@@ -1,0 +1,51 @@
+---
+---
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>{{ page.title }}</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">PiWeb API</h1>
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/BatzJunior">BatzJunior</a></p>
+	<div class="downloadContainer" >
+        	<div class="download linkToGithub">
+	        	<a class="buttons github" href="https://github.com/BatzJunior/testrepo">GitHub</a>
+	        </div>
+        	<div class="download">
+	       		<a class="buttons" href="https://github.com/BatzJunior/testrepo/zipball/master">ZIP</a></li>
+        	</div>
+        	<div class="download">
+	        	<a class="buttons" href="https://github.com/BatzJunior/testrepo/tarball/master">TAR</a>
+	        </div>
+	</div>
+        <p class="header"></p>
+        
+        {% include toc.html %}
+
+      </header>
+      <section>
+        <h1>{{page.title}}</h1>
+
+{{content}}
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
