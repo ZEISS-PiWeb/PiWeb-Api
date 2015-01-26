@@ -7,14 +7,14 @@ defaults:
 
 include: ['_pages']
 relative_permalinks: false
-baseurl: "/testrepo"
+baseurl: "/PiWeb-Api"
 images:
   warning: "![Warning](/testrepo/images/warning.png)"
   info: "![Warning](/testrepo/images/info.png)"
 headers:
-  example: "![Example](/testrepo/images/document-info.png) Example:"
-  request: "![Request](/testrepo/images/server-import.png) Request"
-  response: "![Response](/testrepo/images/server-export.png) Response"
+  example: "![Example](/PiWeb-Api/images/document-info.png) Example:"
+  request: "![Request](/PiWeb-Api/images/server-import.png) Request"
+  response: "![Response](/PiWeb-Api/images/server-export.png) Response"
 sections:
   beginExampleWebService: "<fieldset><legend> Direct webservice call </legend>"
   formatBtns: "<div class=\"btn-group\" data-toggle=\"buttons\"><label class=\"labelBtn active\"><input type=\"radio\" name=\"options\" id=\"option1\" autocomplete=\"off\" checked>JSON</label><label class=\"labelBtn \"><input type=\"radio\" name=\"options\" id=\"option2\" autocomplete=\"off\" checked>XML</label></div>"
