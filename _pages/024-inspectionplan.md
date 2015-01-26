@@ -116,11 +116,11 @@ HTTP/1.1 201 Created
 
 {% highlight xml %}
 <Response>
-<status>
-<statusCode>201</statusCode>
-<statusDescription>Created</statusDescription>
-</status>
-<category>Success</category>
+  <status>
+    <statusCode>201</statusCode>
+    <statusDescription>Created</statusDescription>
+  </status>
+  <category>Success</category>
 </Response>
 {% endhighlight %}
 {{ site.sections['endCode'] }}
