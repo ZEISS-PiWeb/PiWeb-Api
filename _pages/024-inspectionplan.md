@@ -148,23 +148,13 @@ HTTP/1.1 201 Created
 {{ site.headers['request'] | markdownify }}
 
 {% highlight csharp %}
-var catalogue = new Catalogue(){ 
-  Uuid = new Guid( "8c376bee-ffe3-4ee4-abb9-a55b492e69ad" ),
-  Name = "InspectorCatalogue",
-  ValidAttributes = new ushort[]{ 4092, 4093 },
-  CatalogueEntries = new[]{
-    new CatalogueEntry(){ Key = 0, 
-    Attributes = new[]{ new Attribute( 4092, "n.def." ), new Attribute( 4093, "n.def." ) },
-    new CatalogueEntry(){ Key = 1, 
-    Attributes = new[]{ new Attribute( 4092, "21" ), new Attribute( 4093, "Smith" ) },
-    new CatalogueEntry(){ Key = 2, 
-    Attributes = new[]{ new Attribute( 4092, "20" ), new Attribute( 4093, "Miller" ) },
-    new CatalogueEntry(){ Key = 3, 
-    Attributes = new[]{ new Attribute( 4092, "23" ), new Attribute( 4093, "Williams" ) }
-  }
+var part = new InspectionPlanPart{ 
+  Uuid = new Guid( "05550c4c-f0af-46b8-810e-30c0c00a379e" ),
+  Path = PathHelper.String2PartPathInformation( "metal part"),
+  Attributes = new[]{ new Attribute( 1001, "4466" ), new Attribute( 1003, "mp" ) }
 };
 var client = new DataServiceRestClient( serviceUri );
-client.CreateCatalogues( new[]{ catalogue } );
+client.CreateParts( new[]{ part } );
 {% endhighlight %}
 
 {{ site.sections['endExample'] }}
