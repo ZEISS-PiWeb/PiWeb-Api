@@ -93,6 +93,17 @@ POST /dataServiceRest/parts HTTP/1.1
 HTTP/1.1 201 Created
 {% endhighlight %}
 
+{% highlight json %}
+{
+   "status":
+   {
+       "statusCode": 201,
+       "statusDescription": "Created"
+   },
+   "category": "Success"
+}
+{% endhighlight %}
+
 {{ site.sections['endCode'] }}
 
 {% include codeStart.html key="add" format="xml" %}
@@ -105,7 +116,7 @@ HTTP/1.1 201 Created
       <q:attributes key="1001" value="4466" />
       <q:attributes key="1003" value="mp" />
       <q:path>
-        <q:node type="Part">Teschtteil</q:node>
+        <q:node type="Part">metal part</q:node>
       </q:path>
     </InspectionPlanPart>
   </InspectionPlanItems>
@@ -113,6 +124,10 @@ HTTP/1.1 201 Created
 {{ site.sections['endCode'] }}
 
 {{ site.headers['response']  | markdownify }}
+
+{% highlight http %}
+HTTP/1.1 201 Created
+{% endhighlight %}
 
 {% highlight xml %}
 <Response>
