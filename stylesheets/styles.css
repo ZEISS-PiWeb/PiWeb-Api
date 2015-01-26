@@ -41,8 +41,9 @@ p, ul, ol, table, dl {
 }
 
 h1, h2, h3 {
+	font-family: Rockwell, Monaco, serif;
 	line-height:1.3;
-	font-weight: 500;
+	font-weight: normal;
 	display: block;
 	border-bottom: 1px solid #ccc;
 	padding-bottom: 5px;
@@ -63,6 +64,7 @@ h3 {
 }
 
 h4, h5, h6 {
+	font-family: Rockwell, Monaco, serif;
 	font-weight: 700;
 }
 
@@ -195,31 +197,41 @@ div.btn-group{
 	float:right;
 }
 
-div.btn-group .labelBtn{
+fieldset > ul{
+	float: right;
+	list-style: none;
+	margin:0;
+}
+
+fieldset > ul > li{
+	float: left;
+	padding: 4px 12px 4px 12px;
 	margin-left: 4px;
-	padding: 6px 12px 6px 12px;
-	vertical-align: middle;
+	background-color: #437AB4;
 	border: 1px solid #245E9A;
 	border-radius: 4px;
-	color: #fff;
-	background-color: #437AB4;
-	-ms-touch-action: manipulation;
-	touch-action: manipulation;
-	cursor: pointer;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
 }
 
-div.btn-group .active{
-	text-shadow: rgba(255, 255, 255, 0.8) 2px 2px 4px;
+fieldset > ul > li.active{
+	background-color: #305781;
 }
 
-div.btn-group .labelBtn input{
-	position: absolute;
-	clip: rect(0,0,0,0);
-	pointer-events: none;	
+fieldset > ul > li > a{
+	color: #FDFDFD;
+}
+
+fieldset > ul > li > a:hover{
+	text-decoration:none;
+}
+
+fieldset > .codeTab{
+	display:none;
+	visibility:hidden;
+}
+
+fieldset > .active{
+	display: block;
+	visibility: visible;
 }
 
 /* Tables */
@@ -261,8 +273,9 @@ header h1{
 	background-color: #437AB4;
 	box-shadow: 0 15px 30px -20px rgba(0,0,0,0.5);
 	color: #FDFDFD;
+	font-family: Rockwell, sans-serif;
 	font-size: 45px;
-	font-weight: 400;
+	font-weight: 300;
 	line-height: 1.3em;
 	padding: 20px;
 	padding-left:25px;

@@ -51,6 +51,8 @@ URL Endpoint | GET | POST | PUT | DELETE
 /characteristics/:partsPath | Returns the characteristics beneath the part specified by *:partPath* | *Not supported* | *Not supported* | Deletes the characteristics beneath the part specified by *:partsPath*
 characteristics/{:uuidList} | Returns all characteristics that uuid are within the *:uuidList* | *Not supported* | *Not supported* |  Deletes all characteristics that uuid are within the *:uuidList*
 
+{% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
+
 ## {{ page.sections['add'] }}
 
 To create a inspection plan entity it is necessary to transfer the entity object within the request's body. A unique identifier and the path are mandatory, attributes and a comment are optional. The attribute keys which are used for the attributes must come from the parts/characteristics attribute range (specified in the [configuration]({{site.baseurl }}/{{page.category}}/parts/)
@@ -60,37 +62,16 @@ To create a inspection plan entity it is necessary to transfer the entity object
 ### {{ site.headers['example'] }} Adding a part with the uuid 05040c4c-f0af-46b8-810e-30c0c00a379e
 
 {{ site.sections['beginExampleWebService'] }}
-{{ site.sections['formatBtns'] }}
 
-<div class="dropdown">
-
-		<button class="btn btn-danger" type="button" id="myButton">Show Menue</button>
-
-		<ul class="dropdown-menu">
-
-			<li><a href="#">Schuhe</a></li>
-
-			<li><a href="#">Pferd</a></li>
-
-			<li><a href="#">Fahrrad</a></li>
-
-			<li><a href="#">Moped</a></li>
-
-		</ul>
-
-</div>
-
-<script>
-
-$('#myButton').dropdown();
-
-</script>
+{% include codeswitcher.html key="add" %}
 
 {{ site.headers['request']  | markdownify }}
 
 {% highlight http %}
 POST /dataServiceRest/parts HTTP/1.1
 {% endhighlight %}
+
+{% include codeStart.html key="add" format="json" %}
 
 {% highlight json %}
 [
@@ -105,6 +86,11 @@ POST /dataServiceRest/parts HTTP/1.1
   }
 ]
 {% endhighlight %}
+
+{{ site.sections['endCode'] }}
+{% include codeStart.html key="add" format="xml" %}
+
+{{ site.sections['endCode'] }}
 
 {{ site.headers['response']  | markdownify }}
 
