@@ -86,7 +86,15 @@ POST /dataServiceRest/parts HTTP/1.1
   }
 ]
 {% endhighlight %}
+
+{{ site.headers['response']  | markdownify }}
+
+{% highlight http %}
+HTTP/1.1 201 Created
+{% endhighlight %}
 {{ site.sections['endCode'] }}
+
+{% include codeStart.html key="add" format="xml" %}
 
 {% include codeStart.html key="add" format="xml" %}
 {% highlight xml %}
@@ -105,13 +113,6 @@ POST /dataServiceRest/parts HTTP/1.1
 
 {{ site.headers['response']  | markdownify }}
 
-{% include codeStart.html key="add" format="json" %}
-{% highlight http %}
-HTTP/1.1 201 Created
-{% endhighlight %}
-{{ site.sections['endCode'] }}
-
-{% include codeStart.html key="add" format="xml" %}
 {% highlight xml %}
 <Response>
 <status>
