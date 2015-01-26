@@ -17,8 +17,10 @@ headers:
   response: "![Response](/PiWeb-Api/images/server-export.png) Response"
 sections:
   beginExampleWebService: "<fieldset><legend> Direct webservice call </legend>"
-  formatBtns: "<div class=\"btn-group\" data-toggle=\"buttons\"><label class=\"labelBtn active\"><input type=\"radio\" name=\"options\" id=\"option1\" autocomplete=\"off\" checked>JSON</label><label class=\"labelBtn \"><input type=\"radio\" name=\"options\" id=\"option2\" autocomplete=\"off\" checked>XML</label></div>"
   beginExampleAPI: "<fieldset><legend> Webservice call via API.dll </legend>"
   endExample: "</fieldset>"
+  endCode: "</div>"
+settings:
+  defaultCodeFormat: "json"
 gems:
   - jekyll-redirect-from
