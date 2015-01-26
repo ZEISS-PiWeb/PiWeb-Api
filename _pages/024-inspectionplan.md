@@ -111,7 +111,7 @@ HTTP/1.1 201 Created
 {% endhighlight %}
 {{ site.sections['endCode'] }}
 
-{% include codeStart.html key="add" format="json" %}
+{% include codeStart.html key="add" format="xml" %}
 {% highlight xml %}
 <Response>
 <status>
