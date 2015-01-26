@@ -9,8 +9,8 @@ include: ['_pages']
 relative_permalinks: false
 baseurl: "/PiWeb-Api"
 images:
-  warning: "![Warning](/testrepo/images/warning.png)"
-  info: "![Warning](/testrepo/images/info.png)"
+  warning: "![Warning](/PiWeb-Api/images/warning.png)"
+  info: "![Warning](/PiWeb-Api/images/info.png)"
 headers:
   example: "![Example](/PiWeb-Api/images/document-info.png) Example:"
   request: "![Request](/PiWeb-Api/images/server-import.png) Request"
