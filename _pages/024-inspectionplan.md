@@ -105,11 +105,27 @@ POST /dataServiceRest/parts HTTP/1.1
 
 {{ site.headers['response']  | markdownify }}
 
+{% include codeStart.html key="add" format="json" %}
 {% highlight http %}
 HTTP/1.1 201 Created
 {% endhighlight %}
+{{ site.sections['endCode'] }}
+
+{% include codeStart.html key="add" format="json" %}
+{% highlight xml %}
+<Response>
+<status>
+<statusCode>201</statusCode>
+<statusDescription>Created</statusDescription>
+</status>
+<category>Success</category>
+</Response>
+{% endhighlight %}
+{{ site.sections['endCode'] }}
 
 {{ site.sections['endExample'] }}
+
+
 {{ site.sections['beginExampleAPI'] }}
 
 {{ site.headers['request'] | markdownify }}
