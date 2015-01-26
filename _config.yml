@@ -4,3 +4,21 @@ defaults:
       path: "" # an empty string here means all files in the project
     values:
       layout: "frame"
+
+include: ['_pages']
+relative_permalinks: false
+baseurl: "/testrepo"
+images:
+  warning: "![Warning](/testrepo/images/warning.png)"
+  info: "![Warning](/testrepo/images/info.png)"
+headers:
+  example: "![Example](/testrepo/images/document-info.png) Example:"
+  request: "![Request](/testrepo/images/server-import.png) Request"
+  response: "![Response](/testrepo/images/server-export.png) Response"
+sections:
+  beginExampleWebService: "<fieldset><legend> Direct webservice call </legend>"
+  formatBtns: "<div class=\"btn-group\" data-toggle=\"buttons\"><label class=\"labelBtn active\"><input type=\"radio\" name=\"options\" id=\"option1\" autocomplete=\"off\" checked>JSON</label><label class=\"labelBtn \"><input type=\"radio\" name=\"options\" id=\"option2\" autocomplete=\"off\" checked>XML</label></div>"
+  beginExampleAPI: "<fieldset><legend> Webservice call via API.dll </legend>"
+  endExample: "</fieldset>"
+gems:
+  - jekyll-redirect-from
