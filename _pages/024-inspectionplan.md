@@ -86,10 +86,21 @@ POST /dataServiceRest/parts HTTP/1.1
   }
 ]
 {% endhighlight %}
-
 {{ site.sections['endCode'] }}
-{% include codeStart.html key="add" format="xml" %}
 
+{% include codeStart.html key="add" format="xml" %}
+{% highlight xml %}
+<?xml version="1.0" encoding="UTF-8" ?> 
+<InspectionPlanItems>
+<InspectionPlanPart xmlns:q="http://www.daimlerchrysler.com/DataService" uuid="05550c4c-f0af-46b8-810e-30c0c00a379e" >
+<q:attributes key="1001" value="4466" />
+<q:attributes key="1003" value="mp" />
+<q:path>
+<q:node type="Part">Teschtteil</q:node>
+</q:path>
+</InspectionPlanPart>
+</InspectionPlanItems>
+{% endhighlight %}
 {{ site.sections['endCode'] }}
 
 {{ site.headers['response']  | markdownify }}
