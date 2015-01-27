@@ -48,7 +48,8 @@ parts/{:uuidList} | Returns all parts that uuid are within the *:uuidList* | *No
 URL Endpoint | GET | POST | PUT | DELETE
 -------------|-----|-----|------|-------
 /characteristics | *Not supported* | Creates the committed characteristic(s) which is/are transfered in the body of the request | Updates the committed characteristics | *Not supported*
-/characteristics/:partsPath | Returns the characteristics beneath the part specified by *:partPath* | *Not supported* | *Not supported* | Deletes the characteristics beneath the part specified by *:partsPath*
+/characteristics/:partsPath | Returns the characteristics beneath the part specified by *:partPath* | *Not supported* | *Not supported* | Deletes all characteristics and sub characteristics beneath the part specified by *:partsPath*
+/characteristics/:characteristicPath | Returns the characteristics specified by *:characteristicPath*. {{ site.images['info'] }} To dlete a characteristic by its path the filter parameter 'depth:0' mus be transfered! | *Not supported* | *Not supported* | *Not supported*
 characteristics/{:uuidList} | Returns all characteristics that uuid are within the *:uuidList* | *Not supported* | *Not supported* |  Deletes all characteristics that uuid are within the *:uuidList*
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
@@ -162,59 +163,11 @@ client.CreateParts( new[]{ part } );
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
-## {{ page.sections['addEntries'] }}
-
-Beneath adding catalogue entries to a catalogue while creating a catalogue there is also the possibility to add entries to an already existing catalogue.
-
-### {{ site.headers['example'] }}  Adding a catalogue entry - add the inspector ‘Clarks’
-
-{{ site.sections['beginExampleWebService'] }}
-{{ site.headers['request'] | markdownify }}
-
-{% highlight http %}
-POST /dataServiceRest/catalogues/{8c376bee-ffe3-4ee4-abb9-a55b492e69ad}/entries
-{% endhighlight %}
-
-{% highlight json %}
- [
-   {
-       "key": 4,
-       "attributes":
-       {
-           "4092": "22",
-           "4093": "Clarks"
-       }
-   }
- ]
-{% endhighlight %}
-
-{{ site.headers['response'] | markdownify }}
-
-{% highlight http %}
-HTTP/1.1 201 Created
-{% endhighlight %}
-
-{{ site.sections['endExample'] }}
-{{ site.sections['beginExampleAPI'] }}
-
-{{ site.headers['request'] | markdownify }}
-
-{% highlight csharp %}
-var entry = new CatalogueEntry(){ Key = 4, 
-        Attributes = new[]{ new Attribute( 4092, "22" ), new Attribute( 4093, "Clarks" ) };
-var client = new DataServiceRestClient( serviceUri );
-client.CreateCatalogueEntry( new Guid("8c376bee-ffe3-4ee4-abb9-a55b492e69ad"), entry);
-{% endhighlight %}
-
-{{ site.sections['endExample'] }}
-
-{% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
-
 ## {{ page.sections['get'] }}
 
-Fetching the catalogues returns the catalogue an depending on the filter specified or not the catalogue entries. If no filter is specified the entries are returned by default.
+Fetching inspection plan entites returns the respective parts or characteristics depending on the specified part constraint and/or filter. 
 
-### {{ site.headers['example'] }}  Fetching the catalogue with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad and its entries
+### {{ site.headers['example'] }}  Fetching the characteristics beneath the part 8c376bee-ffe3-4ee4-abb9-a55b492e69ad and its entries
 
 {{ site.sections['beginExampleWebService'] }}
 {{ site.headers['request'] | markdownify }}
