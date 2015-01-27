@@ -9,7 +9,7 @@ include: ['_pages']
 relative_permalinks: false
 baseurl: "/PiWeb-Api"
 links:
-  configuration: "[Configuration](/PiWeb-Api/DataService/configuration/)"
+  configuration: "[Configuration](/PiWeb-Api/dataservice/configuration/)"
 images:
   warning: "![Warning](/PiWeb-Api/images/warning.png)"
   info: "![Warning](/PiWeb-Api/images/info.png)"
