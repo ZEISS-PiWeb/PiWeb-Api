@@ -61,7 +61,7 @@ To create a inspection plan entity it is necessary to transfer the entity object
 
 ### {{ site.headers['example'] }} Adding a part with the uuid 05040c4c-f0af-46b8-810e-30c0c00a379e
 
-{{ site.sections['beginExampleWebService'] }}
+{% comment {{ site.sections['beginExampleWebService'] }} %}
 
 {% include codeswitcher.html key="add" %}
 
