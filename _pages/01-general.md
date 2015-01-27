@@ -63,7 +63,7 @@ example:
 
 The  _**format**_ and _**indent**_ parameter can have the following name-value pairs. They are accepted by all endpoints and all implemented HTTP methods GET, PUT, POST and DELETE.
 
-Parameter name | Possible values[**default value**] | Description
+Parameter name | Possible values [**default value**] | Description
 ---------------|------------------------------------|--------------------------------------------------------------
 format         | **json**,xml                       | Determines the input and output format.
 indent         | true,**false**                     | Determines if the response message should be indented or not.  
@@ -72,13 +72,13 @@ The _**filter**_ parameter can have the following name-value pairs. Lists of Ids
 
 ###Catalogues
 
-Parameter name      | Possible values[**default value**] | Description  <br> ```Example``` | Accepted by HTTP methods
+Parameter name      | Possible values [**default value**] | Description  <br> ```Example``` | Accepted by HTTP methods
 --------------------|-----------------|-------------|-------------------------------------------------
 withCatalogueEntries| **true**,false      | Determines if the catalogue entries should be returned or not. <br><br>Example: <br>```withCatalogueEntries:true``` | GET
 
 ###Inspection Plan
 
-Parameter name      | Possible values[**default value**] | Description  <br> ```Example``` | Accepted by endpoint | Accepted by HTTP methods
+Parameter name      | Possible values [**default value**] | Description  <br> ```Example``` | Accepted by endpoint | Accepted by HTTP methods
 --------------------|-----------------|-------------|----------------------|--------------------------
 depth               | i, i∈N           | Restricts the query to the specified depth of the inspection plan tree. <br><br>Example:<br>```depth:5``` | parts, characteristics | GET
 withHistory         | true,**false**      | Determines if the version history should be fetched or not. Does only effect the query if versioning is server side activated. <br><br>Example:<br>```withHistory:true``` | parts, characteristics | GET
@@ -87,7 +87,7 @@ characteristicAttributes | IDs of the attributes | Restricts the query to the at
 
 ###Measurements and Measured Values
 
-Parameter name      | Possible values[**default value**] | Description <br> ```Example```| Accepted by endpoint | Accepted by HTTP methods
+Parameter name      | Possible values [**default value**] | Description <br> ```Example```| Accepted by endpoint | Accepted by HTTP methods
 --------------------|-----------------|-------------|----------------------|--------------------------
 deep                | true, false     | Determines if the query should affect all layers. <br> ```deep:true``` | measurements, values | GET
 orderBy             | ID(s) of the attribute(s) and order direction | Determines which attribute key(s) and which direction the key(s) should be ordered by <br> ```orderBy:4 asc, 10 desc``` | measurements, values | GET
