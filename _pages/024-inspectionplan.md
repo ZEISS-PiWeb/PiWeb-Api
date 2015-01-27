@@ -55,7 +55,7 @@ characteristics/{:uuidList} | Returns all characteristics that uuid are within t
 
 ## {{ page.sections['add'] }}
 
-To create a inspection plan entity it is necessary to transfer the entity object within the request's body. A unique identifier and the path are mandatory, attributes and a comment are optional. The attribute keys which are used for the attributes must come from the parts/characteristics attribute range (specified in the [configuration]({{site.baseurl }}/{{page.category}}/parts/)
+To create a inspection plan entity it is necessary to transfer the entity object within the request's body. A unique identifier and the path are mandatory, attributes and a comment are optional. The attribute keys which are used for the attributes must come from the parts/characteristics attribute range (specified in the {{ site.links['configuration'] }})
 
 {{ site.images['info'] }} The comment is only added if versioning is enabled in server settings.
 
