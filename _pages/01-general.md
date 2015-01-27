@@ -63,10 +63,10 @@ example:
 
 The  _**format**_ and _**indent**_ parameter can have the following name-value pairs. They are accepted by all endpoints and all implemented HTTP methods GET, PUT, POST and DELETE.
 
-Parameter name | Possible values | Description
----------------|-----------------|--------------------------------------------------------------
-format         | json,xml        | Determines the input and output format.
-indent         | true,false      | Determines if the response message should be indented or not.  
+Parameter name <br> [*Possible values*] | Description
+----------------------------------------|--------------------------------------------------------------
+format<br>[***json**,xml*]                     | Determines the input and output format.
+indent<br>[*true,false*]                   | Determines if the response message should be indented or not.  
 
 The _**filter**_ parameter can have the following name-value pairs. Lists of Ids or UUIDs need to be surrounded by “{“ and “}”, the values within the list are separated by “,”.
 
