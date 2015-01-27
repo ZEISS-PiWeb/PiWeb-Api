@@ -40,7 +40,7 @@ Parts and characteristics can be fetched, created, updated and deleted via the f
 URL Endpoint | GET | POST | PUT | DELETE
 -------------|-----|-----|------|-------
 /parts | Returns all parts | Creates the committed part(s) which is/are transfered in the body of the request | Updates the committed parts | Deletes all parts
-/parts/:partsPath | Returns the part specified by *:partsPath* as well as the parts beneath this part | *Not supported* | *Not supported* | Deletes the part specified by *:partsPath* as well as the parts and characteristics beneath this part
+/parts/:partPath | Returns the part specified by *:partPath* as well as the parts beneath this part | *Not supported* | *Not supported* | Deletes the part specified by *:partPath* as well as the parts and characteristics beneath this part
 parts/{:uuidList} | Returns all parts that uuid are within the *:uuidList* | *Not supported* | *Not supported* |  Deletes all parts that uuid are within the *:uuidList* as well as the parts and characteristics beneath the particular part
 
 ### Characteristics
