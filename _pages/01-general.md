@@ -63,22 +63,22 @@ example:
 
 The  _**format**_ and _**indent**_ parameter can have the following name-value pairs. They are accepted by all endpoints and all implemented HTTP methods GET, PUT, POST and DELETE.
 
-Parameter name <br> [*Possible values*] | Description
-----------------------------------------|--------------------------------------------------------------
-format<br>[***json**,xml*]                     | Determines the input and output format.
-indent<br>[*true,false*]                   | Determines if the response message should be indented or not.  
+Parameter name | Possible values[**default value**] | Description
+---------------|------------------------------------|--------------------------------------------------------------
+format         | **json**,xml                       | Determines the input and output format.
+indent         | true,**false**                     | Determines if the response message should be indented or not.  
 
 The _**filter**_ parameter can have the following name-value pairs. Lists of Ids or UUIDs need to be surrounded by “{“ and “}”, the values within the list are separated by “,”.
 
 ###Catalogues
 
-Parameter name      | Possible values | Description | Accepted by HTTP methods
+Parameter name      | Possible values | Description  <br> ```Example``` | Accepted by HTTP methods
 --------------------|-----------------|-------------|-------------------------------------------------
 withCatalogueEntries| true,false      | Determines if the catalogue entries should be returned or not. <br><br>Example: <br>```withCatalogueEntries:true``` | GET
 
 ###Inspection Plan
 
-Parameter name      | Possible values | Description | Accepted by endpoint | Accepted by HTTP methods
+Parameter name      | Possible values | Description  <br> ```Example``` | Accepted by endpoint | Accepted by HTTP methods
 --------------------|-----------------|-------------|----------------------|--------------------------
 depth               | i, i∈N           | Restricts the query to the specified depth of the inspection plan tree. <br><br>Example:<br>```depth:5``` | parts, characteristics | GET
 withHistory         | true,false      | Determines if the version history should be fetched or not. Does only effect the query if versioning is server side activated. <br><br>Example:<br>```withHistory:true``` | parts, characteristics | GET
