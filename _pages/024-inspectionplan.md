@@ -106,8 +106,7 @@ HTTP/1.1 201 Created
 
 {{ site.sections['endCode'] }}
 
-{% include codeStart.html key="add" format="xml" %}
-
+{% comment %}
 {% include codeStart.html key="add" format="xml" %}
 {% highlight xml %}
 <?xml version="1.0" encoding="UTF-8" ?> 
@@ -139,6 +138,8 @@ HTTP/1.1 201 Created
 </Response>
 {% endhighlight %}
 {{ site.sections['endCode'] }}
+
+{% endcomment %}
 
 {{ site.sections['endExample'] }}
 
