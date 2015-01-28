@@ -165,9 +165,9 @@ client.CreateParts( new[]{ part } );
 
 ## {{ page.sections['get'] }}
 
-Fetching inspection plan entites returns the respective parts or characteristics depending on the specified part constraint and/or filter. 
+Fetching inspection plan entites returns the respective parts or characteristics depending on the specified entity constraint and/or filter. 
 
-### {{ site.headers['example'] }}  Fetching the characteristics beneath the part 8c376bee-ffe3-4ee4-abb9-a55b492e69ad and its entries
+### {{ site.headers['example'] }}  Fetching the characteristics beneath the part 8c376bee-ffe3-4ee4-abb9-a55b492e69ad
 
 {{ site.sections['beginExampleWebService'] }}
 {{ site.headers['request'] | markdownify }}
