@@ -238,72 +238,37 @@ var characteristics = client.GetCharacteristicsForPart(
 
 ## {{ page.sections['update'] }}
 
-Updating a catalogue might regard the following aspects: 
+Updating inspection plan entities might regard the following aspects: 
 
-* Rename the catalogue 
-* Add, update or delete catalogue entries
+* Rename/move inspection plan entities
+* Change inspection plan entity's attributes
 
-{{site.images['info']}} To change the valid attributes of a catalogue it needs to be deleted an re-created again.
+{{site.images['info']}} If versioning is is server side activated every update of one or more inspection plan entities creates a new version entry.
 
-### {{ site.headers['example'] }}  Updating the catalogue with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad - rename it from 'InspectorCatalogue' to 'Inspectors' and add the inspector 'Clarks'
+### {{ site.headers['example'] }}  Rename the characteristic "metal part/diameter_circle3" to "metal part/diameterCircle3"
 
 {{ site.sections['beginExampleWebService'] }}
 
 {{ site.headers['request']  | markdownify }}
 
 {% highlight http %}
-PUT /dataServiceRest/catalogues HTTP/1.1
+PUT /dataServiceRest/characteristics HTTP/1.1
 {% endhighlight %}
 
 {% highlight json %}
 [
   {
-           "uuid": "8c376bee-ffe3-4ee4-abb9-a55b492e69ad",
-           "name": "Inspectors",
-           "catalogueEntries":
-           [
-               {
-                   "key": 0,
-                   "attributes":
-                   {
-                       "4092": "n.def.",
-                       "4093": "n.def."
-                   }
-               },
-               {
-                   "key": 1,
-                   "attributes":
-                   {
-                       "4092": "21",
-                       "4093": "Smith"
-                   }
-               },
-               {
-                   "key": 2,
-                   "attributes":
-                   {
-                       "4092": "20",
-                       "4093": "Miller"
-                   }
-               },
-               {
-                   "key": 3,
-                   "attributes":
-                   {
-                       "4092": "23",
-                       "4093": "Williams"
-                   }
-               },
-               {
-                   "key": 4,
-                   "attributes":
-                   {
-                       "4092": "22",
-                       "4093": "Clarks"
-                   }
-               }
-            ]
-        }
+     "path": "PC:/metal part/diameterCircle3/",
+     "attributes":
+     {
+         "2110": "-0.2",
+         "2111": "0.3",
+     },
+     "uuid": "1429c5e2-599c-4d3e-b724-4e00ecb0caa7",
+     "version": 0,
+     "timestamp": "2012-11-19T10:48:32.887Z",
+     "current": true
+  }
 ]
 {% endhighlight %}
 
