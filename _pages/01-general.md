@@ -80,7 +80,7 @@ withCatalogueEntries| **true**, false      | Determines if the catalogue entries
 
 Parameter name      | Possible values [**default value**] | Description  <br> ```Example``` | Accepted by endpoint | Accepted by HTTP methods
 --------------------|-----------------|-------------|----------------------|--------------------------
-depth               | i, i∈N  **1**  | Restricts the query to the specified depth of the inspection plan tree. <br><br>Example:<br>```depth:5``` | parts, characteristics | GET
+depth               | i, i ≥ 0  <br>**1**  | Restricts the query to the specified depth of the inspection plan tree. <br><br>Example:<br>```depth:5``` | parts, characteristics | GET
 withHistory         | true, **false**      | Determines if the version history should be fetched or not. Does only effect the query if versioning is server side activated. <br><br>Example:<br>```withHistory:true``` | parts, characteristics | GET
 partAttributes      | IDs of the attributes | Restricts the query to the attributes that should be returned for parts. <br><br>Example:<br>```partAttributes:{1001,1008}``` | parts | GET
 characteristicAttributes | IDs of the attributes | Restricts the query to the attributes that should be returned for characteristics. <br><br>Example:<br>```characteristicAttributes:{2001,2101}``` | characteristics | GET
