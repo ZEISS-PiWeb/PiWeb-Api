@@ -166,14 +166,31 @@ client.CreateParts( new[]{ part } );
 ## {{ page.sections['get'] }}
 
 Fetching inspection plan entites returns the respective parts or characteristics depending on the specified entity constraint and/or filter. 
+The most important filter parameter is the *depth* parameter which controls down to which level of the inspection plan the entities should be fetched. Setting *depth:0* means that only the entity itself, *depth:1* means the entity and its direct children should be fetched and so on.
 
-### {{ site.headers['example'] }}  Fetching the characteristics beneath the part 8c376bee-ffe3-4ee4-abb9-a55b492e69ad
+Parts can be fetched several ways:
+
+* fetch a certain part by its path (the filter parameter *depth* must be 0)
+* fetch a certain part and its cihldren parts by its path (the filter parameter *depth* must be ≥ 1)
+* fetch one or more certain parts by its UUIDs
+* fetch all parts (can be restricted by filter parameter *depth*)
+
+There are also several possibilities to fetch characteristics:
+
+* fetch a certain characteristic by its path (the filter parameter *depth* must be 0)
+* fetch one or more certain characteristics by its UUIDs
+* fetch all characteristics beneath a certain part path (can be restricted by filter parameter *depth*)
+* fetch all characteristics (can be restricted by filter parameter *depth*)
+
+### {{ site.headers['example'] }}  Fetching the direct characteristics beneath the part /metal part
+
+As the filter parameter *depth* has the default value 1 it can be omitted in this example.
 
 {{ site.sections['beginExampleWebService'] }}
 {{ site.headers['request'] | markdownify }}
 
 {% highlight http %}
-GET /dataServiceRest/catalogues/{8c376bee-ffe3-4ee4-abb9-a55b492e69ad}?filter=withCatalogueEntries:true HTTP/1.1
+GET /dataServiceRest/characteristics/metal%20part HTTP/1.1
 {% endhighlight %}
 
 {{ site.headers['response'] | markdownify }}
@@ -183,49 +200,27 @@ GET /dataServiceRest/catalogues/{8c376bee-ffe3-4ee4-abb9-a55b492e69ad}?filter=wi
    "data":
    [
        {
-           "uuid": "8c376bee-ffe3-4ee4-abb9-a55b492e69ad",
-           "name": "InspectorCatalogue",
-           "validAttributes":
-           [
-               4092,
-               4093
-           ],
-           "catalogueEntries":
-           [
-               {
-                   "key": 0,
-                   "attributes":
-                   {
-                       "4092": "n.def.",
-                       "4093": "n.def."
-                   }
-               },
-               {
-                   "key": 1,
-                   "attributes":
-                   {
-                       "4092": "21",
-                       "4093": "Smith"
-                   }
-               },
-               {
-                   "key": 2,
-                   "attributes":
-                   {
-                       "4092": "20",
-                       "4093": "Miller"
-                   }
-               },
-               {
-                   "key": 3,
-                   "attributes":
-                   {
-                       "4092": "23",
-                       "4093": "Williams"
-                   }
-               }
-            ]
-        }
+           "path": "PC:/metal part/diameter_circle3/",
+           "attributes":
+           {
+               "2004": "3",
+               "2101": "0",
+               "2110": "-0.2",
+               "2111": "0.3",
+               "2540": "0",
+               "2541": "0",
+               "2542": "1",
+               "2543": "2749",
+               "2544": "0",
+               "2545": "42.3384",
+               "2342": "diameter"
+           },
+           "uuid": "1429c5e2-599c-4d3e-b724-4e00ecb0caa7",
+           "version": 0,
+           "timestamp": "2012-11-19T10:48:32.887Z",
+           "current": true
+       },
+       ...
    ]
 }
 {% endhighlight %}
@@ -237,8 +232,8 @@ GET /dataServiceRest/catalogues/{8c376bee-ffe3-4ee4-abb9-a55b492e69ad}?filter=wi
 
 {% highlight csharp %}
 var client = new DataServiceRestClient( serviceUri );
-var catalogues = client.GetCatalogues(new Guid[]{new Guid(
-        "8c376bee-ffe3-4ee4-abb9-a55b492e69ad")}, new CatalogueFilterAttributes());
+var characteristics = client.GetCharacteristicsForPart(
+    PathHelper.String2PartPathInformation("/metal part"));
 {% endhighlight %}
 
 {{ site.sections['endExample'] }}
