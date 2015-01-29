@@ -48,7 +48,7 @@ parts/{:uuidList} | Returns all parts that uuid are within the *:uuidList* | *No
 URL Endpoint | GET | POST | PUT | DELETE
 -------------|-----|-----|------|-------
 /characteristics | *Not supported* | Creates the committed characteristic(s) which is/are transfered in the body of the request | Updates the committed characteristics | *Not supported*
-/characteristics/:partsPath | Returns the characteristics beneath the part specified by *:partPath* | *Not supported* | *Not supported* | Deletes all characteristics and sub characteristics beneath the part specified by *:partsPath*
+/characteristics/:partsPath | Returns all characteristics beneath the part specified by *:partPath* | *Not supported* | *Not supported* | Deletes all characteristics and sub characteristics beneath the part specified by *:partsPath*
 /characteristics/:characteristicPath | Returns the characteristics specified by *:characteristicPath*. <br><br> {{ site.images['info'] }} To get a characteristic by its path the filter parameter ```depth:0``` needs to be set! | *Not supported* | *Not supported* | *Not supported*
 characteristics/{:uuidList} | Returns all characteristics that uuid are within the *:uuidList* | *Not supported* | *Not supported* |  Deletes all characteristics that uuid are within the *:uuidList*
 
@@ -180,9 +180,8 @@ There are also several possibilities to fetch characteristics:
 * fetch a certain characteristic by its path (the filter parameter *depth* must be 0)
 * fetch one or more certain characteristics by its UUIDs
 * fetch all characteristics beneath a certain part path (can be restricted by filter parameter *depth*)
-* fetch all characteristics (can be restricted by filter parameter *depth*)
 
-### {{ site.headers['example'] }}  Fetching the direct characteristics beneath the part /metal part
+### {{ site.headers['example'] }}  Fetching the direct characteristics beneath the part "metal part". Restrict the attributes to the lower and upper tolerance (attribute keys 2110 and 2111).
 
 As the filter parameter *depth* has the default value 1 it can be omitted in this example.
 
@@ -190,7 +189,7 @@ As the filter parameter *depth* has the default value 1 it can be omitted in thi
 {{ site.headers['request'] | markdownify }}
 
 {% highlight http %}
-GET /dataServiceRest/characteristics/metal%20part HTTP/1.1
+GET /dataServiceRest/characteristics/metal%20part?filter=characteristicAttributes:{2110,2111} HTTP/1.1
 {% endhighlight %}
 
 {{ site.headers['response'] | markdownify }}
@@ -203,17 +202,8 @@ GET /dataServiceRest/characteristics/metal%20part HTTP/1.1
            "path": "PC:/metal part/diameter_circle3/",
            "attributes":
            {
-               "2004": "3",
-               "2101": "0",
                "2110": "-0.2",
                "2111": "0.3",
-               "2540": "0",
-               "2541": "0",
-               "2542": "1",
-               "2543": "2749",
-               "2544": "0",
-               "2545": "42.3384",
-               "2342": "diameter"
            },
            "uuid": "1429c5e2-599c-4d3e-b724-4e00ecb0caa7",
            "version": 0,
@@ -232,6 +222,12 @@ GET /dataServiceRest/characteristics/metal%20part HTTP/1.1
 
 {% highlight csharp %}
 var client = new DataServiceRestClient( serviceUri );
+var parentPartPath = PathHelper.String2PartPathInformation("/metal part");
+var filter = new InspectionPlanFilterAttributes()
+  { RequestedCharacteristicAttributes = new AttributeSelector(
+    new[]{ WellKnownKeys.Characteristic.LowerSpecificationLimit, 
+    WellKnownKeys.Characteristic.UpperSpecificationLimit} )
+  };
 var characteristics = client.GetCharacteristicsForPart(
     PathHelper.String2PartPathInformation("/metal part"));
 {% endhighlight %}
