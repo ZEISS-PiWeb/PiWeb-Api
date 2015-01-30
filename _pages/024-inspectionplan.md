@@ -286,17 +286,11 @@ HTTP/1.1 200 Ok
 {% highlight csharp %}
 var client = new DataServiceRestClient( serviceUri );
 
-//Get the catalogue
+//Get the characteristic
 ...
-
-catalogue.Name = "Inspectors";
-var entries = new List< CatalogueEntry >();
-entries = catalogue.CatalogueEntries;
-entries.Add( new CatalogueEntry()
-      { Key = 4, 
-        Attributes = new[]{ new Attribute( 4092, "22" ), new Attribute( 4093, "Clarks" ) };
-cataloge.CatalogueEntries = entries.ToArray();
-client.UpdateCatalogues( catalogue );
+var newPath = PathHelper.String2PathInformation( "/metal part/diameterCircle3", "PC" );
+characteristic.Path = newPath;
+client.UpdateCharacteristics( new InspectionPlanCharacteristic[]{characteristic} );
 {% endhighlight %}
 
 {{ site.sections['endExample'] }}
@@ -305,20 +299,15 @@ client.UpdateCatalogues( catalogue );
 
 ## {{ page.sections['delete'] }}
 
-There are two different options of deleting catalogues: 
+There are two possibilities to delete inspection plan entities either by path or by their uuid. In both cases the entity itself as well as all children are deleted.
 
-* Delete all catalogues or
-* Delete one or more certain catalogues identified by its uuid
- 
-The following examples illustrate these options.
-
-### {{ site.headers['example'] }}  Delete all catalogues
+### {{ site.headers['example'] }}  Delete the part "metal part"  and all entities below it
 
 {{ site.sections['beginExampleWebService'] }}
 {{ site.headers['request'] | markdownify }}
 
 {% highlight http %}
-DELETE /dataServiceRest/catalogues HTTP/1.1
+DELETE /dataServiceRest/parts/metal%20part HTTP/1.1
 {% endhighlight %}
 
 {{ site.headers['response'] | markdownify }}
@@ -333,100 +322,5 @@ HTTP/1.1 200 Ok
 
 {% highlight csharp %}
 var client = new DataServiceRestClient( serviceUri );
-client.DeleteCatalogues();
+client.DeleteParts( PathHelper.String2PartPathInformation( "metal part" ) );
 {% endhighlight %}
-
-{{ site.sections['endExample'] }}
-
-### {{ site.headers['example'] }}  Delete the catalogues with the uuid "8c376bee-ffe3-4ee4-abb9-a55b492e69ad"
-
-{{ site.sections['beginExampleWebService'] }}
-{{ site.headers['request'] | markdownify }}
-
-{% highlight http %}
-DELETE /dataServiceRest/catalogues/{8c376bee-ffe3-4ee4-abb9-a55b492e69ad} HTTP/1.1
-{% endhighlight %}
-
-{{ site.headers['response'] | markdownify }}
-
-{% highlight http %}
-HTTP/1.1 200 Ok
-{% endhighlight %}
-
-{{ site.sections['endExample'] }}
-
-{{ site.sections['beginExampleAPI'] }}
-{{ site.headers['request'] | markdownify }}
-
-{% highlight csharp %}
-var client = new DataServiceRestClient( serviceUri );
-client.DeleteCatalogues( new Guid[]{new Guid( "8c376bee-ffe3-4ee4-abb9-a55b492e69ad" ) );
-{% endhighlight %}
-
-{{ site.sections['endExample'] }}
-
-{% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
-
-## {{ page.sections['deleteEntries'] }}
-
-There are two different options of deleting catalogue entries: 
-
-* Delete all entries of a certain catalogue identified by its uuid
-* Delete one or more certain entries identified by its keys of a certain catalogue identified by its uuid
- 
-The following examples illustrate these options.
-
-### {{ site.headers['example'] }}  Delete all entries of the catalogue with the uuid "8c376bee-ffe3-4ee4-abb9-a55b492e69ad"
-
-{{ site.sections['beginExampleWebService'] }}
-{{ site.headers['request'] | markdownify }}
-
-{% highlight http %}
-DELETE /dataServiceRest/catalogues/{8c376bee-ffe3-4ee4-abb9-a55b492e69ad}/entries HTTP/1.1
-{% endhighlight %}
-
-{{ site.headers['response'] | markdownify }}
-{% highlight http %}
-HTTP/1.1 200 Ok
-{% endhighlight %}
-
-{{ site.sections['endExample'] }}
-
-{{ site.sections['beginExampleAPI'] }}
-{{ site.headers['request'] | markdownify }}
-
-{% highlight csharp %}
-var client = new DataServiceRestClient( serviceUri );
-client.DeleteCatalogueEntries( new Guid( "8c376bee-ffe3-4ee4-abb9-a55b492e69ad" ) );
-{% endhighlight %}
-
-{{ site.sections['endExample'] }}
-
-### {{ site.headers['example'] }}  Delete the entries with key 1 and 3 of the catalogue with the uuid "8c376bee-ffe3-4ee4-abb9-a55b492e69ad"
-
-{{ site.sections['beginExampleWebService'] }}
-{{ site.headers['request'] | markdownify }}
-
-{% highlight http %}
-DELETE /dataServiceRest/catalogues/{8c376bee-ffe3-4ee4-abb9-a55b492e69ad}/entries/{1,3} HTTP/1.1
-{% endhighlight %}
-
-{{ site.headers['response'] | markdownify }}
-
-{% highlight http %}
-HTTP/1.1 200 Ok
-{% endhighlight %}
-
-{{ site.sections['endExample'] }}
-
-{{ site.sections['beginExampleAPI'] }}
-{{ site.headers['request'] | markdownify }}
-
-{% highlight csharp %}
-var client = new DataServiceRestClient( serviceUri );
-client.DeleteCatalogueEntries( 
-  new Guid( "8c376bee-ffe3-4ee4-abb9-a55b492e69ad", new []{ (ushort)1, (ushort(3) } );
-{% endhighlight %}
-
-{{ site.sections['endExample'] }}
-
