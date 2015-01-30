@@ -48,8 +48,8 @@ parts/{:uuidList} | Returns all parts that uuid are within the *:uuidList* | *No
 URL Endpoint | GET | POST | PUT | DELETE
 -------------|-----|-----|------|-------
 /characteristics | *Not supported* | Creates the committed characteristic(s) which is/are transfered in the body of the request | Updates the committed characteristics | *Not supported*
-/characteristics/:partsPath | Returns all characteristics beneath the part specified by *:partPath* | *Not supported* | *Not supported* | Deletes all characteristics and sub characteristics beneath the part specified by *:partsPath*
-/characteristics/:characteristicPath | Returns the characteristics specified by *:characteristicPath*. <br><br> {{ site.images['info'] }} To get a characteristic by its path the filter parameter ```depth:0``` needs to be set! | *Not supported* | *Not supported* | *Not supported*
+/characteristics/:partsPath | Returns all characteristics beneath the part specified by *:partPath* | *Not supported* | *Not supported* | *Not supported*
+/characteristics/:characteristicPath | Returns the characteristic specified by *:characteristicPath*. <br><br> {{ site.images['info'] }} To get a characteristic by its path the filter parameter ```depth:0``` needs to be set! | *Not supported* | *Not supported* | Deletes the characteristic specified by *:characteristicPath* as well as all children beneath this characteristic
 characteristics/{:uuidList} | Returns all characteristics that uuid are within the *:uuidList* | *Not supported* | *Not supported* |  Deletes all characteristics that uuid are within the *:uuidList*
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
