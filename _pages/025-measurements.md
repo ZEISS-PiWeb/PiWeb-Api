@@ -38,7 +38,7 @@ URL Endpoint | GET | POST | PUT | DELETE
 measurements/{:uuidList} | Returns the measurements without measured values which belongs to the parts that uuids are within the *:uuidList* | *Not supported* | *Not supported* |  Deletes all measurements which belongs to the parts that uuid are within the *:uuidList*
 /measurements/values | Returns all measurements including measured data | Creates the committed measurements which is/are transfered in the body of the request. These measurements do not contain measured values. | *Not supported*
 /measurements/:partPath/values | Returns the measurements including measured values which belongs to the part specified by *:partPath* | *Not supported* | *Not supported* | *Not supported*
-/measurements/{:uuidList} | | Returns the measurements including measured values which belongs to the parts that uuids are within the *:uuidList* | *Not supported* | *Not supported* | *Not supported*
+/measurements/{:uuidList} | Returns the measurements including measured values which belongs to the parts that uuids are within the *:uuidList* | *Not supported* | *Not supported* | *Not supported*
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
