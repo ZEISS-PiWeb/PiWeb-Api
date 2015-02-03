@@ -2,7 +2,7 @@
 category: dataservice
 subCategory: measurements
 title: Data Service
-subTitle: Measurements
+subTitle: Measurements and Measured Values
 isSubPage: true
 permalink: /dataservice/measurements/
 sections:
@@ -16,47 +16,35 @@ sections:
 
 ## {{ page.sections['general'] }}
 
-Both parts and characteristics are PiWeb inspeaction plan entities. Each entity consits of the following properties:
+Measurements do always belong to a single inspection plan part. Depending on the purpose the measured values are included within a measurement or not. Each measurement consists of the following properties:
 
 Name | Description
 -----|-------------
-uuid | Identifies this inspection plan entity uniquely.
-path | The path of this entity.
-attributes | A set of attributes which specifies this entity.
-comment | A comment which describes the last inspection plan change.
-version | Contains the revision number of the entity. The revision number starts with zero and is incremented by one each time when changes are applied to the inspection plan. The version is only returned if versioning is enabled in server settings.
-current | Indicates wheter the entity is the current version.
-timeStamp | Contains the date and time of the last update applied to this entity.
-charChangeDate (only for parts) | The timestamp for the most recent characteristic change on any characteristic that belongs to this part
-
+uuid | Identifies this measurement uniquely.
+partUuid | The uuid of the part the measurement belongs to.
+attributes | A set of attributes which specifies this measurement.
+lastModified | Contains the date and time of the last update applied to this measurement.
+characteristics | An array of the characteristics which has been measured within the measurement. Each characteristic within this array consits of the uuid it is identified by and an array of attributes which include at least the measured value attribute.
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
 ## {{ page.sections['endpoint'] }}
 
-Parts and characteristics can be fetched, created, updated and deleted via the following endpoints. Filter can be set as described in the [URL-Parameter section]({{site.baseurl }}/general/#{{ page.subCategory }}).
-
-###Parts
+Measurements can be fetched, created, updated and deleted via the following endpoints. Filter can be set as described in the [URL-Parameter section]({{site.baseurl }}/general/#{{ page.subCategory }}).
 
 URL Endpoint | GET | POST | PUT | DELETE
 -------------|-----|-----|------|-------
-/parts | Returns all parts | Creates the committed part(s) which is/are transfered in the body of the request | Updates the committed parts | Deletes all parts
-/parts/:partPath | Returns the part specified by *:partPath* as well as the parts beneath this part | *Not supported* | *Not supported* | Deletes the part specified by *:partPath* as well as the parts and characteristics beneath this part
-parts/{:uuidList} | Returns all parts that uuid are within the *:uuidList* | *Not supported* | *Not supported* |  Deletes all parts that uuid are within the *:uuidList* as well as the parts and characteristics beneath the particular part
-
-### Characteristics
-
-URL Endpoint | GET | POST | PUT | DELETE
--------------|-----|-----|------|-------
-/characteristics | *Not supported* | Creates the committed characteristic(s) which is/are transfered in the body of the request | Updates the committed characteristics | *Not supported*
-/characteristics/:partsPath | Returns all characteristics beneath the part specified by *:partPath* | *Not supported* | *Not supported* | *Not supported*
-/characteristics/:characteristicPath | Returns the characteristic specified by *:characteristicPath*. <br><br> {{ site.images['info'] }} To get a characteristic by its path the filter parameter ```depth:0``` needs to be set! | *Not supported* | *Not supported* | Deletes the characteristic specified by *:characteristicPath* as well as all children beneath this characteristic
-characteristics/{:uuidList} | Returns all characteristics that uuid are within the *:uuidList* | *Not supported* | *Not supported* |  Deletes all characteristics that uuid are within the *:uuidList*
+/measurements | Returns all measurements without measured values | Creates the committed measurements which is/are transfered in the body of the request. These measurements do not contain measured values. | Updates the committed measurements | Deletes all measurements.
+/measurements/:partPath | Returns the measurements without measured values which belongs to the part specified by *:partPath*  | *Not supported* | *Not supported* | Deletes the measurements which belongs to the part specified by *:partPath*
+measurements/{:uuidList} | Returns the measurements without measured values which belongs to the parts that uuids are within the *:uuidList* | *Not supported* | *Not supported* |  Deletes all measurements which belongs to the parts that uuid are within the *:uuidList*
+/measurements/values | Returns all measurements including measured data | Creates the committed measurements which is/are transfered in the body of the request. These measurements do not contain measured values. | *Not supported*
+/measurements/:partPath/values | Returns the measurements including measured values which belongs to the part specified by *:partPath* | *Not supported* | *Not supported* | *Not supported*
+/measurements/{:uuidList} | | Returns the measurements including measured values which belongs to the parts that uuids are within the *:uuidList* | *Not supported* | *Not supported* | *Not supported*
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
 ## {{ page.sections['add'] }}
 
-To create a inspection plan entity it is necessary to transfer the entity object within the request's body. A unique identifier and the path are mandatory, attributes and a comment are optional. The attribute keys which are used for the attributes must come from the parts/characteristics attribute range (specified in the {{ site.links['configuration'] }})
+Measurements can be created with or without measured values. To create a measurement it is necessary to transfer the measurement object within the request's body. A unique identifier and the path are mandatory, attributes and a comment are optional. The attribute keys which are used for the attributes must come from the parts/characteristics attribute range (specified in the {{ site.links['configuration'] }})
 
 {{ site.images['info'] }} The comment is only added if versioning is enabled in server settings.
 
