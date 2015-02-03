@@ -8,5 +8,4 @@ sections:
   catalogues: Catalogues
   inspection-plan: Inspection Plan
   measurements: Measurements
-  values: Measured Values
 ---
