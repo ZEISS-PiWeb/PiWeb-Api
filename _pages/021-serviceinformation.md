@@ -8,7 +8,7 @@ permalink: /dataservice/serviceinformation/
 sections:
   endpoint: Endpoint Information
   get: Get Service Information
-redirect_from: "/dataservice"
+redirect_from: "/dataservice/"
 ---
 
 ## {{ page.sections['endpoint'] }}
