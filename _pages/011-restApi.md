@@ -1,10 +1,10 @@
 ---
 category: general
-subCategory: webservice
+subCategory: restApi
 title: General Information
-subTitle: Webservice
+subTitle: REST API
 isSubPage: true
-permalink: /general/webservice/
+permalink: /general/restapi/
 sections:
   addresses: Webservice Adresses
   formats: Formats
