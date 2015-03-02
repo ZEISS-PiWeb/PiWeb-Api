@@ -3,8 +3,8 @@ category: general
 title: General Information
 permalink: /general/
 sections:
-  webservice: Webservices
-  api: API.dll
+  restApi: REST API
+  sdk: .NET SDK
 redirect_from: "/"
 ---
 
