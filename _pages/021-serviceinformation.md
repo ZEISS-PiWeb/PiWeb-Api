@@ -45,16 +45,9 @@ URL Endpoint | GET | PUT | POST | DELETE
 
 ## {{page.sections['sdk'] }}
 
-Method | Description | Parameter Description
--------|-------------|----------------------
-{% highlight csharp %} GetServiceInformation( CancellationToken ct = default(CancellationToken) ) {% endhighlight %} | Returns general information about the PiWeb-Server | The ``CancellationToken``` can be transferred optionally and gives the possibility to cancel the asyncronous call.
+There is the following method to fetch general information about the PiWeb-Server. The ``CancellationToken ct``` can be transferred optionally and gives the possibility to cancel the asyncronous call.
 
-{% highlight csharp %}
-/// <summary> Returns general information about the PiWeb-Server </summary>
-/// <param name="cancellationToken"> The cancellationToken can be transferred optionally 
-/// and gives the possibility to cancel the asyncronous call</param>
-public Task<ServiceInformation> GetServiceInformation( CancellationToken cancellationToken = default(CancellationToken) )
-{% endhighlight %}
+{% highlight csharp %} GetServiceInformation( CancellationToken ct = default(CancellationToken) ) {% endhighlight %} | 
 
 ## {{ page.sections['get'] }}
 
