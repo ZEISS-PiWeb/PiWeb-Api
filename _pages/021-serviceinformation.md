@@ -52,10 +52,6 @@ URL Endpoint | GET | PUT | POST | DELETE
 public Task<ServiceInformation> GetServiceInformation( CancellationToken cancellationToken = default(CancellationToken) )
 {% endhighlight %}
 
-Method | Description | Parameter Description
--------|-------------|----------------------
-```public Task<ServiceInformation> GetServiceInformation( CancellationToken cancellationToken = default(CancellationToken) )``` | Returns general information about the PiWeb-Server | The ```cancellationToken``` can be transferred optionally and gives the possibility to cancel the asyncronous call.
-
 ## {{ page.sections['get'] }}
 
 The first time service information are fetched from the server database statistics values need to be created. As the service information call should return immediately statistics creation is triggered in a separate task. Therefore the statistical values partCount, characteristicsCount, measurementsCount and valuesCount stays empty in the first response but should generally contain values on the second call.
