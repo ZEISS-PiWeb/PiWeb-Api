@@ -6,10 +6,34 @@ subTitle: Service Information
 isSubPage: true
 permalink: /dataservice/serviceinformation/
 sections:
-  endpoint: Endpoint Information
+  general: General Information
+  endpoint: REST API Endpoint Information
+  sdk: .NET SDK Methods
   get: Get Service Information
 redirect_from: "/dataservice/"
 ---
+
+## {{ page.sections['general'] }}
+
+Fetching service information is guaranteed to be very fast and is therefore well suited for checking the connection. This method can always be invoked without having credentials specified. 
+The ServiceInformation object which is returned contains of the following properties:
+
+Property | Description
+---------|-------------
+serverName | The name of the PiWeb server as it is specified in the server settings dialog
+version | The version number of the PiWeb server
+securityEnabled | Indicates if security is server side enabled or not.
+edition | The database edition. Should generally be PiwebDB.
+versionWsdlMajor | The major version number of the interface.
+versionWsdlMinor | The minor version number of the interface.
+partCount | Number of parts stored in the server
+characteristicCount | Number of characteristics stored in the server
+measurementCount | Number of measurements stored in the server
+valueCount |Number of measured values stored in the server
+featureList | Includes the erver side supported features.
+inspectionPlanTimestamp | Timestamp of the last inspection plan modification
+measurementTimestamp | Timestamp of the last measurement modification
+configurationTimestamp | Timestamp of the last configuration timestamp
 
 ## {{ page.sections['endpoint'] }}
 
@@ -19,11 +43,17 @@ URL Endpoint | GET | PUT | POST | DELETE
 -------------|-----|-----|------|-------
 /serviceInformation | Returns general information about the PiWeb-Server | not supported | not supported | not supported
 
+## {{page.sections['sdk'] }}
+
+Method | Description | Parameter Description
+-------|-------------|----------------------
+```public Task<ServiceInformation> GetServiceInformation( CancellationToken cancellationToken = default(CancellationToken) )``` | Returns general information about the PiWeb-Server | The ```cancellationToken``` can be transferred optionally and gives the possibility to cancel the asyncronous call.
+
 ## {{ page.sections['get'] }}
 
-Fetching service information is guaranteed to be very fast and is therefore well suited for checking the connection. This method can always be invoked without having credentials specified. 
-
 ### Get Service Information for a given connection
+
+The first time service information are fetched from the server database statistics values need to be created. As the service information call should return immediately statistics creation is triggered in a separate task. Therefore the statistical values partCount, characteristicsCount, measurementsCount and valuesCount stays empty in the first response but should generally contain values on the second call.
 
 ####Example for direct webservice call
 
@@ -50,8 +80,6 @@ Response:
           "characteristicCount": 125,
           "measurementCount": 20,
           "valueCount": 900,
-          "queryTimeout": 0,
-          "queryRowLimit": 0,
           "featureList":
           [
              "MeasurementAggregation",
