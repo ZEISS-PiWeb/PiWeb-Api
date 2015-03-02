@@ -72,12 +72,6 @@ indent         | true, **false**                     | Determines if the respons
 
 The _**filter**_ parameter can have the following name-value pairs. Lists of Ids or UUIDs need to be surrounded by “{“ and “}”, the values within the list are separated by “,”.
 
-###Catalogues
-
-Parameter name      | Possible values [**default value**] | Description  <br> ```Example``` | Accepted by HTTP methods
---------------------|-----------------|-------------|-------------------------------------------------
-withCatalogueEntries| **true**, false      | Determines if the catalogue entries should be returned or not. <br><br>Example: <br>```withCatalogueEntries:true``` | GET
-
 ###Inspection Plan
 
 Parameter name      | Possible values [**default value**] | Description  <br> ```Example``` | Accepted by endpoint | Accepted by HTTP methods
