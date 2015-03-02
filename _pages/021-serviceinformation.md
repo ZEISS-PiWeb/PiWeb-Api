@@ -51,20 +51,21 @@ Method | Description | Parameter Description
 
 ## {{ page.sections['get'] }}
 
-### Get Service Information for a given connection
-
 The first time service information are fetched from the server database statistics values need to be created. As the service information call should return immediately statistics creation is triggered in a separate task. Therefore the statistical values partCount, characteristicsCount, measurementsCount and valuesCount stays empty in the first response but should generally contain values on the second call.
 
-####Example for direct webservice call
+### {{ site.headers['example'] }}  Get Service Information for a given connection
 
-Request:
+{{ site.sections['beginExampleWebService'] }}
+
+{{ site.headers['request']  | markdownify }}
 
 {% highlight http %}
 GET /dataServiceRest/serviceInformation HTTP/1.1
 {% endhighlight %}
 
-Response:
-{% highlight json linenos %}
+{{ site.headers['response']  | markdownify }}
+
+{% highlight json %}
 {
    ...
    "data":
@@ -94,9 +95,14 @@ Response:
 }
 {% endhighlight %}
 
-####Example for webservice call via API.dll
+{{ site.sections['endExample'] }}
+{{ site.sections['beginExampleAPI'] }}
+
+{{ site.headers['request'] | markdownify }}
 
 {% highlight csharp %}
 var client = new DataServiceRestClient( serviceUri );
 ServiceInformation information = client.GetServiceInformation();
 {% endhighlight %}
+
+{{ site.sections['endExample'] }}
