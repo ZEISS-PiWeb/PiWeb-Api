@@ -47,7 +47,7 @@ URL Endpoint | GET | PUT | POST | DELETE
 
 {% highlight csharp %}
 /// <summary> Returns general information about the PiWeb-Server </summary>
-/// <param name="cancellationToken"> The ```cancellationToken``` can be transferred optionally 
+/// <param name="cancellationToken"> The cancellationToken can be transferred optionally 
 /// and gives the possibility to cancel the asyncronous call</param>
 public Task<ServiceInformation> GetServiceInformation( CancellationToken cancellationToken = default(CancellationToken) )
 {% endhighlight %}
