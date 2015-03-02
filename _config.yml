@@ -7,7 +7,6 @@ defaults:
 
 include: ['_pages']
 relative_permalinks: false
-highlighter: rouge
 baseurl: "/PiWeb-Api"
 links:
   configuration: "[Configuration](/PiWeb-Api/dataservice/configuration/)"
