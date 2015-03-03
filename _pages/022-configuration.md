@@ -69,6 +69,19 @@ Method Name | Parmeter<br>*Optional Parameter[default value]* | Parameter Descri
 ------------|-------------------------------------------------|----------------------
 GetConfiguration | *```CancellationToken``` ct [null]* |  The ```CancellationToken ct``` gives the possibility to cancel the asyncronous call.
 
+{% include exampleFieldset.html caption=" Adding a part attribute with the key 1001 to the configuration" %}
+
+{{ site.headers['request'] | markdownify }}
+
+{% highlight csharp %}
+var client = new DataServiceRestClient( serviceUri );
+var attributeDefinition = 
+      new AttributeDefinition( 1001, "partNumber", AttributeType.AlphaNumeric, 30 );
+client.CreateAttributeDefinition( Entity.Part, attributeDefinition );
+{% endhighlight %}
+
+{{ site.sections['endExample'] }}
+
 ### Create Configuration Attributes
 
 Method Name | Parmeter<br>*Optional Parameter[default value]* | Parameter Description
@@ -123,18 +136,6 @@ POST /dataServiceRest/configuration/parts HTTP/1.1
 
 {% highlight http %}
 HTTP/1.1 201 Created
-{% endhighlight %}
-
-{{ site.sections['endExample'] }}
-{{ site.sections['beginExampleAPI'] }}
-
-{{ site.headers['request'] | markdownify }}
-
-{% highlight csharp %}
-var client = new DataServiceRestClient( serviceUri );
-var attributeDefinition = 
-      new AttributeDefinition( 1001, "partNumber", AttributeType.AlphaNumeric, 30 );
-client.CreateAttributeDefinition( Entity.Part, attributeDefinition );
 {% endhighlight %}
 
 {{ site.sections['endExample'] }}
