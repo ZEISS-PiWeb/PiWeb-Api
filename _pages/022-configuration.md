@@ -67,7 +67,7 @@ configuration/*entityType*/{*Comma seperated list of attribute definition ids*} 
 
 The complete configuration for all kinds of entities can be fetched via the method
 
-```GetConfiguration```
+{{ site.images['function-get'] }}  ```GetConfiguration```
 
 Parameter Name | Parmeter Type           | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
