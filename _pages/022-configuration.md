@@ -67,11 +67,11 @@ configuration/*entityType*/{*Comma seperated list of attribute definition ids*} 
 
 The complete configuration for all kinds of entities can be fetched via the method
 
-```GetConfiguration(..)```
+```GetConfiguration```
 
-Parameter Name | Parmeter Type | Parameter Description
-------------|-------------------------------------------------|----------------------
-token | ```CancellationToken``` |  The ```CancellationToken ct``` gives the possibility to cancel the asyncronous call.
+Parameter Name | Parmeter Type           | Parameter Description
+---------------|-------------------------|--------------------------------------------------
+token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
 
 {% include exampleFieldset.html caption=" Get the configuration" %}
 {{ site.headers['request'] | markdownify }}
@@ -85,13 +85,21 @@ Configuration config = await client.GetConfiguration();
 
 ### Create Configuration Attributes
 
-Method Name | Parmeter<br>*Optional Parameter[default value]* | Parameter Description
-------------|-------------------------------------------------|----------------------
-CreateAttributeDefinition | ```Entity``` entity<br><nobr><code>AbstractAttributeDefinition</code> definition </nobr><br>*```CancellationToken``` ct [null]* |  The ```Entity``` entity specifies the entity the attribute should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.<br> Depending on the entity the ```AbstractAttributeDefinition``` definition contains an ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` object which includes the attribute's values. <br> The ```CancellationToken``` ct gives the possibility to cancel the asyncronous call.
+On adding attributes to the configuration the entity type the attributes belong to as well as the attribute definition(s) need to be passed. Attributes can be added via the methods
 
-Method Name | Parmeter<br>*Optional Parameter[default value]* | Parameter Description
-------------|-------------------------------------------------|----------------------
-CreateAttributeDefinitions | ```Entity``` entity<br><nobr><code>AbstractAttributeDefinition[]</code> definitions </nobr><br>*```CancellationToken``` ct [null]* |  The ```Entity``` entity specifies the entity the attributes should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.<br> Depending on the entity the ```AbstractAttributeDefinition``` definitions contains several ```AttributeDefinition``` or  ```CatalogueAttributeDefinition``` objects which include the attributes' values. <br> The ```CancellationToken``` ct gives the possibility to cancel the asyncronous call.
+```CreateAttributeDefinition``` - adds a single attribute to the configuration
+
+Parameter Name | Parmeter Type           | Parameter Description
+---------------|-------------------------|--------------------------------------------------
+entity         | ```Entity```            | Specifies the entity the attribute should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
+definition     | AbstractAttributeDefinition | Depending on the entity the ```AbstractAttributeDefinition``` definition contains an ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` object which includes the attribute's values. token          | CancellationToken       | Parameter is optional and gives the possibility to cancel the asyncronous call.
+
+```CreateAttributeDefinitions``` - adds multiple attributes to the configuration
+
+Parameter Name | Parmeter Type           | Parameter Description
+---------------|-------------------------|--------------------------------------------------
+entity         | ```Entity```            | Specifies the entity the attributes should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
+definitions     | AbstractAttributeDefinition[] | Depending on the entity the ```AbstractAttributeDefinition``` definition contains ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` objects which includes the attribute's values. token          | CancellationToken       | Parameter is optional and gives the possibility to cancel the asyncronous call.
 
 {% include exampleFieldset.html caption="Adding a part attribute with the key 1001 to the configuration" %}
 
