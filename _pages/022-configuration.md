@@ -7,7 +7,7 @@ isSubPage: true
 permalink: /dataservice/configuration/
 sections:
   general: General Information
-  endpoint: REST API Endpoint Information
+  endpoint: REST API Endpoints
   sdk: .NET SDK Methods
   add: Add Attributes
   get: Get Configuration
@@ -36,7 +36,7 @@ key           | The attribute's key which the attribute can be uniquely identifi
 description   | The attribute's name or a short description 
 type          | The attribute's type. May be *AlphaNumeric*, *Integer*, *Float* or *DateTime*
 length        | Defines the attribute's maximum length. Only set if the type is *AlphaNumeric*
-definitionType| Has always the value 'AttributeDefinition' and is used to differentiate between  ```AttributeDefinition``` and ```CatalogueAttributeDefinition```
+definitionType| Has always the value 'AttributeDefinition' and is used to differentiate between  ```AttributeDefinition``` and ```CatalogueAttributeDefinition``` (only relevant and available for REST API)
 
 ###CatalogueAttributeDefinition
 
@@ -45,7 +45,7 @@ Property      | Description
 key           | The attribute's key which the attribute can be uniquely identified by
 description   | The attribute's name or a short description 
 catalogue     | The uuid of the catalogue the attribute's value has to be taken from
-definitionType| Has always the value 'CatalogueAttributeDefinition' and is used to differentiate between  ```AttributeDefinition``` and ```CatalogueAttributeDefinition```
+definitionType| Has always the value 'CatalogueAttributeDefinition' and is used to differentiate between  ```AttributeDefinition``` and ```CatalogueAttributeDefinition``` (only relevant and available for REST API)
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
