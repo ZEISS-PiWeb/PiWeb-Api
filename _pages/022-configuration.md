@@ -9,10 +9,6 @@ sections:
   general: General Information
   endpoint: REST API Endpoints
   sdk: .NET SDK Methods
-  add: Add Attributes
-  get: Get Configuration
-  update: Update Attributes
-  delete: Delete Attributes
 ---
 
 ## {{ page.sections['general'] }}
