@@ -99,7 +99,7 @@ To add one or more attributes to the configuration the entity type the attribute
 
 ### {{ site.headers['example'] }} Adding a part attribute with the key 1001 to the configuration
 
-{{ site.sections['beginExampleWebService'] }}
+{% include exampleFieldset.html caption=" Adding a part attribute with the key 1001 to the configuration" %}
 
 {{ site.headers['request']  | markdownify }}
 
