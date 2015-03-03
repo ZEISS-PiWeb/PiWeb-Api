@@ -69,15 +69,12 @@ Method Name | Parmeter<br>*Optional Parameter[default value]* | Parameter Descri
 ------------|-------------------------------------------------|----------------------
 GetConfiguration | *```CancellationToken``` ct [null]* |  The ```CancellationToken ct``` gives the possibility to cancel the asyncronous call.
 
-{% include exampleFieldset.html caption=" Adding a part attribute with the key 1001 to the configuration" %}
-
+{% include exampleFieldset.html caption=" Get the configuration" %}
 {{ site.headers['request'] | markdownify }}
 
 {% highlight csharp %}
-var client = new DataServiceRestClient( serviceUri );
-var attributeDefinition = 
-      new AttributeDefinition( 1001, "partNumber", AttributeType.AlphaNumeric, 30 );
-client.CreateAttributeDefinition( Entity.Part, attributeDefinition );
+var client = new DataServiceRestClient( new Uri( "http://piwebserver:8080" ) );
+Configuration config = await client.GetConfiguration();
 {% endhighlight %}
 
 {{ site.sections['endExample'] }}
@@ -92,17 +89,58 @@ Method Name | Parmeter<br>*Optional Parameter[default value]* | Parameter Descri
 ------------|-------------------------------------------------|----------------------
 CreateAttributeDefinitions | ```Entity``` entity<br><nobr><code>AbstractAttributeDefinition[]</code> definitions </nobr><br>*```CancellationToken``` ct [null]* |  The ```Entity``` entity specifies the entity the attributes should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.<br> Depending on the entity the ```AbstractAttributeDefinition``` definitions contains several ```AttributeDefinition``` or  ```CatalogueAttributeDefinition``` objects which include the attributes' values. <br> The ```CancellationToken``` ct gives the possibility to cancel the asyncronous call.
 
+{% include exampleFieldset.html caption="Adding a part attribute with the key 1001 to the configuration" %}
+
+{{ site.headers['request'] | markdownify }}
+
+{% highlight csharp %}
+var client = new DataServiceRestClient( new Uri( "http://piwebserver:8080" ) );
+var attributeDefinition = 
+      new AttributeDefinition( 1001, "partNumber", AttributeType.AlphaNumeric, 30 );
+await client.CreateAttributeDefinition( Entity.Part, attributeDefinition );
+{% endhighlight %}
+
+{{ site.sections['endExample'] }}
+
 ### Update Configuration Attributes
 
 Method Name | Parmeter<br>*Optional Parameter[default value]* | Parameter Description
 ------------|-------------------------------------------------|----------------------
 UpdateAttributeDefinitions | ```Entity``` entity<br><nobr><code>AbstractAttributeDefinition[]</code> definitions </nobr><br>*```CancellationToken``` ct [null]* |  The ```Entity``` entity specifies the entity the attributes belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.<br> Depending on the entity the ```AbstractAttributeDefinition``` definitions contains several to be updated ```AttributeDefinition``` or  ```CatalogueAttributeDefinition``` objects which include the attributes' values. <br> The ```CancellationToken``` ct gives the possibility to cancel the asyncronous call.
 
+{% include exampleFieldset.html caption="Updating the part attribute with key 1001 - change length from 30 to 50" %}
+{{ site.headers['request'] | markdownify }}
+
+{% highlight csharp %}
+var client = new DataServiceRestClient( new Uri( "http://piwebserver:8080" ) );
+
+//Get the attribute
+var config = await GetConfiguration();
+var partAttribute = config.PartAttributes.Where( p => p.Key == 1001);
+
+//Change the length
+partAttribute.Length = 50;
+client.UpdateAttributeDefinition( Entity.Part, attributeDefinition );
+{% endhighlight %}
+
+{{ site.sections['endExample'] }}
+
+
 ### Delete Configuration Attributes
 
 Method Name | Parmeter<br>*Optional Parameter[default value]* | Parameter Description
 ------------|-------------------------------------------------|----------------------
 DeleteAttributeDefinitions | ```Entity``` entity<br>*```ushort``` keys [null]*<br>*```CancellationToken``` ct [null]* |  The ```Entity``` entity specifies the entity the attributes belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.<br>The *keys* parameter may contain the keys of th attribute which should be deleted. If it stays empty all attributes of the given *entity* are deleted. <br> The ```CancellationToken``` ct gives the possibility to cancel the asyncronous call.
+
+{% include exampleFieldset.html caption="Delete the part attribute with key 1001" %}
+{{ site.headers['request'] | markdownify }}
+
+{% highlight csharp %}
+var client = new DataServiceRestClient( new Uri( "http://piwebserver:8080" ) );
+await client.DeleteAttributeDefinitions( Entity.Part, new ushort[]{ (ushort)1001 } );
+{% endhighlight %}
+
+{{ site.sections['endExample'] }}
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
@@ -207,16 +245,6 @@ GET /dataServiceRest/configuration HTTP/1.1
 
 {{ site.sections['endExample'] }}
 
-{{ site.sections['beginExampleAPI'] }}
-{{ site.headers['request'] | markdownify }}
-
-{% highlight csharp %}
-var client = new DataServiceRestClient( serviceUri );
-Configuration information = client.GetConfiguration();
-{% endhighlight %}
-
-{{ site.sections['endExample'] }}
-
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
 ## {{ page.sections['update'] }}
@@ -249,21 +277,6 @@ PUT /dataServiceRest/configuration/parts HTTP/1.1
 
 {% highlight http %}
 HTTP/1.1 200 Ok
-{% endhighlight %}
-
-{{ site.sections['endExample'] }}
-{{ site.sections['beginExampleAPI'] }}
-
-{{ site.headers['request'] | markdownify }}
-
-{% highlight csharp %}
-var client = new DataServiceRestClient( serviceUri );
-
-//Get the attribute
-...
-
-attributeDefinition.Length = 50;
-client.UpdateAttributeDefinition( Entity.Part, attributeDefinition );
 {% endhighlight %}
 
 {{ site.sections['endExample'] }}
@@ -347,16 +360,6 @@ DELETE /dataServiceRest/configuration/part/{1001} HTTP/1.1
 
 {% highlight http %}
 HTTP/1.1 200 Ok
-{% endhighlight %}
-
-{{ site.sections['endExample'] }}
-
-{{ site.sections['beginExampleAPI'] }}
-{{ site.headers['request'] | markdownify }}
-
-{% highlight csharp %}
-var client = new DataServiceRestClient( serviceUri );
-client.DeleteAttributeDefinitions( Entity.Part, new ushort[]{ (ushort)1001 } );
 {% endhighlight %}
 
 {{ site.sections['endExample'] }}
