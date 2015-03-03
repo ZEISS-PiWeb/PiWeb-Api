@@ -65,9 +65,13 @@ configuration/*entityType*/{*Comma seperated list of attribute definition ids*} 
 
 ### Get Configuration
 
-Method Name | Parmeter<br>*Optional Parameter[default value]* | Parameter Description
+The complete configuration for all kinds of entities can be fetched via the method
+
+```GetConfiguration(..)```
+
+Parameter Name | Parmeter Type | Parameter Description
 ------------|-------------------------------------------------|----------------------
-GetConfiguration | *```CancellationToken``` ct [null]* |  The ```CancellationToken ct``` gives the possibility to cancel the asyncronous call.
+token | ```CancellationToken``` |  The ```CancellationToken ct``` gives the possibility to cancel the asyncronous call.
 
 {% include exampleFieldset.html caption=" Get the configuration" %}
 {{ site.headers['request'] | markdownify }}
