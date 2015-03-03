@@ -100,7 +100,8 @@ token          | CancellationToken       | Parameter is optional and gives the p
 Parameter Name | Parmeter Type           | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
 entity         | ```Entity```            | Specifies the entity the attributes should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
-definitions     | AbstractAttributeDefinition[] | Depending on the entity the ```AbstractAttributeDefinition``` definition contains ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` objects which includes the attribute's values. token          | CancellationToken       | Parameter is optional and gives the possibility to cancel the asyncronous call.
+definitions     | AbstractAttributeDefinition[] | Depending on the entity the ```AbstractAttributeDefinition``` definition contains ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` objects which includes the attribute's values.
+token          | CancellationToken       | Parameter is optional and gives the possibility to cancel the asyncronous call.
 
 {% include exampleFieldset.html caption="Adding a part attribute with the key 1001 to the configuration" %}
 
