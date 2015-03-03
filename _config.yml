@@ -18,7 +18,7 @@ headers:
   request: "![Request](/PiWeb-Api/images/server-import.png) Request"
   response: "![Response](/PiWeb-Api/images/server-export.png) Response"
 sections:
-  beginExampleWebService: "<fieldset><legend><span><img src=\"/PiWeb-Api/images/document-info.png\"/></span></legend>"
+  beginExampleWebService: "<fieldset><legend><span><img src=\"/PiWeb-Api/images/document-info.png\"/></span> Example:</legend>"
   beginExampleAPI: "<fieldset><legend> Webservice call via API.dll </legend>"
   endExample: "</fieldset>"
   endCode: "</div>"
