@@ -104,7 +104,7 @@ GET /dataServiceRest/serviceInformation HTTP/1.1
 
 {% highlight csharp %}
 var client = new DataServiceRestClient( serviceUri );
-ServiceInformation information = client.GetServiceInformation();
+ServiceInformation information = await client.GetServiceInformation();
 {% endhighlight %}
 
 {{ site.sections['endExample'] }}
