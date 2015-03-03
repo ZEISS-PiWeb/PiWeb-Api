@@ -73,7 +73,7 @@ GetConfiguration | *CancellationToken ct [null]* |  The ```CancellationToken ct`
 
 Method Name | Parmeter<br>*Optional Parameter[default value]* | Parameter Description
 ------------|-------------------------------------------------|----------------------
-CreateAttributeDefinition | Entity entity<br>AbstractAttributeDefinition definition<br>*CancellationToken ct [null]* |  The ```CancellationToken ct``` gives the possibility to cancel the asyncronous call.
+CreateAttributeDefinition | Entity entity<br><nobr>AbstractAttributeDefinition definition</nobr><br>*CancellationToken ct [null]* |  The ```CancellationToken ct``` gives the possibility to cancel the asyncronous call.
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
