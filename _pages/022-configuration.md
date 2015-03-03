@@ -73,7 +73,7 @@ GetConfiguration | *```CancellationToken``` ct [null]* |  The ```CancellationTok
 
 Method Name | Parmeter<br>*Optional Parameter[default value]* | Parameter Description
 ------------|-------------------------------------------------|----------------------
-CreateAttributeDefinition | ```Entity``` entity<br><nobr><code>AbstractAttributeDefinition</code> definition </nobr><br>*```CancellationToken``` ct [null]* |  The ```Entity``` entity specifies the entity the attribute should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.<br> The ```CancellationToken``` ct gives the possibility to cancel the asyncronous call.
+CreateAttributeDefinition | ```Entity``` entity<br><nobr><code>AbstractAttributeDefinition</code> definition </nobr><br>*```CancellationToken``` ct [null]* |  The ```Entity``` entity specifies the entity the attribute should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.<br> Depending on the entity the ```AbstractAttributeDefinition``` definitoins contains an ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` object which includes the attribute's values. <br> The ```CancellationToken``` ct gives the possibility to cancel the asyncronous call.
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
