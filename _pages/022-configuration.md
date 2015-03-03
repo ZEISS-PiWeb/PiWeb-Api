@@ -352,7 +352,7 @@ client.DeleteAttributeDefinitions( Entity.Part );
 
 {{ site.sections['endExample'] }}
 <br>
-####{{ site.images['function-delete'] }} ```DeleteAllAttributeDefinitions``` - deletes all attributes of the configuration
+#### {{ site.images['function-delete'] }} ```DeleteAllAttributeDefinitions``` - deletes all attributes of the configuration
 
 Parameter Name | Parmeter Type           | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
