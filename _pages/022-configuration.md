@@ -270,8 +270,8 @@ On adding attributes to the configuration the entity type the attributes belong 
 Parameter Name | Parmeter Type           | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
 entity         | ```Entity```            | Specifies the entity the attribute should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
-definition     | AbstractAttributeDefinition | Depending on the entity the ```AbstractAttributeDefinition``` definition contains an ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` object which includes the attribute's values.
-token          | CancellationToken       | Parameter is optional and gives the possibility to cancel the asyncronous call.
+definition     | ```AbstractAttributeDefinition``` | Depending on the entity the ```AbstractAttributeDefinition``` definition contains an ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` object which includes the attribute's values.
+token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
 
 {% include exampleFieldset.html caption="Adding a part attribute with the key 1001 to the configuration" %}
 
@@ -291,8 +291,8 @@ await client.CreateAttributeDefinition( Entity.Part, attributeDefinition );
 Parameter Name | Parmeter Type           | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
 entity         | ```Entity```            | Specifies the entity the attributes should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
-definitions     | AbstractAttributeDefinition[] | Depending on the entity the ```AbstractAttributeDefinition``` definition contains ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` objects which includes the attribute's values.
-token          | CancellationToken       | Parameter is optional and gives the possibility to cancel the asyncronous call.
+definitions     | ```AbstractAttributeDefinition[]``` | Depending on the entity the ```AbstractAttributeDefinition``` definition contains ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` objects which includes the attribute's values.
+token          | ```CancellationToken```       | Parameter is optional and gives the possibility to cancel the asyncronous call.
 
 ### Update Configuration Attributes
 
@@ -301,8 +301,8 @@ token          | CancellationToken       | Parameter is optional and gives the p
 Parameter Name | Parmeter Type           | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
 entity         | ```Entity```            | Specifies the entity the attributes belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
-definitions     | AbstractAttributeDefinition[] | Depending on the entity the ```AbstractAttributeDefinition``` definition contains ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` objects which includes the attribute's values.
-token          | CancellationToken       | Parameter is optional and gives the possibility to cancel the asyncronous call.
+definitions     | ```AbstractAttributeDefinition[]``` | Depending on the entity the ```AbstractAttributeDefinition``` definition contains ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` objects which includes the attribute's values.
+token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
 
 {% include exampleFieldset.html caption="Updating the part attribute with key 1001 - change length from 30 to 50" %}
 {{ site.headers['request'] | markdownify }}
@@ -329,8 +329,8 @@ client.UpdateAttributeDefinition( Entity.Part, attributeDefinition );
 Parameter Name | Parmeter Type           | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
 entity         | ```Entity```            | Specifies the entity the attributes should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
-keys           | ushort[]                | May contain the keys of th attributes which should be deleted. If it stays empty all attributes of the given *entity* are deleted.
-token          | CancellationToken       | Parameter is optional and gives the possibility to cancel the asyncronous call.
+keys           | ```ushort[]```          | May contain the keys of th attributes which should be deleted. If it stays empty all attributes of the given *entity* are deleted.
+token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
 
 {% include exampleFieldset.html caption="Delete the part attribute with key 1001" %}
 {{ site.headers['request'] | markdownify }}
@@ -351,12 +351,12 @@ client.DeleteAttributeDefinitions( Entity.Part );
 {% endhighlight %}
 
 {{ site.sections['endExample'] }}
-
+<br>
 {{ site.images['function-delete'] }} ```DeleteAllAttributeDefinitions``` - deletes all attributes of the configuration
 
 Parameter Name | Parmeter Type           | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
-token          | CancellationToken       | Parameter is optional and gives the possibility to cancel the asyncronous call.
+token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
 
 {% include exampleFieldset.html caption="Delete all attributes of the configuration" %}
 {{ site.headers['request'] | markdownify }}
