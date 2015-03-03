@@ -73,7 +73,23 @@ GetConfiguration | *```CancellationToken``` ct [null]* |  The ```CancellationTok
 
 Method Name | Parmeter<br>*Optional Parameter[default value]* | Parameter Description
 ------------|-------------------------------------------------|----------------------
-CreateAttributeDefinition | ```Entity``` entity<br><nobr><code>AbstractAttributeDefinition</code> definition </nobr><br>*```CancellationToken``` ct [null]* |  The ```Entity``` entity specifies the entity the attribute should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.<br> Depending on the entity the ```AbstractAttributeDefinition``` definitoins contains an ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` object which includes the attribute's values. <br> The ```CancellationToken``` ct gives the possibility to cancel the asyncronous call.
+CreateAttributeDefinition | ```Entity``` entity<br><nobr><code>AbstractAttributeDefinition</code> definition </nobr><br>*```CancellationToken``` ct [null]* |  The ```Entity``` entity specifies the entity the attribute should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.<br> Depending on the entity the ```AbstractAttributeDefinition``` definition contains an ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` object which includes the attribute's values. <br> The ```CancellationToken``` ct gives the possibility to cancel the asyncronous call.
+
+Method Name | Parmeter<br>*Optional Parameter[default value]* | Parameter Description
+------------|-------------------------------------------------|----------------------
+CreateAttributeDefinitions | ```Entity``` entity<br><nobr><code>AbstractAttributeDefinition[]</code> definitions </nobr><br>*```CancellationToken``` ct [null]* |  The ```Entity``` entity specifies the entity the attributes should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.<br> Depending on the entity the ```AbstractAttributeDefinition``` definitions contains several ```AttributeDefinition``` or  ```CatalogueAttributeDefinition``` objects which include the attributes' values. <br> The ```CancellationToken``` ct gives the possibility to cancel the asyncronous call.
+
+### Update Configuration Attributes
+
+Method Name | Parmeter<br>*Optional Parameter[default value]* | Parameter Description
+------------|-------------------------------------------------|----------------------
+UpdateAttributeDefinitions | ```Entity``` entity<br><nobr><code>AbstractAttributeDefinition[]</code> definitions </nobr><br>*```CancellationToken``` ct [null]* |  The ```Entity``` entity specifies the entity the attributes belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.<br> Depending on the entity the ```AbstractAttributeDefinition``` definitions contains several to be updated ```AttributeDefinition``` or  ```CatalogueAttributeDefinition``` objects which include the attributes' values. <br> The ```CancellationToken``` ct gives the possibility to cancel the asyncronous call.
+
+### Delete Configuration Attributes
+
+Method Name | Parmeter<br>*Optional Parameter[default value]* | Parameter Description
+------------|-------------------------------------------------|----------------------
+DeleteAttributeDefinitions | ```Entity``` entity<br>*```ushort``` keys [null]*<br>*```CancellationToken``` ct [null]* |  The ```Entity``` entity specifies the entity the attributes belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.<br>The *keys* parameter may contain the keys of th attribute which should be deleted. If it stays empty all attributes of the given *entity* are deleted. <br> The ```CancellationToken``` ct gives the possibility to cancel the asyncronous call.
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
