@@ -92,7 +92,8 @@ On adding attributes to the configuration the entity type the attributes belong 
 Parameter Name | Parmeter Type           | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
 entity         | ```Entity```            | Specifies the entity the attribute should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
-definition     | AbstractAttributeDefinition | Depending on the entity the ```AbstractAttributeDefinition``` definition contains an ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` object which includes the attribute's values. token          | CancellationToken       | Parameter is optional and gives the possibility to cancel the asyncronous call.
+definition     | AbstractAttributeDefinition | Depending on the entity the ```AbstractAttributeDefinition``` definition contains an ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` object which includes the attribute's values.
+token          | CancellationToken       | Parameter is optional and gives the possibility to cancel the asyncronous call.
 
 ```CreateAttributeDefinitions``` - adds multiple attributes to the configuration
 
