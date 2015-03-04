@@ -1,7 +1,8 @@
 <fieldset>
   <legend><span><img src="/PiWeb-Api/images/function-delete.png"/></span>{{caption}}</legend>
-  <br>{{description}} and consits of the following parameters:
+  <br>{{description}}
+  and consits of the following parameters:
   {{parameterTable | markdownify}}
-  {{ exampleCaption | prepend: '**<img src="/PiWeb-Api/images/document-info.png"/> Example:' | append:'**' | markdownify }}
+  {{ exampleCaption | prepend: ' Example:' | prepend: {{ site.images['document-info'] }} | prepend: '**' | append:'**' | markdownify }}
   {{example}}
 </fieldset>
