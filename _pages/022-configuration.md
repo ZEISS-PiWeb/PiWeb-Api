@@ -324,44 +324,38 @@ client.UpdateAttributeDefinition( Entity.Part, attributeDefinition );
 
 ### Delete Configuration Attributes
 
-{{ site.images['function-delete'] }} ```DeleteAttributeDefinitions``` - deletes all or certain attributes for a given entity
-
+{% assign caption="DeleteAttributeDefinitions" %}
+{% assign icon=site.images['function-delete'] %}
+{% assign description="Deletes all or certain attributes for a given entity from the configuration." %}
+{% capture parameterTable %}
 Parameter Name | Parameter Type           | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
 entity         | ```Entity```            | Specifies the entity the attributes should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
 keys           | ```ushort[]```          | May contain the keys of th attributes which should be deleted. If it stays empty all attributes of the given *entity* are deleted.
 token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
 
-{% include exampleFieldset.html caption="Delete the part attribute with key 1001" %}
-{{ site.headers['request'] | markdownify }}
-
+{% assign exampleCaption="Delete all attributes of the configuration" %}
+{% capture example %}
 {% highlight csharp %}
 var client = new DataServiceRestClient( new Uri( "http://piwebserver:8080" ) );
 await client.DeleteAttributeDefinitions( Entity.Part, new ushort[]{ (ushort)1001 } );
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
+{% include sdkFunctionFieldset.html %}
 
-{% include exampleFieldset.html caption="Delete all part attributes" %}
-{{ site.headers['request'] | markdownify }}
-
-{% highlight csharp %}
-var client = new DataServiceRestClient( "http://piwebserver:8080" );
-client.DeleteAttributeDefinitions( Entity.Part );
-{% endhighlight %}
-
-{{ site.sections['endExample'] }}
 
 {% assign caption="DeleteAllAttributeDefinitions" %}
 {% assign icon=site.images['function-delete'] %}
-{% assign description="Deletes all attributes of every single entity for the configuration." %}
+{% assign description="Deletes all attributes of every single entity from the configuration." %}
 {% capture parameterTable %}
 Name           | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
 token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
 {% endcapture %}
-{% assign exampleCaption="Delete all attributes of the configuration" %}
 
+{% assign exampleCaption="Delete all attributes of the configuration" %}
 {% capture example %}
 {% highlight csharp %}
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
