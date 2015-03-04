@@ -1,8 +1,8 @@
 <fieldset>
   <legend><span><img src="/PiWeb-Api/images/function-delete.png"/></span>{{caption}}</legend>
   <br>{{description}}
-  and consits of the following parameters:
+  {{ site.images['list-info'] | append: ' **Parameter List:**'| markdownify }}
   {{parameterTable | markdownify}}
-  {{ exampleCaption | prepend: ' Example:' | prepend: site.images['document-info'] | prepend: '**' | append:'**' | markdownify }}
+  {{ site.images['document-info'] | append: ' **Example: ' | append: exampleCaption | append:'**' | markdownify }}
   {{example}}
 </fieldset>
