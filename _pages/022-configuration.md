@@ -357,8 +357,8 @@ Parameter Name | Parameter Type          | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
 token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
 {% endcapture %}
-
-{% include sdkFunctionFieldset.html caption="DeleteAllAttributeDefinitions" description={{"```Deletes all attributes of the configuration```" | markdownify }} %}
+{% capture description %}```Deletes all attributes of the configuration```{% endcapture %}
+{% include sdkFunctionFieldset.html caption="DeleteAllAttributeDefinitions" %}
 
 {% include exampleFieldset.html caption="Delete all attributes of the configuration" %}
 {{ site.headers['request'] | markdownify }}
