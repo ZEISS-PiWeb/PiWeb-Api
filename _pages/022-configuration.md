@@ -59,7 +59,7 @@ configuration/*entityType*/{*Comma seperated list of attribute definition ids*} 
 
 Fetching the whole configuration returns the attribute definitions for all kind of entities.
 
-{% capture exampleCaption="Fetching the configuration including all attriutes" %}
+{% assign exampleCaption="Fetching the configuration including all attriutes" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
