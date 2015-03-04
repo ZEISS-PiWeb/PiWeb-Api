@@ -354,8 +354,7 @@ client.DeleteAttributeDefinitions( Entity.Part );
 
 #### {{ site.images['function-delete'] }} ```DeleteAllAttributeDefinitions //Deletes all attributes of the configuration```
 
-{% capture fieldset %}{% include sdkFunctionFieldset.md caption="DeleteAllAttributeDefinitions" %}{% endcapture %}
-{{ fieldset | markdownify }}
+{% include sdkFunctionFieldset.html caption="DeleteAllAttributeDefinitions" %}
 
 Parameter Name | Parameter Type          | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
