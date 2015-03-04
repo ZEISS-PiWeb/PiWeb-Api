@@ -360,6 +360,7 @@ Parameter Name | Parameter Type          | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
 token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
 
+
 {{ site.sections['endExample'] }}
 
 {% include exampleFieldset.html caption="Delete all attributes of the configuration" %}
