@@ -299,6 +299,8 @@ token          | ```CancellationToken```       | Parameter is optional and gives
 
 {% assign exampleCaption = "" %}
 
+{% include sdkFunctionFieldset.html %}
+
 ### Update Configuration Attributes
 
 {% assign caption="`UpdateAttributeDefinitions" %}
