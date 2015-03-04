@@ -354,14 +354,13 @@ client.DeleteAttributeDefinitions( Entity.Part );
 
 #### {{ site.images['function-delete'] }} ```DeleteAllAttributeDefinitions //Deletes all attributes of the configuration```
 
-{% include sdkFunctionFieldset.html caption="DeleteAllAttributeDefinitions" %}
+<fieldset><legend><span><img src="/PiWeb-Api/images/function-delete.png"/></span>DeleteAllAttributeDefinitions</legend>
 
 Parameter Name | Parameter Type          | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
 token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
 
-
-{{ site.sections['endExample'] }}
+</fieldset>
 
 {% include exampleFieldset.html caption="Delete all attributes of the configuration" %}
 {{ site.headers['request'] | markdownify }}
