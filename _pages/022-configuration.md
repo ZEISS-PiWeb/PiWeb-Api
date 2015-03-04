@@ -124,10 +124,9 @@ GET /dataServiceRest/configuration HTTP/1.1
 
 To add one or more attributes to the configuration the entity type the attributes belong to as well as the attribute definition(s) need to be transfered. The entity type ist transfered in the uri the attributes within the body of the request.
 
-{% include exampleFieldset.html caption=" Adding a part attribute with the key 1001 to the configuration" %}
+{% assign exampleCaption="Adding a part attribute with the key 1001 to the configuration" %}
 
-{{ site.headers['request']  | markdownify }}
-
+{% capture jsonrequest %}
 {% highlight http %}
 POST /dataServiceRest/configuration/parts HTTP/1.1
 {% endhighlight %}
@@ -143,23 +142,23 @@ POST /dataServiceRest/configuration/parts HTTP/1.1
   }
 ]
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.headers['response']  | markdownify }}
-
+{% capture jsonresponse %}
 {% highlight http %}
 HTTP/1.1 201 Created
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
+{% include exampleFieldset.html %}
 
 ### Update Attributes
 
 To update one or more attributes to the configuration the entity type the attributes belong to as well as the attribute definition(s) need to be transfered. The entity type ist transfered in the uri the attributes within the body of the request.
 
-{% include exampleFieldset.html caption="Updating the part attribute with key 1001 - change length from 30 to 50" %}
+{% assign exampleCaption="Updating the part attribute with key 1001 - change length from 30 to 50" %}
 
-{{ site.headers['request']  | markdownify }}
-
+{% capture jsonrequest %}
 {% highlight http %}
 PUT /dataServiceRest/configuration/parts HTTP/1.1
 {% endhighlight %}
@@ -175,14 +174,15 @@ PUT /dataServiceRest/configuration/parts HTTP/1.1
   }
 ]
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.headers['response']  | markdownify }}
-
+{% capture jsonresponse %}
 {% highlight http %}
 HTTP/1.1 200 Ok
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
+{% include exampleFieldset.html %}
 
 ### Delete Attributes
 
@@ -194,50 +194,53 @@ There are three different options of deleting attributes:
  
 The following examples illustrate these options.
 
-{% include exampleFieldset.html caption="Delete all attributes of the current configuration" %}
-{{ site.headers['request'] | markdownify }}
+{% assign exampleCaption="Delete all attributes of the current configuration" %}
 
+{% capture jsonrequest %}
 {% highlight http %}
 DELETE /dataServiceRest/configuration HTTP/1.1
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.headers['response']  | markdownify }}
-
+{% capture jsonresponse %}
 {% highlight http %}
 HTTP/1.1 200 Ok
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
+{% include exampleFieldset.html %}
 
-{% include exampleFieldset.html caption="Delete all part attributes" %}
-{{ site.headers['request'] | markdownify }}
+{% assign exampleCaption="Delete all part attributes" %}
 
+{% capture jsonrequest %}
 {% highlight http %}
 DELETE /dataServiceRest/configuration/part HTTP/1.1
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.headers['response']  | markdownify }}
-
+{% capture jsonresponse %}
 {% highlight http %}
 HTTP/1.1 200 Ok
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
+{% include exampleFieldset.html %}
 
-{% include exampleFieldset.html caption="Delete the part attribute with the key 1001" %}
-{{ site.headers['request'] | markdownify }}
+{% assign exampleCaption="Delete the part attribute with the key 1001" %}
 
+{% capture jsonrequest %}
 {% highlight http %}
 DELETE /dataServiceRest/configuration/part/{1001} HTTP/1.1
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.headers['response']  | markdownify }}
-
+{% capture jsonresponse %}
 {% highlight http %}
 HTTP/1.1 200 Ok
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
+{% include exampleFieldset.html %}
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
