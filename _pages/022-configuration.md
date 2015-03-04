@@ -244,26 +244,29 @@ HTTP/1.1 200 Ok
 ### Get Configuration
 
 The complete configuration for all kinds of entities can be fetched via the method
-
-{{ site.images['function-get'] }}  ```GetConfiguration```
+{% assign caption="GetConfiguration" %}
+{% assign icon=site.images['function-get'] %}
+{% assign description="Fetches the complete configuration for all kinds of entities." %}
+{% capture parameterTable %}
 
 Parameter Name | Parameter Type           | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
 token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
 
-{% include exampleFieldset.html caption=" Get the configuration" %}
-{{ site.headers['request'] | markdownify }}
-
+{% assign exampleCaption="Get the configuration" %}
+{% capture example %}
 {% highlight csharp %}
 var client = new DataServiceRestClient( new Uri( "http://piwebserver:8080" ) );
 Configuration config = await client.GetConfiguration();
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
+{% include sdkFunctionFieldset.html %}
 
 ### Create Configuration Attributes
 
-{% assign caption="`CreateAttributeDefinition" %}
+{% assign caption="CreateAttributeDefinition" %}
 {% assign icon=site.images['function-create'] %}
 {% assign description="Adds a single attribute for a given entity to the configuration." %}
 {% capture parameterTable %}
@@ -286,7 +289,7 @@ await client.CreateAttributeDefinition( Entity.Part, attributeDefinition );
 
 {% include sdkFunctionFieldset.html %}
 
-{% assign caption="`CreateAttributeDefinitions" %}
+{% assign caption="CreateAttributeDefinitions" %}
 {% assign icon=site.images['function-create'] %}
 {% assign description="Adds multiple attributes for a given entity to the configuration." %}
 {% capture parameterTable %}
@@ -303,7 +306,7 @@ token          | ```CancellationToken```       | Parameter is optional and gives
 
 ### Update Configuration Attributes
 
-{% assign caption="`UpdateAttributeDefinitions" %}
+{% assign caption="UpdateAttributeDefinitions" %}
 {% assign icon=site.images['function-update'] %}
 {% assign description="Updates one or more attributes for a given entity." %}
 {% capture parameterTable %}
