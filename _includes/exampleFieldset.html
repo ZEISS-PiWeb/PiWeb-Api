@@ -1,6 +1,6 @@
 <fieldset>
   <legend>
-    {{  site.images['document-info'] | append: ' Example: ' | append: exampleCaption }}
+    {{  site.images['document-info'] | append: ' Example: ' | append: exampleCaption | markdownify }}
   </legend>
   {{ site.headers['request']  | markdownify }}
   {{ jsonrequest | markdownify }}
