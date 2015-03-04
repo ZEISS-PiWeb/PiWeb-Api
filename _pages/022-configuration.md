@@ -353,6 +353,7 @@ client.DeleteAttributeDefinitions( Entity.Part );
 {{ site.sections['endExample'] }}
 
 {% assign caption="DeleteAllAttributeDefinitions" %}
+{% assign icon="site.images['function-delete']" %}
 {% assign description="Deletes all attributes of every single entity for the configuration." %}
 {% capture parameterTable %}
 Name           | Type                    | Description
