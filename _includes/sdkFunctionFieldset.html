@@ -1,5 +1,7 @@
 <fieldset>
-  {{  site.images['document-info'] | prepend: '<legend><span>' | append: '</span>'| append: caption | append: '</legend>' | markdownify }}
+  <legend>
+  {{  site.images['document-info'] | append: caption | markdownify }}
+  </legend>
   <br>{{description}}<br><br>
   {{ site.images['list-info'] | append: ' **Parameter List:**'| markdownify }}
   {{parameterTable | markdownify}}
