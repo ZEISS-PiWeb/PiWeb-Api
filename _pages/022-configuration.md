@@ -355,7 +355,7 @@ client.DeleteAttributeDefinitions( Entity.Part );
 {% assign caption="DeleteAllAttributeDefinitions" %}
 {% assign description="Deletes all attributes of the configuration" %}
 {% capture parameterTable %}
-<pre>Parameter Name</pre> | Parameter Type          | Parameter Description
+Name           | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
 token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
 {% endcapture %}
