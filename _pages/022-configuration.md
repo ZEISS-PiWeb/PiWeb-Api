@@ -247,7 +247,7 @@ The complete configuration for all kinds of entities can be fetched via the meth
 
 {{ site.images['function-get'] }}  ```GetConfiguration```
 
-Parameter Name | Parmeter Type           | Parameter Description
+Parameter Name | Parameter Type           | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
 token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
 
@@ -267,7 +267,7 @@ On adding attributes to the configuration the entity type the attributes belong 
 
 {{ site.images['function-create'] }} ```CreateAttributeDefinition``` - adds a single attribute to the configuration
 
-Parameter Name | Parmeter Type           | Parameter Description
+Parameter Name | Parameter Type           | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
 entity         | ```Entity```            | Specifies the entity the attribute should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
 definition     | ```AbstractAttributeDefinition``` | Depending on the entity the ```AbstractAttributeDefinition``` definition contains an ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` object which includes the attribute's values.
@@ -288,7 +288,7 @@ await client.CreateAttributeDefinition( Entity.Part, attributeDefinition );
 
 {{ site.images['function-create'] }} ```CreateAttributeDefinitions``` - adds multiple attributes to the configuration
 
-Parameter Name | Parmeter Type           | Parameter Description
+Parameter Name | Parameter Type           | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
 entity         | ```Entity```            | Specifies the entity the attributes should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
 definitions     | ```AbstractAttributeDefinition[]``` | Depending on the entity the ```AbstractAttributeDefinition``` definition contains ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` objects which includes the attribute's values.
@@ -298,7 +298,7 @@ token          | ```CancellationToken```       | Parameter is optional and gives
 
 {{ site.images['function-update'] }} ```UpdateAttributeDefinitions```
 
-Parameter Name | Parmeter Type           | Parameter Description
+Parameter Name | Parameter Type           | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
 entity         | ```Entity```            | Specifies the entity the attributes belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
 definitions     | ```AbstractAttributeDefinition[]``` | Depending on the entity the ```AbstractAttributeDefinition``` definition contains ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` objects which includes the attribute's values.
@@ -326,7 +326,7 @@ client.UpdateAttributeDefinition( Entity.Part, attributeDefinition );
 
 {{ site.images['function-delete'] }} ```DeleteAttributeDefinitions``` - deletes all or certain attributes for a given entity
 
-Parameter Name | Parmeter Type           | Parameter Description
+Parameter Name | Parameter Type           | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
 entity         | ```Entity```            | Specifies the entity the attributes should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
 keys           | ```ushort[]```          | May contain the keys of th attributes which should be deleted. If it stays empty all attributes of the given *entity* are deleted.
@@ -354,13 +354,12 @@ client.DeleteAttributeDefinitions( Entity.Part );
 
 #### {{ site.images['function-delete'] }} ```DeleteAllAttributeDefinitions //Deletes all attributes of the configuration```
 
-{% include sdkFunctionFieldset.html caption="DeleteAllAttributeDefinitions" %}
+{% capture fieldset %}{% include sdkFunctionFieldset.md caption="DeleteAllAttributeDefinitions" %}{% endcapture %}
+{{ fieldset | markdownify }}
 
-{{
-"Parameter Name | Parmeter Type           | Parameter Description
+Parameter Name | Parameter Type          | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
-token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call."
- | markdownify }}
+token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
 
 {{ site.sections['endExample'] }}
 
