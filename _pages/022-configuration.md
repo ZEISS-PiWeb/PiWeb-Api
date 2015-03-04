@@ -354,9 +354,13 @@ client.DeleteAttributeDefinitions( Entity.Part );
 
 #### {{ site.images['function-delete'] }} ```DeleteAllAttributeDefinitions //Deletes all attributes of the configuration```
 
+{% include sdkFunctionFieldset.html caption="DeleteAllAttributeDefinitions" %}
+
 Parameter Name | Parmeter Type           | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
 token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
+
+{{ site.sections['endExample'] }}
 
 {% include exampleFieldset.html caption="Delete all attributes of the configuration" %}
 {{ site.headers['request'] | markdownify }}
