@@ -13,6 +13,7 @@ links:
 images:
   warning: "![Warning](/PiWeb-Api/images/warning.png)"
   info: "![Warning](/PiWeb-Api/images/info.png)"
+  list-info: "![Warning](/PiWeb-Api/images/list-info.png)"
   function-get: "![Get](/PiWeb-Api/images/function-get.png)"
   function-create: "![Get](/PiWeb-Api/images/function-create.png)"
   function-update: "![Get](/PiWeb-Api/images/function-update.png)"
