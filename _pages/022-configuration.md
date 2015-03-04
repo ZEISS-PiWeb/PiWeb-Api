@@ -352,20 +352,20 @@ client.DeleteAttributeDefinitions( Entity.Part );
 
 {{ site.sections['endExample'] }}
 
+{% assign caption="DeleteAllAttributeDefinitions" %}
+{% assign description="Deletes all attributes of the configuration" %}
 {% capture parameterTable %}
 Parameter Name | Parameter Type          | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
 token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
 {% endcapture %}
-{% assign description="Deletes all attributes of the configuration" %}
-{% include sdkFunctionFieldset.html caption="DeleteAllAttributeDefinitions" %}
+{% assign exampleCaption="Delete all attributes of the configuration" %}
 
-{% include exampleFieldset.html caption="Delete all attributes of the configuration" %}
-{{ site.headers['request'] | markdownify }}
-
+{% capture example %}
 {% highlight csharp %}
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
 client.DeleteAllAttributeDefinitions();
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
+{% include sdkFunctionFieldset.html %}
