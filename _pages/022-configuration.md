@@ -356,10 +356,11 @@ client.DeleteAttributeDefinitions( Entity.Part );
 
 <fieldset><legend><span><img src="/PiWeb-Api/images/function-delete.png"/></span>DeleteAllAttributeDefinitions</legend>
 
+{% capture m %}
 Parameter Name | Parameter Type          | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
 token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
-
+{% endcapture %}{{ m | markdownify }}
 </fieldset>
 
 {% include exampleFieldset.html caption="Delete all attributes of the configuration" %}
