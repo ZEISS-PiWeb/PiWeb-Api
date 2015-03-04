@@ -263,50 +263,57 @@ Configuration config = await client.GetConfiguration();
 
 ### Create Configuration Attributes
 
-On adding attributes to the configuration the entity type the attributes belong to as well as the attribute definition(s) need to be passed. Attributes can be added via the methods
-
-{{ site.images['function-create'] }} ```CreateAttributeDefinition``` - adds a single attribute to the configuration
-
+{% assign caption="`CreateAttributeDefinition" %}
+{% assign icon=site.images['function-create'] %}
+{% assign description="Adds a single attribute for a given entity to the configuration." %}
+{% capture parameterTable %}
 Parameter Name | Parameter Type           | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
 entity         | ```Entity```            | Specifies the entity the attribute should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
 definition     | ```AbstractAttributeDefinition``` | Depending on the entity the ```AbstractAttributeDefinition``` definition contains an ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` object which includes the attribute's values.
 token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
 
-{% include exampleFieldset.html caption="Adding a part attribute with the key 1001 to the configuration" %}
-
-{{ site.headers['request'] | markdownify }}
-
+{% assign exampleCaption="Adding a part attribute with the key 1001 to the configuration" %}
+{% capture example %}
 {% highlight csharp %}
 var client = new DataServiceRestClient( new Uri( "http://piwebserver:8080" ) );
 var attributeDefinition = 
       new AttributeDefinition( 1001, "partNumber", AttributeType.AlphaNumeric, 30 );
 await client.CreateAttributeDefinition( Entity.Part, attributeDefinition );
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
+{% include sdkFunctionFieldset.html %}
 
-{{ site.images['function-create'] }} ```CreateAttributeDefinitions``` - adds multiple attributes to the configuration
-
+{% assign caption="`CreateAttributeDefinitions" %}
+{% assign icon=site.images['function-create'] %}
+{% assign description="Adds multiple attributes for a given entity to the configuration." %}
+{% capture parameterTable %}
 Parameter Name | Parameter Type           | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
 entity         | ```Entity```            | Specifies the entity the attributes should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
 definitions     | ```AbstractAttributeDefinition[]``` | Depending on the entity the ```AbstractAttributeDefinition``` definition contains ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` objects which includes the attribute's values.
 token          | ```CancellationToken```       | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign exampleCaption = "" %}
 
 ### Update Configuration Attributes
 
-{{ site.images['function-update'] }} ```UpdateAttributeDefinitions```
-
+{% assign caption="`UpdateAttributeDefinitions" %}
+{% assign icon=site.images['function-update'] %}
+{% assign description="Updates one or more attributes for a given entity." %}
+{% capture parameterTable %}
 Parameter Name | Parameter Type           | Parameter Description
 ---------------|-------------------------|--------------------------------------------------
 entity         | ```Entity```            | Specifies the entity the attributes belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
 definitions     | ```AbstractAttributeDefinition[]``` | Depending on the entity the ```AbstractAttributeDefinition``` definition contains ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` objects which includes the attribute's values.
 token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
 
-{% include exampleFieldset.html caption="Updating the part attribute with key 1001 - change length from 30 to 50" %}
-{{ site.headers['request'] | markdownify }}
-
+{% assign exampleCaption="Updating the part attribute with key 1001 - change length from 30 to 50" %}
+{% capture example %}
 {% highlight csharp %}
 var client = new DataServiceRestClient( new Uri( "http://piwebserver:8080" ) );
 
@@ -318,8 +325,9 @@ var partAttribute = config.PartAttributes.Where( p => p.Key == 1001);
 partAttribute.Length = 50;
 client.UpdateAttributeDefinition( Entity.Part, attributeDefinition );
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
+{% include sdkFunctionFieldset.html %}
 
 
 ### Delete Configuration Attributes
@@ -335,7 +343,7 @@ keys           | ```ushort[]```          | May contain the keys of th attributes
 token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
 {% endcapture %}
 
-{% assign exampleCaption="Delete all attributes of the configuration" %}
+{% assign exampleCaption="Delete the part attribute with the key 1001 from the configuration" %}
 {% capture example %}
 {% highlight csharp %}
 var client = new DataServiceRestClient( new Uri( "http://piwebserver:8080" ) );
@@ -355,7 +363,7 @@ Name           | Type                    | Description
 token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
 {% endcapture %}
 
-{% assign exampleCaption="Delete all attributes of the configuration" %}
+{% assign exampleCaption="Delete all attributes from the configuration" %}
 {% capture example %}
 {% highlight csharp %}
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
