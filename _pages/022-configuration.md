@@ -59,15 +59,16 @@ configuration/*entityType*/{*Comma seperated list of attribute definition ids*} 
 
 Fetching the whole configuration returns the attribute definitions for all kind of entities.
 
-{% include exampleFieldset.html caption="Fetching the configuration including all attriutes" %}
-{{ site.headers['request'] | markdownify }}
+{% capture exampleCaption="Fetching the configuration including all attriutes" %}
 
+{% capture jsonrequest %}
 {% highlight http %}
 GET /dataServiceRest/configuration HTTP/1.1
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.headers['response'] | markdownify }}
-{% highlight json linenos %}
+{% capture jsonresponse %}
+{% highlight json %}
 {
    ...
    "data":
@@ -115,8 +116,9 @@ GET /dataServiceRest/configuration HTTP/1.1
    ]
 }
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
+{% include exampleFieldset.html %}
 
 ### Add Attributes
 
