@@ -248,7 +248,6 @@ HTTP/1.1 200 Ok
 
 ### Get Configuration
 
-The complete configuration for all kinds of entities can be fetched via the method
 {% assign caption="GetConfiguration" %}
 {% assign icon=site.images['function-get'] %}
 {% assign description="Fetches the complete configuration for all kinds of entities." %}
