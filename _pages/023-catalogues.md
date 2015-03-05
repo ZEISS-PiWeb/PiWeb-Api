@@ -35,7 +35,7 @@ URL Endpoint | GET | POST | PUT | DELETE
 /catalogues/(:catUuid1, :catUuid2,...) | Returns the catalogues that uuids are within the catUuid list without their entries | *--* | *--* | Deletes the catalogue(s) which has/have the given catUuid(s)
 /catalogues/(:catUuid1, :catUuid2,...)/entries | Returns the catalogues that uuids are within the catUuid list including their respective entries | *--* | *--* | *--*
 catalogues/:catalogueUuid/entries | *--*| Creates the entries transfered in the body of the request for the catalogue specidied by the *:catalogueUuid* | *--* | Deletes all entries for the catalogue specified by the *catalogueUuid*
-catalogues/:catalogueUuid/entries/{key1, key2...} | *--* | *--* | *--* | Deletes the entries specified by its particular key for the catalogue specified by the *catalogueUuid* 
+catalogues/:catalogueUuid/entries/{key1, key2...} | *--* | *--* | *--* | Deletes the entries specified by its particular key for the catalogue specified by the *:catalogueUuid* 
 
 ### Add Catalogues
 
@@ -43,7 +43,7 @@ To create a catalogue it is necessary to transfer the catalogue object within th
 
 {{ site.images['info'] }} If no catalogue entries are transfered an empty catalogue entry with the key 0 and attribute values 'not defined' ( in case of alphanumeric attributes ) is created by default.
 
-{% assign exampleCaption="Adding a catalogue with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
+{% assign exampleCaption="Adding the catalogue InspectorCatalogue" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
@@ -55,44 +55,24 @@ POST /dataServiceRest/catalogues HTTP/1.1
   {
            "uuid": "8c376bee-ffe3-4ee4-abb9-a55b492e69ad",
            "name": "InspectorCatalogue",
-           "validAttributes":
-           [
-               4092,
-               4093
-           ],
+           "validAttributes": [ 4092, 4093 ],
            "catalogueEntries":
            [
                {
                    "key": 0,
-                   "attributes":
-                   {
-                       "4092": "n.def.",
-                       "4093": "n.def."
-                   }
+                   "attributes": { "4092": "n.def.", "4093": "n.def." }
                },
                {
                    "key": 1,
-                   "attributes":
-                   {
-                       "4092": "21",
-                       "4093": "Smith"
-                   }
+                   "attributes": { "4092": "21", "4093": "Smith" }
                },
                {
                    "key": 2,
-                   "attributes":
-                   {
-                       "4092": "20",
-                       "4093": "Miller"
-                   }
+                   "attributes": { "4092": "20", "4093": "Miller" }
                },
                {
                    "key": 3,
-                   "attributes":
-                   {
-                       "4092": "23",
-                       "4093": "Williams"
-                   }
+                   "attributes": { "4092": "23", "4093": "Williams" }
                }
             ]
         }
