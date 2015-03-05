@@ -14,7 +14,7 @@ sections:
 ## {{ page.sections['general'] }}
 
 Every catalogue consists of a range of valid attributes and several catalogue entries.
-All attribute keys which are used within the valid attributes or the catalogue entries must have been created as catalogue attributes within the PiWeb configuration. ```Catalogue```and CatalogueEntry```have the following structures:
+All attribute keys which are used within the valid attributes or the catalogue entries must have been created as catalogue attributes within the PiWeb configuration. ```Catalogue``` and ```CatalogueEntry```have the following structures:
 
 ### Catalogue
 
