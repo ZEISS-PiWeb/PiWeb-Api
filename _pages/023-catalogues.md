@@ -13,6 +13,9 @@ sections:
 
 ## {{ page.sections['general'] }}
 
+Every catalogue consists of a range of valid attributes and several catalogue entries.
+All attribute keys which are used within the valid attributes or the catalogue entries must have been created as catalogue attributes within the PiWeb configuration. ```Catalogue```and CatalogueEntry```have the following structures:
+
 ### Catalogue
 
 Property         | Datatype             | Description
@@ -184,7 +187,7 @@ Updating a catalogue might regard the following aspects:
 * Rename the catalogue 
 * Add, update or delete catalogue entries
 
-To update a catalogue the whole object excluding the valid attributes needs to be transfered within the body of the HTTP request. On updating catalogues the existing entries ar removed and the passed entries are added to the catalogue.
+To update a catalogue the whole object excluding the valid attributes needs to be transfered within the body of the HTTP request. On updating catalogues the existing entries are removed and the passed entries are added to the catalogue.
 
 {{site.images['info']}} To change the valid attributes of a catalogue it needs to be deleted an re-created again.
 
@@ -439,7 +442,7 @@ client.CreateCatalogueEntry( new Guid("8c376bee-ffe3-4ee4-abb9-a55b492e69ad"), n
 
 {% assign caption="UpdateCatalogues" %}
 {% assign icon=site.images['function-update'] %}
-{% assign description="Updates one or more catalogues. On updating catalogues the existing entries ar removed and the passed entries are added to the catalogue. To change the valid attributes of a catalogue it needs to be deleted an re-created again." %}
+{% assign description="Updates one or more catalogues. This might effect renaming the catalogue as well as  add, update or delete catalogue entries. On updating catalogues the existing entries ar removed and the passed entries are added to the catalogue. To change the valid attributes of a catalogue it needs to be deleted an re-created again." %}
 {% capture parameterTable %}
  Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
