@@ -47,7 +47,7 @@ definitionType| Has always the value 'CatalogueAttributeDefinition' and is used 
 
 ## {{ page.sections['endpoint'] }}
 
-The configuration can be created, fetched, updated and deleted via the following endpoints. There are no filter parameters to restrict the query.
+The configuration can be created, fetched, updated and deleted via the following endpoints. There are no filter parameters to restrict the queries.
 
 URL Endpoint | GET | PUT | POST | DELETE
 -------------|-----|-----|------|-------
