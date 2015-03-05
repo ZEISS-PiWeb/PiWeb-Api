@@ -13,14 +13,23 @@ sections:
 
 ## {{ page.sections['general'] }}
 
-A catalogue consists of the following properties:
+### Catalogue
 
-Property         | Description
------------------|-------------
-uuid             | Identifies the catalogue uniquely
-name             | Name of the catalogue
-validAttributes   | A list of attribute keys that are valid for the respective catalogue
-catalogueEntries | Contains a list of catalogue entries. A catalogue entry consits of a unique index based key which specifies the order within the catalogue and a list of attributes which consits of key value pairs. The keys within this key-value-pairs must come from the validAttributes range.
+Property         | Datatype             | Description
+-----------------|----------------------|------------------------
+uuid             | ```Guid```           | Identifies the catalogue uniquely
+name             | ```string```         | Name of the catalogue
+validAttributes  | ```ushort[]```       | A list of attribute keys that are valid for the respective catalogue
+catalogueEntries | ```CatalogueEntry``` | A list of catalogue entries
+
+### CatalogueEntry
+
+A catalogue entry consits of a unique index based key which specifies the order within the catalogue and a list of attributes which consits of key value pairs. The keys within this key-value-pairs must come from the validAttributes range.
+
+Property         | Datatype             | Description
+-----------------|----------------------|------------------------
+key              | ```short```          | Specifies the entry's order within the catalogue
+attributes       | ```Attribute[]```    | A list of attributes which consits of key and value. The keys must come from the validAttributes range.
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
@@ -317,12 +326,12 @@ HTTP/1.1 200 Ok
 
 {% assign caption="GetCatalogues" %}
 {% assign icon=site.images['function-get'] %}
-{% assign description="Fetches a single or multiple catalogues identified by its uuids or all catalogues if no uuid is passed." %}
+{% assign description="Fetches one or more catalogues identified by its uuids or all catalogues if no uuid is passed." %}
 {% capture parameterTable %}
 
  Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-catalogueUuids | ```Guid[]```            | Parameter is optional and my include the uuids of the to be fetched catalogues.
+catalogueUuids | ```Guid[]```            | Parameter is optional and my include the uuids of the to be fetched catalogues. If no uuid is given all catalogues will be fetched.
 returnEntries  | ```bool```              | Parameter is optional and indicates if the catalogue entries should be returned.
 token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
 {% endcapture %}
@@ -330,7 +339,7 @@ token          | ```CancellationToken``` | Parameter is optional and gives the p
 {% assign exampleCaption="Get the catalogue with uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
 {% capture example %}
 {% highlight csharp %}
-var client = new DataServiceRestClient( serviceUri );
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
 var catalogues = client.GetCatalogues(new Guid[]{new Guid(
         "8c376bee-ffe3-4ee4-abb9-a55b492e69ad")}, new CatalogueFilterAttributes());
 {% endhighlight %}
@@ -343,7 +352,7 @@ var catalogues = client.GetCatalogues(new Guid[]{new Guid(
 
 {% assign caption="CreateCatalogues" %}
 {% assign icon=site.images['function-create'] %}
-{% assign description="Creates a single or multiple catalogues." %}
+{% assign description="Creates one or more catalogues." %}
 {% capture parameterTable %}
  Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
@@ -389,28 +398,59 @@ entry          | ```CatalogueEntry```    | The entry which should be added to th
 token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
 {% endcapture %}
 
-{% assign exampleCaption="Create the catalogue InspectorCatalogue" %}
+{% assign exampleCaption="Add a entry for the inspector Clarks to the InspectorCatalogue" %}
 {% capture example %}
 {% highlight csharp %}
 var entry = new CatalogueEntry(){ Key = 4, 
         Attributes = new[]{ new Attribute( 4092, "22" ), new Attribute( 4093, "Clarks" ) };
-var client = new DataServiceRestClient( serviceUri );
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
 client.CreateCatalogueEntry( new Guid("8c376bee-ffe3-4ee4-abb9-a55b492e69ad"), entry);
 {% endhighlight %}
 {% endcapture %}
 
 {% include sdkFunctionFieldset.html %}
 
+{% assign caption="CreateCatalogueEntries" %}
+{% assign icon=site.images['function-create'] %}
+{% assign description="Adds multiple catalogue entries to an existing catalogue." %}
+{% capture parameterTable %}
+Name           | Type                    | Description
+---------------|-------------------------|--------------------------------------------------
+catalogueUuid  | ```Uuid[]```            | The Uuid the catalogue is identified by.
+entry          | ```CatalogueEntry[]```  | The entries which should be added to the catalogue.
+token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
 
-
-
-
-{{ site.sections['beginExampleAPI'] }}
-
-{{ site.headers['request'] | markdownify }}
-
+{% assign exampleCaption="Add entries for the inspectors Adams and Watson" %}
+{% capture example %}
 {% highlight csharp %}
-var client = new DataServiceRestClient( serviceUri );
+var entryAdams = new CatalogueEntry(){ Key = 5, 
+        Attributes = new[]{ new Attribute( 4092, "23" ), new Attribute( 4093, "Adams" ) };
+var entryWatson = new CatalogueEntry(){ Key = 6, 
+        Attributes = new[]{ new Attribute( 4092, "24" ), new Attribute( 4093, "Watson" ) };
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+client.CreateCatalogueEntry( new Guid("8c376bee-ffe3-4ee4-abb9-a55b492e69ad"), new[]{ entryAdams, entryWatson);
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
+### Update Catalogues
+
+{% assign caption="UpdateCatalogues" %}
+{% assign icon=site.images['function-update'] %}
+{% assign description="Updates one or more catalogues. On updating catalogues the existing entries ar removed and the passed entries are added to the catalogue. To change the valid attributes of a catalogue it needs to be deleted an re-created again." %}
+{% capture parameterTable %}
+ Name          | Type                    | Description
+---------------|-------------------------|--------------------------------------------------
+catalogues     | ```Catalogue[]```       | Includes the catalogues which should be updated.
+token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign exampleCaption="Rename the catalogue InspectorCatalogue to Inspectors and add the inspector Clarks" %}
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
 
 //Get the catalogue
 ...
@@ -424,52 +464,73 @@ entries.Add( new CatalogueEntry()
 cataloge.CatalogueEntries = entries.ToArray();
 client.UpdateCatalogues( catalogue );
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
+{% include sdkFunctionFieldset.html %}
 
+### Delete Catalogues
 
+{% assign caption="DeleteCatalogues" %}
+{% assign icon=site.images['function-delete'] %}
+{% assign description="Deletes the catalogues definded in the ```catalogueUuids``` or all catalogues if the parameter is empty." %}
+{% capture parameterTable %}
+ Name          | Type                    | Description
+---------------|-------------------------|--------------------------------------------------
+catalogueUuids | ```Guid[]```            | Parameter is optional and may include the uuids of the catalogues which should be deleted. If no uuid is given all catalogues will be deleted.
+token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
 
-{{ site.sections['beginExampleAPI'] }}
-{{ site.headers['request'] | markdownify }}
-
+{% assign exampleCaption="Delete the catalogue with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
+{% capture example %}
 {% highlight csharp %}
-var client = new DataServiceRestClient( serviceUri );
-client.DeleteCatalogues();
-{% endhighlight %}
-
-{{ site.sections['endExample'] }}
-
-
-{{ site.sections['beginExampleAPI'] }}
-{{ site.headers['request'] | markdownify }}
-
-{% highlight csharp %}
-var client = new DataServiceRestClient( serviceUri );
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
 client.DeleteCatalogues( new Guid[]{new Guid( "8c376bee-ffe3-4ee4-abb9-a55b492e69ad" ) );
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
+{% include sdkFunctionFieldset.html %}
 
+### Delete Catalogue Entries
 
-{{ site.sections['beginExampleAPI'] }}
-{{ site.headers['request'] | markdownify }}
+{% assign caption="DeleteCatalogueEntry" %}
+{% assign icon=site.images['function-delete'] %}
+{% assign description="Deletes the entry with the ```key```from the catalogue definded by ```catalogueUuid```." %}
+{% capture parameterTable %}
+ Name          | Type                    | Description
+---------------|-------------------------|--------------------------------------------------
+catalogueUuid  | ```Guid```              | The uuid of the catalogues the entry belongs to which should be deleted.
+key            | ```ushort```            | The key of the entry which should be deleted.
+token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
 
+{% assign exampleCaption="Delete the entry with the key 1 from the catalogue with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
+{% capture example %}
 {% highlight csharp %}
-var client = new DataServiceRestClient( serviceUri );
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+client.DeleteCatalogueEntries( 
+  new Guid( "8c376bee-ffe3-4ee4-abb9-a55b492e69ad", new []{ (ushort)1 } );
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
+{% assign caption="DeleteCatalogueEntries" %}
+{% assign icon=site.images['function-delete'] %}
+{% assign description="Deletes the entry that keys are included in ```keys```from the catalogue definded by ```catalogueUuid``` or all entries if ```keys```is empty." %}
+{% capture parameterTable %}
+ Name          | Type                    | Description
+---------------|-------------------------|--------------------------------------------------
+catalogueUuid  | ```Guid```              | The uuid of the catalogues the entry belongs to which should be deleted.
+keys           | ```ushort[]```          | The keys of the entry which should be deleted. If it is empty all entries are deleted.
+token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign exampleCaption="Delete all entries from the catalogue with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
 client.DeleteCatalogueEntries( new Guid( "8c376bee-ffe3-4ee4-abb9-a55b492e69ad" ) );
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
-
-
-
-{{ site.sections['beginExampleAPI'] }}
-{{ site.headers['request'] | markdownify }}
-
-{% highlight csharp %}
-var client = new DataServiceRestClient( serviceUri );
-client.DeleteCatalogueEntries( 
-  new Guid( "8c376bee-ffe3-4ee4-abb9-a55b492e69ad", new []{ (ushort)1, (ushort(3) } );
-{% endhighlight %}
-
-{{ site.sections['endExample'] }}
+{% include sdkFunctionFieldset.html %}
