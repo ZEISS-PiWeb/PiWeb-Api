@@ -31,11 +31,11 @@ Catalogues and catalogue entries can be fetched, created, updated and deleted vi
 URL Endpoint | GET | POST | PUT | DELETE
 -------------|-----|------|-----|-------
 /catalogues | Returns all catalogues without their entries | Creates the committed catalogue(s) which is/are transfered in the body of the request | Updates the committed catalogues and their entries | Deletes all catalogues and the catalogue entries
-/catalogues/entries | Returns all catalogues including their respective entries | *Not supported* | *Not supported* | *Not supported*
-/catalogues/(:catUuid1, :catUuid2,...) | Returns the catalogues that uuids are within the catUuid list without their entries | *Not supported* | *Not supported* | Deletes the catalogue(s) which has/have the given catUuid(s)
-/catalogues/(:catUuid1, :catUuid2,...)/entries | Returns the catalogues that uuids are within the catUuid list including their respective entries | *Not supported* | *Not supported* | *Not supported*
-catalogues/:catalogueUuid/entries | *Not supported*| Creates the entries transfered in the body of the request for the catalogue specidied by the *:catalogueUuid* | *Not supported* | Deletes all entries for the catalogue specified by the *catalogueUuid*
-catalogues/{catalogueUuid}/entries/{key1, key2...} | *Not supported* | *Not supported* | *Not supported* | Deletes the entries specified by its particular key for the catalogue specified by the *catalogueUuid* 
+/catalogues/entries | Returns all catalogues including their respective entries | *--* | *--* | *--*
+/catalogues/(:catUuid1, :catUuid2,...) | Returns the catalogues that uuids are within the catUuid list without their entries | *--* | *--* | Deletes the catalogue(s) which has/have the given catUuid(s)
+/catalogues/(:catUuid1, :catUuid2,...)/entries | Returns the catalogues that uuids are within the catUuid list including their respective entries | *--* | *--* | *--*
+catalogues/:catalogueUuid/entries | *--*| Creates the entries transfered in the body of the request for the catalogue specidied by the *:catalogueUuid* | *--* | Deletes all entries for the catalogue specified by the *catalogueUuid*
+catalogues/:catalogueUuid/entries/{key1, key2...} | *--* | *--* | *--* | Deletes the entries specified by its particular key for the catalogue specified by the *catalogueUuid* 
 
 ### Add Catalogues
 
