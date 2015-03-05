@@ -315,12 +315,12 @@ HTTP/1.1 200 Ok
 
 ### Get Catalogues
 
-{% assign caption="GetConfiguration" %}
+{% assign caption="GetCatalogues" %}
 {% assign icon=site.images['function-get'] %}
 {% assign description="Fetches a single or multiple catalogues identified by its uuids or all catalogues if no uuid is passed." %}
 {% capture parameterTable %}
 
-Parameter Name | Parameter Type          | Parameter Description
+ Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
 catalogueUuids | ```Guid[]```            | Parameter is optional and my include the uuids of the to be fetched catalogues.
 returnEntries  | ```bool```              | Parameter is optional and indicates if the catalogue entries should be returned.
@@ -328,6 +328,30 @@ token          | ```CancellationToken``` | Parameter is optional and gives the p
 {% endcapture %}
 
 {% assign exampleCaption="Get the catalogue with uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( serviceUri );
+var catalogues = client.GetCatalogues(new Guid[]{new Guid(
+        "8c376bee-ffe3-4ee4-abb9-a55b492e69ad")}, new CatalogueFilterAttributes());
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
+
+### Create Catalogues
+
+{% assign caption="CreateCatalogues" %}
+{% assign icon=site.images['function-create'] %}
+{% assign description="Creates a single or multiple catalogues." %}
+{% capture parameterTable %}
+ Name          | Type                    | Description
+---------------|-------------------------|--------------------------------------------------
+catalogues     | ```Catalogue[]```       | Includes the catalogues which should be created.
+token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign exampleCaption="Create the catalogue InspectorCatalogue" %}
 {% capture example %}
 {% highlight csharp %}
 var catalogue = new Catalogue(){ 
@@ -352,33 +376,32 @@ client.CreateCatalogues( new[]{ catalogue } );
 
 {% include sdkFunctionFieldset.html %}
 
+### Create Catalogue Entries
 
+{% assign caption="CreateCatalogueEntry" %}
+{% assign icon=site.images['function-create'] %}
+{% assign description="Adds a catalogue entry to an existing catalogue." %}
+{% capture parameterTable %}
+Name           | Type                    | Description
+---------------|-------------------------|--------------------------------------------------
+catalogueUuid  | ```Uuid[]```            | The Uuid the catalogue is identified by.
+entry          | ```CatalogueEntry```    | The entry which should be added to the catalogue.
+token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
 
-{{ site.sections['beginExampleAPI'] }}
-
-{{ site.headers['request'] | markdownify }}
-
+{% assign exampleCaption="Create the catalogue InspectorCatalogue" %}
+{% capture example %}
 {% highlight csharp %}
 var entry = new CatalogueEntry(){ Key = 4, 
         Attributes = new[]{ new Attribute( 4092, "22" ), new Attribute( 4093, "Clarks" ) };
 var client = new DataServiceRestClient( serviceUri );
 client.CreateCatalogueEntry( new Guid("8c376bee-ffe3-4ee4-abb9-a55b492e69ad"), entry);
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
+{% include sdkFunctionFieldset.html %}
 
 
-
-{{ site.sections['beginExampleAPI'] }}
-{{ site.headers['request'] | markdownify }}
-
-{% highlight csharp %}
-var client = new DataServiceRestClient( serviceUri );
-var catalogues = client.GetCatalogues(new Guid[]{new Guid(
-        "8c376bee-ffe3-4ee4-abb9-a55b492e69ad")}, new CatalogueFilterAttributes());
-{% endhighlight %}
-
-{{ site.sections['endExample'] }}
 
 
 
