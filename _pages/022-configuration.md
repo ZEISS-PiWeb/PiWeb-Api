@@ -252,8 +252,7 @@ HTTP/1.1 200 Ok
 {% assign icon=site.images['function-get'] %}
 {% assign description="Fetches the complete configuration for all kinds of entities." %}
 {% capture parameterTable %}
-
-Parameter Name | Parameter Type           | Parameter Description
+Name           | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
 token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
 {% endcapture %}
@@ -274,7 +273,7 @@ Configuration config = await client.GetConfiguration();
 {% assign icon=site.images['function-create'] %}
 {% assign description="Adds a single attribute for a given entity to the configuration." %}
 {% capture parameterTable %}
-Parameter Name | Parameter Type           | Parameter Description
+Name           | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
 entity         | ```Entity```            | Specifies the entity the attribute should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
 definition     | ```AbstractAttributeDefinition``` | Depending on the entity the ```AbstractAttributeDefinition``` definition contains an ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` object which includes the attribute's values.
@@ -297,7 +296,7 @@ await client.CreateAttributeDefinition( Entity.Part, attributeDefinition );
 {% assign icon=site.images['function-create'] %}
 {% assign description="Adds multiple attributes for a given entity to the configuration." %}
 {% capture parameterTable %}
-Parameter Name | Parameter Type           | Parameter Description
+ Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
 entity         | ```Entity```            | Specifies the entity the attributes should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
 definitions     | ```AbstractAttributeDefinition[]``` | Depending on the entity the ```AbstractAttributeDefinition``` definition contains ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` objects which includes the attribute's values.
@@ -314,7 +313,7 @@ token          | ```CancellationToken```       | Parameter is optional and gives
 {% assign icon=site.images['function-update'] %}
 {% assign description="Updates one or more attributes for a given entity." %}
 {% capture parameterTable %}
-Parameter Name | Parameter Type           | Parameter Description
+ Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
 entity         | ```Entity```            | Specifies the entity the attributes belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
 definitions     | ```AbstractAttributeDefinition[]``` | Depending on the entity the ```AbstractAttributeDefinition``` definition contains ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` objects which includes the attribute's values.
@@ -345,7 +344,7 @@ client.UpdateAttributeDefinition( Entity.Part, attributeDefinition );
 {% assign icon=site.images['function-delete'] %}
 {% assign description="Deletes all or certain attributes for a given entity from the configuration." %}
 {% capture parameterTable %}
-Parameter Name | Parameter Type           | Parameter Description
+ Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
 entity         | ```Entity```            | Specifies the entity the attributes should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
 keys           | ```ushort[]```          | May contain the keys of th attributes which should be deleted. If it stays empty all attributes of the given *entity* are deleted.
