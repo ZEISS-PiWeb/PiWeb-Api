@@ -75,7 +75,7 @@ There are also several possibilities to fetch characteristics:
 
 {% capture jsonrequest %}
 {% highlight http %}
-GET /dataServiceRest/characteristics/metal%20part?filter=characteristicAttributes:{2110,2111} HTTP/1.1
+GET /dataServiceRest/parts/metal%20part/characteristics?filter=characteristicAttributes:{2110,2111} HTTP/1.1
 {% endhighlight %}
 {% endcapture %}
 
@@ -166,7 +166,7 @@ Updating inspection plan entities might regard the following aspects:
 {% assign exampleCaption="Rename the characteristic "metal part/diameter_circle3" to "metal part/diameterCircle3" %}
 {% capture jsonrequest %}
 {% highlight http %}
-PUT /dataServiceRest/characteristics HTTP/1.1
+PUT /dataServiceRest/parts/characteristics HTTP/1.1
 {% endhighlight %}
 
 {% highlight json %}
@@ -236,11 +236,86 @@ HTTP/1.1 200 Ok
 
 ## {{ page.sections['sdk'] }}
 
+### Get Entities
+
+{% assign caption="GetPartByPath" %}
+{% assign icon=site.images['function-get'] %}
+{% assign description="Fetches the part identified by the ```partPath```. " %}
+{% capture parameterTable %}
+Name           | Type                                  | Description
+---------------|---------------------------------------|--------------------------------------------------
+partPath       | ```PathInformation```                 | The path of the part which should be returned.
+filter         | ```InspectionPlanFilterAttributes ``` | Parameter is optional and can further restrict the query.
+token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign exampleCaption="Get the 'metal part' and restrict the result to the attributes 'part number' and 'comment'" %}
+
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+var partPath = PathHelper.String2PartPathInformation("/metal part");
+var filter = new InspectionPlanFilterAttributes()
+  { RequestedPartAttributes = new AttributeSelector(
+    new[]{ WellKnownKeys.Parts.Number, WellKnownKeys.Parts.Comment } )
+  };
+var part = client.GetCharacteristicByPath( partPath, filter );
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
+{% assign caption="GetPartsByUuids" %}
+{% assign icon=site.images['function-get'] %}
+{% assign description="Fetches parts by its uuids. " %}
+{% capture parameterTable %}
+Name           | Type                                  | Description
+---------------|---------------------------------------|--------------------------------------------------
+uuids          | ```Guid[]```                          | The uuids of the parts which should be returned.
+filter         | ```InspectionPlanFilterAttributes ``` | Parameter is optional and can further restrict the query.
+token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign exampleCaption="Get the 'metal part' by its uuid 05040c4c-f0af-46b8-810e-30c0c00a379e" %}
+
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+var part = client.GetCharacteristicsByUuids( new[]{ new Guid("05040c4c-f0af-46b8-810e-30c0c00a379e") } );
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
+{% assign caption="GetChildPartsForPart" %}
+{% assign icon=site.images['function-get'] %}
+{% assign description="Fetches the children of the given ```parentPart``` as well as the part itself. " %}
+{% capture parameterTable %}
+Name           | Type                                  | Description
+---------------|---------------------------------------|--------------------------------------------------
+parentPart     | ```PathInformation```                 | The parent part the child part should be returned for.
+filter         | ```InspectionPlanFilterAttributes ``` | Parameter is optional and can further restrict the query.
+token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign exampleCaption="Get the 'metal part' and the child parts" %}
+
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+var parentPartPath = PathHelper.String2PartPathInformation("/metal part");
+var part = client.GetCharacteristicsForPart( parentPartPath );
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
+
 {{ site.sections['beginExampleAPI'] }}
 {{ site.headers['request'] | markdownify }}
 
 {% highlight csharp %}
-var client = new DataServiceRestClient( serviceUri );
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
 var parentPartPath = PathHelper.String2PartPathInformation("/metal part");
 var filter = new InspectionPlanFilterAttributes()
   { RequestedCharacteristicAttributes = new AttributeSelector(
@@ -265,7 +340,7 @@ var part = new InspectionPlanPart{
   Path = PathHelper.String2PartPathInformation( "metal part"),
   Attributes = new[]{ new Attribute( 1001, "4466" ), new Attribute( 1003, "mp" ) }
 };
-var client = new DataServiceRestClient( serviceUri );
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
 client.CreateParts( new[]{ part } );
 {% endhighlight %}
 
@@ -277,7 +352,7 @@ client.CreateParts( new[]{ part } );
 {{ site.headers['request'] | markdownify }}
 
 {% highlight csharp %}
-var client = new DataServiceRestClient( serviceUri );
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
 
 //Get the characteristic
 ...
@@ -293,7 +368,7 @@ client.UpdateCharacteristics( new InspectionPlanCharacteristic[]{characteristic}
 {{ site.headers['request'] | markdownify }}
 
 {% highlight csharp %}
-var client = new DataServiceRestClient( serviceUri );
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
 client.DeleteParts( PathHelper.String2PartPathInformation( "metal part" ) );
 {% endhighlight %}
 
