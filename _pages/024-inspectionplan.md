@@ -51,53 +51,6 @@ parts/characteristics/(:uuidList) | Returns all characteristics that uuid are wi
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
-## Add Entities
-
-To create a inspection plan entity it is necessary to transfer the entity object within the request's body. A unique identifier and the path are mandatory, attributes and a comment are optional. The attribute keys which are used for the attributes must come from the parts/characteristics attribute range (specified in the {{ site.links['configuration'] }})
-
-{{ site.images['info'] }} The comment is only added if versioning is enabled in server settings.
-
-{% assign exampleCaption="Adding the 'metal part' part with the uuid 05040c4c-f0af-46b8-810e-30c0c00a379e" %}
-
-{% capture jsonrequest %}
-{% highlight http %}
-POST /dataServiceRest/parts HTTP/1.1
-{% endhighlight %}
-
-{% highlight json %}
-[
-  {
-    "uuid": "05040c4c-f0af-46b8-810e-30c0c00a379e",
-    "path": "P:/metal part",
-    "attributes": 
-    {
-      "1001": "4466",
-      "1003": "mp"
-    }       
-  }
-]
-{% endhighlight %}
-{% endcapture %}
-
-{% capture jsonresponse %}
-{% highlight http %}
-HTTP/1.1 201 Created
-{% endhighlight %}
-
-{% highlight json %}
-{
-   "status":
-   {
-       "statusCode": 201,
-       "statusDescription": "Created"
-   },
-   "category": "Success"
-}
-{% endhighlight %}
-{% endcapture %}
-
-{% include exampleFieldset.html %}
-
 ## Get Entities
 
 Fetching inspection plan entites returns the respective parts or characteristics depending on the specified entity constraint and/or filter. 
@@ -152,6 +105,54 @@ GET /dataServiceRest/characteristics/metal%20part?filter=characteristicAttribute
 
 {% include exampleFieldset.html %}
 {% assign comment="" %}
+
+
+## Add Entities
+
+To create a inspection plan entity it is necessary to transfer the entity object within the request's body. A unique identifier and the path are mandatory, attributes and a comment are optional. The attribute keys which are used for the attributes must come from the parts/characteristics attribute range (specified in the {{ site.links['configuration'] }})
+
+{{ site.images['info'] }} The comment is only added if versioning is enabled in server settings.
+
+{% assign exampleCaption="Adding the 'metal part' part with the uuid 05040c4c-f0af-46b8-810e-30c0c00a379e" %}
+
+{% capture jsonrequest %}
+{% highlight http %}
+POST /dataServiceRest/parts HTTP/1.1
+{% endhighlight %}
+
+{% highlight json %}
+[
+  {
+    "uuid": "05040c4c-f0af-46b8-810e-30c0c00a379e",
+    "path": "P:/metal part",
+    "attributes": 
+    {
+      "1001": "4466",
+      "1003": "mp"
+    }       
+  }
+]
+{% endhighlight %}
+{% endcapture %}
+
+{% capture jsonresponse %}
+{% highlight http %}
+HTTP/1.1 201 Created
+{% endhighlight %}
+
+{% highlight json %}
+{
+   "status":
+   {
+       "statusCode": 201,
+       "statusDescription": "Created"
+   },
+   "category": "Success"
+}
+{% endhighlight %}
+{% endcapture %}
+
+{% include exampleFieldset.html %}
 
 ## Update entities
 
