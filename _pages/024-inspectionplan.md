@@ -30,7 +30,7 @@ charChangeDate (only for parts)|  ```dateTime``` | The timestamp for the most re
 
 ## {{ page.sections['endpoint'] }}
 
-Parts and characteristics can be fetched, created, updated and deleted via the following endpoints. Filter can be set as described in the [URL-Parameter section]({{site.baseurl }}/general/#{{ page.subCategory }}).
+Parts and characteristics can be fetched, created, updated and deleted via the following endpoints. Filter which restrict GET or DELETE requests can be set as described in the [URL-Parameter section]({{site.baseurl }}/general/restapi/#{{ page.subCategory }}).
 
 ###Parts
 
@@ -44,32 +44,25 @@ parts/(:uuidList) | Returns all parts that uuid are within the *:uuidList* | *--
 
 URL Endpoint | GET | POST | PUT | DELETE
 -------------|-----|-----|------|-------
-parts/characteristics | *--* | Creates the committed characteristic(s) which is/are transfered in the body of the request | Updates the committed characteristics | *--*
+parts/characteristics | Returns all characteristics | Creates the committed characteristic(s) which is/are transfered in the body of the request | Updates the committed characteristics | *--*
 parts/:partsPath/characteristics | Returns all characteristics beneath the part specified by *:partPath* | *--* | *--* | *--*
 parts/characteristics/:characteristicPath | Returns the characteristic specified by *:characteristicPath*. | *--* | *--* | Deletes the characteristic specified by *:characteristicPath* as well as all children beneath this characteristic
-parts/characteristics/{:uuidList} | Returns all characteristics that uuid are within the *:uuidList* | *--* | *--* |  Deletes all characteristics that uuid are within the *:uuidList*
+parts/characteristics/(:uuidList) | Returns all characteristics that uuid are within the *:uuidList* | *--* | *--* |  Deletes all characteristics that uuid are within the *:uuidList*
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
-## {{ page.sections['add'] }}
+## Add Entities
 
 To create a inspection plan entity it is necessary to transfer the entity object within the request's body. A unique identifier and the path are mandatory, attributes and a comment are optional. The attribute keys which are used for the attributes must come from the parts/characteristics attribute range (specified in the {{ site.links['configuration'] }})
 
 {{ site.images['info'] }} The comment is only added if versioning is enabled in server settings.
 
-### {{ site.headers['example'] }} Adding a part with the uuid 05040c4c-f0af-46b8-810e-30c0c00a379e
+{% assign exampleCaption="Adding a part with the uuid 05040c4c-f0af-46b8-810e-30c0c00a379e" %}
 
-{{ site.sections['beginExampleWebService'] }}
-
-{% comment %} {% include codeswitcher.html key="add" %} {% endcomment %}
-
-{{ site.headers['request']  | markdownify }}
-
+{% capture jsonrequest %}
 {% highlight http %}
 POST /dataServiceRest/parts HTTP/1.1
 {% endhighlight %}
-
-{% include codeStart.html key="add" format="json" %}
 
 {% highlight json %}
 [
@@ -84,9 +77,9 @@ POST /dataServiceRest/parts HTTP/1.1
   }
 ]
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.headers['response']  | markdownify }}
-
+{% capture jsonresponse %}
 {% highlight http %}
 HTTP/1.1 201 Created
 {% endhighlight %}
@@ -101,46 +94,9 @@ HTTP/1.1 201 Created
    "category": "Success"
 }
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endCode'] }}
-
-{% comment %}
-{% include codeStart.html key="add" format="xml" %}
-{% highlight xml %}
-<?xml version="1.0" encoding="UTF-8" ?> 
-  <InspectionPlanItems>
-    <InspectionPlanPart xmlns:q="http://www.daimlerchrysler.com/DataService" uuid="05550c4c-f0af-46b8-810e-30c0c00a379e" >
-      <q:attributes key="1001" value="4466" />
-      <q:attributes key="1003" value="mp" />
-      <q:path>
-        <q:node type="Part">metal part</q:node>
-      </q:path>
-    </InspectionPlanPart>
-  </InspectionPlanItems>
-{% endhighlight %}
-{{ site.sections['endCode'] }}
-
-{{ site.headers['response']  | markdownify }}
-
-{% highlight http %}
-HTTP/1.1 201 Created
-{% endhighlight %}
-
-{% highlight xml %}
-<Response>
-  <status>
-    <statusCode>201</statusCode>
-    <statusDescription>Created</statusDescription>
-  </status>
-  <category>Success</category>
-</Response>
-{% endhighlight %}
-{{ site.sections['endCode'] }}
-
-{% endcomment %}
-
-{{ site.sections['endExample'] }}
-
+{% include exampleFieldset.html %}
 
 {{ site.sections['beginExampleAPI'] }}
 
