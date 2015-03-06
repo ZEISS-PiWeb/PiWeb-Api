@@ -4,7 +4,7 @@
   </legend>
   {% if comment != empty %}
     {{ '<br>' }}
-    {{ comment }}
+    {{ site.images['info'] comment }}
     {{ '<br>' }}
   {% endif %}
   {{ site.headers['request']  | markdownify }}
