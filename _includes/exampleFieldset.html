@@ -3,7 +3,7 @@
     {{  site.images['document-info'] | append: ' Example: ' | append: exampleCaption | markdownify }}
   </legend>
   {% if comment != empty %}
-    <br>{{ comment }}<br>
+    {{ '<br>' | Append: comment | Append: '<br>' }}
   {% endif %}
   {{ site.headers['request']  | markdownify }}
   {{ jsonrequest | markdownify }}
