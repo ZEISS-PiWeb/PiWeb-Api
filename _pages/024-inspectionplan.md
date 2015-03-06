@@ -445,9 +445,7 @@ that schould be created.
 token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
 {% endcapture %}
 
-{% 
-
-assign exampleCaption="Add the characteristic '/metal part/diameterCircle3'." %}
+{% assign exampleCaption="Add the characteristic '/metal part/diameterCircle3'." %}
 
 {% capture example %}
 {% highlight csharp %}
@@ -473,10 +471,7 @@ client.CreateCharacteristics( new[]{ characteristic } );
 
 
 
-{{ 
-
-site.sections['beginExampleAPI'] }}
-
+{{ site.sections['beginExampleAPI'] }}
 {{ site.headers['request'] | markdownify }}
 
 {% highlight csharp %}
