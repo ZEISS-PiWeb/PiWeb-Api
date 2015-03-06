@@ -4,7 +4,6 @@
   </legend>
   {% if comment.size > 0 %}
     {{ site.images['info'] | append: comment | markdownify }}
-    {{ '<br>' }}
   {% endif %}
   {{ site.headers['request']  | markdownify }}
   {{ jsonrequest | markdownify }}
