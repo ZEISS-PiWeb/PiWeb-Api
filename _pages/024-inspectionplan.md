@@ -404,7 +404,7 @@ var characteristics = client.GetCharacteristicsForPart( parentPartPath, filter )
 {% capture parameterTable %}
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
-parts          | ```InspectionPlanPart```              | The parts that should be created.
+parts          | ```InspectionPlanPart[]```            | The parts that should be created.
 token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
 {% endcapture %}
 
@@ -435,9 +435,7 @@ client.CreateParts( new[]{ part } );
 {% capture parameterTable %}
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
-characteristics| ```InspectionPlanCharacteristic```    | The characteristics 
-
-that schould be created.
+characteristics| ```InspectionPlanCharacteristic[]```  | The characteristics that schould be created.
 token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
 {% endcapture %}
 
@@ -467,10 +465,7 @@ client.CreateCharacteristics( new[]{ characteristic } );
 {% highlight csharp %}
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
 
-//Get the 
-
-characteristic
-...
+//Get the characteristic...
 var newPath = PathHelper.String2PathInformation( "/metal part/diameterCircle3", "PC" );
 characteristic.Path = newPath;
 client.UpdateCharacteristics( new InspectionPlanCharacteristic[]{characteristic} );
