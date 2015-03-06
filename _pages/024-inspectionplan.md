@@ -410,7 +410,7 @@ token          | ```CancellationToken```               | Parameter is optional a
 
 {% assign exampleCaption="Add the part 'metal part'." %}
 {% capture example %}
-{% highlight %}
+{% highlight csharp %}
 
 {% endhighlight %}
 {% endcapture %}
