@@ -411,8 +411,100 @@ token          | ```CancellationToken```               | Parameter is optional a
 {% assign exampleCaption="Add the part 'metal part'." %}
 {% capture example %}
 {% highlight csharp %}
+var part = new InspectionPlanPart{ 
+  Uuid = new Guid( "05550c4c-f0af-46b8-810e-30c0c00a379e" ),
+  Path = PathHelper.String2PartPathInformation( 
 
+"metal part"),
+  Attributes = new[]{ 
+    new Attribute( WellKnownKeys.Parts.Number, "4466" ), 
+    new Attribute( WellKnownKeys.Parts.Abbreviation, "mp" ) }
+};
+var client = new 
+
+DataServiceRestClient( "http://piwebserver:8080" );
+client.CreateParts( new[]{ part } );
 {% endhighlight %}
 {% endcapture %}
 
 {% include sdkFunctionFieldset.html %}
+
+#### Characteristics
+
+{% assign caption="CreateCharacetristics" %}
+{% assign icon=site.images['function-create'] %}
+{% assign description="Creates 
+
+the characteristics which are included in ```characteristics``` " %}
+{% capture parameterTable %}
+Name           | Type                                  | Description
+---------------|---------------------------------------|--------------------------------------------------
+characteristics| ```InspectionPlanCharacteristic```    | The characteristics 
+
+that schould be created.
+token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% 
+
+assign exampleCaption="Add the characteristic '/metal part/diameterCircle3'." %}
+
+{% capture example %}
+{% highlight csharp %}
+var characteristic = new InspectionPlanPart{ 
+  Uuid = new Guid( 
+
+"1429c5e2-599c-4d3e-b724-4e00ecb0caa7" ),
+  Path =  PathHelper.String2PathInformation( "/metal part/diameterCircle3", "PC" ),
+  Attributes = new[]{ 
+    new Attribute( 
+
+WellKnownKeys.Characteristic.LowerSpecificationLimit, "-0.2" ), 
+    new Attribute( WellKnownKeys.Characteristic.UpperSpecificationLimit, "0.3" ) }
+};
+var client = new 
+
+DataServiceRestClient( "http://piwebserver:8080" );
+client.CreateCharacteristics( new[]{ characteristic } );
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
+
+
+{{ 
+
+site.sections['beginExampleAPI'] }}
+
+{{ site.headers['request'] | markdownify }}
+
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+
+//Get the 
+
+characteristic
+...
+var newPath = PathHelper.String2PathInformation( "/metal part/diameterCircle3", "PC" );
+characteristic.Path = newPath;
+client.UpdateCharacteristics( new 
+
+InspectionPlanCharacteristic[]{characteristic} );
+{% endhighlight %}
+
+{{ site.sections['endExample'] }}
+
+
+{{ site.sections['beginExampleAPI'] }}
+{{ site.headers['request'] | markdownify }}
+
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+client.DeleteParts( PathHelper.String2PartPathInformation( "metal part" ) );
+{% endhighlight 
+
+%}
+
+{{ site.sections['endExample'] }}
+
