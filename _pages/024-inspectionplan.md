@@ -393,3 +393,36 @@ var characteristics = client.GetCharacteristicsForPart( parentPartPath, filter )
 {% endcapture %}
 
 {% include sdkFunctionFieldset.html %}
+
+### Add Entities
+
+#### Parts
+
+{% assign caption="CreateParts" %}
+{% assign icon=site.images['function-create'] %}
+{% assign description="Creates the parts which are included in ```parts``` " %}
+{% capture parameterTable %}
+Name           | Type                                  | Description
+---------------|---------------------------------------|--------------------------------------------------
+parts          | ```InspectionPlanPart```              | The parts that should be created.
+token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign exampleCaption="Add the part 'metal part'." %}
+
+{% capture example %}
+{% highlight %}
+var part = new InspectionPlanPart{ 
+  Uuid = new Guid( "05550c4c-f0af-46b8-810e-30c0c00a379e" ),
+  Path = PathHelper.String2PartPathInformation( "metal part"),
+  Attributes = new[]{ 
+    new Attribute( WellKnownKeys.Parts.Number, "4466" ), 
+    new Attribute( WellKnownKeys.Parts.Abbreviation, "mp" ) }
+};
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+client.CreateParts( new[]{ part } );
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
