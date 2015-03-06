@@ -57,7 +57,7 @@ To create a inspection plan entity it is necessary to transfer the entity object
 
 {{ site.images['info'] }} The comment is only added if versioning is enabled in server settings.
 
-{% assign exampleCaption="Adding a part with the uuid 05040c4c-f0af-46b8-810e-30c0c00a379e" %}
+{% assign exampleCaption="Adding the 'metal part' part with the uuid 05040c4c-f0af-46b8-810e-30c0c00a379e" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
@@ -98,25 +98,7 @@ HTTP/1.1 201 Created
 
 {% include exampleFieldset.html %}
 
-{{ site.sections['beginExampleAPI'] }}
-
-{{ site.headers['request'] | markdownify }}
-
-{% highlight csharp %}
-var part = new InspectionPlanPart{ 
-  Uuid = new Guid( "05550c4c-f0af-46b8-810e-30c0c00a379e" ),
-  Path = PathHelper.String2PartPathInformation( "metal part"),
-  Attributes = new[]{ new Attribute( 1001, "4466" ), new Attribute( 1003, "mp" ) }
-};
-var client = new DataServiceRestClient( serviceUri );
-client.CreateParts( new[]{ part } );
-{% endhighlight %}
-
-{{ site.sections['endExample'] }}
-
-{% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
-
-## {{ page.sections['get'] }}
+## Get Entities
 
 Fetching inspection plan entites returns the respective parts or characteristics depending on the specified entity constraint and/or filter. 
 The most important filter parameter is the *depth* parameter which controls down to which level of the inspection plan the entities should be fetched. Setting *depth:0* means that only the entity itself, *depth:1* means the entity and its direct children should be fetched and so on.
@@ -124,27 +106,27 @@ The most important filter parameter is the *depth* parameter which controls down
 Parts can be fetched several ways:
 
 * fetch a certain part by its path (the filter parameter *depth* must be 0)
-* fetch a certain part and its cihldren parts by its path (the filter parameter *depth* must be ≥ 1)
+* fetch a certain part and its children parts by its path (the filter parameter *depth* must be ≥ 1)
 * fetch one or more certain parts by its UUIDs
-* fetch all parts (can be restricted by filter parameter *depth*)
+* fetch all parts (can be restricted by filter parameters)
 
 There are also several possibilities to fetch characteristics:
 
 * fetch a certain characteristic by its path (the filter parameter *depth* must be 0)
 * fetch one or more certain characteristics by its UUIDs
-* fetch all characteristics beneath a certain part path (can be restricted by filter parameter *depth*)
+* fetch characteristics beneath a certain part path
+* fetch all characteristics (can be restricted by filter parameters)
 
-### {{ site.headers['example'] }}  Fetching the direct characteristics beneath the part "metal part". Restrict the attributes to the lower and upper tolerance (attribute keys 2110 and 2111).
+{% assign exampleCaption="Fetching the direct characteristics beneath the part "metal part". Restrict the attributes to the lower and upper tolerance (attribute keys 2110 and 2111" %}
+{% assign comment="As the filter parameter *depth* has the default value 1 it can be omitted in this example." %}
 
-As the filter parameter *depth* has the default value 1 it can be omitted in this example.
-
-{{ site.sections['beginExampleWebService'] }}
-{{ site.headers['request'] | markdownify }}
-
+{% capture jsonrequest %}
 {% highlight http %}
 GET /dataServiceRest/characteristics/metal%20part?filter=characteristicAttributes:{2110,2111} HTTP/1.1
 {% endhighlight %}
+{% endcapture %}
 
+{% capture jsonresponse %}
 {{ site.headers['response'] | markdownify }}
 {% highlight json %}
 {
@@ -167,29 +149,12 @@ GET /dataServiceRest/characteristics/metal%20part?filter=characteristicAttribute
    ]
 }
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
+{% include exampleFieldset.html %}
+{% assign comment="" %}
 
-{{ site.sections['beginExampleAPI'] }}
-{{ site.headers['request'] | markdownify }}
-
-{% highlight csharp %}
-var client = new DataServiceRestClient( serviceUri );
-var parentPartPath = PathHelper.String2PartPathInformation("/metal part");
-var filter = new InspectionPlanFilterAttributes()
-  { RequestedCharacteristicAttributes = new AttributeSelector(
-    new[]{ WellKnownKeys.Characteristic.LowerSpecificationLimit, 
-    WellKnownKeys.Characteristic.UpperSpecificationLimit} )
-  };
-var characteristics = client.GetCharacteristicsForPart(
-    PathHelper.String2PartPathInformation("/metal part"));
-{% endhighlight %}
-
-{{ site.sections['endExample'] }}
-
-{% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
-
-## {{ page.sections['update'] }}
+## Update entities
 
 Updating inspection plan entities might regard the following aspects: 
 
@@ -277,3 +242,42 @@ HTTP/1.1 200 Ok
 var client = new DataServiceRestClient( serviceUri );
 client.DeleteParts( PathHelper.String2PartPathInformation( "metal part" ) );
 {% endhighlight %}
+
+{% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
+
+## {{ page.sections['sdk'] }}
+
+{{ site.sections['beginExampleAPI'] }}
+{{ site.headers['request'] | markdownify }}
+
+{% highlight csharp %}
+var client = new DataServiceRestClient( serviceUri );
+var parentPartPath = PathHelper.String2PartPathInformation("/metal part");
+var filter = new InspectionPlanFilterAttributes()
+  { RequestedCharacteristicAttributes = new AttributeSelector(
+    new[]{ WellKnownKeys.Characteristic.LowerSpecificationLimit, 
+    WellKnownKeys.Characteristic.UpperSpecificationLimit} )
+  };
+var characteristics = client.GetCharacteristicsForPart(
+    PathHelper.String2PartPathInformation("/metal part"));
+{% endhighlight %}
+
+{{ site.sections['endExample'] }}
+
+
+
+{{ site.sections['beginExampleAPI'] }}
+
+{{ site.headers['request'] | markdownify }}
+
+{% highlight csharp %}
+var part = new InspectionPlanPart{ 
+  Uuid = new Guid( "05550c4c-f0af-46b8-810e-30c0c00a379e" ),
+  Path = PathHelper.String2PartPathInformation( "metal part"),
+  Attributes = new[]{ new Attribute( 1001, "4466" ), new Attribute( 1003, "mp" ) }
+};
+var client = new DataServiceRestClient( serviceUri );
+client.CreateParts( new[]{ part } );
+{% endhighlight %}
+
+{{ site.sections['endExample'] }}
