@@ -44,7 +44,7 @@ URL Endpoint | GET | POST | PUT | DELETE
 /catalogues/entries | Returns all catalogues including their respective entries | *--* | *--* | *--*
 /catalogues/(:catUuid1, :catUuid2,...) | Returns the catalogues that uuids are within the catUuid list without their entries | *--* | *--* | Deletes the catalogue(s) which has/have the given catUuid(s)
 /catalogues/(:catUuid1, :catUuid2,...)/entries | Returns the catalogues that uuids are within the catUuid list including their respective entries | *--* | *--* | *--*
-catalogues/:catalogueUuid/entries | *--*| Creates the entries transfered in the body of the request for the catalogue specidied by the *:catalogueUuid* | *--* | Deletes all entries for the catalogue specified by the *catalogueUuid*
+catalogues/:catalogueUuid/entries | *--*| Creates the entries transfered in the body of the request for the catalogue specidied by the *:catalogueUuid* | *--* | Deletes all entries for the catalogue specified by the *:catalogueUuid*
 catalogues/:catalogueUuid/entries/{key1, key2...} | *--* | *--* | *--* | Deletes the entries specified by its particular key for the catalogue specified by the *:catalogueUuid* 
 
 ### Get Catalogues (GET)
