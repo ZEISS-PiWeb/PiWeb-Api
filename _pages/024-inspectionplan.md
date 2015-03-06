@@ -444,7 +444,7 @@ token          | ```CancellationToken```               | Parameter is optional a
 {% highlight %}
 var characteristic = new InspectionPlanPart{ 
   Uuid = new Guid( "1429c5e2-599c-4d3e-b724-4e00ecb0caa7" ),
-  Path =  PathHelper.String2PathInformation( "/metal part/diameterCircle3", "PC" );,
+  Path =  PathHelper.String2PathInformation( "/metal part/diameterCircle3", "PC" ),
   Attributes = new[]{ 
     new Attribute( WellKnownKeys.Characteristic.LowerSpecificationLimit, "-0.2" ), 
     new Attribute( WellKnownKeys.Characteristic.UpperSpecificationLimit, "0.3" ) }
