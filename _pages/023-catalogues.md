@@ -27,8 +27,6 @@ catalogueEntries | ```CatalogueEntry``` | A list of catalogue entries
 
 ### CatalogueEntry
 
-A catalogue entry consits of a unique index based key which specifies the order within the catalogue and a list of attributes which consits of key value pairs. The keys within this key-value-pairs must come from the validAttributes range.
-
 Property         | Datatype             | Description
 -----------------|----------------------|------------------------
 key              | ```short```          | Specifies the entry's order within the catalogue
