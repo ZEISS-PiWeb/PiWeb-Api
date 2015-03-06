@@ -70,7 +70,7 @@ There are also several possibilities to fetch characteristics:
 * fetch characteristics beneath a certain part path
 * fetch all characteristics (can be restricted by filter parameters)
 
-{% assign exampleCaption="Fetching the direct characteristics beneath the part 'metal part'. Restrict the attributes to the lower and upper tolerance (attribute keys 2110 and 2111" %}
+{% assign exampleCaption="Fetch characteristics beneath the 'metal part'. Restrict to attribute keys 2110 and 2111" %}
 {% assign comment="As the filter parameter *depth* has the default value 1 it can be omitted in this example." %}
 
 {% capture jsonrequest %}
