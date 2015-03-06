@@ -7,27 +7,24 @@ isSubPage: true
 permalink: /dataservice/inspection-plan/
 sections:
   general: General Information
-  endpoint: Endpoint Information
-  add: Add Entities
-  get: Get Entities
-  update: Update Entities
-  delete: Delete Entities
+  endpoint: REST API Endpoints
+  sdk: .NET SDK Methods
 ---
 
 ## {{ page.sections['general'] }}
 
 Both parts and characteristics are PiWeb inspeaction plan entities. Each entity consits of the following properties:
 
-Name | Description
------|-------------
-uuid | Identifies this inspection plan entity uniquely.
-path | The path of this entity.
-attributes | A set of attributes which specifies this entity.
-comment | A comment which describes the last inspection plan change.
-version | Contains the revision number of the entity. The revision number starts with zero and is incremented by one each time when changes are applied to the inspection plan. The version is only returned if versioning is enabled in server settings.
-current | Indicates wheter the entity is the current version.
-timeStamp | Contains the date and time of the last update applied to this entity.
-charChangeDate (only for parts) | The timestamp for the most recent characteristic change on any characteristic that belongs to this part
+Name | Type | Description
+-----|------|--------------
+uuid | ```Guid``` | Identifies this inspection plan entity uniquely.
+path | ```PathInformation``` | The path of this entity.
+attributes | ```Attribute``` | A set of attributes which specifies this entity.
+comment | ```string``` | A comment which describes the last inspection plan change.
+version | ```int``` | Contains the revision number of the entity. The revision number starts with zero and is incremented by one each time when changes are applied to the inspection plan. The version is only returned if versioning is enabled in server settings.
+current | ```bool``` | Indicates wheter the entity is the current version.
+timeStamp | ```dateTime``` | Contains the date and time of the last update applied to this entity.
+charChangeDate (only for parts)|  ```dateTime``` | The timestamp for the most recent characteristic change on any characteristic that belongs to this part
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
@@ -40,17 +37,17 @@ Parts and characteristics can be fetched, created, updated and deleted via the f
 URL Endpoint | GET | POST | PUT | DELETE
 -------------|-----|-----|------|-------
 /parts | Returns all parts | Creates the committed part(s) which is/are transfered in the body of the request | Updates the committed parts | Deletes all parts
-/parts/:partPath | Returns the part specified by *:partPath* as well as the parts beneath this part | *Not supported* | *Not supported* | Deletes the part specified by *:partPath* as well as the parts and characteristics beneath this part
-parts/{:uuidList} | Returns all parts that uuid are within the *:uuidList* | *Not supported* | *Not supported* |  Deletes all parts that uuid are within the *:uuidList* as well as the parts and characteristics beneath the particular part
+/parts/:partPath | Returns the part specified by *:partPath* as well as the parts beneath this part | *--* | *--* | Deletes the part specified by *:partPath* as well as the parts and characteristics beneath this part
+parts/(:uuidList) | Returns all parts that uuid are within the *:uuidList* | *--* | *--* |  Deletes all parts that uuid are within the *:uuidList* as well as the parts and characteristics beneath the particular part
 
 ### Characteristics
 
 URL Endpoint | GET | POST | PUT | DELETE
 -------------|-----|-----|------|-------
-/characteristics | *Not supported* | Creates the committed characteristic(s) which is/are transfered in the body of the request | Updates the committed characteristics | *Not supported*
-/characteristics/:partsPath | Returns all characteristics beneath the part specified by *:partPath* | *Not supported* | *Not supported* | *Not supported*
-/characteristics/:characteristicPath | Returns the characteristic specified by *:characteristicPath*. <br><br> {{ site.images['info'] }} To get a characteristic by its path the filter parameter ```depth:0``` needs to be set! | *Not supported* | *Not supported* | Deletes the characteristic specified by *:characteristicPath* as well as all children beneath this characteristic
-characteristics/{:uuidList} | Returns all characteristics that uuid are within the *:uuidList* | *Not supported* | *Not supported* |  Deletes all characteristics that uuid are within the *:uuidList*
+parts/characteristics | *--* | Creates the committed characteristic(s) which is/are transfered in the body of the request | Updates the committed characteristics | *--*
+parts/:partsPath/characteristics | Returns all characteristics beneath the part specified by *:partPath* | *--* | *--* | *--*
+parts/characteristics/:characteristicPath | Returns the characteristic specified by *:characteristicPath*. | *--* | *--* | Deletes the characteristic specified by *:characteristicPath* as well as all children beneath this characteristic
+parts/characteristics/{:uuidList} | Returns all characteristics that uuid are within the *:uuidList* | *--* | *--* |  Deletes all characteristics that uuid are within the *:uuidList*
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
