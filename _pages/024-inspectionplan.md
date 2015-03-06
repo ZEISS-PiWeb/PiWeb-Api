@@ -117,7 +117,7 @@ There are also several possibilities to fetch characteristics:
 * fetch characteristics beneath a certain part path
 * fetch all characteristics (can be restricted by filter parameters)
 
-{% assign exampleCaption="Fetching the direct characteristics beneath the part "metal part". Restrict the attributes to the lower and upper tolerance (attribute keys 2110 and 2111" %}
+{% assign exampleCaption="Fetching the direct characteristics beneath the part 'metal part'. Restrict the attributes to the lower and upper tolerance (attribute keys 2110 and 2111" %}
 {% assign comment="As the filter parameter *depth* has the default value 1 it can be omitted in this example." %}
 
 {% capture jsonrequest %}
@@ -162,12 +162,8 @@ Updating inspection plan entities might regard the following aspects:
 
 {{site.images['info']}} If versioning is is server side activated every update of one or more inspection plan entities creates a new version entry.
 
-### {{ site.headers['example'] }}  Rename the characteristic "metal part/diameter_circle3" to "metal part/diameterCircle3"
-
-{{ site.sections['beginExampleWebService'] }}
-
-{{ site.headers['request']  | markdownify }}
-
+{% assign exampleCaption="Rename the characteristic "metal part/diameter_circle3" to "metal part/diameterCircle3" %}
+{% capture jsonrequest %}
 {% highlight http %}
 PUT /dataServiceRest/characteristics HTTP/1.1
 {% endhighlight %}
@@ -176,11 +172,7 @@ PUT /dataServiceRest/characteristics HTTP/1.1
 [
   {
      "path": "PC:/metal part/diameterCircle3/",
-     "attributes":
-     {
-         "2110": "-0.2",
-         "2111": "0.3",
-     },
+     "attributes": { "2110": "-0.2", "2111": "0.3", },
      "uuid": "1429c5e2-599c-4d3e-b724-4e00ecb0caa7",
      "version": 0,
      "timestamp": "2012-11-19T10:48:32.887Z",
@@ -188,61 +180,56 @@ PUT /dataServiceRest/characteristics HTTP/1.1
   }
 ]
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.headers['response']  | markdownify }}
-
+{% capture jsonresponse %}
 {% highlight http %}
 HTTP/1.1 200 Ok
 {% endhighlight %}
 
-{{ site.sections['endExample'] }}
-{{ site.sections['beginExampleAPI'] }}
-
-{{ site.headers['request'] | markdownify }}
-
-{% highlight csharp %}
-var client = new DataServiceRestClient( serviceUri );
-
-//Get the characteristic
-...
-var newPath = PathHelper.String2PathInformation( "/metal part/diameterCircle3", "PC" );
-characteristic.Path = newPath;
-client.UpdateCharacteristics( new InspectionPlanCharacteristic[]{characteristic} );
+{% highlight json %}
+{
+   "status":
+   {
+       "statusCode": 200,
+       "statusDescription": "Ok"
+   },
+   "category": "Success"
+}
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
+{% include exampleFieldset.html %}
 
-{% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
-
-## {{ page.sections['delete'] }}
+## Delete Entities
 
 There are two possibilities to delete inspection plan entities either by path or by their uuid. In both cases the entity itself as well as all children are deleted.
 
-### {{ site.headers['example'] }}  Delete the part "metal part"  and all entities below it
-
-{{ site.sections['beginExampleWebService'] }}
-{{ site.headers['request'] | markdownify }}
-
+{% assign exampleCaption="Delete the part 'metal part'  and all entities below it" %}
+{% capture jsonrequest %}
 {% highlight http %}
 DELETE /dataServiceRest/parts/metal%20part HTTP/1.1
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.headers['response'] | markdownify }}
+{% capture jsonresponse %}
 {% highlight http %}
 HTTP/1.1 200 Ok
 {% endhighlight %}
 
-{{ site.sections['endExample'] }}
-
-{{ site.sections['beginExampleAPI'] }}
-{{ site.headers['request'] | markdownify }}
-
-{% highlight csharp %}
-var client = new DataServiceRestClient( serviceUri );
-client.DeleteParts( PathHelper.String2PartPathInformation( "metal part" ) );
+{% highlight json %}
+{
+   "status":
+   {
+       "statusCode": 200,
+       "statusDescription": "Ok"
+   },
+   "category": "Success"
+}
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
+{% include exampleFieldset.html %}
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
@@ -279,6 +266,34 @@ var part = new InspectionPlanPart{
 };
 var client = new DataServiceRestClient( serviceUri );
 client.CreateParts( new[]{ part } );
+{% endhighlight %}
+
+{{ site.sections['endExample'] }}
+
+
+{{ site.sections['beginExampleAPI'] }}
+
+{{ site.headers['request'] | markdownify }}
+
+{% highlight csharp %}
+var client = new DataServiceRestClient( serviceUri );
+
+//Get the characteristic
+...
+var newPath = PathHelper.String2PathInformation( "/metal part/diameterCircle3", "PC" );
+characteristic.Path = newPath;
+client.UpdateCharacteristics( new InspectionPlanCharacteristic[]{characteristic} );
+{% endhighlight %}
+
+{{ site.sections['endExample'] }}
+
+
+{{ site.sections['beginExampleAPI'] }}
+{{ site.headers['request'] | markdownify }}
+
+{% highlight csharp %}
+var client = new DataServiceRestClient( serviceUri );
+client.DeleteParts( PathHelper.String2PartPathInformation( "metal part" ) );
 {% endhighlight %}
 
 {{ site.sections['endExample'] }}
