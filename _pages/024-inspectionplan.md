@@ -408,21 +408,3 @@ parts          | ```InspectionPlanPart```              | The parts that should b
 token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
 {% endcapture %}
 
-{% assign exampleCaption="Add the part 'metal part'." %}
-
-{% capture example %}
-{% highlight %}
-var part = new InspectionPlanPart{ 
-  Uuid = new Guid( "05550c4c-f0af-46b8-810e-30c0c00a379e" ),
-  Path = PathHelper.String2PartPathInformation( "metal part"),
-  Attributes = new[]{ 
-    new Attribute( WellKnownKeys.Parts.Number, "4466" ), 
-    new Attribute( WellKnownKeys.Parts.Abbreviation, "mp" ) }
-};
-var client = new DataServiceRestClient( "http://piwebserver:8080" );
-client.CreateParts( new[]{ part } );
-{% endhighlight %}
-{% endcapture %}
-
-{% include sdkFunctionFieldset.html %}
-
