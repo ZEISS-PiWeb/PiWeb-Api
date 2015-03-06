@@ -413,9 +413,7 @@ token          | ```CancellationToken```               | Parameter is optional a
 {% highlight csharp %}
 var part = new InspectionPlanPart{ 
   Uuid = new Guid( "05550c4c-f0af-46b8-810e-30c0c00a379e" ),
-  Path = PathHelper.String2PartPathInformation( 
-
-"metal part"),
+  Path = PathHelper.String2PartPathInformation( "metal part"),
   Attributes = new[]{ 
     new Attribute( WellKnownKeys.Parts.Number, "4466" ), 
     new Attribute( WellKnownKeys.Parts.Abbreviation, "mp" ) }
@@ -433,9 +431,7 @@ client.CreateParts( new[]{ part } );
 
 {% assign caption="CreateCharacetristics" %}
 {% assign icon=site.images['function-create'] %}
-{% assign description="Creates 
-
-the characteristics which are included in ```characteristics``` " %}
+{% assign description="Creates the characteristics which are included in ```characteristics``` " %}
 {% capture parameterTable %}
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
@@ -450,19 +446,13 @@ token          | ```CancellationToken```               | Parameter is optional a
 {% capture example %}
 {% highlight csharp %}
 var characteristic = new InspectionPlanPart{ 
-  Uuid = new Guid( 
-
-"1429c5e2-599c-4d3e-b724-4e00ecb0caa7" ),
+  Uuid = new Guid( "1429c5e2-599c-4d3e-b724-4e00ecb0caa7" ),
   Path =  PathHelper.String2PathInformation( "/metal part/diameterCircle3", "PC" ),
   Attributes = new[]{ 
-    new Attribute( 
-
-WellKnownKeys.Characteristic.LowerSpecificationLimit, "-0.2" ), 
+    new Attribute( WellKnownKeys.Characteristic.LowerSpecificationLimit, "-0.2" ), 
     new Attribute( WellKnownKeys.Characteristic.UpperSpecificationLimit, "0.3" ) }
 };
-var client = new 
-
-DataServiceRestClient( "http://piwebserver:8080" );
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
 client.CreateCharacteristics( new[]{ characteristic } );
 {% endhighlight %}
 {% endcapture %}
@@ -483,9 +473,7 @@ characteristic
 ...
 var newPath = PathHelper.String2PathInformation( "/metal part/diameterCircle3", "PC" );
 characteristic.Path = newPath;
-client.UpdateCharacteristics( new 
-
-InspectionPlanCharacteristic[]{characteristic} );
+client.UpdateCharacteristics( new InspectionPlanCharacteristic[]{characteristic} );
 {% endhighlight %}
 
 {{ site.sections['endExample'] }}
@@ -497,9 +485,7 @@ InspectionPlanCharacteristic[]{characteristic} );
 {% highlight csharp %}
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
 client.DeleteParts( PathHelper.String2PartPathInformation( "metal part" ) );
-{% endhighlight 
-
-%}
+{% endhighlight %}
 
 {{ site.sections['endExample'] }}
 
