@@ -409,11 +409,3 @@ token          | ```CancellationToken```               | Parameter is optional a
 {% endcapture %}
 
 {% assign exampleCaption="Add the part 'metal part'." %}
-
-{% capture example %}
-{% highlight %}
-var client = new DataServiceRestClient( "http://piwebserver:8080" );
-client.CreateParts( new[]{ part } );
-{% endhighlight %}
-{% endcapture %}
-
