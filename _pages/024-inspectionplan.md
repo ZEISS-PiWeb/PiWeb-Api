@@ -409,3 +409,10 @@ token          | ```CancellationToken```               | Parameter is optional a
 {% endcapture %}
 
 {% assign exampleCaption="Add the part 'metal part'." %}
+{% capture example %}
+{% highlight %}
+
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
