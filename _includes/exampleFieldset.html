@@ -2,7 +2,7 @@
   <legend>
     {{  site.images['document-info'] | append: ' Example: ' | append: exampleCaption | markdownify }}
   </legend>
-  {% if comment != empty %}
+  {% if comment.size > 0 %}
     {{ '<br>' }}
     {{ site.images['info'] comment }}
     {{ '<br>' }}
