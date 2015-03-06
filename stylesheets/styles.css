@@ -178,13 +178,13 @@ th code{
 	color:#fff;
 }
 
-code{
+/*code{
 	font: inherit;
 	background-color: gainsboro;
 	border: 1px solid #888;
 	border-radius: 4px;
 	padding: 0px 3px;
-}
+}*/
 
 pre {
 	padding: 4px 12px;
