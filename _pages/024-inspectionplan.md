@@ -127,7 +127,6 @@ GET /dataServiceRest/characteristics/metal%20part?filter=characteristicAttribute
 {% endcapture %}
 
 {% capture jsonresponse %}
-{{ site.headers['response'] | markdownify }}
 {% highlight json %}
 {
    ...
@@ -242,6 +241,8 @@ HTTP/1.1 200 Ok
 var client = new DataServiceRestClient( serviceUri );
 client.DeleteParts( PathHelper.String2PartPathInformation( "metal part" ) );
 {% endhighlight %}
+
+{{ site.sections['endExample'] }}
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
