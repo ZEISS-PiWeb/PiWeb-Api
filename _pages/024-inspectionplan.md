@@ -13,7 +13,9 @@ sections:
 
 ## {{ page.sections['general'] }}
 
-Both parts and characteristics are PiWeb inspeaction plan entities. Each entity consits of the following properties:
+Both parts and characteristics are PiWeb inspection plan entities. They are either ```InspectionPlanPart``` or ```InspectionPlanCharacteristic```objects. Both are derived from ```InspectionPlanBase```.
+
+### InspectionPlanBase
 
 Name | Type | Description
 -----|------|--------------
@@ -24,7 +26,12 @@ comment | ```string``` | A comment which describes the last inspection plan chan
 version | ```int``` | Contains the revision number of the entity. The revision number starts with zero and is incremented by one each time when changes are applied to the inspection plan. The version is only returned if versioning is enabled in server settings.
 current | ```bool``` | Indicates wheter the entity is the current version.
 timeStamp | ```dateTime``` | Contains the date and time of the last update applied to this entity.
-charChangeDate (only for parts)|  ```dateTime``` | The timestamp for the most recent characteristic change on any characteristic that belongs to this part
+
+### InspectionPlanPart : InspectionPlanBase
+
+charChangeDate |  ```dateTime``` | The timestamp for the most recent characteristic change on any characteristic that belongs to this part
+
+### InspectionPlanCharacteristic : InspectionPlanBase
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
@@ -238,6 +245,8 @@ HTTP/1.1 200 Ok
 
 ### Get Entities
 
+#### Parts
+
 {% assign caption="GetPartByPath" %}
 {% assign icon=site.images['function-get'] %}
 {% assign description="Fetches the part identified by the ```partPath```. " %}
@@ -304,16 +313,73 @@ token          | ```CancellationToken```               | Parameter is optional a
 {% highlight csharp %}
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
 var parentPartPath = PathHelper.String2PartPathInformation("/metal part");
-var part = client.GetCharacteristicsForPart( parentPartPath );
+var part = client.GetPartsForPart( parentPartPath );
 {% endhighlight %}
 {% endcapture %}
 
 {% include sdkFunctionFieldset.html %}
 
+#### Characteristics
 
-{{ site.sections['beginExampleAPI'] }}
-{{ site.headers['request'] | markdownify }}
+{% assign caption="GetCharacteristicByPath" %}
+{% assign icon=site.images['function-get'] %}
+{% assign description="Fetches the characteristic identified by the ```partPath```. " %}
+{% capture parameterTable %}
+Name           | Type                                  | Description
+---------------|---------------------------------------|--------------------------------------------------
+partPath       | ```PathInformation```                 | The path of the characteristic which should be returned.
+filter         | ```InspectionPlanFilterAttributes ``` | Parameter is optional and can further restrict the query.
+token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
 
+{% assign exampleCaption="Get the characteristic 'metal part/diameterCircle3'" %}
+
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+var charPath = PathHelper.String2PathInformation( "/metal part/diameterCircle3", "PC" );
+var characteristic = client.GetCharacteristicByPath( charPath );
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
+{% assign caption="GetCharacteristicsByUuids" %}
+{% assign icon=site.images['function-get'] %}
+{% assign description="Fetches characteristics by its uuids. " %}
+{% capture parameterTable %}
+Name           | Type                                  | Description
+---------------|---------------------------------------|--------------------------------------------------
+uuids          | ```Guid[]```                          | The uuids of the characteristics which should be returned.
+filter         | ```InspectionPlanFilterAttributes ``` | Parameter is optional and can further restrict the query.
+token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign exampleCaption="Get the 'metal part/diameterCircle3' by its uuid 1429c5e2-599c-4d3e-b724-4e00ecb0caa7" %}
+
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+var characteristic = client.GetCharacteristicsByUuids( new[]{ new Guid("1429c5e2-599c-4d3e-b724-4e00ecb0caa7") } );
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
+{% assign caption="GetCharacteristicsForPart" %}
+{% assign icon=site.images['function-get'] %}
+{% assign description="Fetches the characteristics below the given ```parentPart```. If the ```depth``` property of the ```filter``` parameter is not set only the direct children are returned by default. " %}
+{% capture parameterTable %}
+Name           | Type                                  | Description
+---------------|---------------------------------------|--------------------------------------------------
+parentPart     | ```PathInformation```                 | The parent part the charateristics should be returned for.
+filter         | ```InspectionPlanFilterAttributes ``` | Parameter is optional and can further restrict the query.
+token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign exampleCaption="Get the characteristics below 'metal part'. Restrict the result to lower and upper tolerance attributes." %}
+
+{% capture example %}
 {% highlight csharp %}
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
 var parentPartPath = PathHelper.String2PartPathInformation("/metal part");
@@ -322,29 +388,74 @@ var filter = new InspectionPlanFilterAttributes()
     new[]{ WellKnownKeys.Characteristic.LowerSpecificationLimit, 
     WellKnownKeys.Characteristic.UpperSpecificationLimit} )
   };
-var characteristics = client.GetCharacteristicsForPart(
-    PathHelper.String2PartPathInformation("/metal part"));
+var characteristics = client.GetCharacteristicsForPart( parentPartPath, filter );
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
+{% include sdkFunctionFieldset.html %}
 
+### Add Entities
 
+#### Parts
 
-{{ site.sections['beginExampleAPI'] }}
+{% assign caption="CreateParts" %}
+{% assign icon=site.images['function-create'] %}
+{% assign description="Creates the parts which are included in ```parts``` " %}
+{% capture parameterTable %}
+Name           | Type                                  | Description
+---------------|---------------------------------------|--------------------------------------------------
+parts          | ```InspectionPlanPart```              | The parts that should be created.
+token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
 
-{{ site.headers['request'] | markdownify }}
+{% assign exampleCaption="Add the part 'metal part'." %}
 
-{% highlight csharp %}
+{% capture example %}
+{% highlight %}
 var part = new InspectionPlanPart{ 
   Uuid = new Guid( "05550c4c-f0af-46b8-810e-30c0c00a379e" ),
   Path = PathHelper.String2PartPathInformation( "metal part"),
-  Attributes = new[]{ new Attribute( 1001, "4466" ), new Attribute( 1003, "mp" ) }
+  Attributes = new[]{ 
+    new Attribute( WellKnownKeys.Parts.Number, "4466" ), 
+    new Attribute( WellKnownKeys.Parts.Abbreviation, "mp" ) }
 };
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
 client.CreateParts( new[]{ part } );
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
+{% include sdkFunctionFieldset.html %}
+
+#### Characteristics
+
+{% assign caption="CreateCharacetristics" %}
+{% assign icon=site.images['function-create'] %}
+{% assign description="Creates the characteristics which are included in ```characteristics``` " %}
+{% capture parameterTable %}
+Name           | Type                                  | Description
+---------------|---------------------------------------|--------------------------------------------------
+characteristics| ```InspectionPlanCharacteristic```    | The characteristics that schould be created.
+token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign exampleCaption="Add the characteristic '/metal part/diameterCircle3'." %}
+
+{% capture example %}
+{% highlight %}
+var characteristic = new InspectionPlanPart{ 
+  Uuid = new Guid( "1429c5e2-599c-4d3e-b724-4e00ecb0caa7" ),
+  Path =  PathHelper.String2PathInformation( "/metal part/diameterCircle3", "PC" );,
+  Attributes = new[]{ 
+    new Attribute( WellKnownKeys.Characteristic.LowerSpecificationLimit, "-0.2" ), 
+    new Attribute( WellKnownKeys.Characteristic.UpperSpecificationLimit, "0.3" ) }
+};
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+client.CreateCharacteristics( new[]{ characteristic } );
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
 
 
 {{ site.sections['beginExampleAPI'] }}
