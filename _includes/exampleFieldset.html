@@ -2,6 +2,8 @@
   <legend>
     {{  site.images['document-info'] | append: ' Example: ' | append: exampleCaption | markdownify }}
   </legend>
+  {% if comment != empty %}
+    {{ comment }}<br>
   {{ site.headers['request']  | markdownify }}
   {{ jsonrequest | markdownify }}
   {{ site.headers['response']  | markdownify }}
