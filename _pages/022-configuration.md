@@ -22,26 +22,29 @@ There are different kinds of entites:
 * *values* and 
 * *catalogues*.
 
-The attributes are either ```AttributeDefinition``` or ```CatalogueAttributeDefinition``` objects. Both are derived from the abstract base type ```AbstractAttributeDefinition``` which consists of the ```key``` and ```decription``` property. 
+The attributes are either ```AttributeDefinition``` or ```CatalogueAttributeDefinition``` objects. Both are derived from the abstract base type ```AbstractAttributeDefinition```. 
 
-###AttributeDefinition
+###AbstractAttributeDefinition
 
-Property      | Description
---------------|--------------------------------------------------------------------
-key           | The attribute's key which the attribute can be uniquely identified by
-description   | The attribute's name or a short description 
-type          | The attribute's type. May be *AlphaNumeric*, *Integer*, *Float* or *DateTime*
-length        | Defines the attribute's maximum length. Only set if the type is *AlphaNumeric*
-definitionType| Has always the value 'AttributeDefinition' and is used to differentiate between  ```AttributeDefinition``` and ```CatalogueAttributeDefinition``` (only relevant and available for REST API)
+Property      | Type         | Description
+--------------|--------------|--------------------------------------------------------------
+key           | ```ushort``` | The attribute's key which the attribute can be uniquely identified by
+description   | ```string``` | The attribute's name or a short description 
 
-###CatalogueAttributeDefinition
+###AttributeDefinition : AbstractAttributeDefinition
 
-Property      | Description
---------------|--------------------------------------------------------------------
-key           | The attribute's key which the attribute can be uniquely identified by
-description   | The attribute's name or a short description 
-catalogue     | The uuid of the catalogue the attribute's value has to be taken from
-definitionType| Has always the value 'CatalogueAttributeDefinition' and is used to differentiate between  ```AttributeDefinition``` and ```CatalogueAttributeDefinition``` (only relevant and available for REST API)
+Property      | Type                | Description
+--------------|---------------------|--------------------------------------------------------------
+type          | ```AttributeType``` | The attribute's type. May be *AlphaNumeric*, *Integer*, *Float* or *DateTime*
+length        | ```ushort```        | Defines the attribute's maximum length. Only set if the type is *AlphaNumeric*
+definitionType| ```string```        | Has always the value 'AttributeDefinition' and is used to differentiate between  ```AttributeDefinition``` and ```CatalogueAttributeDefinition``` (only relevant and available for REST API)
+
+###CatalogueAttributeDefinition : AbstractAttributeDefinition
+
+Property      | Type         | Description
+--------------|--------------|------------------------------------------------------------
+catalogue     | ```Guid```   |The uuid of the catalogue the attribute's value has to be taken from
+definitionType| ```string``` | Has always the value 'CatalogueAttributeDefinition' and is used to differentiate between  ```AttributeDefinition``` and ```CatalogueAttributeDefinition``` (only relevant and available for REST API)
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
