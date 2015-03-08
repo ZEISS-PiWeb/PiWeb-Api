@@ -75,9 +75,9 @@ POST /dataServiceRest/parts/measurements HTTP/1.1
   }
 ]
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.headers['response']  | markdownify }}
-
+{% capture jsonresponse %}
 {% highlight http %}
 HTTP/1.1 201 Created
 {% endhighlight %}
@@ -92,3 +92,6 @@ HTTP/1.1 201 Created
    "category": "Success"
 }
 {% endhighlight %}
+{% endcapture %}
+
+{% include exampleFieldset.html %}
