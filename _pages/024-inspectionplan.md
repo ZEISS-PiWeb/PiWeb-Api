@@ -470,12 +470,13 @@ token          | ```CancellationToken```               | Parameter is optional a
 {% assign exampleCaption="Update the 'metal part' part's attribute 'part number'." %}
 {% capture example %}
 {% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+
 //Get the part
 var charPath = PathHelper.String2PathInformation( "/metal part/diameterCircle3", "PC" );
 var part = client.GetPartByPath( charPath );
 
 part.Attributes[ 0 ] = new global::DataService.Attribute( WellKnownKeys.Part.Number, "446" );
-var client = new DataServiceRestClient( "http://piwebserver:8080" );
 client.UpdateParts( new[]{ part } );
 {% endhighlight %}
 {% endcapture %}
@@ -512,7 +513,7 @@ client.UpdateCharacteristics( new InspectionPlanCharacteristic[]{characteristic}
 
 {% include sdkFunctionFieldset.html %}
 
-### Update Entities
+### Delete Entities
 
 #### Parts
 
@@ -557,7 +558,7 @@ client.DeleteParts( PathHelper.String2PartPathInformation( "metal part" ) );
 
 {% assign caption="DeleteParts" %}
 {% assign icon=site.images['function-delete'] %}
-{% assign description="Deletes all parts (and characteristics) of the parts which uuids are within ```guids``` including the parts themselves." %}
+{% assign description="Deletes all parts (and characteristics) whose uuids are within ```guids``` including the parts themselves." %}
 {% capture parameterTable %}
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
@@ -570,5 +571,45 @@ token          | ```CancellationToken```               | Parameter is optional a
 {% highlight csharp %}
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
 client.DeleteParts( new []{ new Guid ( "05550c4c-f0af-46b8-810e-30c0c00a379e" ) } );
+{% endhighlight %}
+{% endcapture %}
+
+#### Characteristics
+
+{% assign caption="DeleteCharacteristics" %}
+{% assign icon=site.images['function-delete'] %}
+{% assign description="Deletes all characteristics below the characteristic ```startPart``` including the characteristic itself." %}
+{% capture parameterTable %}
+Name           | Type                                  | Description
+---------------|---------------------------------------|--------------------------------------------------
+startPart      | ```PathInformation```                 | The path of the characteristic which should be deleted. 
+token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign exampleCaption="Delete everything below 'diameterCircle_3' including the characteristic itself." %}
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+client.DeleteCharacteristics( PathHelper.String2PathInformation( "/metal part/diameterCircle_3", "PC" ) );
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
+{% assign caption="DeleteCharacteristics" %}
+{% assign icon=site.images['function-delete'] %}
+{% assign description="Deletes all characteristics whose uuids are within ```guids``` including the characteristics themselves." %}
+{% capture parameterTable %}
+Name           | Type                                  | Description
+---------------|---------------------------------------|--------------------------------------------------
+guids          | ```PathInformation```                 | The guids of the characteristics which should be deleted. 
+token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign exampleCaption="Delete the characteristic with the uuid 1429c5e2-599c-4d3e-b724-4e00ecb0caa7." %}
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+client.DeleteCharacteristics( new []{ new Guid ( "1429c5e2-599c-4d3e-b724-4e00ecb0caa7" ) } );
 {% endhighlight %}
 {% endcapture %}
