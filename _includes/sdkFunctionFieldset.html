@@ -5,6 +5,9 @@
   {{ site.images['summary'] | append: ' **Summary:** '| append: description | markdownify }}
   {{ site.images['parameter'] | append: ' **Parameter List:**'| markdownify }}
   {{parameterTable | markdownify}}
+  {% if returnParameter != empty %}
+    {{ site.images['returnParameter'] | append: ' **Return parameter:** ```'| append: returnParameter | append: '```' | markdownify }}
+  {% endif %}
   {% if exampleCaption != empty %}
   {{ site.images['document-info'] | append: ' **Example: ' | append: exampleCaption | append:'**' | markdownify }}
   {{example}}
