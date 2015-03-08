@@ -613,3 +613,5 @@ var client = new DataServiceRestClient( "http://piwebserver:8080" );
 client.DeleteCharacteristics( new []{ new Guid ( "1429c5e2-599c-4d3e-b724-4e00ecb0caa7" ) } );
 {% endhighlight %}
 {% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
