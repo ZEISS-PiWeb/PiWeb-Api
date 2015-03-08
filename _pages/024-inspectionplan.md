@@ -258,6 +258,8 @@ filter         | ```InspectionPlanFilterAttributes ``` | Parameter is optional a
 token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
 {% endcapture %}
 
+{% assign returnParameter="Task<InspectionPlanPart>" %}
+
 {% assign exampleCaption="Get the 'metal part' and restrict the result to the attributes 'part number' and 'comment'" %}
 
 {% capture example %}
