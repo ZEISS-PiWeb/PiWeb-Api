@@ -14,6 +14,7 @@ images:
   warning: "![Warning](/PiWeb-Api/images/warning.png)"
   info: "![Info](/PiWeb-Api/images/info.png)"
   parameter: "![Info](/PiWeb-Api/images/parameter.png)"
+  returnParameter: "![Info](/PiWeb-Api/images/returnParameter.png)"
   summary: "![Info](/PiWeb-Api/images/summary.png)"
   list-info: "![List Info](/PiWeb-Api/images/list-info.png)"
   document-info: "![Document Info](/PiWeb-Api/images/document-info.png)"
