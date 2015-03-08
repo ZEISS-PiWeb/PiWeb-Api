@@ -168,7 +168,7 @@ Updating inspection plan entities might regard the following aspects:
 * Rename/move inspection plan entities
 * Change inspection plan entity's attributes
 
-{{site.images['info']}} If versioning is is server side activated every update of one or more inspection plan entities creates a new version entry.
+{{site.images['info']}} If versioning is server side activated every update of one or more inspection plan entities creates a new version entry.
 
 {% assign exampleCaption="Rename the characteristic "metal part/diameter_circle3" to "metal part/diameterCircle3" %}
 {% capture jsonrequest %}
@@ -418,9 +418,7 @@ var part = new InspectionPlanPart{
     new Attribute( WellKnownKeys.Parts.Number, "4466" ), 
     new Attribute( WellKnownKeys.Parts.Abbreviation, "mp" ) }
 };
-var client = new 
-
-DataServiceRestClient( "http://piwebserver:8080" );
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
 client.CreateParts( new[]{ part } );
 {% endhighlight %}
 {% endcapture %}
@@ -429,7 +427,7 @@ client.CreateParts( new[]{ part } );
 
 #### Characteristics
 
-{% assign caption="CreateCharacetristics" %}
+{% assign caption="CreateCharacteristics" %}
 {% assign icon=site.images['function-create'] %}
 {% assign description="Creates the characteristics which are included in ```characteristics``` " %}
 {% capture parameterTable %}
@@ -455,32 +453,122 @@ client.CreateCharacteristics( new[]{ characteristic } );
 {% endhighlight %}
 {% endcapture %}
 
+### Update Entities
+
+#### Parts
+
+{% assign caption="UpdateParts" %}
+{% assign icon=site.images['function-update'] %}
+{% assign description="Update the parts which are included in ```parts``` Updating might regard the following rename/move inspection plan entities or change inspection plan entity’s attributes. If versioning Characteristics every update of one or more inspection plan entities creates a new version entry." %}
+{% capture parameterTable %}
+Name           | Type                                  | Description
+---------------|---------------------------------------|--------------------------------------------------
+parts          | ```InspectionPlanPart[]```            | The parts that should be updated.
+token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign exampleCaption="Update the 'metal part' part's attribute 'part number'." %}
+{% capture example %}
+{% highlight csharp %}
+//Get the part
+var charPath = PathHelper.String2PathInformation( "/metal part/diameterCircle3", "PC" );
+var part = client.GetPartByPath( charPath );
+
+part.Attributes[ 0 ] = new global::DataService.Attribute( WellKnownKeys.Part.Number, "446" );
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+client.UpdateParts( new[]{ part } );
+{% endhighlight %}
+{% endcapture %}
+
 {% include sdkFunctionFieldset.html %}
 
+#### Characteristics
 
+{% assign caption="UpdateCharacteristics" %}
+{% assign icon=site.images['function-update'] %}
+{% assign description="Update the characteristics which are included in ```characteristics``` Updating might regard the following rename/move inspection plan entities or change inspection plan entity’s attributes. If versioning is server side activated every update of one or more inspection plan entities creates a new version entry. " %}
+{% capture parameterTable %}
+Name           | Type                                  | Description
+---------------|---------------------------------------|--------------------------------------------------
+characteristics| ```InspectionPlanCharacteristic[]```  | The characteristics that schould be updated.
+token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
 
-{{ site.sections['beginExampleAPI'] }}
-{{ site.headers['request'] | markdownify }}
+{% assign exampleCaption="Rename/move the characteristic '/metal part/diameterCircle3' to '/metal part/diameterCircle_3'." %}
 
+{% capture example %}
 {% highlight csharp %}
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
 
-//Get the characteristic...
-var newPath = PathHelper.String2PathInformation( "/metal part/diameterCircle3", "PC" );
+//Get the characteristic
+var charPath = PathHelper.String2PathInformation( "/metal part/diameterCircle3", "PC" );
+var characteristic = client.GetCharacteristicByPath( charPath );
+
+var newPath = PathHelper.String2PathInformation( "/metal part/diameterCircle_3", "PC" );
 characteristic.Path = newPath;
 client.UpdateCharacteristics( new InspectionPlanCharacteristic[]{characteristic} );
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
+{% include sdkFunctionFieldset.html %}
 
+### Update Entities
 
-{{ site.sections['beginExampleAPI'] }}
-{{ site.headers['request'] | markdownify }}
+#### Parts
 
+{% assign caption="DeleteAllParts" %}
+{% assign icon=site.images['function-delete'] %}
+{% assign description="Deletes all parts within the database and therefore the complete inspection plan." %}
+{% capture parameterTable %}
+Name           | Type                                  | Description
+---------------|---------------------------------------|--------------------------------------------------
+token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign exampleCaption="Delete the complete inspection plan." %}
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+client.DeleteAllParts();
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
+{% assign caption="DeleteParts" %}
+{% assign icon=site.images['function-delete'] %}
+{% assign description="Deletes all parts (and characteristics) below the part ```startPart``` including the part itself." %}
+{% capture parameterTable %}
+Name           | Type                                  | Description
+---------------|---------------------------------------|--------------------------------------------------
+startPart      | ```PathInformation```                 | The path of the part which should be deleted. 
+token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign exampleCaption="Delete everything below 'metal part' including the part itself." %}
+{% capture example %}
 {% highlight csharp %}
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
 client.DeleteParts( PathHelper.String2PartPathInformation( "metal part" ) );
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
+{% include sdkFunctionFieldset.html %}
 
+{% assign caption="DeleteParts" %}
+{% assign icon=site.images['function-delete'] %}
+{% assign description="Deletes all parts (and characteristics) of the parts which uuids are within ```guids``` including the parts themselves." %}
+{% capture parameterTable %}
+Name           | Type                                  | Description
+---------------|---------------------------------------|--------------------------------------------------
+guids          | ```PathInformation```                 | The guids of the parts which should be deleted. 
+token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign exampleCaption="Delete the part with the uuid 05550c4c-f0af-46b8-810e-30c0c00a379e." %}
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+client.DeleteParts( new []{ new Guid ( "05550c4c-f0af-46b8-810e-30c0c00a379e" ) } );
+{% endhighlight %}
+{% endcapture %}
