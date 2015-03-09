@@ -15,15 +15,15 @@ redirect_from: "/dataservice/"
 ## {{ page.sections['general'] }}
 
 Fetching service information is guaranteed to be very fast and is therefore well suited for checking the connection. This method can always be invoked without having credentials specified.
-The first time service information are fetched from the server database statistics values need to be created. As the service information call should return immediately statistics creation is triggered in a separate task. Therefore the statistical values partCount, characteristicsCount, measurementsCount and valuesCount stays empty in the first response but should generally contain values on the second call.
+The first time service information are fetched from the server, database statistics values need to be created. As the service information call should return immediately, statistics creation is triggered in a separate task. Therefore, the statistical values _**partCount**_, _**characteristicsCount**_, _**measurementsCount**_ and _**valuesCount**_ stay empty in the first response, but should generally contain values on the second call.
 
-The ServiceInformation object which is returned contains of the following properties:
+The ServiceInformation object, which is returned, contains of the following properties:
 
 Property | Description
 ---------|-------------
 serverName | The name of the PiWeb server as it is specified in the server settings dialog
 version | The version number of the PiWeb server
-securityEnabled | Indicates if security is server side enabled or not.
+securityEnabled | Indicates whether security is server side enabled or not.
 edition | The database edition. Should generally be PiwebDB.
 versionWsdlMajor | The major version number of the interface.
 versionWsdlMinor | The minor version number of the interface.
@@ -31,14 +31,14 @@ partCount | Number of parts stored in the server
 characteristicCount | Number of characteristics stored in the server
 measurementCount | Number of measurements stored in the server
 valueCount |Number of measured values stored in the server
-featureList | Includes the erver side supported features.
+featureList | Includes the server side supported features.
 inspectionPlanTimestamp | Timestamp of the last inspection plan modification
 measurementTimestamp | Timestamp of the last measurement modification
 configurationTimestamp | Timestamp of the last configuration timestamp
 
 ## {{ page.sections['endpoint'] }}
 
-Service information can be fetched via the following endpoint. There are no filter parameter to restrict the query.
+Service information can be fetched via the following endpoint. There are no filter parameters to restrict the query.
 
 URL Endpoint | GET | PUT | POST | DELETE
 -------------|-----|-----|------|-------
@@ -101,7 +101,7 @@ GET /dataServiceRest/serviceInformation HTTP/1.1
 
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
-token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+token          | ```CancellationToken```               | Parameter is optional allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign returnParameter="Task<ServiceInformation>" %}
