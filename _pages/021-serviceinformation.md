@@ -9,13 +9,14 @@ sections:
   general: General Information
   endpoint: REST API Endpoints
   sdk: .NET SDK Methods
-  get: Get Service Information
 redirect_from: "/dataservice/"
 ---
 
 ## {{ page.sections['general'] }}
 
-Fetching service information is guaranteed to be very fast and is therefore well suited for checking the connection. This method can always be invoked without having credentials specified. 
+Fetching service information is guaranteed to be very fast and is therefore well suited for checking the connection. This method can always be invoked without having credentials specified.
+The first time service information are fetched from the server database statistics values need to be created. As the service information call should return immediately statistics creation is triggered in a separate task. Therefore the statistical values partCount, characteristicsCount, measurementsCount and valuesCount stays empty in the first response but should generally contain values on the second call.
+
 The ServiceInformation object which is returned contains of the following properties:
 
 Property | Description
@@ -43,30 +44,19 @@ URL Endpoint | GET | PUT | POST | DELETE
 -------------|-----|-----|------|-------
 /serviceInformation | Returns general information about the PiWeb-Server | not supported | not supported | not supported
 
-## {{page.sections['sdk'] }}
-
 ### Get Service Information
 
-Method Name | Parmeter<br>*Optional Parameter[default value]* | Parameter Description
-------------|-------------------------------------------------|----------------------
-GetServiceInformation | *CancellationToken ct [null]* |  The ```CancellationToken ct``` gives the possibility to cancel the asyncronous call.
+{% assign exampleCaption="Get Service Information for a given connection" %}
+{% assign comment="" %}
 
-## {{ page.sections['get'] }}
-
-The first time service information are fetched from the server database statistics values need to be created. As the service information call should return immediately statistics creation is triggered in a separate task. Therefore the statistical values partCount, characteristicsCount, measurementsCount and valuesCount stays empty in the first response but should generally contain values on the second call.
-
-### {{ site.headers['example'] }}  Get Service Information for a given connection
-
-{{ site.sections['beginExampleWebService'] }}
-
-{{ site.headers['request']  | markdownify }}
-
+{% capture jsonrequest %}
 {% highlight http %}
 GET /dataServiceRest/serviceInformation HTTP/1.1
 {% endhighlight %}
+{% endhighlight %}
+{% endcapture %}
 
-{{ site.headers['response']  | markdownify }}
-
+{% capture jsonresponse %}
 {% highlight json %}
 {
    ...
@@ -106,5 +96,29 @@ GET /dataServiceRest/serviceInformation HTTP/1.1
 var client = new DataServiceRestClient( serviceUri );
 ServiceInformation information = await client.GetServiceInformation();
 {% endhighlight %}
+{% endcapture %}
 
-{{ site.sections['endExample'] }}
+{% include exampleFieldset.html %}
+
+
+## {{page.sections['sdk'] }}
+
+### Get Service Information
+
+{% assign caption="GetServiceInformation" %}
+{% assign icon=site.images['function-get'] %}
+{% assign description="Fetches the service information. " %}
+{% capture parameterTable %}
+
+Name           | Type                                  | Description
+---------------|---------------------------------------|--------------------------------------------------
+token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign returnParameter="Task<ServiceInformation>" %}
+{% assign exampleCaption="Get the service information" %}
+{% capture example %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+var serviceInformation = await client.GetServiceInformation();
+{% endcapture %}
+{% include sdkFunctionFieldset.html %}
