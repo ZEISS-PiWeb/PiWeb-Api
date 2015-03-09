@@ -7,7 +7,7 @@ isSubPage: true
 permalink: /dataservice/serviceinformation/
 sections:
   general: General Information
-  endpoint: REST API Endpoint Information
+  endpoint: REST API Endpoints
   sdk: .NET SDK Methods
   get: Get Service Information
 redirect_from: "/dataservice/"
