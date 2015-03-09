@@ -312,18 +312,18 @@ HTTP/1.1 200 OK
 
  Name          | Type                              | Description
 ---------------|-----------------------------------|--------------------------------------------------
-part           | ```Pathnformation```               | The path of the part all measurements should be fetched for.
+part           | ```PathInformation```               | The path of the part all measurements should be fetched for.
 filter         | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
 token          | ```CancellationToken```           | Parameter is optional and gives the possibility to cancel the asyncronous call.
 {% endcapture %}
 
-{% assign returnParameter="Task<SimpleMeasurement>" %}
+{% assign returnParameter="Task<SimpleMeasurement[]>" %}
 
 {% assign exampleCaption="Get all measurements for the part 'metal part'" %}
 {% capture example %}
 {% highlight csharp %}
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
-var measurements = client.GetMeasurementsForPart( PathHelper.String2PartPathInformation( "/metal part" ) );
+var measurements = await client.GetMeasurementsForPart( PathHelper.String2PartPathInformation( "/metal part" ) );
 {% endhighlight %}
 {% endcapture %}
 
@@ -331,7 +331,7 @@ var measurements = client.GetMeasurementsForPart( PathHelper.String2PartPathInfo
 
 {% assign caption="GetMeasurementsForParts" %}
 {% assign icon=site.images['function-get'] %}
-{% assign description="Fetches measurements for the ```part```" %}
+{% assign description="Fetches measurements for all parts that uuid is within ```parts```" %}
 {% capture parameterTable %}
 
  Name          | Type                              | Description
@@ -347,7 +347,105 @@ token          | ```CancellationToken```           | Parameter is optional and g
 {% capture example %}
 {% highlight csharp %}
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
-var measurements = client.GetMeasurementsForParts( new[]{ new Guid( "1429c5e2-599c-4d3e-b724-4e00ecb0caa7" ) } );
+var measurements = await client.GetMeasurementsForParts( new[]{ new Guid( "1429c5e2-599c-4d3e-b724-4e00ecb0caa7" ) } );
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
+{% assign caption="GetMeasurementsByUuid" %}
+{% assign icon=site.images['function-get'] %}
+{% assign description="Fetches all measurements that uuids are within ```measurementUuids```" %}
+{% capture parameterTable %}
+
+ Name            | Type                              | Description
+-----------------|-----------------------------------|--------------------------------------------------
+measurementUuids | ```Guid[]```                      | List of uuids of the measurements that should be fetched.
+filter           | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
+token            | ```CancellationToken```           | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign returnParameter="Task<SimpleMeasurement[]>" %}
+
+{% assign exampleCaption="Get the measurements with the uuid '5b59cac7-9ecd-403c-aa26-56dd25892421'" %}
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+var measurements = client.GetMeasurementsByUuid( new[]{ new Guid( "5b59cac7-9ecd-403c-aa26-56dd25892421" ) } );
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
+#### With Values
+
+{% assign caption="GetMeasuredValuesForPart" %}
+{% assign icon=site.images['function-get'] %}
+{% assign description="Fetches measurements including the measured values for the ```part```." %}
+{% capture parameterTable %}
+
+ Name          | Type                              | Description
+---------------|-----------------------------------|--------------------------------------------------
+part           | ```PathInformation```             | The path of the part all measurements should be fetched for.
+filter         | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
+token          | ```CancellationToken```           | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign returnParameter="Task<DataMeasurement[]>" %}
+
+{% assign exampleCaption="Get all measurements including the measured values for the part 'metal part'" %}
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+var measurements = await client.GetMeasuredValuesForPart( PathHelper.String2PartPathInformation( "/metal part" ) );
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
+{% assign caption="GetMeasuredValuesForParts" %}
+{% assign icon=site.images['function-get'] %}
+{% assign description="Fetches measurements including measured values for all parts that uuid is within ```parts```" %}
+{% capture parameterTable %}
+
+ Name          | Type                              | Description
+---------------|-----------------------------------|--------------------------------------------------
+parts          | ```Guid[]```                      | List of uuids of part the measurements should be fetched for.
+filter         | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
+token          | ```CancellationToken```           | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign returnParameter="Task<DataMeasurement[]>" %}
+
+{% assign exampleCaption="Get all measurements including measured values for the part with the uuid '1429c5e2-599c-4d3e-b724-4e00ecb0caa7'" %}
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+var measurements = await client.GetMeasuredValuesForParts( new[]{ new Guid( "1429c5e2-599c-4d3e-b724-4e00ecb0caa7" ) } );
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
+{% assign caption="GetMeasuredValuesForMeasurements" %}
+{% assign icon=site.images['function-get'] %}
+{% assign description="Fetches all measurements including measured values for measurements that uuids are within ```measurementUuids```" %}
+{% capture parameterTable %}
+
+ Name            | Type                              | Description
+-----------------|-----------------------------------|--------------------------------------------------
+measurementUuids | ```Guid[]```                      | List of uuids of the measurements that should be fetched.
+filter           | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
+token            | ```CancellationToken```           | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign returnParameter="Task<DataMeasurement[]>" %}
+
+{% assign exampleCaption="Get the measurements including measured values for the measurement with the uuid '5b59cac7-9ecd-403c-aa26-56dd25892421'" %}
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+var measurements = client.GetMeasuredValuesForMeasurements( new[]{ new Guid( "5b59cac7-9ecd-403c-aa26-56dd25892421" ) } );
 {% endhighlight %}
 {% endcapture %}
 
