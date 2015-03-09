@@ -263,29 +263,18 @@ HTTP/1.1 200 OK
 
 ### Delete measurements
 
-Updating a measurement does always effect the complete measurement. This means that the whole measurement including attributes and values needs to be transfered within the body of the request and is deleted and recreated again on server side.
+There are three possibilities to delete measurements:
 
-{% assign exampleCaption="Update a measurement - add and change an attribute" %}
+* Delete all measurements
+* Delete measurements for a particular part by its path
+* Delete measurements by its uuids
+
+{% assign exampleCaption="Delete the measurement with the uuid 4b59cac7-9ecd-403c-aa26-56dd25892421" %}
 {% assign comment="" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
-POST /dataServiceRest/parts/measurements HTTP/1.1
-{% endhighlight %}
-
-{% highlight json %}
-[
-  {
-    "uuid": "4b59cac7-9ecd-403c-aa26-56dd25892421",
-      "partUuid": "e42c5327-6258-4c4c-b3e9-6d22c30938b2",
-      "attributes": {
-        "4": "2015-03-09T19:12:00Z",
-        "6": "2",
-        "7": "0",
-        "8": "1"
-      }
-  }
-]
+POST /dataServiceRest/parts/measurements/(4b59cac7-9ecd-403c-aa26-56dd25892421) HTTP/1.1
 {% endhighlight %}
 {% endcapture %}
 
