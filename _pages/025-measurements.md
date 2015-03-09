@@ -312,7 +312,7 @@ HTTP/1.1 200 OK
 
  Name          | Type                              | Description
 ---------------|-----------------------------------|--------------------------------------------------
-part           | ``Pathnformation```               | The path of the part all measurements should be fetched for.
+part           | ```Pathnformation```               | The path of the part all measurements should be fetched for.
 filter         | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
 token          | ```CancellationToken```           | Parameter is optional and gives the possibility to cancel the asyncronous call.
 {% endcapture %}
@@ -336,7 +336,7 @@ var measurements = client.GetMeasurementsForPart( PathHelper.String2PartPathInfo
 
  Name          | Type                              | Description
 ---------------|-----------------------------------|--------------------------------------------------
-parts          | ``Guid[]```                       | List of uuids of part the measurements should be fetched for.
+parts          | ```Guid[]```                       | List of uuids of part the measurements should be fetched for.
 filter         | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
 token          | ```CancellationToken```           | Parameter is optional and gives the possibility to cancel the asyncronous call.
 {% endcapture %}
