@@ -107,7 +107,9 @@ token          | ```CancellationToken```               | Parameter is optional a
 {% assign returnParameter="Task<ServiceInformation>" %}
 {% assign exampleCaption="Get the service information" %}
 {% capture example %}
+{% highlight csharp %}
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
 var serviceInformation = await client.GetServiceInformation();
+{% endhighlight %}
 {% endcapture %}
 {% include sdkFunctionFieldset.html %}
