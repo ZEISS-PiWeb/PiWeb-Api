@@ -296,3 +296,59 @@ HTTP/1.1 200 OK
 {% endcapture %}
 
 {% include exampleFieldset.html %}
+
+{% comment %}------------------------------------------------------------------------------------------------{% endcomment %}
+
+## {{ page.sections['sdk'] }}
+
+### Get Measurements
+
+#### Without Values
+
+{% assign caption="GetMeasurementsForPart" %}
+{% assign icon=site.images['function-get'] %}
+{% assign description="Fetches measurements for the ```part```." %}
+{% capture parameterTable %}
+
+ Name          | Type                              | Description
+---------------|-----------------------------------|--------------------------------------------------
+part           | ``Pathnformation```               | The path of the part all measurements should be fetched for.
+filter         | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
+token          | ```CancellationToken```           | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign returnParameter="Task<SimpleMeasurement>" %}
+
+{% assign exampleCaption="Get all measurements for the part 'metal part'" %}
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+var measurements = client.GetMeasurementsForPart( PathHelper.String2PartPathInformation( "/metal part" ) );
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
+{% assign caption="GetMeasurementsForParts" %}
+{% assign icon=site.images['function-get'] %}
+{% assign description="Fetches measurements for the ```part```" %}
+{% capture parameterTable %}
+
+ Name          | Type                              | Description
+---------------|-----------------------------------|--------------------------------------------------
+parts          | ``Guid[]```                       | List of uuids of part the measurements should be fetched for.
+filter         | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
+token          | ```CancellationToken```           | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign returnParameter="Task<SimpleMeasurement[]>" %}
+
+{% assign exampleCaption="Get all measurements for the part with the uuid '1429c5e2-599c-4d3e-b724-4e00ecb0caa7'" %}
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+var measurements = client.GetMeasurementsForParts( new[]{ new Guid( "1429c5e2-599c-4d3e-b724-4e00ecb0caa7" ) } );
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
