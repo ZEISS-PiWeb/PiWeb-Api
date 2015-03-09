@@ -60,12 +60,12 @@ Measurements can be fetched in several ways and for several purposes:
 
 Each request can be restricted by the respective filter values as described in the [URL-Parameter section]({{site.baseurl }}/general/restapi/#{{ page.subCategory }})
 
-{% assign exampleCaption="Fetch all measurements for the 'metal part' including measured values - restrict to measurements newer than 01.01.2015" %}
-{% assign comment="" %}
+{% assign exampleCaption="Fetch all measurements and values for the part e42c5327-6258-4c4c-b3e9-6d22c30938b2" %}
+{% assign comment="The request is further restricted to only measurements newer than 01.01.2015" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
-POST /dataServiceRest/parts/|metal%20part/measurements/values?filter=searchCondition:4>[2015-01-01T00:00:00Z] HTTP/1.1
+GET /dataServiceRest/parts/(e42c5327-6258-4c4c-b3e9-6d22c30938b2)/measurements/values?filter=searchCondition:4>[2015-01-01T00:00:00Z] HTTP/1.1
 {% endhighlight %}
 {% endcapture %}
 
