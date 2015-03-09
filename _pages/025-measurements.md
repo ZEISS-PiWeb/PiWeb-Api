@@ -39,11 +39,13 @@ Measurements can be fetched, created, updated and deleted via the following endp
 URL Endpoint | GET | POST | PUT | DELETE
 -------------|-----|------|-----|-------
 /parts/measurements | Returns all measurements without measured values | Creates the committed measurements which is/are transfered in the body of the request. These measurements do not contain measured values. | Updates the committed measurements | Deletes all measurements.
-/parts/:partPath/measurements | Returns the measurements without measured values which belongs to the part specified by *:partPath*  | *Not supported* | *Not supported* | Deletes the measurements which belongs to the part specified by *:partPath*
-/parts/measurements/{:uuidList} | Returns the measurements without measured values which belongs to the parts that uuids are within the *:uuidList* | *Not supported* | *Not supported* |  Deletes all measurements which belongs to the parts that uuid are within the *:uuidList*
-/parts/measurements/values | Returns all measurements including measured data | Creates the committed measurements which is/are transfered in the body of the request. These measurements do not contain measured values. | *Not supported*
-/parts/:partPath/measurements/values | Returns the measurements including measured values which belongs to the part specified by *:partPath* | *Not supported* | *Not supported* | *Not supported*
-/parts/measurements/{:uuidList}/values | Returns the measurements including measured values which belongs to the parts that uuids are within the *:uuidList* | *Not supported* | *Not supported* | *Not supported*
+/parts/:partPath/measurements | Returns the measurements without measured values which belongs to the part specified by *:partPath*  | *--* | *--* | Deletes the measurements which belongs to the part specified by *:partPath*
+/parts/(:partUuids)/measurements | Returns the measurements without measured values which belongs to the parts specified by *:partUuids*  | *--* | *--* | Deletes the measurements which belongs to the parts specified by *:partUuids*
+/parts/measurements/{:uuidList} | Returns the measurements without measured values which belongs to the parts that uuids are within the *:uuidList* | *--* | *--* |  Deletes all measurements which belongs to the parts that uuid are within the *:uuidList*
+/parts/measurements/values | Returns all measurements including measured data | Creates the committed measurements which is/are transfered in the body of the request. These measurements do not contain measured values. | *--*
+/parts/:partPath/measurements/values | Returns the measurements including measured values which belongs to the part specified by *:partPath* | *--* | *--* | *--*
+/parts/(:partUuids)/measurements/values | Returns the measurements including measured values which belongs to the parts specified by *:partUuids* | *--* | *--* | *--*
+/parts/measurements/{:uuidList}/values | Returns the measurements including measured values which belongs to the parts that uuids are within the *:uuidList* | *--* | *--* | *--*
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
@@ -52,7 +54,7 @@ URL Endpoint | GET | POST | PUT | DELETE
 Measurements can be fetched in several ways and for several purposes:
 
 * fetch all measurements - with or without values
-* fetch measurements for a particular part path - with or without values
+* fetch measurements for a particular part by its path - with or without values
 * fetch measurements for particular parts by their uuids - with or without values
 * fetch measurements by their uuids - with or without values
 
