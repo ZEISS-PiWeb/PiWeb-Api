@@ -14,7 +14,7 @@ sections:
 ## {{ page.sections['general'] }}
 
 The PiWeb configuration consists of a list of attributes for all types of entities. 
-There are different kinds of entites: 
+The different types of entites are: 
 
 * *parts*, 
 * *characteristics*, 
@@ -28,7 +28,7 @@ The attributes are either ```AttributeDefinition``` or ```CatalogueAttributeDefi
 
 Property      | Type         | Description
 --------------|--------------|--------------------------------------------------------------
-key           | ```ushort``` | The attribute's key which the attribute can be uniquely identified by
+key           | ```ushort``` | The attribute's key, by which the attribute can be uniquely identified
 description   | ```string``` | The attribute's name or a short description 
 
 ###AttributeDefinition : AbstractAttributeDefinition
@@ -55,8 +55,8 @@ The configuration can be fetched, created, updated and deleted via the following
 URL Endpoint | GET | PUT | POST | DELETE
 -------------|-----|-----|------|-------
 /configuration| Returns the attribute configuration (list of attributes for each entity). | *Not supported* | *Not supported* | Deletes all attribute definitions.
-/configuration/*entityType*| *Not supported* | Updates the attribute defintions transfered within the body of the request for the given *entityType* |  Creates the attribute defintions transfered within the body of the request for the given *entityType* | *Not supported*
-configuration/*entityType*/{*Comma seperated list of attribute definition ids*} | *Not supported* | *Not supported* | *Not supported* | Deletes the attribute definitions identified by the *List of attribute definition ids* for the given *entityType*. If the *List of attribute definition ids* is empty all attributes for the given *entityType* are deleted.
+/configuration/*entityType*| *Not supported* | Updates the attribute definitions transfered within the body of the request for the given *entityType* |  Creates the attribute definitions transfered within the body of the request for the given *entityType* | *Not supported*
+configuration/*entityType*/{*Comma seperated list of attribute definition ids*} | *Not supported* | *Not supported* | *Not supported* | Deletes the attribute definitions identified by the *List of attribute definition ids* for the given *entityType*. If the *List of attribute definition ids* is empty, all attributes for the given *entityType* are deleted.
 
 ### Get Configuration
 
@@ -125,7 +125,7 @@ GET /dataServiceRest/configuration HTTP/1.1
 
 ### Add Attributes
 
-To add one or more attributes to the configuration the entity type the attributes belong to as well as the attribute definition(s) need to be transfered. The entity type ist transfered in the uri the attributes within the body of the request.
+To add one or more attributes to the configuration, the entity type to which the attributes belongs to, as well as the attribute definition(s), need to be transfered. The entity type ist transfered in the uri, the attributes within the body of the request.
 
 {% assign exampleCaption="Adding a part attribute with the key 1001 to the configuration" %}
 
@@ -168,7 +168,7 @@ HTTP/1.1 201 Created
 
 ### Update Attributes
 
-To update one or more attributes to the configuration the entity type the attributes belong to as well as the attribute definition(s) need to be transfered. The entity type ist transfered in the uri the attributes within the body of the request.
+To update one or more attributes to the configuration, the entity type to which the attributes belong, as well as the attribute definition(s), need to be transfered. The entity type ist transfered in the uri, the attributes within the body of the request.
 
 {% assign exampleCaption="Updating the part attribute with key 1001 - change length from 30 to 50" %}
 
@@ -211,7 +211,7 @@ HTTP/1.1 200 Ok
 
 ### Delete Attributes
 
-There are three different options of deleting attributes: 
+There are three different options for deleting attributes: 
 
 * Delete all attributes of the configuration, 
 * Delete all attributes of a certain entity or 
@@ -312,7 +312,7 @@ HTTP/1.1 200 Ok
 {% capture parameterTable %}
 Name           | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
+token          | ```CancellationToken``` | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign exampleCaption="Get the configuration" %}
@@ -333,9 +333,9 @@ Configuration config = await client.GetConfiguration();
 {% capture parameterTable %}
 Name           | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-entity         | ```Entity```            | Specifies the entity the attribute should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
-definition     | ```AbstractAttributeDefinition``` | Depending on the entity the ```AbstractAttributeDefinition``` definition contains an ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` object which includes the attribute's values.
-token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
+entity         | ```Entity```            | Specifies the entity to which the attribute should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
+definition     | ```AbstractAttributeDefinition``` | Depending on the entity the ```AbstractAttributeDefinition``` definition contains an ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` object, which includes the attribute's values.
+token          | ```CancellationToken``` | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign exampleCaption="Adding a part attribute with the key 1001 to the configuration" %}
@@ -356,9 +356,9 @@ await client.CreateAttributeDefinition( Entity.Part, attributeDefinition );
 {% capture parameterTable %}
  Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-entity         | ```Entity```            | Specifies the entity the attributes should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
-definitions     | ```AbstractAttributeDefinition[]``` | Depending on the entity the ```AbstractAttributeDefinition``` definition contains ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` objects which includes the attribute's values.
-token          | ```CancellationToken```       | Parameter is optional and gives the possibility to cancel the asyncronous call.
+entity         | ```Entity```            | Specifies the entity to which the attributes should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
+definitions     | ```AbstractAttributeDefinition[]``` | Depending on the entity the ```AbstractAttributeDefinition``` definition contains ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` object, which includes the attribute's values.
+token          | ```CancellationToken```       | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign exampleCaption = "" %}
@@ -373,9 +373,9 @@ token          | ```CancellationToken```       | Parameter is optional and gives
 {% capture parameterTable %}
  Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-entity         | ```Entity```            | Specifies the entity the attributes belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
-definitions     | ```AbstractAttributeDefinition[]``` | Depending on the entity the ```AbstractAttributeDefinition``` definition contains ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` objects which includes the attribute's values.
-token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
+entity         | ```Entity```            | Specifies the entity to which the attributes belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
+definitions     | ```AbstractAttributeDefinition[]``` | Depending on the entity the ```AbstractAttributeDefinition``` definition contains ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` object, which includes the attribute's values.
+token          | ```CancellationToken``` | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign exampleCaption="Updating the part attribute with key 1001 - change length from 30 to 50" %}
@@ -404,9 +404,9 @@ client.UpdateAttributeDefinition( Entity.Part, attributeDefinition );
 {% capture parameterTable %}
  Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-entity         | ```Entity```            | Specifies the entity the attributes should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
-keys           | ```ushort[]```          | May contain the keys of th attributes which should be deleted. If it stays empty all attributes of the given *entity* are deleted.
-token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
+entity         | ```Entity```            | Specifies the entity to which the attributes should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
+keys           | ```ushort[]```          | May contain the keys of the attributes which should be deleted. If it stays empty, all attributes of the given *entity* are deleted.
+token          | ```CancellationToken``` | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign exampleCaption="Delete the part attribute with the key 1001 from the configuration" %}
@@ -426,7 +426,7 @@ await client.DeleteAttributeDefinitions( Entity.Part, new ushort[]{ (ushort)1001
 {% capture parameterTable %}
 Name           | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-token          | ```CancellationToken``` | Parameter is optional and gives the possibility to cancel the asyncronous call.
+token          | ```CancellationToken``` | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign exampleCaption="Delete all attributes from the configuration" %}
