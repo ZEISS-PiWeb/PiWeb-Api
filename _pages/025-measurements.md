@@ -450,3 +450,28 @@ var measurements = client.GetMeasuredValuesForMeasurements( new[]{ new Guid( "5b
 {% endcapture %}
 
 {% include sdkFunctionFieldset.html %}
+
+### Create Measurements
+
+{% assign caption="CreateMeasurements" %}
+{% assign icon=site.images['function-get'] %}
+{% assign description="Creates a measurement without measured values." %}
+{% capture parameterTable %}
+
+ Name            | Type                              | Description
+-----------------|-----------------------------------|--------------------------------------------------
+measurements     | ```SimpleMeasurement[]```         | List of the measurements that should be created.
+token            | ```CancellationToken```           | Parameter is optional and gives the possibility to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign returnParameter="Task" %}
+
+{% assign exampleCaption="Create a measurement" %}
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+//TODO: Example
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
