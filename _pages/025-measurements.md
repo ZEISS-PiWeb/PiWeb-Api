@@ -13,7 +13,7 @@ sections:
 
 ## {{ page.sections['general'] }}
 
-Measurements do always belong to a single inspection plan part. Depending on the purpose the measured values are included within a measurement (```SimpleMeasurement```) or not (```DataMeasurement```). Each measurement consists of the following properties:
+Measurements do always belong to a single inspection plan part. Depending on the purpose the measured values are included within a measurement (```DataMeasurement```) or not (```SimpleMeasurement```). Each measurement consists of the following properties:
 
 ### SimpleMeasurement
 
@@ -24,7 +24,7 @@ partUuid     | Guid        | The uuid of the part the measurement belongs to.
 attributes   | Attribute[] | A set of attributes which specifies this measurement.
 lastModified | DateTime    | Contains the date and time of the last update applied to this measurement.
 
-### DataMeasurement
+### DataMeasurement : SimpleMeasurement
 
 Name            | Type                 | Description
 ----------------|----------------------|--------------
