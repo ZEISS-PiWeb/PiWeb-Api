@@ -53,7 +53,6 @@ URL Endpoint | GET | PUT | POST | DELETE
 {% highlight http %}
 GET /dataServiceRest/serviceInformation HTTP/1.1
 {% endhighlight %}
-{% endhighlight %}
 {% endcapture %}
 
 {% capture jsonresponse %}
@@ -85,16 +84,6 @@ GET /dataServiceRest/serviceInformation HTTP/1.1
        ...
    ]
 }
-{% endhighlight %}
-
-{{ site.sections['endExample'] }}
-{{ site.sections['beginExampleAPI'] }}
-
-{{ site.headers['request'] | markdownify }}
-
-{% highlight csharp %}
-var client = new DataServiceRestClient( serviceUri );
-ServiceInformation information = await client.GetServiceInformation();
 {% endhighlight %}
 {% endcapture %}
 
