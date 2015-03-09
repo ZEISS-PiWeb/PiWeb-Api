@@ -23,8 +23,8 @@ uuid | ```Guid``` | Identifies this inspection plan entity uniquely.
 path | ```PathInformation``` | The path of this entity.
 attributes | ```Attribute``` | A set of attributes which specifies this entity.
 comment | ```string``` | A comment which describes the last inspection plan change.
-version | ```int``` | Contains the revision number of the entity. The revision number starts with zero and is incremented by one each time when changes are applied to the inspection plan. The version is only returned if versioning is enabled in server settings.
-current | ```bool``` | Indicates wheter the entity is the current version.
+version | ```int``` | Contains the revision number of the entity. The revision number starts with zero and is incremented by one each time when changes are applied to the inspection plan. The version is only returned in case versioning is enabled in the server settings.
+current | ```bool``` | Indicates whether the entity is the current version.
 timeStamp | ```dateTime``` | Contains the date and time of the last update applied to this entity.
 
 ### InspectionPlanPart : InspectionPlanBase
@@ -37,7 +37,7 @@ charChangeDate |  ```dateTime``` | The timestamp for the most recent characteris
 
 ## {{ page.sections['endpoint'] }}
 
-Parts and characteristics can be fetched, created, updated and deleted via the following endpoints. Filter which restrict GET or DELETE requests can be set as described in the [URL-Parameter section]({{site.baseurl }}/general/restapi/#{{ page.subCategory }}).
+Parts and characteristics can be fetched, created, updated and deleted via the following endpoints. Filters which restrict GET or DELETE requests can be set as described in the [URL-Parameter section]({{site.baseurl }}/general/restapi/#{{ page.subCategory }}).
 
 ###Parts
 
@@ -45,7 +45,7 @@ URL Endpoint | GET | POST | PUT | DELETE
 -------------|-----|-----|------|-------
 /parts | Returns all parts | Creates the committed part(s) which is/are transfered in the body of the request | Updates the committed parts | Deletes all parts
 /parts/:partPath | Returns the part specified by *:partPath* as well as the parts beneath this part | *--* | *--* | Deletes the part specified by *:partPath* as well as the parts and characteristics beneath this part
-parts/(:uuidList) | Returns all parts that uuid are within the *:uuidList* | *--* | *--* |  Deletes all parts that uuid are within the *:uuidList* as well as the parts and characteristics beneath the particular part
+parts/(:uuidList) | Returns all parts of which the uuid is within the *:uuidList* | *--* | *--* |  Deletes all parts of which the uuid iss within the *:uuidList* as well as the parts and characteristics beneath the particular part
 
 ### Characteristics
 
@@ -54,31 +54,31 @@ URL Endpoint | GET | POST | PUT | DELETE
 parts/characteristics | Returns all characteristics | Creates the committed characteristic(s) which is/are transfered in the body of the request | Updates the committed characteristics | *--*
 parts/:partsPath/characteristics | Returns all characteristics beneath the part specified by *:partPath* | *--* | *--* | *--*
 parts/characteristics/:characteristicPath | Returns the characteristic specified by *:characteristicPath*. | *--* | *--* | Deletes the characteristic specified by *:characteristicPath* as well as all children beneath this characteristic
-parts/characteristics/(:uuidList) | Returns all characteristics that uuid are within the *:uuidList* | *--* | *--* |  Deletes all characteristics that uuid are within the *:uuidList*
+parts/characteristics/(:uuidList) | Returns all characteristics of which the uuid is within the *:uuidList* | *--* | *--* |  Deletes all characteristics of which the uuid is within the *:uuidList*
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
 ## Get Entities
 
 Fetching inspection plan entites returns the respective parts or characteristics depending on the specified entity constraint and/or filter. 
-The most important filter parameter is the *depth* parameter which controls down to which level of the inspection plan the entities should be fetched. Setting *depth:0* means that only the entity itself, *depth:1* means the entity and its direct children should be fetched and so on.
+The most important filter parameter is the *depth* parameter which controls down to which level of the inspection plan the entities should be fetched. Setting *depth:0* means that only the entity itself should be fetched, *depth:1* means the entity and its direct children should be fetched and so on.
 
-Parts can be fetched several ways:
+Parts can be fetched in several ways:
 
 * fetch a certain part by its path (the filter parameter *depth* must be 0)
-* fetch a certain part and its children parts by its path (the filter parameter *depth* must be ≥ 1)
-* fetch one or more certain parts by its UUIDs
-* fetch all parts (can be restricted by filter parameters)
+* fetch a certain part and its children by its path (the filter parameter *depth* must be ≥ 1)
+* fetch one or more certain parts by their UUIDs
+* fetch all parts (can be restricted with filter parameters)
 
 There are also several possibilities to fetch characteristics:
 
 * fetch a certain characteristic by its path (the filter parameter *depth* must be 0)
-* fetch one or more certain characteristics by its UUIDs
+* fetch one or more certain characteristics by their UUIDs
 * fetch characteristics beneath a certain part path
-* fetch all characteristics (can be restricted by filter parameters)
+* fetch all characteristics (can be restricted with filter parameters)
 
 {% assign exampleCaption="Fetch the direct characteristics beneath the 'metal part'. Restrict to attribute keys 2110 and 2111" %}
-{% assign comment="As the filter parameter *depth* has the default value 1 it can be omitted in this example." %}
+{% assign comment="As the filter parameter *depth* has the default value 1, it can be omitted in this example." %}
 
 {% capture jsonrequest %}
 {% highlight http %}
@@ -116,9 +116,9 @@ GET /dataServiceRest/parts/metal%20part/characteristics?filter=characteristicAtt
 
 ## Add Entities
 
-To create a inspection plan entity it is necessary to transfer the entity object within the request's body. A unique identifier and the path are mandatory, attributes and a comment are optional. The attribute keys which are used for the attributes must come from the parts/characteristics attribute range (specified in the {{ site.links['configuration'] }})
+To create an inspection plan entity it is necessary to transfer the entity object within the request's body. A unique identifier and the path are mandatory, attributes and a comment are optional. The attribute keys which are used for the attributes must come from the parts/characteristics attribute range (specified in the {{ site.links['configuration'] }})
 
-{{ site.images['info'] }} The comment is only added if versioning is enabled in server settings.
+{{ site.images['info'] }} The comment is only added if versioning is enabled in the server settings.
 
 {% assign exampleCaption="Adding the 'metal part' part with the uuid 05040c4c-f0af-46b8-810e-30c0c00a379e" %}
 
@@ -168,7 +168,7 @@ Updating inspection plan entities might regard the following aspects:
 * Rename/move inspection plan entities
 * Change inspection plan entity's attributes
 
-{{site.images['info']}} If versioning is server side activated every update of one or more inspection plan entities creates a new version entry.
+{{site.images['info']}} If versioning is activated on server side, every update of one or more inspection plan entities creates a new version entry.
 
 {% assign exampleCaption="Rename the characteristic "metal part/diameter_circle3" to "metal part/diameterCircle3" %}
 {% capture jsonrequest %}
@@ -211,9 +211,9 @@ HTTP/1.1 200 Ok
 
 ## Delete Entities
 
-There are two possibilities to delete inspection plan entities either by path or by their uuid. In both cases the entity itself as well as all children are deleted.
+There are two possibilities to delete inspection plan entities, either by their path or by their uuid. In both cases the entity itself as well as all children are deleted.
 
-{% assign exampleCaption="Delete the part 'metal part'  and all entities below it" %}
+{% assign exampleCaption="Delete the part 'metal part'  and all entities beneath it" %}
 {% capture jsonrequest %}
 {% highlight http %}
 DELETE /dataServiceRest/parts/metal%20part HTTP/1.1
@@ -254,8 +254,8 @@ HTTP/1.1 200 Ok
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
 partPath       | ```PathInformation```                 | The path of the part which should be returned.
-filter         | ```InspectionPlanFilterAttributes ``` | Parameter is optional and can further restrict the query.
-token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+filter         | ```InspectionPlanFilterAttributes ``` | Parameter is optional and is used to restrict the query.
+token          | ```CancellationToken```               | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign returnParameter="Task<InspectionPlanPart>" %}
@@ -283,8 +283,8 @@ var part = client.GetCharacteristicByPath( partPath, filter );
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
 uuids          | ```Guid[]```                          | The uuids of the parts which should be returned.
-filter         | ```InspectionPlanFilterAttributes ``` | Parameter is optional and can further restrict the query.
-token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+filter         | ```InspectionPlanFilterAttributes ``` | Parameter is optional and is used to restrict the query.
+token          | ```CancellationToken```               | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign exampleCaption="Get the 'metal part' by its uuid 05040c4c-f0af-46b8-810e-30c0c00a379e" %}
@@ -305,11 +305,11 @@ var part = client.GetCharacteristicsByUuids( new[]{ new Guid("05040c4c-f0af-46b8
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
 parentPart     | ```PathInformation```                 | The parent part the child part should be returned for.
-filter         | ```InspectionPlanFilterAttributes ``` | Parameter is optional and can further restrict the query.
-token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+filter         | ```InspectionPlanFilterAttributes ``` | Parameter is optional and is used to restrict the query.
+token          | ```CancellationToken```               | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
-{% assign exampleCaption="Get the 'metal part' and the child parts" %}
+{% assign exampleCaption="Get the 'metal part' and its child parts" %}
 
 {% capture example %}
 {% highlight csharp %}
@@ -330,8 +330,8 @@ var part = client.GetPartsForPart( parentPartPath );
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
 partPath       | ```PathInformation```                 | The path of the characteristic which should be returned.
-filter         | ```InspectionPlanFilterAttributes ``` | Parameter is optional and can further restrict the query.
-token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+filter         | ```InspectionPlanFilterAttributes ``` | Parameter is optional and is used to restrict the query.
+token          | ```CancellationToken```               | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign exampleCaption="Get the characteristic 'metal part/diameterCircle3'" %}
@@ -353,8 +353,8 @@ var characteristic = client.GetCharacteristicByPath( charPath );
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
 uuids          | ```Guid[]```                          | The uuids of the characteristics which should be returned.
-filter         | ```InspectionPlanFilterAttributes ``` | Parameter is optional and can further restrict the query.
-token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+filter         | ```InspectionPlanFilterAttributes ``` | Parameter is optional and is used to restrict the query.
+token          | ```CancellationToken```               | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign exampleCaption="Get the 'metal part/diameterCircle3' by its uuid 1429c5e2-599c-4d3e-b724-4e00ecb0caa7" %}
@@ -370,13 +370,13 @@ var characteristic = client.GetCharacteristicsByUuids( new[]{ new Guid("1429c5e2
 
 {% assign caption="GetCharacteristicsForPart" %}
 {% assign icon=site.images['function-get'] %}
-{% assign description="Fetches the characteristics below the given ```parentPart```. If the ```depth``` property of the ```filter``` parameter is not set only the direct children are returned by default. " %}
+{% assign description="Fetches the characteristics below the given ```parentPart```. If the ```depth``` property of the ```filter``` parameter is not set, only the direct children are returned by default. " %}
 {% capture parameterTable %}
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
 parentPart     | ```PathInformation```                 | The parent part the charateristics should be returned for.
-filter         | ```InspectionPlanFilterAttributes ``` | Parameter is optional and can further restrict the query.
-token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+filter         | ```InspectionPlanFilterAttributes ``` | Parameter is optional and is used to restrict the query.
+token          | ```CancellationToken```               | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign exampleCaption="Get the characteristics below 'metal part'. Restrict the result to lower and upper tolerance attributes." %}
@@ -407,7 +407,7 @@ var characteristics = client.GetCharacteristicsForPart( parentPartPath, filter )
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
 parts          | ```InspectionPlanPart[]```            | The parts that should be created.
-token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+token          | ```CancellationToken```               | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign exampleCaption="Add the part 'metal part'." %}
@@ -435,8 +435,8 @@ client.CreateParts( new[]{ part } );
 {% capture parameterTable %}
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
-characteristics| ```InspectionPlanCharacteristic[]```  | The characteristics that schould be created.
-token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+characteristics| ```InspectionPlanCharacteristic[]```  | The characteristics that should be created.
+token          | ```CancellationToken```               | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign exampleCaption="Add the characteristic '/metal part/diameterCircle3'." %}
@@ -461,12 +461,12 @@ client.CreateCharacteristics( new[]{ characteristic } );
 
 {% assign caption="UpdateParts" %}
 {% assign icon=site.images['function-update'] %}
-{% assign description="Update the parts which are included in ```parts``` Updating might regard the following rename/move inspection plan entities or change inspection plan entity’s attributes. If versioning Characteristics every update of one or more inspection plan entities creates a new version entry." %}
+{% assign description="Update the parts which are included in ```parts```. Updating might regard the following: rename/move inspection plan entities or change inspection plan entity’s attributes. If versioning is enabled on server side, every update of one or more inspection plan entities creates a new version entry." %}
 {% capture parameterTable %}
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
 parts          | ```InspectionPlanPart[]```            | The parts that should be updated.
-token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+token          | ```CancellationToken```               | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign exampleCaption="Update the 'metal part' part's attribute 'part number'." %}
@@ -489,12 +489,13 @@ client.UpdateParts( new[]{ part } );
 
 {% assign caption="UpdateCharacteristics" %}
 {% assign icon=site.images['function-update'] %}
-{% assign description="Update the characteristics which are included in ```characteristics``` Updating might regard the following rename/move inspection plan entities or change inspection plan entity’s attributes. If versioning is server side activated every update of one or more inspection plan entities creates a new version entry. " %}
+{% assign description="Update the characteristics which are included in ```characteristics``` Updating might regard the following: 
+rename/move inspection plan entities or change inspection plan entity’s attributes. If versioning is enabled on server side, every update of one or more inspection plan entities creates a new version entry. " %}
 {% capture parameterTable %}
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
-characteristics| ```InspectionPlanCharacteristic[]```  | The characteristics that schould be updated.
-token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+characteristics| ```InspectionPlanCharacteristic[]```  | The characteristics that should be updated.
+token          | ```CancellationToken```               | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign exampleCaption="Rename/move the characteristic '/metal part/diameterCircle3' to '/metal part/diameterCircle_3'." %}
@@ -521,14 +522,14 @@ client.UpdateCharacteristics( new InspectionPlanCharacteristic[]{characteristic}
 
 {% assign caption="DeleteAllParts" %}
 {% assign icon=site.images['function-delete'] %}
-{% assign description="Deletes all parts within the database and therefore the complete inspection plan." %}
+{% assign description="Deletes all parts within the database and therefore the whole inspection plan." %}
 {% capture parameterTable %}
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
-token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+token          | ```CancellationToken```               | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
-{% assign exampleCaption="Delete the complete inspection plan." %}
+{% assign exampleCaption="Delete the whole inspection plan." %}
 {% capture example %}
 {% highlight csharp %}
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
@@ -545,7 +546,7 @@ client.DeleteAllParts();
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
 startPart      | ```PathInformation```                 | The path of the part which should be deleted. 
-token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+token          | ```CancellationToken```               | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign exampleCaption="Delete everything below 'metal part' including the part itself." %}
@@ -560,12 +561,12 @@ client.DeleteParts( PathHelper.String2PartPathInformation( "metal part" ) );
 
 {% assign caption="DeleteParts" %}
 {% assign icon=site.images['function-delete'] %}
-{% assign description="Deletes all parts (and characteristics) whose uuids are within ```guids``` including the parts themselves." %}
+{% assign description="Deletes all parts (and characteristics) of which the uuid is within ```guids```, including the parts themselves." %}
 {% capture parameterTable %}
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
 guids          | ```PathInformation```                 | The guids of the parts which should be deleted. 
-token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+token          | ```CancellationToken```               | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign exampleCaption="Delete the part with the uuid 05550c4c-f0af-46b8-810e-30c0c00a379e." %}
@@ -580,12 +581,12 @@ client.DeleteParts( new []{ new Guid ( "05550c4c-f0af-46b8-810e-30c0c00a379e" ) 
 
 {% assign caption="DeleteCharacteristics" %}
 {% assign icon=site.images['function-delete'] %}
-{% assign description="Deletes all characteristics below the characteristic ```startPart``` including the characteristic itself." %}
+{% assign description="Deletes all characteristics below the characteristic ```startPart```, including the characteristic itself." %}
 {% capture parameterTable %}
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
 startPart      | ```PathInformation```                 | The path of the characteristic which should be deleted. 
-token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+token          | ```CancellationToken```               | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign exampleCaption="Delete everything below 'diameterCircle_3' including the characteristic itself." %}
@@ -600,12 +601,12 @@ client.DeleteCharacteristics( PathHelper.String2PathInformation( "/metal part/di
 
 {% assign caption="DeleteCharacteristics" %}
 {% assign icon=site.images['function-delete'] %}
-{% assign description="Deletes all characteristics whose uuids are within ```guids``` including the characteristics themselves." %}
+{% assign description="Deletes all characteristics of which the uuid is within ```guids```, including the characteristics themselves." %}
 {% capture parameterTable %}
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
 guids          | ```PathInformation```                 | The guids of the characteristics which should be deleted. 
-token          | ```CancellationToken```               | Parameter is optional and gives the possibility to cancel the asyncronous call.
+token          | ```CancellationToken```               | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign exampleCaption="Delete the characteristic with the uuid 1429c5e2-599c-4d3e-b724-4e00ecb0caa7." %}
