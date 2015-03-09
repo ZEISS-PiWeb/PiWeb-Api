@@ -3,10 +3,17 @@ category: general
 title: General Information
 permalink: /general/
 sections:
+  notation: Notation Conventions
   restApi: REST API
   sdk: .NET SDK
 redirect_from: "/"
 ---
+
+## {{ page.sections['notation'] }}
+
+Within this documentation there are the following notation conventions:
+
+* A dervied class is notated in the following way: ```derivedClass : baseClass```
 
 The PiWeb server offers two interfaces: 
 
