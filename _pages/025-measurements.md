@@ -42,7 +42,7 @@ URL Endpoint | GET | POST | PUT | DELETE
 /parts/:partPath/measurements | Returns the measurements without measured values which belongs to the part specified by *:partPath*  | *--* | *--* | Deletes the measurements which belongs to the part specified by *:partPath*
 /parts/(:partUuids)/measurements | Returns the measurements without measured values which belongs to the parts specified by *:partUuids*  | *--* | *--* | Deletes the measurements which belongs to the parts specified by *:partUuids*
 /parts/measurements/{:uuidList} | Returns the measurements without measured values which belongs to the parts that uuids are within the *:uuidList* | *--* | *--* |  Deletes all measurements which belongs to the parts that uuid are within the *:uuidList*
-/parts/measurements/values | Returns all measurements including measured data | Creates the committed measurements which is/are transfered in the body of the request. These measurements do not contain measured values. | *--*
+/parts/measurements/values | Returns all measurements including measured data | Creates the committed measurements which is/are transfered in the body of the request. These measurements contain measured values. | Updates the committed measurements including measured values. |*--*
 /parts/:partPath/measurements/values | Returns the measurements including measured values which belongs to the part specified by *:partPath* | *--* | *--* | *--*
 /parts/(:partUuids)/measurements/values | Returns the measurements including measured values which belongs to the parts specified by *:partUuids* | *--* | *--* | *--*
 /parts/measurements/{:uuidList}/values | Returns the measurements including measured values which belongs to the parts that uuids are within the *:uuidList* | *--* | *--* | *--*
@@ -128,7 +128,6 @@ POST /dataServiceRest/parts/measurements HTTP/1.1
   {
     "uuid": "4b59cac7-9ecd-403c-aa26-56dd25892421",
       "partUuid": "e42c5327-6258-4c4c-b3e9-6d22c30938b2",
-      "lastModified": "2014-11-03T09:27:28.253Z",
       "attributes": {
         "4": "2015-03-09T19:12:00Z",
         "6": "3",
@@ -171,7 +170,6 @@ POST /dataServiceRest/parts/measurements/values HTTP/1.1
   {
     "uuid": "4b59cac7-9ecd-403c-aa26-56dd25892421",
       "partUuid": "e42c5327-6258-4c4c-b3e9-6d22c30938b2",
-      "lastModified": "2014-11-03T09:27:28.253Z",
       "attributes": {
         "4": "2015-03-09T19:12:00Z",
         "6": "3",
@@ -208,6 +206,53 @@ HTTP/1.1 201 Created
    {
        "statusCode": 201,
        "statusDescription": "Created"
+   },
+   "category": "Success"
+}
+{% endhighlight %}
+{% endcapture %}
+
+{% include exampleFieldset.html %}
+
+### Update measurements
+
+Updating a measurement does always effect the complete measurement. This means that the whole measurement including attributes and values needs to be transfered within the body of the request and is deleted and recreated again on server side.
+
+{% assign exampleCaption="Update a measurement - add and change an attribute" %}
+{% assign comment="" %}
+
+{% capture jsonrequest %}
+{% highlight http %}
+POST /dataServiceRest/parts/measurements HTTP/1.1
+{% endhighlight %}
+
+{% highlight json %}
+[
+  {
+    "uuid": "4b59cac7-9ecd-403c-aa26-56dd25892421",
+      "partUuid": "e42c5327-6258-4c4c-b3e9-6d22c30938b2",
+      "attributes": {
+        "4": "2015-03-09T19:12:00Z",
+        "6": "2",
+        "7": "0",
+        "8": "1"
+      }
+  }
+]
+{% endhighlight %}
+{% endcapture %}
+
+{% capture jsonresponse %}
+{% highlight http %}
+HTTP/1.1 200 OK
+{% endhighlight %}
+
+{% highlight json %}
+{
+   "status":
+   {
+       "statusCode": 200,
+       "statusDescription": "OK"
    },
    "category": "Success"
 }
