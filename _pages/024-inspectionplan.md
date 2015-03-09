@@ -489,8 +489,7 @@ client.UpdateParts( new[]{ part } );
 
 {% assign caption="UpdateCharacteristics" %}
 {% assign icon=site.images['function-update'] %}
-{% assign description="Update the characteristics which are included in ```characteristics``` Updating might regard the following: 
-rename/move inspection plan entities or change inspection plan entity’s attributes. If versioning is enabled on server side, every update of one or more inspection plan entities creates a new version entry. " %}
+{% assign description="Update the characteristics which are included in ```characteristics``` Updating might regard the following: rename/move inspection plan entities or change inspection plan entity’s attributes. If versioning is enabled on server side, every update of one or more inspection plan entities creates a new version entry. " %}
 {% capture parameterTable %}
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
