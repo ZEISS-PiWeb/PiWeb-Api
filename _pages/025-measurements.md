@@ -266,7 +266,7 @@ HTTP/1.1 200 OK
 There are three possibilities to delete measurements:
 
 * Delete all measurements
-* Delete measurements for a particular part by its path
+* Delete measurements from a particular part by its path
 * Delete measurements by their uuids
 
 {% assign exampleCaption="Delete the measurement with the uuid 4b59cac7-9ecd-403c-aa26-56dd25892421" %}
@@ -312,7 +312,7 @@ HTTP/1.1 200 OK
 
  Name          | Type                              | Description
 ---------------|-----------------------------------|--------------------------------------------------
-part           | ```PathInformation```               | The path of the part all measurements should be fetched for.
+part           | ```PathInformation```             | The path of the part all measurements shall be fetched for.
 filter         | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
 token          | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
@@ -336,7 +336,7 @@ var measurements = await client.GetMeasurementsForPart( PathHelper.String2PartPa
 
  Name          | Type                              | Description
 ---------------|-----------------------------------|--------------------------------------------------
-parts          | ```Guid[]```                       | List of uuids of the parts the measurements should be fetched for.
+parts          | ```Guid[]```                       | List of uuids of the parts the measurements shall be fetched for.
 filter         | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
 token          | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
@@ -360,7 +360,7 @@ var measurements = await client.GetMeasurementsForParts( new[]{ new Guid( "1429c
 
  Name            | Type                              | Description
 -----------------|-----------------------------------|--------------------------------------------------
-measurementUuids | ```Guid[]```                      | List of uuids of the measurements that should be fetched.
+measurementUuids | ```Guid[]```                      | List of uuids of the measurements that shall be fetched.
 filter           | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
 token            | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
@@ -386,7 +386,7 @@ var measurements = client.GetMeasurementsByUuid( new[]{ new Guid( "5b59cac7-9ecd
 
  Name          | Type                              | Description
 ---------------|-----------------------------------|--------------------------------------------------
-part           | ```PathInformation```             | The path of the part all measurements should be fetched for.
+part           | ```PathInformation```             | The path of the part all measurements shall be fetched for.
 filter         | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
 token          | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
@@ -410,7 +410,7 @@ var measurements = await client.GetMeasuredValuesForPart( PathHelper.String2Part
 
  Name          | Type                              | Description
 ---------------|-----------------------------------|--------------------------------------------------
-parts          | ```Guid[]```                      | List of uuids of the parts the measurements should be fetched for.
+parts          | ```Guid[]```                      | List of uuids of the parts the measurements shall be fetched for.
 filter         | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
 token          | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
@@ -434,7 +434,7 @@ var measurements = await client.GetMeasuredValuesForParts( new[]{ new Guid( "142
 
  Name            | Type                              | Description
 -----------------|-----------------------------------|--------------------------------------------------
-measurementUuids | ```Guid[]```                      | List of uuids of the measurements that should be fetched.
+measurementUuids | ```Guid[]```                      | List of uuids of the measurements that shall be fetched.
 filter           | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
 token            | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
@@ -460,7 +460,7 @@ var measurements = client.GetMeasuredValuesForMeasurements( new[]{ new Guid( "5b
 
  Name            | Type                              | Description
 -----------------|-----------------------------------|--------------------------------------------------
-measurements     | ```SimpleMeasurement[]```         | List of the measurements that should be created.
+measurements     | ```SimpleMeasurement[]```         | List of the measurements that shall be created.
 token            | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
@@ -494,7 +494,7 @@ client.CreateMeasurement( new []{ measurement } );
 
  Name            | Type                              | Description
 -----------------|-----------------------------------|--------------------------------------------------
-measurements     | ```DataMeasurement[]```           | List of the measurements, including values, that should be created.
+measurements     | ```DataMeasurement[]```           | List of the measurements, including values, to be created.
 token            | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
@@ -537,7 +537,7 @@ client.CreateMeasuredValues( new []{ valueMeasurement } );
 
  Name            | Type                              | Description
 -----------------|-----------------------------------|--------------------------------------------------
-measurements     | ```SimpleMeasurement[]```         | List of the measurements that should be updated.
+measurements     | ```SimpleMeasurement[]```         | List of to be updated measurements.
 token            | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
@@ -572,7 +572,7 @@ client.UpdateMeasurement( new []{ measurement } );
 
  Name            | Type                              | Description
 -----------------|-----------------------------------|--------------------------------------------------
-measurements     | ```DataMeasurement[]```           | List of the measurements, including values, that should be updated.
+measurements     | ```DataMeasurement[]```           | List of the measurements, including values, to be updated.
 token            | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
@@ -610,19 +610,19 @@ clientUpdateMeasuredValues( new []{ valueMeasurement } );
 
 {% assign caption="DeleteMeasurements" %}
 {% assign icon=site.images['function-delete'] %}
-{% assign description="Deletes measurements which belongs to the ```part```." %}
+{% assign description="Deletes measurements which belong to the ```part```." %}
 {% capture parameterTable %}
 
  Name          | Type                              | Description
 ---------------|-----------------------------------|--------------------------------------------------
-part           | ```PathInformation```             | The path of the part all measurements should be deleted for.
+part           | ```PathInformation```             | The path of the part all measurements shall be deleted for.
 filter         | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
 token          | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign returnParameter="Task" %}
 
-{% assign exampleCaption="Delete all measurements for the part 'metal part' that are older than 01.01.2015" %}
+{% assign exampleCaption="Delete all measurements from the part 'metal part' which are older than 01.01.2015" %}
 {% capture example %}
 {% highlight csharp %}
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
@@ -650,12 +650,12 @@ client.DeleteMeasurements( PathHelper.String2PartPathInformation( "/metal part" 
 
 {% assign caption="DeleteMeasurements" %}
 {% assign icon=site.images['function-delete'] %}
-{% assign description="Deletes measurements whose uuids are within ```measurements```." %}
+{% assign description="Deletes measurements of which the uuid is within ```measurements```." %}
 {% capture parameterTable %}
 
  Name          | Type                              | Description
 ---------------|-----------------------------------|--------------------------------------------------
-measurements   | ```Guid[]```                      | The uuids of the measurements that should be deleted.
+measurements   | ```Guid[]```                      | The uuids of the measurements to be deleted.
 token          | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
