@@ -13,13 +13,13 @@ sections:
 
 ## {{ page.sections['general'] }}
 
-Measurements do always belong to a single inspection plan part. Depending on the purpose the measured values are included within a measurement (```DataMeasurement```) or not (```SimpleMeasurement```). Each measurement consists of the following properties:
+Measurements do always belong to a single inspection plan part. Depending on the purpose, the measured values are included within a measurement (```DataMeasurement```) or not (```SimpleMeasurement```). Each measurement consists of the following properties:
 
 ### SimpleMeasurement
 
 Name         | Type        | Description
 -------------|-------------|--------------
-uuid         | Guid        | Identifies this measurement uniquely.
+uuid         | Guid        | Identifies the measurement uniquely.
 partUuid     | Guid        | The uuid of the part the measurement belongs to.
 attributes   | Attribute[] | A set of attributes which specifies this measurement.
 lastModified | DateTime    | Contains the date and time of the last update applied to this measurement.
@@ -39,13 +39,13 @@ Measurements can be fetched, created, updated and deleted via the following endp
 URL Endpoint | GET | POST | PUT | DELETE
 -------------|-----|------|-----|-------
 /parts/measurements | Returns all measurements without measured values | Creates the committed measurements which is/are transfered in the body of the request. These measurements do not contain measured values. | Updates the committed measurements | Deletes all measurements.
-/parts/:partPath/measurements | Returns the measurements without measured values which belongs to the part specified by *:partPath*  | *--* | *--* | Deletes the measurements which belongs to the part specified by *:partPath*
-/parts/(:partUuids)/measurements | Returns the measurements without measured values which belongs to the parts specified by *:partUuids*  | *--* | *--* | *--*
-/parts/measurements/{:uuidList} | Returns the measurements without measured values which belongs to the parts that uuids are within the *:uuidList* | *--* | *--* |  Deletes all measurements which belongs to the parts that uuid are within the *:uuidList*
+/parts/:partPath/measurements | Returns the measurements without measured values which belong to the part specified by *:partPath*  | *--* | *--* | Deletes the measurements which belong to the part specified by *:partPath*
+/parts/(:partUuids)/measurements | Returns the measurements without measured values which belong to the parts specified by *:partUuids*  | *--* | *--* | *--*
+/parts/measurements/{:uuidList} | Returns the measurements without measured values which belong to the parts of which the uuid is within the *:uuidList* | *--* | *--* |  Deletes all measurements which belong to the parts of which the uuid is within the *:uuidList*
 /parts/measurements/values | Returns all measurements including measured data | Creates the committed measurements which is/are transfered in the body of the request. These measurements contain measured values. | Updates the committed measurements including measured values. |*--*
-/parts/:partPath/measurements/values | Returns the measurements including measured values which belongs to the part specified by *:partPath* | *--* | *--* | *--*
-/parts/(:partUuids)/measurements/values | Returns the measurements including measured values which belongs to the parts specified by *:partUuids* | *--* | *--* | *--*
-/parts/measurements/{:uuidList}/values | Returns the measurements including measured values which belongs to the parts that uuids are within the *:uuidList* | *--* | *--* | *--*
+/parts/:partPath/measurements/values | Returns the measurements including measured values which belong to the part specified by *:partPath* | *--* | *--* | *--*
+/parts/(:partUuids)/measurements/values | Returns the measurements including measured values which belong to the parts specified by *:partUuids* | *--* | *--* | *--*
+/parts/measurements/{:uuidList}/values | Returns the measurements including measured values which belong to the parts of which the uuid is within the *:uuidList* | *--* | *--* | *--*
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
@@ -111,7 +111,7 @@ GET /dataServiceRest/parts/(e42c5327-6258-4c4c-b3e9-6d22c30938b2)/measurements/v
 
 ### Add measurements
 
-Measurements can be created with or without measured values. To create a measurement it is necessary to transfer the measurement object within the request's body. A unique identifier and the path are mandatory, attributes and a comment are optional. The attribute keys which are used for the attributes must come from the parts/characteristics attribute range (specified in the {{ site.links['configuration'] }})
+Measurements can be created with or without measured values. To create a measurement, it is necessary to transfer the measurement object within the request's body. A unique identifier and the path are mandatory, attributes and a comment are optional. The attribute keys which are used for the attributes must come from the parts/characteristics attribute range (specified in the {{ site.links['configuration'] }})
 
 {{ site.images['info'] }} The comment is only added if versioning is enabled in server settings. 
 
@@ -216,7 +216,7 @@ HTTP/1.1 201 Created
 
 ### Update measurements
 
-Updating a measurement does always effect the complete measurement. This means that the whole measurement including attributes and values needs to be transfered within the body of the request and is deleted and recreated again on server side.
+Updating a measurement does always affect the whole measurement. This means that the whole measurement, including attributes and values, needs to be transfered within the body of the request and is deleted and recreated again on server side.
 
 {% assign exampleCaption="Update a measurement - add and change an attribute" %}
 {% assign comment="" %}
@@ -267,7 +267,7 @@ There are three possibilities to delete measurements:
 
 * Delete all measurements
 * Delete measurements for a particular part by its path
-* Delete measurements by its uuids
+* Delete measurements by their uuids
 
 {% assign exampleCaption="Delete the measurement with the uuid 4b59cac7-9ecd-403c-aa26-56dd25892421" %}
 {% assign comment="" %}
@@ -314,7 +314,7 @@ HTTP/1.1 200 OK
 ---------------|-----------------------------------|--------------------------------------------------
 part           | ```PathInformation```               | The path of the part all measurements should be fetched for.
 filter         | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
-token          | ```CancellationToken```           | Parameter is optional and gives the possibility to cancel the asyncronous call.
+token          | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign returnParameter="Task<SimpleMeasurement[]>" %}
@@ -336,9 +336,9 @@ var measurements = await client.GetMeasurementsForPart( PathHelper.String2PartPa
 
  Name          | Type                              | Description
 ---------------|-----------------------------------|--------------------------------------------------
-parts          | ```Guid[]```                       | List of uuids of part the measurements should be fetched for.
+parts          | ```Guid[]```                       | List of uuids of the parts the measurements should be fetched for.
 filter         | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
-token          | ```CancellationToken```           | Parameter is optional and gives the possibility to cancel the asyncronous call.
+token          | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign returnParameter="Task<SimpleMeasurement[]>" %}
@@ -362,7 +362,7 @@ var measurements = await client.GetMeasurementsForParts( new[]{ new Guid( "1429c
 -----------------|-----------------------------------|--------------------------------------------------
 measurementUuids | ```Guid[]```                      | List of uuids of the measurements that should be fetched.
 filter           | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
-token            | ```CancellationToken```           | Parameter is optional and gives the possibility to cancel the asyncronous call.
+token            | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign returnParameter="Task<SimpleMeasurement[]>" %}
@@ -388,7 +388,7 @@ var measurements = client.GetMeasurementsByUuid( new[]{ new Guid( "5b59cac7-9ecd
 ---------------|-----------------------------------|--------------------------------------------------
 part           | ```PathInformation```             | The path of the part all measurements should be fetched for.
 filter         | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
-token          | ```CancellationToken```           | Parameter is optional and gives the possibility to cancel the asyncronous call.
+token          | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign returnParameter="Task<DataMeasurement[]>" %}
@@ -410,9 +410,9 @@ var measurements = await client.GetMeasuredValuesForPart( PathHelper.String2Part
 
  Name          | Type                              | Description
 ---------------|-----------------------------------|--------------------------------------------------
-parts          | ```Guid[]```                      | List of uuids of part the measurements should be fetched for.
+parts          | ```Guid[]```                      | List of uuids of the parts the measurements should be fetched for.
 filter         | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
-token          | ```CancellationToken```           | Parameter is optional and gives the possibility to cancel the asyncronous call.
+token          | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign returnParameter="Task<DataMeasurement[]>" %}
@@ -429,14 +429,14 @@ var measurements = await client.GetMeasuredValuesForParts( new[]{ new Guid( "142
 
 {% assign caption="GetMeasuredValuesForMeasurements" %}
 {% assign icon=site.images['function-get'] %}
-{% assign description="Fetches all measurements including measured values for measurements that uuids are within ```measurementUuids```" %}
+{% assign description="Fetches all measurements including measured values for measurements of which the uuid is within ```measurementUuids```" %}
 {% capture parameterTable %}
 
  Name            | Type                              | Description
 -----------------|-----------------------------------|--------------------------------------------------
 measurementUuids | ```Guid[]```                      | List of uuids of the measurements that should be fetched.
 filter           | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
-token            | ```CancellationToken```           | Parameter is optional and gives the possibility to cancel the asyncronous call.
+token            | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign returnParameter="Task<DataMeasurement[]>" %}
@@ -461,7 +461,7 @@ var measurements = client.GetMeasuredValuesForMeasurements( new[]{ new Guid( "5b
  Name            | Type                              | Description
 -----------------|-----------------------------------|--------------------------------------------------
 measurements     | ```SimpleMeasurement[]```         | List of the measurements that should be created.
-token            | ```CancellationToken```           | Parameter is optional and gives the possibility to cancel the asyncronous call.
+token            | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign returnParameter="Task" %}
