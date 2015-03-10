@@ -564,7 +564,7 @@ client.DeleteParts( PathHelper.String2PartPathInformation( "metal part" ) );
 {% capture parameterTable %}
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
-guids          | ```PathInformation```                 | The guids of the parts which should be deleted. 
+guids          | ```PathInformation```                 | The guids of the parts which shall be deleted. 
 token          | ```CancellationToken```               | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
@@ -604,7 +604,7 @@ client.DeleteCharacteristics( PathHelper.String2PathInformation( "/metal part/di
 {% capture parameterTable %}
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
-guids          | ```PathInformation```                 | The guids of the characteristics which should be deleted. 
+guids          | ```PathInformation```                 | The guids of the characteristics which shall be deleted. 
 token          | ```CancellationToken```               | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
