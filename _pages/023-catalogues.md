@@ -239,7 +239,7 @@ HTTP/1.1 200 Ok
 
 ### Delete Catalogues (DELETE)
 
-There are two different options of deleting catalogues: 
+There are two different options for deleting catalogues: 
 
 * Delete all catalogues or
 * Delete one or more certain catalogues identified by their uuid
@@ -280,7 +280,7 @@ HTTP/1.1 200 Ok
 
 ### Delete Catalogue Entries
 
-There are two different options of deleting catalogue entries: 
+There are two different options for deleting catalogue entries: 
 
 * Delete all entries of a certain catalogue identified by its uuid
 * Delete one or more certain entries identified by their keys of a certain catalogue identified by its uuid
