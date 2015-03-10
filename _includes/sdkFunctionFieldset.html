@@ -9,7 +9,7 @@
     {{ site.images['returnParameter16'] | append: ' **Return parameter:** ```'| append: returnParameter | append: '```' | markdownify }}
   {% endif %}
   {% if exampleCaption != empty %}
-  {{ site.images['summary16'] | append: ' **Example: ' | append: exampleCaption | append:'**' | markdownify }}
+  {{ site.images['example16'] | append: ' **Example: ' | append: exampleCaption | append:'**' | markdownify }}
   {{example}}
   {% endif %}
 </fieldset>
