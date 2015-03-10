@@ -400,7 +400,7 @@ client.UpdateAttributeDefinition( Entity.Part, attributeDefinition );
 
 {% assign caption="DeleteAttributeDefinitions" %}
 {% assign icon=site.images['function-delete'] %}
-{% assign description="Deletes all or certain attributes for a given entity from the configuration." %}
+{% assign description="Deletes all or certain attributes of a given entity from the configuration." %}
 {% capture parameterTable %}
  Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
