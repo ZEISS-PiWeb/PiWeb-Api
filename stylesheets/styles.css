@@ -473,4 +473,9 @@ section {
     font-size:12pt;
     color:#444;
   }
+  
+  .collapsing {
+    -webkit-transition: none;
+    transition: none;
+}
 }
