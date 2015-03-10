@@ -2,7 +2,16 @@
   Example
 </button>
 
-<fieldset class="collapse" id="collapseExample">
+<div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">{{  site.images['document-info'] | append: ' Example: ' | append: exampleCaption | markdownify }}</h3>
+      </div>
+      <div class="panel-body collapse" id="collapseExample">
+        Panel content
+      </div>
+    </div>
+
+<fieldset>
   <legend>
     {{  site.images['document-info'] | append: ' Example: ' | append: exampleCaption | markdownify }}
   </legend>
