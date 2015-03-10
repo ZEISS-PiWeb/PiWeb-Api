@@ -46,7 +46,7 @@ URL Endpoint | GET | PUT | POST | DELETE
 -------------|-----|-----|------|-------
 /serviceInformation | Returns general information about the PiWeb-Server | not supported | not supported | not supported
 
-### Get Service Information
+### Get Service Information <span class="badge">14</span>
 
 {% assign exampleCaption="Get Service Information for a given connection" %}
 {% assign comment="" %}
