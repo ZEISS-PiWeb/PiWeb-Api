@@ -19,6 +19,8 @@ The first time service information are fetched from the server, database statist
 
 The ServiceInformation object, which is returned, contains of the following properties:
 
+### ServiceInformation
+
 Property | Description
 ---------|-------------
 serverName | The name of the PiWeb server as it is specified in the server settings dialog
