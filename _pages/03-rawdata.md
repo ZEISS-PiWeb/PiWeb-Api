@@ -171,7 +171,7 @@ Updating a raw data object works almost identically like adding raw data objects
 
 If a key is given within the uri, only the raw data object with the given key will be deleted. Otherwise all raw data objects which belong to the entity will be deleted.
 
-### Delete the raw data object with the key 0 for a part with the uuid b8f5d3fe-5bd5-406b-8053-67f647f09dc7
+### Delete the raw data object with the key 0 from a part with the uuid b8f5d3fe-5bd5-406b-8053-67f647f09dc7
 
 #### Example of a direct webservice call
 
@@ -196,7 +196,7 @@ var client = new RawDataServiceRestClient( serviceUri );
 client.DeleteRawDataForPart(new Guid("b8f5d3fe-5bd5-406b-8053-67f647f09dc7"),0);
 {% endhighlight %}
 
-### Delete all raw data objects for the part with the uuid b8f5d3fe-5bd5-406b-8053-67f647f09dc7
+### Delete all raw data objects from the part with the uuid b8f5d3fe-5bd5-406b-8053-67f647f09dc7
 
 #### Example of a direct webservice call
 
