@@ -45,7 +45,7 @@ URL Endpoint | GET | POST | PUT | DELETE
 -------------|-----|-----|------|-------
 /parts | Returns all parts | Creates the committed part(s) which is/are transfered in the body of the request | Updates the committed parts | Deletes all parts
 /parts/:partPath | Returns the part specified by *:partPath* as well as the parts beneath this part | *--* | *--* | Deletes the part specified by *:partPath* as well as the parts and characteristics beneath this part
-parts/(:uuidList) | Returns all parts of which the uuid is within the *:uuidList* | *--* | *--* |  Deletes all parts of which the uuid iss within the *:uuidList* as well as the parts and characteristics beneath the particular part
+parts/(:uuidList) | Returns all parts of which the uuid is within the *:uuidList* | *--* | *--* |  Deletes all parts of which the uuid is within the *:uuidList* as well as the parts and characteristics beneath the particular part
 
 ### Characteristics
 
