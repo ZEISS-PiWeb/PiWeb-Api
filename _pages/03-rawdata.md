@@ -39,7 +39,7 @@ When adding raw data, it is possible to pass a key within the uri. If -1 or no k
 
 ### Add a raw data object to a part with the uuid b8f5d3fe-5bd5-406b-8053-67f647f09dc7
 
-####Example of direct webservice call
+####Example of a direct webservice call
 
 Request:
 
@@ -56,7 +56,7 @@ Response:
 HTTP/1.1 201 Created
 {% endhighlight %}
 
-####Example of webservice call via API.dll
+####Example of a webservice call via API.dll
 
 Request:
 
@@ -77,7 +77,7 @@ The request can be restricted by adding url parameters. For more details see the
 
 ### Fetch raw data information for the part with the uuid b8f5d3fe-5bd5-406b-8053-67f647f09dc7
 
-#### Example of direct webservice call
+#### Example of a direct webservice call
 
 Request:
 
@@ -111,7 +111,7 @@ Response:
 }
 {% endhighlight %}
 
-####Example of webservice call via API.dll
+####Example of a webservice call via API.dll
 
 {% highlight csharp %}
 var client = new RawDataServiceRestClient( serviceUri );
@@ -124,7 +124,7 @@ The server caches raw data fetches. When a raw data object is requested for the 
 
 ### Fetch raw data with key 0 for a part with the uuid b8f5d3fe-5bd5-406b-8053-67f647f09dc7
 
-#### Example of direct webservice call
+#### Example of a direct webservice call
 
 Request:
 
@@ -156,7 +156,7 @@ Response:
 HTTP/1.1 304 Not modified
 {% endhighlight %}
 
-#### Example of webservice call via API.dll
+#### Example of a webservice call via API.dll
 
 {% highlight csharp %}
 var client = new RawDataServiceRestClient( serviceUri );
@@ -173,7 +173,7 @@ If a key is given within the uri, only the raw data object with the given key wi
 
 ### Delete the raw data object with the key 0 for a part with the uuid b8f5d3fe-5bd5-406b-8053-67f647f09dc7
 
-#### Example of direct webservice call
+#### Example of a direct webservice call
 
 Request
 
