@@ -13,18 +13,18 @@ sections:
 
 ##{{page.sections['endpoint']}}
 
-Raw data as well as information about the raw data can be fetched, added, updated and deleted via the following endpoints. Filter can be set as described in the [URL-Parameter section](General-Information#raw-data).
+Raw data as well as information about the raw data can be fetched, added, updated and deleted via the following endpoints. Filters can be set as described in the [URL-Parameter section](General-Information#raw-data).
 
 URL Endpoint | GET | PUT | POST | DELETE
 -------------|-----|-----|------|-------
-rawData/*entity*/ *uuid*/*key* | Returns rawData file for the specified *entity* with the committed *uuid* and *key* | Updates the committed  rawData file for the *entity* with the *uuid* and *key* | Creates the committed rawData file(s) for the *entity* with the *uuid* | Deletes rawData file for the specified *entity* with the comitted *uuid* and *key* or all raw data if no *key* is given
+rawData/*entity*/ *uuid*/*key* | Returns the rawData file for the specified *entity* with the committed *uuid* and *key* | Updates the committed rawData file for the *entity* with the *uuid* and *key* | Creates the committed rawData file(s) for the *entity* with the *uuid* | Deletes the rawData file for the specified *entity* with the comitted *uuid* and *key* or all raw data if no *key* is given
 rawData/*entity*/ *uuid*/*key*/ thumbnail | Returns a preview image of the raw data object for the specified *entity* with the committed *uuid* and *key* | *Not supported* | *Not supported* | *Not supported*
 /rawData/*entity* | Returns a list of raw data information for the *entity* with the uuids commited within the url parameter section | *Not supported* | *Not supported* | *Not supported*
 
 ##{{page.sections['add']}}
 
 Raw data can be added to all kinds of entities: part, characteristic, measurement and measured values.
-On adding raw data further information need to be passed beneath the data itself. The information the raw data object belongs to is passed within the uri, the data are passed within the HTTP body and the additional information are passed within several HTTP header variables:
+When adding raw data, further information needs to be passed beneath the data itself. The information where the raw data object belongs to is passed within the uri, the data itself is passed within the HTTP body and the additional information is passed within several HTTP header variables:
 
 HTTP header variable | Description                                    | Example Value
 ---------------------|------------------------------------------------|--------------------------------------
@@ -33,13 +33,13 @@ Content-Length       | Includes the raw data object's length in bytes | 2090682
 Content-MD5          | Includes raw data object's MD5 hash sum        | "bdf6b06ab301a80ae55021085b820393"
 Content-Type         | Includes raw data object's MIME type           | "application/x-zeiss-piweb-meshmodel"
 
-On adding raw data it is possible to pass a key within the uri. If -1 or no key is passed the next free key will be used on server side. (recommended)
+When adding raw data, it is possible to pass a key within the uri. If -1 or no key is passed, the next free key will be used on server side. (recommended)
 
-{{site.images['warning']}} If a key is passed which is already in use the existing raw data object will be replaced.
+{{site.images['warning']}} If a key is passed which is already in use, the existing raw data object will be replaced.
 
 ### Add a raw data object to a part with the uuid b8f5d3fe-5bd5-406b-8053-67f647f09dc7
 
-####Example for direct webservice call
+####Example of direct webservice call
 
 Request:
 
@@ -56,7 +56,7 @@ Response:
 HTTP/1.1 201 Created
 {% endhighlight %}
 
-####Example for webservice call via API.dll
+####Example of webservice call via API.dll
 
 Request:
 
@@ -73,11 +73,11 @@ client.CreateRawData(meshModelInBytes, rawDataInformation);
 
 ##{{page.sections['fetchInfo']}}
 
-The request can be restricted by adding url parameter. For more details see the [URL-Parameter section](General-Information#raw-data).
+The request can be restricted by adding url parameters. For more details see the [URL-Parameter section](General-Information#raw-data).
 
-### Fetch raw data information for a part with the uuid b8f5d3fe-5bd5-406b-8053-67f647f09dc7
+### Fetch raw data information for the part with the uuid b8f5d3fe-5bd5-406b-8053-67f647f09dc7
 
-#### Example for direct webservice call
+#### Example of direct webservice call
 
 Request:
 
@@ -111,7 +111,7 @@ Response:
 }
 {% endhighlight %}
 
-####Example for webservice call via API.dll
+####Example of webservice call via API.dll
 
 {% highlight csharp %}
 var client = new RawDataServiceRestClient( serviceUri );
@@ -120,11 +120,11 @@ var rawDataInfo = await client.ListRawDataForParts( new Guid[] { b8f5d3fe-5bd5-4
 
 ##{{page.sections['fetchData']}}
 
-On fetching raw data there is server side caching activated. When a raw data object is requested the first time several HTTP header values are returned beneath the raw data object. This header values include the *ETag* header that consists of a distinct hash value which identifies the raw data object unambigusously. This hash value is a combination of the MD5 sum and the last modified date. If this *ETag* value is sent within the *If-None-Match* header on the next request the server returns a *304 - Not modified* HTTP header status code instead of the raw data object if the object has not been changed since the last request. If the API.dll is used the caching is already implemented.
+The server caches raw data fetches. When a raw data object is requested for the first time, several HTTP header values are returned beneath the raw data object. This header values include the *ETag* header. It consists of a distinct hash value which identifies the raw data object unambiguously. This hash value is a combination of the MD5 sum and the last modified date. If this *ETag* value is sent within the *If-None-Match* header, the server returns a *304 - Not modified* HTTP header status code on the next request, instead of the raw data object, if the object has not been changed since the last request. If the API.dll is used, the caching is already implemented.
 
 ### Fetch raw data with key 0 for a part with the uuid b8f5d3fe-5bd5-406b-8053-67f647f09dc7
 
-#### Example for direct webservice call
+#### Example of direct webservice call
 
 Request:
 
@@ -156,7 +156,7 @@ Response:
 HTTP/1.1 304 Not modified
 {% endhighlight %}
 
-#### Example for webservice call via API.dll
+#### Example of webservice call via API.dll
 
 {% highlight csharp %}
 var client = new RawDataServiceRestClient( serviceUri );
@@ -165,15 +165,15 @@ var rawData = await client.GetRawDataForPart( "b8f5d3fe-5bd5-406b-8053-67f647f09
 
 ##{{page.sections['update']}}
 
-Updating a raw data object works nearly identically to adding raw data objects. The only difference is the key which the raw data object is identified by and which is mandatory.
+Updating a raw data object works almost identically like adding raw data objects. The only difference is the key by which the raw data object is identified and which is mandatory.
 
 ##{{page.sections['delete']}}
 
-If a key is given within the uri only the raw data object with the given key otherwise all raw data objects which belong to the entity will be deleted.
+If a key is given within the uri, only the raw data object with the given key will be deleted. Otherwise all raw data objects which belong to the entity will be deleted.
 
-### Delete raw data object with key 0 for a part with the uuid b8f5d3fe-5bd5-406b-8053-67f647f09dc7
+### Delete the raw data object with the key 0 for a part with the uuid b8f5d3fe-5bd5-406b-8053-67f647f09dc7
 
-#### Example for direct webservice call
+#### Example of direct webservice call
 
 Request
 
@@ -187,7 +187,7 @@ Response
 HTTP/1.1 200 OK
 {% endhighlight %}
 
-####Example for webservice call via API.dll
+####Example of a webservice call via API.dll
 
 Request:
 
@@ -196,9 +196,9 @@ var client = new RawDataServiceRestClient( serviceUri );
 client.DeleteRawDataForPart(new Guid("b8f5d3fe-5bd5-406b-8053-67f647f09dc7"),0);
 {% endhighlight %}
 
-### Delete all raw data objects for a part with the uuid b8f5d3fe-5bd5-406b-8053-67f647f09dc7
+### Delete all raw data objects for the part with the uuid b8f5d3fe-5bd5-406b-8053-67f647f09dc7
 
-#### Example for direct webservice call
+#### Example of a direct webservice call
 
 Request
 
@@ -212,7 +212,7 @@ Response
 HTTP/1.1 200 OK
 {% endhighlight %}
 
-####Example for webservice call via API.dll
+####Example of a webservice call via API.dll
 
 Request:
 
