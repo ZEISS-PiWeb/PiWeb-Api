@@ -1,10 +1,6 @@
-<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-  Example
-</button>
-
 <div class="panel panel-primary">
       <div class="panel-heading">
-        <h6 class="panel-title">{{  site.images['document-info'] | append: ' Example: ' | append: exampleCaption | markdownify }}</h6>
+        <h6 class="panel-title" data-toggle="collapse" data-target="#collapseExample">{{ ' Example: ' | append: exampleCaption | markdownify }}</h6>
       </div>
       <div class="panel-body collapse" id="collapseExample">
         Panel content
