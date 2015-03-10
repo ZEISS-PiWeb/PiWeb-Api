@@ -1,4 +1,8 @@
-<fieldset>
+<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+  Example
+</button>
+
+<fieldset class="collapse" id="collapseExample">
   <legend>
     {{  site.images['document-info'] | append: ' Example: ' | append: exampleCaption | markdownify }}
   </legend>
@@ -10,13 +14,3 @@
   {{ site.headers['response']  | markdownify }}
   {{ jsonresponse | markdownify }}
 </fieldset>
-
-<a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-  Link with href
-</a>
-<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-  Button with data-target
-</button>
-<div class="collapse" id="collapseExample">
-  <div class="well">{{ jsonresponse | markdownify }}</div>
-</div>
