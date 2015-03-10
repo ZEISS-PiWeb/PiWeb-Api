@@ -30,7 +30,7 @@ catalogueEntries | ```CatalogueEntry``` | A list of catalogue entries
 Property         | Datatype             | Description
 -----------------|----------------------|------------------------
 key              | ```short```          | Specifies the entry's order within the catalogue
-attributes       | ```Attribute[]```    | A list of attributes which consits of key and value. The keys must come from the validAttributes range.
+attributes       | ```Attribute[]```    | A list of attributes which consists of key and value. The keys must come from the validAttributes range.
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
