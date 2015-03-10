@@ -470,7 +470,17 @@ token            | ```CancellationToken```           | Parameter is optional and
 {% capture example %}
 {% highlight csharp %}
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
-//TODO: Example
+var measurement = new SimpleMeasurement
+                  { Uuid= Guid.NewGuid(),
+                    PartUuid = new Guid( "e42c5327-6258-4c4c-b3e9-6d22c30938b2" ),
+                    Attributes = new {}
+                    [
+                      new Attribute( 4, new DateTime( 2015,3,9,19,12 ) ),
+                      new Attribute ( 6, "3" ),
+                      new Attribute ( 7, "0" )
+                    ]
+                  }
+client.CreateMeasurement( new []{ measurement } );
 {% endhighlight %}
 {% endcapture %}
 
