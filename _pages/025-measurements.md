@@ -454,7 +454,7 @@ var measurements = client.GetMeasuredValuesForMeasurements( new[]{ new Guid( "5b
 ### Create Measurements
 
 {% assign caption="CreateMeasurements" %}
-{% assign icon=site.images['function-get'] %}
+{% assign icon=site.images['function-create'] %}
 {% assign description="Creates a measurement without measured values." %}
 {% capture parameterTable %}
 
@@ -471,7 +471,8 @@ token            | ```CancellationToken```           | Parameter is optional and
 {% highlight csharp %}
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
 var measurement = new SimpleMeasurement
-                  { Uuid= Guid.NewGuid(),
+                  { 
+                    Uuid= Guid.NewGuid(),
                     PartUuid = new Guid( "e42c5327-6258-4c4c-b3e9-6d22c30938b2" ),
                     Attributes = new {}
                     [
@@ -485,3 +486,188 @@ client.CreateMeasurement( new []{ measurement } );
 {% endcapture %}
 
 {% include sdkFunctionFieldset.html %}
+
+{% assign caption="CreateMeasuredValues" %}
+{% assign icon=site.images['function-create'] %}
+{% assign description="Creates a measurement including measured values." %}
+{% capture parameterTable %}
+
+ Name            | Type                              | Description
+-----------------|-----------------------------------|--------------------------------------------------
+measurements     | ```DataMeasurement[]```           | List of the measurements, including values, that should be created.
+token            | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign returnParameter="Task" %}
+
+{% assign exampleCaption="Create a measurement including measured values" %}
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+var valueMeasurement = new SimpleMeasurement
+                  { 
+                    Uuid= Guid.NewGuid(),
+                    PartUuid = new Guid( "e42c5327-6258-4c4c-b3e9-6d22c30938b2" ),
+                    Attributes = new {}
+                    [
+                      new Attribute( 4, new DateTime( 2015,3,9,19,12 ) ),
+                      new Attribute ( 6, "3" ),
+                      new Attribute ( 7, "0" )
+                    ],
+                    Characteristics = new {}
+                    [
+                      new DataCharacteristic ( "0.24966522" ),
+                      new DataCharacteristic ( "0.4457339" ),
+                      new DataCharacteristic ( "0.24981162" )
+                    ]
+                  }
+client.CreateMeasuredValues( new []{ valueMeasurement } );
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
+
+### Update Measurements
+
+{% assign caption="UpdateMeasurements" %}
+{% assign icon=site.images['function-update'] %}
+{% assign description="Updates a measurement without measured values." %}
+{% capture parameterTable %}
+
+ Name            | Type                              | Description
+-----------------|-----------------------------------|--------------------------------------------------
+measurements     | ```SimpleMeasurement[]```         | List of the measurements that should be updated.
+token            | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign returnParameter="Task" %}
+
+{% assign exampleCaption="Update a measurement - add an attribute" %}
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+var measurement = new SimpleMeasurement
+                  { 
+                    Uuid= Guid.NewGuid(),
+                    PartUuid = new Guid( "e42c5327-6258-4c4c-b3e9-6d22c30938b2" ),
+                    Attributes = new {}
+                    [
+                      new Attribute( 4, new DateTime( 2015,3,9,19,12 ) ),
+                      new Attribute ( 6, "3" ),
+                      new Attribute ( 7, "0" ),
+                      new Attribute ( 8, "1" )
+                    ]
+                  }
+client.UpdateMeasurement( new []{ measurement } );
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
+{% assign caption="UpdateMeasuredValues" %}
+{% assign icon=site.images['function-update'] %}
+{% assign description="Updates a measurement including measured values." %}
+{% capture parameterTable %}
+
+ Name            | Type                              | Description
+-----------------|-----------------------------------|--------------------------------------------------
+measurements     | ```DataMeasurement[]```           | List of the measurements, including values, that should be updated.
+token            | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign returnParameter="Task" %}
+
+{% assign exampleCaption="Update a measurement including measured values - add another measured value" %}
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+var valueMeasurement = new SimpleMeasurement
+                  { 
+                    Uuid= Guid.NewGuid(),
+                    PartUuid = new Guid( "e42c5327-6258-4c4c-b3e9-6d22c30938b2" ),
+                    Attributes = new {}
+                    [
+                      new Attribute( 4, new DateTime( 2015,3,9,19,12 ) ),
+                      new Attribute ( 6, "3" ),
+                      new Attribute ( 7, "0" )
+                    ],
+                    Characteristics = new {}
+                    [
+                      new DataCharacteristic ( "0.24966522" ),
+                      new DataCharacteristic ( "0.4457339" ),
+                      new DataCharacteristic ( "0.24981162" ),
+                      new DataCharacteristic ( "0.24467985" )
+                    ]
+                  }
+clientUpdateMeasuredValues( new []{ valueMeasurement } );
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
+### Delete Measurements
+
+{% assign caption="DeleteMeasurements" %}
+{% assign icon=site.images['function-delete'] %}
+{% assign description="Deletes measurements which belongs to the ```part```." %}
+{% capture parameterTable %}
+
+ Name          | Type                              | Description
+---------------|-----------------------------------|--------------------------------------------------
+part           | ```PathInformation```             | The path of the part all measurements should be deleted for.
+filter         | ```MeasurementFilterAttributes``` | Parameter is optional and may restrict the query.
+token          | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign returnParameter="Task" %}
+
+{% assign exampleCaption="Delete all measurements for the part 'metal part' that are older than 01.01.2015" %}
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+var measSearchCondition = new MeasurementSearchAnd
+  {
+  	Conditions = new MeasurementSearchAttributeCondition 
+  		{
+  		  Attribute = 4, 
+  		  Operation = Operation.LessThan, 
+  		  Value = XmlConvert.ToString( new DateTime( 2015, 1, 1, 0, 0, 0, DateTimeKind.Utc ),
+  		          System.Xml.XmlDateTimeSerializationMode.RoundtripKind ), 
+  		  Entity = MeasurementSearchEntity.Measurement
+  		}
+  };
+			
+var filter = new MeasurementFilterAttributes()
+  { 
+    SearchCondition = measSearchCondition
+  };
+client.DeleteMeasurements( PathHelper.String2PartPathInformation( "/metal part" ), filter );
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
+{% assign caption="DeleteMeasurements" %}
+{% assign icon=site.images['function-delete'] %}
+{% assign description="Deletes measurements whose uuids are within ```measurements```." %}
+{% capture parameterTable %}
+
+ Name          | Type                              | Description
+---------------|-----------------------------------|--------------------------------------------------
+measurements   | ```Guid[]```                      | The uuids of the measurements that should be deleted.
+token          | ```CancellationToken```           | Parameter is optional and allows to cancel the asyncronous call.
+{% endcapture %}
+
+{% assign returnParameter="Task" %}
+
+{% assign exampleCaption="Delete all measurements with the uuid 5b59cac7-9ecd-403c-aa26-56dd25892421" %}
+{% capture example %}
+{% highlight csharp %}
+var client = new DataServiceRestClient( "http://piwebserver:8080" );
+client.DeleteMeasurements( new Guid{}[ new Guid( "5b59cac7-9ecd-403c-aa26-56dd25892421" )  ] );
+{% endhighlight %}
+{% endcapture %}
+
+{% include sdkFunctionFieldset.html %}
+
