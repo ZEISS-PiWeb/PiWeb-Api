@@ -44,8 +44,8 @@ URL Endpoint | GET | POST | PUT | DELETE
 /catalogues/entries | Returns all catalogues including their respective entries | *--* | *--* | *--*
 /catalogues/(:catUuid1, :catUuid2,...) | Returns the catalogues of which the uuid is within the catUuid list without their entries | *--* | *--* | Deletes the catalogue(s) which has/have the given catUuid(s)
 /catalogues/(:catUuid1, :catUuid2,...)/entries | Returns the catalogues of which the uuid is within the catUuid list including their respective entries | *--* | *--* | *--*
-catalogues/:catalogueUuid/entries | *--*| Creates the entries transfered in the body of the request for the catalogue specidied by the *:catalogueUuid* | *--* | Deletes all entries of the catalogue specified by the *:catalogueUuid*
-catalogues/:catalogueUuid/entries/{key1, key2...} | *--* | *--* | *--* | Deletes the entries specified by their particular key of the catalogue specified by the *:catalogueUuid* 
+catalogues/:catalogueUuid/entries | *--*| Creates the entries transfered in the body of the request for the catalogue specidied by the *:catalogueUuid* | *--* | Deletes all entries from the catalogue specified by the *:catalogueUuid*
+catalogues/:catalogueUuid/entries/{key1, key2...} | *--* | *--* | *--* | Deletes the entries specified by their particular key from the catalogue specified by the *:catalogueUuid* 
 
 ### Get Catalogues (GET)
 
@@ -282,12 +282,12 @@ HTTP/1.1 200 Ok
 
 There are two different options for deleting catalogue entries: 
 
-* Delete all entries of a certain catalogue identified by its uuid
-* Delete one or more certain entries identified by their keys of a certain catalogue identified by its uuid
+* Delete all entries from a certain catalogue identified by its uuid
+* Delete one or more certain entries identified by their keys from a certain catalogue identified by its uuid
  
 The following examples illustrate these options.
 
-{% assign exampleCaption="Delete all entries of the catalogue with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
+{% assign exampleCaption="Delete all entries from the catalogue with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
@@ -303,7 +303,7 @@ HTTP/1.1 200 Ok
 
 {% include exampleFieldset.html %}
 
-{% assign exampleCaption="Delete the entries with key 1 and 3 of the catalogue with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
+{% assign exampleCaption="Delete the entries with key 1 and 3 from the catalogue with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
@@ -333,7 +333,7 @@ HTTP/1.1 200 Ok
  Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
 catalogueUuids | ```Guid[]```            | Parameter is optional and may include the uuids of the catalogues to be fetched. If no uuid is given, all catalogues will be fetched.
-returnEntries  | ```bool```              | Parameter is optional and indicates whether the catalogue entries should be returned.
+returnEntries  | ```bool```              | Parameter is optional and indicates whether the catalogue entries shall be returned.
 token          | ```CancellationToken``` | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
@@ -357,7 +357,7 @@ var catalogues = client.GetCatalogues(new Guid[]{new Guid(
 {% capture parameterTable %}
  Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-catalogues     | ```Catalogue[]```       | Includes the catalogues which should be created.
+catalogues     | ```Catalogue[]```       | Includes the catalogues which shall be created.
 token          | ```CancellationToken``` | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
@@ -418,7 +418,7 @@ client.CreateCatalogueEntry( new Guid("8c376bee-ffe3-4ee4-abb9-a55b492e69ad"), e
 Name           | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
 catalogueUuid  | ```Uuid[]```            | The Uuid by which the catalogue is identified.
-entry          | ```CatalogueEntry[]```  | The entries which should be added to the catalogue.
+entry          | ```CatalogueEntry[]```  | The entries which shall be added to the catalogue.
 token          | ```CancellationToken``` | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
@@ -444,7 +444,7 @@ client.CreateCatalogueEntry( new Guid("8c376bee-ffe3-4ee4-abb9-a55b492e69ad"), n
 {% capture parameterTable %}
  Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-catalogues     | ```Catalogue[]```       | Includes the catalogues which should be updated.
+catalogues     | ```Catalogue[]```       | Includes the catalogues which shall be updated.
 token          | ```CancellationToken``` | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
@@ -477,7 +477,7 @@ client.UpdateCatalogues( catalogue );
 {% capture parameterTable %}
  Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-catalogueUuids | ```Guid[]```            | Parameter is optional and may include the uuids of the catalogues which should be deleted. If no uuid is given, all catalogues will be deleted.
+catalogueUuids | ```Guid[]```            | Parameter is optional and may include the uuids of the catalogues which shall be deleted. If no uuid is given, all catalogues will be deleted.
 token          | ```CancellationToken``` | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
@@ -517,12 +517,12 @@ client.DeleteCatalogueEntries(
 
 {% assign caption="DeleteCatalogueEntries" %}
 {% assign icon=site.images['function-delete'] %}
-{% assign description="Deletes the entry that keys are included in ```keys```from the catalogue defined by ```catalogueUuid```, or all entries if ```keys```is empty." %}
+{% assign description="Deletes the entries of which the key is included in ```keys```from the catalogue defined by ```catalogueUuid```, or all entries if ```keys```is empty." %}
 {% capture parameterTable %}
  Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-catalogueUuid  | ```Guid```              | The uuid of the catalogue to which the entries, which should be deleted, belongs to.
-keys           | ```ushort[]```          | The keys of the entries which should be deleted. If it's empty, all entries are deleted.
+catalogueUuid  | ```Guid```              | The uuid of the catalogue to which the entries, which shall be deleted, belongs to.
+keys           | ```ushort[]```          | The keys of the entries which shall be deleted. If it's empty, all entries are deleted.
 token          | ```CancellationToken``` | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
