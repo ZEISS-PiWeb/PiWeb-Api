@@ -21,22 +21,22 @@ The ServiceInformation object, which is returned, contains of the following prop
 
 ### ServiceInformation
 
-Property | Description
----------|-------------
-serverName | The name of the PiWeb server as it is specified in the server settings dialog
-version | The version number of the PiWeb server
-securityEnabled | Indicates whether security is server side enabled or not.
-edition | The database edition. Should generally be PiwebDB.
-versionWsdlMajor | The major version number of the interface.
-versionWsdlMinor | The minor version number of the interface.
-partCount | Number of parts stored in the server
-characteristicCount | Number of characteristics stored in the server
-measurementCount | Number of measurements stored in the server
-valueCount |Number of measured values stored in the server
-featureList | Includes the server side supported features.
-inspectionPlanTimestamp | Timestamp of the last inspection plan modification
-measurementTimestamp | Timestamp of the last measurement modification
-configurationTimestamp | Timestamp of the last configuration timestamp
+Property | Type | Description
+---------|------|-------------
+serverName | ```string``` | The name of the PiWeb server as it is specified in the server settings dialog
+version | ```string``` | The version number of the PiWeb server
+securityEnabled | ```bool``` | Indicates whether security is server side enabled or not.
+edition | ```string``` | The database edition. Should generally be PiwebDB.
+versionWsdlMajor | ```string``` | The major version number of the interface.
+versionWsdlMinor | ```string``` | The minor version number of the interface.
+partCount | ```int``` | Number of parts stored in the server
+characteristicCount |```int``` | Number of characteristics stored in the server
+measurementCount | ```int``` | Number of measurements stored in the server
+valueCount | ```int``` | Number of measured values stored in the server
+featureList | ```string[]``` | Includes the server side supported features.
+inspectionPlanTimestamp | ```DateTime``` | Timestamp of the last inspection plan modification
+measurementTimestamp | ```DateTime``` | Timestamp of the last measurement modification
+configurationTimestamp | ```DateTime``` | Timestamp of the last configuration timestamp
 
 ## {{ page.sections['endpoint'] }}
 
