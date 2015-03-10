@@ -15,7 +15,7 @@ redirect_from: "/dataservice/"
 ## {{ page.sections['general'] }}
 
 Fetching service information is guaranteed to be very fast and is therefore well suited for checking the connection. This method can always be invoked without having credentials specified.
-The first time service information are fetched from the server, database statistics values need to be created. As the service information call should return immediately, statistics creation is triggered in a separate task. Therefore, the statistical values **partCount**, **characteristicsCount**, **measurementsCount** and **valuesCount** stay empty in the first response, but should generally contain values on the second call.
+The first time service information are fetched from the server, database statistics values need to be created. As the service information call should return immediately, statistics creation is triggered in a separate task. Therefore, the statistical values ```partCount```, ```characteristicsCount```, ```measurementsCount``` and ```valuesCount``` stay empty in the first response, but should generally contain values on the second call.
 
 The ServiceInformation object, which is returned, contains of the following properties:
 
