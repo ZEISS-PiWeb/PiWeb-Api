@@ -11,13 +11,13 @@ redirect_from: "/"
 
 ## {{ page.sections['notation'] }}
 
-Within this documentation there are the following notation conventions:
+This documentation uses the following notations:
 
-* A derived class is notated in the following way: ```derivedClass : baseClass```
+* Any derived class is notated as: ```derivedClass : baseClass```
 
-PiWeb server offers two interfaces: 
+PiWeb Server offers two interfaces: 
 
 - direct REST webservice calls via plain HTTP requests and 
 - calls via the .NET based API.dll
 
-In the following sections you will find the basic information about both interfaces.
+In the following sections you will find basic information about both interfaces.
