@@ -35,22 +35,22 @@ description   | ```string``` | The attribute's name or a short description
 
 Property      | Type                | Description
 --------------|---------------------|--------------------------------------------------------------
-type          | ```AttributeType``` | The attribute's type. May be *AlphaNumeric*, *Integer*, *Float* or *DateTime*
-length        | ```ushort```        | Defines the attribute's maximum length. Only set if the type is *AlphaNumeric*
-definitionType| ```string```        | Has always the value 'AttributeDefinition' and is used to differentiate between  ```AttributeDefinition``` and ```CatalogueAttributeDefinition``` (only relevant and available for REST API)
+type          | ```AttributeType``` | The attribute's type. *AlphaNumeric*, *Integer*, *Float* or *DateTime*
+length        | ```ushort```        | The attribute's maximum length. Only set if the type is *AlphaNumeric*
+definitionType| ```string```        | Always has the value 'AttributeDefinition' and is used to differentiate between  ```AttributeDefinition``` and ```CatalogueAttributeDefinition``` (only relevant and available for the REST API)
 
 ###CatalogueAttributeDefinition : AbstractAttributeDefinition
 
 Property      | Type         | Description
 --------------|--------------|------------------------------------------------------------
-catalogue     | ```Guid```   |The uuid of the catalogue the attribute's value has to be taken from
-definitionType| ```string``` | Has always the value 'CatalogueAttributeDefinition' and is used to differentiate between  ```AttributeDefinition``` and ```CatalogueAttributeDefinition``` (only relevant and available for REST API)
+catalogue     | ```Guid```   | The uuid of the catalogue that contains the attribute's values
+definitionType| ```string``` | Always has the value 'CatalogueAttributeDefinition' and is used to differentiate between  ```AttributeDefinition``` and ```CatalogueAttributeDefinition``` (only relevant and available for the REST API)
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
 ## {{ page.sections['endpoint'] }}
 
-The configuration can be fetched, created, updated and deleted via the following endpoints. There are no filter parameters to restrict the queries.
+The configuration can be fetched, created, updated and deleted using the following endpoints. These endpoints do not provide filter parameters.
 
 URL Endpoint | GET | PUT | POST | DELETE
 -------------|-----|-----|------|-------
@@ -60,7 +60,7 @@ configuration/*entityType*/{*Comma seperated list of attribute definition ids*} 
 
 ### Get Configuration
 
-Fetching the whole configuration returns the attribute definitions for all kind of entities.
+Fetching the entire configuration returns the attribute definitions for all entity types.
 
 {% assign exampleCaption="Fetching the configuration including all attriutes" %}
 
@@ -125,7 +125,7 @@ GET /dataServiceRest/configuration HTTP/1.1
 
 ### Add Attributes
 
-To add one or more attributes to the configuration, the entity type to which the attributes belongs to, as well as the attribute definition(s), need to be transfered. The entity type ist transfered in the uri, the attributes within the body of the request.
+Each add request must contain the attribute definitions and the entity type which these definitions belong to. The entity type ist part of the uri and the attributes are transmitted in the body of the request.
 
 {% assign exampleCaption="Adding a part attribute with the key 1001 to the configuration" %}
 
@@ -168,7 +168,7 @@ HTTP/1.1 201 Created
 
 ### Update Attributes
 
-To update one or more attributes to the configuration, the entity type to which the attributes belong, as well as the attribute definition(s), need to be transfered. The entity type ist transfered in the uri, the attributes within the body of the request.
+Each update request must contain the attribute definitions and the entity type which these definitions belong to. The entity type ist part of the uri and the attributes are transmitted in the body of the request.
 
 {% assign exampleCaption="Updating the part attribute with key 1001 - change length from 30 to 50" %}
 
@@ -213,11 +213,11 @@ HTTP/1.1 200 Ok
 
 There are three different options for deleting attributes: 
 
-* Delete all attributes of the configuration, 
+* Delete all attributes in the configuration, 
 * Delete all attributes of a certain entity or 
-* Delete one or more certain attributes of a certain entity
+* Delete specific attributes of a specific entity
  
-The following examples illustrate these options.
+The following examples demonstrate these options.
 
 {% assign exampleCaption="Delete all attributes of the current configuration" %}
 
@@ -308,7 +308,7 @@ HTTP/1.1 200 Ok
 
 {% assign caption="GetConfiguration" %}
 {% assign icon=site.images['function-get'] %}
-{% assign description="Fetches the complete configuration for all kinds of entities." %}
+{% assign description="Fetches the entire configuration for all entity types." %}
 {% capture parameterTable %}
 Name           | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
@@ -333,8 +333,8 @@ Configuration config = await client.GetConfiguration();
 {% capture parameterTable %}
 Name           | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-entity         | ```Entity```            | Specifies the entity to which the attribute should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
-definition     | ```AbstractAttributeDefinition``` | Depending on the entity the ```AbstractAttributeDefinition``` definition contains an ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` object, which includes the attribute's values.
+entity         | ```Entity```            | Specifies the entity which the attribute belongs to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
+definition     | ```AbstractAttributeDefinition``` | Depending on the entity, the ```AbstractAttributeDefinition``` definition contains an ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` object, which then contains the attribute's values.
 token          | ```CancellationToken``` | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
@@ -356,8 +356,8 @@ await client.CreateAttributeDefinition( Entity.Part, attributeDefinition );
 {% capture parameterTable %}
  Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-entity         | ```Entity```            | Specifies the entity to which the attributes should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
-definitions     | ```AbstractAttributeDefinition[]``` | Depending on the entity the ```AbstractAttributeDefinition``` definition contains ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` object, which includes the attribute's values.
+entity         | ```Entity```            | Specifies the entity which the attributes belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
+definitions     | ```AbstractAttributeDefinition[]``` | Depending on the entity, the ```AbstractAttributeDefinition``` definition contains ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` object, which then contains the attribute's values.
 token          | ```CancellationToken```       | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
@@ -373,8 +373,8 @@ token          | ```CancellationToken```       | Parameter is optional and allow
 {% capture parameterTable %}
  Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-entity         | ```Entity```            | Specifies the entity to which the attributes belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
-definitions     | ```AbstractAttributeDefinition[]``` | Depending on the entity the ```AbstractAttributeDefinition``` definition contains ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` object, which includes the attribute's values.
+entity         | ```Entity```            | Specifies the entity which the attributes belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
+definitions     | ```AbstractAttributeDefinition[]``` | Depending on the entity, the ```AbstractAttributeDefinition``` definition contains ```AttributeDefinition``` or a ```CatalogueAttributeDefinition``` object, which then contains the attribute's values.
 token          | ```CancellationToken``` | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
@@ -400,12 +400,12 @@ client.UpdateAttributeDefinition( Entity.Part, attributeDefinition );
 
 {% assign caption="DeleteAttributeDefinitions" %}
 {% assign icon=site.images['function-delete'] %}
-{% assign description="Deletes all or certain attributes of a given entity from the configuration." %}
+{% assign description="Deletes all or specific attributes of a given entity from the configuration." %}
 {% capture parameterTable %}
  Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-entity         | ```Entity```            | Specifies the entity to which the attributes should belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
-keys           | ```ushort[]```          | May contain the keys of the attributes which should be deleted. If it stays empty, all attributes of the given *entity* are deleted.
+entity         | ```Entity```            | Specifies the entity which the attributes belong to. Possible values are ```Part```, ```Characteristic```, ```Measurement```, ```Value``` or ```Catalogue```.
+keys           | ```ushort[]```          | Contains the keys of the attributes which should be deleted. If it is empty, all attributes of the given *entity* are deleted.
 token          | ```CancellationToken``` | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
@@ -422,7 +422,7 @@ await client.DeleteAttributeDefinitions( Entity.Part, new ushort[]{ (ushort)1001
 
 {% assign caption="DeleteAllAttributeDefinitions" %}
 {% assign icon=site.images['function-delete'] %}
-{% assign description="Deletes all attributes of every single entity from the configuration." %}
+{% assign description="Deletes all attributes of all entities from the configuration." %}
 {% capture parameterTable %}
 Name           | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
