@@ -1,8 +1,8 @@
 ---
 category: dataservice
-subCategory: catalogues
+subCategory: catalogs
 title: Data Service
-subTitle: Catalogues
+subTitle: Catalogs
 isSubPage: true
 permalink: /dataservice/catalogues/
 sections:
@@ -13,45 +13,45 @@ sections:
 
 ## {{ page.sections['general'] }}
 
-Every catalogue consists of a range of valid attributes and several catalogue entries.
-All attribute keys which are used within the valid attributes or the catalogue entries must have been created as catalogue attributes within the PiWeb configuration. ```Catalogue``` and ```CatalogueEntry```have the following structures:
+Each catalog describes a list of entries. All entries have the same defined set of attributes, called *valid attributes*. 
+All valid attributes must be created as *catalog attributes* beforehand. ```Catalogue``` and ```CatalogueEntry```have the following structures:
 
 ### Catalogue
 
 Property         | Datatype             | Description
 -----------------|----------------------|------------------------
-uuid             | ```Guid```           | Identifies the catalogue uniquely
-name             | ```string```         | Name of the catalogue
-validAttributes  | ```ushort[]```       | A list of attribute keys that are valid for the respective catalogue
-catalogueEntries | ```CatalogueEntry``` | A list of catalogue entries
+uuid             | ```Guid```           | Identifies the catalog uniquely
+name             | ```string```         | Name of the catalog
+validAttributes  | ```ushort[]```       | A list of attribute keys that are valid for this catalog
+catalogueEntries | ```CatalogueEntry``` | A list of catalog entries
 
 ### CatalogueEntry
 
 Property         | Datatype             | Description
 -----------------|----------------------|------------------------
-key              | ```short```          | Specifies the entry's order within the catalogue
-attributes       | ```Attribute[]```    | A list of attributes which consists of key and value. The keys must come from the validAttributes range.
+key              | ```short```          | Specifies the entry's order within the catalog
+attributes       | ```Attribute[]```    | A list of attributes which consists of key and value. The keys must be from the validAttributes.
 
 {% comment %}----------------------------------------------------------------------------------------------- {% endcomment %}
 
 ## {{ page.sections['endpoint'] }}
 
-Catalogues and catalogue entries can be fetched, created, updated and deleted via the following endpoints. There are no filter parameters to restrict the queries.
+Catalogs and catalog entries can be fetched, created, updated and deleted using the following endpoints. These endpoints don't provide filter parameters.
 
 URL Endpoint | GET | POST | PUT | DELETE
 -------------|-----|------|-----|-------
-/catalogues | Returns all catalogues without their entries | Creates the committed catalogue(s) which is/are transfered in the body of the request | Updates the committed catalogues and their entries | Deletes all catalogues and the catalogue entries
-/catalogues/entries | Returns all catalogues including their respective entries | *--* | *--* | *--*
-/catalogues/(:catUuid1, :catUuid2,...) | Returns the catalogues of which the uuid is within the catUuid list without their entries | *--* | *--* | Deletes the catalogue(s) which has/have the given catUuid(s)
-/catalogues/(:catUuid1, :catUuid2,...)/entries | Returns the catalogues of which the uuid is within the catUuid list including their respective entries | *--* | *--* | *--*
-catalogues/:catalogueUuid/entries | *--*| Creates the entries transfered in the body of the request for the catalogue specidied by the *:catalogueUuid* | *--* | Deletes all entries from the catalogue specified by the *:catalogueUuid*
-catalogues/:catalogueUuid/entries/{key1, key2...} | *--* | *--* | *--* | Deletes the entries specified by their particular key from the catalogue specified by the *:catalogueUuid* 
+/catalogues | Returns all catalogs without their entries | Creates the committed catalog(s) which is/are transfered in the body of the request | Updates the committed catalogs and their entries | Deletes all catalogs and the catalog entries
+/catalogues/entries | Returns all catalogs *with entries* | *--* | *--* | *--*
+/catalogues/(:catUuid1, :catUuid2,...) | Returns all catalogs from the catUuid list *without entries* | *--* | *--* | Deletes the catalogs with the provided catUuids
+/catalogues/(:catUuid1, :catUuid2,...)/entries | Returns the catalogs of which the uuid is within the catUuid list including their entries | *--* | *--* | *--*
+catalogues/:catalogueUuid/entries | *--*| Creates the entries in the request body for the catalog specified by the *:catalogueUuid* | *--* | Deletes all entries from the catalogue specified by the *:catalogueUuid*
+catalogues/:catalogueUuid/entries/{key1, key2...} | *--* | *--* | *--* | Deletes the entries specified by their particular key from the catalog specified by the *:catalogueUuid* 
 
-### Get Catalogues (GET)
+### Get Catalogs (GET)
 
-Catalogues can be fetched with or without their respective entries, depending on the endpoint method.
+Catalogs can be fetched with or without their entries, depending on the endpoint method.
 
-{% assign exampleCaption="Fetching the catalogue with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad and its entries" %}
+{% assign exampleCaption="Fetching the catalog with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad and its entries" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
@@ -96,13 +96,13 @@ GET /dataServiceRest/catalogues/(8c376bee-ffe3-4ee4-abb9-a55b492e69ad)/entries H
 
 {% include exampleFieldset.html %}
 
-### Add Catalogues (POST)
+### Add Catalogs (POST)
 
-To create a catalogue, it is necessary to transfer the catalogue object within the request's body. Beneath a unique identifier and the catalog name, the valid attributes need to be transfered. Catalogue entries are optional. The attribute keys, which are used for the valid attributes, must come from the catalogue attribute range (specified in the {{ site.links['configuration'] }})
+To create a new catalog the catalog object must be transmitted the request's body. A valid add request must contain a unique identifier, the catalog name and the valid attributes. Catalog entries are optional. All valid attributes must be added as catalog attributes beforehand (see {{ site.links['configuration'] }}).
 
-{{ site.images['info'] }} If no catalogue entries are transfered, an empty catalogue entry with the key 0 and attribute values 'not defined' ( in case of alphanumeric attributes ) is created by default.
+{{ site.images['info'] }} If no catalog entries are specified an empty catalog entry with key '0' and attribute value(s) 'not defined' ( in case of alphanumeric attributes ) is created by default.
 
-{% assign exampleCaption="Adding the catalogue InspectorCatalogue" %}
+{% assign exampleCaption="Adding the catalog InspectorCatalog" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
@@ -113,7 +113,7 @@ POST /dataServiceRest/catalogues HTTP/1.1
 [
   {
            "uuid": "8c376bee-ffe3-4ee4-abb9-a55b492e69ad",
-           "name": "InspectorCatalogue",
+           "name": "InspectorCatalog",
            "validAttributes": [ 4092, 4093 ],
            "catalogueEntries":
            [
@@ -148,11 +148,12 @@ HTTP/1.1 201 Created
 {% include exampleFieldset.html %}
 
 
-### Add Catalogue Entries (POST)
+### Add Catalog Entries (POST)
 
-Beneath adding catalogue entries to a catalogue while creating a catalogue, there is also the possibility to add entries to an already existing catalogue.
+To add new entries to an existing catalog you must specify all new entries in the request body. Each new entry must contain a unique key.
+Each entry attribute must be listed as a valid attributes in the catalog definition.
 
-{% assign exampleCaption="Adding a catalogue entry - add the inspector ‘Clarks’" %}
+{% assign exampleCaption="Adding a catalog entry - add the inspector ‘Clarks’" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
@@ -178,18 +179,18 @@ HTTP/1.1 201 Created
 {% include exampleFieldset.html %}
 
 
-### Update Catalogues (PUT)
+### Update Catalogs (PUT)
 
-Updating a catalogue might regard the following aspects: 
+Update a catalog if you want to:
 
-* Rename the catalogue 
-* Add, update or delete catalogue entries
+* rename the catalog or
+* add, update or delete catalog entries.
 
-To update a catalogue, the whole object excluding the valid attributes needs to be transfered within the body of the HTTP request. On updating catalogues, the existing entries are removed and the passed entries are added to the catalogue.
+To update a catalog, the whole object excluding the valid attributes needs to be transmitted in the body of the HTTP request. Updating a catalog essentially replaces the current catalog with the new one (delete followed by an add) in a single transaction.
 
-{{site.images['info']}} To change the valid attributes of a catalogue, it needs to be deleted an re-created again.
+{{site.images['info']}} To change the valid attributes the catalog needs to be deleted an re-created again.
 
-{% assign exampleCaption="Rename the catalogue from 'InspectorCatalogue' to 'Inspectors' and add the inspector 'Clarks'" %}
+{% assign exampleCaption="Rename the catalog from 'InspectorCatalog' to 'Inspectors' and add the inspector 'Clarks'" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
@@ -237,16 +238,16 @@ HTTP/1.1 200 Ok
 
 {% include exampleFieldset.html %}
 
-### Delete Catalogues (DELETE)
+### Delete Catalogs (DELETE)
 
-There are two different options for deleting catalogues: 
+There are two different options for deleting catalogs: 
 
-* Delete all catalogues or
-* Delete one or more certain catalogues identified by their uuid
+* delete all catalogs or
+* delete one or more certain catalogs identified by their uuid.
 
-The following examples illustrate these options.
+The following examples demonstrates these options.
 
-{% assign exampleCaption="Delete all catalogues and their entries" %}
+{% assign exampleCaption="Delete all catalogs and their entries" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
@@ -262,7 +263,7 @@ HTTP/1.1 200 Ok
 
 {% include exampleFieldset.html %}
 
-{% assign exampleCaption="Delete the catalogue with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad and its entries" %}
+{% assign exampleCaption="Delete the catalog with uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad and its entries" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
@@ -278,16 +279,16 @@ HTTP/1.1 200 Ok
 
 {% include exampleFieldset.html %}
 
-### Delete Catalogue Entries
+### Delete Catalog Entries
 
-There are two different options for deleting catalogue entries: 
+There are two different options for deleting catalog entries: 
 
-* Delete all entries from a certain catalogue identified by its uuid
-* Delete one or more certain entries identified by their keys from a certain catalogue identified by its uuid
+* delete all entries from a certain catalog identified by its uuid or
+* delete one or more specific entries identified by their keys from a certain catalog identified by its uuid
  
-The following examples illustrate these options.
+The following examples demonstrate these options.
 
-{% assign exampleCaption="Delete all entries from the catalogue with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
+{% assign exampleCaption="Delete all entries from the catalog with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
@@ -303,7 +304,7 @@ HTTP/1.1 200 Ok
 
 {% include exampleFieldset.html %}
 
-{% assign exampleCaption="Delete the entries with key 1 and 3 from the catalogue with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
+{% assign exampleCaption="Delete the entries with key 1 and 3 from the catalog with uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
@@ -323,21 +324,21 @@ HTTP/1.1 200 Ok
 
 ## {{ page.sections['sdk'] }}
 
-### Get Catalogues
+### Get Catalogs
 
 {% assign caption="GetCatalogues" %}
 {% assign icon=site.images['function-get'] %}
-{% assign description="Fetches one or more catalogues identified by their uuids or all catalogues if no uuid is passed." %}
+{% assign description="Fetches one or more catalogs identified by their uuids or all catalogs if no uuid is set." %}
 {% capture parameterTable %}
 
  Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-catalogueUuids | ```Guid[]```            | Parameter is optional and may include the uuids of the catalogues to be fetched. If no uuid is given, all catalogues will be fetched.
-returnEntries  | ```bool```              | Parameter is optional and indicates whether the catalogue entries shall be returned.
+catalogueUuids | ```Guid[]```            | Parameter is optional and may include the uuids of the catalogs to be fetched. If no uuid is given, all catalogs will be fetched.
+returnEntries  | ```bool```              | Parameter is optional and indicates whether the catalog entries shall be returned.
 token          | ```CancellationToken``` | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
-{% assign exampleCaption="Get the catalogue with uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
+{% assign exampleCaption="Get the catalog with uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
 {% capture example %}
 {% highlight csharp %}
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
@@ -349,19 +350,19 @@ var catalogues = client.GetCatalogues(new Guid[]{new Guid(
 {% include sdkFunctionFieldset.html %}
 
 
-### Create Catalogues
+### Create Catalogs
 
 {% assign caption="CreateCatalogues" %}
 {% assign icon=site.images['function-create'] %}
-{% assign description="Creates one or more catalogues." %}
+{% assign description="Creates one or more catalogs." %}
 {% capture parameterTable %}
  Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-catalogues     | ```Catalogue[]```       | Includes the catalogues which shall be created.
+catalogues     | ```Catalogue[]```       | Includes the catalogs which shall be created.
 token          | ```CancellationToken``` | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
-{% assign exampleCaption="Create the catalogue InspectorCatalogue" %}
+{% assign exampleCaption="Create the catalog InspectorCatalogue" %}
 {% capture example %}
 {% highlight csharp %}
 var catalogue = new Catalogue(){ 
@@ -386,16 +387,16 @@ client.CreateCatalogues( new[]{ catalogue } );
 
 {% include sdkFunctionFieldset.html %}
 
-### Create Catalogue Entries
+### Create Catalog Entries
 
 {% assign caption="CreateCatalogueEntry" %}
 {% assign icon=site.images['function-create'] %}
-{% assign description="Adds a catalogue entry to an existing catalogue." %}
+{% assign description="Adds a catalog entry to an existing catalog." %}
 {% capture parameterTable %}
 Name           | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-catalogueUuid  | ```Uuid[]```            | The Uuid by which the catalogue is identified.
-entry          | ```CatalogueEntry```    | The entry which should be added to the catalogue.
+catalogueUuid  | ```Uuid[]```            | The Uuid by which the catalog is identified.
+entry          | ```CatalogueEntry```    | The entry which should be added to the catalog.
 token          | ```CancellationToken``` | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
@@ -413,12 +414,12 @@ client.CreateCatalogueEntry( new Guid("8c376bee-ffe3-4ee4-abb9-a55b492e69ad"), e
 
 {% assign caption="CreateCatalogueEntries" %}
 {% assign icon=site.images['function-create'] %}
-{% assign description="Adds multiple catalogue entries to an existing catalogue." %}
+{% assign description="Adds multiple catalog entries to an existing catalog." %}
 {% capture parameterTable %}
 Name           | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-catalogueUuid  | ```Uuid[]```            | The Uuid by which the catalogue is identified.
-entry          | ```CatalogueEntry[]```  | The entries which shall be added to the catalogue.
+catalogueUuid  | ```Uuid[]```            | The Uuid by which the catalog is identified.
+entry          | ```CatalogueEntry[]```  | The entries which shall be added to the catalog.
 token          | ```CancellationToken``` | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
@@ -436,19 +437,19 @@ client.CreateCatalogueEntry( new Guid("8c376bee-ffe3-4ee4-abb9-a55b492e69ad"), n
 
 {% include sdkFunctionFieldset.html %}
 
-### Update Catalogues
+### Update Catalogs
 
 {% assign caption="UpdateCatalogues" %}
 {% assign icon=site.images['function-update'] %}
-{% assign description="Updates one or more catalogues. This might affect renaming the catalogue as well as add, update or delete catalogue entries. On updating catalogues, the existing entries ar removed and the passed entries are added to the catalogue. To change the valid attributes of a catalogue, it must be deleted an re-created again." %}
+{% assign description="Updates one or more catalogs. Use to rename the catalog or add, update or delete catalog entries. Updating a catalog removes the existing entries and adds the new ones. To change the valid attributes of a catalog, it must be deleted an re-created again." %}
 {% capture parameterTable %}
  Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-catalogues     | ```Catalogue[]```       | Includes the catalogues which shall be updated.
+catalogues     | ```Catalogue[]```       | Includes the catalogs which shall be updated.
 token          | ```CancellationToken``` | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
-{% assign exampleCaption="Rename the catalogue InspectorCatalogue to Inspectors and add the inspector Clarks" %}
+{% assign exampleCaption="Rename the catalog InspectorCatalogue to Inspectors and add the inspector Clarks" %}
 {% capture example %}
 {% highlight csharp %}
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
@@ -469,19 +470,19 @@ client.UpdateCatalogues( catalogue );
 
 {% include sdkFunctionFieldset.html %}
 
-### Delete Catalogues
+### Delete Catalogs
 
 {% assign caption="DeleteCatalogues" %}
 {% assign icon=site.images['function-delete'] %}
-{% assign description="Deletes the catalogues defined in the ```catalogueUuids``` or all catalogues if the parameter is empty." %}
+{% assign description="Deletes the catalogs defined in the ```catalogueUuids``` or all catalogs if the parameter is empty." %}
 {% capture parameterTable %}
  Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-catalogueUuids | ```Guid[]```            | Parameter is optional and may include the uuids of the catalogues which shall be deleted. If no uuid is given, all catalogues will be deleted.
+catalogueUuids | ```Guid[]```            | Parameter is optional can be used to delete specific catalogs only. If no uuid is set, all catalogs will be deleted.
 token          | ```CancellationToken``` | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
-{% assign exampleCaption="Delete the catalogue with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
+{% assign exampleCaption="Delete the catalog with uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
 {% capture example %}
 {% highlight csharp %}
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
@@ -491,20 +492,20 @@ client.DeleteCatalogues( new Guid[]{new Guid( "8c376bee-ffe3-4ee4-abb9-a55b492e6
 
 {% include sdkFunctionFieldset.html %}
 
-### Delete Catalogue Entries
+### Delete Catalog Entries
 
 {% assign caption="DeleteCatalogueEntry" %}
 {% assign icon=site.images['function-delete'] %}
-{% assign description="Deletes the entry with the ```key```from the catalogue defined by ```catalogueUuid```." %}
+{% assign description="Deletes the entry with the ```key```from the catalog defined by ```catalogueUuid```." %}
 {% capture parameterTable %}
  Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-catalogueUuid  | ```Guid```              | The uuid of the catalogue to which the entry, which should be deleted, belongs to.
+catalogueUuid  | ```Guid```              | The uuid of the catalog which the entry belongs to.
 key            | ```ushort```            | The key of the entry which should be deleted.
 token          | ```CancellationToken``` | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
-{% assign exampleCaption="Delete the entry with the key 1 from the catalogue with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
+{% assign exampleCaption="Delete the entry with the key 1 from the catalog with uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
 {% capture example %}
 {% highlight csharp %}
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
@@ -517,16 +518,16 @@ client.DeleteCatalogueEntries(
 
 {% assign caption="DeleteCatalogueEntries" %}
 {% assign icon=site.images['function-delete'] %}
-{% assign description="Deletes the entries of which the key is included in ```keys```from the catalogue defined by ```catalogueUuid```, or all entries if ```keys```is empty." %}
+{% assign description="Deletes the entries of which the key is included in ```keys```from the catalog defined by ```catalogueUuid```, or all entries if ```keys```is empty." %}
 {% capture parameterTable %}
  Name          | Type                    | Description
 ---------------|-------------------------|--------------------------------------------------
-catalogueUuid  | ```Guid```              | The uuid of the catalogue to which the entries, which shall be deleted, belongs to.
+catalogueUuid  | ```Guid```              | The uuid of the catalog which the entries belong to.
 keys           | ```ushort[]```          | The keys of the entries which shall be deleted. If it's empty, all entries are deleted.
 token          | ```CancellationToken``` | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
-{% assign exampleCaption="Delete all entries from the catalogue with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
+{% assign exampleCaption="Delete all entries from the catalog with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
 {% capture example %}
 {% highlight csharp %}
 var client = new DataServiceRestClient( "http://piwebserver:8080" );
