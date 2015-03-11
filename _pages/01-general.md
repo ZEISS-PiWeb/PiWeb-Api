@@ -15,7 +15,7 @@ Within this documentation there are the following notation conventions:
 
 * A derived class is notated in the following way: ```derivedClass : baseClass```
 
-The PiWeb server offers two interfaces: 
+PiWeb server offers two interfaces: 
 
 - direct REST webservice calls via plain HTTP requests and 
 - calls via the .NET based API.dll
