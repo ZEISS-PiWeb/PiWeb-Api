@@ -14,37 +14,37 @@ redirect_from: "/dataservice/"
 
 ## {{ page.sections['general'] }}
 
-Fetching service information is guaranteed to be very fast and is therefore well suited for checking the connection. This method can always be invoked without having credentials specified.
-The first time service information are fetched from the server, database statistics values need to be created. As the service information call should return immediately, statistics creation is triggered in a separate task. Therefore, the statistical values ```partCount```, ```characteristicsCount```, ```measurementsCount``` and ```valuesCount``` stay empty in the first response, but should generally contain values on the second call.
+Service information requests always have the smallest response time and are therefore well suited for checking the connection. Fetching the service information doesn't require authentication.
+The first service information request triggers the calculation of the database statistics. Since the service information call returns immediately the values ```partCount```, ```characteristicsCount```, ```measurementsCount``` and ```valuesCount``` are empty in the first response. These values will be set once the statistics have been calculated; usually on the second call.
 
-The ServiceInformation object, which is returned, contains of the following properties:
+The returned ServiceInformation object contains of the following properties:
 
 ### ServiceInformation
 
 Property | Type | Description
 ---------|------|-------------
-serverName | ```string``` | The name of the PiWeb server as it is specified in the server settings dialog
+serverName | ```string``` | The name of the PiWeb server as specified in the server settings dialog
 version | ```string``` | The version number of the PiWeb server
-securityEnabled | ```bool``` | Indicates whether security is server side enabled or not.
+securityEnabled | ```bool``` | Indicates whether authentication is required by the server.
 edition | ```string``` | The database edition. Should generally be PiwebDB.
 versionWsdlMajor | ```string``` | The major version number of the interface.
 versionWsdlMinor | ```string``` | The minor version number of the interface.
-partCount | ```int``` | Number of parts stored in the server
-characteristicCount |```int``` | Number of characteristics stored in the server
-measurementCount | ```int``` | Number of measurements stored in the server
-valueCount | ```int``` | Number of measured values stored in the server
-featureList | ```string[]``` | Includes the server side supported features.
+partCount | ```int``` | The number of parts stored on the server
+characteristicCount |```int``` | The number of characteristics stored on the server
+measurementCount | ```int``` | The number of measurements stored on the server
+valueCount | ```int``` | The number of measured values stored on the server
+featureList | ```string[]``` | A list of features supported by the server.
 inspectionPlanTimestamp | ```DateTime``` | Timestamp of the last inspection plan modification
 measurementTimestamp | ```DateTime``` | Timestamp of the last measurement modification
 configurationTimestamp | ```DateTime``` | Timestamp of the last configuration timestamp
 
 ## {{ page.sections['endpoint'] }}
 
-Service information can be fetched via the following endpoint. There are no filter parameters to restrict the query.
+The service information can be fetched via the following endpoint. This endpoint doesn't provide filter parameters.
 
 URL Endpoint | GET | PUT | POST | DELETE
 -------------|-----|-----|------|-------
-/serviceInformation | Returns general information about the PiWeb-Server | not supported | not supported | not supported
+/serviceInformation | Returns general information about the PiWeb server | not supported | not supported | not supported
 
 ### Get Service Information <span class="badge">14</span>
 
