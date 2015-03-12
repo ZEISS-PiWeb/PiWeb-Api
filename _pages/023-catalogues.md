@@ -4,7 +4,7 @@ subCategory: catalogs
 title: Data Service
 subTitle: Catalogs
 isSubPage: true
-permalink: /dataservice/catalogues/
+permalink: /dataservice/catalogs/
 sections:
   general: General Information
   endpoint: REST API Endpoints
