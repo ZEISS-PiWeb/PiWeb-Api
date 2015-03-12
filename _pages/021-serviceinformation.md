@@ -103,7 +103,7 @@ GET /dataServiceRest/serviceInformation HTTP/1.1
 
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
-token          | ```CancellationToken```               | Parameter is optional allows to cancel the asyncronous call.
+token          | ```CancellationToken```               | Parameter is optional and allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign returnParameter="Task<ServiceInformation>" %}
