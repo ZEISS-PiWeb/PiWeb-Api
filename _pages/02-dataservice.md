@@ -5,7 +5,7 @@ permalink: /dataservice/
 sections:
   serviceInformation: Service Information
   configuration: Configuration
-  catalogues: Catalogues
+  catalogs: Catalogs
   inspection-plan: Inspection Plan
   measurements: Measurements and Measured Values
 ---
