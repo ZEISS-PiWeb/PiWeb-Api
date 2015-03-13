@@ -13,29 +13,33 @@ sections:
 
 ##{{page.sections['endpoint']}}
 
-Raw data as well as information about the raw data can be fetched, added, updated and deleted via the following endpoints. Filters can be set as described in the [URL-Parameter section](General-Information#raw-data).
+You can fetch, add, update and delete raw data files and the raw data file information using the following endpoints. Applicable filters are described in the [URL Parameters section](General-Information#raw-data).
 
 URL Endpoint | GET | PUT | POST | DELETE
 -------------|-----|-----|------|-------
-rawData/*entity*/ *uuid*/*key* | Returns the rawData file for the specified *entity* with the committed *uuid* and *key* | Updates the committed rawData file for the *entity* with the *uuid* and *key* | Creates the committed rawData file(s) for the *entity* with the *uuid* | Deletes the rawData file for the specified *entity* with the comitted *uuid* and *key* or all raw data if no *key* is given
-rawData/*entity*/ *uuid*/*key*/ thumbnail | Returns a preview image of the raw data object for the specified *entity* with the committed *uuid* and *key* | *Not supported* | *Not supported* | *Not supported*
-/rawData/*entity* | Returns a list of raw data information for the *entity* with the uuids commited within the url parameter section | *Not supported* | *Not supported* | *Not supported*
+rawData/*entity*/ *uuid*/*key* | Returns the one specific file identified by *entity*, *uuid* and *key*| Replaces the file identified by *entity*, *uuid* and *key* with the one in the request body| Adds the transmitted file to the entity with type *entity* and id *uuid* | Deletes the file identified by *entity*, *uuid* and *key*. Deletes all files if no *key* is identified.
+rawData/*entity*/ *uuid*/*key*/ thumbnail | Returns a preview image for the file identified by *entity*, *uuid* and *key* | *Not supported* | *Not supported* | *Not supported*
+/rawData/*entity* | Returns a list of raw data file information entries for all entities with type *entity* and a matching id in the *uuids* parameter | *Not supported* | *Not supported* | *Not supported*
 
 ##{{page.sections['add']}}
 
-Raw data can be added to all kinds of entities: part, characteristic, measurement and measured values.
-When adding raw data, further information needs to be passed beneath the data itself. The information where the raw data object belongs to is passed within the uri, the data itself is passed within the HTTP body and the additional information is passed within several HTTP header variables:
+You can attach files to all entity types: parts, characteristics, measurements and measured values.
+
+An add request consists of 3 mandatory parts:
+1. The *URL* specifies which entity the file will be added to.
+2. The *request body* contains the file itself.
+3. The *HTTP headers* must provide meta information about the file, see below for details.
 
 HTTP header variable | Description                                    | Example Value
 ---------------------|------------------------------------------------|--------------------------------------
-Content-Disposition  | Includes the raw data object's file name       | "MetalPart.meshModel"
-Content-Length       | Includes the raw data object's length in bytes | 2090682
-Content-MD5          | Includes raw data object's MD5 hash sum        | "bdf6b06ab301a80ae55021085b820393"
-Content-Type         | Includes raw data object's MIME type           | "application/x-zeiss-piweb-meshmodel"
+Content-Disposition  | Includes the file name       | "MetalPart.meshModel"
+Content-Length       | Includes the length in bytes | 2090682
+Content-MD5          | Includes file's MD5 hash sum        | "bdf6b06ab301a80ae55021085b820393"
+Content-Type         | Includes file's MIME type           | "application/x-zeiss-piweb-meshmodel"
 
-When adding raw data, it is possible to pass a key within the uri. If -1 or no key is passed, the next free key will be used on server side. (recommended)
+When adding a file, you can pass the desired file key as part of the uri. If you pass -1 or no key, the next available key will automatically assigned by the server. (recommended)
 
-{{site.images['warning']}} If a key is passed which is already in use, the existing raw data object will be replaced.
+{{site.images['warning']}} If you pass a key which is already assigned to another file, this file will be replaced.
 
 ### Add a raw data object to a part with the uuid b8f5d3fe-5bd5-406b-8053-67f647f09dc7
 
@@ -73,7 +77,7 @@ client.CreateRawData(meshModelInBytes, rawDataInformation);
 
 ##{{page.sections['fetchInfo']}}
 
-The request can be restricted by adding url parameters. For more details see the [URL-Parameter section](General-Information#raw-data).
+You can restrict the request by adding url parameters. For more details see the [URL-Parameter section](General-Information#raw-data).
 
 ### Fetch raw data information for the part with the uuid b8f5d3fe-5bd5-406b-8053-67f647f09dc7
 
@@ -120,7 +124,11 @@ var rawDataInfo = await client.ListRawDataForParts( new Guid[] { b8f5d3fe-5bd5-4
 
 ##{{page.sections['fetchData']}}
 
-The server caches raw data fetches. When a raw data object is requested for the first time, several HTTP header values are returned beneath the raw data object. This header values include the *ETag* header. It consists of a distinct hash value which identifies the raw data object unambiguously. This hash value is a combination of the MD5 sum and the last modified date. If this *ETag* value is sent within the *If-None-Match* header, the server returns a *304 - Not modified* HTTP header status code on the next request, instead of the raw data object, if the object has not been changed since the last request. If the API.dll is used, the caching is already implemented.
+The server caches raw data fetch requests. When you request a raw data file for the first time the response will contain the file itself and several HTTP headers. One of these headers is the *ETag* header. An ETag is a unique hash value to identify the file. It is a combination of the file's MD5 checksum and the last modification date. If you send an ETag in the *If-None-Match* header, the server can respond two different ways, depending in whether the file has been modified since the last request:
+1. *Not modified*: The server will return a *304 - Not modified* HTTP status code and the response body will be emtpy.
+2. *Modified*: The server will return the file.
+
+If you use the PiWeb .NET SDK, caching is already built in.
 
 ### Fetch raw data with key 0 for a part with the uuid b8f5d3fe-5bd5-406b-8053-67f647f09dc7
 
@@ -165,11 +173,11 @@ var rawData = await client.GetRawDataForPart( "b8f5d3fe-5bd5-406b-8053-67f647f09
 
 ##{{page.sections['update']}}
 
-Updating a raw data object works almost identically like adding raw data objects. The only difference is the key by which the raw data object is identified and which is mandatory.
+Updating a file works just like adding a file. The only difference is that you must specify the key for the file you want to update.
 
 ##{{page.sections['delete']}}
 
-If a key is given within the uri, only the raw data object with the given key will be deleted. Otherwise all raw data objects which belong to the entity will be deleted.
+If you provide a key in the URI, the server will only delete the file identified by the key. Otherwise the server will delete all files attached to the entity.
 
 ### Delete the raw data object with the key 0 from a part with the uuid b8f5d3fe-5bd5-406b-8053-67f647f09dc7
 
