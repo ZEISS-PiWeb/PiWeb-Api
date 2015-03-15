@@ -21,6 +21,7 @@ The returned ServiceInformation object contains of the following properties:
 
 ### ServiceInformation
 
+{% capture table %}
 Property | Type | Description
 ---------|------|-------------
 serverName | ```string``` | The name of the PiWeb server as specified in the server settings dialog
@@ -37,6 +38,8 @@ featureList | ```string[]``` | A list of features supported by the server.
 inspectionPlanTimestamp | ```DateTime``` | Timestamp of the last inspection plan modification
 measurementTimestamp | ```DateTime``` | Timestamp of the last measurement modification
 configurationTimestamp | ```DateTime``` | Timestamp of the last configuration timestamp
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 ## {{ page.sections['endpoint'] }}
 
