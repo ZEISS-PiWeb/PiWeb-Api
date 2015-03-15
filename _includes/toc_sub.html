@@ -1,0 +1,40 @@
+
+{% for node in site.pages %}
+	{% if node.title != nil and node.url != '/' and node.isSubPage != true %}
+		{% capture nodediff %}{{ page.url | remove:node.url }}{% endcapture %}
+		
+		{% if node.category == page.category %}
+			{% for sec in node.sections %}
+				
+				<ul class="subNavList">
+					{% assign subPage = nil %}
+					{% for pg in site.pages %}
+						{% if pg.isSubPage == true and pg.category == node.category and pg.subCategory == sec[0] %}
+							{% assign subPage = pg %}
+						{% endif %}
+					{% endfor %}
+					
+					{% if subPage %}
+						{% capture url %}{{site.baseurl}}{{ subPage.url}}{% endcapture %}
+						<li><a {% if subPage.url == page.url %}class="bold" {% endif %}href="{{url}}">{{ sec[1] }}</a></li>
+						
+						{% if subPage.url == page.url %}
+							{% for subsec in subPage.sections %}
+								<ul class="subNavList">
+									{% capture anker %}{{ subsec[1] | slugify }}{% endcapture %}
+									<li><a href="{{url}}#{{ anker }}">{{ subsec[1] }}</a></li>
+								</ul>
+							{% endfor %}
+						{% endif %}
+					{% else %}
+						{% capture anker %}{{ sec[1] | slugify }}{% endcapture %}
+						{% capture url %}{{site.baseurl}}{{node.url}}#{{ anker }}{% endcapture %}
+						<li><a href="{{url}}">{{ sec[1] }}</a></li>
+					{% endif %}
+					
+				</ul>
+			{% endfor %}
+		{% endif %}
+	{% endif %}
+{% endfor %}
+

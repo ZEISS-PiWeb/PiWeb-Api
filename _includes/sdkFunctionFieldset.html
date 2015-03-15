@@ -1,15 +1,9 @@
-<fieldset>
-  <legend>
-  {{  icon | append: caption | markdownify }}
-  </legend>
-  {{ site.images['summary16'] | append: ' **Summary:** '| append: description | markdownify }}
-  {{ site.images['parameter16'] | append: ' **Parameter List:**'| markdownify }}
-  {{parameterTable | markdownify}}
-  {% if returnParameter != empty %}
-    {{ site.images['returnParameter16'] | append: ' **Return parameter:** ```'| append: returnParameter | append: '```' | markdownify }}
-  {% endif %}
-  {% if exampleCaption != empty %}
-  {{ site.images['example16'] | append: ' **Example: ' | append: exampleCaption | append:'**' | markdownify }}
-  {{example}}
-  {% endif %}
-</fieldset>
+{{ site.images['parameter16'] | append: ' **Parameter List:**'| markdownify }}
+{{parameterTable | markdownify}}
+{% if returnParameter != empty %}
+  {{ site.images['returnParameter16'] | append: ' **Return parameter:** ```'| append: returnParameter | append: '```' | markdownify }}
+{% endif %}
+{% if exampleCaption != empty %}
+{{ site.images['example16'] | append: ' **Example: ' | append: exampleCaption | append:'**' | markdownify }}
+{{example}}
+{% endif %}

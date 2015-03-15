@@ -1,0 +1,22 @@
+<div class="panel panel-default">
+  <div  class="panel-heading" role="tab" 
+        id={{ '"heading' | append: linkId | append: '"' }} 
+        data-toggle="collapse" 
+        href={{ '"#collapse' | append: linkId | append: '"' }} 
+        aria-expanded="false" 
+        aria-controls={{ '"#collapse' | append: linkId | append: '"' }}>
+    <span>{{ icon |  append: '  ' | append: caption | markdownify | remove:'<p>'| remove: '</p>'  }}</span>
+    <span style="float: right;">
+      {{ description }}
+    </span>
+  </div>
+  
+  <div  id={{ '"collapse' | append: linkId | append: '"' }}
+        class="panel-collapse collapse" 
+        role="tabpanel" 
+        aria-labelledby={{ '"heading' | append: linkId | append: '"' }}>
+    <div class="panel-body">
+      {% include sdkFunctionFieldset.html %}
+    </div>
+  </div>
+</div>

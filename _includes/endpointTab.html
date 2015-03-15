@@ -1,0 +1,22 @@
+<div class="panel panel-default">
+  <div  class="panel-heading" role="tab" 
+        id={{ '"heading' | append: linkId | append: '"' }} 
+        data-toggle="collapse" 
+        href={{ '"#collapse' | append: linkId | append: '"' }} 
+        aria-expanded="false" 
+        aria-controls={{ '"#collapse' | append: linkId | append: '"' }}>
+    <span class="label label-primary">{{ method }}</span> {{ endpoint }}
+    <span style="float: right;">
+      {{ summary }}
+    </span>
+  </div>
+  
+  <div  id={{ '"collapse' | append: linkId | append: '"' }}
+        class="panel-collapse collapse" 
+        role="tabpanel" 
+        aria-labelledby={{ '"heading' | append: linkId | append: '"' }}>
+    <div class="panel-body">
+      {% include exampleFieldset.html %}
+    </div>
+  </div>
+</div>
