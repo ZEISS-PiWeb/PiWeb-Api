@@ -45,12 +45,11 @@ configurationTimestamp | ```DateTime``` | Timestamp of the last configuration ti
 
 The service information can be fetched via the following endpoint. This endpoint doesn't provide filter parameters.
 
-URL Endpoint | GET | PUT | POST | DELETE
--------------|-----|-----|------|-------
-/serviceInformation | Returns general information about the PiWeb server | not supported | not supported | not supported
-
-### Get Service Information <span class="badge">14</span>
-
+{% assign linkId="serviceInformationEndpointGet" %}
+{% assign method="GET" %}
+{% assign endpoint="/serviceInformation" %}
+{% assign summary="Returns general information about the PiWeb server" %}
+{% assign description="" %}
 {% assign exampleCaption="Get Service Information for a given connection" %}
 {% assign comment="" %}
 
@@ -91,14 +90,13 @@ GET /dataServiceRest/serviceInformation HTTP/1.1
 }
 {% endhighlight %}
 {% endcapture %}
-
-{% include exampleFieldset.html %}
-
+{% include endpointTab.html %}
 
 ## {{page.sections['sdk'] }}
 
 ### Get Service Information
 
+{% assign linkId="serviceInformationMethodGet" %}
 {% assign caption="GetServiceInformation" %}
 {% assign icon=site.images['function-get'] %}
 {% assign description="Fetches the service information. " %}
@@ -106,7 +104,7 @@ GET /dataServiceRest/serviceInformation HTTP/1.1
 
 Name           | Type                                  | Description
 ---------------|---------------------------------------|--------------------------------------------------
-token          | ```CancellationToken```               | Parameter is optional and allows to cancel the asyncronous call.
+token          | ```CancellationToken```               | Parameter is optional allows to cancel the asyncronous call.
 {% endcapture %}
 
 {% assign returnParameter="Task<ServiceInformation>" %}
@@ -117,4 +115,4 @@ var client = new DataServiceRestClient( "http://piwebserver:8080" );
 var serviceInformation = await client.GetServiceInformation();
 {% endhighlight %}
 {% endcapture %}
-{% include sdkFunctionFieldset.html %}
+{% include methodTab.html %}
