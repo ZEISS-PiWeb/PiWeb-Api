@@ -14,7 +14,9 @@ permalink: /restapi/dataservice/measurementsandvalues/
 ### Endpoints
 
 You can fetch, create, update and delete measurements and values via the following endpoints: 
+<br/>
 
+#### Measurements
 {% assign linkId="measurementsGetAll" %}
 {% assign method="GET" %}
 {% assign endpoint="/measurements" %}
