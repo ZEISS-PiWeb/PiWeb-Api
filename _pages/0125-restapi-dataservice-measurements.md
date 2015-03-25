@@ -176,6 +176,7 @@ The delete condition may be further restricted by the filter parameter `searchCo
 
 {% assign exampleCaption="Delete the measurement with the uuid 4b59cac7-9ecd-403c-aa26-56dd25892421" %}
 {% assign comment="" %}
+{% endcapture %}
 
 {% capture jsonrequest %}
 {% highlight http %}
