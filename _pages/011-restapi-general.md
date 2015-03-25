@@ -11,6 +11,7 @@ sections:
    codes: Status Codes
    parameter: Url Parameter
    envelope: Response Envelope
+redirect_from: "/"
 ---
 
 ## {{page.sections['addresses']}}
