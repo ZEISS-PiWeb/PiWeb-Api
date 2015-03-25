@@ -22,7 +22,7 @@ You can fetch, create, update and delete measurements and values via the followi
 {% assign endpoint="/measurements" %}
 {% assign summary="Fetches measurements" %}
 {% capture description %}
-You can fetch all measurements or certain measurements if you restrict the query. Possible [```filter uri parameters```](#filters) are `deep`, `searchCondition`, `orderBy`, `limitResult` or `requestedMeasurementAttributes`.
+You can fetch all measurements or certain measurements. Possible [```filter uri parameters```](#filters) are `partPath`, `partUuids`, `measurementUuids`, `deep`, `searchCondition`, `order`, `limitResult`, `requestedMeasurementAttributes`, `statistics` and `aggregation`.
 {% endcapture %}
 {% assign exampleCaption="Fetch measurements newer than 01.01.2015 for the part with the guid e42c5327-6258-4c4c-b3e9-6d22c30938b2" %}
 
@@ -61,7 +61,7 @@ GET /dataServiceRest/measurements?partUuids=(e42c5327-6258-4c4c-b3e9-6d22c30938b
 {% assign method="GET" %}
 {% assign endpoint="/measurements/:measUuid" %}
 {% assign summary="Fetches a measurement by its :measUuid" %}
-{% assign description="" %}
+{% assign description="The request can be restricted by [```filter uri parameters```](#filters). Possible filters are `requestedMeasurementAttributes`, `statistics` and `aggregation`." %}
 
 {% assign exampleCaption="Fetch a measurement by its guid" %}
 
