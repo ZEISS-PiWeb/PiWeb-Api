@@ -20,13 +20,52 @@ You can fetch, create, update and delete measurements and values via the followi
 {% assign endpoint="/measurements" %}
 {% assign summary="Fetches measurements" %}
 {% capture description %}
-You can fetch all measurements or certain measurements if you restrict the query. Possible filter parameters are `deep`, `searchCondition`, `orderBy`, `limitResult` or `requestedMeasurementAttributes` by [```filter uri parameters```](#filters).
+You can fetch all measurements or certain measurements if you restrict the query. Possible [```filter uri parameters```](#filters) are `deep`, `searchCondition`, `orderBy`, `limitResult` or `requestedMeasurementAttributes`.
 {% endcapture %}
 {% assign exampleCaption="Fetch measurements newer than 01.01.2015 for the part with the guid e42c5327-6258-4c4c-b3e9-6d22c30938b2" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
 GET /dataServiceRest/measurements?partUuids=(e42c5327-6258-4c4c-b3e9-6d22c30938b2)&searchCondition=4>[2015-01-01T00:00:00Z] HTTP/1.1
+{% endhighlight %}
+{% endcapture %}
+
+{% capture jsonresponse %}
+
+{% highlight json %}
+{
+  ...
+   "data":
+   [
+     {
+       "uuid": "5b59cac7-9ecd-403c-aa26-56dd25892421",
+       "partUuid": "e42c5327-6258-4c4c-b3e9-6d22c30938b2",
+       "lastModified": "2015-03-09T09:19:38.653Z",
+       "attributes":
+       {
+           "4": "2015-03-09T19:12:00Z",
+           "6": "3",
+           "7": "0"
+       }
+      },
+      ...
+}
+{% endhighlight %}
+{% endcapture %}
+
+{% include endpointTab.html %}
+
+{% assign linkId="measurementsGetOne" %}
+{% assign method="GET" %}
+{% assign endpoint="/measurements/:measUuid" %}
+{% assign summary="Fetches a measurement by its :measUuid" %}
+{% assign description="" %}
+
+{% assign exampleCaption="Fetch a measurement by its guid" %}
+
+{% capture jsonrequest %}
+{% highlight http %}
+GET /dataServiceRest/measurements/5b59cac7-9ecd-403c-aa26-56dd25892421 HTTP/1.1
 {% endhighlight %}
 {% endcapture %}
 
@@ -172,15 +211,48 @@ There are several possibilities to delete measurements:
 * Delete measurements from parts by its uuids
 * Delete measurements by their uuids
 
-The delete condition may be further restricted by the filter parameter `searchCondition`.
+The delete condition may be further restricted by the [filter parameter](#filters) `searchCondition`.
+{% endcapture %}
 
 {% assign exampleCaption="Delete measurements newer than 01.01.2015 and older than 31.03.2015 from the part with the uuid e42c5327-6258-4c4c-b3e9-6d22c30938b2" %}
-{% assign comment="" %}
-{% endcapture %}
 
 {% capture jsonrequest %}
 {% highlight http %}
 POST /dataServiceRest/measurements?partUuids={4b59cac7-9ecd-403c-aa26-56dd25892421}&searchCondition=4>[2015-01-01T00:00:00Z]+4<[2015-03-31T23:59:59Z] HTTP/1.1
+{% endhighlight %}
+{% endcapture %}
+
+{% capture jsonresponse %}
+{% highlight http %}
+HTTP/1.1 200 OK
+{% endhighlight %}
+
+{% highlight json %}
+{
+   "status":
+   {
+       "statusCode": 200,
+       "statusDescription": "OK"
+   },
+   "category": "Success"
+}
+{% endhighlight %}
+{% endcapture %}
+
+{% include endpointTab.html %}
+
+
+{% assign linkId="measurementsDeleteOne" %}
+{% assign method="DELETE" %}
+{% assign endpoint="/measurements/:measUuid" %}
+{% assign summary="Delete a measurement by its :measUuid" %}
+{% assign description="" %}
+
+{% assign exampleCaption="Delete a measurement by its guid" %}
+
+{% capture jsonrequest %}
+{% highlight http %}
+POST /dataServiceRest/measurements/5b59cac7-9ecd-403c-aa26-56dd25892421 HTTP/1.1
 {% endhighlight %}
 {% endcapture %}
 
