@@ -15,7 +15,7 @@
   </head>
   <body>
 	<nav class="navbar navbar-default navbar-fixed-top" role="banner">
-	  	<div class="container container-header">
+	  	<div class="container container-header container-header-top">
 	    		<div class="navbar-header">
 	      			<button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
 	        			<span class="sr-only">Toggle navigation</span>
@@ -46,5 +46,18 @@
 			</div>
 		 </div>
 	</div>
+	
+	<script type="text/javascript">
+    	function toggleChevron(e) {
+	    var headingDiv = $(e.target).parents( "div.panel-heading" );
+	    if( !headingDiv.length)
+	    	headingDiv = $(e.target);
+	    headingDiv
+    		.find( "ul.nav" )
+        	.find( "span.glyphicon" )
+        	.toggleClass('glyphicon-menu-down glyphicon-menu-right');
+	}
+	$( "div[id^='heading']" ).click(toggleChevron);
+    </script>
   </body>
 </html>

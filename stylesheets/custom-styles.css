@@ -22,8 +22,27 @@ h2{
   padding-bottom: 5px;
 }
 
+/*Moves anker links to correct position after click*/
+h2[id]:before { 
+  display: block; 
+  content: " "; 
+  margin-top: -120px; 
+  height: 120px; 
+  visibility: hidden; 
+}
+
+h5{
+	margin: 1px 0px 10px;
+	text-indent: -25px;
+	padding-left: 25px;
+}
+
+h6{
+	margin-top: 10px;
+}
+
 p{
-	margin: 0 0 20px;
+	margin: 0 0 25px;
 }
 
 fieldset{
@@ -48,8 +67,28 @@ legend{
 span.label{
 	margin-right: 5px;
 }
+
+.panel{
+	margin-bottom:10px;
+}
+
 .panel-default>span>img{
 	margin-right: 5px;
+}
+
+.panel-description{
+	float:none;
+}
+
+@media (min-width: 767px) {
+	.panel-description{
+		float:right;
+	}
+}
+
+.panel-heading{
+	cursor: pointer;
+	padding: 5px 15px;
 }
 
 code{
@@ -61,13 +100,26 @@ code{
   background-color: #437AB4;
   color: #FDFDFD;
   font-weight: 400;
-  padding-left: 25px;
+  padding-left: 10px;
 }
 
-@media (max-width: 767px) {
+@media (min-width: 767px) {
 	.container-header {
-		padding-left:5px;	
+		padding-left:25px;
 	}
+	.container-header-top{
+		margin-top: 10px;
+		border-top-left-radius: 10px;
+		border-top-right-radius: 10px;
+	}
+}
+
+.nav>li.fixedWidth{
+	width: 60px;
+}
+
+.navbar-right{
+	margin-right:0;
 }
 
 .navbar-header{
@@ -87,7 +139,9 @@ code{
   border: none;
 }
 
-.navbar-default .navbar-brand{
+.navbar-default .navbar-brand,
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
   color: #FDFDFD;
 }
 
@@ -103,6 +157,11 @@ code{
 .navbar-default .navbar-nav>li>a.active{
 	background-color: #245E9A;
 	border-radius: 4px;
+}
+@media (max-width: 767px) {
+	.navbar-default .navbar-nav>li>a.active{
+		border-radius: 0;
+	}
 }
 
 .navbar-default .navbar-toggle {
@@ -160,12 +219,28 @@ ul.subNavList{
 	color: #FFF;
 	font-weight: inherit;
 	border:0;
+	vertical-align: initial;
 }
 
 .table>tbody>tr>td{
 	border:0;
 	background-color:#f5f5f5;
 }
+
+.table th code{
+	color: #000;
+}
+
+.glyphicon{
+	margin-right: 10px;
+	padding-top: 7px
+}
+
+@media (max-width: 767px) {
+	.glyphicon{
+		visibility: hidden;
+		display: none;
+	}
 }
 
 /* Tables */

@@ -1,14 +1,30 @@
 <div class="panel panel-default">
-  <div  class="panel-heading" role="tab" 
+  <div class="panel-heading"
+        role="tab" 
         id={{ '"heading' | append: linkId | append: '"' }} 
         data-toggle="collapse" 
         href={{ '"#collapse' | append: linkId | append: '"' }} 
         aria-expanded="false" 
         aria-controls={{ '"#collapse' | append: linkId | append: '"' }}>
-    <span class="label label-primary">{{ method }}</span> {{ endpoint }}
-    <span style="float: right;">
-      {{ summary }}
-    </span>
+    <ul class="nav">
+      <li class="navbar-left"><span class="glyphicon glyphicon-menu-right"></span></li>
+      <li class="navbar-left fixedWidth">
+      {% case method %}
+        {% when 'GET' %}
+           {{ site.sections['getLabel'] }}
+        {% when 'POST' %}
+           {{ site.sections['postLabel'] }}
+        {% when 'PUT' %}
+           {{ site.sections['putLabel'] }}
+        {% when 'DELETE' %}
+           {{ site.sections['deleteLabel'] }}
+      {% endcase %}
+      </li>
+      <li class="navbar-left">{{ endpoint }}</li>
+      {% if summary %}
+        <li class="navbar-right">{{ summary}}</li>
+      {% endif %}
+    </ul>
   </div>
   
   <div  id={{ '"collapse' | append: linkId | append: '"' }}
@@ -16,6 +32,7 @@
         role="tabpanel" 
         aria-labelledby={{ '"heading' | append: linkId | append: '"' }}>
     <div class="panel-body">
+      {{ description | markdownify }}
       {% include exampleFieldset.html %}
     </div>
   </div>

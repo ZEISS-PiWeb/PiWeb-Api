@@ -1,20 +1,9 @@
-<!--<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-  Button with data-target
-</button>-->
-<!--
-<div class="collapse" id="collapseExample">
-  Blubb
-</div>-->
+{{  site.headers['example'] | append: exampleCaption | markdownify }}
+{% if comment.size > 0 %}
+  {{ site.images['info'] | append: ' ' | append: comment | markdownify }}
+{% endif %}
+{{ site.headers['request']  | markdownify }}
+{{ jsonrequest | markdownify }}
+{{ site.headers['response']  | markdownify }}
+{{ jsonresponse | markdownify }}
 
-<fieldset>
-  <legend>
-    {{  site.images['document-info'] | append: ' Example: ' | append: exampleCaption | markdownify }}
-  </legend>
-  {% if comment.size > 0 %}
-    {{ site.images['info'] | append: ' ' | append: comment | markdownify }}
-  {% endif %}
-  {{ site.headers['request']  | markdownify }}
-  {{ jsonrequest | markdownify }}
-  {{ site.headers['response']  | markdownify }}
-  {{ jsonresponse | markdownify }}
-</fieldset>

@@ -26,16 +26,14 @@ images:
   function-create: "![Create](/PiWeb-Api/images/function-create.png)"
   function-update: "![Update](/PiWeb-Api/images/function-update.png)"
   function-delete: "![Delete](/PiWeb-Api/images/function-delete.png)"
-headers:
-  example: "![Example](/PiWeb-Api/images/document-info.png) Example:"
-  request: "![Request](/PiWeb-Api/images/server-import.png) Request"
-  response: "![Response](/PiWeb-Api/images/server-export.png) Response"
 sections:
-  beginExampleWebService: "<fieldset><legend><span><img src=\"/PiWeb-Api/images/document-info.png\"/></span> Example:</legend>"
-  beginExampleAPI: "<fieldset><legend> Webservice call via API.dll </legend>"
-  endExample: "</fieldset>"
-  endCode: "</div>"
-settings:
-  defaultCodeFormat: "json"
+  getLabel: <span class="label label-primary">GET</span>
+  postLabel: <span class="label label-success">POST</span>
+  putLabel: <span class="label label-warning">PUT</span>
+  deleteLabel: <span class="label label-danger">DELETE</span>
+headers:
+  example: "##### ![Example](/PiWeb-Api/images/document-info.png) Example: "
+  request: "##### Request"
+  response: "##### Response"
 gems:
   - jekyll-redirect-from
