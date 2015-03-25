@@ -449,7 +449,7 @@ HTTP/1.1 201 Created
 {% assign linkId="valuesUpdate" %}
 {% assign method="PUT" %}
 {% assign endpoint="/values" %}
-{% assign summary="Updates values" %}
+{% assign summary="Updates measurements and values" %}
 {% capture description %}
 Updating a measurement does always affect the whole measurement. This means that the whole measurement, including attributes and values, needs to be transfered within the body of the request and is deleted and recreated again on server side.
 {% endcapture %}
@@ -511,3 +511,26 @@ HTTP/1.1 200 OK
 {% endcapture %}
 
 {% include endpointTab.html %}
+
+
+
+
+### Filters
+
+Parameter name      | Possible values [**default value**] | Description <br><br> ```Example```
+--------------------|---------------------|-------------------------------------------------------------
+`measurementUuids`         | Guids of the measurements | Restricts the query to these measurements <br><br> `measurementUuids={5b59cac7-9ecd-403c-aa26-56dd25892421}`
+`partUuids`           | Guids of the parts | Restricts the query to these parts guids <br><br> `partUuids={e42c5327-6258-4c4c-b3e9-6d22c30938b2}`
+`partPath`            | Path of the part | Restricts the query to this part path <br><br> `partPath=/metal%20part` 
+`deep`                | true, **false**     | Determines whether the query should affect all layers. <br> `deep=true` 
+`orderBy`             | ID(s) of the attribute(s) and order direction <br> **4 desc** | Determines which attribute key(s) and which direction the key(s) should be ordered by <br><br> `orderBy:4 asc, 10 desc`
+`searchCondition`     | AttribueKey, Operator and Value| Restricts the query to given condition(s). Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> Multiple restrictions are combined with '+', the format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. The values need to be surrounded by [ and ]. <br><br> `searchCondition=4>[2012-11-13T00:00:00Z]`
+`limitResult`         | i, i∈N | Restricts the number of result items. <br> `limitResult=100`
+`requestedMeasurementAttributes` | IDs of the attributes | Restricts the query to the attributes that should be returned for measurements. <br><br> `requestedMeasurementAttributes={4,8}`
+`requestedValueAttributes` | IDs of the attributes |List of attributes that should be returned for values. <br><br> `requestedValueAttributes={1,8}`
+`characteristicsUuidList` | Uuids of the characteristics | Restricts the query to the characteristics for which values should be returned. <br><br> `characteristicsUuidList={525d15c6-dc70-4ab4-bd3c-8ab2b5780e6b, 8faae7a0-d1e1-4ee2-b3a5-d4526f6ba822}`
+`statistics` | **None**, Simple, Detailed | Indicates how statistical information should be returned: <br>*None* = Return no information<br>*Simple* = Return statistical information including numvber of characteristics out of warning limit, number of characteristics out of tolerance and number of characteristics in warning limit and tolerance<br>Detailed = Return statistical information the same way as *Simple* plus the guid for each characteristic <br><br> `statistics=Simple`
+`aggregation`          | **Measurements**, AggregationMeasurements, All | Specifies which types of measurements will be fetched. <br><br> `aggregation=All`
+
+
+### General Information
