@@ -20,7 +20,7 @@ You can fetch, create, update and delete measurements and values via the followi
 {% assign endpoint="/measurements" %}
 {% assign summary="Fetches measurements" %}
 {% capture description %}
-You can fetch all measurements or certain measurements if you restrict the query by [filter uri parameters](#filters).
+You can fetch all measurements or certain measurements if you restrict the query. Possible filter parameters are `deep`, `searchCondition`, `orderBy`, `limitResult` or `requestedMeasurementAttributes` by [```filter uri parameters```](#filters).
 {% endcapture %}
 {% assign exampleCaption="Fetch measurements newer than 01.01.2015 for the part with the guid e42c5327-6258-4c4c-b3e9-6d22c30938b2" %}
 
@@ -159,3 +159,45 @@ HTTP/1.1 200 OK
 
 {% include endpointTab.html %}
 
+
+{% assign linkId="measurementsDelete" %}
+{% assign method="DELETE" %}
+{% assign endpoint="/measurements" %}
+{% assign summary="Deletes measurements" %}
+{% capture description %}
+There are several possibilities to delete measurements:
+
+* Delete all measurements
+* Delete measurements from a part by its path
+* Delete measurements from parts by its uuids
+* Delete measurements by their uuids
+
+The delete condition may be further restricted by the filter parameter `searchCondition`.
+
+{% assign exampleCaption="Delete the measurement with the uuid 4b59cac7-9ecd-403c-aa26-56dd25892421" %}
+{% assign comment="" %}
+
+{% capture jsonrequest %}
+{% highlight http %}
+POST /dataServiceRest/measurements?partUuids={4b59cac7-9ecd-403c-aa26-56dd25892421} HTTP/1.1
+{% endhighlight %}
+{% endcapture %}
+
+{% capture jsonresponse %}
+{% highlight http %}
+HTTP/1.1 200 OK
+{% endhighlight %}
+
+{% highlight json %}
+{
+   "status":
+   {
+       "statusCode": 200,
+       "statusDescription": "OK"
+   },
+   "category": "Success"
+}
+{% endhighlight %}
+{% endcapture %}
+
+{% include endpointTab.html %}
