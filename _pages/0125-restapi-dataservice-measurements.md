@@ -174,13 +174,13 @@ There are several possibilities to delete measurements:
 
 The delete condition may be further restricted by the filter parameter `searchCondition`.
 
-{% assign exampleCaption="Delete the measurement with the uuid 4b59cac7-9ecd-403c-aa26-56dd25892421" %}
+{% assign exampleCaption="Delete measurements newer than 01.01.2015 and older than 31.03.2015 from the part with the uuid e42c5327-6258-4c4c-b3e9-6d22c30938b2" %}
 {% assign comment="" %}
 {% endcapture %}
 
 {% capture jsonrequest %}
 {% highlight http %}
-POST /dataServiceRest/measurements?partUuids={4b59cac7-9ecd-403c-aa26-56dd25892421} HTTP/1.1
+POST /dataServiceRest/measurements?partUuids={4b59cac7-9ecd-403c-aa26-56dd25892421}&searchCondition=4>[2015-01-01T00:00:00Z]+4<[2015-03-31T23:59:59Z] HTTP/1.1
 {% endhighlight %}
 {% endcapture %}
 
