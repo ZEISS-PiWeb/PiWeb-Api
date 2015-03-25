@@ -516,7 +516,7 @@ HTTP/1.1 200 OK
 
 
 ### Filters
-
+{% capture table %}
 Parameter name      | Possible values [**default value**] | Description <br><br> ```Example```
 --------------------|---------------------|-------------------------------------------------------------
 `measurementUuids`         | Guids of the measurements | Restricts the query to these measurements <br><br> `measurementUuids={5b59cac7-9ecd-403c-aa26-56dd25892421}`
@@ -531,6 +531,7 @@ Parameter name      | Possible values [**default value**] | Description <br><br>
 `characteristicsUuidList` | Uuids of the characteristics | Restricts the query to the characteristics for which values should be returned. <br><br> `characteristicsUuidList={525d15c6-dc70-4ab4-bd3c-8ab2b5780e6b, 8faae7a0-d1e1-4ee2-b3a5-d4526f6ba822}`
 `statistics` | **None**, Simple, Detailed | Indicates how statistical information should be returned: <br>*None* = Return no information<br>*Simple* = Return statistical information including numvber of characteristics out of warning limit, number of characteristics out of tolerance and number of characteristics in warning limit and tolerance<br>Detailed = Return statistical information the same way as *Simple* plus the guid for each characteristic <br><br> `statistics=Simple`
 `aggregation`          | **Measurements**, AggregationMeasurements, All | Specifies which types of measurements will be fetched. <br><br> `aggregation=All`
-
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 ### General Information
