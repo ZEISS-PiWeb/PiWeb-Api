@@ -253,6 +253,6 @@ ul.subNavList{
 	color: #000;
 }
 
-.tooltip-arrow{
-	border-color: #437AB4;	
+.tooltip.top .tooltip-arrow{
+	border-top-color: #437AB4;	
 }
