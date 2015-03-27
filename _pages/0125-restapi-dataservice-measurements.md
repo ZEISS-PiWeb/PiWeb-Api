@@ -22,7 +22,9 @@ You can fetch, create, update and delete measurements and values via the followi
 {% assign endpoint="/measurements" %}
 {% assign summary="Fetches measurements" %}
 {% capture description %}
-You can fetch all measurements or certain measurements. Possible [filter uri parameters](#filters) are `partPath`, `partUuids`, `measurementUuids`, `deep`, `searchCondition`, `order`, `limitResult`, `requestedMeasurementAttributes`, `statistics` and `aggregation`.
+You can fetch all measurements or certain measurements. Possible [filter uri parameters](#filters) are 
+<code data-toggle="tooltip" data-placement="left" title="1<br>2">partPath</code>
+`partPath`, `partUuids`, `measurementUuids`, `deep`, `searchCondition`, `order`, `limitResult`, `requestedMeasurementAttributes`, `statistics` and `aggregation`.
 
 <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="left" title="Tooltip on left">Tooltip on left</button>
 {% endcapture %}
