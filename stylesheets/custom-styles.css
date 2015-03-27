@@ -249,7 +249,7 @@ ul.subNavList{
 	padding: 8px 8px;
 }
 
-.tooltip-inner .code{
+.tooltip-inner code{
 	color: #000;
 }
 
