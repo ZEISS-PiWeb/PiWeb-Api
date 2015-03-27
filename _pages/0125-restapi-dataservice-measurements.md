@@ -535,3 +535,16 @@ Parameter name      | Possible values [**default value**] | Description <br><br>
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 ### General Information
+
+Measurements do always belong to a single inspection plan part. Depending on the purpose, the measured values are included within a measurement or not. Each measurement consists of the following properties:
+
+{% capture table %}
+Name            | Type                 | Description
+----------------|----------------------|------------------------------------------------------------------------------------
+uuid            | Guid                 | Identifies the measurement uniquely.
+partUuid        | Guid                 | The uuid of the part the measurement belongs to.
+attributes      | Attribute[]          | A set of attributes which specifies this measurement.
+lastModified    | DateTime             | Contains the date and time of the last update applied to this measurement.
+characteristics | DataCharacteristic[] | An array of the characteristics which has been measured within the measurement. Each characteristic within this array consits of the uuid it is identified by and an array of attributes which include at least the measured value attribute.
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
