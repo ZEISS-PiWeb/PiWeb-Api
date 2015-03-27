@@ -243,50 +243,16 @@ ul.subNavList{
 	}
 }
 
-/* Tables */
-/*
-table {
-  width:100%;
-  margin-bottom: 32px;
-  text-align: left;
-  border-spacing:1px;
-  border-collapse: inherit;
- }
-
-th {
-  padding: 10px;
-  background: #437AB4;
-  color: #FFF;
-  font-size: 1.1em;
-  font-weight: 400;
- }
-
-td {
-  padding: 10px;
-  background: #F6F6F6;
- }
-*/
-/*
-.affix-top,.affix{
- position: static;
+.tooltip-inner{
+	background-color: #437AB4;
+	text-align: left;
+	padding: 8px 8px;
 }
 
-@media (min-width: 979px) {
-  #sidebar.affix-top {
-    position: static;
-  	margin-top:30px;
-  	width:228px;
-  }
-  
-  #sidebar.affix {
-    position: fixed;
-    top:70px;
-    width:228px;
-  }
+.tooltip-inner .code{
+	color: #000;
 }
 
-#sidebar li.active {
-  border:0 #eee solid;
-  border-right-width:5px;
+.tooltip-arrow{
+	border-left-color: #437AB4;	
 }
-*/
