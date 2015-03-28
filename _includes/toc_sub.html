@@ -24,6 +24,7 @@
 									{% capture url %}{{site.baseurl}}{{ pg.url}}{% endcapture %}
 									{% capture anker %}{{ subSec[1] | slugify }}{% endcapture %}
 									<li><a href="{{url}}#{{ anker }}">{{ subSec[1] }}</a></li>
+									<li><a href="{{ subSec[1] | slugify }}">{{ subSec[1] }}</a></li>
 								{% endif %}
 							{% endfor %}
 							</ul>
