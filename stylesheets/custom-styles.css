@@ -187,12 +187,6 @@ code{
 background-color: #FDFDFD;
 }
 
-@media (min-width: 767px) {
-	div.subNavigation{
-		position: fixed;
-	}
-}
-
 .row{
 	margin-left:0;
 	margin-right:0;
