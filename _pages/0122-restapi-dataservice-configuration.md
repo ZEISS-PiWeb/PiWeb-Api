@@ -82,39 +82,6 @@ GET /dataServiceRest/configuration HTTP/1.1
 {% include endpointTab.html %}
 
 
-{% assign linkId="configurationEndpointDelete1" %}
-{% assign method="DELETE" %}
-{% assign endpoint="/configuration" %}
-{% assign summary="Deletes all attribute definitions" %}
-{% assign description="" %}
-{% assign exampleCaption="Delete all attributes of the current configuration" %}
-
-{% capture jsonrequest %}
-{% highlight http %}
-DELETE /dataServiceRest/configuration HTTP/1.1
-{% endhighlight %}
-{% endcapture %}
-
-{% capture jsonresponse %}
-{% highlight http %}
-HTTP/1.1 200 Ok
-{% endhighlight %}
-
-{% highlight json %}
-{
-   "status":
-   {
-       "statusCode": 200,
-       "statusDescription": "Ok"
-   },
-   "category": "Success"
-}
-{% endhighlight %}
-{% endcapture %}
-
-{% include endpointTab.html %}
-
-
 {% assign linkId="configurationEndpointAdd" %}
 {% assign method="POST" %}
 {% assign endpoint="/configuration/:entityType" %}
@@ -203,6 +170,40 @@ HTTP/1.1 200 Ok
 {% endcapture %}
 
 {% include endpointTab.html %}
+
+
+{% assign linkId="configurationEndpointDelete1" %}
+{% assign method="DELETE" %}
+{% assign endpoint="/configuration" %}
+{% assign summary="Deletes all attribute definitions" %}
+{% assign description="" %}
+{% assign exampleCaption="Delete all attributes of the current configuration" %}
+
+{% capture jsonrequest %}
+{% highlight http %}
+DELETE /dataServiceRest/configuration HTTP/1.1
+{% endhighlight %}
+{% endcapture %}
+
+{% capture jsonresponse %}
+{% highlight http %}
+HTTP/1.1 200 Ok
+{% endhighlight %}
+
+{% highlight json %}
+{
+   "status":
+   {
+       "statusCode": 200,
+       "statusDescription": "Ok"
+   },
+   "category": "Success"
+}
+{% endhighlight %}
+{% endcapture %}
+
+{% include endpointTab.html %}
+
 
 {% assign linkId="configurationEndpointDelete2" %}
 {% assign method="DELETE" %}
