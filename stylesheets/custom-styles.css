@@ -209,7 +209,7 @@ ul.subNavList{
 	padding-left:20px;
 }
 
-.nav>li{
+.nav>li>a{
 	display: inherit;
 }
 
