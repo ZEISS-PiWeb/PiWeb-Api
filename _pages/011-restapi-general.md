@@ -32,7 +32,8 @@ and
 http(s)://serverUri:port/instanceName/RawDataServiceRest
 {% endhighlight %}
 
-The instanceName and https are optional and depend on the server settings.
+
+{{ site.images['info'] }} The instanceName and https are optional and depend on the server settings.
 
 ## {{page.sections['formats']}}
 
@@ -58,13 +59,13 @@ You can restrict requests by attaching several parameters to the endpoint of the
 ?parameter=value[&parameter=value] 
 {% endhighlight %}
 
-example: 
+<br/>Example: 
 
 {% highlight http %}
 ?deep=true&orderBy=4 asc
 {% endhighlight %}
 
-If the parameter contains lists of ids guids it needs to be surrounded by “{“ and “}”, the values within the list are separated by “,”.
+{{ site.images['info'] }} If the parameter contains lists of ids guids it needs to be surrounded by “{“ and “}”, the values within the list are separated by “,”.
 
 ## {{page.sections['envelope']}}
 Every response, excluding streamed data responses, consists of a response envelope which includes meta data and the data returned by the webservice. A typical response envelope looks as follows:
