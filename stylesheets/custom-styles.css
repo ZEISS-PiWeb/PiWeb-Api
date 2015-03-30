@@ -221,7 +221,7 @@ ul.subNavList{
 	display: inline;
 }
 
-.nav>li>a:hover{
+.nav>li:hover{
 	background-color: #FDFDFD;
 	border-left: 1px solid #337ab7;
 	padding-left: 14px;
