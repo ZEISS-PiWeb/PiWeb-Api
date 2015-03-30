@@ -209,6 +209,14 @@ ul.subNavList{
 	padding-left:20px;
 }
 
+.nav>li{
+	display: inherit;
+}
+
+.nav>li>a:hover{
+	background-color: #FDFDFD;
+}
+
 .table{
 	border-spacing: 1px;
 	border-collapse: inherit;
