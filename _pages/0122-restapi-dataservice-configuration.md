@@ -250,7 +250,7 @@ The different types of entites are:
 
 The attributes are either ```AttributeDefinition``` or ```CatalogueAttributeDefinition```.
 {% capture table %}
-###AttributeDefinition
+####AttributeDefinition
 
 Property      | Type                | Description
 --------------|---------------------|--------------------------------------------------------------
@@ -260,7 +260,7 @@ type          | ```AttributeType``` | The attribute's type. *AlphaNumeric*, *Int
 length        | ```ushort```        | The attribute's maximum length. Only set if the type is *AlphaNumeric*
 definitionType| ```string```        | Always has the value 'AttributeDefinition' and is used to differentiate between  ```AttributeDefinition``` and ```CatalogueAttributeDefinition```
 
-###CatalogueAttributeDefinition
+####CatalogueAttributeDefinition
 
 Property      | Type         | Description
 --------------|--------------|------------------------------------------------------------
