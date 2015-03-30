@@ -13,16 +13,6 @@ permalink: /restapi/dataservice/catalogs/
 
 ### Endpoints
 
-Catalogs and catalog entries can be fetched, created, updated and deleted using the following endpoints. These endpoints  provide the following filter parameters:
-
-{% capture table %}
-Parameter name      | Description  <br> `Example` | Accepted by endpoint
---------------------|------------------  ---------|---------------------
-`catalogUuids`      | List of catalogue uuids that restrict the request. <br> `(d7291afb-0a67-4c1e-8bcc-6fc455bcc0e5, 8c376bee-ffe3-4ee4-abb9-a55b492e69ad)` | {{site.sections['getLabel']}} {{site.sections['deleteLabel']}} /catalogs
-`entryIds`          | List of catalogue entry ids that restrict the request. <br> `(1,4)` | <nobr>{{site.sections['deleteLabel'] }} catalogs/:catalogUuid</nobr>
-{% endcapture %}
-{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
-
 {% assign linkId="catalogEndpointGetAll" %}
 {% assign method="GET" %}
 {% assign endpoint="/catalogs" %}
@@ -93,6 +83,58 @@ GET /dataServiceRest/catalogs HTTP/1.1
 {% endcapture %}
 
 {% include endpointTab.html %}
+
+
+{% assign linkId="catalogEndpointGetSingle" %}
+{% assign method="GET" %}
+{% assign endpoint="/catalogs/:catalogUuid" %}
+{% assign summary="Returns the catalog specified by the :catalogUuid" %}
+{% assign description="" %}
+{% assign exampleCaption="Fetching the catalog with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
+
+{% capture jsonrequest %}
+{% highlight http %}
+GET /dataServiceRest/catalogs/8c376bee-ffe3-4ee4-abb9-a55b492e69ad HTTP/1.1
+{% endhighlight %}
+{% endcapture %}
+
+{% capture jsonresponse %}
+{% highlight json %}
+{
+   ...
+   "data":
+   [
+       {
+           "uuid": "8c376bee-ffe3-4ee4-abb9-a55b492e69ad",
+           "name": "InspectorCatalogue",
+           "validAttributes": [ 4092, 4093 ],
+           "catalogueEntries":
+           [
+               {
+                   "key": 0,
+                   "attributes": { "4092": "n.def.", "4093": "n.def." }
+               },
+               {
+                   "key": 1,
+                   "attributes": { "4092": "21", "4093": "Smith" }
+               },
+               {
+                   "key": 2,
+                   "attributes": { "4092": "20", "4093": "Miller" }
+               },
+               {
+                   "key": 3,
+                   "attributes": { "4092": "23", "4093": "Williams" }
+               }
+            ]
+        }
+   ]
+}
+{% endhighlight %}
+{% endcapture %}
+
+{% include endpointTab.html %}
+
 
 {% assign linkId="catalogEndpointCreate" %}
 {% assign method="POST" %}
@@ -237,56 +279,6 @@ HTTP/1.1 200 Ok
 {% include endpointTab.html %}
 
 
-{% assign linkId="catalogEndpointGetSingle" %}
-{% assign method="GET" %}
-{% assign endpoint="/catalogs/:catalogUuid" %}
-{% assign summary="Returns the catalog specified by the :catalogUuid" %}
-{% assign description="" %}
-{% assign exampleCaption="Fetching the catalog with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
-
-{% capture jsonrequest %}
-{% highlight http %}
-GET /dataServiceRest/catalogs/8c376bee-ffe3-4ee4-abb9-a55b492e69ad HTTP/1.1
-{% endhighlight %}
-{% endcapture %}
-
-{% capture jsonresponse %}
-{% highlight json %}
-{
-   ...
-   "data":
-   [
-       {
-           "uuid": "8c376bee-ffe3-4ee4-abb9-a55b492e69ad",
-           "name": "InspectorCatalogue",
-           "validAttributes": [ 4092, 4093 ],
-           "catalogueEntries":
-           [
-               {
-                   "key": 0,
-                   "attributes": { "4092": "n.def.", "4093": "n.def." }
-               },
-               {
-                   "key": 1,
-                   "attributes": { "4092": "21", "4093": "Smith" }
-               },
-               {
-                   "key": 2,
-                   "attributes": { "4092": "20", "4093": "Miller" }
-               },
-               {
-                   "key": 3,
-                   "attributes": { "4092": "23", "4093": "Williams" }
-               }
-            ]
-        }
-   ]
-}
-{% endhighlight %}
-{% endcapture %}
-
-{% include endpointTab.html %}
-
 {% assign linkId="catalogEndpointCreateEntries" %}
 {% assign method="POST" %}
 {% assign endpoint="/catalogs/:catalogUuid" %}
@@ -344,6 +336,20 @@ HTTP/1.1 200 Ok
 {% endcapture %}
 
 {% include endpointTab.html %}
+
+
+### Filters
+
+Catalogs and catalog entries can be fetched, created, updated and deleted using the following endpoints. These endpoints  provide the following filter parameters:
+
+{% capture table %}
+Parameter name      | Description  <br> `Example` | Accepted by endpoint
+--------------------|------------------  ---------|---------------------
+`catalogUuids`      | List of catalogue uuids that restrict the request. <br> `(d7291afb-0a67-4c1e-8bcc-6fc455bcc0e5, 8c376bee-ffe3-4ee4-abb9-a55b492e69ad)` | {{site.sections['getLabel']}} {{site.sections['deleteLabel']}} /catalogs
+`entryIds`          | List of catalogue entry ids that restrict the request. <br> `(1,4)` | <nobr>{{site.sections['deleteLabel'] }} catalogs/:catalogUuid</nobr>
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
+
 
 ### General Information
 
