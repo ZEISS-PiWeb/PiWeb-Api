@@ -209,8 +209,8 @@ ul.subNavList{
 	padding-left:20px;
 }
 
-ul.subNavList>li.active{
-	border-left: 2px solid #337ab7;
+ul.subNavList>li>a:hover {
+	text-decoration: none;
 }
 
 #navbar> .nav>li:hover{
