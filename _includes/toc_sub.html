@@ -1,4 +1,4 @@
-<div data-spy="affix" data-offset-top="60" id="navbar" >
+<div data-spy="affix" data-offset-top="60" >
 {% for node in site.pages %}
 	{% if node.level == 0 and node.area == page.area %}
 		{% for sec in node.sections %}
@@ -9,6 +9,7 @@
 						<li><a {% if pg.category == page.category %}class="bold" {% endif %}href="{{url}}">{{ sec[1] }}</a></li>
 					
 						{% if pg.category == page.category %}
+							<div  id="navbar">
 							<ul class="nav">
 							{% for subSec in pg.sections %}
 								{% assign subPage = nil %}
@@ -25,6 +26,7 @@
 								{% endif %}
 							{% endfor %}
 							</ul>
+							</div>
 						{% endif %}
 					{% endif %}
 				{% endfor %}
