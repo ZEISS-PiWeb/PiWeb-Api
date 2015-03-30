@@ -10,6 +10,7 @@ sections:
    formats: Formats
    codes: Status Codes
    parameter: Url Parameter
+   security: Security
    envelope: Response Envelope
 redirect_from: "/"
 ---
@@ -66,6 +67,9 @@ You can restrict requests by attaching several parameters to the endpoint of the
 {% endhighlight %}
 
 {{ site.images['info'] }} If the parameter contains lists of ids guids it needs to be surrounded by “{“ and “}”, the values within the list are separated by “,”.
+
+## {{page.sections['security']}}
+The access to PiWeb database might be secured by access control settings. 
 
 ## {{page.sections['envelope']}}
 Every response, excluding streamed data responses, consists of a response envelope which includes meta data and the data returned by the webservice. A typical response envelope looks as follows:
