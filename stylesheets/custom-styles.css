@@ -210,7 +210,7 @@ ul.subNavList{
 }
 
 .nav>li.active {
-	border-left: 1px solid #337ab7;
+	border-left: 2px solid #337ab7;
 }
 
 .nav>li.active>a {
@@ -223,6 +223,8 @@ ul.subNavList{
 
 .nav>li>a:hover{
 	background-color: #FDFDFD;
+	border-left: 1px solid #337ab7;
+	padding-left: 14px;
 }
 
 .table{
