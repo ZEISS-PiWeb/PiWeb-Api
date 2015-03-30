@@ -13,6 +13,8 @@ permalink: /restapi/dataservice/catalogs/
 
 ### Endpoints
 
+Catalogs and catalog entries can be fetched, created, updated and deleted using the following endpoints.
+
 {% assign linkId="catalogEndpointGetAll" %}
 {% assign method="GET" %}
 {% assign endpoint="/catalogs" %}
@@ -340,7 +342,7 @@ HTTP/1.1 200 Ok
 
 ### Filters
 
-Catalogs and catalog entries can be fetched, created, updated and deleted using the following endpoints. These endpoints  provide the following filter parameters:
+These endpoints  provide the following filter parameters:
 
 {% capture table %}
 Parameter name      | Description  <br> `Example` | Accepted by endpoint
