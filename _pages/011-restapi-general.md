@@ -69,7 +69,15 @@ You can restrict requests by attaching several parameters to the endpoint of the
 {{ site.images['info'] }} If the parameter contains lists of ids guids it needs to be surrounded by “{“ and “}”, the values within the list are separated by “,”.
 
 ## {{page.sections['security']}}
-The access to PiWeb database might be secured by access control settings. 
+The access to PiWeb server might be secured by access control settings. Authentication might be Basic Authentification based on username/password credentials or Windows Authentication based on Active Directory integration.
+
+If PiWeb server is secured by Basic Authentication you have to pass the credentials within the HTTP Authorization header. The Authorization header must contain the `Basic` key word followed by base64 encoded `user:password` string:
+
+{% highlight http %}
+
+Authorization: Basic QWRtaW5pc3RyYXRvcjphZG0hbiFzdHJhdDBy
+
+{% endhighlight %}
 
 ## {{page.sections['envelope']}}
 Every response, excluding streamed data responses, consists of a response envelope which includes meta data and the data returned by the webservice. A typical response envelope looks as follows:
