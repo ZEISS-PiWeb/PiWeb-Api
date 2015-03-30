@@ -9,8 +9,8 @@
 						<li><a {% if pg.category == page.category %}class="bold" {% endif %}href="{{url}}">{{ sec[1] }}</a></li>
 					
 						{% if pg.category == page.category %}
-							<div  id="navbar">
-							<ul class="nav">
+							<div  >
+							<ul class="nav" id="navbar">
 							{% for subSec in pg.sections %}
 								{% assign subPage = nil %}
 								{% for spg in site.pages %}
