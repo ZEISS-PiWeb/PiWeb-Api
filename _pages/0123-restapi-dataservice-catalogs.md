@@ -192,6 +192,37 @@ HTTP/1.1 201 Created
 
 {% include endpointTab.html %}
 
+{% assign linkId="catalogEndpointCreateEntries" %}
+{% assign method="POST" %}
+{% assign endpoint="/catalogs/:catalogUuid" %}
+{% assign summary=" Creates entries for the catalog specified by the :catalogueUuid" %}
+{% assign description="To add new entries to an existing catalog you must specify all new entries in the request body. Each new entry must contain a unique key. Each entry attribute must be listed as a valid attributes in the catalog definition." %}
+{% assign exampleCaption="Adding a catalog entry - add the inspector ‘Clarks’" %}
+
+{% capture jsonrequest %}
+{% highlight http %}
+POST /dataServiceRest/catalogues/8c376bee-ffe3-4ee4-abb9-a55b492e69ad/entries
+{% endhighlight %}
+
+{% highlight json %}
+ [
+   {
+       "key": 4,
+       "attributes": { "4092": "22", "4093": "Clarks" }
+   }
+ ]
+{% endhighlight %}
+{% endcapture %}
+
+{% capture jsonresponse %}
+{% highlight http %}
+HTTP/1.1 201 Created
+{% endhighlight %}
+{% endcapture %}
+
+{% include endpointTab.html %}
+
+
 {% assign linkId="catalogEndpointUpdate" %}
 {% assign method="PUT" %}
 {% assign endpoint="/catalogs" %}
@@ -275,37 +306,6 @@ DELETE /dataServiceRest/catalogues?catalogUuids=(8c376bee-ffe3-4ee4-abb9-a55b492
 {% capture jsonresponse %}
 {% highlight http %}
 HTTP/1.1 200 Ok
-{% endhighlight %}
-{% endcapture %}
-
-{% include endpointTab.html %}
-
-
-{% assign linkId="catalogEndpointCreateEntries" %}
-{% assign method="POST" %}
-{% assign endpoint="/catalogs/:catalogUuid" %}
-{% assign summary=" Creates entries for the catalog specified by the :catalogueUuid" %}
-{% assign description="To add new entries to an existing catalog you must specify all new entries in the request body. Each new entry must contain a unique key. Each entry attribute must be listed as a valid attributes in the catalog definition." %}
-{% assign exampleCaption="Adding a catalog entry - add the inspector ‘Clarks’" %}
-
-{% capture jsonrequest %}
-{% highlight http %}
-POST /dataServiceRest/catalogues/8c376bee-ffe3-4ee4-abb9-a55b492e69ad/entries
-{% endhighlight %}
-
-{% highlight json %}
- [
-   {
-       "key": 4,
-       "attributes": { "4092": "22", "4093": "Clarks" }
-   }
- ]
-{% endhighlight %}
-{% endcapture %}
-
-{% capture jsonresponse %}
-{% highlight http %}
-HTTP/1.1 201 Created
 {% endhighlight %}
 {% endcapture %}
 
