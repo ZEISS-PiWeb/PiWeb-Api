@@ -210,7 +210,7 @@ ul.subNavList{
 }
 
 .nav>li>a{
-	display: inherit;
+	display: inline;
 }
 
 .nav>li>a:hover{
