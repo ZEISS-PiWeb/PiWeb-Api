@@ -24,7 +24,7 @@ The base addresses for the REST based services are:
 http(s)://serverUri:port/instanceName/DataServiceRest
 {% endhighlight %}
 
-and
+<br/>and
 
 ### Raw Data Service
 
@@ -32,7 +32,7 @@ and
 http(s)://serverUri:port/instanceName/RawDataServiceRest
 {% endhighlight %}
 
-
+<br/>
 {{ site.images['info'] }} The instanceName and https are optional and depend on the server settings.
 
 ## {{page.sections['formats']}}
