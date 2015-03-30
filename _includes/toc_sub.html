@@ -20,7 +20,7 @@
 								{% endfor %}
 								{% if subPage %}
 									{% capture url %}{{site.baseurl}}{{ subPage.url}}{% endcapture %}
-									<li><a {% if subPage.url == page.url %}class="bold" {% endif %}href="{{url}}">{{ subPage.pageTitle }}</a></li>	
+									<li {% if subPage.url == page.url %}class="active" {% endif %}><a href="{{url}}">{{ subPage.pageTitle }}</a></li>	
 								{% else %}
 									<li><a href="#{{ subSec[1] | slugify }}">{{ subSec[1] }}</a></li>
 								{% endif %}
