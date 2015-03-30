@@ -210,7 +210,7 @@ ul.subNavList{
 }
 
 #navbar> .nav>li:hover{
-	border-left: 2px solid #437AB4;
+	border-left: 2px dotted #437AB4;
 }
 
 .nav>li.active {
