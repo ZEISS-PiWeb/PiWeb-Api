@@ -209,6 +209,14 @@ ul.subNavList{
 	padding-left:20px;
 }
 
+.nav>li.active {
+	border-left: 1px solid #337ab7;
+}
+
+.nav>li.active>a {
+	padding-left: 13px;
+}
+
 .nav>li>a{
 	display: inline;
 }
