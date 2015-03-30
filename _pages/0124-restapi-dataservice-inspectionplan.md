@@ -53,6 +53,43 @@ GET /dataServiceRest/parts?partPath=/metal%20part&depth=0 HTTP/1.1
 {% include endpointTab.html %}
 
 
+{% assign linkId="inspectionPlanEndpointGetPart" %}
+{% assign method="GET" %}
+{% assign endpoint="/parts/:partUuid" %}
+{% assign summary="Fetches a certain part by its :partUuid" %}
+{% assign description="" %}
+{% assign exampleCaption="Fetch the part '/metal part' by its guid" %}
+
+{% capture jsonrequest %}
+{% highlight http %}
+GET /dataServiceRest/parts/05040c4c-f0af-46b8-810e-30c0c00a379e HTTP/1.1
+{% endhighlight %}
+{% endcapture %}
+
+{% capture jsonresponse %}
+{% highlight json %}
+{
+   ...
+   "data":
+   [
+      {
+           "path": "P:/metal part/",
+           "charChangeDate": "2014-11-19T10:48:32.917Z",
+           "attributes": {},
+           "uuid": "05040c4c-f0af-46b8-810e-30c0c00a379e",
+           "version": 0,
+           "timestamp": "2012-11-19T10:48:32.887Z",
+           "current": true
+       }
+   ]
+}
+{% endhighlight %}
+{% endcapture %}
+
+{% include endpointTab.html %}
+
+
+
 {% assign linkId="inspectionPlanEndpointAddParts" %}
 {% assign method="POST" %}
 {% assign endpoint="/parts" %}
@@ -187,44 +224,6 @@ HTTP/1.1 200 Ok
 {% include endpointTab.html %}
 
 
-
-{% assign linkId="inspectionPlanEndpointGetPart" %}
-{% assign method="GET" %}
-{% assign endpoint="/parts/:partUuid" %}
-{% assign summary="Fetches a certain part by its :partUuid" %}
-{% assign description="" %}
-{% assign exampleCaption="Fetch the part '/metal part' by its guid" %}
-
-{% capture jsonrequest %}
-{% highlight http %}
-GET /dataServiceRest/parts/05040c4c-f0af-46b8-810e-30c0c00a379e HTTP/1.1
-{% endhighlight %}
-{% endcapture %}
-
-{% capture jsonresponse %}
-{% highlight json %}
-{
-   ...
-   "data":
-   [
-      {
-           "path": "P:/metal part/",
-           "charChangeDate": "2014-11-19T10:48:32.917Z",
-           "attributes": {},
-           "uuid": "05040c4c-f0af-46b8-810e-30c0c00a379e",
-           "version": 0,
-           "timestamp": "2012-11-19T10:48:32.887Z",
-           "current": true
-       }
-   ]
-}
-{% endhighlight %}
-{% endcapture %}
-
-{% include endpointTab.html %}
-
-
-
 {% assign linkId="inspectionPlanEndpointDeletePart" %}
 {% assign method="DELETE" %}
 {% assign endpoint="/parts/:partUuid" %}
@@ -313,6 +312,41 @@ GET /dataServiceRest/characteristics?partPath=/metal%20part&depth=2 HTTP/1.1
            "uuid": "1175919c-5c59-487e-a0fb-deac04510046",
            "version": 0,
            "timestamp": "2015-03-24T08:17:38.423Z",
+           "current": true
+       }
+   ]
+}
+{% endhighlight %}
+{% endcapture %}
+
+{% include endpointTab.html %}
+
+
+{% assign linkId="inspectionPlanEndpointGetChar" %}
+{% assign method="GET" %}
+{% assign endpoint="/characteristics/:charUuid" %}
+{% assign summary="Fetches a certain characteristics by its :charUuid" %}
+{% assign description="" %}
+{% assign exampleCaption="Fetch the characteristics '/metal part/deviation_3' by its guid" %}
+
+{% capture jsonrequest %}
+{% highlight http %}
+GET /dataServiceRest/characteristics/27e23a7c-dbe7-4863-8461-6abf7b03ddd7 HTTP/1.1
+{% endhighlight %}
+{% endcapture %}
+
+{% capture jsonresponse %}
+{% highlight json %}
+{
+   ...
+   "data":
+   [
+      {
+           "path": "PC:/metal part/deviation_3/",
+           "attributes": { ... },
+           "uuid": "27e23a7c-dbe7-4863-8461-6abf7b03ddd7",
+           "version": 0,
+           "timestamp": "2012-11-19T10:48:32.887Z",
            "current": true
        }
    ]
@@ -461,43 +495,6 @@ HTTP/1.1 200 Ok
 {% endcapture %}
 
 {% include endpointTab.html %}
-
-
-
-{% assign linkId="inspectionPlanEndpointGetChar" %}
-{% assign method="GET" %}
-{% assign endpoint="/characteristics/:charUuid" %}
-{% assign summary="Fetches a certain characteristics by its :charUuid" %}
-{% assign description="" %}
-{% assign exampleCaption="Fetch the characteristics '/metal part/deviation_3' by its guid" %}
-
-{% capture jsonrequest %}
-{% highlight http %}
-GET /dataServiceRest/characteristics/27e23a7c-dbe7-4863-8461-6abf7b03ddd7 HTTP/1.1
-{% endhighlight %}
-{% endcapture %}
-
-{% capture jsonresponse %}
-{% highlight json %}
-{
-   ...
-   "data":
-   [
-      {
-           "path": "PC:/metal part/deviation_3/",
-           "attributes": { ... },
-           "uuid": "27e23a7c-dbe7-4863-8461-6abf7b03ddd7",
-           "version": 0,
-           "timestamp": "2012-11-19T10:48:32.887Z",
-           "current": true
-       }
-   ]
-}
-{% endhighlight %}
-{% endcapture %}
-
-{% include endpointTab.html %}
-
 
 
 {% assign linkId="inspectionPlanEndpointDeleteChar" %}
