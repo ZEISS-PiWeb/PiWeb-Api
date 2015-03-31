@@ -345,10 +345,10 @@ HTTP/1.1 200 Ok
 These endpoints  provide the following filter parameters:
 
 {% capture table %}
-Parameter name      | Description  <br> `Example` 
---------------------|------------------  ------------------------------
-`catalogUuids`      | List of catalogue uuids that restrict the request. <br> `(d7291afb-0a67-4c1e-8bcc-6fc455bcc0e5, 8c376bee-ffe3-4ee4-abb9-a55b492e69ad)`
-`entryIds`          | List of catalogue entry ids that restrict the request. <br> `(1,4)`
+Parameter name | Description
+---------------|------------------  ------------------------------
+`catalogUuids` | List of catalogue uuids that restrict the request. <br> `{d7291afb-0a67-4c1e-8bcc-6fc455bcc0e5, 8c376bee-ffe3-4ee4-abb9-a55b492e69ad}`
+`entryIds`     | List of catalogue entry ids that restrict the request. <br> `{1,4}`
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
@@ -356,26 +356,26 @@ Parameter name      | Description  <br> `Example`
 ### General Information
 
 Each catalog describes a list of entries. All entries have the same defined set of attributes, called *valid attributes*. 
-All valid attributes must be created as *catalog attributes* beforehand. ```Catalog``` and ```CatalogEntry```have the following structures:
+All valid attributes must be created as *catalog attributes* beforehand. `Catalog` and `CatalogEntry`have the following structures:
 
 #### Catalog
 
 {% capture table %}
-Property         | Datatype             | Description
------------------|----------------------|------------------------
-uuid             | ```Guid```           | Identifies the catalog uniquely
-name             | ```string```         | Name of the catalog
-validAttributes  | ```ushort[]```       | A list of attribute keys that are valid for this catalog
-catalogEntries   | ```CatalogEntry```   | A list of catalog entries
+Property                      | Description
+------------------------------|----------------------------------------------
+`Guid` uuid                   | Identifies the catalog uniquely
+`string` name                 | The name of the catalog
+`ushort[]` validAttributes    | A list of attribute keys that are valid for this catalog
+`CatalogEntry` catalogEntries | A list of catalog entries
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 #### CatalogEntry
 
 {% capture table %}
-Property         | Datatype             | Description
------------------|----------------------|------------------------
-key              | ```short```          | Specifies the entry's order within the catalog
-attributes       | ```Attribute[]```    | A list of attributes which consists of key and value. The keys must be from the validAttributes.
+Property                 | Description
+-------------------------|----------------------------------------------------
+`short` key              | Specifies the entry's order within the catalog
+`Attribute[]` attributes | A list of attributes which consists of key and value. The keys must be from the validAttributes.
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}

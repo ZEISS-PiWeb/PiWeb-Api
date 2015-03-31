@@ -64,7 +64,7 @@ GET /dataServiceRest/measurements?partUuids=(e42c5327-6258-4c4c-b3e9-6d22c30938b
 {% assign method="GET" %}
 {% assign endpoint="/measurements/:measUuid" %}
 {% assign summary="Fetches a measurement by its :measUuid" %}
-{% assign description="The request can be restricted by [```filter uri parameters```](#filters). Possible filters are `requestedMeasurementAttributes`, `statistics` and `aggregation`." %}
+{% assign description="The request can be restricted by [`filter uri parameters`](#filters). Possible filters are `requestedMeasurementAttributes`, `statistics` and `aggregation`." %}
 
 {% assign exampleCaption="Fetch a measurement by its guid" %}
 
@@ -338,7 +338,7 @@ GET /dataservicerest/values?partUuids=(05040c4c-f0af-46b8-810e-30c0c00a379e)&sea
 {% assign method="GET" %}
 {% assign endpoint="/values/:measUuid" %}
 {% assign summary="Fetches a measurement including measured values by its :measUuid" %}
-{% assign description="The request can be restricted by [```filter uri parameters```](#filters). Possible filters are `requestedMeasurementAttributes`, `requestedValueAttributes`, `characteristicUuids` and `aggregation`." %}
+{% assign description="The request can be restricted by [`filter uri parameters`](#filters). Possible filters are `requestedMeasurementAttributes`, `requestedValueAttributes`, `characteristicUuids` and `aggregation`." %}
 
 {% assign exampleCaption="Fetch a measurement including  all values by its guid" %}
 
@@ -520,7 +520,7 @@ HTTP/1.1 200 OK
 
 ### Filters
 {% capture table %}
-Parameter name      | Possible values [**default value**] | Description <br><br> ```Example```
+Parameter name      | Possible values [**default value**] | Description
 --------------------|---------------------|-------------------------------------------------------------
 `measurementUuids`         | Guids of the measurements | Restricts the query to these measurements <br><br> `measurementUuids={5b59cac7-9ecd-403c-aa26-56dd25892421}`
 `partUuids`           | Guids of the parts | Restricts the query to these parts guids <br><br> `partUuids={e42c5327-6258-4c4c-b3e9-6d22c30938b2}`
@@ -542,12 +542,12 @@ Parameter name      | Possible values [**default value**] | Description <br><br>
 Measurements do always belong to a single inspection plan part. Depending on the purpose, the measured values are included within a measurement or not. Each measurement consists of the following properties:
 
 {% capture table %}
-Name            | Type                 | Description
-----------------|----------------------|------------------------------------------------------------------------------------
-uuid            | Guid                 | Identifies the measurement uniquely.
-partUuid        | Guid                 | The uuid of the part the measurement belongs to.
-attributes      | Attribute[]          | A set of attributes which specifies this measurement.
-lastModified    | DateTime             | Contains the date and time of the last update applied to this measurement.
-characteristics | DataCharacteristic[] | An array of the characteristics which has been measured within the measurement. Each characteristic within this array consits of the uuid it is identified by and an array of attributes which include at least the measured value attribute.
+Property                               | Description
+---------------------------------------|------------------------------------------------------------------------------------
+`Guid` uuid                            | Identifies the measurement uniquely.
+`Guid` partUuid                        | The uuid of the part the measurement belongs to.
+attributes                             | A set of attributes which specifies this measurement.
+`DateTime` lastModified                | Contains the date and time of the last update applied to this measurement.
+`DataCharacteristic[]` characteristics | An array of the characteristics which has been measured within the measurement. Each characteristic within this array consits of the uuid it is identified by and an array of attributes which include at least the measured value attribute.
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}

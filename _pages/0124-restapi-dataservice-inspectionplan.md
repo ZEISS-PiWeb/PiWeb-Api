@@ -542,8 +542,8 @@ HTTP/1.1 200 Ok
 The described endpoints provide the following filters:
 
 {% capture table %}
-Parameter name      | Possible values [**default value**] | Description  <br> ```Example```
---------------------|------------------------------       |--------------------------------
+Parameter name        | Possible values [**default value**] | Description
+----------------------|-------------------------------------|--------------------------------
 `partUuids`           | Guids of the parts | Restricts the query to these parts guids 
 `partPath`            | Path of the part | Restricts the query to this part path  
 `charUuids`           | Guids of the characteristics | Restricts the query to these characteristics guids 
@@ -560,15 +560,15 @@ Parameter name      | Possible values [**default value**] | Description  <br> ``
 Both parts and characteristics are PiWeb inspection plan entities. They consists of the following properties:
 
 {% capture table %}
-Name | Type | Description
------|------|--------------
-uuid | ```Guid``` | Identifies this inspection plan entity uniquely.
-path | ```PathInformation``` | The path of this entity.
-attributes | ```Attribute``` | A set of attributes which specifies this entity.
-comment | ```string``` | A comment which describes the last inspection plan change.
-version | ```int``` | Contains the revision number of the entity. The revision number starts with zero and is incremented by one each time when changes are applied to the inspection plan. The version is only returned in case versioning is enabled in the server settings.
-current | ```bool``` | Indicates whether the entity is the current version.
-timeStamp | ```dateTime``` | Contains the date and time of the last update applied to this entity.
-charChangeDate *(Part only)* |  ```dateTime``` | The timestamp for the most recent characteristic change on any characteristic that belongs to this part
+Property                  | Description
+--------------------------|-----------------------
+`Guid` uuid               | Identifies this inspection plan entity uniquely
+`PathInformation` path    | The path of this entity
+`Attribute` attributes    | A set of attributes which specifies this entity
+`string` comment          | A comment which describes the last inspection plan change
+`int` version             | Contains the revision number of the entity. The revision number starts with zero and is incremented by one each time when changes are applied to the inspection plan. The version is only returned in case versioning is enabled in the server settings
+`bool` current            | Indicates whether the entity is the current version
+timeStamp | `dateTime`    | Contains the date and time of the last update applied to this entity
+`dateTime` charChangeDate | *(Part only)* The timestamp for the most recent characteristic change on any characteristic that belongs to this part
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}

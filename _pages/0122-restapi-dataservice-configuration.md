@@ -248,25 +248,25 @@ The different types of entites are:
 * *values* and 
 * *catalogues*.
 
-The attributes are either ```AttributeDefinition``` or ```CatalogueAttributeDefinition```.
+The attributes are either `AttributeDefinition` or `CatalogueAttributeDefinition`.
 {% capture table %}
 ####AttributeDefinition
 
-Property      | Type                | Description
---------------|---------------------|--------------------------------------------------------------
-key           | ```ushort```        | The attribute's key, by which the attribute can be uniquely identified
-description   | ```string```        | The attribute's name or a short description 
-type          | ```AttributeType``` | The attribute's type. *AlphaNumeric*, *Integer*, *Float* or *DateTime*
-length        | ```ushort```        | The attribute's maximum length. Only set if the type is *AlphaNumeric*
-definitionType| ```string```        | Always has the value 'AttributeDefinition' and is used to differentiate between  ```AttributeDefinition``` and ```CatalogueAttributeDefinition```
+Property                | Description
+------------------------|--------------------------------------------------------------
+`ushort` key            | The attribute's key, by which the attribute can be uniquely identified
+`string` description    | The attribute's name or a short description 
+`AttributeType` type    | The attribute's type. *AlphaNumeric*, *Integer*, *Float* or *DateTime*
+`ushort` length         | The attribute's maximum length. Only set if the type is *AlphaNumeric*
+`string` definitionType | Always has the value 'AttributeDefinition' and is used to differentiate between  `AttributeDefinition` and `CatalogueAttributeDefinition`
 
 ####CatalogueAttributeDefinition
 
-Property      | Type         | Description
---------------|--------------|------------------------------------------------------------
-key           | ```ushort``` | The attribute's key, by which the attribute can be uniquely identified
-description   | ```string``` | The attribute's name or a short description 
-catalogue     | ```Guid```   | The uuid of the catalogue that contains the attribute's values
-definitionType| ```string``` | Always has the value 'CatalogueAttributeDefinition' and is used to differentiate between  ```AttributeDefinition``` and ```CatalogueAttributeDefinition```
+Property                 | Description
+-------------------------|------------------------------------------------------------
+`ushort` key             | The attribute's key, by which the attribute can be uniquely identified
+`string` description     | The attribute's name or a short description 
+`Guid` catalogue         | The uuid of the catalogue that contains the attribute's values
+`string` definitionType  | Always has the value 'CatalogueAttributeDefinition' and is used to differentiate between  `AttributeDefinition` and `CatalogueAttributeDefinition`
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
