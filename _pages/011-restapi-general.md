@@ -43,12 +43,12 @@ The input and output format is JSON as it is the most performance and memory eff
 ## {{page.sections['codes']}}
 
 {% capture table %}
-Method        | Statuscode Ok        | Statuscode Failure                                       | Comment
-------------- | :------------------- | -------------------------------------------------------- | -------
-GET           | **200** (OK)         | **400** (Bad request) - Request failed <br> **404** (Not found) - Endpoint(s) or item does not exist | --- <br> If none of the requested items exist, status code 404 is returned. Otherwise status code 200 is returned.
-POST           | **201** (Created)    | **400** (Bad request) – Request failed, e.g. due to bad formatting <br> **404** (Not found) – Endpoint doesn't exist <br> **409** (Conflict) – Resource already exists | Status code 400 is returned if the creation of at least one item failed. <br> --- <br><br> Status code 409 is returned if one or more items already existed.
-PUT          | **200** (Ok)         | **400** (Bad request) –  Request failed, e.g. due to bad formatting <br> **404** (Not found) – Endpoint or item(s) doesn't exist | Status code 400 is returned if the update of at least one item failed. <br> Status code 404 is returned if one or more items didn't exist.
-DELETE        | **200** (Ok) | **400** (Bad request) – Request failed <br><br> **404** (Not found) – Endpoint or item(s) doesn't exist | Status code 400 is returned if deletion of one or more items failed. <br> Status code 404 is returned if none of the requested items exist.
+Method        | Statuscode Ok        | Statuscode Failure                                       
+------------- | :------------------- | ----------------------------------------------------------------
+GET           | **200** (OK)         | **400** (Bad request) - Request failed <br> **404** (Not found) - Endpoint or item does not exist 
+POST           | **201** (Created)    | **400** (Bad request) – Creation of at least one item failed, e.g. due to bad formatting <br> **404** (Not found) – Endpoint doesn't exist <br> **409** (Conflict) – An item does already exist
+PUT          | **200** (Ok)         | **400** (Bad request) –  Update of at least one item failed, e.g. due to bad formatting <br> **404** (Not found) – Endpoint or item(s) doesn't exist
+DELETE        | **200** (Ok) | **400** (Bad request) – Request of at least one item failed <br><br> **404** (Not found) – Endpoint or items do not exist
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
