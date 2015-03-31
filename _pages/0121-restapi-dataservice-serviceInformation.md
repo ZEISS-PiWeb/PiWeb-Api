@@ -68,21 +68,21 @@ Service information requests always have the smallest response time and are ther
 The returned ServiceInformation object has the following properties:
 
 {% capture table %}
-Property                           | Description
------------------------------------|---------------------------------------------------------------
-<code>string</code> serverName                | The name of the PiWeb server as specified in the server settings dialog
-<code>string</code> version                   | The version number of the PiWeb server
-<code>bool</code> securityEnabled             | Indicates whether authentication is required by the server
-<code>string</code> edition                   | The database edition. Usually this is "PiWebDB"
-<code>string</code> versionWsdlMajor          | The major version number of the interface
-<code>string</code> versionWsdlMinor          | The minor version number of the interface
-<code>int</code> partCount                    | The estimated number of parts stored on the server
-<code>int</code> characteristicCount          | The estimated number of characteristics stored on the server
-<code>int</code> measurementCount             | The estimated number of measurements stored on the server
-<code>int</code> valueCount                   | The estimated number of measured values stored on the server
-<code>Features</code> featureList             | A list of features supported by the server. This can be *MeasurementAggregation* or *DistinctMeasurementSearch*
-<code>DateTime</code> inspectionPlanTimestamp | Timestamp of the last inspection plan modification
-<code>DateTime</code> measurementTimestamp    | Timestamp of the last measurement modification
-<code>DateTime</code> configurationTimestamp  | Timestamp of the last configuration modification
+Property                                                   | Description
+-----------------------------------------------------------|---------------------------------------------------------------
+<nobr><code>string</code> serverName</nobr>                | The name of the PiWeb server as specified in the server settings dialog
+<nobr><code>string</code> version</nobr>                   | The version number of the PiWeb server
+<nobr><code>bool</code> securityEnabled</nobr>             | Indicates whether authentication is required by the server
+<nobr><code>string</code> edition</nobr>                   | The database edition. Usually this is "PiWebDB"
+<nobr><code>string</code> versionWsdlMajor</nobr>          | The major version number of the interface
+<nobr><code>string</code> versionWsdlMinor</nobr>          | The minor version number of the interface
+<nobr><code>int</code> partCount</nobr>                    | The estimated number of parts stored on the server
+<nobr><code>int</code> characteristicCount</nobr>          | The estimated number of characteristics stored on the server
+<nobr><code>int</code> measurementCount</nobr>             | The estimated number of measurements stored on the server
+<nobr><code>int</code> valueCount</nobr>                   | The estimated number of measured values stored on the server
+<nobr><code>Features</code> featureList</nobr>             | A list of features supported by the server. This can be *MeasurementAggregation* or *DistinctMeasurementSearch*
+<nobr><code>DateTime</code> inspectionPlanTimestamp</nobr> | Timestamp of the last inspection plan modification
+<nobr><code>DateTime</code> measurementTimestamp</nobr>    | Timestamp of the last measurement modification
+<nobr><code>DateTime</code> configurationTimestamp</nobr>  | Timestamp of the last configuration modification
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
