@@ -24,11 +24,11 @@ You can fetch, create, update and delete parts and characteristics via the follo
 {% capture description %}
 You can fetch all parts or certain parts. Possible [filter uri parameters](#filters) are `partUuids`, `partPath`, `depth`, `withHistory` and `partAttributes`.
 {% endcapture %}
-{% assign exampleCaption="Fetch the part with the path '/metal part' without possible child parts" %}
+{% assign exampleCaption="Fetch a part by its path '/metal part' without possible child parts restricted to several attributes" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
-GET /dataServiceRest/parts?partPath=/metal%20part&depth=0 HTTP/1.1
+GET /dataServiceRest/parts?partPath=/metal%20part&depth=0&partAttributes={1001,1003} HTTP/1.1
 {% endhighlight %}
 {% endcapture %}
 
@@ -41,7 +41,7 @@ GET /dataServiceRest/parts?partPath=/metal%20part&depth=0 HTTP/1.1
       {
            "path": "P:/metal part/",
            "charChangeDate": "2014-11-19T10:48:32.917Z",
-           "attributes": {},
+           "attributes": { "1001": "4466", "1003": "mp" },
            "uuid": "05040c4c-f0af-46b8-810e-30c0c00a379e",
            "version": 0,
            "timestamp": "2012-11-19T10:48:32.887Z",
