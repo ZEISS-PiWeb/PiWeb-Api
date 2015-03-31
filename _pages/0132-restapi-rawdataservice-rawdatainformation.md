@@ -121,15 +121,15 @@ GET /rawDataServiceRest/rawData/part/05040c4c-f0af-46b8-810e-30c0c00a379e HTTP/1
 The returned objects contains the following properties:
 
 {% capture table %}
-Property         | Datatype         | Description
------------------|------------------|------------------------
-target           | `TargetEntity`   |  Specifies a concrete entity for a raw data object and consits of the entity's type (Part, Characteristic, Measurement, Value) and guid. If raw data is attached to an entity of type `Value`, the `uuid` contains a compound key in the following format: `{MeasurementUuid}|{CharacteristicUuid}`
-key              | `int`            | This is a unique key that identifies this specific raw data object for a corresponding entity. An entity can have multiple raw data object that are distinct by this key.
-fileName         | `string`         | The filename of the raw data object. Please note that this filename is not unique (unlike filenames in traditional file systems).
-mimeType         | `string`         | The file's mime type. 
-lastModified     | `DateTime`       | The timestamp of the last modification of the corresponding raw data object
-created          | `DateTime`       | The timestamp of the creation of the corresponding raw data object
-size             | `ìnt`            | The size of the raw data object in bytes
-md5              | `string`         | The MD5-Hash of the raw data object
+Property                             | Description
+-----------------|-------------------|------------------------
+<nobr>target `TargetEntity`</nobr>   | Specifies a concrete entity for a raw data object and consits of the entity's type (Part, Characteristic, Measurement, Value) and guid. If raw data is attached to an entity of type `Value`, the `uuid` contains a compound key in the following format: `{MeasurementUuid}|{CharacteristicUuid}`
+<nobr>key `int`</nobr>               | This is a unique key that identifies this specific raw data object for a corresponding entity. An entity can have multiple raw data object that are distinct by this key.
+<nobr>fileName `string`</nobr>       | The filename of the raw data object. Please note that this filename is not unique (unlike filenames in traditional file systems).
+<nobr>mimeType `string`</nobr>       | The file's mime type. 
+<nobr>lastModified `DateTime`</nobr> | The timestamp of the last modification of the corresponding raw data object
+<nobr>created `DateTime`</nobr>      | The timestamp of the creation of the corresponding raw data object
+<nobr>size `int`</nobr>              | The size of the raw data object in bytes
+<nobr>md5 `string`</nobr>            | The MD5-Hash of the raw data object
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
