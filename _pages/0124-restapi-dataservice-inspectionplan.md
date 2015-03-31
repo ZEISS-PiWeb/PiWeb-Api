@@ -548,10 +548,10 @@ Parameter name      | Possible values [**default value**] | Description  <br> ``
 `partPath`            | Path of the part | Restricts the query to this part path  
 `charUuids`           | Guids of the characteristics | Restricts the query to these characteristics guids 
 `charPath`            | Path of the characteristic | Restricts the query to this characteristic path 
-`depth`               | i, i ≥ 0  <br>**1**  | It controls down to which level of the inspection plan the entities should be fetched. Setting *depth:0* means that only the entity itself should be fetched, *depth:1* means the entity and its direct children should be fetched and so on. <br><br>`depth=5` 
+`depth`               | i, i ≥ 0  <br>**1**  | It controls down to which level of the inspection plan the entities should be fetched. Setting `depth=0` means that only the entity itself should be fetched, `depth=1` means the entity and its direct children should be fetched and so on. <br><br>`depth=5` 
 `withHistory`         | true, **false**      | Determines whether the version history should be fetched or not. Does only effect the query if versioning is activated on the server side. <br><br>`withHistory=true`
-`partAttributes`      | IDs of the attributes | Restricts the query to the attributes that should be returned for parts. <br><br>`partAttributes=(1001,1008)`
-`characteristicAttributes` | IDs of the attributes | Restricts the query to the attributes that should be returned for characteristics. <br><br>`characteristicAttributes=(2001,2101)`
+`partAttributes`      | IDs of the attributes | Restricts the query to the attributes that should be returned for parts. <br><br>`partAttributes={1001,1008}`
+`characteristicAttributes` | IDs of the attributes | Restricts the query to the attributes that should be returned for characteristics. <br><br>`characteristicAttributes={2001,2101}`
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
