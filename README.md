@@ -1,7 +1,9 @@
 PiWeb-Api
 =========
 
+<div style="text-align:center">
 ![ZEISS PiWeb](https://github.com/ZEISS-PiWeb/PiWeb-Api/blob/master/Logo.png)
+</div>
 
 PiWeb-API is a communication interface for the quality data managament system [ZEISS PiWeb](http://www.zeiss.com/industrial-metrology/en_de/products/software/piweb.html). The interface is based on a HTTP/S web service architecture.
 
@@ -35,7 +37,6 @@ http://your-piweb-server/dataServiceRest/configuration
         "characteristicAttributes":
         [
             {
-
                 "key": 2101,
                 "description": "Nominal",
                 "length": 0,
@@ -43,7 +44,6 @@ http://your-piweb-server/dataServiceRest/configuration
                 "definitionType": "AttributeDefinition"
             },
             {
-
                 "key": 2110,
                 "description": "Lower tolerance",
                 "length": 0,
@@ -56,7 +56,7 @@ http://your-piweb-server/dataServiceRest/configuration
                 "length": 0,
                 "type": "Float",
                 "definitionType": "AttributeDefinition"
-            }, ...
+            }, "..."
         ],
         "measurementAttributes": [ "..." ],
         "valueAttributes":
@@ -136,4 +136,4 @@ http://your-piweb-server/dataServiceRest/measurements?limitResult=10
 #### Learn more
 
 * Read the [API documentation guide](http://zeiss-piweb.github.io/PiWeb-Api)
-* Get the [C# sample project](https://github.com/zeiss-piweb/zeiss-piweb/tree/master/sdk/samples)
+* Get the [C# sample project](https://github.com/ZEISS-PiWeb/PiWeb-Api/tree/master/SDK/Samples)
