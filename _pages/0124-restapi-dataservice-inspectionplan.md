@@ -15,6 +15,8 @@ permalink: /restapi/dataservice/inspectionplan/
 
 You can fetch, create, update and delete parts and characteristics via the following endpoints: 
 
+####Parts
+
 {% assign linkId="inspectionPlanEndpointGetAllParts" %}
 {% assign method="GET" %}
 {% assign endpoint="/parts" %}
@@ -262,6 +264,8 @@ HTTP/1.1 200 Ok
 <p></p>
 
 
+
+####Characteristics
 
 {% assign linkId="inspectionPlanEndpointGetAllChars" %}
 {% assign method="GET" %}
