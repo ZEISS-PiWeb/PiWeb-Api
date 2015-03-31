@@ -1,7 +1,7 @@
 PiWeb-Api
 =========
 
-<img align="center" src="Logo.png" alt="PiWeb Logo" width="200"/>
+![ZEISS PiWeb](https://github.com/ZEISS-PiWeb/PiWeb-Api/blob/master/Logo.png)
 
 PiWeb-API is a communication interface for the quality data managament system [ZEISS PiWeb](http://www.zeiss.com/industrial-metrology/en_de/products/software/piweb.html). The interface is based on a HTTP/S web service architecture.
 
@@ -18,7 +18,7 @@ http://your-piweb-server/dataServiceRest/configuration
 ```json
 {
 
-    "status": { ... } ,
+    "status": { "..." } ,
     "category": "Success",
     "data":
     {
@@ -30,17 +30,10 @@ http://your-piweb-server/dataServiceRest/configuration
                 "length": 30,
                 "type": "AlphaNumeric",
                 "definitionType": "AttributeDefinition"
-            }, ...
+            }, "..."
         ],
         "characteristicAttributes":
         [
-            {
-                "key": 2001,
-                "description": "characteristic number",
-                "length": 20,
-                "type": "AlphaNumeric",
-                "definitionType": "AttributeDefinition"
-            },
             {
 
                 "key": 2101,
@@ -65,7 +58,7 @@ http://your-piweb-server/dataServiceRest/configuration
                 "definitionType": "AttributeDefinition"
             }, ...
         ],
-        "measurementAttributes": [ ... ],
+        "measurementAttributes": [ "..." ],
         "valueAttributes":
         [
             {
@@ -76,7 +69,7 @@ http://your-piweb-server/dataServiceRest/configuration
                 "definitionType": "AttributeDefinition"
             }
         ],
-        "catalogAttributes": [ ... ]
+        "catalogAttributes": [ "..." ]
     }
 }
 ```
@@ -89,7 +82,7 @@ http://your-piweb-server/dataServiceRest/parts?depth=10000
 
 ```json
 {
-    "status": { ... },
+    "status": { "..." },
     "category": "Success",
     "data":
     [
@@ -101,7 +94,7 @@ http://your-piweb-server/dataServiceRest/parts?depth=10000
             "version": 0,
             "timestamp": "2014-10-07T13:39:34.74Z",
             "current": true
-        },  ...
+        },  "..."
    ]
 }
 ```
@@ -114,8 +107,7 @@ http://your-piweb-server/dataServiceRest/measurements?limitResult=10
 
 ```json
 {
-    "status": 
-    { ... },
+    "status": { "..." },
     "category": "Success",
     "data":
     [
@@ -136,8 +128,7 @@ http://your-piweb-server/dataServiceRest/measurements?limitResult=10
 		    {
 		        "4": "2014-12-05T13:25:55Z"
 		    }
-		},        
-		...
+		}, "..."
    ]
 }
 ```
