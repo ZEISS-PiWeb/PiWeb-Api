@@ -22,7 +22,7 @@ You can fetch, create, update and delete parts and characteristics via the follo
 {% assign endpoint="/parts" %}
 {% assign summary="Fetches parts" %}
 {% capture description %}
-You can fetch all parts or certain parts if you restrict the query by [filter uri parameters](#filters).
+You can fetch all parts or certain parts. Possible [filter uri parameters](#filters) are `partUuids`, `partPath`, `depth`, `withHistory` and `partAttributes`.
 {% endcapture %}
 {% assign exampleCaption="Fetch the part with the path '/metal part' without possible child parts" %}
 
@@ -271,7 +271,7 @@ HTTP/1.1 200 Ok
 {% assign method="GET" %}
 {% assign endpoint="/characteristics" %}
 {% assign summary="Fetches characteristics" %}
-{% assign description="You can fetch all characteristics or the characteristics described by the uri parameters. Only direct characteristics are fetched, characteristics beneath child parts are not considered." %}
+{% assign description="You can fetch all characteristics or the characteristics described by the uri parameters. Possible [filter uri parameters](#filters) are `partUuids`, `partPath`, `charUuids`, `charPath`, `depth`, `withHistory` and `characteristicAttributes`.Only direct characteristics are fetched, characteristics beneath child parts are not considered." %}
 {% assign exampleCaption="Fetch all characteristics beneath the part '/metal part' until depth=2" %}
 
 {% capture jsonrequest %}
@@ -542,16 +542,16 @@ HTTP/1.1 200 Ok
 The described endpoints provide the following filters:
 
 {% capture table %}
-Parameter name      | Possible values [**default value**] | Description  <br> ```Example``` | Accepted by endpoint
---------------------|------------------------------       |---------------------------------|--------------------------
-`partUuids`           | Guids of the parts | Restricts the query to these parts guids | <nobr>{{site.sections['getLabel']}} {{site.sections['deleteLabel']}} /parts</nobr><br> {{site.sections['getLabel']}} /characteristics
-`partPath`            | Path of the part | Restricts the query to this part path  | <nobr>{{site.sections['getLabel']}} {{site.sections['deleteLabel']}} /parts</nobr><br> {{site.sections['getLabel']}} /characteristics
-`charUuids`           | Guids of the characteristics | Restricts the query to these characteristics guids | <nobr>{{site.sections['getLabel']}} /characteristics</nobr>
-`charPath`            | Path of the characteristic | Restricts the query to this characteristic path  | <nobr>{{site.sections['getLabel']}} /characteristics</nobr>
-`depth`               | i, i ≥ 0  <br>**1**  | It controls down to which level of the inspection plan the entities should be fetched. Setting *depth:0* means that only the entity itself should be fetched, *depth:1* means the entity and its direct children should be fetched and so on. <br><br>`depth=5` | <nobr>{{site.sections['getLabel']}} /parts</nobr><br> {{site.sections['getLabel']}} /characteristics
-`withHistory`         | true, **false**      | Determines whether the version history should be fetched or not. Does only effect the query if versioning is activated on the server side. <br><br>`withHistory=true` | <nobr>{{site.sections['getLabel']}} /parts</nobr><br> {{site.sections['getLabel']}} /characteristics
-`partAttributes`      | IDs of the attributes | Restricts the query to the attributes that should be returned for parts. <br><br>`partAttributes=(1001,1008)` | <nobr>{{site.sections['getLabel']}} /parts</nobr>
-`characteristicAttributes` | IDs of the attributes | Restricts the query to the attributes that should be returned for characteristics. <br><br>`characteristicAttributes=(2001,2101)` | <nobr>{{site.sections['getLabel']}} /characteristics</nobr>
+Parameter name      | Possible values [**default value**] | Description  <br> ```Example```
+--------------------|------------------------------       |--------------------------------
+`partUuids`           | Guids of the parts | Restricts the query to these parts guids 
+`partPath`            | Path of the part | Restricts the query to this part path  
+`charUuids`           | Guids of the characteristics | Restricts the query to these characteristics guids 
+`charPath`            | Path of the characteristic | Restricts the query to this characteristic path 
+`depth`               | i, i ≥ 0  <br>**1**  | It controls down to which level of the inspection plan the entities should be fetched. Setting *depth:0* means that only the entity itself should be fetched, *depth:1* means the entity and its direct children should be fetched and so on. <br><br>`depth=5` 
+`withHistory`         | true, **false**      | Determines whether the version history should be fetched or not. Does only effect the query if versioning is activated on the server side. <br><br>`withHistory=true`
+`partAttributes`      | IDs of the attributes | Restricts the query to the attributes that should be returned for parts. <br><br>`partAttributes=(1001,1008)`
+`characteristicAttributes` | IDs of the attributes | Restricts the query to the attributes that should be returned for characteristics. <br><br>`characteristicAttributes=(2001,2101)`
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
