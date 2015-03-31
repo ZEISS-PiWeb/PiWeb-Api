@@ -20,7 +20,7 @@ The configuration can be fetched, created, updated and deleted using the followi
 {% assign endpoint="/configuration" %}
 {% assign summary="Returns the attribute definitions for all entity types" %}
 {% assign description="" %}
-{% assign exampleCaption="Fetching the configuration including all attriutes" %}
+{% assign exampleCaption="Fetching the configuration including all attributes" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
@@ -209,8 +209,8 @@ HTTP/1.1 200 Ok
 {% assign method="DELETE" %}
 {% assign endpoint="/configuration/:entityType/:attributesIdList" %}
 {% assign summary="Deletes the attribute(s) in :attributedIdList for :entityType" %}
-{% assign description="Deletes the attribute definitions identified by the list of attribute definition ids for the given :entityType. If the List of attribute definition ids is empty, all attributes for the given :entityType are deleted." %}
-{% assign exampleCaption="Delete the part attribute with the key 1001 and 1002" %}
+{% assign description="Deletes the attribute definitions identified by the list of attribute definition ids for the given :entityType. If the list of attribute definition ids is empty, all attributes for the given :entityType are deleted." %}
+{% assign exampleCaption="Delete the part attributes with the keys 1001 and 1002" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
