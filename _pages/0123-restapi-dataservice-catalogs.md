@@ -19,7 +19,7 @@ Catalogs and catalog entries can be fetched, created, updated and deleted using 
 {% assign method="GET" %}
 {% assign endpoint="/catalogs" %}
 {% assign summary="Fetches catalogs" %}
-{% assign description="" %}
+{% assign description="This request can be restricted by the filter parameter `catalogUuids`" %}
 {% assign exampleCaption="Fetching all catalogs" %}
 
 {% capture jsonrequest %}
@@ -293,7 +293,7 @@ HTTP/1.1 200 Ok
 There are two different options for deleting catalogs:
 
 * delete all catalogs or
-* delete one or more certain catalogs identified by their uuid.
+* delete one or more certain catalogs identified by their uuid. Therefore you need to add the filter parameter `catalogUuids` to the request uri.
 {% endcapture %}
 {% assign exampleCaption="Delete the catalog with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
 
@@ -320,7 +320,7 @@ HTTP/1.1 200 Ok
 There are two different options for deleting catalog entries:
 
 * Delete all entries from a certain catalog identified by its uuid or
-* Delete one or more specific entries identified by their keys from a certain catalog identified by its uuid
+* Delete one or more specific entries identified by their keys from a certain catalog identified by its uuid. Therefore you need to add the filter parameter `entryIds` to the request uri.
 {% endcapture %}
 
 {% assign exampleCaption="Delete the entries with key 1 and 3 from the catalog with uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
@@ -345,10 +345,10 @@ HTTP/1.1 200 Ok
 These endpoints  provide the following filter parameters:
 
 {% capture table %}
-Parameter name      | Description  <br> `Example` | Accepted by endpoint
---------------------|------------------  ---------|---------------------
-`catalogUuids`      | List of catalogue uuids that restrict the request. <br> `(d7291afb-0a67-4c1e-8bcc-6fc455bcc0e5, 8c376bee-ffe3-4ee4-abb9-a55b492e69ad)` | {{site.sections['getLabel']}} {{site.sections['deleteLabel']}} /catalogs
-`entryIds`          | List of catalogue entry ids that restrict the request. <br> `(1,4)` | <nobr>{{site.sections['deleteLabel'] }} catalogs/:catalogUuid</nobr>
+Parameter name      | Description  <br> `Example` 
+--------------------|------------------  ------------------------------
+`catalogUuids`      | List of catalogue uuids that restrict the request. <br> `(d7291afb-0a67-4c1e-8bcc-6fc455bcc0e5, 8c376bee-ffe3-4ee4-abb9-a55b492e69ad)`
+`entryIds`          | List of catalogue entry ids that restrict the request. <br> `(1,4)`
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
