@@ -23,7 +23,7 @@ You can fetch, create, update and delete measurements and values via the followi
 {% assign summary="Fetches measurements" %}
 {% capture description %}
 You can fetch all measurements or certain measurements. Possible [filter uri parameters](#filters) are 
-<code data-toggle="tooltip" data-placement="bottom auto" data-html="true" title="Restricts the query to this part path <br><br><code>partPath=/metal%20part</code>">partPath site.images['info']</code>
+<code data-toggle="tooltip" data-placement="bottom auto" data-html="true" title="Restricts the query to this part path <br><br><code>partPath=/metal%20part</code>">partPath</code>  site.images['info']
 `partPath`, `partUuids`, `measurementUuids`, `deep`, `searchCondition`, `order`, `limitResult`, `requestedMeasurementAttributes`, `statistics` and `aggregation`.
 
 {% endcapture %}
