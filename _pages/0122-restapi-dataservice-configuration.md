@@ -254,19 +254,19 @@ The attributes are either `AttributeDefinition` or `CatalogueAttributeDefinition
 
 Property                             | Description
 -------------------------------------|--------------------------------------------------------------
-<nobr>`ushort` key</nobr>            | The attribute's key, by which the attribute can be uniquely identified
-<nobr>`string` description</nobr>    | The attribute's name or a short description 
-<nobr>`AttributeType` type</nobr>    | The attribute's type. *AlphaNumeric*, *Integer*, *Float* or *DateTime*
-<nobr>`ushort` length</nobr>         | The attribute's maximum length. Only set if the type is *AlphaNumeric*
-<nobr>`string` definitionType</nobr> | Always has the value 'AttributeDefinition' and is used to differentiate between  `AttributeDefinition` and `CatalogueAttributeDefinition`
+<nobr><code>ushort</code> key</nobr>            | The attribute's key, by which the attribute can be uniquely identified
+<nobr><code>string</code> description</nobr>    | The attribute's name or a short description 
+<nobr><code>AttributeType</code> type</nobr>    | The attribute's type. *AlphaNumeric*, *Integer*, *Float* or *DateTime*
+<nobr><code>ushort</code> length</nobr>         | The attribute's maximum length. Only set if the type is *AlphaNumeric*
+<nobr><code>string</code> definitionType</nobr> | Always has the value 'AttributeDefinition' and is used to differentiate between  `AttributeDefinition` and `CatalogueAttributeDefinition`
 
 ####CatalogueAttributeDefinition
 
 Property                              | Description
 --------------------------------------|------------------------------------------------------------
-<nobr>`ushort` key</nobr>             | The attribute's key, by which the attribute can be uniquely identified
-<nobr>`string` description</nobr>     | The attribute's name or a short description 
-<nobr>`Guid` catalogue</nobr>         | The uuid of the catalogue that contains the attribute's values
-<nobr>`string` definitionType</nobr>  | Always has the value 'CatalogueAttributeDefinition' and is used to differentiate between  `AttributeDefinition` and `CatalogueAttributeDefinition`
+<nobr><code>ushort</code> key</nobr>             | The attribute's key, by which the attribute can be uniquely identified
+<nobr><code>string</code> description</nobr>     | The attribute's name or a short description 
+<nobr><code>Guid</code> catalogue</nobr>         | The uuid of the catalogue that contains the attribute's values
+<nobr><code>string</code> definitionType</nobr>  | Always has the value 'CatalogueAttributeDefinition' and is used to differentiate between  `AttributeDefinition` and `CatalogueAttributeDefinition`
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}

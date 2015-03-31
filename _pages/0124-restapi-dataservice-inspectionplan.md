@@ -562,13 +562,13 @@ Both parts and characteristics are PiWeb inspection plan entities. They consists
 {% capture table %}
 Property                               | Description
 ---------------------------------------|-----------------------
-<nobr>`Guid` uuid</nobr>               | Identifies this inspection plan entity uniquely
-<nobr>`PathInformation` path</nobr>    | The path of this entity
-<nobr>`Attribute` attributes</nobr>    | A set of attributes which specifies this entity
-<nobr>`string` comment</nobr>          | A comment which describes the last inspection plan change
-<nobr>`int` version</nobr>             | Contains the revision number of the entity. The revision number starts with zero and is incremented by one each time when changes are applied to the inspection plan. The version is only returned in case versioning is enabled in the server settings
-<nobr>`bool` current</nobr>            | Indicates whether the entity is the current version
-<nobr>`dateTime` timeStamp</nobr>      | Contains the date and time of the last update applied to this entity
-<nobr>`dateTime` charChangeDate</nobr> | *(Part only)* The timestamp for the most recent characteristic change on any characteristic that belongs to this part
+<nobr><code>Guid</code> uuid</nobr>               | Identifies this inspection plan entity uniquely
+<nobr><code>PathInformation</code> path</nobr>    | The path of this entity
+<nobr><code>Attribute</code> attributes</nobr>    | A set of attributes which specifies this entity
+<nobr><code>string</code> comment</nobr>          | A comment which describes the last inspection plan change
+<nobr><code>int</code> version</nobr>             | Contains the revision number of the entity. The revision number starts with zero and is incremented by one each time when changes are applied to the inspection plan. The version is only returned in case versioning is enabled in the server settings
+<nobr><code>bool</code> current</nobr>            | Indicates whether the entity is the current version
+<nobr><code>dateTime</code> timeStamp</nobr>      | Contains the date and time of the last update applied to this entity
+<nobr><code>dateTime</code> charChangeDate</nobr> | *(Part only)* The timestamp for the most recent characteristic change on any characteristic that belongs to this part
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}

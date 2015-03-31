@@ -123,13 +123,13 @@ The returned objects contains the following properties:
 {% capture table %}
 Property                             | Description
 -----------------|-------------------|------------------------
-<nobr>target `TargetEntity`</nobr>   | Specifies a concrete entity for a raw data object and consits of the entity's type (Part, Characteristic, Measurement, Value) and guid. If raw data is attached to an entity of type `Value`, the `uuid` contains a compound key in the following format: `{MeasurementUuid}|{CharacteristicUuid}`
-<nobr>key `int`</nobr>               | This is a unique key that identifies this specific raw data object for a corresponding entity. An entity can have multiple raw data object that are distinct by this key.
-<nobr>fileName `string`</nobr>       | The filename of the raw data object. Please note that this filename is not unique (unlike filenames in traditional file systems).
-<nobr>mimeType `string`</nobr>       | The file's mime type. 
-<nobr>lastModified `DateTime`</nobr> | The timestamp of the last modification of the corresponding raw data object
-<nobr>created `DateTime`</nobr>      | The timestamp of the creation of the corresponding raw data object
-<nobr>size `int`</nobr>              | The size of the raw data object in bytes
-<nobr>md5 `string`</nobr>            | The MD5-Hash of the raw data object
+<nobr><code>TargetEntity</code> target</nobr>   | Specifies a concrete entity for a raw data object and consits of the entity's type (Part, Characteristic, Measurement, Value) and guid. If raw data is attached to an entity of type `Value`, the `uuid` contains a compound key in the following format: `{MeasurementUuid}|{CharacteristicUuid}`
+<nobr><code>int</code> key</nobr>               | This is a unique key that identifies this specific raw data object for a corresponding entity. An entity can have multiple raw data object that are distinct by this key.
+<nobr><code>string</code> fileName</nobr>       | The filename of the raw data object. Please note that this filename is not unique (unlike filenames in traditional file systems).
+<nobr><code>string</code> mimeType</nobr>       | The file's mime type. 
+<nobr><code>DateTime</code> lastModified</nobr> | The timestamp of the last modification of the corresponding raw data object
+<nobr><code>DateTime</code> created</nobr>      | The timestamp of the creation of the corresponding raw data object
+<nobr><code>int</code> size</nobr>              | The size of the raw data object in bytes
+<nobr><code>string</code> md5</nobr>            | The MD5-Hash of the raw data object
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}

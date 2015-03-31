@@ -542,12 +542,12 @@ Parameter name      | Possible values [**default value**] | Description
 Measurements do always belong to a single inspection plan part. Depending on the purpose, the measured values are included within a measurement or not. Each measurement consists of the following properties:
 
 {% capture table %}
-Property                               | Description
----------------------------------------|------------------------------------------------------------------------------------
-`Guid` uuid                            | Identifies the measurement uniquely.
-`Guid` partUuid                        | The uuid of the part the measurement belongs to.
-attributes                             | A set of attributes which specifies this measurement.
-`DateTime` lastModified                | Contains the date and time of the last update applied to this measurement.
-`DataCharacteristic[]` characteristics | An array of the characteristics which has been measured within the measurement. Each characteristic within this array consits of the uuid it is identified by and an array of attributes which include at least the measured value attribute.
+Property                                                      | Description
+--------------------------------------------------------------|------------------------------------------------------------------------------------
+<nobr><code>Guid<code> uuid</nobr>                            | Identifies the measurement uniquely.
+<nobr><code>Guid<code> partUuid</nobr>                        | The uuid of the part the measurement belongs to.
+<nobr><code>Attribute[]<code> attributes</nobr>               | A set of attributes which specifies this measurement.
+<nobr><code>DateTime<code> lastModified</nobr>                | Contains the date and time of the last update applied to this measurement.
+<nobr><code>DataCharacteristic[]<code> characteristics</nobr> | An array of the characteristics which has been measured within the measurement. Each characteristic within this array consits of the uuid it is identified by and an array of attributes which include at least the measured value attribute.
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}

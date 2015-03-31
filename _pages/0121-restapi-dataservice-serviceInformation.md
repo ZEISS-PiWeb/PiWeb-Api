@@ -70,19 +70,19 @@ The returned ServiceInformation object has the following properties:
 {% capture table %}
 Property                           | Description
 -----------------------------------|---------------------------------------------------------------
-`string` serverName                | The name of the PiWeb server as specified in the server settings dialog
-`string` version                   | The version number of the PiWeb server
-`bool` securityEnabled             | Indicates whether authentication is required by the server
-`string` edition                   | The database edition. Usually this is "PiWebDB"
-`string` versionWsdlMajor          | The major version number of the interface
-`string` versionWsdlMinor          | The minor version number of the interface
-`int` partCount                    | The estimated number of parts stored on the server
-`int` characteristicCount          | The estimated number of characteristics stored on the server
-`int` measurementCount             | The estimated number of measurements stored on the server
-`int` valueCount                   | The estimated number of measured values stored on the server
-`Features` featureList             | A list of features supported by the server. This can be *MeasurementAggregation* or *DistinctMeasurementSearch*
-`DateTime` inspectionPlanTimestamp | Timestamp of the last inspection plan modification
-`DateTime` measurementTimestamp    | Timestamp of the last measurement modification
-`DateTime` configurationTimestamp  | Timestamp of the last configuration modification
+<code>string</code> serverName                | The name of the PiWeb server as specified in the server settings dialog
+<code>string</code> version                   | The version number of the PiWeb server
+<code>bool</code> securityEnabled             | Indicates whether authentication is required by the server
+<code>string</code> edition                   | The database edition. Usually this is "PiWebDB"
+<code>string</code> versionWsdlMajor          | The major version number of the interface
+<code>string</code> versionWsdlMinor          | The minor version number of the interface
+<code>int</code> partCount                    | The estimated number of parts stored on the server
+<code>int</code> characteristicCount          | The estimated number of characteristics stored on the server
+<code>int</code> measurementCount             | The estimated number of measurements stored on the server
+<code>int</code> valueCount                   | The estimated number of measured values stored on the server
+<code>Features</code> featureList             | A list of features supported by the server. This can be *MeasurementAggregation* or *DistinctMeasurementSearch*
+<code>DateTime</code> inspectionPlanTimestamp | Timestamp of the last inspection plan modification
+<code>DateTime</code> measurementTimestamp    | Timestamp of the last measurement modification
+<code>DateTime</code> configurationTimestamp  | Timestamp of the last configuration modification
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}

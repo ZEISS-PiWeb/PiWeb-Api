@@ -363,10 +363,10 @@ All valid attributes must be created as *catalog attributes* beforehand. `Catalo
 {% capture table %}
 Property                                   | Description
 -------------------------------------------|----------------------------------------------
-<nobr>`Guid` uuid</nobr>                   | Identifies the catalog uniquely
-<nobr>`string` name</nobr>                 | The name of the catalog
-<nobr>`ushort[]` validAttributes</nobr>    | A list of attribute keys that are valid for this catalog
-<nobr>`CatalogEntry` catalogEntries</nobr> | A list of catalog entries
+<nobr><code>Guid</code> uuid</nobr>                   | Identifies the catalog uniquely
+<nobr><code>string</code> name</nobr>                 | The name of the catalog
+<nobr><code>ushort[]</code> validAttributes</nobr>    | A list of attribute keys that are valid for this catalog
+<nobr><code>CatalogEntry</code> catalogEntries</nobr> | A list of catalog entries
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
@@ -375,7 +375,7 @@ Property                                   | Description
 {% capture table %}
 Property                              | Description
 --------------------------------------|----------------------------------------------------
-<nobr>`short` key</nobr>              | Specifies the entry's order within the catalog
-<nobr>`Attribute[]` attributes</nobr> | A list of attributes which consists of key and value. The keys must be from the validAttributes.
+<nobr><code>short</code> key</nobr>              | Specifies the entry's order within the catalog
+<nobr><code>Attribute[]</code> attributes</nobr> | A list of attributes which consists of key and value. The keys must be from the validAttributes.
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
