@@ -138,6 +138,7 @@ code{
 .container-header-footer>a:hover,
 .container-header-footer>a:focus{
 	color: #FDFDFD;
+	text-decoration: none;
 }
 
 .navbar-default {
