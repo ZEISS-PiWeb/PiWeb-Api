@@ -38,10 +38,8 @@
 	<div class="container">
       		<div class="row">
 			<div class="col-md-3 page-nav" id="leftCol">
-				<div data-spy="affix" data-offset-top="130" >
-					{% include aboutlinks.html %}
-					{% include toc_sub.html %}
-				</div>
+				{% include aboutlinks.html %}
+				{% include toc_sub.html %}
 			</div>
 			<div class="col-md-9 page-main">
         			<h1>{{page.title}}{% if page.subTitle %} - {{page.subTitle}}{% endif%}</h1>
