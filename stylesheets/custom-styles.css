@@ -23,7 +23,7 @@ h2{
 }
 
 /*Moves anker links to correct position after click*/
-h2[id]:before, h3[id]:before { 
+h2[id]:before { 
   display: block; 
   content: " "; 
   margin-top: -120px; 
@@ -134,13 +134,6 @@ code{
 	box-shadow: 0 12px 24px -12px rgba(0,0,0,0.5);
 }
 
-.container-header-footer>a,
-.container-header-footer>a:hover,
-.container-header-footer>a:focus{
-	color: #FDFDFD;
-	text-decoration: none;
-}
-
 .navbar-default {
   background-color: inherit;
   border: none;
@@ -216,31 +209,6 @@ ul.subNavList{
 	padding-left:20px;
 }
 
-ul.subNavList>li>a:hover {
-	text-decoration: none;
-}
-
-#navbar>.nav>li:hover{
-	border-left: 2px dotted #437AB4;
-}
-
-#navbar>.nav>li.active, #navbar>.nav>li.active:hover{
-	border-left: 2px solid #337ab7;
-}
-
-#navbar>.nav>li.active>a {
-	padding-left: 13px;
-}
-
-#navbar>.nav>li>a{
-	display: inline;
-}
-
-#navbar>.nav>li>a:hover{
-	background-color: #FDFDFD;
-	padding-left: 13px;
-}
-
 .table{
 	border-spacing: 1px;
 	border-collapse: inherit;
@@ -275,16 +243,80 @@ ul.subNavList>li>a:hover {
 	}
 }
 
-.tooltip-inner{
-	background-color: #437AB4;
-	text-align: left;
-	padding: 8px 8px;
+.about-links{
+	display: table;
+	margin: 0px auto 30px auto;
+	padding: 0;
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+	width: 75%;
+	text-align: center;
 }
 
-.tooltip-inner code{
-	color: #000;
+.about-links>li{
+	list-style: none;
+	text-align: center;
+	width:60px;
+	display: inline-block;
 }
 
-.tooltip.top .tooltip-arrow{
-	border-top-color: #437AB4;	
+.about-links>li>a{
+	line-height: 1px;
+	width: 60px;
 }
+
+.about-links>li>a>svg{
+	fill: currentColor;
+}
+
+.about-links>li>a>span{
+	display: list-item;
+}
+
+/* Tables */
+/*
+table {
+  width:100%;
+  margin-bottom: 32px;
+  text-align: left;
+  border-spacing:1px;
+  border-collapse: inherit;
+ }
+
+th {
+  padding: 10px;
+  background: #437AB4;
+  color: #FFF;
+  font-size: 1.1em;
+  font-weight: 400;
+ }
+
+td {
+  padding: 10px;
+  background: #F6F6F6;
+ }
+*/
+/*
+.affix-top,.affix{
+ position: static;
+}
+
+@media (min-width: 979px) {
+  #sidebar.affix-top {
+    position: static;
+  	margin-top:30px;
+  	width:228px;
+  }
+  
+  #sidebar.affix {
+    position: fixed;
+    top:70px;
+    width:228px;
+  }
+}
+
+#sidebar li.active {
+  border:0 #eee solid;
+  border-right-width:5px;
+}
+*/
