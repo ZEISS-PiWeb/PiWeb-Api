@@ -98,7 +98,7 @@ GET /dataServiceRest/parts/05040c4c-f0af-46b8-810e-30c0c00a379e HTTP/1.1
 {% assign summary="Creates parts" %}
 {% capture description %}
 
-If you want to create an inspection plan entity it is necessary that you transfer the entity object within the request's body. A unique identifier and the path are mandatory, attributes and a comment are optional. The attribute keys which you use for the attributes must come from the parts attribute range (specified in the {{ site.links['configuration'] }})
+To create an inspection plan entity, it is necessary to transfer the entity object in the request's body. A unique identifier and the path are mandatory, attributes and a comment are optional. The attribute keys which you use for the attributes must be contained in the parts attribute range (specified in the {{ site.links['configuration'] }})
 
 {{ site.images['info'] }} The comment is only added if versioning is enabled in the server settings.
 {% endcapture %}
@@ -196,7 +196,7 @@ HTTP/1.1 200 Ok
 {% assign endpoint="/parts" %}
 {% assign summary="Deletes parts" %}
 {% capture description %}
-There are two possibilities you can delete parts, either by their path or by their uuids. This means that one of the filter parameters `partPath` or `partUuids` has to be set. In both cases the entity itself as well as all children are deleted.
+There are two ways to delete parts, either by their path or by their uuids. This means that one of the filter parameters `partPath` or `partUuids` has to be set. In both cases the entity itself as well as all children are deleted.
 {% endcapture %}
 
 {% assign exampleCaption="Delete the part 'metal part'  and all entities beneath it" %}
@@ -367,7 +367,7 @@ GET /dataServiceRest/characteristics/27e23a7c-dbe7-4863-8461-6abf7b03ddd7 HTTP/1
 {% assign summary="Creates characteristics" %}
 {% capture description %}
 
-If you create characteristics it is necessary that you transfer the characteristics within the request's body. A unique identifier and the path are mandatory, attributes and a comment are optional. The attribute keys which are used for the attributes must come from the characteristics attribute range (specified in the {{ site.links['configuration'] }})
+To create characteristics, it is necessary to transfer the characteristics in the request's body. A unique identifier and the path are mandatory, attributes and a comment are optional. The attribute keys which are used for the attributes must be contained in the characteristics attribute range (specified in the {{ site.links['configuration'] }})
 
 {{ site.images['info'] }} The comment is only added if versioning is enabled in the server settings.
 {% endcapture %}
@@ -471,10 +471,10 @@ HTTP/1.1 200 Ok
 {% assign endpoint="/characteristics" %}
 {% assign summary="Deletes characteristics" %}
 {% capture description %}
-There are two possibilities you can delete characteristics, either by their path or by their uuids. This means that one of the filter parameters `charPath` or `charUuids` has to be set. In both cases the entity itself as well as all children are deleted.
+There are two ways to delete characteristics, either by their path or by their uuids. This means that one of the filter parameters `charPath` or `charUuids` has to be set. In both cases the entity itself as well as all children are deleted.
 {% endcapture %}
 
-{% assign exampleCaption="Delete the characteristic 'metal part/deviation_3'  and all entities beneath it" %}
+{% assign exampleCaption="Delete the characteristic 'metal part/deviation_3' and all entities beneath it" %}
 {% capture jsonrequest %}
 {% highlight http %}
 DELETE /dataServiceRest/parts?charPath=/metal%20part/deviation_3 HTTP/1.1
