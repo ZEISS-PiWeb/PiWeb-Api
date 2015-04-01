@@ -134,6 +134,12 @@ code{
 	box-shadow: 0 12px 24px -12px rgba(0,0,0,0.5);
 }
 
+.container-header-footer>a,
+.container-header-footer>a:hover,
+.container-header-footer>a:focus{
+	color: #FDFDFD;
+}
+
 .navbar-default {
   background-color: inherit;
   border: none;
