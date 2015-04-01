@@ -13,7 +13,7 @@
     <script src="{{site.baseurl}}/javascripts/bootstrap.js"></script>
     <meta name="viewport" content="user-scalable=no, width=device-width" id="viewport">
   </head>
-  <body>
+  <body data-spy="scroll" data-target="#navbar" data-offset="120">
 	<nav class="navbar navbar-default navbar-fixed-top" role="banner">
 	  	<div class="container container-header container-header-top">
 	    		<div class="navbar-header">
@@ -23,7 +23,7 @@
 	        			<span class="icon-bar"></span>
 	        			<span class="icon-bar"></span>
 	      			</button>
-	      			<a href="/" class="navbar-brand">PiWeb API</a>
+	      			<a href="https://github.com/ZEISS-PiWeb/PiWeb-Api"  target="_blank" class="navbar-brand">PiWeb API</a>
 			</div>
 	    		<nav class="collapse navbar-collapse" role="navigation">
 	      			<ul class="nav navbar-nav">
@@ -32,7 +32,7 @@
 	    		</nav>
 	  	</div>
 	  	<div class="container container-header container-header-footer">
-	  		This project is maintained by Carl Zeiss IZfM
+	  		<a href="http://www.zeiss-izm.de" target="_blank">This project is maintained by Carl Zeiss IZfM</a>
 	  	</div>
 	</nav>
 	<div class="container">
@@ -44,6 +44,7 @@
 			<div class="col-md-9 page-main">
         			<h1>{{page.title}}{% if page.subTitle %} - {{page.subTitle}}{% endif%}</h1>
 				{{content}}
+				<div style="height:70px;"></div>
 			</div>
 		 </div>
 	</div>
@@ -59,6 +60,8 @@
         	.toggleClass('glyphicon-menu-down glyphicon-menu-right');
 	}
 	$( "div[id^='heading']" ).click(toggleChevron);
+	
+	$(function () {  $('[data-toggle="tooltip"]').tooltip() })
     </script>
   </body>
 </html>
