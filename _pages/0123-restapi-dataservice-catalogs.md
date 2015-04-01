@@ -143,9 +143,9 @@ GET /dataServiceRest/catalogs/8c376bee-ffe3-4ee4-abb9-a55b492e69ad HTTP/1.1
 {% assign endpoint="/catalogs" %}
 {% assign summary="Creates catalogs" %}
 {% capture description %}
-To create a new catalog the catalog object must be transmitted the request's body. A valid add request must contain a unique identifier, the catalog name and the valid attributes. Catalog entries are optional. All valid attributes must be added as catalog attributes beforehand (see {{ site.links['configuration'] }}).
+To create a new catalog, the catalog object must be transmitted in the request's body. A valid add request must contain a unique identifier, the catalog name and the valid attributes. Catalog entries are optional. All valid attributes must be added as catalog attributes beforehand (see {{ site.links['configuration'] }}).
 
-{{ site.images['info'] }} If no catalog entries are specified an empty catalog entry with key '0' and attribute value(s) 'not defined' ( in case of alphanumeric attributes ) is created by default.
+{{ site.images['info'] }} If no catalog entries are specified, an empty catalog entry with key '0' and attribute value(s) 'not defined' ( in case of alphanumeric attributes ) is created by default.
 {% endcapture %}
 {% assign exampleCaption="Adding the catalog InspectorCatalog" %}
 
@@ -196,7 +196,7 @@ HTTP/1.1 201 Created
 {% assign method="POST" %}
 {% assign endpoint="/catalogs/:catalogUuid" %}
 {% assign summary=" Creates entries for the catalog specified by the :catalogueUuid" %}
-{% assign description="To add new entries to an existing catalog you must specify all new entries in the request body. Each new entry must contain a unique key. Each entry attribute must be listed as a valid attributes in the catalog definition." %}
+{% assign description="To add new entries to an existing catalog, you must specify all new entries in the request body. Each new entry must contain a unique key. Each entry attribute must be listed as a valid attribute in the catalog definition." %}
 {% assign exampleCaption="Adding a catalog entry - add the inspector ‘Clarks’" %}
 
 {% capture jsonrequest %}
@@ -228,14 +228,14 @@ HTTP/1.1 201 Created
 {% assign endpoint="/catalogs" %}
 {% assign summary="Updates catalogs" %}
 {% capture description %}
-Update a catalog if you want to:
+Update a catalog when you want to:
 
 * rename the catalog or
 * add, update or delete catalog entries.
 
 To update a catalog, the whole object excluding the valid attributes needs to be transmitted in the body of the HTTP request. Updating a catalog essentially replaces the current catalog with the new one (delete followed by an add) in a single transaction.
 
-{{site.images['info']}} To change the valid attributes the catalog needs to be deleted an re-created again.
+{{site.images['info']}} To change the valid attributes, the catalog needs to be deleted an re-created again.
 {% endcapture %}
 {% assign exampleCaption="Rename the catalog from 'InspectorCatalog' to 'Inspectors' and add the inspector 'Clarks'" %}
 
@@ -342,7 +342,7 @@ HTTP/1.1 200 Ok
 
 ### Filters
 
-These endpoints  provide the following filter parameters:
+These endpoints provide the following filter parameters:
 
 {% capture table %}
 Parameter name | Description
