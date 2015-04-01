@@ -318,3 +318,8 @@ ul.subNavList>li>a:hover {
 .about-links>li>a>span{
 	display: list-item;
 }
+
+.affix{
+	margin-top: -110px;
+}
+}
