@@ -85,8 +85,8 @@ GET /dataServiceRest/configuration HTTP/1.1
 {% assign linkId="configurationEndpointAdd" %}
 {% assign method="POST" %}
 {% assign endpoint="/configuration/:entityType" %}
-{% assign summary="Creates the attribute(s) for :entityType" %}
-{% assign description="Creates the attribute definition(s) transfered within the body of the request for the given `:entityType` which must be part of the uri" %}
+{% assign summary="Creates the attributes for :entityType" %}
+{% assign description="Creates the attribute definitions transfered within the body of the request for the given `:entityType` which must be part of the uri" %}
 {% assign exampleCaption="Adding a part attribute with the key 1001 to the configuration" %}
 
 {% capture jsonrequest %}
@@ -130,8 +130,8 @@ HTTP/1.1 201 Created
 {% assign linkId="configurationEndpointUpdate" %}
 {% assign method="PUT" %}
 {% assign endpoint="/configuration/:entityType" %}
-{% assign summary="Updates the attribute(s) for :entityType" %}
-{% assign description="Updates the attribute definition(s) transfered within the body of the request for the given `:entityType` which must be part of the uri" %}
+{% assign summary="Updates the attributes for :entityType" %}
+{% assign description="Updates the attribute definitions transfered within the body of the request for the given `:entityType` which must be part of the uri" %}
 {% assign exampleCaption="Updating the part attribute with key 1001 - change length from 30 to 50" %}
 
 {% capture jsonrequest %}
@@ -208,9 +208,9 @@ HTTP/1.1 200 Ok
 {% assign linkId="configurationEndpointDelete2" %}
 {% assign method="DELETE" %}
 {% assign endpoint="/configuration/:entityType/:attributesIdList" %}
-{% assign summary="Deletes the attribute(s) in :attributedIdList for :entityType" %}
-{% assign description="Deletes the attribute definitions identified by the list of attribute definition ids for the given :entityType. If the list of attribute definition ids is empty, all attributes for the given :entityType are deleted." %}
-{% assign exampleCaption="Delete the part attributes with the keys 1001 and 1002" %}
+{% assign summary="Deletes the attributes in :attributedIdList for :entityType" %}
+{% assign description="Deletes all attribute definitions of which the id is in the `:attributeIdList` for the specified `:entityType`. If `:attributeIdList` is not specified, the request deletes all attributes of the `:entityType`." %}
+{% assign exampleCaption="Delete the part attributes with the keys *1001* and *1002*" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
@@ -239,8 +239,8 @@ HTTP/1.1 200 Ok
 
 ### General Information
 
-The PiWeb configuration consists of a list of attributes for all types of entities. 
-The different types of entites are: 
+The PiWeb configuration consists of a list of attributes for each entity type. 
+The different entity types are: 
 
 * *parts*, 
 * *characteristics*, 
@@ -254,7 +254,7 @@ The attributes are either `AttributeDefinition` or `CatalogueAttributeDefinition
 
 Property                             | Description
 -------------------------------------|--------------------------------------------------------------
-<nobr><code>ushort</code> key</nobr>            | The attribute's key, by which the attribute can be uniquely identified
+<nobr><code>ushort</code> key</nobr>            | The attribute's key, which serves as a unique id
 <nobr><code>string</code> description</nobr>    | The attribute's name or a short description 
 <nobr><code>AttributeType</code> type</nobr>    | The attribute's type. *AlphaNumeric*, *Integer*, *Float* or *DateTime*
 <nobr><code>ushort</code> length</nobr>         | The attribute's maximum length. Only set if the type is *AlphaNumeric*
@@ -264,9 +264,9 @@ Property                             | Description
 
 Property                              | Description
 --------------------------------------|------------------------------------------------------------
-<nobr><code>ushort</code> key</nobr>             | The attribute's key, by which the attribute can be uniquely identified
+<nobr><code>ushort</code> key</nobr>             | The attribute's key, which serves as a unique id
 <nobr><code>string</code> description</nobr>     | The attribute's name or a short description 
-<nobr><code>Guid</code> catalogue</nobr>         | The uuid of the catalogue that contains the attribute's values
+<nobr><code>Guid</code> catalogue</nobr>         | The id of the catalog that contains the attribute's values
 <nobr><code>string</code> definitionType</nobr>  | Always has the value 'CatalogueAttributeDefinition' and is used to differentiate between  `AttributeDefinition` and `CatalogueAttributeDefinition`
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
