@@ -266,7 +266,7 @@ Property                              | Description
 --------------------------------------|------------------------------------------------------------
 <nobr><code>ushort</code> key</nobr>             | The attribute's key, which serves as a unique id
 <nobr><code>string</code> description</nobr>     | The attribute's name or a short description 
-<nobr><code>Guid</code> catalogue</nobr>         | The id of the catalog that contains the attribute's values
+<nobr><code>Guid</code> catalogue</nobr>         | The id of the catalog that contains the possible attribute values
 <nobr><code>string</code> definitionType</nobr>  | Always has the value 'CatalogueAttributeDefinition' and is used to differentiate between  `AttributeDefinition` and `CatalogueAttributeDefinition`
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
