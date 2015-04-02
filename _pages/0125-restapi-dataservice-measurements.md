@@ -13,7 +13,7 @@ permalink: /restapi/dataservice/measurementsandvalues/
 
 ### Endpoints
 
-You can fetch, create, update and delete measurements and values via the following endpoints: 
+You can fetch, create, update and delete measurements and values using the following endpoints: 
 <br/>
 
 #### Measurements
@@ -22,7 +22,7 @@ You can fetch, create, update and delete measurements and values via the followi
 {% assign endpoint="/measurements" %}
 {% assign summary="Fetches measurements" %}
 {% capture description %}
-You can fetch all measurements or certain measurements. Possible [filter uri parameters](#filters) are 
+You can fetch all measurements or certain measurements only. Possible [filter uri parameters](#filters) are 
 <code data-toggle="tooltip" data-placement="bottom auto" data-html="true" title="Restricts the query to this part path <br><br><code>partPath=/metal%20part</code>">partPath</code>
 `partPath`, `partUuids`, `measurementUuids`, `deep`, `searchCondition`, `order`, `limitResult`, `requestedMeasurementAttributes`, `statistics` and `aggregation`.
 
@@ -105,7 +105,7 @@ GET /dataServiceRest/measurements/5b59cac7-9ecd-403c-aa26-56dd25892421 HTTP/1.1
 {% assign endpoint="/measurements" %}
 {% assign summary="Creates measurements" %}
 {% capture description %}
-To create a measurement, it is necessary to transfer the measurement object within the request's body. A unique identifier and the path are mandatory, attributes and a comment are optional. The attribute keys which are used for the attributes must come from the parts/characteristics attribute range (specified in the {{ site.links['configuration'] }})
+To create a new measurement, you must send its JSON representation in the request body. Values for `uuid` and `path` are required, `attributes` and `comment` are optional. The attribute keys must be valid measurement attributes as specified in the {{ site.links['configuration'] }}.
 
 {{ site.images['info'] }} The comment is only added if versioning is enabled in server settings. 
 {% endcapture %}
@@ -157,7 +157,7 @@ HTTP/1.1 201 Created
 {% assign endpoint="/measurements" %}
 {% assign summary="Updates measurements" %}
 {% capture description %}
-Updating a measurement does always affect the whole measurement. This means that the whole measurement, including attributes and values, needs to be transfered within the body of the request and is deleted and recreated again on server side.
+Updating a measurement does always affect the whole measurement. This means that you must send the whole measurement, including attributes and values, in the request body. The server then deletes the old measurement and creates the new one in a single transaction.
 {% endcapture %}
 
 {% assign exampleCaption="Update a measurement - add and change an attribute" %}
@@ -209,10 +209,10 @@ HTTP/1.1 200 OK
 {% assign endpoint="/measurements" %}
 {% assign summary="Deletes measurements" %}
 {% capture description %}
-There are several possibilities to delete measurements:
+You have multiple options for deleting measurements measurements:
 
 * Delete all measurements
-* Delete measurements from a part by its path
+* Delete measurements from a single part by its path
 * Delete measurements from parts by its uuids
 * Delete measurements by their uuids
 
@@ -290,7 +290,7 @@ HTTP/1.1 200 OK
 {% assign endpoint="/values" %}
 {% assign summary="Fetches measurements including measured values" %}
 {% capture description %}
-You can fetch all measurements including values or certain measurements including values. Possible [filter uri parameters](#filters) are `partPath`, `partUuids`, `measurementUuids`, `deep`, `searchCondition`, `order`, `limitResult`, `characteristicUuids`, `requestedMeasurementAttributes`, `requestedValueAttributes` and `aggregation`.
+You can fetch all measurements with values or only certain measurements with values. Possible [filter uri parameters](#filters) are `partPath`, `partUuids`, `measurementUuids`, `deep`, `searchCondition`, `order`, `limitResult`, `characteristicUuids`, `requestedMeasurementAttributes`, `requestedValueAttributes` and `aggregation`.
 {% endcapture %}
 {% assign exampleCaption="Fetch measurements and values newer than 01.01.2015 restricted to a certain characteristic for a part restricted by its guid" %}
 
@@ -387,7 +387,7 @@ GET /dataServiceRest/values/5b59cac7-9ecd-403c-aa26-56dd25892421 HTTP/1.1
 {% assign endpoint="/values" %}
 {% assign summary="Creates measurements including values" %}
 {% capture description %}
-To create a measurement including values, it is necessary to transfer the measurement object within the request's body. A unique identifier and the path are mandatory, attributes and a comment are optional. The attribute keys which are used for the attributes must come from the parts/characteristics attribute range (specified in the {{ site.links['configuration'] }})
+To create a measurement with values, you must send its JSON representation in the request body. Values for `uuid` and `path` are required, `attributes` and `comment` are optional. The attribute keys must be valid measurement attributes as specified in the {{ site.links['configuration'] }}.
 
 {{ site.images['info'] }} The comment is only added if versioning is enabled in server settings. 
 {% endcapture %}
@@ -454,7 +454,7 @@ HTTP/1.1 201 Created
 {% assign endpoint="/values" %}
 {% assign summary="Updates measurements and values" %}
 {% capture description %}
-Updating a measurement does always affect the whole measurement. This means that the whole measurement, including attributes and values, needs to be transfered within the body of the request and is deleted and recreated again on server side.
+Updating a measurement does always affect the whole measurement. This means that you must send the whole measurement, including attributes and values, in the request body. The server then deletes the old measurement and creates the new one in a single transaction.
 {% endcapture %}
 
 {% assign exampleCaption="Update a measurement - change a measured value" %}
@@ -523,23 +523,23 @@ HTTP/1.1 200 OK
 Parameter name      | Possible values [**default value**] | Description
 --------------------|---------------------|-------------------------------------------------------------
 `measurementUuids`         | Guids of the measurements | Restricts the query to these measurements <br><br> `measurementUuids={5b59cac7-9ecd-403c-aa26-56dd25892421}`
-`partUuids`           | Guids of the parts | Restricts the query to these parts guids <br><br> `partUuids={e42c5327-6258-4c4c-b3e9-6d22c30938b2}`
-`partPath`            | Path of the part | Restricts the query to this part path <br><br> `partPath=/metal%20part` 
-`deep`                | true, **false**     | Determines whether the query should affect all layers. <br> `deep=true` 
-`orderBy`             | ID(s) of the attribute(s) and order direction <br> **4 desc** | Determines which attribute key(s) and which direction the key(s) should be ordered by <br><br> `orderBy:4 asc, 10 desc`
+`partUuids`           | Guids of the parts | Restricts the query to these parts <br><br> `partUuids={e42c5327-6258-4c4c-b3e9-6d22c30938b2}`
+`partPath`            | Path of the part | Restricts the query to this part <br><br> `partPath=/metal%20part` 
+`deep`                | true, **false**     | Determines whether the query should affect all levels of the inspection plan. <br> `deep=true` 
+`orderBy`             | Ids of the attributes and order direction <br> **4 desc** | Determines which attribute keys and which direction the keys should be ordered by <br><br> `orderBy:4 asc, 10 desc`
 `searchCondition`     | AttribueKey, Operator and Value| Restricts the query to given condition(s). Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> Multiple restrictions are combined with '+', the format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. The values need to be surrounded by [ and ]. <br><br> `searchCondition=4>[2012-11-13T00:00:00Z]`
 `limitResult`         | i, i∈N | Restricts the number of result items. <br> `limitResult=100`
-`requestedMeasurementAttributes` | IDs of the attributes | Restricts the query to the attributes that should be returned for measurements. <br><br> `requestedMeasurementAttributes={4,8}`
-`requestedValueAttributes` | IDs of the attributes |List of attributes that should be returned for values. <br><br> `requestedValueAttributes={1,8}`
+`requestedMeasurementAttributes` | Ids of the attributes | Restricts the query to the attributes that should be returned for measurements. <br><br> `requestedMeasurementAttributes={4,8}`
+`requestedValueAttributes` | Ids of the attributes |List of attributes that should be returned for values. <br><br> `requestedValueAttributes={1,8}`
 `characteristicsUuidList` | Uuids of the characteristics | Restricts the query to the characteristics for which values should be returned. <br><br> `characteristicsUuidList={525d15c6-dc70-4ab4-bd3c-8ab2b5780e6b, 8faae7a0-d1e1-4ee2-b3a5-d4526f6ba822}`
-`statistics` | **None**, Simple, Detailed | Indicates how statistical information should be returned: <br>*None* = Return no information<br>*Simple* = Return statistical information including numvber of characteristics out of warning limit, number of characteristics out of tolerance and number of characteristics in warning limit and tolerance<br>Detailed = Return statistical information the same way as *Simple* plus the guid for each characteristic <br><br> `statistics=Simple`
+`statistics` | **None**, Simple, Detailed | Indicates how statistical informtaion should be returned: <br>*None* = Return no information<br>*Simple* = Return statistical information including numvber of characteristics out of warning limit, number of characteristics out of tolerance and number of characteristics in warning limit and tolerance<br>Detailed = Return statistical information the same way as *Simple* plus the guid for each characteristic <br><br> `statistics=Simple`
 `aggregation`          | **Measurements**, AggregationMeasurements, All | Specifies which types of measurements will be fetched. <br><br> `aggregation=All`
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 ### General Information
 
-Measurements do always belong to a single inspection plan part. Depending on the purpose, the measured values are included within a measurement or not. Each measurement consists of the following properties:
+Measurements do always belong to a single inspection plan part. Depending on the purpose, the measured values are included within a measurement or not. Each measurement has the following properties:
 
 {% capture table %}
 Property                                                      | Description
