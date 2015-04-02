@@ -13,7 +13,7 @@ permalink: /restapi/dataservice/serviceInformation/
 
 ### Endpoints
 
-The service information can be fetched via the following endpoint. This endpoint doesn't provide filter parameters.
+The service information can be fetched using the following endpoint. This endpoint doesn't provide filter parameters.
 
 {% assign linkId="serviceInformationEndpointGet" %}
 {% assign method="GET" %}
@@ -70,7 +70,7 @@ The returned ServiceInformation object has the following properties:
 {% capture table %}
 Property                                                   | Description
 -----------------------------------------------------------|---------------------------------------------------------------
-<nobr><code>string</code> serverName</nobr>                | The name of the PiWeb server as specified in the server settings dialog
+<nobr><code>string</code> serverName</nobr>                | The name of the PiWeb server as specified in the server settings
 <nobr><code>string</code> version</nobr>                   | The version number of the PiWeb server
 <nobr><code>bool</code> securityEnabled</nobr>             | Indicates whether authentication is required by the server
 <nobr><code>string</code> edition</nobr>                   | The database edition. Usually this is "PiWebDB"
