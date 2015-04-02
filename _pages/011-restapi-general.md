@@ -52,8 +52,8 @@ PUT          | **200** (Ok)         | **400** (Bad request) –  Update of at le
 DELETE        | **200** (Ok) | **400** (Bad request) – Request of at least one item failed <br> **404** (Not found) – Endpoint or items do not exist
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
-#
-# {{page.sections['parameter']}}
+
+## {{page.sections['parameter']}}
 
 You can restrict requests by attaching certain parameters to the webservice URL in the following format:
 
