@@ -233,7 +233,7 @@ Update a catalog when you want to:
 * rename the catalog or
 * add, update or delete catalog entries.
 
-To update a catalog, the whole object excluding the valid attributes needs to be transmitted in the body of the HTTP request. Updating a catalog essentially replaces the current catalog with the new one (delete followed by an add) in a single transaction.
+To update a catalog, the whole object, excluding the valid attributes, needs to be transmitted in the body of the HTTP request. Updating a catalog essentially replaces the current catalog with the new one (*delete* followed by an *add*) in a single transaction.
 
 {{site.images['info']}} To change the valid attributes, the catalog needs to be deleted an re-created again.
 {% endcapture %}
@@ -293,7 +293,7 @@ HTTP/1.1 200 Ok
 There are two different options for deleting catalogs:
 
 * delete all catalogs or
-* delete one or more certain catalogs identified by their uuid. Therefore you need to add the filter parameter `catalogUuids` to the request uri.
+* delete one or more specific catalogs identified by their uuid. For this request you need to add the filter parameter `catalogUuids` to the request uri.
 {% endcapture %}
 {% assign exampleCaption="Delete the catalog with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
 
@@ -320,7 +320,7 @@ HTTP/1.1 200 Ok
 There are two different options for deleting catalog entries:
 
 * Delete all entries from a certain catalog identified by its uuid or
-* Delete one or more specific entries identified by their keys from a certain catalog identified by its uuid. Therefore you need to add the filter parameter `entryIds` to the request uri.
+* Delete one or more specific entries identified by their keys from a certain catalog identified by its uuid. For this request you need to add the filter parameter `entryIds` to the request uri.
 {% endcapture %}
 
 {% assign exampleCaption="Delete the entries with key 1 and 3 from the catalog with uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
@@ -347,8 +347,8 @@ These endpoints provide the following filter parameters:
 {% capture table %}
 Parameter name | Description
 ---------------|------------------  ------------------------------
-`catalogUuids` | List of catalogue uuids that restrict the request. <br> `{d7291afb-0a67-4c1e-8bcc-6fc455bcc0e5, 8c376bee-ffe3-4ee4-abb9-a55b492e69ad}`
-`entryIds`     | List of catalogue entry ids that restrict the request. <br> `{1,4}`
+`catalogUuids` | A list of catalog uuids to target only specific catalogs <br> `{d7291afb-0a67-4c1e-8bcc-6fc455bcc0e5, 8c376bee-ffe3-4ee4-abb9-a55b492e69ad}`
+`entryIds`     | A list of catalog entry ids to target only specific entries <br> `{1,4}`
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
@@ -376,6 +376,6 @@ Property                                   | Description
 Property                              | Description
 --------------------------------------|----------------------------------------------------
 <nobr><code>short</code> key</nobr>              | Specifies the entry's order within the catalog
-<nobr><code>Attribute[]</code> attributes</nobr> | A list of attributes which consists of key and value. The keys must be from the validAttributes.
+<nobr><code>Attribute[]</code> attributes</nobr> | A list of attributes which consists of key and value. The keys must be in the `validAttributes` list.
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
