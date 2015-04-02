@@ -13,7 +13,7 @@ permalink: /restapi/dataservice/inspectionplan/
 
 ### Endpoints
 
-You can fetch, create, update and delete parts and characteristics via the following endpoints: 
+You can fetch, create, update and delete parts and characteristics using the following endpoints: 
 
 ####Parts
 
@@ -24,7 +24,7 @@ You can fetch, create, update and delete parts and characteristics via the follo
 {% capture description %}
 You can fetch all parts or certain parts. Possible [filter uri parameters](#filters) are `partUuids`, `partPath`, `depth`, `withHistory` and `requestedPartAttributes`.
 {% endcapture %}
-{% assign exampleCaption="Fetch a part by its path '/metal part' without possible child parts restricted to several attributes" %}
+{% assign exampleCaption="Fetch the part at path `/metal part` without child parts and only get the values for attributes `1001` and `1003`" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
@@ -98,7 +98,7 @@ GET /dataServiceRest/parts/05040c4c-f0af-46b8-810e-30c0c00a379e HTTP/1.1
 {% assign summary="Creates parts" %}
 {% capture description %}
 
-To create an inspection plan entity, it is necessary to transfer the entity object in the request's body. A unique identifier and the path are mandatory, attributes and a comment are optional. The attribute keys which you use for the attributes must be contained in the parts attribute range (specified in the {{ site.links['configuration'] }})
+To create a new part, you must send its JSON representation in the request body. Values for `uuid` and `path` are required, attributes and a comment are optional. The attribute keys must be valid part attributes as specified in the {{ site.links['configuration'] }}.
 
 {{ site.images['info'] }} The comment is only added if versioning is enabled in the server settings.
 {% endcapture %}
@@ -149,10 +149,10 @@ HTTP/1.1 201 Created
 
 If you update a part you might want to:
 
-* Rename/move parts
-* Change part's attributes
+* Rename/move parts or
+* change attributes of parts.
 
-{{site.images['info']}} If versioning is activated on server side, every update of one or more parts creates a new version entry.
+{{site.images['info']}} If versioning is activated on the server side, every update creates a new version entry.
 {% endcapture %}
 
 {% assign exampleCaption="Change the "metal part"*s attributes" %}
@@ -196,10 +196,10 @@ HTTP/1.1 200 Ok
 {% assign endpoint="/parts" %}
 {% assign summary="Deletes parts" %}
 {% capture description %}
-There are two ways to delete parts, either by their path or by their uuids. This means that one of the filter parameters `partPath` or `partUuids` has to be set. In both cases the entity itself as well as all children are deleted.
+There are two ways to delete parts, either by their path or by their uuids. This means that one of the filter parameters `partPath` or `partUuids` has to be set. In both cases the request deletes the part itself as well as all its child parts and child characteristics.
 {% endcapture %}
 
-{% assign exampleCaption="Delete the part 'metal part'  and all entities beneath it" %}
+{% assign exampleCaption="Delete the part 'metal part' and its children." %}
 {% capture jsonrequest %}
 {% highlight http %}
 DELETE /dataServiceRest/parts?partPath=/metal%20part HTTP/1.1
@@ -231,10 +231,10 @@ HTTP/1.1 200 Ok
 {% assign endpoint="/parts/:partUuid" %}
 {% assign summary="Delete a part by its :partUuid" %}
 {% capture description %}
-If you delete a part the entity itself as well as all children are deleted.
+Deleting a part also deletes all its children.
 {% endcapture %}
 
-{% assign exampleCaption="Delete the part 'metal part' and all entities beneath it by its guid" %}
+{% assign exampleCaption="Delete the part 'metal part' and all entities beneath it by the part's guid" %}
 {% capture jsonrequest %}
 {% highlight http %}
 DELETE /dataServiceRest/parts/05040c4c-f0af-46b8-810e-30c0c00a379e HTTP/1.1
@@ -271,7 +271,7 @@ HTTP/1.1 200 Ok
 {% assign method="GET" %}
 {% assign endpoint="/characteristics" %}
 {% assign summary="Fetches characteristics" %}
-{% assign description="You can fetch all characteristics or the characteristics described by the uri parameters. Possible [filter uri parameters](#filters) are `partUuids`, `partPath`, `charUuids`, `charPath`, `depth`, `withHistory` and `requestedCharacteristicAttributes`.Only direct characteristics are fetched, characteristics beneath child parts are not considered." %}
+{% assign description="You can fetch all characteristics or only the characteristics described by the uri parameters. Possible [filter uri parameters](#filters) are `partUuids`, `partPath`, `charUuids`, `charPath`, `depth`, `withHistory` and `requestedCharacteristicAttributes`. You can only request direct characteristics of the part, characteristics of child parts will be ignored." %}
 {% assign exampleCaption="Fetch all characteristics beneath the part '/metal part' until depth=2" %}
 
 {% capture jsonrequest %}
@@ -331,7 +331,7 @@ GET /dataServiceRest/characteristics?partPath=/metal%20part&depth=2 HTTP/1.1
 {% assign endpoint="/characteristics/:charUuid" %}
 {% assign summary="Fetches a certain characteristics by its :charUuid" %}
 {% assign description="" %}
-{% assign exampleCaption="Fetch the characteristics '/metal part/deviation_3' by its guid" %}
+{% assign exampleCaption="Fetch the characteristic '/metal part/deviation_3' by its guid" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
@@ -367,7 +367,7 @@ GET /dataServiceRest/characteristics/27e23a7c-dbe7-4863-8461-6abf7b03ddd7 HTTP/1
 {% assign summary="Creates characteristics" %}
 {% capture description %}
 
-To create characteristics, it is necessary to transfer the characteristics in the request's body. A unique identifier and the path are mandatory, attributes and a comment are optional. The attribute keys which are used for the attributes must be contained in the characteristics attribute range (specified in the {{ site.links['configuration'] }})
+To create characteristics, you must send a JSON representation of the characteristics in the request body. A unique identifier and the path are mandatory, attributes and a comment are optional. The attribute keys which are used for the attributes must be contained in the characteristics attribute range (specified in the {{ site.links['configuration'] }})
 
 {{ site.images['info'] }} The comment is only added if versioning is enabled in the server settings.
 {% endcapture %}
@@ -425,7 +425,7 @@ HTTP/1.1 201 Created
 If you update characteristics you want to:
 
 * Rename/move characteristics or
-* Change characteristic's attributes
+* change attributes of characteristics.
 
 {{site.images['info']}} If versioning is activated on server side, every update of one or more parts creates a new version entry.
 {% endcapture %}
@@ -471,7 +471,7 @@ HTTP/1.1 200 Ok
 {% assign endpoint="/characteristics" %}
 {% assign summary="Deletes characteristics" %}
 {% capture description %}
-There are two ways to delete characteristics, either by their path or by their uuids. This means that one of the filter parameters `charPath` or `charUuids` has to be set. In both cases the entity itself as well as all children are deleted.
+You have two options to delete characteristics, either by their paths or by their uuids. This means that one of the filter parameters `charPath` or `charUuids` has to be set. In both cases the request deletes the characteristic itself as well as all its children.
 {% endcapture %}
 
 {% assign exampleCaption="Delete the characteristic 'metal part/deviation_3' and all entities beneath it" %}
@@ -506,7 +506,7 @@ HTTP/1.1 200 Ok
 {% assign endpoint="/characteristics/:charUuid" %}
 {% assign summary="Delete a characteristic by its :charUuid" %}
 {% capture description %}
-If you delete a characteristic, the entity itself as well as all children are deleted.
+Deleting a characteristic also deletes all its children.
 {% endcapture %}
 
 {% assign exampleCaption="Delete the characteristic 'metal part/deviation_3' and all entities beneath it by its guid" %}
@@ -544,31 +544,31 @@ The described endpoints provide the following filters:
 {% capture table %}
 Parameter name        | Possible values [**default value**] | Description
 ----------------------|-------------------------------------|--------------------------------
-`partUuids`           | Guids of the parts | Restricts the query to these parts guids 
-`partPath`            | Path of the part | Restricts the query to this part path  
-`charUuids`           | Guids of the characteristics | Restricts the query to these characteristics guids 
-`charPath`            | Path of the characteristic | Restricts the query to this characteristic path 
-`depth`               | i, i ≥ 0  <br>**1**  | It controls down to which level of the inspection plan the entities should be fetched. Setting `depth=0` means that only the entity itself should be fetched, `depth=1` means the entity and its direct children should be fetched and so on. <br><br>`depth=5` 
-`withHistory`         | true, **false**      | Determines whether the version history should be fetched or not. Does only effect the query if versioning is activated on the server side. <br><br>`withHistory=true`
-`requestedPartAttributes`      | **All**, None or IDs of the attributes | Restricts the query to the attributes that should be returned for parts. <br><br>`requestedPartAttributes={1001,1008}`
-`requestedCharacteristicAttributes` | **All**, None or IDs of the attributes | Restricts the query to the attributes that should be returned for characteristics. <br><br>`requestedCharacteristicAttributes={2001,2101}`
+`partUuids`           | Guids of the parts | Restricts the query to these parts 
+`partPath`            | Path of the part | Restricts the query to this part  
+`charUuids`           | Guids of the characteristics | Restricts the query to these characteristics 
+`charPath`            | Path of the characteristic | Restricts the query to this characteristic 
+`depth`               | i, i ≥ 0  <br>**1**  | Determines how many levels of the inspection plan tree hierarchy should be fetched. Setting `depth=0` means that only the entity itself should be fetched, `depth=1` means the entity and its direct children should be fetched and so on. <br><br>`depth=5` 
+`withHistory`         | true, **false**      | Determines whether the version history should be fetched or not. This only effects the query if versioning is activated on the server side. <br><br>`withHistory=true`
+`requestedPartAttributes`      | `**All**`, `None` or attribute ids | Restricts the query to the attributes that should be returned for parts. <br><br>`requestedPartAttributes={1001,1008}`
+`requestedCharacteristicAttributes` | `**All**`, `None` or attributes ids | Restricts the query to the attributes that should be returned for characteristics. <br><br>`requestedCharacteristicAttributes={2001,2101}`
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 ### General Information
 
-Both parts and characteristics are PiWeb inspection plan entities. They consists of the following properties:
+Both parts and characteristics are PiWeb inspection plan entities. They have the following properties:
 
 {% capture table %}
 Property                               | Description
 ---------------------------------------|-----------------------
 <nobr><code>Guid</code> uuid</nobr>               | Identifies this inspection plan entity uniquely
 <nobr><code>PathInformation</code> path</nobr>    | The path of this entity
-<nobr><code>Attribute</code> attributes</nobr>    | A set of attributes which specifies this entity
+<nobr><code>Attribute</code> attributes</nobr>    | A set of attributes which describe the entity
 <nobr><code>string</code> comment</nobr>          | A comment which describes the last inspection plan change
-<nobr><code>int</code> version</nobr>             | Contains the revision number of the entity. The revision number starts with zero and is incremented by one each time when changes are applied to the inspection plan. The version is only returned in case versioning is enabled in the server settings
-<nobr><code>bool</code> current</nobr>            | Indicates whether the entity is the current version
-<nobr><code>dateTime</code> timeStamp</nobr>      | Contains the date and time of the last update applied to this entity
-<nobr><code>dateTime</code> charChangeDate</nobr> | *(Part only)* The timestamp for the most recent characteristic change on any characteristic that belongs to this part
+<nobr><code>int</code> version</nobr>             | Contains the entity´s revision number. The revision number starts with `0` and is incremented by `1` each time changes are applied to the inspection plan. The version is only returned in case versioning is enabled in the server settings.
+<nobr><code>bool</code> current</nobr>            | Indicates whether the entity is the most recent version
+<nobr><code>dateTime</code> timeStamp</nobr>      | Contains the date and time of when the entity was last updated
+<nobr><code>dateTime</code> charChangeDate</nobr> | *(Parts only)* The timestamp for the most recent characteristic change on any characteristic that belongs to this part
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
