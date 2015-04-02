@@ -22,7 +22,7 @@ The base addresses for the REST based services are:
 ### Data Service
 
 {% highlight http %}
-http(s)://serverUri:port/instanceName/DataServiceRest
+http(s)://`serverUri`:`port`/`instanceName`/DataServiceRest
 {% endhighlight %}
 
 <br/>and
@@ -30,11 +30,12 @@ http(s)://serverUri:port/instanceName/DataServiceRest
 ### Raw Data Service
 
 {% highlight http %}
-http(s)://serverUri:port/instanceName/RawDataServiceRest
+http(s)://`serverUri`:`port`/`instanceName`/RawDataServiceRest
+
 {% endhighlight %}
 
 <br/>
-{{ site.images['info'] }} The instanceName and https are optional and depend on the server settings.
+{{ site.images['info'] }} `instanceName` and `https` are optional and depend on the server settings.
 
 ## {{page.sections['formats']}}
 
@@ -51,10 +52,10 @@ PUT          | **200** (Ok)         | **400** (Bad request) –  Update of at le
 DELETE        | **200** (Ok) | **400** (Bad request) – Request of at least one item failed <br> **404** (Not found) – Endpoint or items do not exist
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
+#
+# {{page.sections['parameter']}}
 
-## {{page.sections['parameter']}}
-
-You can restrict requests by attaching several parameters to the endpoint of the webservice URL in the following format:
+You can restrict requests by attaching certain parameters to the webservice URL in the following format:
 
 {% highlight http %}
 ?parameter=value[&parameter=value] 
@@ -66,12 +67,12 @@ You can restrict requests by attaching several parameters to the endpoint of the
 ?deep=true&orderBy=4 asc
 {% endhighlight %}
 
-{{ site.images['info'] }} If the parameter contains lists of ids guids it needs to be surrounded by “{“ and “}”, the values within the list are separated by “,”.
+{{ site.images['info'] }} If the parameter contains lists of ids it needs to be surrounded by `{` and `}`, the values within the list are separated by `,`.
 
 ## {{page.sections['security']}}
-The access to PiWeb server might be secured by access control settings. Authentication might be Basic Authentification based on username/password credentials or Windows Authentication based on Active Directory integration.
+Access to PiWeb server service might require authentication. Authentication can be either *basic authentication* based on username and password or *Windows authentication* based on Active Directory integration.
 
-If PiWeb server is secured by Basic Authentication you have to pass the credentials within the HTTP Authorization header. The Authorization header must contain the `Basic` key word followed by base64 encoded `user:password` string:
+If PiWeb Server is secured by basic authentication you have to pass the credentials in the HTTP Authorization header. The authorization header must contain the `Basic` key word followed by base64 encoded `user:password` string:
 
 {% highlight http %}
 
