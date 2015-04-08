@@ -13,19 +13,6 @@ links:
 images:
   warning: "![Warning](/PiWeb-Api/images/warning.png)"
   info: "![Info](/PiWeb-Api/images/info.png)"
-  parameter: "![Info](/PiWeb-Api/images/parameter.png)"
-  parameter16: "![Info](/PiWeb-Api/images/parameter_16.png)"
-  returnParameter: "![Info](/PiWeb-Api/images/returnParameter.png)"
-  returnParameter16: "![Info](/PiWeb-Api/images/returnParameter_16.png)"
-  summary: "![Info](/PiWeb-Api/images/summary.png)"
-  summary16: "![Info](/PiWeb-Api/images/summary_16.png)"
-  list-info: "![List Info](/PiWeb-Api/images/list-info.png)"
-  document-info: "![Document Info](/PiWeb-Api/images/document-info.png)"
-  example16: "![Example](/PiWeb-Api/images/example_16.png)"
-  function-get: "![Get](/PiWeb-Api/images/function-get.png)"
-  function-create: "![Create](/PiWeb-Api/images/function-create.png)"
-  function-update: "![Update](/PiWeb-Api/images/function-update.png)"
-  function-delete: "![Delete](/PiWeb-Api/images/function-delete.png)"
 sections:
   getLabel: <span class="label label-primary">GET</span>
   postLabel: <span class="label label-success">POST</span>
