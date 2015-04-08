@@ -146,10 +146,6 @@ code{
   border: none;
 }
 
-.navbar-brand{
-	margin-left: 25px;
-}
-
 .navbar-default .navbar-brand,
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {
@@ -188,6 +184,7 @@ code{
   height: 70px;
   font-size: 40px;
   line-height: 40px;
+  margin-left: 25px;
 }
 
 .navbar-toggle{
