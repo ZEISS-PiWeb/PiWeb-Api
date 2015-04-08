@@ -146,6 +146,10 @@ code{
   border: none;
 }
 
+.navbar-brand{
+	margin-left: 25px;
+}
+
 .navbar-default .navbar-brand,
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {
@@ -177,7 +181,7 @@ code{
 
 .navbar-collapse .navbar-nav{
   margin-top:20px;
-  margin-left: 32px;
+  margin-left: 52px;
 }
 
 .navbar-brand {
