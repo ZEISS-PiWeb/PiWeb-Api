@@ -527,7 +527,6 @@ Parameter name      | Possible values [**default value**] | Description
 `partPath`            | Path of the part | Restricts the query to this part <br><br> `partPath=/metal%20part` 
 `deep`                | true, **false**     | Determines whether the query should affect all levels of the inspection plan. <br> `deep=true` 
 `orderBy`             | Ids of the attributes and order direction <br> **4 desc** | Determines which attribute keys and which direction the keys should be ordered by <br><br> `orderBy:4 asc, 10 desc`
-`searchCondition`     | AttribueKey, Operator and Value| Restricts the query to given condition(s). Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> Multiple restrictions are combined with '+', the format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. The values need to be surrounded by [ and ]. <br><br> `searchCondition=4>[2012-11-13T00:00:00Z]`
 `limitResult`         | i, i∈N | Restricts the number of result items. <br> `limitResult=100`
 `requestedMeasurementAttributes` | Ids of the attributes | Restricts the query to the attributes that should be returned for measurements. <br><br> `requestedMeasurementAttributes={4,8}`
 `requestedValueAttributes` | Ids of the attributes |List of attributes that should be returned for values. <br><br> `requestedValueAttributes={1,8}`
