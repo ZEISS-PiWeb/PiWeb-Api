@@ -161,7 +161,7 @@ code{
   border-color: #FDFDFD;
 }
 
-.navbar-default>.affix{
+nav>.affix{
 	margin-top: -50px;
 	position: fixed;
   	right: 0;
@@ -317,8 +317,8 @@ ul.subNavList>li>a:hover {
 	display: list-item;
 }
 
-.page-nav>.affix{
-	margin-top: -110px;
+div>.affix{
+	margin-top: -195px;
 }
 
 .footer{
