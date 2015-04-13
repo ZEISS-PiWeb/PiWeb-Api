@@ -4,6 +4,7 @@ body {
   background-color:#FDFDFD;
   color: #232323;
   margin: 0;
+  padding-top: 0;
   line-height: 1.5em;
   -webkit-font-smoothing: antialiased;
 }
