@@ -127,13 +127,6 @@ code{
   	height: 5px;
 }
 
-.container-header-footer>a,
-.container-header-footer>a:hover,
-.container-header-footer>a:focus{
-	color: #FDFDFD;
-	text-decoration: none;
-}
-
 .navbar-default {
   background-color: inherit;
   border: none;
@@ -223,7 +216,8 @@ ul.subNavList>li>a:hover {
 	border-left: 2px solid #337ab7;
 }
 
-#navbar>.nav>li.active>a {
+#navbar>.nav>li.active>a,
+#navbar>.nav>li.hover>a{
 	padding-left: 13px;
 }
 
