@@ -180,6 +180,12 @@ code{
   margin-left: 52px;
 }
 
+@media (min-width: 767px) {
+	.navbar-nav {
+		margin-left: 76px;
+	}
+}
+
 .navbar-brand {
   height: 70px;
   font-size: 40px;
@@ -188,7 +194,7 @@ code{
 
 @media (min-width: 767px) {
 	.navbar-brand {
-		margin-left: 76px;
+		margin-left: 0px;
 	}
 }
 
