@@ -114,7 +114,7 @@ code{
 	}
 }
 
-.container-header-footer .affix-top{
+.container-header-footer .affix{
 	margin-top: -50px;
 	position: fixed;
   	right: 0;
@@ -317,7 +317,7 @@ ul.subNavList>li>a:hover {
 	display: list-item;
 }
 
-.affix{
+.page-nav .affix{
 	margin-top: -110px;
 }
 
