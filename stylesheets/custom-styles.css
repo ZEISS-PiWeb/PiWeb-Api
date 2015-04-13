@@ -223,6 +223,7 @@ ul.subNavList>li>a:hover {
 
 #navbar>.nav>li>a{
 	display: inline;
+	padding: 0px 15px;
 }
 
 #navbar>.nav>li>a:hover{
