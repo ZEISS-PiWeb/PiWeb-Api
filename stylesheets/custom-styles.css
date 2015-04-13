@@ -114,13 +114,6 @@ code{
 	}
 }
 
-.container-header-footer .affix{
-	margin-top: -50px;
-	position: fixed;
-  	right: 0;
-  	left: 0;
-}
-
 .nav>li.fixedWidth{
 	width: 60px;
 }
@@ -166,6 +159,13 @@ code{
 
 .navbar-default .navbar-toggle {
   border-color: #FDFDFD;
+}
+
+.navbar-default>.affix{
+	margin-top: -50px;
+	position: fixed;
+  	right: 0;
+  	left: 0;
 }
 
 .navbar-collapse .navbar-nav{
@@ -317,7 +317,7 @@ ul.subNavList>li>a:hover {
 	display: list-item;
 }
 
-.page-nav .affix{
+.page-nav>.affix{
 	margin-top: -110px;
 }
 
