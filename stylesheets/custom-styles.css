@@ -217,7 +217,7 @@ ul.subNavList>li>a:hover {
 }
 
 #navbar>.nav>li.active>a,
-#navbar>.nav>li.hover>a{
+#navbar>.nav>li:hover>a{
 	padding-left: 13px;
 }
 
