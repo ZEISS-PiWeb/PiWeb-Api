@@ -4,14 +4,17 @@ body {
   background-color:#FDFDFD;
   color: #232323;
   margin: 0;
-  padding-top: 95px;
-  line-height: 2em;
+  line-height: 1.5em;
   -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, h4, h5, h6 {
   color:#232323;
   margin:36px 0 10px;
+}
+
+h1{
+	margin-top: 0;
 }
 
 h2{
@@ -99,18 +102,13 @@ code{
 .container-header {
   background-color: #437AB4;
   color: #FDFDFD;
-  font-weight: 400;
   padding-left: 10px;
+  height: 50px;
 }
 
 @media (min-width: 767px) {
 	.container-header {
-		padding-left:25px;
-	}
-	.container-header-top{
-		margin-top: 10px;
-		border-top-left-radius: 10px;
-		border-top-right-radius: 10px;
+		padding-left:32px;
 	}
 }
 
@@ -120,10 +118,6 @@ code{
 
 .navbar-right{
 	margin-right:0;
-}
-
-.navbar-header{
-	 text-shadow: rgba(0, 0, 0, 0.4) 2px 2px 4px;
 }
 
 .container-header-footer{
@@ -156,9 +150,8 @@ code{
 .navbar-default .navbar-nav>li>a:focus, 
 .navbar-default .navbar-nav>li>a:hover{
   color: #FDFDFD;
-  font-size: larger;
-  padding-top: 7px;
-  padding-bottom: 10px;
+  padding-top: 4px;
+  padding-bottom: 5px;
 }
 
 .navbar-default .navbar-nav>li>a.active{
@@ -176,19 +169,12 @@ code{
 }
 
 .navbar-collapse .navbar-nav{
-  margin-top:20px;
-}
-
-@media (min-width: 992px) {
-	.navbar-nav {
-		margin-left: 76px;
-	}
+  margin-top:12px;
+  margin-left: 15px;
 }
 
 .navbar-brand {
-  height: 70px;
-  font-size: 40px;
-  line-height: 40px;
+  font-size: 2.3em;
 }
 
 @media (min-width: 768px) {
@@ -210,10 +196,6 @@ background-color: #FDFDFD;
 .row{
 	margin-left:0;
 	margin-right:0;
-}
-
-.page-nav{
-  padding: 40px 0px;
 }
 
 .page-main{
