@@ -193,8 +193,9 @@ background-color: #FDFDFD;
 }
 
 .row{
-	margin-left:0;
-	margin-right:0;
+	margin-left: 0;
+	margin-right: 0;
+	margin-top: 40px;
 }
 
 .page-main{
