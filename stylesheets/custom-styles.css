@@ -180,7 +180,7 @@ code{
   margin-left: 52px;
 }
 
-@media (min-width: 767px) {
+@media (min-width: 768px) {
 	.navbar-nav {
 		margin-left: 76px;
 	}
@@ -192,7 +192,7 @@ code{
   line-height: 40px;
 }
 
-@media (min-width: 767px) {
+@media (min-width: 768px) {
 	.navbar-brand {
 		margin-left: 0px;
 	}
