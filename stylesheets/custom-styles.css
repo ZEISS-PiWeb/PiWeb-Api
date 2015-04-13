@@ -312,4 +312,16 @@ ul.subNavList>li>a:hover {
 .affix{
 	margin-top: -110px;
 }
+
+.footer{
+	text-align: center;
+	border-top: 3px solid #437AB4;
+  	padding: 20px;
+  	background-color: #245E9A;	
+}
+
+.footer>a, 
+.footer>a:hover, 
+.footer>a:visited{
+	color: #DDD;
 }
