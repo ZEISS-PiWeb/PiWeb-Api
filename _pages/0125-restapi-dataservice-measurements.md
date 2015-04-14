@@ -537,7 +537,7 @@ Parameter name      | Possible values [**default value**] | Description
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
-### General Information
+### Object Structure
 
 Measurements do always belong to a single inspection plan part. Depending on the purpose, the measured values are included within a measurement or not. Each measurement has the following properties:
 
