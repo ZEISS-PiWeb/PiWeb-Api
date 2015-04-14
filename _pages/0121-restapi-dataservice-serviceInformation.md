@@ -61,7 +61,7 @@ GET /dataServiceRest/serviceInformation HTTP/1.1
 {% endcapture %}
 {% include endpointTab.html %}
 
-### Obejct Structure
+### Object Structure
 
 Service information requests always have the smallest response time and are therefore well suited for checking the connection. Fetching the service information doesn't require authentication.
 
