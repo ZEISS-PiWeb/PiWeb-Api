@@ -116,7 +116,7 @@ GET /rawDataServiceRest/rawData/part/05040c4c-f0af-46b8-810e-30c0c00a379e HTTP/1
 
 {% include endpointTab.html %}
 
-### General Information
+### Object Structure
 
 The returned objects contains the following properties:
 
