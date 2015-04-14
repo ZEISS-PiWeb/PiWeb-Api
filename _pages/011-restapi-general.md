@@ -8,10 +8,10 @@ permalink: /restapi/general/
 sections:
    addresses: Addresses
    formats: Formats
-   codes: Status Codes
-   parameter: Url Parameter
    security: Security
-   envelope: Response Envelope
+   parameter: Url Parameter
+   codes: Status Codes
+   response: Response
 redirect_from: "/"
 ---
 
@@ -41,17 +41,16 @@ http(s)://serverUri:port/instanceName/RawDataServiceRest
 
 The input and output format is JSON as it is the most performance and memory efficient format at the moment.
 
-## {{page.sections['codes']}}
+## {{page.sections['security']}}
+Access to PiWeb server service might require authentication. Authentication can be either *basic authentication* based on username and password or *Windows authentication* based on Active Directory integration.
 
-{% capture table %}
-Method        | Statuscodes
-------------- | -----------------------------------------------------------------------------------
-GET           | **200** (OK)<br> **400** (Bad request) - Request failed <br> **404** (Not found) - Endpoint or item does not exist 
-POST           | **201** (Created)<br> **400** (Bad request) – Creation of at least one item failed, e.g. due to bad formatting <br> **404** (Not found) – Endpoint doesn't exist <br> **409** (Conflict) – An item does already exist
-PUT          | **200** (OK)<br> **400** (Bad request) –  Update of at least one item failed, e.g. due to bad formatting <br> **404** (Not found) – Endpoint or item(s) doesn't exist
-DELETE        | **200** (OK)<br>**400** (Bad request) – Request of at least one item failed <br> **404** (Not found) – Endpoint or items do not exist
-{% endcapture %}
-{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
+If PiWeb Server is secured by basic authentication you have to pass the credentials in the HTTP Authorization header. The authorization header must contain the `Basic` key word followed by base64 encoded `user:password` string:
+
+{% highlight http %}
+
+Authorization: Basic QWRtaW5pc3RyYXRvcjphZG0hbiFzdHJhdDBy
+
+{% endhighlight %}
 
 ## {{page.sections['parameter']}}
 
@@ -69,31 +68,25 @@ You can restrict requests by attaching certain parameters to the webservice URL 
 
 {{ site.images['info'] }} If the parameter contains lists of ids it needs to be surrounded by `{` and `}`, the values within the list are separated by `,`.
 
-## {{page.sections['security']}}
-Access to PiWeb server service might require authentication. Authentication can be either *basic authentication* based on username and password or *Windows authentication* based on Active Directory integration.
+## {{page.sections['codes']}}
 
-If PiWeb Server is secured by basic authentication you have to pass the credentials in the HTTP Authorization header. The authorization header must contain the `Basic` key word followed by base64 encoded `user:password` string:
+{% capture table %}
+Method        | Statuscodes
+------------- | -----------------------------------------------------------------------------------
+GET           | **200** (OK)<br> **400** (Bad request) - Request failed <br> **404** (Not found) - Endpoint or item does not exist 
+POST           | **201** (Created)<br> **400** (Bad request) – Creation of at least one item failed, e.g. due to bad formatting <br> **404** (Not found) – Endpoint doesn't exist <br> **409** (Conflict) – An item does already exist
+PUT          | **200** (OK)<br> **400** (Bad request) –  Update of at least one item failed, e.g. due to bad formatting <br> **404** (Not found) – Endpoint or item(s) doesn't exist
+DELETE        | **200** (OK)<br>**400** (Bad request) – Request of at least one item failed <br> **404** (Not found) – Endpoint or items do not exist
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
-{% highlight http %}
 
-Authorization: Basic QWRtaW5pc3RyYXRvcjphZG0hbiFzdHJhdDBy
-
-{% endhighlight %}
-
-## {{page.sections['envelope']}}
-Every response, excluding streamed data responses, consists of a response envelope which includes meta data and the data returned by the webservice. A typical response envelope looks as follows:
+## {{page.sections['response']}}
+Every response consists either of the requested data or of an error message returned by the webservice. A typical error response looks as follows:
 
 {% highlight json %}
 {
-   "status":
-   {
-       "statusCode": 200,
-       "statusDescription": "OK"
-   },
-   "category": "Success",
-   "data":
-   {...}
+   "message": "Unable to insert inspection plan items. An item with path '/metal part/' 
+               [uuid: 05040c4c-f0af-46b8-810e-30c0c00a379e] does already exist."
 }
 {% endhighlight %}
-
-The possible status codes and their meanings can be found above in [{{page.sections['codes']}}](#{{page.sections['codes'] | downcase | replace:' ','-' }}).
