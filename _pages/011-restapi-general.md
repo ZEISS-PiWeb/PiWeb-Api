@@ -19,15 +19,13 @@ redirect_from: "/"
 
 The base addresses for the REST based services are:
 
-### Data Service
+#### Data Service
 
 {% highlight http %}
 http(s)://serverUri:port/instanceName/DataServiceRest
 {% endhighlight %}
 
-<br/>and
-
-### Raw Data Service
+#### Raw Data Service
 
 {% highlight http %}
 http(s)://serverUri:port/instanceName/RawDataServiceRest
