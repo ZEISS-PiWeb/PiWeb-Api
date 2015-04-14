@@ -136,17 +136,6 @@ POST /dataServiceRest/parts/measurements HTTP/1.1
 {% highlight http %}
 HTTP/1.1 201 Created
 {% endhighlight %}
-
-{% highlight json %}
-{
-   "status":
-   {
-       "statusCode": 201,
-       "statusDescription": "Created"
-   },
-   "category": "Success"
-}
-{% endhighlight %}
 {% endcapture %}
 
 {% include endpointTab.html %}
@@ -188,17 +177,6 @@ POST /dataServiceRest/measurements HTTP/1.1
 {% highlight http %}
 HTTP/1.1 200 OK
 {% endhighlight %}
-
-{% highlight json %}
-{
-   "status":
-   {
-       "statusCode": 200,
-       "statusDescription": "OK"
-   },
-   "category": "Success"
-}
-{% endhighlight %}
 {% endcapture %}
 
 {% include endpointTab.html %}
@@ -231,17 +209,6 @@ POST /dataServiceRest/measurements?partUuids={4b59cac7-9ecd-403c-aa26-56dd258924
 {% highlight http %}
 HTTP/1.1 200 OK
 {% endhighlight %}
-
-{% highlight json %}
-{
-   "status":
-   {
-       "statusCode": 200,
-       "statusDescription": "OK"
-   },
-   "category": "Success"
-}
-{% endhighlight %}
 {% endcapture %}
 
 {% include endpointTab.html %}
@@ -264,17 +231,6 @@ POST /dataServiceRest/measurements/5b59cac7-9ecd-403c-aa26-56dd25892421 HTTP/1.1
 {% capture jsonresponse %}
 {% highlight http %}
 HTTP/1.1 200 OK
-{% endhighlight %}
-
-{% highlight json %}
-{
-   "status":
-   {
-       "statusCode": 200,
-       "statusDescription": "OK"
-   },
-   "category": "Success"
-}
 {% endhighlight %}
 {% endcapture %}
 
@@ -433,17 +389,6 @@ POST /dataServiceRest/values HTTP/1.1
 {% highlight http %}
 HTTP/1.1 201 Created
 {% endhighlight %}
-
-{% highlight json %}
-{
-   "status":
-   {
-       "statusCode": 201,
-       "statusDescription": "Created"
-   },
-   "category": "Success"
-}
-{% endhighlight %}
 {% endcapture %}
 
 {% include endpointTab.html %}
@@ -499,17 +444,6 @@ POST /dataServiceRest/measurements HTTP/1.1
 {% capture jsonresponse %}
 {% highlight http %}
 HTTP/1.1 200 OK
-{% endhighlight %}
-
-{% highlight json %}
-{
-   "status":
-   {
-       "statusCode": 200,
-       "statusDescription": "OK"
-   },
-   "category": "Success"
-}
 {% endhighlight %}
 {% endcapture %}
 

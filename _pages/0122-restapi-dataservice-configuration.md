@@ -111,17 +111,6 @@ POST /dataServiceRest/configuration/parts HTTP/1.1
 {% highlight http %}
 HTTP/1.1 201 Created
 {% endhighlight %}
-
-{% highlight json %}
-{
-   "status":
-   {
-       "statusCode": 201,
-       "statusDescription": "Created"
-   },
-   "category": "Success"
-}
-{% endhighlight %}
 {% endcapture %}
 
 {% include endpointTab.html %}
@@ -156,17 +145,6 @@ PUT /dataServiceRest/configuration/parts HTTP/1.1
 {% highlight http %}
 HTTP/1.1 200 Ok
 {% endhighlight %}
-
-{% highlight json %}
-{
-   "status":
-   {
-       "statusCode": 200,
-       "statusDescription": "Ok"
-   },
-   "category": "Success"
-}
-{% endhighlight %}
 {% endcapture %}
 
 {% include endpointTab.html %}
@@ -189,17 +167,6 @@ DELETE /dataServiceRest/configuration HTTP/1.1
 {% highlight http %}
 HTTP/1.1 200 Ok
 {% endhighlight %}
-
-{% highlight json %}
-{
-   "status":
-   {
-       "statusCode": 200,
-       "statusDescription": "Ok"
-   },
-   "category": "Success"
-}
-{% endhighlight %}
 {% endcapture %}
 
 {% include endpointTab.html %}
@@ -221,17 +188,6 @@ DELETE /dataServiceRest/configuration/part/(1001, 1002) HTTP/1.1
 {% capture jsonresponse %}
 {% highlight http %}
 HTTP/1.1 200 Ok
-{% endhighlight %}
-
-{% highlight json %}
-{
-   "status":
-   {
-       "statusCode": 200,
-       "statusDescription": "Ok"
-   },
-   "category": "Success"
-}
 {% endhighlight %}
 {% endcapture %}
 

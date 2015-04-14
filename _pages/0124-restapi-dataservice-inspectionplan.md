@@ -125,17 +125,6 @@ POST /dataServiceRest/parts HTTP/1.1
 {% highlight http %}
 HTTP/1.1 201 Created
 {% endhighlight %}
-
-{% highlight json %}
-{
-   "status":
-   {
-       "statusCode": 201,
-       "statusDescription": "Created"
-   },
-   "category": "Success"
-}
-{% endhighlight %}
 {% endcapture %}
 
 {% include endpointTab.html %}
@@ -176,17 +165,6 @@ PUT /dataServiceRest/parts HTTP/1.1
 {% highlight http %}
 HTTP/1.1 200 Ok
 {% endhighlight %}
-
-{% highlight json %}
-{
-   "status":
-   {
-       "statusCode": 200,
-       "statusDescription": "Ok"
-   },
-   "category": "Success"
-}
-{% endhighlight %}
 {% endcapture %}
 
 {% include endpointTab.html %}
@@ -209,17 +187,6 @@ DELETE /dataServiceRest/parts?partPath=/metal%20part HTTP/1.1
 {% capture jsonresponse %}
 {% highlight http %}
 HTTP/1.1 200 Ok
-{% endhighlight %}
-
-{% highlight json %}
-{
-   "status":
-   {
-       "statusCode": 200,
-       "statusDescription": "Ok"
-   },
-   "category": "Success"
-}
 {% endhighlight %}
 {% endcapture %}
 
@@ -244,17 +211,6 @@ DELETE /dataServiceRest/parts/05040c4c-f0af-46b8-810e-30c0c00a379e HTTP/1.1
 {% capture jsonresponse %}
 {% highlight http %}
 HTTP/1.1 200 Ok
-{% endhighlight %}
-
-{% highlight json %}
-{
-   "status":
-   {
-       "statusCode": 200,
-       "statusDescription": "Ok"
-   },
-   "category": "Success"
-}
 {% endhighlight %}
 {% endcapture %}
 
@@ -400,17 +356,6 @@ POST /dataServiceRest/characteristics HTTP/1.1
 {% highlight http %}
 HTTP/1.1 201 Created
 {% endhighlight %}
-
-{% highlight json %}
-{
-   "status":
-   {
-       "statusCode": 201,
-       "statusDescription": "Created"
-   },
-   "category": "Success"
-}
-{% endhighlight %}
 {% endcapture %}
 
 {% include endpointTab.html %}
@@ -451,17 +396,6 @@ PUT /dataServiceRest/characteristics HTTP/1.1
 {% highlight http %}
 HTTP/1.1 200 Ok
 {% endhighlight %}
-
-{% highlight json %}
-{
-   "status":
-   {
-       "statusCode": 200,
-       "statusDescription": "Ok"
-   },
-   "category": "Success"
-}
-{% endhighlight %}
 {% endcapture %}
 
 {% include endpointTab.html %}
@@ -484,17 +418,6 @@ DELETE /dataServiceRest/parts?charPath=/metal%20part/deviation_3 HTTP/1.1
 {% capture jsonresponse %}
 {% highlight http %}
 HTTP/1.1 200 Ok
-{% endhighlight %}
-
-{% highlight json %}
-{
-   "status":
-   {
-       "statusCode": 200,
-       "statusDescription": "Ok"
-   },
-   "category": "Success"
-}
 {% endhighlight %}
 {% endcapture %}
 
@@ -519,17 +442,6 @@ DELETE /dataServiceRest/characteristics/27e23a7c-dbe7-4863-8461-6abf7b03ddd7 HTT
 {% capture jsonresponse %}
 {% highlight http %}
 HTTP/1.1 200 Ok
-{% endhighlight %}
-
-{% highlight json %}
-{
-   "status":
-   {
-       "statusCode": 200,
-       "statusDescription": "Ok"
-   },
-   "category": "Success"
-}
 {% endhighlight %}
 {% endcapture %}
 
