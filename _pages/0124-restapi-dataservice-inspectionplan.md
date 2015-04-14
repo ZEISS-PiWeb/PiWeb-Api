@@ -555,13 +555,13 @@ Parameter name        | Possible values [**default value**] | Description
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
-### General Information
+### Object Structure
 
 Both parts and characteristics are PiWeb inspection plan entities. They have the following properties:
 
 {% capture table %}
-Property                               | Description
----------------------------------------|-----------------------
+Property                                          | Description
+--------------------------------------------------|-----------------------
 <nobr><code>Guid</code> uuid</nobr>               | Identifies this inspection plan entity uniquely
 <nobr><code>PathInformation</code> path</nobr>    | The path of this entity
 <nobr><code>Attribute</code> attributes</nobr>    | A set of attributes which describe the entity
