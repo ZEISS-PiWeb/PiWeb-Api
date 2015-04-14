@@ -22,7 +22,7 @@ The base addresses for the REST based services are:
 ### Data Service
 
 {% highlight http %}
-http(s)://`serverUri`:`port`/`instanceName`/DataServiceRest
+http(s)://serverUri:port/instanceName/DataServiceRest
 {% endhighlight %}
 
 <br/>and
@@ -30,7 +30,7 @@ http(s)://`serverUri`:`port`/`instanceName`/DataServiceRest
 ### Raw Data Service
 
 {% highlight http %}
-http(s)://`serverUri`:`port`/`instanceName`/RawDataServiceRest
+http(s)://serverUri:port/instanceName/RawDataServiceRest
 
 {% endhighlight %}
 
@@ -44,12 +44,12 @@ The input and output format is JSON as it is the most performance and memory eff
 ## {{page.sections['codes']}}
 
 {% capture table %}
-Method        | Statuscode Ok        | Statuscode Failure                                       
-------------- | :------------------- | ----------------------------------------------------------------
-GET           | **200** (OK)         | **400** (Bad request) - Request failed <br> **404** (Not found) - Endpoint or item does not exist 
-POST           | **201** (Created)    | **400** (Bad request) – Creation of at least one item failed, e.g. due to bad formatting <br> **404** (Not found) – Endpoint doesn't exist <br> **409** (Conflict) – An item does already exist
-PUT          | **200** (Ok)         | **400** (Bad request) –  Update of at least one item failed, e.g. due to bad formatting <br> **404** (Not found) – Endpoint or item(s) doesn't exist
-DELETE        | **200** (Ok) | **400** (Bad request) – Request of at least one item failed <br> **404** (Not found) – Endpoint or items do not exist
+Method        | Statuscodes
+------------- | -----------------------------------------------------------------------------------
+GET           | **200** (OK)<br> **400** (Bad request) - Request failed <br> **404** (Not found) - Endpoint or item does not exist 
+POST           | **201** (Created)<br> **400** (Bad request) – Creation of at least one item failed, e.g. due to bad formatting <br> **404** (Not found) – Endpoint doesn't exist <br> **409** (Conflict) – An item does already exist
+PUT          | **200** (OK)<br> **400** (Bad request) –  Update of at least one item failed, e.g. due to bad formatting <br> **404** (Not found) – Endpoint or item(s) doesn't exist
+DELETE        | **200** (OK)**400** (Bad request) – Request of at least one item failed <br> **404** (Not found) – Endpoint or items do not exist
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
