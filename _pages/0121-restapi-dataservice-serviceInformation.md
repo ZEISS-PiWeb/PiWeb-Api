@@ -35,7 +35,7 @@ GET /dataServiceRest/serviceInformation HTTP/1.1
    "data":
    [
        {
-          "serverName": "PiWeb Server DEDRSW9KKNVY1",
+          "serverName": "PiWeb Server",
           "version": "5.6.2.0",
           "securityEnabled": false,
           "edition": "PiWebDB",
@@ -61,7 +61,7 @@ GET /dataServiceRest/serviceInformation HTTP/1.1
 {% endcapture %}
 {% include endpointTab.html %}
 
-### General Information
+### Obejct Structure
 
 Service information requests always have the smallest response time and are therefore well suited for checking the connection. Fetching the service information doesn't require authentication.
 
