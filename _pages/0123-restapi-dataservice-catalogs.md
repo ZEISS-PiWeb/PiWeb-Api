@@ -353,7 +353,7 @@ Parameter name | Description
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 
-### General Information
+### Object Structure
 
 Each catalog describes a list of entries. All entries have the same defined set of attributes, called *valid attributes*. 
 All valid attributes must be created as *catalog attributes* beforehand. `Catalog` and `CatalogEntry`have the following structures:
