@@ -1,5 +1,5 @@
 ---
-category: sdk
+area: sdk
 level: 0
 title: .NET SDK
 permalink: /sdk/general/
