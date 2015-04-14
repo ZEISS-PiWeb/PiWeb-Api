@@ -28,6 +28,13 @@ Constructor method | Description
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
+{{ site.headers['example'] }} A data service client for a server using https on host "piwebserver" on port 8080.
+
+{% highlight csharp %}
+var dataserviceRestClient = new DataServiceRestClient( "https", "piwebserver", 8080 );
+{% endhighlight %}
+
+
 ###Rawdata Service
 
 {% capture table %}
@@ -38,12 +45,6 @@ Constructor method | Description
 ```public RawDataServiceRestClient( string scheme, string host, int port, string instance = null )``` | Instantiates the client with the given uri segments.
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
-
-{{ site.headers['example'] }} A data service client for a server using https on host "piwebserver" on port 8080.
-
-{% highlight csharp %}
-var dataserviceRestClient = new DataServiceRestClient( "https", "piwebserver", 8080 );
-{% endhighlight %}
 
 {{ site.headers['example'] }} A raw data service client pointed to "http:piwebserver:8082"
 
