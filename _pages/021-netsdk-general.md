@@ -1,7 +1,7 @@
 ---
-category: sdk
+area: sdk
 level: 1
-subCategory: general
+category: general
 title: .NET SDK
 subTitle: General Information
 permalink: /sdk/general/
