@@ -237,7 +237,7 @@ HTTP/1.1 200 Ok
 
 {% include endpointTab.html %}
 
-### General Information
+### Object Structure
 
 The PiWeb configuration consists of a list of attributes for each entity type. 
 The different entity types are: 
