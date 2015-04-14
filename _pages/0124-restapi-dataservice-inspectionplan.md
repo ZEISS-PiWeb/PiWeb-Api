@@ -542,16 +542,16 @@ HTTP/1.1 200 Ok
 The described endpoints provide the following filters:
 
 {% capture table %}
-Parameter name        | Possible values [**default value**] | Description
-----------------------|-------------------------------------|--------------------------------
-`partUuids`           | Guids of the parts | Restricts the query to these parts 
-`partPath`            | Path of the part | Restricts the query to this part  
-`charUuids`           | Guids of the characteristics | Restricts the query to these characteristics 
-`charPath`            | Path of the characteristic | Restricts the query to this characteristic 
-`depth`               | i, i ≥ 0  <br>**1**  | Determines how many levels of the inspection plan tree hierarchy should be fetched. Setting `depth=0` means that only the entity itself should be fetched, `depth=1` means the entity and its direct children should be fetched and so on. <br><br>`depth=5` 
-`withHistory`         | true, **false**      | Determines whether the version history should be fetched or not. This only effects the query if versioning is activated on the server side. <br><br>`withHistory=true`
-`requestedPartAttributes`      | `**All**`, `None` or attribute ids | Restricts the query to the attributes that should be returned for parts. <br><br>`requestedPartAttributes={1001,1008}`
-`requestedCharacteristicAttributes` | `**All**`, `None` or attributes ids | Restricts the query to the attributes that should be returned for characteristics. <br><br>`requestedCharacteristicAttributes={2001,2101}`
+Parameter name                                                                 | Description
+-------------------------------------------------------------------------------|--------------------------------
+<nobr><code>Guid list</code> partUuids</nobr>                                  | Restricts the query to the parts with these uuids.
+<nobr><code>Path</code> partPath</nobr>                                        | Restricts the query to the part with this path.
+<nobr><code>Guid list</code> charUuids</nobr>                                  | Restricts the query to characteristics with these uuids.
+<nobr><code>Path</code> charPath</nobr>                                        | Restricts the query to the part with this characteristics.
+<nobr><code>ushort</code> depth</nobr>                                         | Determines how many levels of the inspection plan tree hierarchy should be fetched. Setting `depth=0` means that only the entity itself should be fetched, `depth=1` means the entity and its direct children should be fetched. Please note that depth is treated relative of the path depth of the provided part or characteristic.
+<nobr><code>bool</code> withHistory</nobr>                                     | Determines whether the version history should be fetched or not. This only effects the query if versioning is activated on the server side. <br><br>`withHistory=true`
+<nobr><code>All, None, ID list</code> requestedPartAttributes</nobr>           | Restricts the query to the attributes that should be returned for parts, for example `requestedPartAttributes={1001, 1008}`.
+<nobr><code>All, None, ID list</code> requestedCharacteristicAttributes</nobr> | Restricts the query to the attributes that should be returned for characteristics, for example `requestedCharacteristicAttributes={2001, 2101}`
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
