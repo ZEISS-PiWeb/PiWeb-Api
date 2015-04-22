@@ -38,23 +38,22 @@ GET /dataServiceRest/measurements?partUuids=(e42c5327-6258-4c4c-b3e9-6d22c30938b
 {% capture jsonresponse %}
 
 {% highlight json %}
-{
-  ...
-   "data":
-   [
+
+ [
+   {
+     "uuid": "5b59cac7-9ecd-403c-aa26-56dd25892421",
+     "partUuid": "e42c5327-6258-4c4c-b3e9-6d22c30938b2",
+     "lastModified": "2015-03-09T09:19:38.653Z",
+     "attributes":
      {
-       "uuid": "5b59cac7-9ecd-403c-aa26-56dd25892421",
-       "partUuid": "e42c5327-6258-4c4c-b3e9-6d22c30938b2",
-       "lastModified": "2015-03-09T09:19:38.653Z",
-       "attributes":
-       {
-           "4": "2015-03-09T19:12:00Z",
-           "6": "3",
-           "7": "0"
-       }
-      },
-      ...
-}
+         "4": "2015-03-09T19:12:00Z",
+         "6": "3",
+         "7": "0"
+     }
+    },
+    ...
+  ]
+
 {% endhighlight %}
 {% endcapture %}
 
@@ -77,23 +76,21 @@ GET /dataServiceRest/measurements/5b59cac7-9ecd-403c-aa26-56dd25892421 HTTP/1.1
 {% capture jsonresponse %}
 
 {% highlight json %}
-{
-  ...
-   "data":
-   [
+
+ [
+   {
+     "uuid": "5b59cac7-9ecd-403c-aa26-56dd25892421",
+     "partUuid": "e42c5327-6258-4c4c-b3e9-6d22c30938b2",
+     "lastModified": "2015-03-09T09:19:38.653Z",
+     "attributes":
      {
-       "uuid": "5b59cac7-9ecd-403c-aa26-56dd25892421",
-       "partUuid": "e42c5327-6258-4c4c-b3e9-6d22c30938b2",
-       "lastModified": "2015-03-09T09:19:38.653Z",
-       "attributes":
-       {
-           "4": "2015-03-09T19:12:00Z",
-           "6": "3",
-           "7": "0"
-       }
-      },
-      ...
-}
+         "4": "2015-03-09T19:12:00Z",
+         "6": "3",
+         "7": "0"
+     }
+    }
+  ]
+
 {% endhighlight %}
 {% endcapture %}
 
@@ -259,32 +256,31 @@ GET /dataservicerest/values?partUuids=(05040c4c-f0af-46b8-810e-30c0c00a379e)&sea
 {% capture jsonresponse %}
 
 {% highlight json %}
-{
-  ...
-   "data":
-   [
-     {
-      "characteristics":
-           {
-               "b587d548-8aa6-42b7-b292-0f3e13452c3f":
-               {
-                   "1": "-0.073420455529934786"
-               }
-           },
-           "uuid": "88974561-a449-4a94-8b3e-970822b84406",
-           "partUuid": "05040c4c-f0af-46b8-810e-30c0c00a379e",
-           "lastModified": "2015-01-19T10:48:34.157Z",
-           "attributes":
-           {
-               "4": "2010-11-05T20:30:57.6Z",
-               "6": "5",
-               "7": "4",
-               "8": "7",
-               "12": "4"
-           }
-      },
-      ...
-}
+
+ [
+   {
+    "characteristics":
+         {
+             "b587d548-8aa6-42b7-b292-0f3e13452c3f":
+             {
+                 "1": "-0.073420455529934786"
+             }
+         },
+         "uuid": "88974561-a449-4a94-8b3e-970822b84406",
+         "partUuid": "05040c4c-f0af-46b8-810e-30c0c00a379e",
+         "lastModified": "2015-01-19T10:48:34.157Z",
+         "attributes":
+         {
+             "4": "2010-11-05T20:30:57.6Z",
+             "6": "5",
+             "7": "4",
+             "8": "7",
+             "12": "4"
+         }
+    },
+    ...
+  ]
+
 {% endhighlight %}
 {% endcapture %}
 
@@ -307,31 +303,30 @@ GET /dataServiceRest/values/5b59cac7-9ecd-403c-aa26-56dd25892421 HTTP/1.1
 {% capture jsonresponse %}
 
 {% highlight json %}
-{
-  ...
-   "data":
-   [
+
+ [
+   {
+    "characteristics":
      {
-      "characteristics":
-       {
-           "b587d548-8aa6-42b7-b292-0f3e13452c3f":
-           {
-               "1": "-0.073420455529934786"
-           },
-           ...
-       },
-       "uuid": "5b59cac7-9ecd-403c-aa26-56dd25892421",
-       "partUuid": "e42c5327-6258-4c4c-b3e9-6d22c30938b2",
-       "lastModified": "2015-03-09T09:19:38.653Z",
-       "attributes":
-       {
-           "4": "2015-03-09T19:12:00Z",
-           "6": "3",
-           "7": "0"
-       }
-      },
-      ...
-}
+         "b587d548-8aa6-42b7-b292-0f3e13452c3f":
+         {
+             "1": "-0.073420455529934786"
+         },
+         ...
+     },
+     "uuid": "5b59cac7-9ecd-403c-aa26-56dd25892421",
+     "partUuid": "e42c5327-6258-4c4c-b3e9-6d22c30938b2",
+     "lastModified": "2015-03-09T09:19:38.653Z",
+     "attributes":
+     {
+         "4": "2015-03-09T19:12:00Z",
+         "6": "3",
+         "7": "0"
+     }
+    },
+    ...
+  ]
+
 {% endhighlight %}
 {% endcapture %}
 
