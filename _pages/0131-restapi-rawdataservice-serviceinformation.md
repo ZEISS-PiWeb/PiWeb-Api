@@ -30,17 +30,13 @@ GET /rawdataServiceRest/serviceInformation HTTP/1.1
 
 {% capture jsonresponse %}
 {% highlight json %}
-{
-   ...
-   "data":
-   [
-       {
-        "versionWsdlMajor": "2",
-        "versionWsdlMinor": "3",
-        "version": "5.8.0.0"
-       }
-   ]
-}
+
+ {
+  "versionWsdlMajor": "2",
+  "versionWsdlMinor": "3",
+  "version": "5.8.0.0"
+ }
+
 {% endhighlight %}
 {% endcapture %}
 
