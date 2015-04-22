@@ -30,52 +30,48 @@ GET /dataServiceRest/configuration HTTP/1.1
 
 {% capture jsonresponse %}
 {% highlight json %}
-{
-   ...
-   "data":
-   [
-       {
-          "partAttributes":
-          [
-           [
-               "key":1001,
-               "description":"partNumber",
-               "length":30,
-               "type":"AlphaNumeric",
-               "definitionType":"AttributeDefinition"
-           ],
-           ...
-          ],
-          "characteristicAttributes":
-          [
-           [
-               "key":2001,
-               "description":"characteristicNumber",
-               "length":20,
-               "type":"AlphaNumeric",
-               "definitionType":"AttributeDefinition"
-           ],
-           ...
-          ],
-          "measurementAttributes":
-          [
-                "key": 8,
-                "description": "inspector",
-                "catalogue": "8c376bee-ffe3-4ee4-abb9-a55b492e69ad",
-                "definitionType": "CatalogueAttributeDefinition"
-          ...
-          ],
-          "valueAttributes":
-          [
-          ...
-          ],
-          "catalogueAttributes":
-          [
-          ...
-          ]
-       }
-   ]
-}
+
+      {
+       "partAttributes":
+       [
+        [
+            "key":1001,
+            "description":"partNumber",
+            "length":30,
+            "type":"AlphaNumeric",
+            "definitionType":"AttributeDefinition"
+        ],
+        ...
+       ],
+       "characteristicAttributes":
+       [
+        [
+            "key":2001,
+            "description":"characteristicNumber",
+            "length":20,
+            "type":"AlphaNumeric",
+            "definitionType":"AttributeDefinition"
+        ],
+        ...
+       ],
+       "measurementAttributes":
+       [
+             "key": 8,
+             "description": "inspector",
+             "catalogue": "8c376bee-ffe3-4ee4-abb9-a55b492e69ad",
+             "definitionType": "CatalogueAttributeDefinition"
+       ...
+       ],
+       "valueAttributes":
+       [
+       ...
+       ],
+       "catalogueAttributes":
+       [
+       ...
+       ]
+      }
+
 {% endhighlight %}
 {% endcapture %}
 
