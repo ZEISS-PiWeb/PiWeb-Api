@@ -211,6 +211,7 @@ a.bold{
 ul.subNavList{
 	list-style:none;
 	padding-left:20px;
+	line-height: 2em;
 }
 
 ul.subNavList>li>a:hover {
