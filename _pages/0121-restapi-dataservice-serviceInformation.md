@@ -30,7 +30,7 @@ GET /dataServiceRest/serviceInformation HTTP/1.1
 
 {% capture jsonresponse %}
 {% highlight json %}
-{
+
     {
        "serverName": "PiWeb Server",
        "version": "5.6.2.0",
@@ -51,7 +51,7 @@ GET /dataServiceRest/serviceInformation HTTP/1.1
        "measurementTimestamp": "2014-11-03T10:27:28.3461853+01:00",
        "configurationTimestamp": "2014-11-03T10:27:27.5245116+01:00"
     }
-}
+
 {% endhighlight %}
 {% endcapture %}
 {% include endpointTab.html %}
