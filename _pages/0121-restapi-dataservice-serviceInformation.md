@@ -31,26 +31,26 @@ GET /dataServiceRest/serviceInformation HTTP/1.1
 {% capture jsonresponse %}
 {% highlight json %}
 
-    {
-       "serverName": "PiWeb Server",
-       "version": "5.6.2.0",
-       "securityEnabled": false,
-       "edition": "PiWebDB",
-       "versionWsdlMajor": "2",
-       "versionWsdlMinor": "9",
-       "partCount": 4,
-       "characteristicCount": 125,
-       "measurementCount": 20,
-       "valueCount": 900,
-       "featureList":
-       [
-          "MeasurementAggregation",
-          "DistinctMeasurementSearch"
-       ],
-       "inspectionPlanTimestamp": "2014-11-24T16:08:58.812964+01:00",
-       "measurementTimestamp": "2014-11-03T10:27:28.3461853+01:00",
-       "configurationTimestamp": "2014-11-03T10:27:27.5245116+01:00"
-    }
+{
+   "serverName": "PiWeb Server",
+   "version": "5.6.2.0",
+   "securityEnabled": false,
+   "edition": "PiWebDB",
+   "versionWsdlMajor": "2",
+   "versionWsdlMinor": "9",
+   "partCount": 4,
+   "characteristicCount": 125,
+   "measurementCount": 20,
+   "valueCount": 900,
+   "featureList":
+   [
+      "MeasurementAggregation",
+      "DistinctMeasurementSearch"
+   ],
+   "inspectionPlanTimestamp": "2014-11-24T16:08:58.812964+01:00",
+   "measurementTimestamp": "2014-11-03T10:27:28.3461853+01:00",
+   "configurationTimestamp": "2014-11-03T10:27:27.5245116+01:00"
+}
 
 {% endhighlight %}
 {% endcapture %}
