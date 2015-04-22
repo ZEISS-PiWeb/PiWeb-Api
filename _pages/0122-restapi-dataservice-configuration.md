@@ -31,7 +31,7 @@ GET /dataServiceRest/configuration HTTP/1.1
 {% capture jsonresponse %}
 {% highlight json %}
 
-      {
+{
        "partAttributes":
        [
         [
@@ -70,7 +70,7 @@ GET /dataServiceRest/configuration HTTP/1.1
        [
        ...
        ]
-      }
+}
 
 {% endhighlight %}
 {% endcapture %}
