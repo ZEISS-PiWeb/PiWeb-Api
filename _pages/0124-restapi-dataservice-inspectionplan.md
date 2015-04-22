@@ -34,21 +34,19 @@ GET /dataServiceRest/parts?partPath=/metal%20part&depth=0&requestedPartAttribute
 
 {% capture jsonresponse %}
 {% highlight json %}
-{
-   ...
-   "data":
-   [
-      {
-           "path": "P:/metal part/",
-           "charChangeDate": "2014-11-19T10:48:32.917Z",
-           "attributes": { "1001": "4466", "1003": "mp" },
-           "uuid": "05040c4c-f0af-46b8-810e-30c0c00a379e",
-           "version": 0,
-           "timestamp": "2012-11-19T10:48:32.887Z",
-           "current": true
-       }
-   ]
-}
+
+[
+   {
+        "path": "P:/metal part/",
+        "charChangeDate": "2014-11-19T10:48:32.917Z",
+        "attributes": { "1001": "4466", "1003": "mp" },
+        "uuid": "05040c4c-f0af-46b8-810e-30c0c00a379e",
+        "version": 0,
+        "timestamp": "2012-11-19T10:48:32.887Z",
+        "current": true
+    }
+]
+
 {% endhighlight %}
 {% endcapture %}
 
@@ -70,21 +68,19 @@ GET /dataServiceRest/parts/05040c4c-f0af-46b8-810e-30c0c00a379e HTTP/1.1
 
 {% capture jsonresponse %}
 {% highlight json %}
-{
-   ...
-   "data":
-   [
-      {
-           "path": "P:/metal part/",
-           "charChangeDate": "2014-11-19T10:48:32.917Z",
-           "attributes": {},
-           "uuid": "05040c4c-f0af-46b8-810e-30c0c00a379e",
-           "version": 0,
-           "timestamp": "2012-11-19T10:48:32.887Z",
-           "current": true
-       }
-   ]
-}
+
+[
+   {
+        "path": "P:/metal part/",
+        "charChangeDate": "2014-11-19T10:48:32.917Z",
+        "attributes": {},
+        "uuid": "05040c4c-f0af-46b8-810e-30c0c00a379e",
+        "version": 0,
+        "timestamp": "2012-11-19T10:48:32.887Z",
+        "current": true
+    }
+]
+
 {% endhighlight %}
 {% endcapture %}
 
@@ -238,44 +234,42 @@ GET /dataServiceRest/characteristics?partPath=/metal%20part&depth=2 HTTP/1.1
 
 {% capture jsonresponse %}
 {% highlight json %}
-{
-   ...
-   "data":
-   [
-      {
-           "path": "PC:/metal part/deviation_3/",
-           "attributes": { ... },
-           "uuid": "27e23a7c-dbe7-4863-8461-6abf7b03ddd7",
-           "version": 0,
-           "timestamp": "2012-11-19T10:48:32.887Z",
-           "current": true
-       },
-      {
-           "path": "PCC:/metal part/deviation_3/.X/",
-           "attributes": { ... },
-           "uuid": "51c8568a-9410-465a-a8ed-33063db41dac",
-           "version": 0,
-           "timestamp": "2015-03-24T08:17:28.03Z",
-           "current": true
-       },
-       {
-           "path": "PCC:/metal part/deviation_3/.Y/",
-           "attributes": { ... },
-           "uuid": "b7a30736-6e89-4dd5-9bc0-e6cb9eb5e2da",
-           "version": 0,
-           "timestamp": "2015-03-24T08:17:34.61Z",
-           "current": true
-       },
-       {
-           "path": "PCC:/metal part/deviation_3/.Z/",
-           "attributes": { ... },
-           "uuid": "1175919c-5c59-487e-a0fb-deac04510046",
-           "version": 0,
-           "timestamp": "2015-03-24T08:17:38.423Z",
-           "current": true
-       }
-   ]
-}
+
+[
+   {
+        "path": "PC:/metal part/deviation_3/",
+        "attributes": { ... },
+        "uuid": "27e23a7c-dbe7-4863-8461-6abf7b03ddd7",
+        "version": 0,
+        "timestamp": "2012-11-19T10:48:32.887Z",
+        "current": true
+    },
+   {
+        "path": "PCC:/metal part/deviation_3/.X/",
+        "attributes": { ... },
+        "uuid": "51c8568a-9410-465a-a8ed-33063db41dac",
+        "version": 0,
+        "timestamp": "2015-03-24T08:17:28.03Z",
+        "current": true
+    },
+    {
+        "path": "PCC:/metal part/deviation_3/.Y/",
+        "attributes": { ... },
+        "uuid": "b7a30736-6e89-4dd5-9bc0-e6cb9eb5e2da",
+        "version": 0,
+        "timestamp": "2015-03-24T08:17:34.61Z",
+        "current": true
+    },
+    {
+        "path": "PCC:/metal part/deviation_3/.Z/",
+        "attributes": { ... },
+        "uuid": "1175919c-5c59-487e-a0fb-deac04510046",
+        "version": 0,
+        "timestamp": "2015-03-24T08:17:38.423Z",
+        "current": true
+    }
+]
+
 {% endhighlight %}
 {% endcapture %}
 
@@ -297,20 +291,18 @@ GET /dataServiceRest/characteristics/27e23a7c-dbe7-4863-8461-6abf7b03ddd7 HTTP/1
 
 {% capture jsonresponse %}
 {% highlight json %}
-{
-   ...
-   "data":
-   [
-      {
-           "path": "PC:/metal part/deviation_3/",
-           "attributes": { ... },
-           "uuid": "27e23a7c-dbe7-4863-8461-6abf7b03ddd7",
-           "version": 0,
-           "timestamp": "2012-11-19T10:48:32.887Z",
-           "current": true
-       }
-   ]
-}
+
+[
+   {
+        "path": "PC:/metal part/deviation_3/",
+        "attributes": { ... },
+        "uuid": "27e23a7c-dbe7-4863-8461-6abf7b03ddd7",
+        "version": 0,
+        "timestamp": "2012-11-19T10:48:32.887Z",
+        "current": true
+    }
+]
+
 {% endhighlight %}
 {% endcapture %}
 
