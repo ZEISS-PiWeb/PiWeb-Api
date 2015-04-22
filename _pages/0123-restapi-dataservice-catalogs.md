@@ -30,57 +30,53 @@ GET /dataServiceRest/catalogs HTTP/1.1
 
 {% capture jsonresponse %}
 {% highlight json %}
-{
+[
+   {
+      "uuid": "d7291afb-0a67-4c1e-8bcc-6fc455bcc0e5",
+      "name": "direction catalog",
+      "validAttributes": [ 2009 ],
+      "catalogueEntries":
+      [
+         {
+            "key": 0,
+            "attributes": { "2009": "undefined" }
+         },
+         {
+            "key": 1,
+            "attributes": { "2009": "right" }
+         },
+         {
+            "key": 2,
+            "attributes": { "2009": "left" }
+         }
+      ]
+   },
+   {
+      "uuid": "8c376bee-ffe3-4ee4-abb9-a55b492e69ad",
+      "name": "InspectorCatalogue",
+      "validAttributes": [ 4092, 4093 ],
+      "catalogueEntries":
+      [
+         {
+            "key": 0,
+            "attributes": { "4092": "n.def.", "4093": "n.def." }
+         },
+         {
+            "key": 1,
+            "attributes": { "4092": "21", "4093": "Smith" }
+         },
+         {
+            "key": 2,
+            "attributes": { "4092": "20", "4093": "Miller" }
+         },
+         {
+            "key": 3,
+            "attributes": { "4092": "23", "4093": "Williams" }
+         }
+      ]
+   },
    ...
-   "data":
-   [
-      {
-         "uuid": "d7291afb-0a67-4c1e-8bcc-6fc455bcc0e5",
-         "name": "direction catalog",
-         "validAttributes": [ 2009 ],
-         "catalogueEntries":
-         [
-            {
-               "key": 0,
-               "attributes": { "2009": "undefined" }
-            },
-            {
-               "key": 1,
-               "attributes": { "2009": "right" }
-            },
-            {
-               "key": 2,
-               "attributes": { "2009": "left" }
-            }
-         ]
-      },
-      {
-         "uuid": "8c376bee-ffe3-4ee4-abb9-a55b492e69ad",
-         "name": "InspectorCatalogue",
-         "validAttributes": [ 4092, 4093 ],
-         "catalogueEntries":
-         [
-            {
-               "key": 0,
-               "attributes": { "4092": "n.def.", "4093": "n.def." }
-            },
-            {
-               "key": 1,
-               "attributes": { "4092": "21", "4093": "Smith" }
-            },
-            {
-               "key": 2,
-               "attributes": { "4092": "20", "4093": "Miller" }
-            },
-            {
-               "key": 3,
-               "attributes": { "4092": "23", "4093": "Williams" }
-            }
-         ]
-      },
-      ...
-   ]
-}
+]
 {% endhighlight %}
 {% endcapture %}
 
@@ -102,36 +98,34 @@ GET /dataServiceRest/catalogs/8c376bee-ffe3-4ee4-abb9-a55b492e69ad HTTP/1.1
 
 {% capture jsonresponse %}
 {% highlight json %}
-{
-   ...
-   "data":
-   [
-       {
-           "uuid": "8c376bee-ffe3-4ee4-abb9-a55b492e69ad",
-           "name": "InspectorCatalogue",
-           "validAttributes": [ 4092, 4093 ],
-           "catalogueEntries":
-           [
-               {
-                   "key": 0,
-                   "attributes": { "4092": "n.def.", "4093": "n.def." }
-               },
-               {
-                   "key": 1,
-                   "attributes": { "4092": "21", "4093": "Smith" }
-               },
-               {
-                   "key": 2,
-                   "attributes": { "4092": "20", "4093": "Miller" }
-               },
-               {
-                   "key": 3,
-                   "attributes": { "4092": "23", "4093": "Williams" }
-               }
-            ]
-        }
-   ]
-}
+
+[
+    {
+        "uuid": "8c376bee-ffe3-4ee4-abb9-a55b492e69ad",
+        "name": "InspectorCatalogue",
+        "validAttributes": [ 4092, 4093 ],
+        "catalogueEntries":
+        [
+            {
+                "key": 0,
+                "attributes": { "4092": "n.def.", "4093": "n.def." }
+            },
+            {
+                "key": 1,
+                "attributes": { "4092": "21", "4093": "Smith" }
+            },
+            {
+                "key": 2,
+                "attributes": { "4092": "20", "4093": "Miller" }
+            },
+            {
+                "key": 3,
+                "attributes": { "4092": "23", "4093": "Williams" }
+            }
+         ]
+     }
+]
+
 {% endhighlight %}
 {% endcapture %}
 
