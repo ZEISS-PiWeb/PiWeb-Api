@@ -41,38 +41,37 @@ GET /rawDataServiceRest/rawData/part?uuids=(05040c4c-f0af-46b8-810e-30c0c00a379e
 
 {% capture jsonresponse %}
 {% highlight json %}
- ...
-   "data":
-   [
-    {
-         "target":
-         {
-             "entity": "Part",
-             "uuid": " 05040c4c-f0af-46b8-810e-30c0c00a379e"
-         },
-         "key": 0,
-         "fileName": "section view.meshModel",
-         "mimeType": "application/x-zip-compressed",
-         "lastModified": "2012-11-19T10:48:34.327Z",
-         "created": "2012-11-19T10:48:34.327Z",
-         "size": 147376,
-         "md5": "02f9c86143ea176c06e24524385b5907"
-     },
-     {
-         "target":
-         {
-             "entity": "Part",
-             "uuid": "5441c003-b6db-4217-ac6a-45cdbb805bb3"
-         },
-         "key": 0,
-         "fileName": "cad_22.meshModel",
-         "mimeType": "application/x-zeiss-piweb-meshmodel",
-         "lastModified": "2015-03-20T14:37:02.943Z",
-         "created": "2015-03-20T14:37:02.943Z",
-         "size": 837245,
-         "md5": "cbde88e2ed754c70860b3e6d4313551a"
-     }
-    ]
+
+[
+ {
+      "target":
+      {
+          "entity": "Part",
+          "uuid": " 05040c4c-f0af-46b8-810e-30c0c00a379e"
+      },
+      "key": 0,
+      "fileName": "section view.meshModel",
+      "mimeType": "application/x-zip-compressed",
+      "lastModified": "2012-11-19T10:48:34.327Z",
+      "created": "2012-11-19T10:48:34.327Z",
+      "size": 147376,
+      "md5": "02f9c86143ea176c06e24524385b5907"
+  },
+  {
+      "target":
+      {
+          "entity": "Part",
+          "uuid": "5441c003-b6db-4217-ac6a-45cdbb805bb3"
+      },
+      "key": 0,
+      "fileName": "cad_22.meshModel",
+      "mimeType": "application/x-zeiss-piweb-meshmodel",
+      "lastModified": "2015-03-20T14:37:02.943Z",
+      "created": "2015-03-20T14:37:02.943Z",
+      "size": 837245,
+      "md5": "cbde88e2ed754c70860b3e6d4313551a"
+ }
+]
 {% endhighlight %}
 {% endcapture %}
 
@@ -93,24 +92,23 @@ GET /rawDataServiceRest/rawData/part/05040c4c-f0af-46b8-810e-30c0c00a379e HTTP/1
 
 {% capture jsonresponse %}
  {% highlight json %}
- ...
-   "data":
-   [
-    {
-         "target":
-         {
-             "entity": "Part",
-             "uuid": " 05040c4c-f0af-46b8-810e-30c0c00a379e"
-         },
-         "key": 0,
-         "fileName": "section view.meshModel",
-         "mimeType": "application/x-zip-compressed",
-         "lastModified": "2012-11-19T10:48:34.327Z",
-         "created": "2012-11-19T10:48:34.327Z",
-         "size": 147376,
-         "md5": "02f9c86143ea176c06e24524385b5907"
-     }
-    ]
+ 
+[
+ {
+      "target":
+      {
+          "entity": "Part",
+          "uuid": " 05040c4c-f0af-46b8-810e-30c0c00a379e"
+      },
+      "key": 0,
+      "fileName": "section view.meshModel",
+      "mimeType": "application/x-zip-compressed",
+      "lastModified": "2012-11-19T10:48:34.327Z",
+      "created": "2012-11-19T10:48:34.327Z",
+      "size": 147376,
+      "md5": "02f9c86143ea176c06e24524385b5907"
+  }
+ ]
 {% endhighlight %}    
 {% endcapture %}
 
