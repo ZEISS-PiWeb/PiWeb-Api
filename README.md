@@ -17,7 +17,7 @@ http://your-piweb-server/dataServiceRest/configuration
 
 ```json
 {
-"partAttributes": 
+    "partAttributes": 
     [
         {
             "key": 1001,
