@@ -17,58 +17,52 @@ http://your-piweb-server/dataServiceRest/configuration
 
 ```json
 {
-
-    "status": { "..." } ,
-    "category": "Success",
-    "data":
-    {
-        "partAttributes": 
-        [
-            {
-                "key": 1001,
-                "description": "part number",
-                "length": 30,
-                "type": "AlphaNumeric",
-                "definitionType": "AttributeDefinition"
-            }, "..."
-        ],
-        "characteristicAttributes":
-        [
-            {
-                "key": 2101,
-                "description": "Nominal",
-                "length": 0,
-                "type": "Float",
-                "definitionType": "AttributeDefinition"
-            },
-            {
-                "key": 2110,
-                "description": "Lower tolerance",
-                "length": 0,
-                "type": "Float",
-                "definitionType": "AttributeDefinition"
-            },
-            {
-                "key": 2111,
-                "description": "Upper tolerance",
-                "length": 0,
-                "type": "Float",
-                "definitionType": "AttributeDefinition"
-            }, "..."
-        ],
-        "measurementAttributes": [ "..." ],
-        "valueAttributes":
-        [
-            {
-                "key": 1,
-                "description": "measured value",
-                "length": 0,
-                "type": "Float",
-                "definitionType": "AttributeDefinition"
-            }
-        ],
-        "catalogAttributes": [ "..." ]
-    }
+"partAttributes": 
+    [
+        {
+            "key": 1001,
+            "description": "part number",
+            "length": 30,
+            "type": "AlphaNumeric",
+            "definitionType": "AttributeDefinition"
+        }, "..."
+    ],
+    "characteristicAttributes":
+    [
+        {
+            "key": 2101,
+            "description": "Nominal",
+            "length": 0,
+            "type": "Float",
+            "definitionType": "AttributeDefinition"
+        },
+        {
+            "key": 2110,
+            "description": "Lower tolerance",
+            "length": 0,
+            "type": "Float",
+            "definitionType": "AttributeDefinition"
+        },
+        {
+            "key": 2111,
+            "description": "Upper tolerance",
+            "length": 0,
+            "type": "Float",
+            "definitionType": "AttributeDefinition"
+        }, "..."
+    ],
+    "measurementAttributes": [ "..." ],
+    "valueAttributes":
+    [
+        {
+            "key": 1,
+            "description": "measured value",
+            "length": 0,
+            "type": "Float",
+            "definitionType": "AttributeDefinition"
+        }
+    ],
+    "catalogAttributes": [ "..." ]
 }
 ```
 
@@ -79,22 +73,17 @@ http://your-piweb-server/dataServiceRest/parts?depth=10000
 ```
 
 ```json
-{
-    "status": { "..." },
-    "category": "Success",
-    "data":
-    [
-        {
-            "path": "/",
-            "charChangeDate": "2015-03-26T08:56:51.487Z",
-            "attributes": { },
-            "uuid": "00000000-0000-0000-0000-000000000000",
-            "version": 0,
-            "timestamp": "2014-10-07T13:39:34.74Z",
-            "current": true
-        },  "..."
-   ]
-}
+[
+    {
+        "path": "/",
+        "charChangeDate": "2015-03-26T08:56:51.487Z",
+        "attributes": { },
+        "uuid": "00000000-0000-0000-0000-000000000000",
+        "version": 0,
+        "timestamp": "2014-10-07T13:39:34.74Z",
+        "current": true
+    },  "..."
+]
 ```
 
 #####Fetching the 10 most recent measurements
@@ -104,31 +93,26 @@ http://your-piweb-server/dataServiceRest/measurements?limitResult=10
 ```
 
 ```json
-{
-    "status": { "..." },
-    "category": "Success",
-    "data":
-    [
-       {
-		    "uuid": "64a47361-9b5b-43e3-9774-45e2862e65ab",
-		    "partUuid": "4ce9ba9a-794f-4e57-beb2-c84612065179",
-		    "lastModified": "2015-03-26T08:51:29.343Z",
-		    "attributes": 
-		    {
-		        "4": "2014-12-05T14:25:55Z"
-		    }
-		},
-		{
-		    "uuid": "c0b784f1-d85b-4c46-8f39-7824567004aa",
-		    "partUuid": "4ce9ba9a-794f-4e57-beb2-c84612065179",
-		    "lastModified": "2015-03-26T08:48:35.14Z",
-		    "attributes": 
-		    {
-		        "4": "2014-12-05T13:25:55Z"
-		    }
-		}, "..."
-   ]
-}
+[
+   {
+        "uuid": "64a47361-9b5b-43e3-9774-45e2862e65ab",
+        "partUuid": "4ce9ba9a-794f-4e57-beb2-c84612065179",
+        "lastModified": "2015-03-26T08:51:29.343Z",
+        "attributes": 
+        {
+            "4": "2014-12-05T14:25:55Z"
+        }
+    },
+    {
+        "uuid": "c0b784f1-d85b-4c46-8f39-7824567004aa",
+        "partUuid": "4ce9ba9a-794f-4e57-beb2-c84612065179",
+        "lastModified": "2015-03-26T08:48:35.14Z",
+        "attributes": 
+        {
+            "4": "2014-12-05T13:25:55Z"
+        }
+    }, "..."
+]
 ```
 
 #### Learn more
