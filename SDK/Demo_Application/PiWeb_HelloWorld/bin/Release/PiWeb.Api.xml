@@ -1,0 +1,3360 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PiWeb.Api</name>
+    </assembly>
+    <members>
+        <member name="T:Common.Client.ArrayHelper">
+            <summary>
+            Helper class that splits an array into smaller arrays with a fixed segment size.
+            </summary>
+        </member>
+        <member name="M:Common.Client.ArrayHelper.Split``1(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Func{``0,System.Int32})">
+            <summary>
+            This method splits the source enumeration into multiple smaller arrays with size <paramref name="targetSize"/>.
+            The default weighting of every item is 1. A specific weighting can be calculated for every item with function <paramref name="calcWeightingOfOneItem"/>.
+            </summary>
+        </member>
+        <member name="T:Common.Client.ParameterDefinition">
+            <summary>
+            Class that represents a parameter value (name and value) of an uri.
+            </summary>
+        </member>
+        <member name="M:Common.Client.ParameterDefinition.#ctor(System.String,System.String)">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:Common.Client.ParameterDefinition.Create(System.String,System.String)">
+            <summary>
+            Factory method to create a new <see cref="T:Common.Client.ParameterDefinition"/>.
+            </summary>
+        </member>
+        <member name="M:Common.Client.ParameterDefinition.ToString">
+            <summary>
+            Overridden <see cref="M:System.Object.ToString"/> method.
+            </summary>
+        </member>
+        <member name="P:Common.Client.ParameterDefinition.Name">
+            <summary>
+            Returns the name of the parameter.
+            </summary>
+        </member>
+        <member name="P:Common.Client.ParameterDefinition.Value">
+            <summary>
+            Returns the value of the parameter.
+            </summary>
+        </member>
+        <member name="T:Common.Client.PushStreamContent">
+            <summary>
+            Special implementation of <see cref="T:System.Net.Http.HttpContent"/> that supports deferred streaming of the payload data.
+            </summary>
+        </member>
+        <member name="T:Common.Client.RestClient">
+            <summary>
+            Base class for communication with REST based web services.
+            </summary>
+        </member>
+        <member name="F:Common.Client.RestClient.MimeTypeJson">
+            <summary>Mimetype für JSON</summary>
+        </member>
+        <member name="M:Common.Client.RestClient.#ctor(System.Uri,System.String,System.Int32,System.Nullable{System.Int32})">
+            <summary>Constructor.</summary>
+        </member>
+        <member name="M:Common.Client.RestClient.SetHeaders(System.Net.Http.Headers.HttpRequestHeaders)">
+            <summary> Sets the HTTP headers fields for the <paramref name="headers"/> object. </summary>
+            <param name="headers">The headers object the values should be set for.</param>
+        </member>
+        <member name="M:Common.Client.RestClient.Get``1(System.String,System.Threading.CancellationToken,Common.Client.ParameterDefinition[])">
+            <summary>GETs data asynchronously and returns a <see cref="T:System.Threading.Tasks.Task"/> that contains a result of type <typeparamref name="T"/>.</summary>
+            <typeparam name="T">Result type that should be returned within the Task object.</typeparam>
+            <param name="requestUri">The string that should the base url extended by.</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/> the async call can be canceled with.</param>
+            <param name="parameterDefinitions">Query parameters the url can be extended by.</param>
+        </member>
+        <member name="M:Common.Client.RestClient.GetEnumerated``1(System.String,System.Threading.CancellationToken,Common.Client.ParameterDefinition[])">
+            <summary>GETs data asynchronously and returns a <see cref="T:System.Threading.Tasks.Task"/> that contains a result of type <see cref="T:System.Collections.Generic.IEnumerable`1"/>.</summary>
+            <typeparam name="T">Result type that should be returned within the Task object.</typeparam>
+            <param name="requestUri">The string that should the base url extended by.</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/> the async call can be canceled with.</param>
+            <param name="parameterDefinitions">Query parameters the url can be extended by.</param>
+        </member>
+        <member name="M:Common.Client.RestClient.GetBytes(System.String,System.Threading.CancellationToken,Common.Client.ParameterDefinition[])">
+            <summary>GETs data asynchronously and returns a <see cref="T:System.Threading.Tasks.Task"/> that contains a result of type <see cref="T:System.Byte"/>-Array.</summary>
+            <param name="requestUri">The string that should the base url extended by.</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/> the async call can be canceled with.</param>
+            <param name="parameterDefinitions">Query parameters the url can be extended by.</param>
+        </member>
+        <member name="M:Common.Client.RestClient.GetStream(System.String,System.Threading.CancellationToken,Common.Client.ParameterDefinition[])">
+            <summary>GETs data asynchronously and returns a <see cref="T:System.Threading.Tasks.Task"/> that contains a result of type <see cref="T:System.IO.Stream"/>.</summary>
+            <param name="requestUri">The string that should the base url extended by.</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/> the async call can be canceled with.</param>
+            <param name="parameterDefinitions">Query parameters the url can be extended by.</param>
+        </member>
+        <member name="M:Common.Client.RestClient.Post``1(System.String,System.Object,System.Threading.CancellationToken,Common.Client.ParameterDefinition[])">
+            <summary>POSTs data asynchronously and returns a <see cref="T:System.Threading.Tasks.Task"/> that contains a result of type <typeparamref name="T"/>.</summary>
+            <typeparam name="T">Result type that should be returned within the Task object.</typeparam>
+            <param name="requestUri">The string that should the base url extended by.</param>
+            <param name="data">The data that should be posted within the HTTP body.</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/> the async call can be canceled with.</param>
+            <param name="parameterDefinitions">Query parameters the url can be extended by.</param>
+        </member>
+        <member name="M:Common.Client.RestClient.Post(System.String,System.Object,System.Threading.CancellationToken,Common.Client.ParameterDefinition[])">
+            <summary>POSTs data asynchronously and returns a <see cref="T:System.Threading.Tasks.Task"/>.</summary>
+            <param name="requestUri">The string that should the base url extended by.</param>
+            <param name="data">The data that should be posted within the HTTP body.</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/> the async call can be canceled with.</param>
+            <param name="parameterDefinitions">Query parameters the url can be extended by.</param>
+        </member>
+        <member name="M:Common.Client.RestClient.Post(System.String,System.IO.Stream,System.Threading.CancellationToken,System.Nullable{System.Int64},System.String,System.Nullable{System.Guid},System.String,Common.Client.ParameterDefinition[])">
+            <summary>POSTs data asynchronously and returns a <see cref="T:System.Threading.Tasks.Task"/>.</summary>
+            <param name="requestUri">The string that should the base url extended by.</param>
+            <param name="data">The data that should be posted within the HTTP body.</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/> the async call can be canceled with.</param>
+            <param name="parameterDefinitions">Query parameters the url can be extended by.</param>
+            <param name="contentLength">The length of the content that should be send.</param>
+            <param name="mimeType">The mime type of the content to be sent.</param>
+            <param name="contentDisposition">The name of the file to be streamed.</param>
+            <param name="contentMD5">The MD5 sum of the file to be streamed.</param>
+        </member>
+        <member name="M:Common.Client.RestClient.Put(System.String,System.Object,System.Threading.CancellationToken,Common.Client.ParameterDefinition[])">
+            <summary>PUTs data asynchronously and returns a <see cref="T:System.Threading.Tasks.Task"/>.</summary>
+            <param name="requestUri">The string that should the base url extended by.</param>
+            <param name="data">The data that should be posted within the HTTP body.</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/> the async call can be canceled with.</param>
+            <param name="parameterDefinitions">Query parameters the url can be extended by.</param>
+        </member>
+        <member name="M:Common.Client.RestClient.Put(System.String,System.IO.Stream,System.Threading.CancellationToken,System.Nullable{System.Int64},System.String,System.Nullable{System.Guid},System.String,Common.Client.ParameterDefinition[])">
+            <summary>PUTs data asynchronously and returns a <see cref="T:System.Threading.Tasks.Task"/>.</summary>
+            <param name="requestUri">The string that should the base url extended by.</param>
+            <param name="data">The data that should be posted within the HTTP body.</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/> the async call can be canceled with.</param>
+            <param name="parameterDefinitions">Query parameters the url can be extended by.</param>
+            <param name="contentLength">The length of the content that should be send.</param>
+            <param name="mimeType">The mime type of the content to be sent.</param>
+            <param name="contentDisposition">The name of the file to be streamed.</param>
+            <param name="contentMD5">The MD5 sum of the file to be streamed.</param>
+        </member>
+        <member name="M:Common.Client.RestClient.Delete(System.String,System.Threading.CancellationToken,Common.Client.ParameterDefinition[])">
+            <summary>DELETEs data asynchronously and returns a <see cref="T:System.Threading.Tasks.Task"/>.</summary>
+            <param name="requestUri">The string that should the base url extended by.</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/> the async call can be canceled with.</param>
+            <param name="parameterDefinitions">Query parameters the url can be extended by.</param>
+        </member>
+        <member name="M:Common.Client.RestClient.BuildRequest(System.Net.Http.HttpMethod,System.String,Common.Client.ParameterDefinition[])">
+            <summary>
+            Creates a new <see cref="T:System.Net.Http.HttpRequestMessage"/> to call the url <code>requestUri</code> with the HTTP 
+            verb <code>method</code> (GET, POST, PUT, DELETE).
+            </summary>
+        </member>
+        <member name="M:Common.Client.RestClient.BuildRequest(System.Net.Http.HttpMethod,System.String,System.Object,Common.Client.ParameterDefinition[])">
+            <summary>
+            Creates a new <see cref="T:System.Net.Http.HttpRequestMessage"/> to call the url <code>requestUri</code> with the HTTP 
+            verb <code>method</code> (GET, POST, PUT, DELETE) and data <code>payload</code>.
+            </summary>
+        </member>
+        <member name="M:Common.Client.RestClient.GetResponseStream(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <summary>
+            Reads and returns the response stream.
+            </summary>
+        </member>
+        <member name="M:Common.Client.RestClient.GetResponse(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <summary>
+            Reads the response stream and throws an exception in case of an error.
+            </summary>
+        </member>
+        <member name="P:Common.Client.RestClient.UseDefaultWebProxy">
+            <summary>
+            Gets or sets if system default proxy should be used.
+            </summary>
+        </member>
+        <member name="P:Common.Client.RestClient.ServiceLocation">
+            <summary>
+            Returns the endpoint address of the webservice.
+            </summary>
+        </member>
+        <member name="P:Common.Client.RestClient.Credentials">
+            <summary>
+            Gets or sets the authentication (username + password) used by this class. 
+            </summary>
+        </member>
+        <member name="P:Common.Client.RestClient.UseDefaultCredentials">
+            <summary>
+            Gets or sets whether the current login credentials (single sign on) should be sent for authorization.
+            </summary>
+        </member>
+        <member name="P:Common.Client.RestClient.ClientCertificate">
+            <summary> 
+            Gets or sets the client certificate that should be used for authorization.
+            </summary>
+        </member>
+        <member name="T:Common.Client.RestClientException">
+            <summary>
+            Base class for client side exceptions that are thrown by the <see cref="T:Common.Client.RestClient"/> in case of errors.
+            </summary>
+        </member>
+        <member name="M:Common.Client.RestClientException.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:Common.Client.RestClientException.#ctor(System.String)">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:Common.Client.RestClientException.#ctor(System.String,System.Exception)">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="T:Common.Client.WrappedServerErrorException">
+            <summary>
+            Base class for server side exceptions that are thrown by the <see cref="T:Common.Client.RestClient"/> in case of errors.
+            </summary>
+        </member>
+        <member name="M:Common.Client.WrappedServerErrorException.#ctor(Common.Data.Error,System.Net.HttpStatusCode)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="error">The server side error.</param>
+            <param name="statusCode">The http status.</param>
+        </member>
+        <member name="P:Common.Client.WrappedServerErrorException.Error">
+            <summary>
+            Returns the server side error.
+            </summary>
+        </member>
+        <member name="P:Common.Client.WrappedServerErrorException.StatusCode">
+            <summary>
+            Returns the http status.
+            </summary>
+        </member>
+        <member name="T:Common.Data.AttributeItemExtensions">
+            <summary>
+            Extension class with various helper methods for attribute list manipulation.
+            </summary>
+        </member>
+        <member name="M:Common.Data.AttributeItemExtensions.GetAttribute(Common.Data.IAttributeItem,System.UInt16)">
+            <summary>
+            Gibt das Attribut mit Schlüssel <code>key</code> zurück.
+            </summary>
+        </member>
+        <member name="M:Common.Data.AttributeItemExtensions.GetAttribute(Common.Data.IAttributeItem,System.UInt16,System.Int32@)">
+            <summary>
+            Gibt das Attribut mit Schlüssel <code>key</code> zurück.
+            </summary>
+        </member>
+        <member name="M:Common.Data.AttributeItemExtensions.GetAttributeValue(Common.Data.IAttributeItem,System.UInt16)">
+            <summary>
+            Gibt das Attribut mit Schlüssel <code>key</code> zurück.
+            </summary>
+        </member>
+        <member name="M:Common.Data.AttributeItemExtensions.GetDoubleAttributeValue(Common.Data.IAttributeItem,System.UInt16)">
+            <summary>
+            Gibt das Attribut mit Schlüssel <code>key</code> als <see cref="T:System.Double"/> zurück.
+            </summary>
+            <remarks>
+            Wenn das Attribut leer ist, nicht vorhanden ist oder nicht geparst werden kann, wird <code>null</code>
+            zurückgegeben.
+            </remarks>
+        </member>
+        <member name="M:Common.Data.AttributeItemExtensions.GetIntAttributeValue(Common.Data.IAttributeItem,System.UInt16)">
+            <summary>
+            Gibt das Attribut mit Schlüssel <code>key</code> als <see cref="T:System.Int32"/> zurück.
+            </summary>
+            <remarks>
+            Wenn das Attribut leer ist, nicht vorhanden ist oder nicht geparst werden kann, wird <code>null</code>
+            zurückgegeben.
+            </remarks>
+        </member>
+        <member name="M:Common.Data.AttributeItemExtensions.GetDateAttributeValue(Common.Data.IAttributeItem,System.UInt16)">
+            <summary>
+            Gibt das Attribut mit Schlüssel <code>key</code> als <see cref="T:System.DateTime"/> zurück.
+            </summary>
+            <remarks>
+            Wenn das Attribut leer ist, nicht vorhanden ist oder nicht geparst werden kann, wird <code>null</code>
+            zurückgegeben.
+            </remarks>
+        </member>
+        <member name="M:Common.Data.AttributeItemExtensions.InsertNullAttribute(Common.Data.IAttributeItem,System.UInt16)">
+            <summary>
+            Inserts or replaces the attribute for the given key with an attribute that is interpreted as deletion
+            by merge models (effectively deleting the corresponding base attribute from existance)
+            </summary>
+        </member>
+        <member name="M:Common.Data.AttributeItemExtensions.SetAttribute(Common.Data.IAttributeItem,System.UInt16,System.String)">
+            <summary>
+            Setzt das Attribut mit Schlüssel <code>key</code> auf den Wert <code>value</code>.
+            </summary>
+        </member>
+        <member name="M:Common.Data.AttributeItemExtensions.SetAttribute(Common.Data.IAttributeItem,DataService.Attribute)">
+            <summary>
+            Setzt das Attribut mit Schlüssel <code>key</code> auf den Wert <code>value</code>.
+            </summary>
+        </member>
+        <member name="M:Common.Data.AttributeItemExtensions.RemoveAttribute(Common.Data.IAttributeItem,System.UInt16)">
+            <summary>
+            Entfernt das Attribut mit Schlüssel <code>key</code>.
+            </summary>
+        </member>
+        <member name="T:Common.Data.ClientIdHelper">
+            <summary>
+            Hilfsklasse zur Ermittlung der ClientId die an die diversen Services gesendet wird.
+            </summary>
+        </member>
+        <member name="F:Common.Data.ClientIdHelper.ClientId">
+            <summary> Default-Wert für die Client-ID die den einzelnen Webservice-Methoden mitgegeben wird. </summary>
+        </member>
+        <member name="F:Common.Data.ClientIdHelper.ClientProduct">
+            <summary> Produkt-Name des Clients</summary>
+        </member>
+        <member name="F:Common.Data.ClientIdHelper.ClientVersion">
+            <summary> Produkt-Version des Clients </summary>
+        </member>
+        <member name="M:Common.Data.ClientIdHelper.#cctor">
+            <summary>
+            Statischer Konstruktor.
+            </summary>
+        </member>
+        <member name="T:Common.Data.Converter.AttributeConverter">
+            <summary>
+            Specialized <see cref="T:Newtonsoft.Json.JsonConverter"/> for <see cref="T:DataService.Attribute"/>-objects.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.AttributeConverter.CanConvert(System.Type)">
+            <summary>
+            Determines whether this instance can convert the specified object type.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.AttributeConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Reads the JSON representation of the object.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.AttributeConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Writes the JSON representation of the object.
+            </summary>
+        </member>
+        <member name="T:Common.Data.Converter.AttributeDefinitionConverter">
+            <summary>
+            Specialized <see cref="T:Newtonsoft.Json.JsonConverter"/> for <see cref="T:DataService.AbstractAttributeDefinition"/>-objects.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.AttributeDefinitionConverter.CanConvert(System.Type)">
+            <summary>
+            Determines whether this instance can convert the specified object type.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.AttributeDefinitionConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Reads the JSON representation of the object.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.AttributeDefinitionConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Writes the JSON representation of the object.
+            </summary>
+        </member>
+        <member name="T:Common.Data.Converter.CatalogueConverter">
+            <summary>
+            Specialized <see cref="T:Newtonsoft.Json.JsonConverter"/> for <see cref="T:DataService.Catalog"/>-objects.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.CatalogueConverter.CanConvert(System.Type)">
+            <summary>
+            Determines whether this instance can convert the specified object type.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.CatalogueConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Reads the JSON representation of the object.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.CatalogueConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Writes the JSON representation of the object.
+            </summary>
+        </member>
+        <member name="T:Common.Data.Converter.CatalogueEntryConverter">
+            <summary>
+            Specialized <see cref="T:Newtonsoft.Json.JsonConverter"/> for <see cref="T:DataService.CatalogEntry"/>-objects.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.CatalogueEntryConverter.CanConvert(System.Type)">
+            <summary>
+            Determines whether this instance can convert the specified object type.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.CatalogueEntryConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Reads the JSON representation of the object.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.CatalogueEntryConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Writes the JSON representation of the object.
+            </summary>
+        </member>
+        <member name="T:Common.Data.Converter.ConfigurationConverter">
+            <summary>
+            Specialized <see cref="T:Newtonsoft.Json.JsonConverter"/> for <see cref="T:DataService.Configuration"/>-objects.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.ConfigurationConverter.CanConvert(System.Type)">
+            <summary>
+            Determines whether this instance can convert the specified object type.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.ConfigurationConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Reads the JSON representation of the object.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.ConfigurationConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Writes the JSON representation of the object.
+            </summary>
+        </member>
+        <member name="T:Common.Data.Converter.DataCharacteristicConverter">
+            <summary>
+            Specialized <see cref="T:Newtonsoft.Json.JsonConverter"/> for <see cref="T:DataService.DataCharacteristic"/>-objects.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.DataCharacteristicConverter.CanConvert(System.Type)">
+            <summary>
+            Determines whether this instance can convert the specified object type.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.DataCharacteristicConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Reads the JSON representation of the object.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.DataCharacteristicConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Writes the JSON representation of the object.
+            </summary>
+        </member>
+        <member name="T:Common.Data.Converter.PathInformationConverter">
+            <summary>
+            Specialized <see cref="T:Newtonsoft.Json.JsonConverter"/> for <see cref="T:DataService.PathInformation"/>-objects.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.PathInformationConverter.CanConvert(System.Type)">
+            <summary>
+            Determines whether this instance can convert the specified object type.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.PathInformationConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Reads the JSON representation of the object.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.PathInformationConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Writes the JSON representation of the object.
+            </summary>
+        </member>
+        <member name="T:Common.Data.Converter.StreamingReaderConverter`1">
+            <summary>
+            Specialized <see cref="T:Newtonsoft.Json.JsonConverter"/> for streaming a list or an array.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.StreamingReaderConverter`1.CanConvert(System.Type)">
+            <summary>
+            Determines whether this instance can convert the specified object type.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.StreamingReaderConverter`1.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Reads the JSON representation of the object. Not supported right now.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.StreamingReaderConverter`1.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Not supported right now.
+            </summary>
+        </member>
+        <member name="P:Common.Data.Converter.StreamingReaderConverter`1.CanWrite">
+            <summary>
+            Returns <code>false</code>. No write support.
+            </summary>
+        </member>
+        <member name="T:Common.Data.Converter.StreamingWriterConverter`1">
+            <summary>
+            Specialized <see cref="T:Newtonsoft.Json.JsonConverter"/> for streamed writing a list or an array.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.StreamingWriterConverter`1.CanConvert(System.Type)">
+            <summary>
+            Determines whether this instance can convert the specified object type.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.StreamingWriterConverter`1.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Not supported right now.
+            </summary>
+        </member>
+        <member name="M:Common.Data.Converter.StreamingWriterConverter`1.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Writes the JSON representation of the object.
+            </summary>
+        </member>
+        <member name="P:Common.Data.Converter.StreamingWriterConverter`1.CanRead">
+            <summary>
+            Returns <code>false</code>. No read support.
+            </summary>
+        </member>
+        <member name="T:Common.Data.GenericSearchCondition">
+            <summary>
+            Klasse zum Parsen einer Filterzeichenkette für Messdaten.
+            </summary>
+        </member>
+        <member name="M:Common.Data.GenericSearchAnd.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Common.Data.GenericSearchAnd.#ctor(Common.Data.GenericSearchCondition[])">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="T:Common.Data.IAttributeItem">
+            <summary>
+            Interface für Objekte, die eine Liste von Attributen zur Verfügung stellen.
+            </summary>
+        </member>
+        <member name="P:Common.Data.IAttributeItem.Attributes">
+            <summary>
+            Gibt alle Attribute als Feld zurück.
+            </summary>
+        </member>
+        <member name="T:Common.Data.PathHelper">
+            <summary> Helping class for converting <see cref="T:DataService.PathInformation"/> objects to strings and vice versa. </summary>
+        </member>
+        <member name="F:Common.Data.PathHelper.Delimiter">
+            <summary> Delimiter character for the path components. </summary>
+        </member>
+        <member name="F:Common.Data.PathHelper.EscapedDelimiter">
+            <summary> Escaped delimiter character for the path components </summary>
+        </member>
+        <member name="F:Common.Data.PathHelper.DelimiterString">
+            <summary> Delimiter string for the path components </summary>
+        </member>
+        <member name="M:Common.Data.PathHelper.String2PartPathInformation(System.String)">
+            <summary> Creates from <paramref name="path"/> a part <see cref="T:DataService.PathInformation"/> object. </summary>
+        </member>
+        <member name="M:Common.Data.PathHelper.String2CharPathInformation(System.String)">
+            <summary> Creates from <paramref name="path"/> a characteristic <see cref="T:DataService.PathInformation"/> object. </summary>
+        </member>
+        <member name="M:Common.Data.PathHelper.String2PathInformation(System.String,System.String)">
+            <summary> Creates from <paramref name="path"/> a <see cref="T:DataService.PathInformation"/> object. 
+            Depending on <paramref name="structure"/> it will be a part or a characteristic.</summary>
+        </member>
+        <member name="M:Common.Data.PathHelper.String2PathInformationInternal(System.String,System.String,System.Nullable{DataService.InspectionPlanEntity})">
+            <summary> Internal method to create a <see cref="T:DataService.PathInformation"/> object from <paramref name="path"/>. </summary>
+        </member>
+        <member name="M:Common.Data.PathHelper.GetDepth(System.String)">
+            <summary> Returns the depth of the <paramref name="path"/>. </summary>
+        </member>
+        <member name="M:Common.Data.PathHelper.PathInformation2String(DataService.PathInformation)">
+            <summary> Converts <paramref name="path"/> to a string which can be stored in the database. </summary>
+        </member>
+        <member name="M:Common.Data.PathHelper.GetStructure(DataService.PathInformation)">
+            <summary> Returns the structure of the <paramref name="path"/>. </summary>
+        </member>
+        <member name="T:Common.Data.RestClientHelper">
+            <summary>
+            Helper class for REST webservice calls.
+            </summary>
+        </member>
+        <member name="F:Common.Data.RestClientHelper.QueryListStart">
+            <summary>Start identifier for a list inside a HTTP query.</summary>
+        </member>
+        <member name="F:Common.Data.RestClientHelper.QueryListStop">
+            <summary>End identifier for a list inside a HTTP query.</summary>
+        </member>
+        <member name="M:Common.Data.RestClientHelper.SeekToResponseEnvelope(System.IO.Stream,System.Action{Newtonsoft.Json.JsonTextReader})">
+            <summary>
+            PiWeb-5.6 uses a response envelope that will be skipped by this compatibility code
+            </summary>
+        </member>
+        <member name="M:Common.Data.RestClientHelper.DeserializeObject``1(System.IO.Stream)">
+            <summary>
+            Deserializes the <paramref name="data"/>-stream into a new object of type <typeparamref name="T"/>. The data is expected to be in JSON format.
+            </summary>
+        </member>
+        <member name="M:Common.Data.RestClientHelper.DeserializeEnumeratedObject``1(System.IO.Stream)">
+            <summary>
+            Deserializes the <paramref name="data"/>-stream into a new enumerable object of type <typeparamref name="T"/>. The data is expected to be in JSON format.
+            </summary>
+        </member>
+        <member name="M:Common.Data.RestClientHelper.ConvertStringToUInt16List(System.String)">
+            <summary>
+            Parses a string to a list of ushorts.
+            </summary>
+        </member>
+        <member name="M:Common.Data.RestClientHelper.ConvertStringToGuidList(System.String)">
+            <summary>
+            Parses a string to a list of Guids.
+            </summary>
+        </member>
+        <member name="M:Common.Data.RestClientHelper.ParseListToStringArray(System.String)">
+            <summary>Parses a list of strings.</summary>
+        </member>
+        <member name="M:Common.Data.RestClientHelper.ConvertUInt16ListToString(System.UInt16[])">
+            <summary>Creates a list string from the ushorts <code>value</code>.</summary>
+        </member>
+        <member name="M:Common.Data.RestClientHelper.ConvertGuidListToString(System.Guid[])">
+            <summary>Creates a list string from the uuids <code>value</code>.</summary>
+        </member>
+        <member name="M:Common.Data.RestClientHelper.ToListString(System.String)">
+            <summary>Creates a list string from <paramref name="list"/>. </summary>
+        </member>
+        <member name="M:Common.Data.RestClientHelper.CreateJsonSerializer">
+            <summary>
+            Creates and configures the <see cref="T:Newtonsoft.Json.JsonSerializer"/> that are needed by the services.
+            </summary>
+        </member>
+        <member name="T:Common.Data.SearchConditionParser">
+            <summary>
+            Parser class for search condition strings. 
+            </summary>
+        </member>
+        <member name="M:Common.Data.SearchConditionParser.CanParse(System.String)">
+            <summary>
+            Returns <code>true</code> if the search filter is valid and can be parsed.
+            </summary>
+        </member>
+        <member name="M:Common.Data.SearchConditionParser.GenericConditionToString(Common.Data.GenericSearchCondition)">
+            <summary>
+            Converts the search filter into a string.
+            </summary>
+        </member>
+        <member name="M:Common.Data.SearchConditionParser.FindFirst(System.String,System.Collections.Generic.IEnumerable{System.String},System.Int32)">
+            <summary>
+            Finds the first  das erste Vorkommens eines beliebigen Strings aus dem values-Array.
+            </summary>
+            <param name="str">String in dem gesucht wird.</param>
+            <param name="values">Strings nach denen gesucht wird.</param>
+            <param name="startIndex">Index von dem an im String gesucht wird.</param>
+            <returns>Der erste vorkommende String, ansonsten null.</returns>
+        </member>
+        <member name="M:Common.Data.SearchConditionParser.Parse(System.String)">
+            <summary>
+            Parses the search filter string.
+            </summary>
+            <param name="searchFilter">The search filter string.</param>
+        </member>
+        <member name="M:Common.Data.SearchConditionParser.TryParse(System.String,Common.Data.GenericSearchCondition@)">
+            <summary>
+            Tries to parse the <code>searchFilter</code> and returns the filter as a <see cref="T:Common.Data.GenericSearchCondition"/> if successful.
+            </summary>
+        </member>
+        <member name="T:Common.Data.StringUuidTools">
+            <summary> 
+            Helper class to convert a pair of measurementUuid and characteristicUuid to a string in form measurementUuid|characteristicUuid and vice versa. 
+            </summary>
+        </member>
+        <member name="M:Common.Data.StringUuidTools.SplitStringUuidPair(System.String)">
+            <summary> Splits a string containig a measurementUuid and a characteristicUuid in form measurementUuid|characteristicUuid. </summary>
+        </member>
+        <member name="M:Common.Data.StringUuidTools.CreateStringUuidPair(System.Guid,System.Guid)">
+            <summary> Creates a string containig a measurementUuid and a characteristicUuid in form measurementUuid|characteristicUuid. </summary>
+        </member>
+        <member name="M:Common.Data.StringUuidTools.CreateStringUuidPair(Common.Data.ValueRawDataIdentifier)">
+            <summary> Creates a string containig a measurementUuid and a characteristicUuid in form measurementUuid|characteristicUuid. </summary>
+        </member>
+        <member name="M:Common.Data.StringUuidTools.IsStringUuidPair(System.String)">
+            <summary> Checks if a given string is a unique UUID pair (in form measurementUuid|characteristicUuid) </summary>
+        </member>
+        <member name="T:Common.Data.ValueRawDataIdentifier">
+            <summary>
+            References an identifier for a measured values raw data. Consists of the measurement uuid and the characteristic uuid. 
+            </summary>
+        </member>
+        <member name="T:Common.Data.Error">
+            <summary> 
+            Class holds an error which can occur on calling a webservice method. 
+            </summary>
+        </member>
+        <member name="M:Common.Data.Error.#ctor">
+            <summary> 
+            Constructor 
+            </summary>
+        </member>
+        <member name="M:Common.Data.Error.#ctor(System.String)">
+            <summary> 
+            Constructor 
+            </summary>
+        </member>
+        <member name="M:Common.Data.Error.#ctor(System.Exception)">
+            <summary> 
+            Constructor 
+            </summary>
+        </member>
+        <member name="P:Common.Data.Error.Message">
+            <summary> 
+            Returns the error description message.
+            </summary>
+        </member>
+        <member name="P:Common.Data.Error.InnerError">
+            <summary>
+            The nested <see cref="T:Common.Data.Error"/> instance that triggered the current error.
+            </summary>
+        </member>
+        <member name="T:Common.Data.WellKnownCatalogEntries">
+            <summary>
+            Static class with well known catalog entries.
+            </summary>
+        </member>
+        <member name="T:Common.Data.WellKnownCatalogEntries.Characteristic">
+            <summary>
+            Well known catalog entries for characteristics.
+            </summary>
+        </member>
+        <member name="T:Common.Data.WellKnownCatalogEntries.Characteristic.Type">
+            <summary>
+            Catalog entries for the characteristic type.
+            </summary>
+        </member>
+        <member name="F:Common.Data.WellKnownCatalogEntries.Characteristic.Type.Variable">
+            <summary>
+            The characteristic is a variable characteristic (measurement values are double values).
+            </summary>
+        </member>
+        <member name="F:Common.Data.WellKnownCatalogEntries.Characteristic.Type.Attributive">
+            <summary>
+            The characteristic is a attributive characteristic (measurement values are integers that 
+            specify the index of the corresponding measurement value catalog).
+            </summary>
+        </member>
+        <member name="F:Common.Data.WellKnownCatalogEntries.Characteristic.Type.Counter">
+            <summary>
+            The characteristic is a counting characteristic (measurement values are integers specify a count).
+            </summary>
+        </member>
+        <member name="T:Common.Data.WellKnownCatalogEntries.Measurement">
+            <summary>
+            Well known catalog entries for measurements.
+            </summary>
+        </member>
+        <member name="T:Common.Data.WellKnownCatalogEntries.Measurement.AggregationInterval">
+            <summary>
+            Catalog entries for the measurement aggregation interval.
+            </summary>
+        </member>
+        <member name="F:Common.Data.WellKnownCatalogEntries.Measurement.AggregationInterval.Undefined">
+            <summary>Undefined.</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownCatalogEntries.Measurement.AggregationInterval.Hourly">
+            <summary>Hourly.</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownCatalogEntries.Measurement.AggregationInterval.Daily">
+            <summary>Daily.</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownCatalogEntries.Measurement.AggregationInterval.Weekly">
+            <summary>Weekly.</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownCatalogEntries.Measurement.AggregationInterval.Monthly">
+            <summary>Monthly.</summary>
+        </member>
+        <member name="T:Common.Data.WellKnownCatalogEntries.Measurement.Status">
+            <summary>
+            Catalog entries for the measurement status.
+            </summary>
+        </member>
+        <member name="F:Common.Data.WellKnownCatalogEntries.Measurement.Status.Undefined">
+            <summary>Undefined.</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownCatalogEntries.Measurement.Status.Valid">
+            <summary>Valid</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownCatalogEntries.Measurement.Status.Blocked">
+            <summary>Blocked</summary>
+        </member>
+        <member name="T:Common.Data.WellKnownKeys">
+            <summary>
+            Static class with well known attribute keys.
+            </summary>
+        </member>
+        <member name="T:Common.Data.WellKnownKeys.Part">
+            <summary>Well known keys for accessing part attributes.</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.Number">
+            <summary>Part number</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.Description">
+            <summary>Part description</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.Abbreviation">
+            <summary>Part abbreviation</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.DrawingStatus">
+            <summary>Drawing status</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.Line">
+            <summary>Line</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.ControlItem">
+            <summary>Documented flag</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.VariantOfLine">
+            <summary>Model</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.DrawingNumber">
+            <summary>Drawing number</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.DrawingName">
+            <summary>Drawing name</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.Operation">
+            <summary>Operation</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.Organisation">
+            <summary>Organization</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.CostCenter">
+            <summary>Cost center</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.InspectionType">
+            <summary>Inspection type</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.Plant">
+            <summary>Production plant</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.CallbackUri">
+            <summary>
+            The uri that can be used to create an interactive hyperlink that calls another application. This is used by PiWeb Monitor 
+            for example to switch back to the measuring application (Calypso, Caligo etc.) when clicking on a characteristic or part.
+            </summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.CallbackUriText">
+            <summary>
+            This is a descriptive text for the <see cref="F:Common.Data.WellKnownKeys.Part.CallbackUri"/>.
+            </summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.AdjustmentDate">
+            <summary>Abstimmungsdatum</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.CreationDate">
+            <summary>Eingegeben am</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.CreatedBy">
+            <summary>Eingegeben von</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.UpdateDate">
+            <summary>Geändert am</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.UpdatedBy">
+            <summary>Geändert von</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.OrganisationalUnit">
+            <summary>Organisiationseinheit</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.ProductionLine">
+            <summary>Straße</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.Responsible">
+            <summary>Verantwortlich</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Part.Comment">
+            <summary>Comment</summary>
+        </member>
+        <member name="T:Common.Data.WellKnownKeys.Characteristic">
+            <summary>Well known keys for accessing part characteristic.</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.Number">
+            <summary>Characteristic number</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.Description">
+            <summary>Characteristic description</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.Abbreviation">
+            <summary>Characteristic abbreviation</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.Direction">
+            <summary>Characteristic direction</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.GroupType">
+            <summary>Characteristic group type</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.MeasurementPointRole">
+            <summary>Measurement point role</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.Position">
+            <summary>Position of a characteristic (left; right)</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.Orientation">
+            <summary>Orientation of a characteristic (X; Y; Z; ...)</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.ControlItem">
+            <summary>Documented flag</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.DistributionType">
+            <summary>Distribution type</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.LogicalOperationString">
+            <summary>The formula that describes a calculated characteristics</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.DecimalPlaces">
+            <summary>Number decimal places</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.DesiredValue">
+            <summary>Desired value</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.NominalValue">
+            <summary>Nominal value</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.LowerSpecificationLimit">
+            <summary>Lower specification limit</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.UpperSpecificationLimit">
+            <summary>Upper specification limit</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.LowerTolerance">
+            <summary>Lower tolerance limit</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.UpperTolerance">
+            <summary>Upper tolerance limit</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.LowerScrapLimit">
+            <summary>Lower scrap limit</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.UpperScrapLimit">
+            <summary>Upper scrap limit</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.LowerNaturallyBoundary">
+            <summary>Lower natural boundary</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.UpperNaturallyBoundary">
+            <summary>Upper natural boundary</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.Unit">
+            <summary>The unit (mm, inch, °, etc.)</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.NameOfQualityControlPlan">
+            <summary>Name of inspection plan</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.I">
+            <summary>Normal vector, x coordinate</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.J">
+            <summary>Normal vector, y coordinate</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.K">
+            <summary>Normal vector, z coordinate</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.X">
+            <summary>Position, x coordinate</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.Y">
+            <summary>Position, y coordinate</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.Z">
+            <summary>Position, z coordinate</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.Layer">
+            <summary>Layer</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.AudiCategory">
+            <summary>AUDI: Kategorie (Analysemaß; Bemusterungsmaß; Netzmaß; ...)</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.AudiFunctionGroup">
+            <summary>AUDI: Funktionsgruppe</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.PBMS">
+            <summary>AUDI: Kennzeichnung von PBMS-Punkten (Wert=1)</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.Inline">
+            <summary>AUDI: Kennzeichnung von Inline-Punkten (Wert=1)</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.Symmetric">
+            <summary>AUDI: Kennzeichnung von symmetrischen Merkmale (Wert=1)</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.ManualToleranceInput">
+            <summary>AUDI: Kennzeichnung von manueller Toleranzeingabe</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.AuditFunction">
+            <summary>Auditfunktion</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.LowerControlLimit">
+            <summary>Untere Eingriffgrenze</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.UpperControlLimit">
+            <summary>Obere Eingriffgrenze</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.LowerWarningLimit">
+            <summary>Untere Warngrenze</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.UpperWarningLimit">
+            <summary>Obere Warngrenze</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.CharacteristicType">
+            <summary>Merkmalsart (variabel; attributiv und attributiv zählend)</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.MeasurementValueCatalogue">
+            <summary>Messwertkatalog zur Auswertung attributiver Merkmale</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.PlotMeasurand">
+            <summary>Messgroesse (fuer Formplot)</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.CharacteristicSpecification">
+            <summary>Typ des Merkmals (Circle; Cone; Plane; ...)</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.Text1">
+            <summary>Beschreibungstext 1 des Merkmals</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.Text2">
+            <summary>Beschreibungstext 2 des Merkmals</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.Text3">
+            <summary>Beschreibungstext 3 des Merkmals</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.Category">
+            <summary>Dem Merkmal zugeordnete Kategorie.</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.FeatureName">
+            <summary>Name des Messelementes des Merkmals</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.OperationType">
+            <summary>Typ der Verknüpfung (SYM; DIST; ..) eines Merkmals</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.AudiMeasurementProgram">
+            <summary>Messprogramm</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.AudiSectionalPlane">
+            <summary>Schnittebene</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.AudiFmk">
+            <summary>FMK-Kennung</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.AudiToleranceChain">
+            <summary>Tolerenzkette</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.AudiMeasuringPrinciple">
+            <summary>Messprinzip</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.CallbackUri">
+            <summary>
+            The uri that can be used to create an interactive hyperlink that calls another application. This is used by PiWeb Monitor 
+            for example to switch back to the measuring application (Calypso, Caligo etc.) when clicking on a characteristic or part.
+            </summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.CallbackUriText">
+            <summary>
+            This is a descriptive text for the <see cref="F:Common.Data.WellKnownKeys.Characteristic.CallbackUri"/>.
+            </summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Characteristic.MeasuredQuantity">
+            <summary>Measured quantity</summary>
+        </member>
+        <member name="T:Common.Data.WellKnownKeys.Measurement">
+            <summary>Well known keys for accessing measurement attributes.</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Measurement.Time">
+            <summary>Time</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Measurement.EventId">
+            <summary>Event Id</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Measurement.BatchNumber">
+            <summary>Batch number</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Measurement.InspectorName">
+            <summary>Inspector name</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Measurement.Comment">
+            <summary>Comment</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Measurement.MachineNumber">
+            <summary>Machine number</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Measurement.ProcessId">
+            <summary>Process Id</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Measurement.InspectionEquipment">
+            <summary>Inspection equipment</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Measurement.ProcessValue">
+            <summary>Process value</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Measurement.PartsId">
+            <summary>Part Id</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Measurement.InspectionType">
+            <summary>Inspection type</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Measurement.ProductionNumber">
+            <summary>Inspection number</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Measurement.Contract">
+            <summary>Contract</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Measurement.Shift">
+            <summary>Shift</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Measurement.MeasurementStatus">
+            <summary>Measurement status (approved; blocked; ...)</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Measurement.MeasurementChangeDate">
+            <summary>Measurement change date</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Measurement.MeasurementChangedBy">
+            <summary>Measurement changed by</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Measurement.AggregationJobUuid">
+            <summary>Contains the uuid of the aggregation job that created this measurement. Empty if this measurement is not an aggregated measurement.</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Measurement.AggregationInterval">
+            <summary>Contains the aggregation interval that was used to create this aggregated measurement.</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Measurement.AggregatedMeasurementCount">
+            <summary>Contains the number of original measurements that this aggregated measurement is based on.</summary>
+        </member>
+        <member name="P:Common.Data.WellKnownKeys.Measurement.AggregatedMeasurementKeys">
+            <summary>
+            Collection of all measurement attributes specific for aggregated measurements
+            </summary>
+        </member>
+        <member name="T:Common.Data.WellKnownKeys.Catalogue">
+            <summary>Well known keys for accessing value attributes.</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Catalogue.AuditFunctionGroupKey">
+            <summary>Auditkatalog: Funktionsgruppe</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Catalogue.AuditPriorityKey">
+            <summary>Auditkatalog: Priorität</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Catalogue.DistributionKey">
+            <summary>Statistical distribution</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Catalogue.ColorSchemePositionKey">
+            <summary>Color scheme position</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Catalogue.StatusColorKey">
+            <summary>Status color</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Catalogue.LowerClassLimitKey">
+            <summary>Lower class limit</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Catalogue.UpperClassLimitKey">
+            <summary>Upper class limit</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Catalogue.MeasuredQuantityKey">
+            <summary>Measured quantity</summary>
+        </member>
+        <member name="T:Common.Data.WellKnownKeys.Value">
+            <summary>Well known keys for accessing value attributes.</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Value.MeasuredValue">
+            <summary>Measured value</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Value.AggregatedMinimum">
+            <summary>Key for a measurement value attribute that contains the minimum (calculated by an aggregation job for example).</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Value.AggregatedMaximum">
+            <summary>Key for a measurement value attribute that contains the maximum (calculated by an aggregation job for example).</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Value.AggregatedRange">
+            <summary>Key for a measurement value attribute that contains the range (calculated by an aggregation job for example).</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Value.AggregatedMean">
+            <summary>Key for a measurement value attribute that contains the mean value (calculated by an aggregation job for example).</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Value.AggregatedSigma">
+            <summary>Key for a measurement value attribute that contains the sigma (calculated by an aggregation job for example).</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Value.AggregatedMedian">
+            <summary>Key for a measurement value attribute that contains the median (calculated by an aggregation job for example).</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Value.AggregatedLowerQuartile">
+            <summary>Key for a measurement value attribute that contains the lower quartile (0.25 quantile) (calculated by an aggregation job for example).</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Value.AggregatedUpperQuartile">
+            <summary>Key for a measurement value attribute that contains the upper quartile (0.75 quantile) (calculated by an aggregation job for example).</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Value.AggregatedCp">
+            <summary>Key for a measurement value attribute that contains the cp value (calculated by an aggregation job for example).</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Value.AggregatedCpk">
+            <summary>Key for a measurement value attribute that contains the cpk value (calculated by an aggregation job for example).</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Value.AggregatedValueCount">
+            <summary>Key for a measurement value attribute that contains the number of values (calculated by an aggregation job for example).</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Value.AggregatedOOW">
+            <summary>Key for a measurement value attribute that contains the number of characterteristics out of warning limit (calculated by an aggregation job for example).</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownKeys.Value.AggregatedOOT">
+            <summary>Key for a measurement value attribute that contains the number of characterteristics out of tolerance (calculated by an aggregation job for example).</summary>
+        </member>
+        <member name="P:Common.Data.WellKnownKeys.Value.AggregatedValueKeys">
+            <summary>
+            Collection of all measurement value attributes specific for aggregated measurements
+            </summary>
+        </member>
+        <member name="T:Common.Data.WellKnownServerFeatures">
+            <summary>
+            Static class with constants that are used by <see cref="P:DataService.ServiceInformation.FeatureList"/> to indicate the availability of certain server features.
+            </summary>
+        </member>
+        <member name="F:Common.Data.WellKnownServerFeatures.MergeAttributes">
+            <summary>Server supports server side querying of merged measurements (like a primary key for measurement search)</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownServerFeatures.MeasurementAggregation">
+            <summary>Server support the measurement aggregation feature</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownServerFeatures.DistinctMeasurementSearch">
+            <summary>Server supports the distinct search for specific attribute values</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownServerFeatures.ReadOnlyDatabase">
+            <summary>The server database is readonly and cannot be modified</summary>
+        </member>
+        <member name="F:Common.Data.WellKnownServerFeatures.JobEngineNotSupported">
+            <summary>The server does not support jobs.</summary>
+        </member>
+        <member name="T:DataService.AbstractAttributeDefinition">
+            <summary>
+            This is the abstract base element which is used to define the possible attributes that an
+            entity (like Part, Characteristic etc.) may have.
+            Every attribute definition consists of a key, which is used to identify the attribute
+            (e.g. <code>1002</code> or <code>2120</code> and a description.
+            </summary>
+        </member>
+        <member name="M:DataService.AbstractAttributeDefinition.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:DataService.AbstractAttributeDefinition.#ctor(System.UInt16,System.String,System.Boolean)">
+            <summary>
+            Constructor. Initializes a new definition using the specified key and value.
+            </summary>
+            <param name="key">The unique key for this attribute</param>
+            <param name="description">The attribute description</param>
+            <param name="queryEfficient"><code>true</code> if this attribute is efficient for filtering operations</param>
+        </member>
+        <member name="M:DataService.AbstractAttributeDefinition.ToString">
+            <summary>
+            Overridden <see cref="M:System.Object.ToString"/> method.
+            </summary>
+        </member>
+        <member name="P:DataService.AbstractAttributeDefinition.Key">
+            <summary>
+            Gets or sets the key for this attribute definition.
+            </summary>
+        </member>
+        <member name="P:DataService.AbstractAttributeDefinition.Description">
+            <summary>
+            Gets or sets the name of this attribute definition.
+            </summary>
+        </member>
+        <member name="P:DataService.AbstractAttributeDefinition.QueryEfficient">
+            <summary>
+            Determines whether this attribute is efficient for filtering operations.
+            </summary>
+            <remarks>
+            This flag is currently unused. This may be used in futere web service versions.
+            </remarks>
+        </member>
+        <member name="T:DataService.AggregationMeasurementSelection">
+            <summary>
+            Enumeration that specifies the which types of measurements will be fetched from the database.
+            </summary>
+        </member>
+        <member name="F:DataService.AggregationMeasurementSelection.Measurements">
+            <summary>Fetch normal measurements.</summary>
+        </member>
+        <member name="F:DataService.AggregationMeasurementSelection.AggregationMeasurements">
+            <summary>Fetch aggregated measurements</summary>
+        </member>
+        <member name="F:DataService.AggregationMeasurementSelection.Default">
+            <summary>Default behavior (fetch normal measurements only)</summary>
+        </member>
+        <member name="F:DataService.AggregationMeasurementSelection.All">
+            <summary>Fetch all measurements (normal and aggregated).</summary>
+        </member>
+        <member name="T:DataService.AllAttributeSelection">
+            <summary>
+            Enumeration that determines which attributes for a specific will be returned.
+            </summary>
+        </member>
+        <member name="F:DataService.AllAttributeSelection.True">
+            <summary>
+            If this enumeration value is specified in a <see cref="T:DataService.AttributeSelector"/>, all attributes 
+            will be returned.
+            </summary>
+        </member>
+        <member name="F:DataService.AllAttributeSelection.False">
+            <summary>
+            If this enumeration value is specified in a <see cref="T:DataService.AttributeSelector"/>, only a subset of attributes 
+            which are specified via <see cref="P:DataService.AttributeSelector.Attributes"/> will be returned.
+            </summary>
+        </member>
+        <member name="F:DataService.AllAttributeSelection.QueryEfficient">
+            <summary>
+            If this enumeration value is specified in a <see cref="T:DataService.AttributeSelector"/>, only attributes which are
+            marked as <see cref="P:DataService.AbstractAttributeDefinition.QueryEfficient"/> will be returned.
+            </summary>
+        </member>
+        <member name="T:DataService.Attribute">
+            <summary>
+            Every single instance of every entity (like Part, Characteristic etc.) may have an arbitrary
+            amount of attributes, which further describe the specific entity instance. This element
+            represents a single attribute, which has a key (e.g. <code>k1002</code> or <code>k2120</code>,
+            whereas only the numeric part is used) and a value.
+            </summary>
+            <remarks>This class is immutable.</remarks>
+        </member>
+        <member name="M:DataService.Attribute.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:DataService.Attribute.#ctor(System.UInt16,System.String)">
+            <summary>
+            Constructor. Creates a new attribute with key <code>key</code> and value <code>value</code>.
+            </summary>
+            <param name="key">The key of the newly created attribute.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:DataService.Attribute.#ctor(System.UInt16,System.Object)">
+            <summary>
+            Konstruktor. Creates a new attribute with key <code>key</code> and value <code>rawValue</code>.
+            </summary>
+            <param name="key">The key of the newly created attribute.</param>
+            <param name="rawValue">The raw value.</param>
+        </member>
+        <member name="M:DataService.Attribute.IsNull">
+            <summary>
+            Determines whether this attribute has a value or not. This allows us to distinguish between attributes defining the empty string
+            and attributes defining a null value (which could be interpreted as deletion during a merge). 
+            </summary>
+            <returns>
+              <c>true</c> if this attribute has no value; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:DataService.Attribute.GetRawValue(System.Type)">
+            <summary>
+            Returns the <see cref="P:DataService.Attribute.RawValue"/> if not null. Otherwise parses the <see cref="P:DataService.Attribute.Value"/> using the specified 
+            <code>type</code> and returns that value.
+            </summary>
+            <param name="type">The data type to use for parsing the value.</param>
+        </member>
+        <member name="M:DataService.Attribute.ToString">
+            <summary>
+            Overridden <see cref="M:System.Object.ToString"/>-method.
+            </summary>
+        </member>
+        <member name="P:DataService.Attribute.Key">
+            <summary>
+            Returns the key of this attribute.
+            </summary>
+        </member>
+        <member name="P:DataService.Attribute.RawValue">
+            <summary>
+            Returns the parsed attribute value of this attribute.
+            </summary>
+        </member>
+        <member name="P:DataService.Attribute.Value">
+            <summary>
+            Returns the attribute value of this attribute.
+            </summary>
+        </member>
+        <member name="T:DataService.AttributeDefinition">
+            <summary>
+            This element (in combination with its base element) is used to define the possible attributes
+            that an entity (like Part, Characteristic etc.) may have. In addition to its base element, this
+            element contains the type of an attribute and its size (or length).
+            "length" is ignored for Integer, Float and DateTime attributes, as they have a fixed format.
+            Integer is a signed 32-bit type, Float and DateTime are adopted from the XML Schema definition.
+            XML Schema defines them as follows:
+            Float corresponds to the IEEE single-precision 32-bit floating point type. The following
+            examples are legal literals for Float: <code>-1E4, 1267.43233E12, 12.78e-2, 12</code>.
+            Details can be found in the XML Schema definition, Part 2: Datatypes, Section "Primitive
+            Datatypes".
+            DateTime represents a specific instant of time. The lexical representation has to be
+            in the format "CCYY-MM-DDThh:mm:ss". The letter "T" is the date/time separator. "ss" may
+            contain fractional seconds (like "ss.ssss...") to increase the precision.
+            Details can be found in the XML Schema definition, Part 2: Datatypes, Section "Primitive Datatypes".
+            </summary>
+        </member>
+        <member name="M:DataService.AttributeDefinition.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:DataService.AttributeDefinition.#ctor(System.UInt16,System.String,DataService.AttributeType,System.UInt16,System.Boolean)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="key">The unique key for this attribute</param>
+            <param name="description">The attribute description</param>
+            <param name="type">The datatype of this attribute</param>
+            <param name="length">The length of a string attribute (only valid if <code>type</code> is <code>AttributeType.AlphaNumeric</code></param>
+            <param name="queryEfficient"><code>true</code> if this attribute is efficient for filtering operations</param>
+        </member>
+        <member name="P:DataService.AttributeDefinition.Type">
+            <summary>
+            Gets or sets the data type of this attribute definition.
+            </summary>
+        </member>
+        <member name="P:DataService.AttributeDefinition.Length">
+            <summary>
+            Gets or sets the length of this attribute definition (if the definitions data type is <see cref="F:DataService.AttributeType.AlphaNumeric"/>.
+            </summary>
+        </member>
+        <member name="T:DataService.AttributeSelector">
+            <summary>
+            This element is used by search operations which return entities such as Parts,
+            Characteristics, Measurements etc. It specifies, if the entities, which match the search
+            criteria, should be returned with all their attributes, or if only the attributes
+            specified in this element should be returned.
+            </summary>
+        </member>
+        <member name="M:DataService.AttributeSelector.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:DataService.AttributeSelector.#ctor(DataService.AllAttributeSelection)">
+            <summary>
+            Constructor. Initializes a new attribute selector for a specific <see cref="T:DataService.AllAttributeSelection"/>.
+            </summary>
+        </member>
+        <member name="M:DataService.AttributeSelector.#ctor(System.UInt16[])">
+            <summary>
+            Constructor. Initializes a new attribute selector for a specific set of attributes <code>attributes</code>.
+            </summary>
+        </member>
+        <member name="P:DataService.AttributeSelector.Attributes">
+            <summary>
+            Gets or sets the list of attributes that should be fetched.
+            </summary>
+        </member>
+        <member name="P:DataService.AttributeSelector.AllAttributes">
+            <summary>
+            Gets or sets a value that determines whether to fetch all, no or just the query efficient attributes.
+            </summary>
+        </member>
+        <member name="T:DataService.AttributeType">
+            <summary>
+            These are the possible data types of attributes.
+            </summary>
+        </member>
+        <member name="F:DataService.AttributeType.AlphaNumeric">
+            <summary>
+            AlphaNumeric represents a string value.
+            </summary>
+        </member>
+        <member name="F:DataService.AttributeType.Integer">
+            <summary>
+            Integer is a signed 32-bit type.
+            </summary>
+        </member>
+        <member name="F:DataService.AttributeType.Float">
+            <summary>
+            Float corresponds to the IEEE single-precision 32-bit floating point type. The following
+            xamples are legal literals for Float: <code>-1E4, 1267.43233E12, 12.78e-2, 12</code>.
+            </summary>
+        </member>
+        <member name="F:DataService.AttributeType.DateTime">
+            <summary>
+            DateTime represents a specific instant of time. The lexical representation has to be 
+            in the format "CCYY-MM-DDThh:mm:ss". The letter "T" is the date/time separator. "ss" may
+            contain fractional seconds (like "ss.ssss...") to increase the precision.
+            </summary>
+        </member>
+        <member name="T:DataService.Catalog">
+            <summary>
+            This element (in combination with its base element) describes the entity Catalogue with its relation to zero or more catalogue entries.
+            When received from the DataService as a result of <code>CatalogueSearch</code>, the element 
+            <code>validAttributes</code> contains a list of attribute keys, that are valid for the respective catalogue.
+            </summary>
+        </member>
+        <member name="T:DataService.SimpleCatalog">
+            <summary>
+            This element describes the entity Catalog without any relations to other entites.
+            The entity Catalog has an unique identifier, which is used as primary key, and a name,
+            which is used by an user to distinguish between different Catalogues.
+            </summary>
+        </member>
+        <member name="M:DataService.SimpleCatalog.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:DataService.SimpleCatalog.ToString">
+            <summary>
+            Overridden <see cref="M:System.Object.ToString"/> method.
+            </summary>
+        </member>
+        <member name="P:DataService.SimpleCatalog.Uuid">
+            <summary>
+            Gets or sets the uuid of this catalog.
+            </summary>
+        </member>
+        <member name="P:DataService.SimpleCatalog.Name">
+            <summary>
+            Gets or sets the name of the catalog.
+            </summary>
+        </member>
+        <member name="P:DataService.Catalog.Item(System.Int16)">
+            <summary>
+            Returns the catalog entry with index <code>key</code>.
+            </summary>
+        </member>
+        <member name="P:DataService.Catalog.ValidAttributes">
+            <summary>
+            Gets or sets a list of attribute keys that are valid for the entries of this catalog.
+            </summary>
+        </member>
+        <member name="P:DataService.Catalog.CatalogEntries">
+            <summary>
+            Gets or sets the list of catalog entries in this catalog.
+            </summary>
+        </member>
+        <member name="T:DataService.CatalogAttributeDefinition">
+            <summary>
+            The CatalogueAttributeDefinition element (in combination with its base element) is used to
+            define the possible attributes that an entity (like Part, Characteristic etc.) may have.
+            In contrast to the element "AttributeDefinition", this element is used for attributes which
+            reference a Catalogue. A Catalogue consists of an uuid, a name and a map, which maps from
+            integer values to arbitrary attributes.
+            </summary>
+        </member>
+        <member name="P:DataService.CatalogAttributeDefinition.Catalog">
+            <summary>
+            Gets or sets the uuid of the catalogue this attribute definition points to.
+            </summary>
+        </member>
+        <member name="T:DataService.CatalogCollection">
+            <summary>
+            Special class that holds a list of <see cref="T:DataService.Catalog"/>.
+            </summary>
+        </member>
+        <member name="M:DataService.CatalogCollection.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:DataService.CatalogCollection.#ctor(System.Collections.Generic.IEnumerable{DataService.Catalog})">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:DataService.CatalogCollection.GetEnumerator">
+            <summary>
+            Returns an enumerator for enumerating all catalogs in this collection.
+            </summary>
+        </member>
+        <member name="P:DataService.CatalogCollection.Count">
+            <summary>
+            Returns the number of catalogs in this list.
+            </summary>
+        </member>
+        <member name="P:DataService.CatalogCollection.Item(System.Guid)">
+            <summary>
+            Returns the catalog with uuid <code>catalogUuid</code>.
+            </summary>
+        </member>
+        <member name="P:DataService.CatalogCollection.Item(System.Guid,System.Int16)">
+            <summary>
+            Returns the catalog entry with index <code>catalogEntryIndex</code> from catalog with uuid <code>catalogUuid</code>.
+            </summary>
+        </member>
+        <member name="P:DataService.CatalogCollection.Item(System.Guid,System.String)">
+            <summary>
+            Returns the catalog entry with index <code>catalogEntryIndex</code> from catalog with uuid <code>catalogUuid</code>.
+            </summary>
+            <remarks>
+            The index <code>catalogEntryIndex</code> has to be a valid short.
+            </remarks>
+        </member>
+        <member name="T:DataService.CatalogEntry">
+            <summary>
+            This element describes a single entry of a catalogue. Each entry has a key, which has to be
+            unique within the catalogue in which it is used, and zero or more attributes.
+            </summary>
+        </member>
+        <member name="M:DataService.CatalogEntry.ToString">
+            <summary>
+            Overridden <see cref="M:System.Object.ToString"/> method.
+            </summary>
+        </member>
+        <member name="M:DataService.CatalogEntry.ToString(System.IFormatProvider)">
+            <summary>
+            Returns a string representation of this entry using the format provider
+            <code>provider</code>.
+            </summary>
+        </member>
+        <member name="P:DataService.CatalogEntry.Attributes">
+            <summary>
+            Gets or sets the attributes that belong to this catalog entry.
+            </summary>
+        </member>
+        <member name="P:DataService.CatalogEntry.Key">
+            <summary>
+            Gets or sets the key of this catalog entry.
+            </summary>
+        </member>
+        <member name="T:DataService.Configuration">
+            <summary>
+            This element holds the configuration of the service.
+            It defines the possible attributes that each entity (like Part, Characteristic, ...) may have.
+            When a client wants to construct an entity, it must not use any attributes which are not defined
+            in the corresponding list.
+            The entities Part and Characteristic have significant attributes. The list of significant
+            attributes has the function of a primary key: There must be not more than one Part in the database
+            with the same values for the set of significant part attributes. The same applies to
+            Characteristics, but there must be not more than one Characteristic with a given
+            signature below a given root Part (a Part with no parent). This means, that there may be
+            several Characteristics with the same signature, but then each one has to have a different root Part.
+            </summary>
+        </member>
+        <member name="M:DataService.Configuration.GetName(System.UInt16)">
+             <summary>
+            Returns the name of the attribute definition specified by <code>key</code>.
+             </summary>
+             <param name="key">The key of the attribute definition.</param>
+        </member>
+        <member name="M:DataService.Configuration.GetDefinition(System.UInt16)">
+            <summary>
+            Returns the attribute definition with <code>key</code>.
+            </summary>
+            <param name="key">The key of the attribute definition.</param>
+        </member>
+        <member name="M:DataService.Configuration.GetDefinitions(DataService.Entity)">
+            <summary>
+            Returns all attribute definitions for entity type <code>entityType</code>.
+            </summary>
+        </member>
+        <member name="M:DataService.Configuration.GetDefinition(DataService.Entity,System.UInt16)">
+            <summary>
+            Returns the attribute definition with <code>key</code> for entity type <code>entity</code>.
+            </summary>
+            <param name="key">The key of the attribute definition.</param>
+            <param name="type">The entity type for which the definition should be returned.</param>
+        </member>
+        <member name="M:DataService.Configuration.IsKeyOfType(DataService.Entity,System.UInt16)">
+            <summary>
+            Returns <code>true</code> if the attribute definition with key <code>key</code> belongs to an entity 
+            with type <code>entityType</code>.
+            </summary>
+        </member>
+        <member name="M:DataService.Configuration.GetTypeForKey(System.UInt16)">
+            <summary>
+            Return the entity type <code>entityType</code> of the attribute definition with <code>key</code>. If the key 
+            does not exist in this configuration, <code>null</code> is returned.
+            </summary>
+        </member>
+        <member name="M:DataService.Configuration.GetFormattedValue(System.UInt16,System.String,DataService.CatalogCollection,System.IFormatProvider)">
+            <summary>
+            Returns a formatted value for the attribute <paramref name="value"/>. If the value is a catalog entry, the catalog value will
+            be returned. This method uses the <paramref name="provider"/> for formatting the value. If the <paramref name="provider"/> 
+            is not specified, the <see cref="P:System.Globalization.CultureInfo.CurrentUICulture"/> is used to format the resulting value.
+            </summary>
+        </member>
+        <member name="P:DataService.Configuration.AllAttributes">
+            <summary>
+            Returns a list of all attribute definitions in this configuration.
+            </summary>
+        </member>
+        <member name="P:DataService.Configuration.PartAttributes">
+            <summary>
+            Gets or sets a list of all part attribute definitions.
+            </summary>
+        </member>
+        <member name="P:DataService.Configuration.CharacteristicAttributes">
+            <summary>
+            Gets or sets a list of all characteristic attribute definitions.
+            </summary>
+        </member>
+        <member name="P:DataService.Configuration.MeasurementAttributes">
+            <summary>
+            Gets or sets a list of all measurement attribute definitions.
+            </summary>
+        </member>
+        <member name="P:DataService.Configuration.ValueAttributes">
+            <summary>
+            Gets or sets a list of all value attribute definitions.
+            </summary>
+        </member>
+        <member name="P:DataService.Configuration.CatalogueAttributes">
+            <summary>
+            Gets or sets a list of all catalog attribute definitions.
+            </summary>
+        </member>
+        <member name="P:DataService.Configuration.VersioningType">
+            <summary>
+            The attribute <code>versioningType</code> defines, whether updates to Parts or Characteristics
+            overwrite existing values, or whether they create a new version of the entity.
+            </summary>
+        </member>
+        <member name="T:DataService.DataCharacteristic">
+            <summary>
+            This element describes the entity Characteristic in the context of measured data.
+            It extends its base element with a relation to the measured data.
+            </summary>
+        </member>
+        <member name="T:DataService.InspectionPlanBase">
+            <remarks/>
+        </member>
+        <member name="M:DataService.InspectionPlanBase.ToString">
+            <summary>
+            Overriden <see cref="M:System.Object.ToString"/> method.
+            </summary>
+        </member>
+        <member name="P:DataService.InspectionPlanBase.Item(System.UInt16)">
+            <summary>
+            Indexer for accessing the attribute value with the specified <code>key</code>.
+            </summary>
+        </member>
+        <member name="P:DataService.InspectionPlanBase.Attributes">
+            <summary>
+            Gets or sets the attributes of this inspection plan entity.
+            </summary>
+        </member>
+        <member name="P:DataService.InspectionPlanBase.Uuid">
+            <summary>
+            Gets or sets the uuid of this inspection plan entity. The uuid is always constant, even if 
+            this entity is renamed.
+            </summary>
+        </member>
+        <member name="P:DataService.InspectionPlanBase.Comment">
+            <summary>
+            Gets or sets the comment of this inspection plan entity.
+            </summary>
+        </member>
+        <member name="P:DataService.InspectionPlanBase.Path">
+            <summary>
+            Gets or sets the path of this inspection plan entity.
+            </summary>
+        </member>
+        <member name="P:DataService.InspectionPlanBase.Version">
+            <summary>
+            Contains the revision number of a Part. The revision number starts with 
+            zero and is incremented by one each time when changes are applied to a Part.
+            </summary>
+        </member>
+        <member name="P:DataService.InspectionPlanBase.Timestamp">
+            <summary>
+            Contains the date and time of the last update applied to a Part instance.
+            </summary>
+        </member>
+        <member name="P:DataService.InspectionPlanBase.Current">
+            <summary>
+            Gets or sets a flag if this item represents the current version. If this flag is 
+            <code>false</code> a newer version of this entity exists and this entity is part
+            of the inspection plan history.
+            </summary>
+        </member>
+        <member name="P:DataService.DataCharacteristic.Value">
+            <summary>
+            Gets or sets the measurement value. Please note that a measurement value can include additional 
+            information when measurement value attributes are defined.
+            </summary>
+        </member>
+        <member name="T:DataService.DataMeasurement">
+            <summary>
+            Each measurement includes characteristic entities, which include the measured data.
+            </summary>
+        </member>
+        <member name="T:DataService.SimpleMeasurement">
+            <summary>
+            This element describes the entity Measurement without any measurement values.
+            Like all other entities, the Measurement entity has an unique identifier, which is used as a primary key,
+            a type description, and zero or more attributes.
+            </summary>
+        </member>
+        <member name="M:DataService.SimpleMeasurement.ToString">
+            <summary>
+            Overridden <see cref="M:System.Object.ToString"/> method.
+            </summary>
+        </member>
+        <member name="P:DataService.SimpleMeasurement.Uuid">
+            <summary>
+            Gets or sets the uuid of this measurement.
+            </summary>
+        </member>
+        <member name="P:DataService.SimpleMeasurement.PartUuid">
+            <summary>
+            Gets or sets the uuid the part this measurement belongs to.
+            </summary>
+        </member>
+        <member name="P:DataService.SimpleMeasurement.LastModified">
+            <summary>
+            Gets or sets the last modification timestamp of this measurement. The server will update this 
+            timestamp whenever an attribute of this measurement is changed or whenever measurement values
+            of this measurement are updated, deleted and added.
+            </summary>
+        </member>
+        <member name="P:DataService.SimpleMeasurement.Attributes">
+            <summary>
+            Gets or sets all attributes that belong to this measurement.
+            </summary>
+        </member>
+        <member name="P:DataService.SimpleMeasurement.Status">
+            <summary>
+            Gets or sets the status information for this measurement. This status information can be requested when 
+            performing a measurement search using one of the values from <see cref="T:DataService.MeasurementStatistics"/>.
+            </summary>
+        </member>
+        <member name="P:DataService.SimpleMeasurement.Time">
+            <summary>
+            Gets or sets the time of this measurement. If this measurement has no time attribute, then <see cref="F:DataService.SimpleMeasurement.MinimumValidDatabaseDateTime"/> will
+            be returned.
+            </summary>
+        </member>
+        <member name="P:DataService.DataMeasurement.Characteristics">
+            <summary>
+            Gets or sets the measurement values.
+            </summary>
+        </member>
+        <member name="T:DataService.DataValue">
+            <summary>
+            This element describes the entity Value in the context of measured data.
+            </summary>
+        </member>
+        <member name="M:DataService.DataValue.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:DataService.DataValue.#ctor(System.Nullable{System.Double})">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:DataService.DataValue.#ctor(DataService.Attribute[])">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="P:DataService.DataValue.Attributes">
+            <summary>
+            Gets or sets the attributes that belong to the measurement value. By default, every measurement 
+            value has the attribute <code>K1</code> which is the measurent value as a double value.
+            </summary>
+        </member>
+        <member name="P:DataService.DataValue.MeasuredValue">
+            <summary>
+            Convinience property for accessing the measurement value (K1).
+            </summary>
+        </member>
+        <member name="T:DataService.Entity">
+            <summary>
+            This enumeration specifies all possible entities that are accessible via DataService.
+            </summary>
+        </member>
+        <member name="F:DataService.Entity.Part">
+            <summary>Part</summary>
+        </member>
+        <member name="F:DataService.Entity.Characteristic">
+            <summary>Characteristic</summary>
+        </member>
+        <member name="F:DataService.Entity.Value">
+            <summary>Measurement value</summary>
+        </member>
+        <member name="F:DataService.Entity.Measurement">
+            <summary>Measurement</summary>
+        </member>
+        <member name="F:DataService.Entity.Catalogue">
+            <summary>Catalog</summary>
+        </member>
+        <member name="T:DataService.InspectionPlanCharacteristic">
+            <summary>
+            This element extends the entity Characteristic with an optional version history of old values.
+            </summary>
+        </member>
+        <member name="P:DataService.InspectionPlanCharacteristic.History">
+            <summary>
+            Gets or sets the version history for this inspection plan characteristic.
+            </summary>
+        </member>
+        <member name="T:DataService.InspectionPlanEntity">
+            <summary>
+            The entities which are allowed in InspectionPlanSearch  are defined in this element.
+            </summary>
+        </member>
+        <member name="F:DataService.InspectionPlanEntity.Part">
+            <summary>
+            Specifies the entity type "Part"
+            </summary>
+        </member>
+        <member name="F:DataService.InspectionPlanEntity.Characteristic">
+            <summary>
+            Specifies the entity type "Characteristic"
+            </summary>
+        </member>
+        <member name="T:DataService.InspectionPlanPart">
+            <summary>
+            This element extends the entity Part with an optional version history of old values.
+            </summary>
+        </member>
+        <member name="T:DataService.SimplePart">
+            <summary>
+            This element describes the entity Part without any relations to other entites.
+            Like all other entities, the Part entity has an unique identifier, which is used as a primary key,
+            a type description, and zero or more attributes.
+            </summary>
+        </member>
+        <member name="P:DataService.SimplePart.CharChangeDate">
+            <summary>
+            Gets or sets the timestamp for characteristic changes. Whenever a characteristic below that part (but not below sub parts) is changed, created or deleted,
+            this timestamp will be updated by the server backend.
+            </summary>
+        </member>
+        <member name="P:DataService.InspectionPlanPart.History">
+            <summary>
+            Gets or sets the version history for this inspection plan part.
+            </summary>
+        </member>
+        <member name="T:DataService.Operation">
+            <summary>
+            This element contains the possible operations which can be used in search criteria expressions.
+            The different values of <code>In</code> and <code>NotIn</code> have to be separated by a
+            comma. If a value itself contains a comma, the value has to be quoted in single quotes. If a value
+            is quoted and it should contain a single quote, the quote has to be escaped by a second quoute.
+            Valid examples for <code>In</code>/<code>NotIn</code> are: <code>1,2</code>, <code>1,'2,0'</code>
+            and <code>1,'2,0''5'</code>.
+            </summary>
+        </member>
+        <member name="F:DataService.Operation.Equal">
+            <summary>
+            Specifies an operation that checks if two values are equal.
+            </summary>
+        </member>
+        <member name="F:DataService.Operation.NotEqual">
+            <summary>
+            Specifies an operation that checks if two values are not equal.
+            </summary>
+        </member>
+        <member name="F:DataService.Operation.GreaterThan">
+            <summary>
+            Specifies an operation that checks if one value is greater than another value.
+            </summary>
+        </member>
+        <member name="F:DataService.Operation.LessThan">
+            <summary>
+            Specifies an operation that checks if one value is less than another value.
+            </summary>
+        </member>
+        <member name="F:DataService.Operation.GreaterThanOrEqual">
+            <summary>
+            Specifies an operation that checks if one value is greater than or equal to another value.
+            </summary>
+        </member>
+        <member name="F:DataService.Operation.LessThanOrEqual">
+            <summary>
+            Specifies an operation that checks if one value is less than or equal to another value.
+            </summary>
+        </member>
+        <member name="F:DataService.Operation.In">
+            <summary>
+            Specifies an operation that checks if one value is inside a value list.
+            </summary>
+        </member>
+        <member name="F:DataService.Operation.NotIn">
+            <summary>
+            Specifies an operation that checks if one value is not inside a value list.
+            </summary>
+        </member>
+        <member name="F:DataService.Operation.Like">
+            <summary>
+            Specifies an operation that checks if two values are equal. Placeholder "%" (arbitrary string) and "_" (single character) are allowed.
+            </summary>
+        </member>
+        <member name="T:DataService.Order">
+            <summary>
+            This class is used for specifying the sort order of e.g. measurements.
+            </summary>
+        </member>
+        <member name="M:DataService.Order.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:DataService.Order.#ctor(System.UInt16,DataService.OrderDirection,DataService.Entity)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="attribute">The key of the attribute that is used for sorting</param>
+            <param name="direction">The sort direction</param>
+            <param name="entity">The entity that is used for sorting</param>
+        </member>
+        <member name="M:DataService.Order.ToString">
+            <summary>
+            Overridden <see cref="M:System.Object.ToString"/> method.
+            </summary>
+        </member>
+        <member name="P:DataService.Order.Entity">
+            <summary>
+            Gets or sets the entity that is used for sorting.
+            </summary>
+        </member>
+        <member name="P:DataService.Order.Attribute">
+            <summary>
+            Gets or sets the key of the attribute that is used for sorting.
+            </summary>
+        </member>
+        <member name="P:DataService.Order.Direction">
+            <summary>
+            Gets or sets the sort direction.
+            </summary>
+        </member>
+        <member name="T:DataService.OrderDirection">
+            <summary>
+            This element specifies the direction of an order operation.
+            </summary>
+        </member>
+        <member name="F:DataService.OrderDirection.Asc">
+            <summary>
+            Ascending order.
+            </summary>
+        </member>
+        <member name="F:DataService.OrderDirection.Desc">
+            <summary>
+            Descending order.
+            </summary>
+        </member>
+        <member name="T:DataService.PathElement">
+            <summary>
+            Each element in a path hierarchy consists of the name of the current element and its type.
+            Notice that comparision of path elements is case insensitiv per default.
+            </summary>
+            <remarks>Diese Klasse ist immutable!</remarks>
+        </member>
+        <member name="F:DataService.PathElement.EmptyPart">
+            <summary>
+            Constant value for an empty part.
+            </summary>
+        </member>
+        <member name="F:DataService.PathElement.EmptyCharacteristic">
+            <summary>
+            Constant value for an empty characteristic.
+            </summary>
+        </member>
+        <member name="M:DataService.PathElement.#ctor(DataService.InspectionPlanEntity,System.String)">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:DataService.PathElement.Part(System.String)">
+            <summary>
+            Creates a new path element with type <see cref="F:DataService.InspectionPlanEntity.Part"/>.
+            </summary>
+        </member>
+        <member name="M:DataService.PathElement.Char(System.String)">
+            <summary>
+            Creates a new path element with type <see cref="F:DataService.InspectionPlanEntity.Characteristic"/>.
+            </summary>
+        </member>
+        <member name="M:DataService.PathElement.op_Equality(DataService.PathElement,DataService.PathElement)">
+            <summary>
+            Equality operator. Path element are compared case insensitive.
+            </summary>
+        </member>
+        <member name="M:DataService.PathElement.op_Inequality(DataService.PathElement,DataService.PathElement)">
+            <summary>
+            Inequality operator. Path element are compared case insensitive.
+            </summary>
+        </member>
+        <member name="M:DataService.PathElement.Equals(System.Object)">
+            <summary>
+            Overridden <see cref="M:System.Object.Equals(System.Object)"/> method. Path element are compared case insensitive.
+            </summary>
+        </member>
+        <member name="M:DataService.PathElement.GetHashCode">
+            <summary>
+            Overrridden <see cref="M:System.Object.GetHashCode"/> method.
+            </summary>
+        </member>
+        <member name="M:DataService.PathElement.ToString">
+            <summary>
+            Overrridden <see cref="M:System.Object.ToString"/> method.
+            </summary>
+        </member>
+        <member name="P:DataService.PathElement.Type">
+            <summary>
+            Gibt den Type des Pfadabschnittes zurück.
+            </summary>
+        </member>
+        <member name="P:DataService.PathElement.Value">
+            <summary>
+            Gibt den Namen zurück.
+            </summary>
+        </member>
+        <member name="P:DataService.PathElement.IsEmpty">
+            <summary>
+            Gibt an, ob diese <see cref="T:DataService.PathElement"/>-Instanz leer ist.
+            </summary>
+        </member>
+        <member name="T:DataService.PathInformation">
+            <summary>
+            A complete path hierarchy consists of many path elements, each one discribing one node of
+            the path hierarchy. The order of the nodes has to match the hierarchical structure:
+            the top most node ist the first node in this list, a leaf node is the last node in this list.
+            </summary>
+        </member>
+        <member name="F:DataService.PathInformation.Root">
+            <summary> Returns the root path. </summary>
+        </member>
+        <member name="M:DataService.PathInformation.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:DataService.PathInformation.#ctor(System.Collections.Generic.IEnumerable{DataService.PathElement})">
+            <summary>Constructor. Initialies the path with the given <paramref name="paths"/>.</summary>
+        </member>
+        <member name="M:DataService.PathInformation.#ctor(DataService.PathElement[])">
+            <summary>Constructor. Initialies the path with the given <paramref name="paths"/>.</summary>
+        </member>
+        <member name="M:DataService.PathInformation.#ctor(DataService.PathInformation,System.Int32,System.Int32)">
+            <summary>Constructor. Initialies the path as a view on the given <paramref name="path"/> with an offset and a length.</summary>
+        </member>
+        <member name="M:DataService.PathInformation.IsNullOrRoot(DataService.PathInformation)">
+            <summary> Checks if the <paramref name="path"/> is <code>null</code> or the root part. </summary>
+            <returns>True, if the <paramref name="path"/> is <code>null</code> or the root part otherwise false.</returns>
+        </member>
+        <member name="M:DataService.PathInformation.IsBelow(DataService.PathInformation)">
+            <summary> Checks if this path is below <paramref name="path"/> or is equal to <paramref name="path"/>.
+            Also checks the path elements type!
+            </summary>
+        </member>
+        <member name="M:DataService.PathInformation.Parent(System.Int32)">
+            <summary> 
+            Returns the parent path by stepping up the <code>upcount</code> number of levels in the path hierarchy.
+            </summary>
+            <param name="upcount">Number of levels to go upwards the path hierarchy (&gt;= 0).</param>
+            <returns>The path without the last n levels, the path itself or the root path.</returns>
+        </member>
+        <member name="M:DataService.PathInformation.op_Addition(DataService.PathInformation,DataService.PathInformation)">
+            <summary>
+            Add operator. Combines the path <paramref name="p1"/> and the path <paramref name="p2"/> to a new <see cref="T:DataService.PathInformation"/> instance.
+            </summary>
+        </member>
+        <member name="M:DataService.PathInformation.Combine(DataService.PathInformation,DataService.PathInformation)">
+            <summary> 
+            Combines the path <paramref name="p1"/> and the path <paramref name="p2"/> to a new <see cref="T:DataService.PathInformation"/> instance. 
+            </summary>
+        </member>
+        <member name="M:DataService.PathInformation.Combine(DataService.PathInformation,DataService.PathElement)">
+            <summary>
+            Combines the path <paramref name="path"/> and the path element <paramref name="elem"/> to a new <see cref="T:DataService.PathInformation"/> instance. 
+            </summary>
+        </member>
+        <member name="M:DataService.PathInformation.StartPath(System.Int32)">
+            <summary> 
+            Returns the a path that contains the first <code>count</code> number of path elements from this path. 
+            </summary>
+        </member>
+        <member name="M:DataService.PathInformation.op_Equality(DataService.PathInformation,DataService.PathInformation)">
+            <summary> 
+            Equality operator. Comparison of path elements is case insensitive.
+            </summary>
+        </member>
+        <member name="M:DataService.PathInformation.op_Inequality(DataService.PathInformation,DataService.PathInformation)">
+            <summary> 
+            Inequality operator. Comparison of path elements is case insensitive!.
+            </summary>
+        </member>
+        <member name="M:DataService.PathInformation.Equals(System.Object)">
+            <summary> 
+            Overridden <see cref="M:System.Object.Equals(System.Object)"/> method. 
+            </summary>
+        </member>
+        <member name="M:DataService.PathInformation.GetHashCode">
+            <summary> 
+            Overridden <see cref="M:System.Object.GetHashCode"/> method. 
+            </summary>
+        </member>
+        <member name="M:DataService.PathInformation.ToString">
+            <summary> 
+            Overridden <see cref="M:System.Object.ToString"/> method. 
+            </summary>
+        </member>
+        <member name="M:DataService.PathInformation.GetEnumerator">
+            <summary>
+            Returns an enumerator which contains all <see cref="T:DataService.PathElement"/> objects which this <see cref="T:DataService.PathInformation"/> consists of. 
+            </summary>
+        </member>
+        <member name="M:DataService.PathInformation.ToString(System.String,System.IFormatProvider)">
+            <summary>
+            Creates a string with the following formatting types:
+            * "S", "Name": Returns just the name (last path component) of the path.
+            * "Full": Returns the name and the full path in brackets.
+            * No or unknown format: Returns the whole path.
+            </summary>
+        </member>
+        <member name="P:DataService.PathInformation.Item(System.Int32)">
+            <summary>
+            Indexer to access the path elements by its index.
+            </summary>
+        </member>
+        <member name="P:DataService.PathInformation.ParentPath">
+            <summary>
+            Returns the parent path.
+            </summary>
+        </member>
+        <member name="P:DataService.PathInformation.ParentPartPath">
+            <summary>
+            Returns the parent part path.
+            </summary>
+        </member>
+        <member name="P:DataService.PathInformation.RootPartPath">
+            <summary> 
+            Returns the root part of ths path.
+            </summary>
+        </member>
+        <member name="P:DataService.PathInformation.IsRoot">
+            <summary> 
+            Returns true if this path is the root part. 
+            </summary>
+        </member>
+        <member name="P:DataService.PathInformation.Count">
+            <summary> 
+            Returns the number of path elements. 
+            </summary>
+        </member>
+        <member name="P:DataService.PathInformation.Name">
+            <summary> 
+            Returns the name part of the path. 
+            </summary>
+        </member>
+        <member name="P:DataService.PathInformation.TypedName">
+            <summary> 
+            Returns the typed name of the path - a path element. As the root part does not have a name <code>null</code> is returned. 
+            </summary>
+        </member>
+        <member name="P:DataService.PathInformation.Type">
+            <summary> 
+            Returns the type of the last path element. 
+            </summary>
+        </member>
+        <member name="T:DataService.DataServiceRestClient">
+            <summary>
+            Client class for communicating with the REST based data service.
+            </summary>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.#ctor(System.String)">
+            <summary> 
+            Constructor. Initialization of the client class for communicating with the DataService via the given <paramref name="serverUri"/>
+            </summary>
+            <param name="serverUri">The PiWeb Server uri, including port and instance</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.#ctor(System.Uri)">
+            <summary>
+            Constructor. Initilization of the client class for communicating with the DataService via the given <paramref name="serverUri"/>
+            </summary>
+            <param name="serverUri">The PiWeb Server uri, including port and instance</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.#ctor(System.String,System.String,System.Int32,System.String)">
+            <summary> 
+            Constructor. Initialization of the client class for communicating with the DataService via the given parameters.
+            </summary>
+            <param name="scheme">PiWeb Server's schema (http/https)</param>
+            <param name="host">PiWeb Server's host address</param>
+            <param name="port">PiWeb Server's port</param>
+            <param name="instance">An additional path wich is added to the uri, e.g. needed for an instance identifier.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.GetServiceInformation(System.Threading.CancellationToken)">
+            <summary> 
+            Method for fetching the <see cref="T:DataService.ServiceInformation"/>. This method can be used for connection checking. The call returns quickly 
+            and does not produce any noticeable server load. 
+            </summary>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.GetConfiguration(System.Threading.CancellationToken)">
+            <summary> 
+            Method for fetching the <see cref="T:DataService.Configuration"/>. The <see cref="T:DataService.Configuration"/> contains the 
+            attribute definitions for parts, characteristics, measurements and values etc.
+            </summary>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.CreateAttributeDefinition(DataService.Entity,DataService.AbstractAttributeDefinition,System.Threading.CancellationToken)">
+            <summary>
+            Adds a new attribute definition to the database configuration for the specified <paramref name="entity"/>.
+            </summary>
+            <param name="entity">The entity the attribute definition should be added to.</param>
+            <param name="definition">The attribute definition to add.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.CreateAttributeDefinitions(DataService.Entity,DataService.AbstractAttributeDefinition[],System.Threading.CancellationToken)">
+            <summary>
+            Adds new attribute definitions to the database configuration for the specified <paramref name="entity"/>.
+            </summary>
+            <param name="entity">The entity the attribute definitions should be added to.</param>
+            <param name="definitions">The attribute definitions to add.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.UpdateAttributeDefinition(DataService.Entity,DataService.AbstractAttributeDefinition[],System.Threading.CancellationToken)">
+            <summary> 
+            Updates / replaces the attribute definitions for the specified <paramref name="entity"/>. If the definition
+            does not exist yet, it will be replaced otherwise it will be updated.
+            </summary>
+            <param name="entity">The entity the attribute definitions should be replaced for.</param>
+            <param name="definitions">The attribute definitions to update.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.DeleteAttributeDefinitions(DataService.Entity,System.UInt16[],System.Threading.CancellationToken)">
+            <summary>
+            Deletes the attribute definitions from the database configuration for the specified <paramref name="entity"/>. If the key
+            list is empty, all definitions for the entity are deleted.
+            </summary>
+            <param name="entity">The entity the attribute definitions should be deleted from.</param>
+            <param name="keys">The keys that specify the definitions.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.DeleteAllAttributeDefinitions(System.Threading.CancellationToken)">
+            <summary>
+            Deletes all attribute definitions from the database configuration.
+            </summary>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.GetCatalogs(System.Guid[],System.Threading.CancellationToken)">
+            <summary> 
+            Method for fetching the <see cref="T:DataService.Catalog"/>.  The catalogs contain the definition 
+            and the catalog entries.
+            </summary>
+            <param name="catalogUuids">A list of catalog uuids to restrict the result. If this list is empty, all catalogs will be returned</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.CreateCatalogs(DataService.Catalog[],System.Threading.CancellationToken)">
+            <summary>
+            Adds the specified catalogs to the database. If the catalog contains entries, the entries will be added too.
+            </summary>
+            <param name="catalogs">The catalogs to add.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.UpdateCatalogs(DataService.Catalog[],System.Threading.CancellationToken)">
+            <summary> 
+            Updates the specified catalogs. If the catalog contains entries, the entries will be updated too.
+            </summary>
+            <param name="catalogs">The catalogs to update.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.DeleteCatalogs(System.Guid[],System.Threading.CancellationToken)">
+            <summary> 
+            Deletes the specified catalogs including their entries from the database. If the parameter <paramref name="catalogUuids"/>
+            is empty, all catalogs will be deleted.
+            </summary>
+            <param name="catalogUuids">The catalog uuids to delete.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.CreateCatalogEntry(System.Guid,DataService.CatalogEntry,System.Threading.CancellationToken)">
+            <summary> 
+            Adds the specified catalog entry to the catalog with uuid <paramref name="catalogUuid"/>. If the key <see cref="P:DataService.CatalogEntry.Key"/>
+            is <code>-1</code>, the server will generate a new unique key for that entry.
+            </summary>
+            <param name="catalogUuid">The uuid of the catalog to add the entry to.</param>
+            <param name="entry">The catalog entry to add.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.CreateCatalogEntries(System.Guid,DataService.CatalogEntry[],System.Threading.CancellationToken)">
+            <summary>
+            Adds the specified catalog entries to the catalog with uuid <paramref name="catalogUuid"/>. If the key <see cref="P:DataService.CatalogEntry.Key"/>
+            is <code>-1</code>, the server will generate a new unique key for that entry.
+            </summary>
+            <param name="catalogUuid">The uuid of the catalog to add the entries to.</param>
+            <param name="entries">The catalog entries to add.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.DeleteCatalogEntry(System.Guid,System.UInt16,System.Threading.CancellationToken)">
+            <summary> 
+            Removes the catalog entry with the specified <paramref name="key"/> from the catalog <paramref name="catalogUuid"/>.
+            </summary>
+            <param name="catalogUuid">The uuid of the catalog to remove the entry from.</param>
+            <param name="key">The key of the catalog entry to delete.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.DeleteCatalogEntries(System.Guid,System.UInt16[],System.Threading.CancellationToken)">
+            <summary> 
+            Removes the catalog entries with the specified <paramref name="keys"/> from the catalog <paramref name="catalogUuid"/>. If the list of keys
+            is empty, all catalog entries will be removed.
+            </summary>
+            <param name="catalogUuid">The uuid of the catalog to remove the entries from.</param>
+            <param name="keys">The keys of the catalog entries to delete.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.GetParts(DataService.PathInformation,DataService.InspectionPlanFilterAttributes,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Fetches a list of parts below <paramref name="partPath"/>. The result list always contains the specified parent part too. If the parent part
+            is <code>null</code>, a server wide search is performed. The search can be restricted using the specified <paramref name="filter"/>. If the
+            <see cref="P:DataService.InspectionPlanFilterAttributes.Depth"/> is <code>0</code>, only the specified part will be returned.
+            </summary>
+            <param name="partPath">The parent part to fetch the children for.</param> 
+            <param name="filter">A filter that can be used to further restrict the search operation.</param>
+            <param name="streamed">
+            This controls whether to choose a streamed transfer mode or not. Using streamed mode has the side effect, that the result is transfered 
+            using http/s when the caller enumerates the result. The caller should be aware of because then enumerating might take longer than expected.
+            Non streamed transfer mode first reads the whole result inside the task and then returns an enumerator over the buffered result. This is
+            the preferred way when calling the task from UI code or when enumerating the whole result. The streamed mode would be preferred when the 
+            result is processed in blocks on non UI code or when not the complete result set is used.
+            </param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.CreateParts(DataService.InspectionPlanPart[],System.Threading.CancellationToken)">
+            <summary>
+            Adds the specified parts to the database.
+            </summary>
+            <param name="parts">The parts to add.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.UpdateParts(DataService.InspectionPlanPart[],System.Threading.CancellationToken)">
+            <summary>
+            Updates the specified parts in the database.
+            </summary>
+            <param name="parts">The parts to update.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.DeleteAllParts(System.Threading.CancellationToken)">
+            <summary> 
+            Deletes all parts from the database. Since parts act as the parent of characteristics and measurements, this call will 
+            delete all characteristics and measurements including the measurement values too.
+            </summary>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.DeleteParts(DataService.PathInformation,System.Threading.CancellationToken)">
+            <summary> 
+            Deletes all parts and child parts below <paramref name="partPath"/> from the database. Since parts act as the parent 
+            of characteristics and measurements, this call will delete all characteristics and measurements including the measurement 
+            values that are a child of the specified parent part.
+            </summary>
+            <param name="partPath">The parent part for the delete operation.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.DeleteParts(System.Guid[],System.Threading.CancellationToken)">
+            <summary> 
+            Deletes all parts and child parts below the parts specified by <paramref name="partUuids"/> from the database. Since parts act as the parent 
+            of characteristics and measurements, this call will delete all characteristics and measurements including the measurement 
+            values that are a child of the specified parent part.
+            </summary>
+            <param name="partUuids">The uuid list of the parent part for the delete operation.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.GetCharacteristics(DataService.PathInformation,DataService.InspectionPlanFilterAttributes,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Fetches a list of characteristics below <paramref name="partPath"/>. If the parent part is <code>null</code> the characteristics below
+            the root part will be returned. The search can be restricted using the specified <paramref name="filter"/>. If the
+            <see cref="P:DataService.InspectionPlanFilterAttributes.Depth"/> is <code>0</code>, only the specified part will be returned.
+            </summary>
+            <param name="partPath">The parent part to fetch the children for.</param> 
+            <param name="filter">A filter that can be used to further restrict the search operation.</param>
+            <param name="streamed">
+            This controls whether to choose a streamed transfer mode or not. Using streamed mode has the side effect, that the result is transfered 
+            using http/s when the caller enumerates the result. The caller should be aware of because then enumerating might take longer than expected.
+            Non streamed transfer mode first reads the whole result inside the task and then returns an enumerator over the buffered result. This is
+            the preferred way when calling the task from UI code or when enumerating the whole result. The streamed mode would be preferred when the 
+            result is processed in blocks on non UI code or when not the complete result set is used.
+            </param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.CreateCharacteristics(DataService.InspectionPlanCharacteristic[],System.Threading.CancellationToken)">
+            <summary>
+            Adds the specified characteristics to the database.
+            </summary>
+            <param name="characteristics">The characteristics to add.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.UpdateCharacteristics(DataService.InspectionPlanCharacteristic[],System.Threading.CancellationToken)">
+            <summary>
+            Updates the specified characteristics in the database.
+            </summary>
+            <param name="characteristics">characteristics parts to update.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.DeleteCharacteristics(DataService.PathInformation,System.Threading.CancellationToken)">
+            <summary> 
+            Deletes the characteristic <paramref name="charPath"/> and its sub characteristics from the database. 
+            </summary>
+            <param name="charPath">The characteristic path for the delete operation.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.DeleteCharacteristics(System.Guid[],System.Threading.CancellationToken)">
+            <summary>
+            Deletes the characteristics <paramref name="charUuid"/> and their sub characteristics from the database. 
+            </summary>
+            <param name="charUuid">The characteristic uuid list for the delete operation.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.GetMeasurements(DataService.PathInformation,DataService.MeasurementFilterAttributes,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Fetches a list of measurements for the <paramref name="partPath"/>. The search operation can be parameterized using the specified 
+            <paramref name="filter"/>. If the filter is empty, all measurements for the specified part will be fetched.
+            </summary>
+            <param name="partPath">The part path to fetch the measurements for.</param>
+            <param name="filter">A filter that can be used to further restrict the search operation.</param>
+            <param name="streamed">
+            This controls whether to choose a streamed transfer mode or not. Using streamed mode has the side effect, that the result is transfered 
+            using http/s when the caller enumerates the result. The caller should be aware of because then enumerating might take longer than expected.
+            Non streamed transfer mode first reads the whole result inside the task and then returns an enumerator over the buffered result. This is
+            the preferred way when calling the task from UI code or when enumerating the whole result. The streamed mode would be preferred when the 
+            result is processed in blocks on non UI code or when not the complete result set is used.
+            </param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.CreateMeasurements(DataService.SimpleMeasurement[],System.Threading.CancellationToken)">
+            <summary>
+            Adds the measurements parts to the database.
+            </summary>
+            <param name="measurements">The measurements to add.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.UpdateMeasurements(DataService.SimpleMeasurement[],System.Threading.CancellationToken)">
+            <summary>
+            Updates the specified measurements in the database.
+            </summary>
+            <param name="measurements">The measurements to update.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.DeleteMeasurements(DataService.PathInformation,Common.Data.GenericSearchCondition,System.Threading.CancellationToken)">
+            <summary>
+            Deletes the measurements including the measurement values for part <paramref name="partPath"/>. The <paramref name="filter"/> can be used 
+            to restrict the measurements. If the filter is empty, all measurements for the specified part will be deleted. If the partPath is empty,
+            all measurements from the whole database will be deleted.
+            </summary>
+            <param name="partPath">The part path to delete the measurements from.</param>
+            <param name="filter">A filter to restruct the delete operation.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.DeleteMeasurements(System.Guid[],System.Threading.CancellationToken)">
+            <summary>
+            Deletes the measurements that are part of the <paramref name="measurementUuids"/> list.
+            </summary>
+            <param name="measurementUuids">The list of uuids of the measurements to delete.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.GetMeasurementValues(DataService.PathInformation,DataService.MeasurementValueFilterAttributes,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Fetches a list of measurements and measurement values for the <paramref name="partPath"/>. The search operation 
+            can be parameterized using the specified <paramref name="filter"/>. If the filter is empty, all measurements for 
+            the specified part will be fetched.
+            </summary>
+            <param name="partPath">The part path to fetch the measurements and values for.</param>
+            <param name="filter">A filter that can be used to further restrict the search operation.</param>
+            <param name="streamed">
+            This controls whether to choose a streamed transfer mode or not. Using streamed mode has the side effect, that the result is transfered 
+            using http/s when the caller enumerates the result. The caller should be aware of because then enumerating might take longer than expected.
+            Non streamed transfer mode first reads the whole result inside the task and then returns an enumerator over the buffered result. This is
+            the preferred way when calling the task from UI code or when enumerating the whole result. The streamed mode would be preferred when the 
+            result is processed in blocks on non UI code or when not the complete result set is used.
+            </param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.CreateMeasurementValues(DataService.DataMeasurement[],System.Threading.CancellationToken)">
+            <summary>
+            Adds the measurements and measurement values parts to the database. Please note that no single values can be inserted or updated. Whole
+            measurements with all values can be created or updated only.
+            </summary>
+            <param name="values">The measurements and values to add.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:DataService.DataServiceRestClient.UpdateMeasurementValues(DataService.DataMeasurement[],System.Threading.CancellationToken)">
+            <summary>
+            Updates the measurements and measurement values parts to the database. Please note that no single values can be inserted or updated. Whole
+            measurements with all values can be created or updated only.
+            </summary>
+            <param name="values">The measurements and values to update.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="T:DataService.InspectionPlanFilterAttributes">
+            <summary>
+            Class that encapsulates the url parameter for an inspection plan search via PiWeb-REST web service.
+            </summary>
+        </member>
+        <member name="F:DataService.InspectionPlanFilterAttributes.DefaultForParts">
+            <summary>
+            Default values for the filter <see cref="T:DataService.InspectionPlanFilterAttributes"/> that is used for fetching parts.
+            </summary>
+        </member>
+        <member name="F:DataService.InspectionPlanFilterAttributes.DefaultForCharacteristics">
+            <summary>
+            Default values for the filter <see cref="T:DataService.InspectionPlanFilterAttributes"/> that is used for fetching characteristics.
+            </summary>
+        </member>
+        <member name="M:DataService.InspectionPlanFilterAttributes.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:DataService.InspectionPlanFilterAttributes.Parse(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Parses the filter and returns a <see cref="T:DataService.InspectionPlanFilterAttributes"/> object that represents the filter values.
+            If the parse operation was not successful, an <see cref="T:System.InvalidOperationException"/> will be thrown.
+            </summary>
+            <returns>The <see cref="T:DataService.InspectionPlanFilterAttributes"/> with the parsed information.</returns>
+        </member>
+        <member name="M:DataService.InspectionPlanFilterAttributes.ToParameterDefinition">
+            <summary>
+            Creates a <see cref="T:Common.Client.ParameterDefinition"/> list that represents this filter.
+            </summary>
+        </member>
+        <member name="M:DataService.InspectionPlanFilterAttributes.ToString">
+            <summary>
+            Overriden <see cref="M:System.Object.ToString"/> method.
+            </summary>
+        </member>
+        <member name="P:DataService.InspectionPlanFilterAttributes.Depth">
+            <summary>
+            Gets or sets the search depth for the search.
+            </summary>
+        </member>
+        <member name="P:DataService.InspectionPlanFilterAttributes.RequestedPartAttributes">
+            <summary>
+            Gets or sets the selector for the part attributes.
+            </summary>
+        </member>
+        <member name="P:DataService.InspectionPlanFilterAttributes.RequestedCharacteristicAttributes">
+            <summary>
+            Gets or sets the selector for the characteristic attributes.
+            </summary>
+        </member>
+        <member name="P:DataService.InspectionPlanFilterAttributes.WithHistory">
+            <summary>
+            Gets or sets a flag that determines whether the version history should be returned.
+            </summary>
+        </member>
+        <member name="P:DataService.InspectionPlanFilterAttributes.PartUuids">
+            <summary>
+            Gets or sets a list of part uuids that should be used for searching for parts or characteristics.
+            </summary>
+        </member>
+        <member name="T:DataService.MeasurementFilterAttributes">
+            <summary>
+            Class that encapsulates the url parameter for a measurement value search via PiWeb-REST web service.
+            </summary>
+        </member>
+        <member name="M:DataService.MeasurementFilterAttributes.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:DataService.MeasurementFilterAttributes.Parse(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Parses the filter and returns a <see cref="T:DataService.MeasurementFilterAttributes"/> object that represents the filter values.
+            If the parse operation was not successful, an <see cref="T:System.InvalidOperationException"/> will be thrown.
+            </summary>
+            <returns>The <see cref="T:DataService.MeasurementFilterAttributes"/> with the parsed information.</returns>
+        </member>
+        <member name="M:DataService.MeasurementFilterAttributes.ToParameterDefinition">
+            <summary>
+            Creates a <see cref="T:Common.Client.ParameterDefinition"/> list that represents this filter.
+            </summary>
+        </member>
+        <member name="M:DataService.MeasurementFilterAttributes.ToString">
+            <summary>
+            Overriden <see cref="M:System.Object.ToString"/> method.
+            </summary>
+        </member>
+        <member name="P:DataService.MeasurementFilterAttributes.Deep">
+            <summary>
+            Gets or sets a flag if the search should only be performed for the specified part (<code>false</code>) or 
+            if the part and child parts (<code>true</code>) should be searched.
+            </summary>
+        </member>
+        <member name="P:DataService.MeasurementFilterAttributes.LimitResult">
+            <summary>
+            Gets or sets the maximum number of measurements that should be returned. If this value is -1, no limit is used.
+            </summary>
+        </member>
+        <member name="P:DataService.MeasurementFilterAttributes.OrderBy">
+            <summary>
+            Gets or sets the sort order of the resulting measurements.
+            </summary>
+        </member>
+        <member name="P:DataService.MeasurementFilterAttributes.RequestedMeasurementAttributes">
+            <summary>
+            Gets or sets the selector for the measurement attributes.
+            </summary>
+        </member>
+        <member name="P:DataService.MeasurementFilterAttributes.SearchCondition">
+            <summary>
+            Gets or sets the search condition that should be used.
+            </summary>
+        </member>
+        <member name="P:DataService.MeasurementFilterAttributes.MeasurementUuids">
+            <summary>
+            Gets or sets the list of measurement uuids that should be returned.
+            </summary>
+        </member>
+        <member name="P:DataService.MeasurementFilterAttributes.Statistics">
+            <summary>
+            Specifies if statistical information (<see cref="T:DataService.MeasurementStatistics"/>: number characteristics OOT, OOT, etc.) should be returned.
+            </summary>
+        </member>
+        <member name="P:DataService.MeasurementFilterAttributes.AggregationMeasurements">
+            <summary>
+            Specifies what types of measurements will be returned (normal/aggregated measurements or both). 
+            </summary>
+        </member>
+        <member name="T:DataService.MeasurementStatistics">
+            <summary>
+            Enumeration that specifies what additional statistical information should be returned with each measurement.
+            </summary>
+        </member>
+        <member name="F:DataService.MeasurementStatistics.None">
+            <summary>
+            No additional statistical information is calculated.
+            </summary>
+        </member>
+        <member name="F:DataService.MeasurementStatistics.Simple">
+            <summary>
+            Statistical information should be returned. This information includes:
+            * Number of characteristics out of tolerance.
+            * Number of characteristics out of warning limits.
+            * Number of characteristics in warning limits and in tolerance.
+            </summary>
+        </member>
+        <member name="F:DataService.MeasurementStatistics.Detailed">
+            <summary>
+            Statistical information should be returned. This information includes:
+            In addition the the information returned by <see cref="F:DataService.MeasurementStatistics.Simple"/>,
+            the uuids of the characteristics that belong to these groups will be returned.
+            </summary>
+        </member>
+        <member name="T:DataService.MeasurementValueFilterAttributes">
+            <summary>
+            Class that encapsulates the url parameter for a measurement search via PiWeb-REST web service.
+            </summary>
+        </member>
+        <member name="M:DataService.MeasurementValueFilterAttributes.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:DataService.MeasurementValueFilterAttributes.Parse(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Parses the filter and returns a <see cref="T:DataService.MeasurementValueFilterAttributes"/> object that represents the filter values.
+            If the parse operation was not successful, an <see cref="T:System.InvalidOperationException"/> will be thrown.
+            </summary>
+            <returns>The <see cref="T:DataService.MeasurementValueFilterAttributes"/> with the parsed information.</returns>
+        </member>
+        <member name="M:DataService.MeasurementValueFilterAttributes.ToParameterDefinition">
+            <summary>
+            Creates a <see cref="T:Common.Client.ParameterDefinition"/> list that represents this filter.
+            </summary>
+        </member>
+        <member name="M:DataService.MeasurementValueFilterAttributes.ToString">
+            <summary>
+            Overriden <see cref="M:System.Object.ToString"/> method.
+            </summary>
+        </member>
+        <member name="P:DataService.MeasurementValueFilterAttributes.Deep">
+            <summary>
+            Gets or sets a flag if the search should only be performed for the specified part (<code>false</code>) or 
+            if the part and child parts (<code>true</code>) should be searched.
+            </summary>
+        </member>
+        <member name="P:DataService.MeasurementValueFilterAttributes.LimitResult">
+            <summary>
+            Gets or sets the maximum number of measurements that should be returned. If this value is -1, no limit is used.
+            </summary>
+        </member>
+        <member name="P:DataService.MeasurementValueFilterAttributes.OrderBy">
+            <summary>
+            Gets or sets the sort order of the resulting measurements.
+            </summary>
+        </member>
+        <member name="P:DataService.MeasurementValueFilterAttributes.RequestedValueAttributes">
+            <summary>
+            Gets or sets the selector for the measurement value attributes.
+            </summary>
+        </member>
+        <member name="P:DataService.MeasurementValueFilterAttributes.RequestedMeasurementAttributes">
+            <summary>
+            Gets or sets the selector for the measurement attributes.
+            </summary>
+        </member>
+        <member name="P:DataService.MeasurementValueFilterAttributes.SearchCondition">
+            <summary>
+            Gets or sets the search condition that should be used.
+            </summary>
+        </member>
+        <member name="P:DataService.MeasurementValueFilterAttributes.MeasurementUuids">
+            <summary>
+            Gets or sets the list of measurement uuids that should be returned.
+            </summary>
+        </member>
+        <member name="P:DataService.MeasurementValueFilterAttributes.CharacteristicsUuidList">
+            <summary>
+            Gets or sets the list of characteristic uuids that should be returned.
+            </summary>
+        </member>
+        <member name="P:DataService.MeasurementValueFilterAttributes.AggregationMeasurements">
+            <summary>
+            Specifies what types of measurements will be returned (normal/aggregated measurements or both). 
+            </summary>
+        </member>
+        <member name="T:DataService.ServiceInformation">
+            <summary>
+            This class contains general information about the DataService, like its current version, the server name etc.
+            </summary>
+        </member>
+        <member name="M:DataService.ServiceInformation.ToString">
+            <summary>
+            Overridden <see cref="M:System.Object.ToString"/> method.
+            </summary>
+        </member>
+        <member name="P:DataService.ServiceInformation.ServerName">
+            <summary>
+            Gets or sets the server name.
+            </summary>
+        </member>
+        <member name="P:DataService.ServiceInformation.Version">
+            <summary>
+            Gets or sets the server version.
+            </summary>
+        </member>
+        <member name="P:DataService.ServiceInformation.SecurityEnabled">
+            <summary>
+            Gets or sets whether the server has security enabled.
+            </summary>
+        </member>
+        <member name="P:DataService.ServiceInformation.Edition">
+            <summary>
+            Gets or sets the servers edition.
+            </summary>
+        </member>
+        <member name="P:DataService.ServiceInformation.VersionWsdlMajor">
+            <summary>
+            Gets or sets the web service major interface version.
+            </summary>
+        </member>
+        <member name="P:DataService.ServiceInformation.VersionWsdlMinor">
+            <summary>
+            Gets or sets the minor web service interface version.
+            </summary>
+        </member>
+        <member name="P:DataService.ServiceInformation.PartCount">
+            <summary>
+            Gets or sets the number of parts that currently exist in the server. This number is just an approximation.
+            </summary>
+        </member>
+        <member name="P:DataService.ServiceInformation.CharacteristicCount">
+            <summary>
+            Gets or sets the number of characteristics that currently exist in the server. This number is just an approximation.
+            </summary>
+        </member>
+        <member name="P:DataService.ServiceInformation.MeasurementCount">
+            <summary>
+            Gets or sets the number of measurements that currently exist in the server. This number is just an approximation.
+            </summary>
+        </member>
+        <member name="P:DataService.ServiceInformation.ValueCount">
+            <summary>
+            Gets or sets the number of values that currently exist in the server. This number is just an approximation.
+            </summary>
+        </member>
+        <member name="P:DataService.ServiceInformation.FeatureList">
+            <summary>
+            Gets or sets a list of features that are supported by the server.
+            </summary>
+        </member>
+        <member name="P:DataService.ServiceInformation.InspectionPlanTimestamp">
+            <summary>
+            Gets or sets the timestamp of the last inspection plan modification accross the whole server.
+            </summary>
+        </member>
+        <member name="P:DataService.ServiceInformation.MeasurementTimestamp">
+            <summary>
+            Gets or sets the timestamp of the last measurement modification accross the whole server.
+            </summary>
+        </member>
+        <member name="P:DataService.ServiceInformation.ConfigurationTimestamp">
+            <summary>
+            Gets or sets the timestamp for the last modification of the server configuration.
+            </summary>
+        </member>
+        <member name="P:DataService.ServiceInformation.WsdlVersion">
+            <summary>
+            Convenience property that combines <see cref="P:DataService.ServiceInformation.VersionWsdlMajor"/> and <see cref="P:DataService.ServiceInformation.VersionWsdlMinor"/>.
+            </summary>
+        </member>
+        <member name="T:DataService.SimpleMeasurementStatus">
+            <summary>
+            Status object that has detailed information about the number of characteristics in/out tolerance. This status object can be 
+            requested when performing a measurement search using one of the values of <see cref="T:DataService.MeasurementStatistics"/>.
+            </summary>
+        </member>
+        <member name="P:DataService.SimpleMeasurementStatus.Id">
+            <summary>
+            Gets or sets the unique id of the status. Currently this can be one of the following:
+            <code>InTol</code>, <code>OutWarn</code> and <code>OutTol</code>.
+            </summary>
+        </member>
+        <member name="P:DataService.SimpleMeasurementStatus.Count">
+            <summary>
+            Gets or sets the number of characteristics with this measurement status.
+            </summary>
+        </member>
+        <member name="P:DataService.SimpleMeasurementStatus.Uuid">
+            <summary>
+            Gets or sets the uuids of the characteristics that have this status. This property will only be populated
+            when the detailed status is requested with <see cref="F:DataService.MeasurementStatistics.Detailed"/>.
+            </summary>
+        </member>
+        <member name="T:DataService.VersioningType">
+            <summary>
+            This enumeration specifies how the server is performing inspection plan versioning.
+            </summary>
+        </member>
+        <member name="F:DataService.VersioningType.Off">
+            <summary>Versioning functionality is completly disabled.</summary>
+        </member>
+        <member name="F:DataService.VersioningType.On">
+            <summary>Versioning is enabled every time.</summary>
+        </member>
+        <member name="F:DataService.VersioningType.Client">
+            <summary>Client decides if versioning is enabled.</summary> 
+            <comment>This means that versioning is generally enabled and the client 
+            has the possibility to switch versioning on/off for certain changes.</comment>
+        </member>
+        <member name="T:RawDataService.RawDataEntity">
+            <summary>
+            Enumeration that specifies the entity to which a raw data object is attached to. 
+            </summary>
+        </member>
+        <member name="F:RawDataService.RawDataEntity.Part">
+            <summary>The raw data object belongs to a part.</summary>
+        </member>
+        <member name="F:RawDataService.RawDataEntity.Characteristic">
+            <summary>The raw data object belongs to a characteristic.</summary>
+        </member>
+        <member name="F:RawDataService.RawDataEntity.Measurement">
+            <summary>The raw data object belongs to a measurement.</summary>
+        </member>
+        <member name="F:RawDataService.RawDataEntity.Value">
+            <summary>The raw data object belongs to a measurement value.</summary>
+        </member>
+        <member name="T:RawDataService.RawDataInformation">
+            <summary>
+            This object holds information for a raw data object like its size, key, name etc.
+            </summary>
+        </member>
+        <member name="M:RawDataService.RawDataInformation.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:RawDataService.RawDataInformation.#ctor(RawDataService.RawDataTargetEntity,System.Int32)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="entity">The entity this object belongs to.</param>
+            <param name="key">A unique key that identifies this information object.</param>
+        </member>
+        <member name="M:RawDataService.RawDataInformation.#ctor(RawDataService.RawDataInformation)">
+            <summary>
+            Copy-Constructor.
+            </summary>
+            <param name="data">The raw data information object that should be copied.</param>
+        </member>
+        <member name="M:RawDataService.RawDataInformation.ToString">
+            <summary>
+            Overriden <see cref="M:System.Object.ToString"/>-method.
+            </summary>
+        </member>
+        <member name="P:RawDataService.RawDataInformation.Target">
+            <summary>
+            Gets or sets the target object this raw data object belongs to.
+            </summary>
+        </member>
+        <member name="P:RawDataService.RawDataInformation.Key">
+            <summary>
+            This is a unique key that identifies this specific raw data object for a corresponding entity. An entity (Part, Characteristic, Measurement, Value)
+            can have multiple raw data object that are distinct by this key.
+            </summary>
+        </member>
+        <member name="P:RawDataService.RawDataInformation.FileName">
+            <summary>
+            Gets or sets the filename of the raw data object.
+            </summary>
+            <remarks>
+            Please note that this filename is not unique (unlike filenames in traditional file systems).
+            </remarks>
+        </member>
+        <member name="P:RawDataService.RawDataInformation.MimeType">
+            <summary>
+            Gets or sets the mime type of the raw data object.
+            </summary>
+        </member>
+        <member name="P:RawDataService.RawDataInformation.LastModified">
+            <summary>
+            Gets or sets the timestamp of the last modification of the corresponding raw data object.
+            </summary>
+            <remarks>
+            The attribute <code>LastModified</code> will be set by the Rawdata-Service.
+            A user value will be ignored. 
+            </remarks>
+        </member>
+        <member name="P:RawDataService.RawDataInformation.Created">
+            <summary>
+            Gets or sets the timestamp of the creation of the corresponding raw data object.
+            </summary>
+            <remarks>
+            The attribute <code>Created</code> will be set by the Rawdata-Service.
+            A user value will be ignored. 
+            </remarks>
+        </member>
+        <member name="P:RawDataService.RawDataInformation.Size">
+            <summary>
+            Gets or sets the size of the raw data object in bytes.
+            </summary>
+        </member>
+        <member name="P:RawDataService.RawDataInformation.MD5">
+            <summary>
+            Gets or sets the MD5-Hash of the raw data object.
+            </summary>
+        </member>
+        <member name="P:RawDataService.RawDataInformation.MD5String">
+            <summary>
+            Gets or sets the MD5-Hash of the raw data object.
+            </summary>
+            <remarks>
+            This property exists for serialization compatibility reasons only. This will be removed in a future version of this interface.
+            </remarks>
+        </member>
+        <member name="T:RawDataService.RawDataTargetEntity">
+            <summary>
+            Specifies a concrete entity for a raw data object. If raw data is attached to an entity 
+            of type <see cref="F:RawDataService.RawDataEntity.Value"/>, the attribute <code>Uuid</code> contains a 
+            compound key in the following format: <code>{MeasurementUuid}|{CharacteristicUuid}</code>.
+            </summary>
+        </member>
+        <member name="M:RawDataService.RawDataTargetEntity.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:RawDataService.RawDataTargetEntity.#ctor(RawDataService.RawDataEntity,System.Guid)">
+            <summary>
+            Creates a new <see cref="T:RawDataService.RawDataTargetEntity"/> based on the specified <code>uuid</code> and <code>entity</code>.
+            </summary>
+            <param name="entity">The entity to which this raw data object belongs to.</param>
+            <param name="uuid">The uuid of the entity.</param>
+        </member>
+        <member name="M:RawDataService.RawDataTargetEntity.#ctor(RawDataService.RawDataEntity,System.String)">
+            <summary>
+            Creates a new <see cref="T:RawDataService.RawDataTargetEntity"/> based on the specified <code>uuid</code> and <code>entity</code>.
+            </summary>
+            <param name="entity">The entity to which this raw data object belongs to.</param>
+            <param name="uuid">The uuid of the entity.</param>
+        </member>
+        <member name="M:RawDataService.RawDataTargetEntity.CreateForPart(System.Guid)">
+            <summary>Factory method to create a new <see cref="T:RawDataService.RawDataTargetEntity"/>-object for a <see cref="F:RawDataService.RawDataEntity.Part"/>.</summary>
+            <param name="uuid">The uuid of a part.</param>
+        </member>
+        <member name="M:RawDataService.RawDataTargetEntity.CreateForCharacteristic(System.Guid)">
+            <summary>Factory method to create a new <see cref="T:RawDataService.RawDataTargetEntity"/>-object for a <see cref="F:RawDataService.RawDataEntity.Characteristic"/>.</summary>
+            <param name="uuid">The uuid of a characteristic.</param>
+        </member>
+        <member name="M:RawDataService.RawDataTargetEntity.CreateForMeasurement(System.Guid)">
+            <summary>Factory method to create a new <see cref="T:RawDataService.RawDataTargetEntity"/>-object for a <see cref="F:RawDataService.RawDataEntity.Measurement"/>.</summary>
+            <param name="uuid">The uuid of a measurement.</param>
+        </member>
+        <member name="M:RawDataService.RawDataTargetEntity.CreateForValue(System.Guid,System.Guid)">
+            <summary>Factory method to create a new <see cref="T:RawDataService.RawDataTargetEntity"/>-object for a <see cref="F:RawDataService.RawDataEntity.Value"/>.</summary>
+            <remarks>
+            Please note that the characteristic should belong to the part to which the specified measurement belongs to.
+            </remarks>
+            <param name="characteristicUuid">The uuid of a characteristic.</param>
+            <param name="measurementUuid">The uuid of a measurement.</param>
+        </member>
+        <member name="M:RawDataService.RawDataTargetEntity.ToString">
+            <summary>
+            Overriden <see cref="M:System.Object.ToString"/>-method.
+            </summary>
+        </member>
+        <member name="P:RawDataService.RawDataTargetEntity.Entity">
+            <summary>
+            Gets or sets the entity to which this raw data object belongs to.
+            </summary>
+        </member>
+        <member name="P:RawDataService.RawDataTargetEntity.Uuid">
+            <summary>
+            Gets or sets the uuid of the entity.
+            </summary>
+        </member>
+        <member name="T:RawDataService.RawDataServiceRestClient">
+            <summary>
+            Client class for communicating with the REST based raw data service.
+            </summary>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.#ctor(System.String,System.Nullable{System.Int32})">
+            <summary> 
+            Constructor. Initialization of the client class for communicating with the RawDataService via the given <paramref name="serverUri"/>
+            </summary>
+            <param name="serverUri">The PiWeb Server uri, including port and instance</param>
+            <param name="maxUriLength">The uri length limit</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.#ctor(System.Uri,System.Nullable{System.Int32})">
+            <summary>
+            Constructor. Initilization of the client class for communicating with the RawDataService via the given <paramref name="serverUri"/>
+            </summary>
+            <param name="serverUri">The PiWeb Server uri, including port and instance</param>
+            <param name="maxUriLength">The uri length limit</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.#ctor(System.String,System.String,System.Int32,System.String,System.Nullable{System.Int32})">
+            <summary> 
+            Constructor. Initialization of the client class for communicating with the RawDataService via the given parameters.
+            </summary>
+            <param name="scheme">PiWeb Server's schema (http/https)</param>
+            <param name="host">PiWeb Server's host address</param>
+            <param name="port">PiWeb Server's port</param>
+            <param name="instance">An additional path wich is added to the uri, e.g. needed for an instance identifier.</param>
+            <param name="maxUriLength">The uri length limit</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.GetServiceInformation(System.Threading.CancellationToken)">
+            <summary> 
+            Method for fetching the <see cref="T:RawDataService.ServiceInformation"/>. This method can be used for connection checking. The call returns quickly 
+            and does not produce any noticeable server load. 
+            </summary>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.ListRawDataForParts(System.Guid[],System.Threading.CancellationToken)">
+            <summary> 
+            Fetches a list of raw data information for the parts identified by <paramref name="partUuids"/>. 
+            </summary>
+            <param name="partUuids">The list of part uuids the raw data information should be fetched for.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.ListRawDataForCharacteristics(System.Guid[],System.Threading.CancellationToken)">
+            <summary> 
+            Fetches a list of raw data information for the characteristic identified by <paramref name="charateristicUuids"/>. 
+            </summary>
+            <param name="charateristicUuids">The list of characteristic uuids the raw data information should be fetched for.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.ListRawDataForMeasurements(System.Guid[],System.Threading.CancellationToken)">
+            <summary> 
+            Fetches a list of raw data information for the measurements identified by <paramref name="measurementUuids"/>. 
+            </summary>
+            <param name="measurementUuids">The list of measurement uuids the raw data information should be fetched for.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.ListRawDataForValues(Common.Data.ValueRawDataIdentifier[],System.Threading.CancellationToken)">
+            <summary> 
+            Fetches a list of raw data information for the measurement values identified by <paramref name="measurementValueUuids"/>. 
+            </summary>
+            <param name="measurementValueUuids">The list of value uuids the raw data information should be fetched for.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.ListRawData(RawDataService.RawDataEntity,System.String[],System.Threading.CancellationToken)">
+            <summary> 
+            Fetches a list of raw data information for the <paramref name="entity"/> identified by <paramref name="uuids"/>. 
+            </summary>
+            <param name="entity">The <see cref="T:RawDataService.RawDataEntity"/> the raw data information should be fetched for.</param>
+            <param name="uuids">The list of value uuids the data information should be fetched for.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.ListRawData(System.Collections.Generic.IEnumerable{RawDataService.RawDataTargetEntity},System.Threading.CancellationToken)">
+            <summary> 
+            Fetches a list of information about the raw data for the <paramref name="entities"/>. 
+            </summary>
+            <remarks> Use this method to fetch raw data information for several <see cref="T:RawDataService.RawDataEntity"/> types in one call.</remarks>
+            <param name="entities">The entities the raw data information should be fetched for.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.GetRawDataForPart(System.Guid,System.Int32,System.Threading.CancellationToken)">
+            <summary> 
+            Fetches raw data for the part with <paramref name="partUuid"/> and raw data index <paramref name="rawDataKey"/>. 
+            </summary>
+            <param name="partUuid">The uuid of the part to fetch the raw data object for.</param>
+            <param name="rawDataKey">The unique key that identifies the raw data object for the specified part.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.GetRawDataForCharacteristic(System.Guid,System.Int32,System.Threading.CancellationToken)">
+            <summary> 
+            Fetches raw data for the characteristic with <paramref name="characteristicUuid"/> and raw data index <paramref name="rawDataKey"/>. 
+            </summary>
+            <param name="characteristicUuid">The uuid of the characteristic to fetch the raw data object for.</param>
+            <param name="rawDataKey">The unique key that identifies the raw data object for the specified characteristic.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.GetRawDataForMeasurement(System.Guid,System.Int32,System.Threading.CancellationToken)">
+            <summary> 
+            Fetches raw data for the measurement with <paramref name="measurementUuid"/> and raw data index <paramref name="rawDataKey"/>. 
+            </summary>
+            <param name="measurementUuid">The uuid of the measurement to fetch the raw data object for.</param>
+            <param name="rawDataKey">The unique key that identifies the raw data object for the specified measurement.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.GetRawDataForValue(System.Guid,System.Guid,System.Int32,System.Threading.CancellationToken)">
+            <summary> 
+            Fetches raw data for the value identified  by the compound key of <paramref name="measurementUuid"/> and <paramref name="characteristicUuid"/> and raw data index <paramref name="rawDataKey"/>. 
+            </summary>
+            <param name="measurementUuid">The uuid of the measurement to fetch the raw data object for.</param>
+            <param name="characteristicUuid">The uuid of the characteristic to fetch the raw data object for.</param>
+            <param name="rawDataKey">The unique key that identifies the raw data object for the specified measurement value.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.GetRawData(RawDataService.RawDataInformation,System.Threading.CancellationToken)">
+            <summary>
+            Fetches raw data as a byte array for the raw data item identified by <paramref name="info"/>. 
+            </summary>
+            <param name="info">The <see cref="T:RawDataService.RawDataInformation"/> that specifies the raw data object that should be fetched.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.GetRawDataStream(RawDataService.RawDataInformation,System.Threading.CancellationToken)">
+            <summary>
+            Fetches raw data as a stream for the raw data item identified by <paramref name="info"/>. 
+            </summary>
+            <param name="info">The <see cref="T:RawDataService.RawDataInformation"/> that specifies the raw data object that should be fetched.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.GetRawDataThumbnail(RawDataService.RawDataInformation,System.Threading.CancellationToken)">
+            <summary> 
+            Fetches a preview image for the specified <code>info</code>. 
+            </summary>
+            <param name="info">The <see cref="T:RawDataService.RawDataInformation"/> that identifies the raw data object to fetch the preview image for.</param>
+            <returns>The preview image as byte array.</returns>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.GetRawDataThumbnailStream(RawDataService.RawDataInformation,System.Threading.CancellationToken)">
+            <summary> 
+            Fetches a preview image for the specified <code>info</code>. 
+            </summary>
+            <param name="info">The <see cref="T:RawDataService.RawDataInformation"/> that identifies the raw data object to fetch the preview image for.</param>
+            <returns>The preview image as stream.</returns>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.CreateRawData(RawDataService.RawDataInformation,System.IO.Stream,System.Threading.CancellationToken)">
+            <summary> 
+            Creates a new raw data object <paramref name="data"/> for the element identified by <paramref name="info"/>. 
+            </summary>
+            <param name="data">The raw data to upload.</param>
+            <param name="info">The <see cref="T:RawDataService.RawDataInformation"/> object containing the <see cref="T:RawDataService.RawDataEntity"/> type and the uuid of the raw data that should be uploaded.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+            <remarks>
+            If key speciefied by <see cref="P:RawDataService.RawDataInformation.Key"/> is -1, a new key will be chosen by the server automatically. This is the preferred way.
+            </remarks>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.CreateRawData(RawDataService.RawDataInformation,System.Byte[],System.Threading.CancellationToken)">
+            <summary> 
+            Creates a new raw data object <paramref name="data"/> for the element specified by <paramref name="info"/>. 
+            </summary>
+            <param name="data">The raw data to upload.</param>
+            <param name="info">The <see cref="T:RawDataService.RawDataInformation"/> object containing the <see cref="T:RawDataService.RawDataEntity"/> type and the uuid of the raw data that should be uploaded.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+            <remarks>
+            If key speciefied by <see cref="P:RawDataService.RawDataInformation.Key"/> is -1, a new key will be chosen by the server automatically. This is the preferred way.
+            </remarks>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.UpdateRawData(RawDataService.RawDataInformation,System.Byte[],System.Threading.CancellationToken)">
+            <summary> 
+            Updates the raw data object <paramref name="data"/> for the element identified by <paramref name="info"/>. 
+            </summary>
+            <param name="data">The raw data to upload.</param>
+            <param name="info">The <see cref="T:RawDataService.RawDataInformation"/> object containing the <see cref="T:RawDataService.RawDataEntity"/> type, the uuid and the key of the raw data that should be updated.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.UpdateRawData(RawDataService.RawDataInformation,System.IO.Stream,System.Threading.CancellationToken)">
+            <summary>
+            Updates the raw data object <paramref name="data"/> for the element identified in <paramref name="info"/>.
+            </summary>
+            <param name="data">The raw data to be uploaded.</param>
+            <param name="info">The <see cref="T:RawDataService.RawDataInformation"/> object containing the <see cref="T:RawDataService.RawDataEntity"/> type, the uuid and the key of the raw data that should be updated.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.DeleteAllRawDataForPart(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Deletes all raw data for the part identified by the uuid <paramref name="partUuid"/>.
+            </summary>
+            <param name="partUuid">The uuid of the part the raw data objects belongs to.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.DeleteAllRawDataForCharacteristic(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Deletes all raw data for the characteristic identified by the uuid <paramref name="characteristicUuid"/>.
+            </summary>
+            <param name="characteristicUuid">The uuid of the characteristic the raw data object belongs to. </param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.DeleteAllRawDataForMeasurement(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Deletes all raw data for the measurement identified by the uuid <paramref name="measurementUuid"/>.
+            </summary>
+            <param name="measurementUuid">The uuid of the measurement the raw data object belongs to.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.DeleteAllRawDataForValue(System.Guid,System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Deletes all raw data for the value identified by the compound key <paramref name="measurementUuid"/> and the characteristic with uuid <paramref name="characteristicUuid"/>.
+            </summary>
+            <param name="measurementUuid">The uuid of the measurement the raw data object belongs to.</param>
+            <param name="characteristicUuid">The uuid of the characteristic the raw data object belongs to.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.DeleteRawDataForPart(System.Guid,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Deletes the raw data object identified by the key <paramref name="rawDataKey"/> and the part with uuid <paramref name="partUuid"/>.
+            </summary>
+            <param name="partUuid">The uuid of the part the raw data objects belongs to.</param>
+            <param name="rawDataKey">The key of the raw data object which should be deleted.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.DeleteRawDataForCharacteristic(System.Guid,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Deletes the raw data object identified by the key <paramref name="rawDataKey"/> for the characteristic with uuid <paramref name="characteristicUuid"/>.
+            </summary>
+            <param name="characteristicUuid">The uuid of the part the raw data objects belongs to. </param>
+            <param name="rawDataKey">The key of the raw data object which should be deleted.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.DeleteRawDataForMeasurement(System.Guid,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Deletes the raw data object identified by the key <paramref name="rawDataKey"/> for the measurement with uuid <paramref name="measurementUuid"/>.
+            </summary>
+            <param name="measurementUuid">The uuid of the part the raw data objects belongs to. </param>
+            <param name="rawDataKey">The key of the raw data object which should be deleted.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.DeleteRawDataForValue(System.Guid,System.Guid,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Deletes the raw data object identified by the compound key <paramref name="measurementUuid"/> and <paramref name="characteristicUuid"/>.
+            </summary>
+            <param name="measurementUuid">The uuid of the measurement the raw data objects belongs to. </param>
+            <param name="characteristicUuid">The uuid of the characteristic the raw data object belongs to.</param>
+            <param name="rawDataKey">The key of the raw data object that should be deleted.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="M:RawDataService.RawDataServiceRestClient.DeleteRawData(RawDataService.RawDataInformation,System.Threading.CancellationToken)">
+            <summary>
+            Deletes raw data for the element identified by <paramref name="info"/>.
+            </summary>
+            <param name="info">The <see cref="T:RawDataService.RawDataInformation"/> object containing the <see cref="T:RawDataService.RawDataEntity"/> type, the uuid and the key of the raw data that should be deleted.</param>
+            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        </member>
+        <member name="T:RawDataService.ServiceInformation">
+            <summary>
+            This class contains general information about the RawDataService, like its current version.
+            </summary>
+        </member>
+        <member name="M:RawDataService.ServiceInformation.ToString">
+            <summary>
+            Overridden <see cref="M:System.Object.ToString"/> method.
+            </summary>
+        </member>
+        <member name="P:RawDataService.ServiceInformation.VersionWsdlMajor">
+            <summary>
+            Gets or sets the major interface version.
+            </summary>
+        </member>
+        <member name="P:RawDataService.ServiceInformation.VersionWsdlMinor">
+            <summary>
+            Gets or sets the minor interface version.
+            </summary>
+        </member>
+        <member name="P:RawDataService.ServiceInformation.Version">
+            <summary>
+            Gets or sets the version of the server backend.
+            </summary>
+        </member>
+    </members>
+</doc>
