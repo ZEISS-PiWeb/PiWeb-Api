@@ -111,6 +111,7 @@ namespace DataService
 		/// (<see cref="SimpleMeasurement.LastModified"/>) is used and not the time attribute (<see cref="WellKnownKeys.Measurement.Time"/>).
 		/// </summary>
 		public DateTime? ToModificationDate { get; set; }
+
 		#endregion
 
 		#region methods

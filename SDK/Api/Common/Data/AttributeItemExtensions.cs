@@ -13,6 +13,7 @@ namespace Common.Data
 	using System;
 	using System.Globalization;
 	using System.Xml;
+	using DataService;
 
 	#endregion
 
@@ -115,6 +116,26 @@ namespace Common.Data
 			catch
 			{ }
 			return null;
+		}
+
+		/// <summary>
+		/// Returns the attribute's value of the attribute with the key <see cref="key"/> If the attribute consists of a catalogue entry the entry
+		/// is returned, otherwise the attribute's value (string, int, double or DateTime) is returned.
+		/// </summary>
+		public static object GetRawAttributeValue(
+			this IAttributeItem item,
+			ushort key,
+			Configuration configuration,
+			CatalogCollection catalogues )
+		{
+			var value = item.GetAttribute( key );
+			if( value == null )
+				return null;
+
+			if( value.RawValue != null )
+				return value.RawValue;
+
+			return configuration.ParseValue( key, value.Value, catalogues );
 		}
 
 		/// <summary>

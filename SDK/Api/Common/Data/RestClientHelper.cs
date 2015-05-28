@@ -59,20 +59,20 @@ namespace Common.Data
 				var reader = new JsonTextReader( new StreamReader( stream, Encoding.UTF8, true, 1, true ) ) {CloseInput = false};
 				if( reader.Read() && reader.TokenType == JsonToken.StartObject )
 								{
-					while( reader.Read() )
-					{
-						switch( Convert.ToString( reader.Value ) )
-						{
-							case "status":
-							case "category":
+				// "status" überlesen
+					if( reader.Read() && Convert.ToString( reader.Value ) == "status" )
 								reader.Skip();
-								break;
-							case "data":
+
+					// "category" überlesen
+					if( reader.Read() && Convert.ToString( reader.Value ) == "category" )
+						reader.Skip();
+
+					if( reader.Read() && Convert.ToString( reader.Value ) == "data" )
+					{
 								reader.Read();
 								return reader;
 						}
 					}
-									}
 				stream.Seek( 0, SeekOrigin.Begin );
 			}
 			return new JsonTextReader( new StreamReader( stream, Encoding.UTF8, true, 1, true ) ) {CloseInput = false};
