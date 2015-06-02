@@ -368,6 +368,15 @@ nav ul.about-links li a svg{
 	fill: #245E9A;
 }
 
+nav ul.about-links li a svg:after{
+	content: ""; 
+  	position: absolute;
+  	top: 0;
+	  right: 0;
+  	bottom: 0;
+  	left:0;
+}
+
 nav p a{
 	text-decoration: underline;
 	color:#437AB4;	
