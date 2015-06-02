@@ -315,7 +315,7 @@ ul.subNavList>li>a:hover {
 	fill: currentColor;
 }
 
-.about-links>li>a>svg:after{
+.about-links>li>a>svg::after{
   content: ""; 
   position: absolute;
   top: 0;
