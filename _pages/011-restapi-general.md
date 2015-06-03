@@ -15,7 +15,7 @@ sections:
 redirect_from: "/"
 ---
 
-## {{page.sections['gi-formats']} [MultiMarkdownOverview] ##
+## {{page.sections['gi-formats']} {#the-site}
 
 The base addresses for the REST based services are:
 
