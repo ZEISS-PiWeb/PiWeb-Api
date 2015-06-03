@@ -6,16 +6,16 @@ title: REST API
 subTitle: General Information
 permalink: /restapi/general/
 sections:
-   addresses: Addresses
-   formats: Formats
-   security: Security
-   parameter: Url Parameter
-   codes: Status Codes
-   response: Response
+   gi-addresses: Addresses
+   gi-formats: Formats
+   gi-security: Security
+   gi-parameter: Url Parameter
+   gi-codes: Status Codes
+   gi-response: Response
 redirect_from: "/"
 ---
 
-## {{page.sections['addresses']}}
+## {{page.sections['gi-addresses']}}
 
 The base addresses for the REST based services are:
 
@@ -35,11 +35,11 @@ http(s)://serverUri:port/instanceName/RawDataServiceRest
 <br/>
 {{ site.images['info'] }} `instanceName` and `https` are optional and depend on the server settings.
 
-## {{page.sections['formats']}}
+## {{page.sections['gi-formats']}}
 
 The input and output format is JSON as it is the most performance and memory efficient format at the moment.
 
-## {{page.sections['security']}}
+## {{page.sections['gi-security']}}
 Access to PiWeb server service might require authentication. Authentication can be either *basic authentication* based on username and password or *Windows authentication* based on Active Directory integration.
 
 If PiWeb Server is secured by basic authentication you have to pass the credentials in the HTTP Authorization header. The authorization header must contain the `Basic` key word followed by base64 encoded `user:password` string:
@@ -50,7 +50,7 @@ Authorization: Basic QWRtaW5pc3RyYXRvcjphZG0hbiFzdHJhdDBy
 
 {% endhighlight %}
 
-## {{page.sections['parameter']}}
+## {{page.sections['gi-parameter']}}
 
 You can restrict requests by attaching certain parameters to the webservice URL in the following format:
 
@@ -66,7 +66,7 @@ You can restrict requests by attaching certain parameters to the webservice URL 
 
 {{ site.images['info'] }} If the parameter contains lists of ids it needs to be surrounded by `{` and `}`, the values within the list are separated by `,`.
 
-## {{page.sections['codes']}}
+## {{page.sections['gi-codes']}}
 
 {% capture table %}
 Method        | Statuscodes
@@ -79,7 +79,7 @@ DELETE        | **200** (OK)<br>**400** (Bad request) – Request of at least on
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 
-## {{page.sections['response']}}
+## {{page.sections['gi-response']}}
 Every response consists either of the requested data or of an error message returned by the webservice. A typical error response looks as follows:
 
 {% highlight json %}
