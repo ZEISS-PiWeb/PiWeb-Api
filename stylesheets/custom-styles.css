@@ -139,9 +139,12 @@ code{
   color: #FDFDFD;
 }
 
-.navbar-default .navbar-nav>li>a,
-.navbar-default .navbar-nav>li>a:focus, 
-.navbar-default .navbar-nav>li>a:hover{
+.navbar-nav>li>a,
+.navbar-nav>li>a:focus, 
+.navbar-nav>li>a:hover,
+.navbar-nav-right>li>a,
+.navbar-nav-right>li>a:focus, 
+.navbar-nav-right>li>a:hover{
   color: #FDFDFD;
   padding-top: 4px;
   padding-bottom: 5px;
