@@ -149,7 +149,8 @@ code{
   padding-top: 4px;
   padding-bottom: 5px;
   background-color: transparent;
-  vertical-align: middle;
+  vertical-align: sub;
+  text-decoration: none;
 }
 
 .navbar-default .navbar-nav>li>a.active{
