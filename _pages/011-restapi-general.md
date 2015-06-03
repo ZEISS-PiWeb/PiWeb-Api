@@ -15,7 +15,7 @@ sections:
 redirect_from: "/"
 ---
 
-<h2 id="blubb">{{page.sections['gi-addresses']}</h2>
+<h2 id="blubb">{{page.sections['gi-addresses']}}</h2>
 
 The base addresses for the REST based services are:
 
