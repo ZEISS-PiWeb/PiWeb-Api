@@ -168,11 +168,11 @@ code{
 }
 
 nav>.affix{
-	/*margin-top: -50px;
+	margin-top: -50px;
 	position: fixed;
   	right: 0;
   	left: 0;
-  	z-index: 1030;*/
+  	z-index: 1030;
 }
 
 .navbar-collapse .navbar-nav{
