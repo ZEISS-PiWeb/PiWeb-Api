@@ -15,7 +15,7 @@ sections:
 redirect_from: "/"
 ---
 
-## {{page.sections['gi-addresses']}}
+## Addresses
 
 The base addresses for the REST based services are:
 
