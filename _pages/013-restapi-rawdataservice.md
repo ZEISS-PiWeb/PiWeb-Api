@@ -6,12 +6,18 @@ title: REST API
 subTitle: Rawdata Service
 permalink: /restapi/rawdataservice/serviceinformation/
 sections:
-  serviceInformation: Service Information
-  rawDataInformation: Raw Data Information
-  rawDataObjects: Raw Data Objects
+  serviceInformation: 
+    title: Service Information
+    anchor: rs-service-information
+  rawDataInformation: 
+    title: Raw Data Information
+    anchor: rs-raw-data-information
+  rawDataObjects: 
+    title: Raw Data Objects
+    anchor: rs-raw-data-objects
 ---
 
-## {{page.sections['serviceInformation']}}
+<h2 id="{{page.sections['serviceInformation'].anchor}}">{{page.sections['serviceInformation'].title}}</h2>
 
 ### Endpoints
 
@@ -46,8 +52,7 @@ GET /rawdataServiceRest/serviceInformation HTTP/1.1
 
 
 
-
-## {{page.sections['rawDataInformation']}}
+<h2 id="{{page.sections['rawDataInformation'].anchor}}">{{page.sections['rawDataInformation'].title}}</h2>
 
 
 ### Endpoints
@@ -173,9 +178,7 @@ Property                             | Description
 
 
 
-
-## {{page.sections['rawDataObjects']}}
-
+<h2 id="{{page.sections['rawDataObjects'].anchor}}">{{page.sections['rawDataObjects'].title}}</h2>
 
 ### Endpoints
 
