@@ -47,11 +47,11 @@ http(s)://serverUri:port/instanceName/RawDataServiceRest
 <br/>
 {{ site.images['info'] }} `instanceName` and `https` are optional and depend on the server settings.
 
-## {{page.sections['formats']}}
+<h2 id="{{page.sections['formats'].anchor}}">{{page.sections['formats'].title}}</h2>
 
 The input and output format is JSON as it is the most performance and memory efficient format at the moment.
 
-## {{page.sections['security']}}
+<h2 id="{{page.sections['security'].anchor}}">{{page.sections['security'].title}}</h2>
 Access to PiWeb server service might require authentication. Authentication can be either *basic authentication* based on username and password or *Windows authentication* based on Active Directory integration.
 
 If PiWeb Server is secured by basic authentication you have to pass the credentials in the HTTP Authorization header. The authorization header must contain the `Basic` key word followed by base64 encoded `user:password` string:
@@ -62,7 +62,7 @@ Authorization: Basic QWRtaW5pc3RyYXRvcjphZG0hbiFzdHJhdDBy
 
 {% endhighlight %}
 
-## {{page.sections['parameter']}}
+<h2 id="{{page.sections['parameter'].anchor}}">{{page.sections['parameter'].title}}</h2>
 
 You can restrict requests by attaching certain parameters to the webservice URL in the following format:
 
@@ -78,7 +78,7 @@ You can restrict requests by attaching certain parameters to the webservice URL 
 
 {{ site.images['info'] }} If the parameter contains lists of ids it needs to be surrounded by `{` and `}`, the values within the list are separated by `,`.
 
-## {{page.sections['codes']}}
+<h2 id="{{page.sections['codes'].anchor}}">{{page.sections['codes'].title}}</h2>
 
 {% capture table %}
 Method        | Statuscodes
@@ -91,7 +91,7 @@ DELETE        | **200** (OK)<br>**400** (Bad request) – Request of at least on
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 
-## {{page.sections['response']}}
+<h2 id="{{page.sections['response'].anchor}}">{{page.sections['response'].title}}</h2>
 Every response consists either of the requested data or of an error message returned by the webservice. A typical error response looks as follows:
 
 {% highlight json %}
