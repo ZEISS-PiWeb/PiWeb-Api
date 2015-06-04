@@ -6,24 +6,24 @@ title: REST API
 subTitle: General Information
 permalink: /restapi/general/
 sections:
-   - addresses: 
-      - title: Addresses
-        anchor: gi-addresses
-   - formats: 
-      - title: Formats
-        anchor: gi-formats
-   - security: 
-      - title: Security
-        anchor: gi-security
-   - parameter: 
-      - title: Url Parameter
-        anchor: gi-parameter
-   - codes: 
-      - title: Status Codes
-        anchor: gi-codes
-   - response: 
-      - title: Response
-        anchor: gi-response
+   addresses: 
+      title: Addresses
+      anchor: gi-addresses
+   formats: 
+      title: Formats
+      anchor: gi-formats
+   security: 
+      title: Security
+      anchor: gi-security
+   parameter: 
+      title: Url Parameter
+      anchor: gi-parameter
+   codes: 
+      title: Status Codes
+      anchor: gi-codes
+   response: 
+      title: Response
+      anchor: gi-response
 redirect_from: "/"
 ---
 
