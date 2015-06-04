@@ -12,7 +12,7 @@
 							<div id="navbar" >
 							<ul class="nav">
 							{% for subSec in pg.sections %}
-								<li><a href="#{{ subSec.anchor }}">{{ subSec[0] }}</a></li>
+								<li><a href="#{{ subSec[1].anchor }}">{{ subSec[1].title }}</a></li>
 							{% endfor %}
 							</ul>
 							</div>
