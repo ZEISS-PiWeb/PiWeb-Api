@@ -6,16 +6,28 @@ title: REST API
 subTitle: General Information
 permalink: /restapi/general/
 sections:
-   gi-addresses: Addresses
-   gi-formats: Formats
-   gi-security: Security
-   gi-parameter: Url Parameter
-   gi-codes: Status Codes
-   gi-response: Response
+   - addresses: 
+      - title: Addresses
+        anchor: gi-addresses
+   - formats: 
+      - title: Formats
+        anchor: gi-formats
+   - security: 
+      - title: Security
+        anchor: gi-security
+   - parameter: 
+      - title: Url Parameter
+        anchor: gi-parameter
+   - codes: 
+      - title: Status Codes
+        anchor: gi-codes
+   - response: 
+      - title: Response
+        anchor: gi-response
 redirect_from: "/"
 ---
 
-<h2 id="blubb">{{page.sections['gi-addresses']}}</h2>
+<h2 id="gi-serviceInformatio"ngithub pages >{{page.sections['addresses']}}</h2>
 
 The base addresses for the REST based services are:
 
@@ -35,11 +47,11 @@ http(s)://serverUri:port/instanceName/RawDataServiceRest
 <br/>
 {{ site.images['info'] }} `instanceName` and `https` are optional and depend on the server settings.
 
-## {{page.sections['gi-formats']}}
+## {{page.sections['formats']}}
 
 The input and output format is JSON as it is the most performance and memory efficient format at the moment.
 
-## {{page.sections['gi-security']}}
+## {{page.sections['security']}}
 Access to PiWeb server service might require authentication. Authentication can be either *basic authentication* based on username and password or *Windows authentication* based on Active Directory integration.
 
 If PiWeb Server is secured by basic authentication you have to pass the credentials in the HTTP Authorization header. The authorization header must contain the `Basic` key word followed by base64 encoded `user:password` string:
@@ -50,7 +62,7 @@ Authorization: Basic QWRtaW5pc3RyYXRvcjphZG0hbiFzdHJhdDBy
 
 {% endhighlight %}
 
-## {{page.sections['gi-parameter']}}
+## {{page.sections['parameter']}}
 
 You can restrict requests by attaching certain parameters to the webservice URL in the following format:
 
@@ -66,7 +78,7 @@ You can restrict requests by attaching certain parameters to the webservice URL 
 
 {{ site.images['info'] }} If the parameter contains lists of ids it needs to be surrounded by `{` and `}`, the values within the list are separated by `,`.
 
-## {{page.sections['gi-codes']}}
+## {{page.sections['codes']}}
 
 {% capture table %}
 Method        | Statuscodes
@@ -79,7 +91,7 @@ DELETE        | **200** (OK)<br>**400** (Bad request) – Request of at least on
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 
-## {{page.sections['gi-response']}}
+## {{page.sections['response']}}
 Every response consists either of the requested data or of an error message returned by the webservice. A typical error response looks as follows:
 
 {% highlight json %}
