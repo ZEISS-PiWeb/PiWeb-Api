@@ -27,7 +27,7 @@ sections:
 redirect_from: "/"
 ---
 
-<h2 id="gi-serviceInformatio"ngithub pages >{{page.sections['addresses']}}</h2>
+<h2 id="{{page.sections['addresses'].anchor}}">{{page.sections['addresses'].title}}</h2>
 
 The base addresses for the REST based services are:
 
