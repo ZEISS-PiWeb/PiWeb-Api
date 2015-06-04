@@ -6,14 +6,24 @@ title: REST API
 subTitle: Data Service
 permalink: /restapi/dataservice/serviceInformation/
 sections:
-  serviceInformation: Service Information
-  configuration: Configuration
-  catalogs: Catalogs
-  inspectionPlan: Inspection Plan
-  measurementsAndValues: Measurements And Values
+  serviceInformation: 
+    title: Service Information
+    anchor: ds-service-information
+  configuration: 
+    title: Configuration
+    anchor: ds-configuration
+  catalogs: 
+    title: Catalogs
+    anchor: ds-catalogs
+  inspectionPlan: 
+    title: Inspection Plan
+    anchor: ds-inspection-plan
+  measurementsAndValues: 
+    title: Measurements And Values
+    anchor: ds-measurements-and-values
 ---
 
-## {{page.sections['serviceInformation']}}
+<h2 id="{{page.sections['serviceInformation'].anchor}}">{{page.sections['serviceInformation'].title}}</h2>
 
 ### Endpoints
 
@@ -87,8 +97,7 @@ Property                                                   | Description
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 
-
-## {{page.sections['configuration']}}
+<h2 id="{{page.sections['configuration'].anchor}}">{{page.sections['configuration'].title}}</h2>
 
 ### Endpoints
 
@@ -303,8 +312,7 @@ Property                              | Description
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 
-
-## {{page.sections['catalogs']}}
+<h2 id="{{page.sections['catalogs'].anchor}}">{{page.sections['catalogs'].title}}</h2>
 
 ### Endpoints
 
@@ -670,8 +678,7 @@ Property                              | Description
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 
-
-## {{page.sections['inspectionPlan']}}
+<h2 id="{{page.sections['inspectionPlan'].anchor}}">{{page.sections['inspectionPlan'].title}}</h2>
 
 ### Endpoints
 
@@ -1140,8 +1147,7 @@ Property                                          | Description
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 
-
-## {{page.sections['measurementsAndValues']}}
+<h2 id="{{page.sections['measurementsAndValues'].anchor}}">{{page.sections['measurementsAndValues'].title}}</h2>
 
 ### Endpoints
 
