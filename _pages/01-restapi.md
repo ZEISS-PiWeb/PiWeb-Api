@@ -27,5 +27,6 @@ sections:
         anchor: gi-response
   dataService: 
     title: Data Service
-    title: rawDataService: Raw Data Service
+  rawDataService: 
+    title: Raw Data Service
 ---
