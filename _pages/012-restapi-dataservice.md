@@ -4,7 +4,7 @@ level: 1
 category: dataService
 title: REST API
 subTitle: Data Service
-permalink: /restapi/dataservice
+permalink: /restapi/dataservice/
 sections:
   serviceInformation: 
     title: Service Information
