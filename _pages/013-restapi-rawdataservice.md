@@ -4,7 +4,7 @@ level: 1
 category: rawDataService
 title: REST API
 subTitle: Rawdata Service
-permalink: /restapi/rawdataservice
+permalink: /restapi/rawdataservice/
 sections:
   serviceInformation: 
     title: Service Information
