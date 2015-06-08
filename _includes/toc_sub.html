@@ -8,7 +8,7 @@
 						{% capture url %}{{site.baseurl}}{{ pg.url}}{% endcapture %}
 						<li><a {% if pg.category == page.category %}class="bold" {% endif %} href="{{url}}">{{ sec[1] }}</a></li>
 					
-						{% if pg.category == page.category %}
+						
 							<div id="navbar" >
 							<ul class="nav">
 							{% for subSec in pg.sections %}
@@ -16,7 +16,7 @@
 							{% endfor %}
 							</ul>
 							</div>
-						{% endif %}
+						
 					{% endif %}
 				{% endfor %}
 			</ul>
