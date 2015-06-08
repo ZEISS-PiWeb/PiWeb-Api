@@ -6,7 +6,7 @@
 				{% for pg in site.pages %}
 					{% if pg.level == 1 and pg.area == page.area and pg.category == sec[0] %}
 						{% capture url %}{{site.baseurl}}{{ pg.url}}{% endcapture %}
-						<li><a {% if pg.category == page.category %}class="bold" {% endif %} href="{{url}}">{{ sec[1] }}</a></li>
+						<li><a {% if pg.category == page.category %}class="bold" {% endif %} href="{{url}}">{{ sec[1].title }}</a></li>
 					
 						
 							<div id="navbar" >
