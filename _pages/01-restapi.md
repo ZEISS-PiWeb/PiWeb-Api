@@ -46,12 +46,29 @@ sections:
       measurementsAndValues: 
         title: Measurements And Values
         anchor: ds-measurements-and-values
+  rawdataservice:
+    title: Raw Data Service
+    anchor: rs
+    secs:
+      serviceInformation: 
+        title: Service Information
+        anchor: rs-service-information
+      rawDataInformation: 
+        title: Raw Data Information
+        anchor: rs-raw-data-information
+      rawDataObjects: 
+        title: Raw Data Objects
+        anchor: rs-raw-data-objects
 ---
 <h1 id="{{page.sections['general'].anchor}}">{{page.sections['general'].title}}</h1>
 
 {% include_relative 011-general.md %}
-
+<br/>
 <h1 id="{{page.sections['dataservice'].anchor}}">{{page.sections['dataservice'].title}}</h1>
 
 {% include_relative 012-dataservice.md %}
+<br/>
+<h1 id="{{page.sections['rawdataservice'].anchor}}">{{page.sections['rawdataservice'].title}}</h1>
+
+{% include_relative 013-rawdataservice.md %}
 
