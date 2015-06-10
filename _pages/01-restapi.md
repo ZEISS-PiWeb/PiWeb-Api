@@ -2,7 +2,7 @@
 area: restApi
 level: 0
 title: REST API
-
+redirect_from: "/"
 sections:
   general: 
     title: General Information
@@ -32,4 +32,5 @@ sections:
     title: Raw Data Service
 ---
 <h1 id="{{page.sections['general'].anchor}}">{{page.sections['general'].title}}</h1>
-<h2 id="{{page.sections['general']['secs']['addresses'].anchor}}">{{page.sections['general']['secs']['addresses'].title}}</h2>
+
+{% include_relative 011-test.md %}
