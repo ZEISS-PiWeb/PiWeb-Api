@@ -3,7 +3,7 @@ area: restApi
 level: 0
 title: REST API
 redirect_from: "/"
-
+permalink: "/restapi/"
 sections:
   general: 
     title: General Information
