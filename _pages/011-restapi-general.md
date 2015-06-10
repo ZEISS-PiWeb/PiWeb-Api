@@ -2,7 +2,7 @@
 area: restApi
 level: 1
 category: general
-title: REST API
+title: REST Api
 subTitle: General Information
 permalink: /restapi/general/
 sections:
