@@ -30,3 +30,5 @@ sections:
   rawDataService: 
     title: Raw Data Service
 ---
+
+<h2 id="{{page.sections['general']['secs']['addresses'].anchor}}">{{page.sections['general']['secs']['addresses'].title}}</h2>
