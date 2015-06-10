@@ -6,6 +6,7 @@ title: REST API
 sections:
   general: 
     title: General Information
+    anchor: gi
     secs:
      addresses: 
         title: Addresses
@@ -30,5 +31,5 @@ sections:
   rawDataService: 
     title: Raw Data Service
 ---
-
+<h1 id="{{page.sections['general'].anchor}}">{{page.sections['general'].title}}</h1>
 <h2 id="{{page.sections['general']['secs']['addresses'].anchor}}">{{page.sections['general']['secs']['addresses'].title}}</h2>
