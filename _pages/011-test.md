@@ -1,3 +1,29 @@
+---
+sections:
+  general: 
+    title: General Information
+    anchor: gi
+    secs:
+     addresses: 
+        title: Addresses
+        anchor: gi-addresses
+     formats: 
+        title: Formats
+        anchor: gi-formats
+     security: 
+        title: Security
+        anchor: gi-security
+     parameter: 
+        title: Url Parameter
+        anchor: gi-parameter
+     codes: 
+        title: Status Codes
+        anchor: gi-codes
+     response: 
+        title: Response
+        anchor: gi-response
+---
+
 <h2 id="{{page.sections['general']['secs']['addresses'].anchor}}">{{page.sections['general']['secs']['addresses'].title}}</h2>
 
 The base addresses for the REST based services are:
