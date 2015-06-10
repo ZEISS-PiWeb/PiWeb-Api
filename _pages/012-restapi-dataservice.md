@@ -1,7 +1,7 @@
 ---
 area: restApi
 level: 1
-category: dataService
+category: dataservice
 title: REST API
 subTitle: Data Service
 permalink: /restapi/dataservice/
