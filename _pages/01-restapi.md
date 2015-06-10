@@ -1,7 +1,7 @@
 ---
 area: restApi
 level: 0
-title: REST API
+title: REST Api
 redirect_from: "/"
 permalink: "/restapi/"
 sections:
