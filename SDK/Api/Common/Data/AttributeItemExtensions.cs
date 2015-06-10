@@ -119,7 +119,7 @@ namespace Common.Data
 		}
 
 		/// <summary>
-		/// Returns the attribute's value of the attribute with the key <see cref="key"/> If the attribute consists of a catalogue entry the entry
+		/// Returns the attribute's value of the attribute with the key <paramref name="key"/> If the attribute consists of a catalogue entry the entry
 		/// is returned, otherwise the attribute's value (string, int, double or DateTime) is returned.
 		/// </summary>
 		public static object GetRawAttributeValue(
