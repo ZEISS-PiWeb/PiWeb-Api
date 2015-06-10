@@ -2,7 +2,7 @@
 {% for node in site.pages %}
 	{% if node.level == 0 and node.area == page.area %}
 		{% for sec in node.sections %}
-			<ul class="subNavList">
+			<ul class="subNavList nav">
 				{% for pg in site.pages %}
 					{% if pg.level == 1 and pg.area == page.area and pg.category == sec[0] %}
 						{% capture url %}{{site.baseurl}}{{ pg.url}}{% endcapture %}
