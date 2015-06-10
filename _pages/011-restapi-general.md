@@ -24,7 +24,6 @@ sections:
    response: 
       title: Response
       anchor: gi-response
-redirect_from: "/"
 ---
 
 <h2 id="{{page.sections['addresses'].anchor}}">{{page.sections['addresses'].title}}</h2>
