@@ -1,5 +1,4 @@
-<div data-spy="affix" data-offset-top="80" >
-<div id="navbar" >
+<div data-spy="affix" data-offset-top="80" id="navbar">
 {% for node in site.pages %}
 	{% if node.area == page.area %}
 		<ul class="nav">
@@ -7,16 +6,14 @@
 		{% for sec in node.sections %}
 			<li>
 				<a href="#{{sec[1].anchor}}" data-target="#{{sec[1].anchor}}">{{sec[1].title}}</a>
-				<div id="navbar" >
 				<ul class="nav">
 				{% for subsec in sec[1].secs %}
 					<li><a href="#{{subsec[1].anchor}}" data-target="#{{subsec[1].anchor}}">{{subsec[1].title}}</a></li>
 				{% endfor %}
-				</ul></div>
+				</ul>
 			</li>
 		{% endfor %}
 		</ul>
 	{% endif %}
 {% endfor %}
-</div>
 </div>
