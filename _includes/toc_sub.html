@@ -1,6 +1,6 @@
 <div data-spy="affix" data-offset-top="80" >
 {% for node in site.pages %}
-	{% if node.level == 0 and node.area == page.area %}
+	{% if node.area == page.area %}
 		{% for sec in node.sections %}
 			<ul class="subNavList">
 				{% for pg in site.pages %}
@@ -21,6 +21,14 @@
 				{% endfor %}
 			</ul>
 		{% endfor %}
+		<ul class="nav subNavist">
+		{% for sec in node.sections %}
+			<li><a href="#sec[1].anchor" data-target="#{{sec[1].anchor}}">{{sec[1].title}}</a></li>
+			{% for subsec in sec.secs %}
+			
+			{% endfor %}
+		{% endfor %}
+		</ul>
 	{% endif %}
 {% endfor %}
 </div>
