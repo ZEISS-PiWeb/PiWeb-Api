@@ -26,7 +26,7 @@
 		{% for sec in node.sections %}
 			<li><a href=#"{{sec[1].anchor}}" data-target="#{{sec[1].anchor}}">{{sec[1].title}}</a></li>
 			<ul class="nav subNavist">
-			{% for subsec in sec[0].secs %}
+			{% for subsec in sec[1].secs %}
 				<li><a href=#"{{subsec[1].anchor}}" data-target="#{{subsec[1].anchor}}">{{subsec[1].title}}</a></li>
 			{% endfor %}
 			</ul>
