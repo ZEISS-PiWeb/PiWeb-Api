@@ -249,7 +249,7 @@ ul.subNavList>li>a:hover {
 	font-weight:bold;
 }
 
-#navbar>.nav .nav :hover{
+#navbar>.nav .nav a:hover{
 	border-left: 2px dotted #437AB4;
 }
 
