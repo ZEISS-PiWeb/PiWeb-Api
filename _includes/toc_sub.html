@@ -1,7 +1,7 @@
 <div data-spy="affix" data-offset-top="80" >
 {% for node in site.pages %}
 	{% if node.area == page.area %}
-		<ul class="nav subNavist">
+		<ul class="nav">
 		{% comment %}When you iterate over a hash using a variable called sec, sec[0] contains the key and sec[1] contains the value on each iteration.{% endcomment %}
 		{% for sec in node.sections %}
 			<li><a href="#{{sec[1].anchor}}" data-target="#{{sec[1].anchor}}">{{sec[1].title}}</a></li>
