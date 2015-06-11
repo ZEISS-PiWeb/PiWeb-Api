@@ -229,6 +229,10 @@ ul.subNavList>li>a:hover {
 	text-decoration: none;
 }
 
+#navbar>.nav :hover{
+	background-color: #FDFDFD;
+}
+
 #navbar>.nav .nav{
 	display:none;
 }
@@ -253,8 +257,8 @@ ul.subNavList>li>a:hover {
 	border-left: 2px solid #337ab7;
 }
 
-#navbar>.nav .nav .active>a,
-#navbar>.nav .nav :hover>a{
+#navbar>.nav .active .nav .active>a,
+#navbar>.nav .active .nav :hover>a{
 	padding-left: 13px;
 }
 
@@ -263,7 +267,7 @@ ul.subNavList>li>a:hover {
 	padding: 0px 15px;
 }
 
-#navbar>.nav .nav>li>a:hover{
+#navbar>.nav .active .nav>li>a:hover{
 	background-color: #FDFDFD;
 	padding-left: 13px;
 }
