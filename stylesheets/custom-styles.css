@@ -229,16 +229,21 @@ ul.subNavList>li>a:hover {
 	text-decoration: none;
 }
 
-#navbar>.nav .nav>li:hover{
+#navbar>.nav .nav{
+	display:none;
+}
+
+#navbar>.nav .nav :hover{
 	border-left: 2px dotted #437AB4;
 }
 
-#navbar>.nav .nav>li.active, #navbar>.nav .nav>li.active:hover{
+#navbar>.nav .nav .active, #navbar>.nav .nav .active:hover{
 	border-left: 2px solid #337ab7;
+	display:block;
 }
 
-#navbar>.nav .nav>li.active>a,
-#navbar>.nav .nav>li:hover>a{
+#navbar>.nav .nav .active>a,
+#navbar>.nav .nav :hover>a{
 	padding-left: 13px;
 }
 
