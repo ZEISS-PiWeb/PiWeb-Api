@@ -237,6 +237,10 @@ ul.subNavList>li>a:hover {
 	display:block;
 }
 
+#navbar>.nav>li>a{
+	padding: 5px 0px;
+}
+
 #navbar>.nav>.active>a{
 	font-weight:bold;
 }
