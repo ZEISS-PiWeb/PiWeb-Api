@@ -344,9 +344,19 @@ div>.affix{
 
 .footer{
 	text-align: center;
-	border-top: 3px solid #437AB4;
+	border-top: 5px solid #437AB4;
   	padding: 20px;
-  	background-color: #245E9A;	
+  	background-color: #245E9A;
+  	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	position: fixed;
+	margin-bottom: -59px;
+}
+
+.affix-bottom{
+	position:relative;
+	margin-bottom:0;
 }
 
 .footer>a, 
