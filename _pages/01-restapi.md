@@ -60,11 +60,11 @@ sections:
         title: Raw Data Objects
         anchor: rs-raw-data-objects
 ---
-<h1 id="{{page.sections['general'].anchor}}">{{page.sections['general'].title}}</h1>
+<section id="{{page.sections['general'].anchor}}">
+<h1>{{page.sections['general'].title}}</h1>
 
 {% include_relative 011-general.md %}
-
-<br/>
+</section>
 
 <h1 id="{{page.sections['dataservice'].anchor}}">{{page.sections['dataservice'].title}}</h1>
 
