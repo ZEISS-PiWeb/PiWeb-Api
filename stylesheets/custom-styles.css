@@ -276,8 +276,11 @@ ul.subNavList>li>a:hover {
 
 #navcolumn>.nav .nav>li>a:hover{
 	background-color: #FDFDFD;
-	padding-left: 13px;
-	border-left:none;
+	padding-left: 11px;
+}
+
+#navcolumn>.nav .nav .active>a:hover{
+	border-left:none;	
 }
 
 .table{
