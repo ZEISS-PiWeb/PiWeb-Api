@@ -131,6 +131,7 @@ code{
 .navbar-default {
   background-color: inherit;
   border: none;
+  z-index:999;
 }
 
 .navbar-default .navbar-brand,
