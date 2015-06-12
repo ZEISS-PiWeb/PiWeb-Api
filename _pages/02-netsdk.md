@@ -8,10 +8,10 @@ sections:
     title: General Information
     anchor: gi
     secs:
-     create: 
+      create: 
         title: Creating the client
         anchor: gi-create
-    use: 
+      use: 
         title: Using the client
         anchor: gi-use
 ---
