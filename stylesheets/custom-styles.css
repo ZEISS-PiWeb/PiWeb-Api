@@ -28,13 +28,13 @@ h2{
 }
 
 /*Moves anker links to correct position after click*/
-/*h2[id]:before, h3[id]:before { 
+h1[id]:before, h2[id]:before, h3[id]:before { 
   display: block; 
   content: " "; 
   margin-top: -120px; 
   height: 120px; 
   visibility: hidden; 
-}*/
+}
 
 h5{
 	margin: 1px 0px 10px;
