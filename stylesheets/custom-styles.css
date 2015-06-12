@@ -258,25 +258,21 @@ ul.subNavList>li>a:hover {
 	border-left: 2px solid #337ab7;
 }
 
-#navcolumn>.nav .nav :hover{
-	padding-left: 13px;
-}
-
 #navcolumn>.nav .nav .active:hover{
 	padding-left: 0px;
 }
 
 #navcolumn>.nav .nav>li>a{
-	padding: 0px 13px;
+	padding: 0px 15px;
 }
 
 #navcolumn>.nav .nav .active>a{
-	padding: 0px 11px;
+	padding: 0px 13px;
 }
 
 #navcolumn>.nav .nav>li>a:hover{
 	background-color: #FDFDFD;
-	padding-left: 11px;
+	padding-left: 13px;
 }
 
 #navcolumn>.nav .nav .active>a:hover{
