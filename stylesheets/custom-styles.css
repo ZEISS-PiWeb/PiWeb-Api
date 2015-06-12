@@ -262,6 +262,10 @@ ul.subNavList>li>a:hover {
 	padding-left: 13px;
 }
 
+#navcolumn>.nav .nav .active:hover{
+	padding-left: 0px;
+}
+
 #navcolumn>.nav .nav>li>a{
 	display: inline;
 	padding: 0px 15px;
