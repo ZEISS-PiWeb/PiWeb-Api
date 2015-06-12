@@ -249,7 +249,7 @@ ul.subNavList>li>a:hover {
 	font-weight:bold;
 }
 
-#navcolumn>.nav .nav :hover{
+#navcolumn>.nav .nav a:hover{
 	border-left: 2px dotted #437AB4;
 }
 
@@ -272,6 +272,7 @@ ul.subNavList>li>a:hover {
 #navcolumn>.nav .active .nav>li>a:hover{
 	background-color: #FDFDFD;
 	padding-left: 13px;
+	border-left:none;
 }
 
 .table{
