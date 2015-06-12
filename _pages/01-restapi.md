@@ -64,7 +64,7 @@ sections:
 
 <h1>{{page.sections['general'].title}}</h1>
 
-{% include_relative 011-general.md | markdownify %}
+{% include_relative 011-general.md %}
 
 </section>
 
