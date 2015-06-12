@@ -229,45 +229,45 @@ ul.subNavList>li>a:hover {
 	text-decoration: none;
 }
 
-#navbar>.nav :hover{
+#navcolumn>.nav :hover{
 	background-color: #FDFDFD;
 }
 
-#navbar>.nav .nav{
+#navcolumn>.nav .nav{
 	display:none;
 }
 
-#navbar>.nav .active .nav{
+#navcolumn>.nav .active .nav{
 	display:block;
 }
 
-#navbar>.nav>li>a{
+#navcolumn>.nav>li>a{
 	padding: 5px 0px;
 }
 
-#navbar>.nav>.active>a{
+#navcolumn>.nav>.active>a{
 	font-weight:bold;
 }
 
-#navbar>.nav .nav a:hover{
+#navcolumn>.nav .nav a:hover{
 	border-left: 2px dotted #437AB4;
 }
 
-#navbar>.nav .nav .active, #navbar>.nav .nav .active:hover{
+#navcolumn>.nav .nav .active, #navcolumn>.nav .nav .active:hover{
 	border-left: 2px solid #337ab7;
 }
 
-#navbar>.nav .active .nav .active>a,
-#navbar>.nav .active .nav :hover>a{
+#navcolumn>.nav .active .nav .active>a,
+#navcolumn>.nav .active .nav :hover>a{
 	padding-left: 13px;
 }
 
-#navbar>.nav .nav>li>a{
+#navcolumn>.nav .nav>li>a{
 	display: inline;
 	padding: 0px 15px;
 }
 
-#navbar>.nav .active .nav>li>a:hover{
+#navcolumn>.nav .active .nav>li>a:hover{
 	background-color: #FDFDFD;
 	padding-left: 13px;
 }
