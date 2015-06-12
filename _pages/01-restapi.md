@@ -61,9 +61,11 @@ sections:
         anchor: rs-raw-data-objects
 ---
 <section id="{{page.sections['general'].anchor}}">
+
 <h1>{{page.sections['general'].title}}</h1>
 
 {% include_relative 011-general.md %}
+
 </section>
 
 <h1 id="{{page.sections['dataservice'].anchor}}">{{page.sections['dataservice'].title}}</h1>
