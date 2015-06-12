@@ -65,13 +65,13 @@ sections:
 
 {% include_relative 011-general.md %}
 
-<br/>
+<p class="dottedline" />
 
 <h1 id="{{page.sections['dataservice'].anchor}}">{{page.sections['dataservice'].title}}</h1>
 
 {% include_relative 012-dataservice.md %}
 
-<br/>
+<p class="dottedline" />
 
 <h1 id="{{page.sections['rawdataservice'].anchor}}">{{page.sections['rawdataservice'].title}}</h1>
 
