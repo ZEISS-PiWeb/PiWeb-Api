@@ -355,7 +355,7 @@ div>.affix{
 }
 
 .affix-bottom{
-	position:absolute;
+	position:static;
 	margin-bottom:0;
 }
 
