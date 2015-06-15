@@ -355,11 +355,8 @@ div>.affix{
 }
 
 .affix-bottom{
-	position:relative;
+	position:absolute;
 	margin-bottom:0;
-	bottom: auto;
-	left: auto;
-	right: auto;
 }
 
 .footer>a, 
