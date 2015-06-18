@@ -1131,7 +1131,7 @@ You can fetch, create, update and delete measurements and values using the follo
 {% assign endpoint="/measurements" %}
 {% assign summary="Fetches measurements" %}
 {% capture description %}
-You can fetch all measurements or certain measurements only. Possible [filter uri parameters](#filters) are 
+You can fetch all measurements or certain measurements only. Possible [filter uri parameters](#{{page.sections['dataservice']['secs']['inspectionPlan'].anchor}}-filters) are 
 <code data-toggle="tooltip" data-placement="bottom auto" data-html="true" title="Restricts the query to this part path <br><br><code>partPath=/metal%20part</code>">partPath</code>
 `partPath`, `partUuids`, `measurementUuids`, `deep`, `searchCondition`, `order`, `limitResult`, `requestedMeasurementAttributes`, `statistics` and `aggregation`.
 
@@ -1172,7 +1172,7 @@ GET /dataServiceRest/measurements?partUuids=(e42c5327-6258-4c4c-b3e9-6d22c30938b
 {% assign method="GET" %}
 {% assign endpoint="/measurements/:measUuid" %}
 {% assign summary="Fetches a measurement by its :measUuid" %}
-{% assign description="The request can be restricted by [`filter uri parameters`](#filters). Possible filters are `requestedMeasurementAttributes`, `statistics` and `aggregation`." %}
+{% assign description="The request can be restricted by [filter uri parameters](#{{page.sections['dataservice']['secs']['measurementsAndValues'].anchor}}-filters). Possible filters are `requestedMeasurementAttributes`, `statistics` and `aggregation`." %}
 
 {% assign exampleCaption="Fetch a measurement by its guid" %}
 
@@ -1211,7 +1211,7 @@ GET /dataServiceRest/measurements/5b59cac7-9ecd-403c-aa26-56dd25892421 HTTP/1.1
 {% assign endpoint="/measurements" %}
 {% assign summary="Creates measurements" %}
 {% capture description %}
-To create a new measurement, you must send its JSON representation in the request body. Values for `uuid` and `path` are required, `attributes` and `comment` are optional. The attribute keys must be valid measurement attributes as specified in the {{ site.links['configuration'] }}.
+To create a new measurement, you must send its JSON representation in the request body. Values for `uuid` and `path` are required, `attributes` and `comment` are optional. The attribute keys must be valid measurement attributes as specified in the #{{page.sections['dataservice']['secs']['configuration'].anchor}}.
 
 {{ site.images['info'] }} The comment is only added if versioning is enabled in server settings. 
 {% endcapture %}
@@ -1300,7 +1300,7 @@ You have multiple options for deleting measurements measurements:
 * Delete measurements from parts by its uuids
 * Delete measurements by their uuids
 
-The delete condition may be further restricted by the [filter parameter](#filters) `searchCondition`.
+The delete condition may be further restricted by the [filter uri parameters](#{{page.sections['dataservice']['secs']['measurementsAndValues'].anchor}}-filters) `searchCondition`.
 {% endcapture %}
 
 {% assign exampleCaption="Delete measurements newer than 01.01.2015 and older than 31.03.2015 from the part with the uuid e42c5327-6258-4c4c-b3e9-6d22c30938b2" %}
@@ -1352,7 +1352,7 @@ HTTP/1.1 200 OK
 {% assign endpoint="/values" %}
 {% assign summary="Fetches measurements including measured values" %}
 {% capture description %}
-You can fetch all measurements with values or only certain measurements with values. Possible [filter uri parameters](#filters) are `partPath`, `partUuids`, `measurementUuids`, `deep`, `searchCondition`, `order`, `limitResult`, `characteristicUuids`, `requestedMeasurementAttributes`, `requestedValueAttributes` and `aggregation`.
+You can fetch all measurements with values or only certain measurements with values. Possible (#{{page.sections['dataservice']['secs']['measurementsAndValues'].anchor}}-filters) are `partPath`, `partUuids`, `measurementUuids`, `deep`, `searchCondition`, `order`, `limitResult`, `characteristicUuids`, `requestedMeasurementAttributes`, `requestedValueAttributes` and `aggregation`.
 {% endcapture %}
 {% assign exampleCaption="Fetch measurements and values newer than 01.01.2015 restricted to a certain characteristic for a part restricted by its guid" %}
 
@@ -1399,7 +1399,7 @@ GET /dataservicerest/values?partUuids=(05040c4c-f0af-46b8-810e-30c0c00a379e)&sea
 {% assign method="GET" %}
 {% assign endpoint="/values/:measUuid" %}
 {% assign summary="Fetches a measurement including measured values by its :measUuid" %}
-{% assign description="The request can be restricted by [`filter uri parameters`](#filters). Possible filters are `requestedMeasurementAttributes`, `requestedValueAttributes`, `characteristicUuids` and `aggregation`." %}
+{% assign description="The request can be restricted by (#{{page.sections['dataservice']['secs']['measurementsAndValues'].anchor}}-filters). Possible filters are `requestedMeasurementAttributes`, `requestedValueAttributes`, `characteristicUuids` and `aggregation`." %}
 
 {% assign exampleCaption="Fetch a measurement including  all values by its guid" %}
 
