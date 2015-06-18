@@ -413,7 +413,7 @@ GET /dataServiceRest/catalogs/8c376bee-ffe3-4ee4-abb9-a55b492e69ad HTTP/1.1
 {% assign endpoint="/catalogs" %}
 {% assign summary="Creates catalogs" %}
 {% capture description %}
-To create a new catalog, the catalog object must be transmitted in the request's body. A valid add request must contain a unique identifier, the catalog name and the valid attributes. Catalog entries are optional. All valid attributes must be added as catalog attributes beforehand (see <a href="{{ page.url }}#{{page.sections['dataservice']['secs']['configuration'].anchor}}>{{page.sections['dataservice']['secs']['configuration'].title}}</a>).
+To create a new catalog, the catalog object must be transmitted in the request's body. A valid add request must contain a unique identifier, the catalog name and the valid attributes. Catalog entries are optional. All valid attributes must be added as catalog attributes beforehand (see <a href="{{ page.url }}#{{page.sections['dataservice']['secs']['configuration'].anchor}}">{{page.sections['dataservice']['secs']['configuration'].title}}</a>).
 
 {{ site.images['info'] }} If no catalog entries are specified, an empty catalog entry with key '0' and attribute value(s) 'not defined' ( in case of alphanumeric attributes ) is created by default.
 {% endcapture %}
