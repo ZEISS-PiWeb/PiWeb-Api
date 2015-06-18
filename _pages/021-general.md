@@ -32,10 +32,10 @@ Constructor method | Description
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
-{{ site.headers['example'] }} A raw data service client pointed to "http:piwebserver:8082"
+{{ site.headers['example'] }} A raw data service client pointed to "http://piwebserver:8082"
 
 {% highlight csharp %}
-var rawdataserviceRestClient = new RawDataServiceRestClient( "http:piwebserver:8082" );
+var rawdataserviceRestClient = new RawDataServiceRestClient( "http://piwebserver:8082" );
 {% endhighlight %}
 
 <h2 id="{{page.sections['general']['secs']['use'].anchor}}">{{page.sections['general']['secs']['use'].title}}</h2>
