@@ -864,7 +864,7 @@ HTTP/1.1 200 Ok
 {% assign method="GET" %}
 {% assign endpoint="/characteristics" %}
 {% assign summary="Fetches characteristics" %}
-{% assign description="You can fetch all characteristics or only the characteristics described by the uri parameters. Possible [filter uri parameters](#filters) are `partUuids`, `partPath`, `charUuids`, `charPath`, `depth`, `withHistory` and `requestedCharacteristicAttributes`. You can only request direct characteristics of the part, characteristics of child parts will be ignored." %}
+{% assign description="You can fetch all characteristics or only the characteristics described by the uri parameters. Possible [filter uri parameters](#{{page.sections['dataservice']['secs']['inspectionPlan'].anchor}}-filters) are `partUuids`, `partPath`, `charUuids`, `charPath`, `depth`, `withHistory` and `requestedCharacteristicAttributes`. You can only request direct characteristics of the part, characteristics of child parts will be ignored." %}
 {% assign exampleCaption="Fetch all characteristics beneath the part '/metal part' until depth=2" %}
 
 {% capture jsonrequest %}
@@ -1038,7 +1038,7 @@ HTTP/1.1 200 Ok
 {% assign endpoint="/characteristics" %}
 {% assign summary="Deletes characteristics" %}
 {% capture description %}
-You have two options to delete characteristics, either by their paths or by their uuids. This means that one of the filter parameters `charPath` or `charUuids` has to be set. In both cases the request deletes the characteristic itself as well as all its children.
+You have two options to delete characteristics, either by their paths or by their uuids. This means that one of the [filter uri parameters](#{{page.sections['dataservice']['secs']['inspectionPlan'].anchor}}-filters) `charPath` or `charUuids` has to be set. In both cases the request deletes the characteristic itself as well as all its children.
 {% endcapture %}
 
 {% assign exampleCaption="Delete the characteristic 'metal part/deviation_3' and all entities beneath it" %}
