@@ -1108,7 +1108,7 @@ Both parts and characteristics are PiWeb inspection plan entities. They have the
 Property                                          | Description
 --------------------------------------------------|-----------------------
 <nobr><code>Guid</code> uuid</nobr>               | Identifies this inspection plan entity uniquely
-<nobr><code>PathInformation</code> path</nobr>    | The path of this entity
+<nobr><code>string</code> path</nobr>             | The path of this entity. It consists of the path's hierarchical structure followed by the path itself, e.g. `PCC:/metal part/deviation_3/.X/`. `P` stands for part and `C` for characteristic.
 <nobr><code>Attribute</code> attributes</nobr>    | A set of attributes which describe the entity
 <nobr><code>string</code> comment</nobr>          | A comment which describes the last inspection plan change
 <nobr><code>int</code> version</nobr>             | Contains the entity´s revision number. The revision number starts with `0` and is incremented by `1` each time changes are applied to the inspection plan. The version is only returned in case versioning is enabled in the server settings.
