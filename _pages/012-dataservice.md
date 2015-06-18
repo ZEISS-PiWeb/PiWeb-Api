@@ -1,6 +1,6 @@
 <h2 id="{{page.sections['dataservice']['secs']['serviceInformation'].anchor}}">{{page.sections['dataservice']['secs']['serviceInformation'].title}}</h2>
 
-### Endpoints
+<h3 id="{{page.sections['dataservice']['secs']['serviceInformation'].anchor}}-endpoints">Endpoints</h3>
 
 The service information can be fetched using the following endpoint. This endpoint doesn't provide filter parameters.
 
