@@ -45,7 +45,7 @@ GET /dataServiceRest/serviceInformation HTTP/1.1
 {% endcapture %}
 {% include endpointTab.html %}
 
-### Object Structure
+<h3 id="{{page.sections['dataservice']['secs']['serviceInformation'].anchor}}-objectstructure">Object Structure</h3>
 
 Service information requests always have the smallest response time and are therefore well suited for checking the connection. Fetching the service information doesn't require authentication.
 
@@ -73,7 +73,7 @@ Property                                                   | Description
 
 <h2 id="{{page.sections['dataservice']['secs']['configuration'].anchor}}">{{page.sections['dataservice']['secs']['configuration'].title}}</h2>
 
-### Endpoints
+<h3 id="{{page.sections['dataservice']['secs']['configuration'].anchor}}-endpoints">Endpoints</h3>
 
 The configuration can be fetched, created, updated and deleted using the following endpoints. These endpoints do not provide filter parameters.
 
@@ -251,7 +251,7 @@ HTTP/1.1 200 Ok
 
 {% include endpointTab.html %}
 
-### Object Structure
+<h3 id="{{page.sections['dataservice']['secs']['configuration'].anchor}}-objectstructure">Object Structure</h3>
 
 The PiWeb configuration consists of a list of attributes for each entity type. 
 The different entity types are: 
@@ -287,7 +287,7 @@ Property                              | Description
 
 <h2 id="{{page.sections['dataservice']['secs']['catalogs'].anchor}}">{{page.sections['dataservice']['secs']['catalogs'].title}}</h2>
 
-### Endpoints
+<h3 id="{{page.sections['dataservice']['secs']['catalogs'].anchor}}-endpoints">Endpoints</h3>
 
 Catalogs and catalog entries can be fetched, created, updated and deleted using the following endpoints.
 
@@ -610,7 +610,7 @@ HTTP/1.1 200 Ok
 {% include endpointTab.html %}
 
 
-### Filters
+<h3 id="{{page.sections['dataservice']['secs']['catalogs'].anchor}}-filters">Filters</h3>
 
 These endpoints provide the following filter parameters:
 
@@ -623,7 +623,7 @@ Parameter name | Description
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 
-### Object Structure
+<h3 id="{{page.sections['dataservice']['secs']['catalogs'].anchor}}-objectstructure">Object Structure</h3>
 
 Each catalog describes a list of entries. All entries have the same defined set of attributes, called *valid attributes*. 
 All valid attributes must be created as *catalog attributes* beforehand. `Catalog` and `CatalogEntry`have the following structures:
@@ -652,7 +652,7 @@ Property                              | Description
 
 <h2 id="{{page.sections['dataservice']['secs']['inspectionPlan'].anchor}}">{{page.sections['dataservice']['secs']['inspectionPlan'].title}}</h2>
 
-### Endpoints
+<h3 id="{{page.sections['dataservice']['secs']['inspectionPlan'].anchor}}-endpoints">Endpoints</h3>
 
 You can fetch, create, update and delete parts and characteristics using the following endpoints: 
 
@@ -1082,7 +1082,7 @@ HTTP/1.1 200 Ok
 
 <br/>
 
-### Filters
+<h3 id="{{page.sections['dataservice']['secs']['inspectionPlan'].anchor}}-filters">Filters</h3>
 
 The described endpoints provide the following filters:
 
@@ -1100,7 +1100,7 @@ Parameter name                                                                 |
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
-### Object Structure
+<h3 id="{{page.sections['dataservice']['secs']['inspectionPlan'].anchor}}-objectstructure">Object Structure</h3>
 
 Both parts and characteristics are PiWeb inspection plan entities. They have the following properties:
 
@@ -1120,7 +1120,7 @@ Property                                          | Description
 
 <h2 id="{{page.sections['dataservice']['secs']['measurementsAndValues'].anchor}}">{{page.sections['dataservice']['secs']['measurementsAndValues'].title}}</h2>
 
-### Endpoints
+<h3 id="{{page.sections['dataservice']['secs']['measurementsAndValues'].anchor}}-endpoints">Endpoints</h3>
 
 You can fetch, create, update and delete measurements and values using the following endpoints: 
 <br/>
@@ -1554,9 +1554,8 @@ HTTP/1.1 200 OK
 {% include endpointTab.html %}
 
 
+<h3 id="{{page.sections['dataservice']['secs']['measurementsAndValues'].anchor}}-filters">Filters</h3>
 
-
-### Filters
 {% capture table %}
 Parameter name      | Possible values [**default value**] | Description
 --------------------|---------------------|-------------------------------------------------------------
@@ -1575,7 +1574,7 @@ Parameter name      | Possible values [**default value**] | Description
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
-### Object Structure
+<h3 id="{{page.sections['dataservice']['secs']['measurementsAndValues'].anchor}}-objectStructure">Object Structure</h3>
 
 Measurements do always belong to a single inspection plan part. Depending on the purpose, the measured values are included within a measurement or not. Each measurement has the following properties:
 
