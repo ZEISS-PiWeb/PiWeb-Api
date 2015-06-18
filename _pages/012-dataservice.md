@@ -811,7 +811,7 @@ HTTP/1.1 200 Ok
 {% assign endpoint="/parts" %}
 {% assign summary="Deletes parts" %}
 {% capture description %}
-There are two ways to delete parts, either by their path or by their uuids. This means that one of the filter parameters `partPath` or `partUuids` has to be set. In both cases the request deletes the part itself as well as all its child parts and child characteristics.
+There are two ways to delete parts, either by their path or by their uuids. This means that one of the [filter uri parameters](#{{page.sections['dataservice']['secs']['inspectionPlan'].anchor}}-filters) `partPath` or `partUuids` has to be set. In both cases the request deletes the part itself as well as all its child parts and child characteristics.
 {% endcapture %}
 
 {% assign exampleCaption="Delete the part 'metal part' and its children." %}
