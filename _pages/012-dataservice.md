@@ -663,7 +663,7 @@ You can fetch, create, update and delete parts and characteristics using the fol
 {% assign endpoint="/parts" %}
 {% assign summary="Fetches parts" %}
 {% capture description %}
-You can fetch all parts or certain parts. Possible [filter uri parameters]({{page.sections['dataservice']['secs']['inspectionPlan'].anchor}}-filters) are `partUuids`, `partPath`, `depth`, `withHistory` and `requestedPartAttributes`.
+You can fetch all parts or certain parts. Possible [filter uri parameters](#{{page.sections['dataservice']['secs']['inspectionPlan'].anchor}}-filters) are `partUuids`, `partPath`, `depth`, `withHistory` and `requestedPartAttributes`.
 {% endcapture %}
 {% assign exampleCaption="Fetch the part at path `/metal part` without child parts and only get the values for attributes `1001` and `1003`" %}
 
