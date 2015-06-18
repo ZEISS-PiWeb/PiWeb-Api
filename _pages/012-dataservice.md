@@ -735,7 +735,7 @@ GET /dataServiceRest/parts/05040c4c-f0af-46b8-810e-30c0c00a379e HTTP/1.1
 {% assign summary="Creates parts" %}
 {% capture description %}
 
-To create a new part, you must send its JSON representation in the request body. Values for `uuid` and `path` are required, `attributes` and `comment` are optional. The attribute keys must be valid part attributes as specified in the {{ site.links['configuration'] }}.
+To create a new part, you must send its JSON representation in the request body. Values for `uuid` and `path` are required, `attributes` and `comment` are optional. The attribute keys must be valid part attributes as specified in the <a href="#{{page.sections['dataservice']['secs']['configuration'].anchor}}">{{page.sections['dataservice']['secs']['configuration'].title}}</a>.
 
 {{ site.images['info'] }} The comment is only added if versioning is enabled in the server settings.
 {% endcapture %}
@@ -956,7 +956,7 @@ GET /dataServiceRest/characteristics/27e23a7c-dbe7-4863-8461-6abf7b03ddd7 HTTP/1
 {% assign summary="Creates characteristics" %}
 {% capture description %}
 
-To create characteristics, you must send a JSON representation of the characteristics in the request body. Values for `uuid` and `path` are required, `attributes` and `comment` are optional. The attribute keys must be valid characteristic attributes as specified in the {{ site.links['configuration'] }}.
+To create characteristics, you must send a JSON representation of the characteristics in the request body. Values for `uuid` and `path` are required, `attributes` and `comment` are optional. The attribute keys must be valid characteristic attributes as specified in the <a href="#{{page.sections['dataservice']['secs']['configuration'].anchor}}">{{page.sections['dataservice']['secs']['configuration'].title}}</a>.
 
 {{ site.images['info'] }} The comment is only added if versioning is enabled in the server settings.
 {% endcapture %}
@@ -1211,7 +1211,7 @@ GET /dataServiceRest/measurements/5b59cac7-9ecd-403c-aa26-56dd25892421 HTTP/1.1
 {% assign endpoint="/measurements" %}
 {% assign summary="Creates measurements" %}
 {% capture description %}
-To create a new measurement, you must send its JSON representation in the request body. Values for `uuid` and `path` are required, `attributes` and `comment` are optional. The attribute keys must be valid measurement attributes as specified in the #{{page.sections['dataservice']['secs']['configuration'].anchor}}.
+To create a new measurement, you must send its JSON representation in the request body. Values for `uuid` and `path` are required, `attributes` and `comment` are optional. The attribute keys must be valid measurement attributes as specified in the <a href="#{{page.sections['dataservice']['secs']['configuration'].anchor}}">{{page.sections['dataservice']['secs']['configuration'].title}}</a>.
 
 {{ site.images['info'] }} The comment is only added if versioning is enabled in server settings. 
 {% endcapture %}
@@ -1447,7 +1447,7 @@ GET /dataServiceRest/values/5b59cac7-9ecd-403c-aa26-56dd25892421 HTTP/1.1
 {% assign endpoint="/values" %}
 {% assign summary="Creates measurements including values" %}
 {% capture description %}
-To create a measurement with values, you must send its JSON representation in the request body. Values for `uuid` and `path` are required, `attributes` and `comment` are optional. The attribute keys must be valid measurement attributes as specified in the {{ site.links['configuration'] }}.
+To create a measurement with values, you must send its JSON representation in the request body. Values for `uuid` and `path` are required, `attributes` and `comment` are optional. The attribute keys must be valid measurement attributes as specified in the <a href="#{{page.sections['dataservice']['secs']['configuration'].anchor}}">{{page.sections['dataservice']['secs']['configuration'].title}}</a>.
 
 {{ site.images['info'] }} The comment is only added if versioning is enabled in server settings. 
 {% endcapture %}
