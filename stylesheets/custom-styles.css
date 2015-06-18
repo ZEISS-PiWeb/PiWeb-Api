@@ -82,6 +82,8 @@ legend{
 span.label{
 	margin-right: 5px;
 	font-variant: small-caps;
+	font-size: 85%;
+	font-weight: 500;
 }
 
 .panel{
