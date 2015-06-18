@@ -12,10 +12,10 @@ images:
   warning: "![Warning](/PiWeb-Api/images/warning.png)"
   info: "![Info](/PiWeb-Api/images/info.png)"
 sections:
-  getLabel: <span class="label label-primary">GET</span>
-  postLabel: <span class="label label-success">POST</span>
-  putLabel: <span class="label label-warning">PUT</span>
-  deleteLabel: <span class="label label-danger">DELETE</span>
+  getLabel: <span class="label label-primary">Get</span>
+  postLabel: <span class="label label-success">Post</span>
+  putLabel: <span class="label label-warning">Put</span>
+  deleteLabel: <span class="label label-danger">Delete</span>
 headers:
   example: "##### ![Example](/PiWeb-Api/images/document-info.png) Example: "
   request: "##### Request"
