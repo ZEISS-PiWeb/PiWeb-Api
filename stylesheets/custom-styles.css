@@ -318,13 +318,13 @@ ul.subNavList>li>a:hover {
 .table-inline>thead>tr>th{
 	background: inherit;
 	color: inherit;
+	font-variant: small-caps;
+	border-bottom: 1px solid #CCC;
 }
 
 .table-inline>tbody>tr>td{
 	border-top: 1px solid #DDD;
 	background-color:inherit;
-	font-variant: small-caps;
-	border-bottom: 1px solid #CCC;
 }
 
 .glyphicon{
