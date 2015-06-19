@@ -315,6 +315,17 @@ ul.subNavList>li>a:hover {
 	color: #000;
 }
 
+.table-inline{
+	border-spacing: 1px;
+	border-collapse: inherit;
+}
+
+.table-inline>thead>tr>th{
+	font-weight: inherit;
+	border:0;
+	vertical-align: initial;
+}
+
 .glyphicon{
 	margin-right: 10px;
 	padding-top: 7px
