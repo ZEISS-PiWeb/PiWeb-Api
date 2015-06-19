@@ -315,15 +315,14 @@ ul.subNavList>li>a:hover {
 	color: #000;
 }
 
-.table-inline{
-	border-spacing: 1px;
-	border-collapse: inherit;
+.table-inline>thead>tr>th{
+	background: inherit;
+	color: inherit;
 }
 
-.table-inline>thead>tr>th{
-	font-weight: inherit;
-	border:0;
-	vertical-align: initial;
+.table-inline>tbody>tr>td{
+	border:inherit;
+	background-color:inherit;
 }
 
 .glyphicon{
