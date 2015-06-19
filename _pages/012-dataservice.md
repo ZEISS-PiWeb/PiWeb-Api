@@ -668,9 +668,9 @@ You can fetch all parts or certain parts. Possible [filter uri parameters](#{{pa
 {% capture table %}
 Parameter name                                                                 | Description
 -------------------------------------------------------------------------------|--------------------------------
-<nobr><code>Guid list</code> partUuids</nobr>                                  | Restricts the query to the parts with these uuids.
-<nobr><code>Path</code> partPath</nobr>                                        | Restricts the query to the part with this path.
-<nobr><code>Guid list</code> charUuids</nobr>                                  | Restricts the query to characteristics with these uuids.
+partUuids<br><i>optional</i>                                                   | <code>Guid list</code> Restricts the query to the parts with these uuids.
+partPath<br><i>optional</i>                                                    | <code>Path</code> Restricts the query to the part with this path.
+charUuids<br><i>optional</i>                                                   | <code>Guid list</code> Restricts the query to characteristics with these uuids.
 <nobr><code>Path</code> charPath</nobr>                                        | Restricts the query to the part with this characteristics.
 <nobr><code>ushort</code> depth</nobr>                                         | Determines how many levels of the inspection plan tree hierarchy should be fetched. Setting `depth=0` means that only the entity itself should be fetched, `depth=1` means the entity and its direct children should be fetched. Please note that depth is treated relative of the path depth of the provided part or characteristic.
 <nobr><code>bool</code> withHistory</nobr>                                     | Determines whether the version history should be fetched or not. This only effects the query if versioning is activated on the server side.
