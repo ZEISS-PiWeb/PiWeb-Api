@@ -664,6 +664,21 @@ You can fetch, create, update and delete parts and characteristics using the fol
 {% assign summary="Fetches parts" %}
 {% capture description %}
 You can fetch all parts or certain parts. Possible [filter uri parameters](#{{page.sections['dataservice']['secs']['inspectionPlan'].anchor}}-filters) are `partUuids`, `partPath`, `depth`, `withHistory` and `requestedPartAttributes`.
+
+{% capture table %}
+Parameter name                                                                 | Description
+-------------------------------------------------------------------------------|--------------------------------
+<nobr><code>Guid list</code> partUuids</nobr>                                  | Restricts the query to the parts with these uuids.
+<nobr><code>Path</code> partPath</nobr>                                        | Restricts the query to the part with this path.
+<nobr><code>Guid list</code> charUuids</nobr>                                  | Restricts the query to characteristics with these uuids.
+<nobr><code>Path</code> charPath</nobr>                                        | Restricts the query to the part with this characteristics.
+<nobr><code>ushort</code> depth</nobr>                                         | Determines how many levels of the inspection plan tree hierarchy should be fetched. Setting `depth=0` means that only the entity itself should be fetched, `depth=1` means the entity and its direct children should be fetched. Please note that depth is treated relative of the path depth of the provided part or characteristic.
+<nobr><code>bool</code> withHistory</nobr>                                     | Determines whether the version history should be fetched or not. This only effects the query if versioning is activated on the server side.
+<nobr><code>All, None, ID list</code> requestedPartAttributes</nobr>           | Restricts the query to the attributes that should be returned for parts, for example `requestedPartAttributes={1001, 1008}`.
+<nobr><code>All, None, ID list</code> requestedCharacteristicAttributes</nobr> | Restricts the query to the attributes that should be returned for characteristics, for example `requestedCharacteristicAttributes={2001, 2101}`
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
+
 {% endcapture %}
 {% assign exampleCaption="Fetch the part at path `/metal part` without child parts and only get the values for attributes `1001` and `1003`" %}
 
