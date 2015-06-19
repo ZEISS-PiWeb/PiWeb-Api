@@ -321,7 +321,7 @@ ul.subNavList>li>a:hover {
 }
 
 .table-inline>tbody>tr>td{
-	border:inherit;
+	border-top: 1px solid #DDD;
 	background-color:inherit;
 }
 
