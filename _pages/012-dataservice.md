@@ -677,7 +677,7 @@ Parameter name                                                                 |
 <nobr><code>All, None, ID list</code> requestedPartAttributes</nobr>           | Restricts the query to the attributes that should be returned for parts, for example `requestedPartAttributes={1001, 1008}`.
 <nobr><code>All, None, ID list</code> requestedCharacteristicAttributes</nobr> | Restricts the query to the attributes that should be returned for characteristics, for example `requestedCharacteristicAttributes={2001, 2101}`
 {% endcapture %}
-{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
+{{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
 
 {% endcapture %}
 {% assign exampleCaption="Fetch the part at path `/metal part` without child parts and only get the values for attributes `1001` and `1003`" %}
