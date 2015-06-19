@@ -713,7 +713,20 @@ GET /dataServiceRest/parts?partPath=/metal%20part&depth=0&requestedPartAttribute
 {% assign method="GET" %}
 {% assign endpoint="/parts/:partUuid" %}
 {% assign summary="Fetches a certain part by its :partUuid" %}
-{% assign description="" %}
+{% capture description %}
+
+You can fetch  a certain part by its :partUuid. The result can be restricted by the following uri parameters:
+
+{% capture table %}
+Parameter name                                                                 | Description
+-------------------------------------------------------------------------------|--------------------------------
+<nobr><code>bool</code> withHistory</nobr><br><i>default:</i> <code>false</code>| Determines whether the version history should be fetched or not. This only effects the query if versioning is activated on the server side.
+<nobr><code>All, None, ID list</code> requestedPartAttributes</nobr><br><i>default:</i> <code>All</code>                                                                                            | Restricts the query to the attributes that should be returned for parts, for example `requestedPartAttributes={1001, 1008}`.
+{% endcapture %}
+
+{{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
+
+{% endcapture %}
 {% assign exampleCaption="Fetch the part '/metal part' by its guid" %}
 
 {% capture jsonrequest %}
