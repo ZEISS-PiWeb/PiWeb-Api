@@ -1158,24 +1158,6 @@ HTTP/1.1 200 Ok
 
 <br/>
 
-<h3 id="{{page.sections['dataservice']['secs']['inspectionPlan'].anchor}}-filters">Filters</h3>
-
-The described endpoints provide the following filters:
-
-{% capture table %}
-Parameter name                                                                 | Description
--------------------------------------------------------------------------------|--------------------------------
-<nobr><code>Guid list</code> partUuids</nobr>                                  | Restricts the query to the parts with these uuids.
-<nobr><code>Path</code> partPath</nobr>                                        | Restricts the query to the part with this path.
-<nobr><code>Guid list</code> charUuids</nobr>                                  | Restricts the query to characteristics with these uuids.
-<nobr><code>Path</code> charPath</nobr>                                        | Restricts the query to the part with this characteristics.
-<nobr><code>ushort</code> depth</nobr>                                         | Determines how many levels of the inspection plan tree hierarchy should be fetched. Setting `depth=0` means that only the entity itself should be fetched, `depth=1` means the entity and its direct children should be fetched. Please note that depth is treated relative of the path depth of the provided part or characteristic.
-<nobr><code>bool</code> withHistory</nobr>                                     | Determines whether the version history should be fetched or not. This only effects the query if versioning is activated on the server side.
-<nobr><code>All, None, ID list</code> requestedPartAttributes</nobr>           | Restricts the query to the attributes that should be returned for parts, for example `requestedPartAttributes={1001, 1008}`.
-<nobr><code>All, None, ID list</code> requestedCharacteristicAttributes</nobr> | Restricts the query to the attributes that should be returned for characteristics, for example `requestedCharacteristicAttributes={2001, 2101}`
-{% endcapture %}
-{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
-
 <h3 id="{{page.sections['dataservice']['secs']['inspectionPlan'].anchor}}-objectstructure">Object Structure</h3>
 
 Both parts and characteristics are PiWeb inspection plan entities. They have the following properties:
@@ -1207,9 +1189,26 @@ You can fetch, create, update and delete measurements and values using the follo
 {% assign endpoint="/measurements" %}
 {% assign summary="Fetches measurements" %}
 {% capture description %}
-You can fetch all measurements or certain measurements only. Possible [filter uri parameters](#{{page.sections['dataservice']['secs']['inspectionPlan'].anchor}}-filters) are 
-<code data-toggle="tooltip" data-placement="bottom auto" data-html="true" title="Restricts the query to this part path <br><br><code>partPath=/metal%20part</code>">partPath</code>
+You can fetch all measurements or certain measurements only. Possible filter uri parameters are: 
 `partPath`, `partUuids`, `measurementUuids`, `deep`, `searchCondition`, `order`, `limitResult`, `requestedMeasurementAttributes`, `statistics` and `aggregation`.
+
+{% capture table %}
+Parameter name      | Possible values [**default value**] | Description
+--------------------|---------------------|-------------------------------------------------------------
+`measurementUuids`         | Guids of the measurements | Restricts the query to these measurements <br><br> `measurementUuids={5b59cac7-9ecd-403c-aa26-56dd25892421}`
+`partUuids`           | Guids of the parts | Restricts the query to these parts <br><br> `partUuids={e42c5327-6258-4c4c-b3e9-6d22c30938b2}`
+`partPath`            | Path of the part | Restricts the query to this part <br><br> `partPath=/metal%20part` 
+`deep`                | true, **false**     | Determines whether the query should affect all levels of the inspection plan. <br> `deep=true` 
+`orderBy`             | Ids of the attributes and order direction <br> **4 desc** | Determines which attribute keys and which direction the keys should be ordered by <br><br> `orderBy:4 asc, 10 desc`
+`searchCondition`     | AttribueKey, Operator and Value| The query will only return items matching all conditions. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ]. <br><br> `searchCondition=4>[2012-11-13T00:00:00Z]`
+`limitResult`         | i, i∈N | Restricts the number of result items. <br> `limitResult=100`
+`requestedMeasurementAttributes` | Ids of the attributes | Restricts the query to the attributes that should be returned for measurements. <br><br> `requestedMeasurementAttributes={4,8}`
+`requestedValueAttributes` | Ids of the attributes |List of attributes that should be returned for values. <br><br> `requestedValueAttributes={1,8}`
+`characteristicsUuidList` | Uuids of the characteristics | Restricts the query to the characteristics for which values should be returned. <br><br> `characteristicsUuidList={525d15c6-dc70-4ab4-bd3c-8ab2b5780e6b, 8faae7a0-d1e1-4ee2-b3a5-d4526f6ba822}`
+`statistics` | **None**, Simple, Detailed | Indicates how statistical informtaion should be returned: <br>*None* = Return no information<br>*Simple* = Return statistical information including numvber of characteristics out of warning limit, number of characteristics out of tolerance and number of characteristics in warning limit and tolerance<br>Detailed = Return statistical information the same way as *Simple* plus the guid for each characteristic <br><br> `statistics=Simple`
+`aggregation`          | **Measurements**, AggregationMeasurements, All | Specifies which types of measurements will be fetched. <br><br> `aggregation=All`
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-inner">' }}
 
 {% endcapture %}
 {% assign exampleCaption="Fetch measurements newer than 01.01.2015 for the part with the guid e42c5327-6258-4c4c-b3e9-6d22c30938b2" %}
