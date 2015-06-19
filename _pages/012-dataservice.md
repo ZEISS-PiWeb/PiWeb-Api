@@ -663,19 +663,16 @@ You can fetch, create, update and delete parts and characteristics using the fol
 {% assign endpoint="/parts" %}
 {% assign summary="Fetches parts" %}
 {% capture description %}
-You can fetch all parts or certain parts. Possible [filter uri parameters](#{{page.sections['dataservice']['secs']['inspectionPlan'].anchor}}-filters) are `partUuids`, `partPath`, `depth`, `withHistory` and `requestedPartAttributes`.
+You can fetch all parts or certain parts. Possible filter uri parameters are: 
 
 {% capture table %}
 Parameter name                                                                 | Description
 -------------------------------------------------------------------------------|--------------------------------
-<nobr><code>Guid list</code>partUuids<br></nobr>                               | Restricts the query to the parts with these uuids.
+<nobr><code>Guid list</code> partUuids<br></nobr>                               | Restricts the query to the parts with these uuids.
 <nobr><code>Path</code> partPath</nobr>                                        | Restricts the query to the part with this path.
-<nobr><code>Guid list</code>charUuids<br></nobr>                               | Restricts the query to characteristics with these uuids.
-<nobr><code>Path</code> charPath</nobr>                                        | Restricts the query to the part with this characteristics.
 <nobr><code>ushort</code> depth</nobr><br><i>default:</i> <code>1</code>       | Determines how many levels of the inspection plan tree hierarchy should be fetched. Setting `depth=0` means that only the entity itself should be fetched, `depth=1` means the entity and its direct children should be fetched. Please note that depth is treated relative of the path depth of the provided part or characteristic.
 <nobr><code>bool</code> withHistory</nobr><br><i>default:</i> <code>false</code>| Determines whether the version history should be fetched or not. This only effects the query if versioning is activated on the server side.
 <nobr><code>All, None, ID list</code> requestedPartAttributes</nobr><br><i>default:</i> <code>All</code>                                                                                            | Restricts the query to the attributes that should be returned for parts, for example `requestedPartAttributes={1001, 1008}`.
-<nobr><code>All, None, ID list</code> requestedCharacteristicAttributes</nobr><br><i>default:</i> <code>All</code>                                                                                  | Restricts the query to the attributes that should be returned for characteristics, for example `requestedCharacteristicAttributes={2001, 2101}`
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
 
@@ -839,7 +836,18 @@ HTTP/1.1 200 Ok
 {% assign endpoint="/parts" %}
 {% assign summary="Deletes parts" %}
 {% capture description %}
-There are two ways to delete parts, either by their path or by their uuids. This means that one of the [filter uri parameters](#{{page.sections['dataservice']['secs']['inspectionPlan'].anchor}}-filters) `partPath` or `partUuids` has to be set. In both cases the request deletes the part itself as well as all its child parts and child characteristics.
+There are two ways to delete parts, either by their path or by their uuids. This means that either the filter parameter `partPath` or `partUuids` has to be set: 
+
+{% capture table %}
+Parameter name                                                                 | Description
+-------------------------------------------------------------------------------|--------------------------------
+<nobr><code>Guid list</code> partUuids<br></nobr>                              | Restricts the query to the parts with these uuids.
+<nobr><code>Path</code> partPath</nobr>                                        | Restricts the query to the part with this path.
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
+
+In both cases the request deletes the part itself as well as all its child parts and child characteristics. If both parameters are set only the `partUuids` parameter will be considered.
+
 {% endcapture %}
 
 {% assign exampleCaption="Delete the part 'metal part' and its children." %}
@@ -892,7 +900,26 @@ HTTP/1.1 200 Ok
 {% assign method="GET" %}
 {% assign endpoint="/characteristics" %}
 {% assign summary="Fetches characteristics" %}
-{% assign description="You can fetch all characteristics or only the characteristics described by the uri parameters. Possible [filter uri parameters](#{{page.sections['dataservice']['secs']['inspectionPlan'].anchor}}-filters) are `partUuids`, `partPath`, `charUuids`, `charPath`, `depth`, `withHistory` and `requestedCharacteristicAttributes`. You can only request direct characteristics of the part, characteristics of child parts will be ignored." %}
+{% capture description %}
+
+You can fetch all characteristics or only the characteristics described by the uri parameters. Possible filter uri parameters are:
+
+{% capture table %}
+Parameter name                                                                 | Description
+-------------------------------------------------------------------------------|--------------------------------
+<nobr><code>Guid list</code>partUuids<br></nobr>                               | Restricts the query to the parts with these uuids.
+<nobr><code>Path</code> partPath</nobr>                                        | Restricts the query to the part with this path.
+<nobr><code>Guid list</code>charUuids<br></nobr>                               | Restricts the query to characteristics with these uuids.
+<nobr><code>Path</code> charPath</nobr>                                        | Restricts the query to the part with this characteristics.
+<nobr><code>ushort</code> depth</nobr><br><i>default:</i> <code>65.536</code>  | Determines how many levels of the inspection plan tree hierarchy should be fetched. Setting `depth=0` means that only the entity itself should be fetched, `depth=1` means the entity and its direct children should be fetched. Please note that depth is treated relative of the path depth of the provided part or characteristic.
+<nobr><code>bool</code> withHistory</nobr><br><i>default:</i> <code>false</code>| Determines whether the version history should be fetched or not. This only effects the query if versioning is activated on the server side.
+<nobr><code>All, None, ID list</code> requestedCharacteristicAttributes</nobr><br><i>default:</i> <code>All</code>                                                                                  | Restricts the query to the attributes that should be returned for characteristics, for example `requestedCharacteristicAttributes={2001, 2101}`
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
+
+{{ site.images['info'] }}You can only request direct characteristics of the part, characteristics of child parts will be ignored. 
+
+{% endcapture %}
 {% assign exampleCaption="Fetch all characteristics beneath the part '/metal part' until depth=2" %}
 
 {% capture jsonrequest %}
@@ -949,7 +976,18 @@ GET /dataServiceRest/characteristics?partPath=/metal%20part&depth=2 HTTP/1.1
 {% assign method="GET" %}
 {% assign endpoint="/characteristics/:charUuid" %}
 {% assign summary="Fetches a certain characteristics by its :charUuid" %}
-{% assign description="" %}
+{% capture description %}
+The result of fetching a certain characteristic by its :charUuid can be restricted by the following uri parameters:
+
+{% capture table %}
+Parameter name                                                                  | Description
+--------------------------------------------------------------------------------|--------------------------------
+<nobr><code>bool</code> withHistory</nobr><br><i>default:</i> <code>false</code>| Determines whether the version history should be fetched or not. This only effects the query if versioning is activated on the server side.
+<nobr><code>All, None, ID list</code> requestedCharacteristicAttributes</nobr><br><i>default:</i> <code>All</code>                                                                                  | Restricts the query to the attributes that should be returned for characteristics, for example `requestedCharacteristicAttributes={2001, 2101}`
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
+{% endcapture %}
+
 {% assign exampleCaption="Fetch the characteristic '/metal part/deviation_3' by its guid" %}
 
 {% capture jsonrequest %}
@@ -1066,7 +1104,17 @@ HTTP/1.1 200 Ok
 {% assign endpoint="/characteristics" %}
 {% assign summary="Deletes characteristics" %}
 {% capture description %}
-You have two options to delete characteristics, either by their paths or by their uuids. This means that one of the [filter uri parameters](#{{page.sections['dataservice']['secs']['inspectionPlan'].anchor}}-filters) `charPath` or `charUuids` has to be set. In both cases the request deletes the characteristic itself as well as all its children.
+You have two options to delete characteristics, either by their paths or by their uuids. This means that either the filter parameter `charPath` or `charUuids` has to be set: 
+
+{% capture table %}
+Parameter name                                                                 | Description
+-------------------------------------------------------------------------------|--------------------------------
+<nobr><code>Guid list</code>charUuids<br></nobr>                               | Restricts the query to characteristics with these uuids.
+<nobr><code>Path</code> charPath</nobr>                                        | Restricts the query to the part with this characteristics.
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
+
+In both cases the request deletes the characteristic itself as well as all its children. If both parameters are set only the `charUuids` parameter will be considered.
 {% endcapture %}
 
 {% assign exampleCaption="Delete the characteristic 'metal part/deviation_3' and all entities beneath it" %}
