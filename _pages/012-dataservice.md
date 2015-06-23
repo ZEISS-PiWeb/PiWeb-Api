@@ -1195,16 +1195,7 @@ You can fetch all measurements or certain measurements only. Possible filter uri
 {% capture table %}
 <code>Type</code> Parameter      |  Description <br> <code>Example</code>
 --------------------|-----------------------------------------------------------------------------------
-<nobr><code>Guid list</code> measurementUuids </nobr>         | Restricts the query to these measurements <br> `measurementUuids={5b59cac7-9ecd-403c-aa26-56dd25892421}`
-<nobr><code>Guid list</code> partUuids </nobr> | Restricts the query to these parts <br> `partUuids={e42c5327-6258-4c4c-b3e9-6d22c30938b2}`
-<nobr><code>Path</code> partPath </nobr> | Restricts the query to this part <br><br> `partPath=/metal%20part` 
-<nobr><code>bool</code> deep </nobr><br><i>default:</i> <code>false</code> | Determines whether the query should affect all levels of the inspection plan. <br> `deep=true` 
-<nobr><code>OrderCriteria</code> orderBy </nobr><br><i>default:</i> <code>4 desc</code>   | Determines which attribute keys and which direction the keys should be ordered by <br> `orderBy:4 asc, 10 desc`
-<nobr><code>Condition</code> searchCondition </nobr>| The query will only return items matching all conditions. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ]. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`
-<nobr><code>int</code> limitResult </nobr>| Restricts the number of result items. <br> `limitResult=100`
 <nobr><code>All, None, Id list</code> requestedMeasurementAttributes </nobr><br><i>default:</i> <code>All</code> | Restricts the query to the attributes that should be returned for measurements. <br> `requestedMeasurementAttributes={4,8}`
-<nobr><code>All, None, Id list</code> requestedValueAttributes </nobr><br><i>default:</i> <code>All</code> |List of attributes that should be returned for values. <br><br> `requestedValueAttributes={1,8}`
-<nobr><code>Guid list</code> characteristicsUuidList </nobr> | Restricts the query to the characteristics for which values should be returned. <br> `characteristicsUuidList={525d15c6-dc70-4ab4-bd3c-8ab2b5780e6b, 8faae7a0-d1e1-4ee2-b3a5-d4526f6ba822}`
 <nobr><code>None, Simple, Detailed</code> statistics </nobr><br><i>default:</i> <code>None</code> | Indicates how statistical informtaion should be returned: <br><code>None</code> = Return no information<br><code>Simple</code> = Return statistical information including numvber of characteristics out of warning limit, number of characteristics out of tolerance and number of characteristics in warning limit and tolerance<br><code>Detailed</code> = Return statistical information the same way as <code>Simple</code> plus the guid for each characteristic <br> `statistics=Simple`
 <nobr><code>Measurements, AggregationMeasurements, All</code> aggregation </nobr><br><i>default:</i> <code>Measurements</code> | Specifies which types of measurements will be fetched. <br> `aggregation=All`
 {% endcapture %}
