@@ -1178,7 +1178,6 @@ You can fetch, create, update and delete measurements and values using the follo
 {% assign summary="Fetches measurements" %}
 {% capture description %}
 You can fetch all measurements or certain measurements only. Possible filter uri parameters are: 
-`partPath`, `partUuids`, `measurementUuids`, `deep`, `searchCondition`, `order`, `limitResult`, `requestedMeasurementAttributes`, `statistics` and `aggregation`.
 
 {% capture table %}
 <code>Type</code> Parameter      |  Description <br> <code>Example</code>
@@ -1500,7 +1499,7 @@ GET /dataservicerest/values?partUuids={05040c4c-f0af-46b8-810e-30c0c00a379e}&sea
 {% assign endpoint="/values/:measUuid" %}
 {% assign summary="Fetches a measurement including measured values by its :measUuid" %}
 {% capture description %}
-The request can be restricted by the following uri filter parameters: Possible filters are `requestedMeasurementAttributes`, `requestedValueAttributes`, `characteristicUuids` and `aggregation`." %}
+The request can be restricted by the following uri filter parameters: Possible filters are: 
 
 {% capture table %}
 <code>Type</code> Parameter      |  Description <br> <code>Example</code>
