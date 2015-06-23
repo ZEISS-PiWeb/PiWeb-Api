@@ -1459,7 +1459,7 @@ You can fetch all measurements with values or only certain measurements with val
 <nobr><code>int</code> limitResult </nobr>| Restricts the number of result items. <br> `limitResult=100`
 <nobr><code>All, None, Id list</code> requestedMeasurementAttributes </nobr><br><i>default:</i> <code>All</code> | Restricts the query to the attributes that should be returned for measurements. <br> `requestedMeasurementAttributes={4,8}`
 <nobr><code>All, None, Id list</code> requestedValueAttributes </nobr><br><i>default:</i> <code>All</code> |List of attributes that should be returned for values. <br><br> `requestedValueAttributes={1,8}`
-<nobr><code>Guid list</code> characteristicsUuidList </nobr> | Restricts the query to the characteristics for which values should be returned. <br> `characteristicsUuidList={525d15c6-dc70-4ab4-bd3c-8ab2b5780e6b, 8faae7a0-d1e1-4ee2-b3a5-d4526f6ba822}`
+<nobr><code>Guid list</code> characteristicUuids </nobr> | Restricts the query to the characteristics for which values should be returned. <br> `characteristicsUuidList={525d15c6-dc70-4ab4-bd3c-8ab2b5780e6b, 8faae7a0-d1e1-4ee2-b3a5-d4526f6ba822}`
 <nobr><code>None, Simple, Detailed</code> statistics </nobr><br><i>default:</i> <code>None</code> | Indicates how statistical informtaion should be returned: <br><code>None</code> = Return no information<br><code>Simple</code> = Return statistical information including numvber of characteristics out of warning limit, number of characteristics out of tolerance and number of characteristics in warning limit and tolerance<br><code>Detailed</code> = Return statistical information the same way as <code>Simple</code> plus the guid for each characteristic <br> `statistics=Simple`
 <nobr><code>Measurements, AggregationMeasurements, All</code> aggregation </nobr><br><i>default:</i> <code>Measurements</code> | Specifies which types of measurements will be fetched. <br> `aggregation=All`
 {% endcapture %}
@@ -1511,7 +1511,20 @@ GET /dataservicerest/values?partUuids=(05040c4c-f0af-46b8-810e-30c0c00a379e)&sea
 {% assign method="GET" %}
 {% assign endpoint="/values/:measUuid" %}
 {% assign summary="Fetches a measurement including measured values by its :measUuid" %}
-{% assign description="The request can be restricted by (#{{page.sections['dataservice']['secs']['measurementsAndValues'].anchor}}-filters). Possible filters are `requestedMeasurementAttributes`, `requestedValueAttributes`, `characteristicUuids` and `aggregation`." %}
+{% capture description %}
+The request can be restricted by the following uri filter parameters: Possible filters are `requestedMeasurementAttributes`, `requestedValueAttributes`, `characteristicUuids` and `aggregation`." %}
+
+{% capture table %}
+<code>Type</code> Parameter      |  Description <br> <code>Example</code>
+--------------------|-----------------------------------------------------------------------------------
+<nobr><code>All, None, Id list</code> requestedMeasurementAttributes </nobr><br><i>default:</i> <code>All</code> | Restricts the query to the attributes that should be returned for measurements. <br> `requestedMeasurementAttributes={4,8}`
+<nobr><code>All, None, Id list</code> requestedValueAttributes </nobr><br><i>default:</i> <code>All</code> |List of attributes that should be returned for values. <br><br> `requestedValueAttributes={1,8}`
+<nobr><code>Guid list</code> characteristicUuids </nobr> | Restricts the query to the characteristics for which values should be returned. <br> `characteristicsUuidList={525d15c6-dc70-4ab4-bd3c-8ab2b5780e6b, 8faae7a0-d1e1-4ee2-b3a5-d4526f6ba822}`
+<nobr><code>Measurements, AggregationMeasurements, All</code> aggregation </nobr><br><i>default:</i> <code>Measurements</code> | Specifies which types of measurements will be fetched. <br> `aggregation=All`
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
+
+{% endcapture %}
 
 {% assign exampleCaption="Fetch a measurement including  all values by its guid" %}
 
