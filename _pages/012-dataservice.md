@@ -569,7 +569,7 @@ There are two different options for deleting catalogs:
 
 {% capture jsonrequest %}
 {% highlight http %}
-DELETE /dataServiceRest/catalogues?catalogUuids=(8c376bee-ffe3-4ee4-abb9-a55b492e69ad) HTTP/1.1
+DELETE /dataServiceRest/catalogues?catalogUuids={8c376bee-ffe3-4ee4-abb9-a55b492e69ad} HTTP/1.1
 {% endhighlight %}
 {% endcapture %}
 
@@ -597,7 +597,7 @@ There are two different options for deleting catalog entries:
 
 {% capture jsonrequest %}
 {% highlight http %}
-DELETE /dataServiceRest/catalogues/8c376bee-ffe3-4ee4-abb9-a55b492e69ad?entryIds=(1,3) HTTP/1.1
+DELETE /dataServiceRest/catalogues/8c376bee-ffe3-4ee4-abb9-a55b492e69ad?entryIds={1,3} HTTP/1.1
 {% endhighlight %}
 {% endcapture %}
 
@@ -1213,7 +1213,7 @@ You can fetch all measurements or certain measurements only. Possible filter uri
 
 {% capture jsonrequest %}
 {% highlight http %}
-GET /dataServiceRest/measurements?partUuids=(e42c5327-6258-4c4c-b3e9-6d22c30938b2)&searchCondition=4>[2015-01-01T00:00:00Z] HTTP/1.1
+GET /dataServiceRest/measurements?partUuids={e42c5327-6258-4c4c-b3e9-6d22c30938b2}&searchCondition=4>[2015-01-01T00:00:00Z] HTTP/1.1
 {% endhighlight %}
 {% endcapture %}
 
@@ -1470,7 +1470,7 @@ You can fetch all measurements with values or only certain measurements with val
 
 {% capture jsonrequest %}
 {% highlight http %}
-GET /dataservicerest/values?partUuids=(05040c4c-f0af-46b8-810e-30c0c00a379e)&searchCondition=4>[2010-11-04T00:00:00Z]&characteristicUuids=(b587d548-8aa6-42b7-b292-0f3e13452c3f) HTTP/1.1
+GET /dataservicerest/values?partUuids={05040c4c-f0af-46b8-810e-30c0c00a379e}&searchCondition=4>[2010-11-04T00:00:00Z]&characteristicUuids={b587d548-8aa6-42b7-b292-0f3e13452c3f} HTTP/1.1
 {% endhighlight %}
 {% endcapture %}
 
