@@ -1247,8 +1247,21 @@ GET /dataServiceRest/measurements?partUuids=(e42c5327-6258-4c4c-b3e9-6d22c30938b
 {% assign method="GET" %}
 {% assign endpoint="/measurements/:measUuid" %}
 {% assign summary="Fetches a measurement by its :measUuid" %}
-{% assign description="The request can be restricted by [filter uri parameters](#{{page.sections['dataservice']['secs']['measurementsAndValues'].anchor}}-filters). Possible filters are `requestedMeasurementAttributes`, `statistics` and `aggregation`." %}
+{% capture description %}
 
+The request can be restricted by the following filter uri parameters: 
+
+{% capture table %}
+<code>Type</code> Parameter      |  Description <br> <code>Example</code>
+--------------------|-----------------------------------------------------------------------------------
+
+<nobr><code>All, None, Id list</code> requestedMeasurementAttributes </nobr><br><i>default:</i> <code>All</code> | Restricts the query to the attributes that should be returned for measurements. <br> `requestedMeasurementAttributes={4,8}`
+<nobr><code>None, Simple, Detailed</code> statistics </nobr><br><i>default:</i> <code>None</code> | Indicates how statistical informtaion should be returned: <br><code>None</code> = Return no information<br><code>Simple</code> = Return statistical information including numvber of characteristics out of warning limit, number of characteristics out of tolerance and number of characteristics in warning limit and tolerance<br><code>Detailed</code> = Return statistical information the same way as <code>Simple</code> plus the guid for each characteristic <br> `statistics=Simple`
+<nobr><code>Measurements, AggregationMeasurements, All</code> aggregation </nobr><br><i>default:</i> <code>Measurements</code> | Specifies which types of measurements will be fetched. <br> `aggregation=All`
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
+
+{% endcapture %}
 {% assign exampleCaption="Fetch a measurement by its guid" %}
 
 {% capture jsonrequest %}
