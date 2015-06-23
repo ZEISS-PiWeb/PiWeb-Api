@@ -304,6 +304,7 @@ ul.subNavList>li>a:hover {
 	font-weight: inherit;
 	border:0;
 	vertical-align: initial;
+	font-variant: small-caps;
 }
 
 .table>tbody>tr>td{
@@ -313,18 +314,6 @@ ul.subNavList>li>a:hover {
 
 .table th code{
 	color: #000;
-}
-
-.table-inline>thead>tr>th{
-	background: inherit;
-	color: inherit;
-	font-variant: small-caps;
-	border-bottom: 1px solid #CCC;
-}
-
-.table-inline>tbody>tr>td{
-	border-top: 1px solid #DDD;
-	background-color:inherit;
 }
 
 .glyphicon{
