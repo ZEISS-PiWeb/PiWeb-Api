@@ -313,7 +313,9 @@ ul.subNavList>li>a:hover {
 }
 
 .table th code{
-	color: #000;
+	font-variant: all-small-caps;
+	font-size: 100%;
+	background-color: rgba(80,80,80,0.5);
 }
 
 .glyphicon{
