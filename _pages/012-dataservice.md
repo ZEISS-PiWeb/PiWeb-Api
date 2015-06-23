@@ -295,7 +295,7 @@ Catalogs and catalog entries can be fetched, created, updated and deleted using 
 {% assign method="GET" %}
 {% assign endpoint="/catalogs" %}
 {% assign summary="Fetches catalogs" %}
-{% assign description="This request can be restricted by the filter parameter `catalogUuids`" %}
+{% assign description="This request can be restricted by the filter parameter `catalogUuids`, a list of catalog uuids to target only specific catalogs. " %}
 {% assign exampleCaption="Fetching all catalogs" %}
 
 {% capture jsonrequest %}
@@ -564,6 +564,7 @@ There are two different options for deleting catalogs:
 
 * delete all catalogs or
 * delete one or more specific catalogs identified by their uuid. For this request you need to add the filter parameter `catalogUuids` to the request uri.
+* 
 {% endcapture %}
 {% assign exampleCaption="Delete the catalog with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
 
@@ -608,19 +609,6 @@ HTTP/1.1 200 Ok
 {% endcapture %}
 
 {% include endpointTab.html %}
-
-
-<h3 id="{{page.sections['dataservice']['secs']['catalogs'].anchor}}-filters">Filters</h3>
-
-These endpoints provide the following filter parameters:
-
-{% capture table %}
-Parameter name | Description
----------------|------------------  ------------------------------
-`catalogUuids` | A list of catalog uuids to target only specific catalogs <br> `{d7291afb-0a67-4c1e-8bcc-6fc455bcc0e5, 8c376bee-ffe3-4ee4-abb9-a55b492e69ad}`
-`entryIds`     | A list of catalog entry ids to target only specific entries <br> `{1,4}`
-{% endcapture %}
-{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 
 <h3 id="{{page.sections['dataservice']['secs']['catalogs'].anchor}}-objectstructure">Object Structure</h3>
