@@ -120,15 +120,15 @@ GET /dataServiceRest/configuration HTTP/1.1
        [
              "key": 8,
              "description": "inspector",
-             "catalogue": "8c376bee-ffe3-4ee4-abb9-a55b492e69ad",
-             "definitionType": "CatalogueAttributeDefinition"
+             "catalog": "8c376bee-ffe3-4ee4-abb9-a55b492e69ad",
+             "definitionType": "CatalogAttributeDefinition"
        ...
        ],
        "valueAttributes":
        [
        ...
        ],
-       "catalogueAttributes":
+       "catalogAttributes":
        [
        ...
        ]
@@ -260,9 +260,9 @@ The different entity types are:
 * *characteristics*, 
 * *measurements*, 
 * *values* and 
-* *catalogues*.
+* *catalogs*.
 
-The attributes are either `AttributeDefinition` or `CatalogueAttributeDefinition`.
+The attributes are either `AttributeDefinition` or `CatalogAttributeDefinition`.
 {% capture table %}
 ####AttributeDefinition
 
@@ -272,16 +272,16 @@ Property                             | Description
 <nobr><code>string</code> description</nobr>    | The attribute's name or a short description 
 <nobr><code>AttributeType</code> type</nobr>    | The attribute's type. *AlphaNumeric*, *Integer*, *Float* or *DateTime*
 <nobr><code>ushort</code> length</nobr>         | The attribute's maximum length. Only set if the type is *AlphaNumeric*
-<nobr><code>string</code> definitionType</nobr> | Always has the value 'AttributeDefinition' and is used to differentiate between  `AttributeDefinition` and `CatalogueAttributeDefinition`
+<nobr><code>string</code> definitionType</nobr> | Always has the value 'AttributeDefinition' and is used to differentiate between  `AttributeDefinition` and `CatalogAttributeDefinition`
 
-####CatalogueAttributeDefinition
+####CatalogAttributeDefinition
 
 Property                              | Description
 --------------------------------------|------------------------------------------------------------
 <nobr><code>ushort</code> key</nobr>             | The attribute's key, which serves as a unique id
 <nobr><code>string</code> description</nobr>     | The attribute's name or a short description 
-<nobr><code>Guid</code> catalogue</nobr>         | The id of the catalog that contains the possible attribute values
-<nobr><code>string</code> definitionType</nobr>  | Always has the value 'CatalogueAttributeDefinition' and is used to differentiate between  `AttributeDefinition` and `CatalogueAttributeDefinition`
+<nobr><code>Guid</code> catalog</nobr>         | The id of the catalog that contains the possible attribute values
+<nobr><code>string</code> definitionType</nobr>  | Always has the value 'CatalogAttributeDefinition' and is used to differentiate between  `AttributeDefinition` and `CatalogAttributeDefinition`
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
@@ -311,7 +311,7 @@ GET /dataServiceRest/catalogs HTTP/1.1
       "uuid": "d7291afb-0a67-4c1e-8bcc-6fc455bcc0e5",
       "name": "direction catalog",
       "validAttributes": [ 2009 ],
-      "catalogueEntries":
+      "catalogEntries":
       [
          {
             "key": 0,
@@ -329,9 +329,9 @@ GET /dataServiceRest/catalogs HTTP/1.1
    },
    {
       "uuid": "8c376bee-ffe3-4ee4-abb9-a55b492e69ad",
-      "name": "InspectorCatalogue",
+      "name": "InspectorCatalog",
       "validAttributes": [ 4092, 4093 ],
-      "catalogueEntries":
+      "catalogEntries":
       [
          {
             "key": 0,
@@ -378,9 +378,9 @@ GET /dataServiceRest/catalogs/8c376bee-ffe3-4ee4-abb9-a55b492e69ad HTTP/1.1
 [
     {
         "uuid": "8c376bee-ffe3-4ee4-abb9-a55b492e69ad",
-        "name": "InspectorCatalogue",
+        "name": "InspectorCatalog",
         "validAttributes": [ 4092, 4093 ],
-        "catalogueEntries":
+        "catalogEntries":
         [
             {
                 "key": 0,
@@ -421,7 +421,7 @@ To create a new catalog, the catalog object must be transmitted in the request's
 
 {% capture jsonrequest %}
 {% highlight http %}
-POST /dataServiceRest/catalogues HTTP/1.1
+POST /dataServiceRest/catalogs HTTP/1.1
 {% endhighlight %}
 
 {% highlight json %}
@@ -430,7 +430,7 @@ POST /dataServiceRest/catalogues HTTP/1.1
            "uuid": "8c376bee-ffe3-4ee4-abb9-a55b492e69ad",
            "name": "InspectorCatalog",
            "validAttributes": [ 4092, 4093 ],
-           "catalogueEntries":
+           "catalogEntries":
            [
                {
                    "key": 0,
@@ -465,13 +465,13 @@ HTTP/1.1 201 Created
 {% assign linkId="catalogEndpointCreateEntries" %}
 {% assign method="POST" %}
 {% assign endpoint="/catalogs/:catalogUuid" %}
-{% assign summary=" Creates entries for the catalog specified by the :catalogueUuid" %}
+{% assign summary=" Creates entries for the catalog specified by the :catalogUuid" %}
 {% assign description="To add new entries to an existing catalog, you must specify all new entries in the request body. Each new entry must contain a unique key. Each entry attribute must be listed as a valid attribute in the catalog definition." %}
 {% assign exampleCaption="Adding a catalog entry - add the inspector ‘Clarks’" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
-POST /dataServiceRest/catalogues/8c376bee-ffe3-4ee4-abb9-a55b492e69ad/entries
+POST /dataServiceRest/catalogs/8c376bee-ffe3-4ee4-abb9-a55b492e69ad/entries
 {% endhighlight %}
 
 {% highlight json %}
@@ -511,7 +511,7 @@ To update a catalog, the whole object, excluding the valid attributes, needs to 
 
 {% capture jsonrequest %}
 {% highlight http %}
-PUT /dataServiceRest/catalogues HTTP/1.1
+PUT /dataServiceRest/catalogs HTTP/1.1
 {% endhighlight %}
 
 {% highlight json %}
@@ -519,7 +519,7 @@ PUT /dataServiceRest/catalogues HTTP/1.1
   {
            "uuid": "8c376bee-ffe3-4ee4-abb9-a55b492e69ad",
            "name": "Inspectors",
-           "catalogueEntries":
+           "catalogEntries":
            [
                {
                    "key": 0,
@@ -570,7 +570,7 @@ There are two different options for deleting catalogs:
 
 {% capture jsonrequest %}
 {% highlight http %}
-DELETE /dataServiceRest/catalogues?catalogUuids={8c376bee-ffe3-4ee4-abb9-a55b492e69ad} HTTP/1.1
+DELETE /dataServiceRest/catalogs?catalogUuids={8c376bee-ffe3-4ee4-abb9-a55b492e69ad} HTTP/1.1
 {% endhighlight %}
 {% endcapture %}
 
@@ -586,7 +586,7 @@ HTTP/1.1 200 Ok
 {% assign linkId="catalogEndpointDeleteEntries" %}
 {% assign method="DELETE" %}
 {% assign endpoint="/catalogs/:catalogUuid" %}
-{% assign summary="Deletes entries for the catalog specified by the :catalogueUuid" %}
+{% assign summary="Deletes entries for the catalog specified by the :catalogUuid" %}
 {% capture description %}
 There are two different options for deleting catalog entries:
 
@@ -598,7 +598,7 @@ There are two different options for deleting catalog entries:
 
 {% capture jsonrequest %}
 {% highlight http %}
-DELETE /dataServiceRest/catalogues/8c376bee-ffe3-4ee4-abb9-a55b492e69ad?entryIds={1,3} HTTP/1.1
+DELETE /dataServiceRest/catalogs/8c376bee-ffe3-4ee4-abb9-a55b492e69ad?entryIds={1,3} HTTP/1.1
 {% endhighlight %}
 {% endcapture %}
 
