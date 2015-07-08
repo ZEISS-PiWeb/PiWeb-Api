@@ -118,4 +118,4 @@ http://your-piweb-server/dataServiceRest/measurements?limitResult=10
 #### Learn more
 
 * Read the [API documentation guide](http://zeiss-piweb.github.io/PiWeb-Api)
-* Get the [C# sample project](https://github.com/ZEISS-PiWeb/PiWeb-Api/tree/master/SDK/Samples)
+* Get the [C# sample project](https://github.com/ZEISS-PiWeb/PiWeb-Api/tree/master/SDK/Demo_Application)
