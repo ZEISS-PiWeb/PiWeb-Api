@@ -683,8 +683,7 @@ GET /dataServiceRest/parts?partPath=/metal%20part&depth=0&requestedPartAttribute
         "attributes": { "1001": "4466", "1003": "mp" },
         "uuid": "05040c4c-f0af-46b8-810e-30c0c00a379e",
         "version": 0,
-        "timestamp": "2012-11-19T10:48:32.887Z",
-        "current": true
+        "timestamp": "2012-11-19T10:48:32.887Z"
     }
 ]
 
@@ -730,8 +729,7 @@ GET /dataServiceRest/parts/05040c4c-f0af-46b8-810e-30c0c00a379e HTTP/1.1
         "attributes": {},
         "uuid": "05040c4c-f0af-46b8-810e-30c0c00a379e",
         "version": 0,
-        "timestamp": "2012-11-19T10:48:32.887Z",
-        "current": true
+        "timestamp": "2012-11-19T10:48:32.887Z"
     }
 ]
 
@@ -925,32 +923,28 @@ GET /dataServiceRest/characteristics?partPath=/metal%20part&depth=2 HTTP/1.1
         "attributes": { ... },
         "uuid": "27e23a7c-dbe7-4863-8461-6abf7b03ddd7",
         "version": 0,
-        "timestamp": "2012-11-19T10:48:32.887Z",
-        "current": true
+        "timestamp": "2012-11-19T10:48:32.887Z"
     },
    {
         "path": "PCC:/metal part/deviation_3/.X/",
         "attributes": { ... },
         "uuid": "51c8568a-9410-465a-a8ed-33063db41dac",
         "version": 0,
-        "timestamp": "2015-03-24T08:17:28.03Z",
-        "current": true
+        "timestamp": "2015-03-24T08:17:28.03Z"
     },
     {
         "path": "PCC:/metal part/deviation_3/.Y/",
         "attributes": { ... },
         "uuid": "b7a30736-6e89-4dd5-9bc0-e6cb9eb5e2da",
         "version": 0,
-        "timestamp": "2015-03-24T08:17:34.61Z",
-        "current": true
+        "timestamp": "2015-03-24T08:17:34.61Z"
     },
     {
         "path": "PCC:/metal part/deviation_3/.Z/",
         "attributes": { ... },
         "uuid": "1175919c-5c59-487e-a0fb-deac04510046",
         "version": 0,
-        "timestamp": "2015-03-24T08:17:38.423Z",
-        "current": true
+        "timestamp": "2015-03-24T08:17:38.423Z"
     }
 ]
 
@@ -993,8 +987,7 @@ GET /dataServiceRest/characteristics/27e23a7c-dbe7-4863-8461-6abf7b03ddd7 HTTP/1
         "attributes": { ... },
         "uuid": "27e23a7c-dbe7-4863-8461-6abf7b03ddd7",
         "version": 0,
-        "timestamp": "2012-11-19T10:48:32.887Z",
-        "current": true
+        "timestamp": "2012-11-19T10:48:32.887Z"
     }
 ]
 
@@ -1158,7 +1151,6 @@ Property                                          | Description
 <nobr><code>Attribute</code> attributes</nobr>    | A set of attributes which describe the entity
 <nobr><code>string</code> comment</nobr>          | A comment which describes the last inspection plan change
 <nobr><code>int</code> version</nobr>             | Contains the entity´s revision number. The revision number starts with `0` and is incremented by `1` each time changes are applied to the inspection plan. The version is only returned in case versioning is enabled in the server settings.
-<nobr><code>bool</code> current</nobr>            | Indicates whether the entity is the most recent version
 <nobr><code>dateTime</code> timeStamp</nobr>      | Contains the date and time of when the entity was last updated
 <nobr><code>dateTime</code> charChangeDate</nobr> | *(Parts only)* The timestamp for the most recent characteristic change on any characteristic that belongs to this part
 {% endcapture %}
