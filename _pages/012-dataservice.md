@@ -955,7 +955,7 @@ GET /dataServiceRest/characteristics?partPath=/metal%20part&depth=2 HTTP/1.1
 {% assign linkId="inspectionPlanEndpointGetChar" %}
 {% assign method="GET" %}
 {% assign endpoint="/characteristics/:charUuid" %}
-{% assign summary="Fetches a certain characteristics by its :charUuid" %}
+{% assign summary="Fetches a certain characteristic by its :charUuid" %}
 {% capture description %}
 The result of fetching a certain characteristic by its :charUuid can be restricted by the following uri parameters:
 
