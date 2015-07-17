@@ -8,12 +8,6 @@
 
 namespace DataService
 {
-	#region using
-
-	using System;
-	
-	#endregion
-
 	/// <summary>
 	/// This element extends the entity Characteristic with an optional version history of old values.
 	/// </summary>

@@ -119,14 +119,14 @@ namespace Common.Data
 		}
 
 		/// <summary>
-		/// Returns the attribute's value of the attribute with the key <paramref name="key"/> If the attribute consists of a catalogue entry the entry
+		/// Returns the attribute's value of the attribute with the key <paramref name="key"/> If the attribute consists of a catalog entry the entry
 		/// is returned, otherwise the attribute's value (string, int, double or DateTime) is returned.
 		/// </summary>
 		public static object GetRawAttributeValue(
 			this IAttributeItem item,
 			ushort key,
 			Configuration configuration,
-			CatalogCollection catalogues )
+			CatalogCollection catalogs )
 		{
 			var value = item.GetAttribute( key );
 			if( value == null )
@@ -135,7 +135,7 @@ namespace Common.Data
 			if( value.RawValue != null )
 				return value.RawValue;
 
-			return configuration.ParseValue( key, value.Value, catalogues );
+			return configuration.ParseValue( key, value.Value, catalogs );
 		}
 
 		/// <summary>

@@ -8,12 +8,6 @@
 
 namespace DataService
 {
-	#region using
-	
-	using System;
-
-	#endregion
-
 	/// <summary>
 	/// The entities which are allowed in InspectionPlanSearch  are defined in this element.
 	/// </summary>

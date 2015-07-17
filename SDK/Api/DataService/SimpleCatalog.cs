@@ -17,9 +17,9 @@ namespace DataService
 	/// <summary>
 	/// This element describes the entity Catalog without any relations to other entites.
 	/// The entity Catalog has an unique identifier, which is used as primary key, and a name,
-	/// which is used by an user to distinguish between different Catalogues.
+	/// which is used by an user to distinguish between different Catalogs.
 	/// </summary>
-	public class SimpleCatalog 
+	public class SimpleCatalog
 	{
 		#region constructor
 
@@ -40,9 +40,9 @@ namespace DataService
 		/// </summary>
 		public Guid Uuid { get; set; }
 
-        /// <summary>
-        /// Gets or sets the name of the catalog.
-        /// </summary>
+		/// <summary>
+		/// Gets or sets the name of the catalog.
+		/// </summary>
 		public string Name { get; set; }
 
 		#endregion

@@ -1,0 +1,17 @@
+C:\GitSource\PiWeb-Api\SDK\Api\bin\Release\PiWeb.Api.dll
+C:\GitSource\PiWeb-Api\SDK\Api\bin\Release\PiWeb.Api.pdb
+C:\GitSource\PiWeb-Api\SDK\Api\bin\Release\de\PiWeb.Api.resources.dll
+C:\GitSource\PiWeb-Api\SDK\Api\bin\Release\Newtonsoft.Json.dll
+C:\GitSource\PiWeb-Api\SDK\Api\obj\Release\Api.csprojResolveAssemblyReference.cache
+C:\GitSource\PiWeb-Api\SDK\Api\obj\Release\Common.Data.SearchConditionParser.resources
+C:\GitSource\PiWeb-Api\SDK\Api\obj\Release\DataService.AttributeType.resources
+C:\GitSource\PiWeb-Api\SDK\Api\obj\Release\DataService.Entity.resources
+C:\GitSource\PiWeb-Api\SDK\Api\obj\Release\DataService.Operation.resources
+C:\GitSource\PiWeb-Api\SDK\Api\obj\Release\Common.Data.SearchConditionParser.de.resources
+C:\GitSource\PiWeb-Api\SDK\Api\obj\Release\DataService.AttributeType.de.resources
+C:\GitSource\PiWeb-Api\SDK\Api\obj\Release\DataService.Entity.de.resources
+C:\GitSource\PiWeb-Api\SDK\Api\obj\Release\DataService.Operation.de.resources
+C:\GitSource\PiWeb-Api\SDK\Api\obj\Release\Api.csproj.GenerateResource.Cache
+C:\GitSource\PiWeb-Api\SDK\Api\obj\Release\de\PiWeb.Api.resources.dll
+C:\GitSource\PiWeb-Api\SDK\Api\obj\Release\PiWeb.Api.dll
+C:\GitSource\PiWeb-Api\SDK\Api\obj\Release\PiWeb.Api.pdb

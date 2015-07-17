@@ -8,12 +8,6 @@
 
 namespace DataService
 {
-	#region using
-
-	using System;
-
-	#endregion
-
 	/// <summary>
 	/// Each measurement includes characteristic entities, which include the measured data.
 	/// </summary>

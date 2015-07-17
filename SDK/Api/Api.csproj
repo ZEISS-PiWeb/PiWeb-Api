@@ -69,8 +69,8 @@
     <Compile Include="Common\Data\ClientIdHelper.cs" />
     <Compile Include="Common\Data\Converter\AttributeConverter.cs" />
     <Compile Include="Common\Data\Converter\AttributeDefinitionConverter.cs" />
-    <Compile Include="Common\Data\Converter\CatalogueConverter.cs" />
-    <Compile Include="Common\Data\Converter\CatalogueEntryConverter.cs" />
+    <Compile Include="Common\Data\Converter\CatalogConverter.cs" />
+    <Compile Include="Common\Data\Converter\CatalogEntryConverter.cs" />
     <Compile Include="Common\Data\Converter\ConfigurationConverter.cs" />
     <Compile Include="Common\Data\Converter\DataCharacteristicConverter.cs" />
     <Compile Include="Common\Data\Converter\PathInformationConverter.cs" />
@@ -111,7 +111,6 @@
     <Compile Include="DataService\PathElement.cs" />
     <Compile Include="DataService\PathInformation.cs" />
     <Compile Include="DataService\DataServiceRestClient.cs" />
-    <Compile Include="DataService\InspectionPlanFilterAttributes.cs" />
     <Compile Include="DataService\MeasurementFilterAttributes.cs" />
     <Compile Include="DataService\MeasurementStatistics.cs" />
     <Compile Include="DataService\MeasurementValueFilterAttributes.cs" />

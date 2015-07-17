@@ -10,7 +10,6 @@ namespace DataService
 {
 	#region using
 
-	using System;
 	using System.Collections.Generic;
 
 	using Newtonsoft.Json;
@@ -18,11 +17,11 @@ namespace DataService
 	#endregion
 
 	/// <summary>
-	/// This element (in combination with its base element) describes the entity Catalogue with its relation to zero or more catalogue entries.
+	/// This element (in combination with its base element) describes the entity Catalog with its relation to zero or more catalog entries.
 	/// When received from the DataService as a result of <code>CatalogueSearch</code>, the element 
-	/// <code>validAttributes</code> contains a list of attribute keys, that are valid for the respective catalogue.
+	/// <code>validAttributes</code> contains a list of attribute keys, that are valid for the respective catalog.
 	/// </summary>
-	[JsonConverter( typeof( Common.Data.Converter.CatalogueConverter ) )]
+	[JsonConverter( typeof( Common.Data.Converter.CatalogConverter ) )]
 	public class Catalog : SimpleCatalog
 	{
 		#region members

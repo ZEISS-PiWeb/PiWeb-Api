@@ -242,11 +242,13 @@ namespace DataService
 
 		/// <summary>
 		/// Fetches a list of parts below <paramref name="partPath"/>. The result list always contains the specified parent part too. If the parent part
-		/// is <code>null</code>, a server wide search is performed. The search can be restricted using the specified <paramref name="filter"/>. If the
-		/// <see cref="InspectionPlanFilterAttributes.Depth"/> is <code>0</code>, only the specified part will be returned.
+		/// is <code>null</code>, a server wide search is performed. If the <see paramref="depth"/> is <code>0</code>, only the specified part will be returned.
 		/// </summary>
 		/// <param name="partPath">The parent part to fetch the children for.</param> 
-		/// <param name="filter">A filter that can be used to further restrict the search operation.</param>
+		/// <param name="withHistory">Determines whether to return the version history for each part.</param>
+		/// <param name="depth">The depth for the inspection plan search.</param>
+		/// <param name="partUuids">The list of part uuids to restrict the search to.</param>
+		/// <param name="requestedPartAttributes">The attribute selector to determine which attributes to return.</param>
 		/// <param name="streamed">
 		/// This controls whether to choose a streamed transfer mode or not. Using streamed mode has the side effect, that the result is transfered 
 		/// using http/s when the caller enumerates the result. The caller should be aware of because then enumerating might take longer than expected.
@@ -255,18 +257,27 @@ namespace DataService
 		/// result is processed in blocks on non UI code or when not the complete result set is used.
 		/// </param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public async Task<IEnumerable<InspectionPlanPart>> GetParts( PathInformation partPath = null, InspectionPlanFilterAttributes filter = null, bool streamed = false, CancellationToken cancellationToken = default(CancellationToken) )
+		public async Task<IEnumerable<InspectionPlanPart>> GetParts( PathInformation partPath = null, Guid[] partUuids = null, ushort? depth = null, AttributeSelector requestedPartAttributes = null, bool withHistory = false, bool streamed = false, CancellationToken cancellationToken = default(CancellationToken) )
 		{
-			var parameter = new List<ParameterDefinition>();
-			parameter.AddRange( ( filter ?? InspectionPlanFilterAttributes.DefaultForParts ).ToParameterDefinition() );
-
-			if( partPath != null )
-				parameter.Add( ParameterDefinition.Create( "partPath", PathHelper.PathInformation2String( partPath ) ) );
+			var parameter = RestClientHelper.ParseToParameter( partPath, partUuids, depth, requestedPartAttributes, withHistory: withHistory );
 
 			if( streamed )
 				return await GetEnumerated<InspectionPlanPart>( "parts", cancellationToken, parameter.ToArray() ).ConfigureAwait( false );
 
 			return await Get<InspectionPlanPart[]>( "parts", cancellationToken, parameter.ToArray() ).ConfigureAwait( false );
+		}
+
+		/// <summary>
+		/// Fetches a single part by its uuid.
+		/// </summary>
+		/// <param name="partUuid">The part's uuid</param>
+		/// <param name="withHistory">Determines whether to return the version history for the part.</param>
+		/// <param name="requestedPartAttributes">The attribute selector to determine which attributes to return.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+		public async Task<InspectionPlanPart> GetPartByUuid( Guid partUuid, AttributeSelector requestedPartAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default(CancellationToken) )
+		{
+			var parameter = RestClientHelper.ParseToParameter( requestedPartAttributes: requestedPartAttributes, withHistory: withHistory );
+			return await Get<InspectionPlanPart>( String.Format( "parts/{0}", partUuid ), cancellationToken, parameter.ToArray() ).ConfigureAwait( false );
 		}
 
 		/// <summary>
@@ -329,11 +340,14 @@ namespace DataService
 
 		/// <summary>
 		/// Fetches a list of characteristics below <paramref name="partPath"/>. If the parent part is <code>null</code> the characteristics below
-		/// the root part will be returned. The search can be restricted using the specified <paramref name="filter"/>. If the
-		/// <see cref="InspectionPlanFilterAttributes.Depth"/> is <code>0</code>, only the specified part will be returned.
+		/// the root part will be returned. The search can be restricted using the various filter parameters. If the <see paramref="depth"/> is 
+		/// <code>0</code>, only the specified part will be returned.
 		/// </summary>
 		/// <param name="partPath">The parent part to fetch the children for.</param> 
-		/// <param name="filter">A filter that can be used to further restrict the search operation.</param>
+		/// <param name="withHistory">Determines whether to return the version history for each characteristic.</param>
+		/// <param name="depth">The depth for the inspection plan search.</param>
+		/// <param name="partUuids">The list of part uuids to restrict the search to.</param>
+		/// <param name="requestedCharacteristicAttributes">The attribute selector to determine which attributes to return.</param>
 		/// <param name="streamed">
 		/// This controls whether to choose a streamed transfer mode or not. Using streamed mode has the side effect, that the result is transfered 
 		/// using http/s when the caller enumerates the result. The caller should be aware of because then enumerating might take longer than expected.
@@ -342,18 +356,27 @@ namespace DataService
 		/// result is processed in blocks on non UI code or when not the complete result set is used.
 		/// </param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public async Task<IEnumerable<InspectionPlanCharacteristic>> GetCharacteristics( PathInformation partPath = null, InspectionPlanFilterAttributes filter = null, bool streamed = false, CancellationToken cancellationToken = default(CancellationToken) )
+		public async Task<IEnumerable<InspectionPlanCharacteristic>> GetCharacteristics( PathInformation partPath = null, Guid[] partUuids = null, ushort? depth = null, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false, bool streamed = false, CancellationToken cancellationToken = default(CancellationToken) )
 		{
-			var parameter = new List<ParameterDefinition>();
-			parameter.AddRange( ( filter ?? InspectionPlanFilterAttributes.DefaultForCharacteristics ).ToParameterDefinition() );
-
-			if( partPath != null )
-				parameter.Add( ParameterDefinition.Create( "partPath", PathHelper.PathInformation2String( partPath ) ) );
+			var parameter = RestClientHelper.ParseToParameter( partPath, partUuids, depth, requestedCharacteristicAttributes, withHistory: withHistory );
 
 			if( streamed )
 				return await GetEnumerated<InspectionPlanCharacteristic>( "characteristics", cancellationToken, parameter.ToArray() ).ConfigureAwait( false );
 
 			return await Get<InspectionPlanCharacteristic[]>( "characteristics", cancellationToken, parameter.ToArray() ).ConfigureAwait( false );
+		}
+
+		/// <summary>
+		/// Fetches a single characteristic by its uuid.
+		/// </summary>
+		/// <param name="charUuid">The characteristic's uuid</param>
+		/// <param name="withHistory">Determines whether to return the version history for the characteristic.</param>
+		/// <param name="requestedCharacteristicAttributes">The attribute selector to determine which attributes to return.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+		public async Task<InspectionPlanCharacteristic> GetCharacteristicByUuid( Guid charUuid, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default(CancellationToken) )
+		{
+			var parameter = RestClientHelper.ParseToParameter( requestedCharacteristicAttributes: requestedCharacteristicAttributes, withHistory: withHistory );
+			return await Get<InspectionPlanCharacteristic>( string.Format( "characteristics/{0}", charUuid ), cancellationToken, parameter.ToArray() ).ConfigureAwait( false );
 		}
 
 		/// <summary>

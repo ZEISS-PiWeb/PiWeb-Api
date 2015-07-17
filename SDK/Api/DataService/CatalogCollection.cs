@@ -27,7 +27,7 @@ namespace DataService
 	{
 		#region members
 
-		private readonly Dictionary<Guid, Catalog> _Catalogues = new Dictionary<Guid, Catalog>();
+		private readonly Dictionary<Guid, Catalog> _Catalogs = new Dictionary<Guid, Catalog>();
 
 		#endregion
 
@@ -42,11 +42,11 @@ namespace DataService
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		public CatalogCollection( IEnumerable<Catalog> catalogues )
+		public CatalogCollection( IEnumerable<Catalog> catalogs )
 		{
-			foreach( var cat in catalogues ?? new Catalog[0] )
+			foreach( var cat in catalogs ?? new Catalog[0] )
 			{
-				_Catalogues.Add( cat.Uuid, cat );
+				_Catalogs.Add( cat.Uuid, cat );
 			}
 		}
 
@@ -59,7 +59,7 @@ namespace DataService
 		/// </summary>
 		public int Count
 		{
-			get { return _Catalogues.Count; }
+			get { return _Catalogs.Count; }
 		}
 
 		/// <summary>
@@ -70,7 +70,7 @@ namespace DataService
 			get
 			{
 				Catalog result;
-				_Catalogues.TryGetValue( catalogUuid, out result );
+				_Catalogs.TryGetValue( catalogUuid, out result );
 
 				return result;
 			}
@@ -114,7 +114,7 @@ namespace DataService
 		/// </summary>
 		public IEnumerator<Catalog> GetEnumerator()
 		{
-			return _Catalogues.Values.GetEnumerator();
+			return _Catalogs.Values.GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()

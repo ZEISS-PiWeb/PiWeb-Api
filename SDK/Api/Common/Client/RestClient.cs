@@ -340,15 +340,15 @@ namespace Common.Client
 
 			if( parameterDefinitions != null )
 			{
-			var queryString = new StringBuilder();
-			foreach( var parameterDefinition in parameterDefinitions )
-			{
-				if( queryString.Length > 0 )
-					queryString.Append( "&" );
+				var queryString = new StringBuilder();
+				foreach( var parameterDefinition in parameterDefinitions )
+				{
+					if( queryString.Length > 0 )
+						queryString.Append( "&" );
 
-				queryString.Append( parameterDefinition.Name ).Append( "=" ).Append( Uri.EscapeDataString( parameterDefinition.Value ) );
-			}
-			uriBuilder.Query = queryString.ToString();
+					queryString.Append( parameterDefinition.Name ).Append( "=" ).Append( Uri.EscapeDataString( parameterDefinition.Value ) );
+				}
+				uriBuilder.Query = queryString.ToString();
 			}
 			var request = new HttpRequestMessage( method, uriBuilder.Uri );
 			request.Headers.AcceptLanguage.Add( new StringWithQualityHeaderValue( CultureInfo.CurrentUICulture.IetfLanguageTag, 1.0 ) );

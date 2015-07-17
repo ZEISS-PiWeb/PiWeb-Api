@@ -203,6 +203,45 @@ namespace Common.Data
 			/// <summary>Layer</summary>
 			public const ushort Layer = 2555;
 
+			#region Stamps
+
+			/// <summary>
+			/// Stamp text
+			/// </summary>
+			public const ushort StampCaption = 3108;
+
+			/// <summary>
+			/// Determines whether this characteristic has a stamp (1) or not (0).
+			/// </summary>
+			public const ushort Stamp = 3109;
+
+			/// <summary>
+			/// Stamp position, x coordinate relative to bitmap
+			/// </summary>
+			public const ushort StampPositionX = 3110;
+
+			/// <summary>
+			/// Stamp position, y coordinate relative to bitmap
+			/// </summary>
+			public const ushort StampPositionY = 3111;
+
+			/// <summary>
+			/// Stamp target, x coordinate relative to bitmap
+			/// </summary>
+			public const ushort StampTargetX = 3112;
+
+			/// <summary>
+			/// Stamp target, y coordinate relative to bitmap
+			/// </summary>
+			public const ushort StampTargetY = 3113;
+
+			/// <summary>
+			/// Stamp radius relative to the bitmap width
+			/// </summary>
+			public const ushort StampRadius = 3114;
+
+			#endregion
+
 			#region AUDI-specific
 
 			/// <summary>AUDI: Kategorie (Analysemaﬂ; Bemusterungsmaﬂ; Netzmaﬂ; ...)</summary>
@@ -242,7 +281,7 @@ namespace Common.Data
 			public const ushort CharacteristicType = 12004;
 
 			/// <summary>Messwertkatalog zur Auswertung attributiver Merkmale</summary>
-			public const ushort MeasurementValueCatalogue = 12005;
+			public const ushort MeasurementValueCatalog = 12005;
 
 			/// <summary>Messgroesse (fuer Formplot)</summary>
 			public const ushort PlotMeasurand = 12009;
@@ -389,10 +428,10 @@ namespace Common.Data
 
 		#endregion
 
-		#region Catalogue
+		#region Catalog
 
 		/// <summary>Well known keys for accessing value attributes.</summary>
-		public static class Catalogue
+		public static class Catalog
 		{
 			#region Daimler specific
 
@@ -417,10 +456,10 @@ namespace Common.Data
 			public const ushort LowerClassLimitKey = 2135;
 
 			/// <summary>Upper class limit</summary>
-            public const ushort UpperClassLimitKey = 2136;
+			public const ushort UpperClassLimitKey = 2136;
 
 			/// <summary>Measured quantity</summary>
-            public static ushort MeasuredQuantityKey = 13267;
+			public static ushort MeasuredQuantityKey = 13267;
 		}
 
 		#endregion

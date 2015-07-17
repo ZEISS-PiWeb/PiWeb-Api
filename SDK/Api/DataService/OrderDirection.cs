@@ -8,12 +8,6 @@
 
 namespace DataService
 {
-	#region using
-
-	using System;
-
-	#endregion
-
 	/// <summary>
 	/// This element specifies the direction of an order operation.
 	/// </summary>

@@ -17,6 +17,7 @@ namespace Common.Data
 	using System.IO;
 	using System.Net;
 	using System.Text;
+	using Common.Client;
 	using Converter;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Converters;
@@ -32,7 +33,7 @@ namespace Common.Data
 	/// <summary>
 	/// Helper class for REST webservice calls.
 	/// </summary>
-	[System.Diagnostics.DebuggerStepThrough]
+	//[System.Diagnostics.DebuggerStepThrough]
 	public static class RestClientHelper
 	{
 		#region constants
@@ -58,10 +59,10 @@ namespace Common.Data
 			{
 				var reader = new JsonTextReader( new StreamReader( stream, Encoding.UTF8, true, 1, true ) ) {CloseInput = false};
 				if( reader.Read() && reader.TokenType == JsonToken.StartObject )
-								{
-				// "status" überlesen
+				{
+					// "status" überlesen
 					if( reader.Read() && Convert.ToString( reader.Value ) == "status" )
-								reader.Skip();
+						reader.Skip();
 
 					// "category" überlesen
 					if( reader.Read() && Convert.ToString( reader.Value ) == "category" )
@@ -69,10 +70,10 @@ namespace Common.Data
 
 					if( reader.Read() && Convert.ToString( reader.Value ) == "data" )
 					{
-								reader.Read();
-								return reader;
-						}
+						reader.Read();
+						return reader;
 					}
+				}
 				stream.Seek( 0, SeekOrigin.Begin );
 			}
 			return new JsonTextReader( new StreamReader( stream, Encoding.UTF8, true, 1, true ) ) {CloseInput = false};
@@ -110,6 +111,40 @@ namespace Common.Data
 			}
 		}
 
+		/// <summary>
+		/// Parses inspection plan filter criterias to a <see cref="ParameterDefinition"/> list.
+		/// </summary>
+		/// <param name="partPath">Path of the part the query should be restricted by.</param>
+		/// <param name="partUuids">Uuids of the parts the query should be restricted by.</param>
+		/// <param name="depth">The depth determines how deep the response should be.</param>
+		/// <param name="requestedPartAttributes">Restricts the part attributes that are returned.</param>
+		/// <param name="requestedCharacteristicAttributes">Restricts the characteristic attributes that are returned.</param>
+		/// <param name="withHistory">Determines if the history should be returned.</param>
+		/// <returns></returns>
+		public static List<ParameterDefinition> ParseToParameter( PathInformation partPath = null, Guid[] partUuids = null, ushort? depth = null, AttributeSelector requestedPartAttributes = null, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false )
+		{
+			var parameter = new List<ParameterDefinition>();
+			if( partPath != null )
+				parameter.Add( ParameterDefinition.Create( "partPath", PathHelper.PathInformation2String( partPath ) ) );
+
+			if( depth.HasValue )
+				parameter.Add( ParameterDefinition.Create( "depth", depth.ToString() ) );
+
+			if( withHistory )
+				parameter.Add( ParameterDefinition.Create( "withHistory", true.ToString() ) );
+
+			if( partUuids != null && partUuids.Length > 0 )
+				parameter.Add( ParameterDefinition.Create( "partUuids", ConvertGuidListToString( partUuids ) ) );
+
+			if( requestedPartAttributes != null && requestedPartAttributes.AllAttributes != AllAttributeSelection.True && requestedPartAttributes.Attributes != null )
+				parameter.Add( ParameterDefinition.Create( "requestedPartAttributes", ConvertUInt16ListToString( requestedPartAttributes.Attributes ) ) );
+
+			if( requestedCharacteristicAttributes != null && requestedCharacteristicAttributes.AllAttributes != AllAttributeSelection.True && requestedCharacteristicAttributes.Attributes != null )
+				parameter.Add( ParameterDefinition.Create( "requestedCharacteristicAttributes", ConvertUInt16ListToString( requestedCharacteristicAttributes.Attributes ) ) );
+
+			return parameter;
+		}
+		
 		/// <summary>
 		/// Parses a string to a list of ushorts.
 		/// </summary>
@@ -188,8 +223,8 @@ namespace Common.Data
 			serializer.Converters.Add( new StringEnumConverter() );
 			serializer.Converters.Add( new AttributeConverter() );
 			serializer.Converters.Add( new AttributeDefinitionConverter() );
-			serializer.Converters.Add( new CatalogueConverter() );
-			serializer.Converters.Add( new CatalogueEntryConverter() );
+			serializer.Converters.Add( new CatalogConverter() );
+			serializer.Converters.Add( new CatalogEntryConverter() );
 			serializer.Converters.Add( new ConfigurationConverter() );
 			serializer.Converters.Add( new DataCharacteristicConverter() );
 			serializer.Converters.Add( new PathInformationConverter() );

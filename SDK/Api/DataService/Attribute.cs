@@ -12,7 +12,7 @@ namespace DataService
 
 	using System;
 	using System.Xml;
-
+	
 	#endregion
 
 	/// <summary>
@@ -89,7 +89,7 @@ namespace DataService
 						return ( (double)RawValue ).ToString( "G17", System.Globalization.CultureInfo.InvariantCulture );
 					if( RawValue is DateTime )
 						return XmlConvert.ToString( (DateTime)RawValue, XmlDateTimeSerializationMode.RoundtripKind );
-				if( RawValue is CatalogEntry )
+					if( RawValue is CatalogEntry )
 						return ( ( CatalogEntry ) RawValue ).Key.ToString();
 					return Convert.ToString( RawValue, System.Globalization.CultureInfo.InvariantCulture );
 				}

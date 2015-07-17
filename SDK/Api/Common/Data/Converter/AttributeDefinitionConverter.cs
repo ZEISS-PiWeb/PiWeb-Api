@@ -43,7 +43,7 @@ namespace Common.Data.Converter
 			var description = default( string );
 			var attributeDefinitionType = default( string );
 			var type = default( AttributeType );
-			var catalogueUuid = default( Guid );
+			var catalogUuid = default( Guid );
 
 			while( reader.Read() && reader.TokenType == Newtonsoft.Json.JsonToken.PropertyName )
 			{
@@ -64,8 +64,8 @@ namespace Common.Data.Converter
 					case "type":
 						type = (AttributeType)Enum.Parse( typeof( AttributeType ), reader.ReadAsString() );
 						break;
-					case "catalogue":
-						catalogueUuid = Guid.Parse( reader.ReadAsString() );
+					case "catalog":
+						catalogUuid = Guid.Parse( reader.ReadAsString() );
 						break;
 					case "definitionType":
 						attributeDefinitionType = reader.ReadAsString();
@@ -76,8 +76,8 @@ namespace Common.Data.Converter
 			if( attributeDefinitionType == "AttributeDefinition" )
 				return new AttributeDefinition { Description = description, Key = key, Length = length, QueryEfficient = queryEfficient, Type = type };
 	
-			if( attributeDefinitionType == "CatalogueAttributeDefinition" )
-				return new CatalogAttributeDefinition { Description = description, Key = key, QueryEfficient = queryEfficient, Catalog = catalogueUuid };
+			if( attributeDefinitionType == "CatalogAttributeDefinition" )
+				return new CatalogAttributeDefinition { Description = description, Key = key, QueryEfficient = queryEfficient, Catalog = catalogUuid };
 
 			return null;
 		}
@@ -99,7 +99,7 @@ namespace Common.Data.Converter
 				var attributeDef = definition as AttributeDefinition;
 				if( attributeDef != null )
 				{
-					if( attributeDef.Length != 0 )
+					if( attributeDef.Length > 0 )
 					{
 						writer.WritePropertyName( "length" );
 						writer.WriteValue( attributeDef.Length );
@@ -113,10 +113,10 @@ namespace Common.Data.Converter
 				var catalogDef = definition as CatalogAttributeDefinition;
 				if( catalogDef != null )
 				{
-					writer.WritePropertyName( "catalogue" );
+					writer.WritePropertyName( "catalog" );
 					writer.WriteValue( catalogDef.Catalog );
 					writer.WritePropertyName( "definitionType" );
-					writer.WriteValue( "CatalogueAttributeDefinition" );
+					writer.WriteValue( "CatalogAttributeDefinition" );
 				}
 
 				writer.WriteEndObject();

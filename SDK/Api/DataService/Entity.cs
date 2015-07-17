@@ -32,6 +32,6 @@ namespace DataService
 		Measurement,
 
 		/// <summary>Catalog</summary>
-		Catalogue
+		Catalog
 	}
 }

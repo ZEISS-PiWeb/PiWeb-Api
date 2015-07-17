@@ -15,7 +15,7 @@ namespace DataService
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Xml;
-
+	
 	using Newtonsoft.Json;
 
 	#endregion
@@ -41,13 +41,13 @@ namespace DataService
 		private AbstractAttributeDefinition[] _CharacteristicAttributes = new AbstractAttributeDefinition[ 0 ];
 		private AbstractAttributeDefinition[] _MeasurementAttributes = new AbstractAttributeDefinition[ 0 ];
 		private AbstractAttributeDefinition[] _ValueAttributes = new AbstractAttributeDefinition[ 0 ];
-		private AttributeDefinition[] _CatalogueAttributes = new AttributeDefinition[ 0 ];
+		private AttributeDefinition[] _CatalogAttributes = new AttributeDefinition[ 0 ];
 
 		private Dictionary<ushort, AbstractAttributeDefinition> _PartAttributesDict;
 		private Dictionary<ushort, AbstractAttributeDefinition> _CharacteristicAttributesDict;
 		private Dictionary<ushort, AbstractAttributeDefinition> _MeasurementAttributesDict;
 		private Dictionary<ushort, AbstractAttributeDefinition> _ValueAttributesDict;
-		private Dictionary<ushort, AbstractAttributeDefinition> _CatalogueAttributesDict;
+		private Dictionary<ushort, AbstractAttributeDefinition> _CatalogAttributesDict;
 		private Dictionary<ushort, AbstractAttributeDefinition> _AllAttributesDict;
 
 		private Dictionary<ushort, AbstractAttributeDefinition> PartAttributesDict
@@ -90,13 +90,13 @@ namespace DataService
 			}
 		}
 
-		private Dictionary<ushort, AbstractAttributeDefinition> CatalogueAttributesDict
+		private Dictionary<ushort, AbstractAttributeDefinition> CatalogAttributesDict
 		{
 			get
 			{
-				if( _CatalogueAttributesDict == null )
-					FillTable( _CatalogueAttributes, ref _CatalogueAttributesDict );
-				return _CatalogueAttributesDict;
+				if( _CatalogAttributesDict == null )
+					FillTable( _CatalogAttributes, ref _CatalogAttributesDict );
+				return _CatalogAttributesDict;
 			}
 		}
 
@@ -111,7 +111,7 @@ namespace DataService
 					FillTable( _CharacteristicAttributes, ref _AllAttributesDict );
 					FillTable( _MeasurementAttributes, ref  _AllAttributesDict );
 					FillTable( _ValueAttributes, ref _AllAttributesDict );
-					FillTable( _CatalogueAttributes, ref  _AllAttributesDict );
+					FillTable( _CatalogAttributes, ref  _AllAttributesDict );
 				}
 				return _AllAttributesDict;
 			}
@@ -193,15 +193,15 @@ namespace DataService
 		/// <summary>
 		/// Gets or sets a list of all catalog attribute definitions.
 		/// </summary>
-		public AttributeDefinition[] CatalogueAttributes
+		public AttributeDefinition[] CatalogAttributes
 		{
-			get { return _CatalogueAttributes; }
+			get { return _CatalogAttributes; }
 			set
 			{
-				_CatalogueAttributes = value ?? new AttributeDefinition[ 0 ];
-				_CatalogueAttributes = _CatalogueAttributes.OrderBy( a => a.Key ).ToArray();
+				_CatalogAttributes = value ?? new AttributeDefinition[ 0 ];
+				_CatalogAttributes = _CatalogAttributes.OrderBy( a => a.Key ).ToArray();
 
-				_CatalogueAttributesDict = null;
+				_CatalogAttributesDict = null;
 			}
 		}
 
@@ -251,8 +251,8 @@ namespace DataService
 					return _MeasurementAttributes;
 				case Entity.Value:
 					return _ValueAttributes;
-				case Entity.Catalogue:
-					return _CatalogueAttributes;
+				case Entity.Catalog:
+					return _CatalogAttributes;
 				default:
 					return new AbstractAttributeDefinition[ 0 ];
 			}
@@ -280,8 +280,8 @@ namespace DataService
 				case Entity.Value:
 					ValueAttributesDict.TryGetValue( key, out result );
 					break;
-				case Entity.Catalogue:
-					CatalogueAttributesDict.TryGetValue( key, out result );
+				case Entity.Catalog:
+					CatalogAttributesDict.TryGetValue( key, out result );
 					break;
 			}
 			return result;
@@ -303,8 +303,8 @@ namespace DataService
 					return MeasurementAttributesDict.ContainsKey( key );
 				case Entity.Value:
 					return ValueAttributesDict.ContainsKey( key );
-				case Entity.Catalogue:
-					return CatalogueAttributesDict.ContainsKey( key );
+				case Entity.Catalog:
+					return CatalogAttributesDict.ContainsKey( key );
 			}
 			return false;
 		}
@@ -327,8 +327,8 @@ namespace DataService
 			if( ValueAttributesDict.ContainsKey( key ) )
 				return Entity.Value;
 
-			if( CatalogueAttributesDict.ContainsKey( key ) )
-				return Entity.Catalogue;
+			if( CatalogAttributesDict.ContainsKey( key ) )
+				return Entity.Catalog;
 		
 			return null;
 		}
@@ -375,10 +375,10 @@ namespace DataService
 			}
 			return value;
 		}
-		
+
 		/// <summary>
 		/// Returns the value represented by <paramref name="attributeValue"/>. <paramref name="attributeValue"/> musst be the language neutral database entry of an attribute.
-		/// I.e. if an attribute represents a catatalogue entry, the catalogue entry is returned. If an attribute represents a normal value
+		/// I.e. if an attribute represents a catatalogue entry, the catalog entry is returned. If an attribute represents a normal value
 		/// of type string, int, double or DateTime the value is returned with that type.
 		/// </summary>
 		public object ParseValue( ushort key, string attributeValue, CatalogCollection catalogs )

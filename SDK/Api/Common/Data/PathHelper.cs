@@ -59,7 +59,7 @@ namespace Common.Data
 		private static PathInformation String2PathInformationInternal( string path, string structure, InspectionPlanEntity? entity )
 		{
 			var resultPath = PathInformation.Root;
-			if( !string.IsNullOrEmpty( path ) && !( path == Delimiter.ToString() && structure != null && structure.Length == 1 && structure[ 0 ] == 'P' ) )
+			if( !string.IsNullOrEmpty( path ) && !( path == Delimiter.ToString() && string.IsNullOrEmpty( structure ) ) )
 			{
 				var result = new List<PathElement>( structure != null ? structure.Length : 10 );
 

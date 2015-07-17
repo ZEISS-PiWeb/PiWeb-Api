@@ -19,10 +19,10 @@ namespace DataService
 	#endregion
 
 	/// <summary>
-	/// This element describes a single entry of a catalogue. Each entry has a key, which has to be
-	/// unique within the catalogue in which it is used, and zero or more attributes.
+	/// This element describes a single entry of a catalog. Each entry has a key, which has to be
+	/// unique within the catalog in which it is used, and zero or more attributes.
 	/// </summary>
-	[JsonConverter( typeof( Common.Data.Converter.CatalogueEntryConverter ) )]
+	[JsonConverter( typeof( Common.Data.Converter.CatalogEntryConverter ) )]
 	public class CatalogEntry : IAttributeItem
 	{
 		#region members

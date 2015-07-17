@@ -60,7 +60,7 @@ namespace Common.Data.Converter
 						break;
 					case "catalogAttributes":
 						reader.Read();
-						configuration.CatalogueAttributes = serializer.Deserialize<AttributeDefinition[]>( reader );
+						configuration.CatalogAttributes = serializer.Deserialize<AttributeDefinition[]>( reader );
 						break;
 				}
 			}
@@ -121,11 +121,11 @@ namespace Common.Data.Converter
 					writer.WriteEndArray();
 				}
 
-				if( configuration.CatalogueAttributes.Length > 0 )
+				if( configuration.CatalogAttributes.Length > 0 )
 				{
 					writer.WritePropertyName( "catalogAttributes" );
 					writer.WriteStartArray();
-					foreach( var att in configuration.CatalogueAttributes )
+					foreach( var att in configuration.CatalogAttributes )
 					{
 						serializer.Serialize( writer, att );
 					}
