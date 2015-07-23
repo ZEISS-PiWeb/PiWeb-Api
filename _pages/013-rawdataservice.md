@@ -49,7 +49,7 @@ Returns a list of raw data file information entries for all entities with type :
 {% capture table %}
 Parameter name | Description  <br> *Example* 
 ---------------|---------------------------
-`uuids`        | Restricts the query to the entities identified by the given uuids. <br> {{site.images['warning']}} Entites of type 'Value' are identified by a compound key, which consists of the uuid of the measurement, '&#124;' and the characteristics uuid <br><br> *uuids=(652ae7a0-d1e1-4ee2-b3a5-d4526f6ba822&#124;78bd15c6-dc70-4ab4-bd3c-8ab2b5780b52)*
+`uuids`        | Restricts the query to the entities identified by the given uuids. <br> {{site.images['warning']}} Entites of type 'Value' are identified by a compound key, which consists of the uuid of the measurement, '&#124;' and the characteristics uuid <br><br> *uuids={652ae7a0-d1e1-4ee2-b3a5-d4526f6ba822&#124;78bd15c6-dc70-4ab4-bd3c-8ab2b5780b52}*
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
@@ -59,7 +59,7 @@ Parameter name | Description  <br> *Example*
 
 {% capture jsonrequest %}
 {% highlight http %}
-GET /rawDataServiceRest/rawData/part?uuids=(05040c4c-f0af-46b8-810e-30c0c00a379e,5441c003-b6db-4217-ac6a-45cdbb805bb3) HTTP/1.1
+GET /rawDataServiceRest/rawData/part?uuids={05040c4c-f0af-46b8-810e-30c0c00a379e,5441c003-b6db-4217-ac6a-45cdbb805bb3} HTTP/1.1
 {% endhighlight %}
 {% endcapture %}
 
