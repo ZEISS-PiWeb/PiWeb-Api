@@ -32,8 +32,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Api\_DLLs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PiWeb.Api">
-      <HintPath>..\..\Api\bin\Release\PiWeb.Api.dll</HintPath>
+      <HintPath>..\..\Api\_DLLs\PiWeb.Api.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
