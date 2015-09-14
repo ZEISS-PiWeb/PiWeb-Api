@@ -789,14 +789,12 @@ If you update a part you might want to:
 * Rename/move parts or
 * change attributes of parts.
 
-{{site.images['info']}} If versioning is activated on the server side, every update creates a new version entry.
-
-If versioning is set to 'Controlled by the client' on server side it can be done by adding the following parameter:
+{{site.images['info']}} If versioning is activated on the server side, every update creates a new version entry. If versioning is set to 'Controlled by the client' on server side it can be contolled by the following parameter:
 
 {% capture table %}
 Parameter name                                                                 | Description
 -------------------------------------------------------------------------------|--------------------------------
-<nobr><code>bool</code> versioningEnabled</nobr><br><i>default:</i> <code>false</code>| Determines whether a version entry should be created or not. This only effects the query if versioning is set to 'Controlled by the client' on the server side.
+<nobr><code>bool</code> versioningEnabled</nobr><br><i>default:</i> <code>false</code>| Determines whether a version entry should be created or not. This only effects the query if versioning is set to 'Controlled by the client' on server side.
 {% endcapture %}
 
 {{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
@@ -1061,10 +1059,19 @@ If you update characteristics you want to:
 * Rename/move characteristics or
 * change attributes of characteristics.
 
-{{site.images['info']}} If versioning is activated on server side, every update of one or more parts creates a new version entry.
+{{site.images['info']}} If versioning is activated on server side, every update of one or more characteristics creates a new version entry. If versioning is set to 'Controlled by the client' on server side it can be contolled by the following parameter:
+
+{% capture table %}
+Parameter name                                                                 | Description
+-------------------------------------------------------------------------------|--------------------------------
+<nobr><code>bool</code> versioningEnabled</nobr><br><i>default:</i> <code>false</code>| Determines whether a version entry should be created or not. This only effects the query if versioning is set to 'Controlled by the client' on server side.
 {% endcapture %}
 
-{% assign exampleCaption="Change the "metal part/deviation_3"*s attributes" %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
+
+{% endcapture %}
+
+{% assign exampleCaption="Change the metal part/deviation_3's attributes" %}
 {% capture jsonrequest %}
 {% highlight http %}
 PUT /dataServiceRest/characteristics HTTP/1.1
