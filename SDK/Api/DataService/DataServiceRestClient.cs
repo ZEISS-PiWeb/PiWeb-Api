@@ -294,10 +294,12 @@ namespace DataService
 		/// Updates the specified parts in the database.
 		/// </summary>
 		/// <param name="parts">The parts to update.</param>
+		/// <param name="versioningEnabled">Specifies whether to create a new inspection plan version entry.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public Task UpdateParts( InspectionPlanPart[] parts, CancellationToken cancellationToken = default(CancellationToken) )
+		public Task UpdateParts( InspectionPlanPart[] parts, bool versioningEnabled = false, CancellationToken cancellationToken = default(CancellationToken) )
 		{
-			return Put( "parts", parts, cancellationToken );
+			var parameter = ParameterDefinition.Create( "versioningEnabled", versioningEnabled.ToString() );
+			return Put( "parts", parts, cancellationToken, parameter );
 		}
 
 		/// <summary> 
@@ -393,10 +395,12 @@ namespace DataService
 		/// Updates the specified characteristics in the database.
 		/// </summary>
 		/// <param name="characteristics">characteristics parts to update.</param>
+		/// <param name="versioningEnabled">Specifies whether to create a new inspection plan version entry.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public Task UpdateCharacteristics( InspectionPlanCharacteristic[] characteristics, CancellationToken cancellationToken = default(CancellationToken) )
+		public Task UpdateCharacteristics( InspectionPlanCharacteristic[] characteristics, bool versioningEnabled = false, CancellationToken cancellationToken = default(CancellationToken) )
 		{
-			return Put( "characteristics", characteristics, cancellationToken );
+			var parameter = ParameterDefinition.Create( "versioningEnabled", versioningEnabled.ToString() );
+			return Put( "characteristics", characteristics, cancellationToken, parameter );
 		}
 
 		/// <summary> 
