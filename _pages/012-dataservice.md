@@ -790,9 +790,20 @@ If you update a part you might want to:
 * change attributes of parts.
 
 {{site.images['info']}} If versioning is activated on the server side, every update creates a new version entry.
+
+If versioning is set to 'Controlled by the client' on server side it can be done by adding the following parameter:
+
+{% capture table %}
+Parameter name                                                                 | Description
+-------------------------------------------------------------------------------|--------------------------------
+<nobr><code>bool</code> versioningEnabled</nobr><br><i>default:</i> <code>false</code>| Determines whether a version entry should be created or not. This only effects the query if versioning is set to 'Controlled by the client' on the server side.
 {% endcapture %}
 
-{% assign exampleCaption="Change the "metal part"*s attributes" %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
+
+{% endcapture %}
+
+{% assign exampleCaption="Change the metal part's attributes" %}
 {% capture jsonrequest %}
 {% highlight http %}
 PUT /dataServiceRest/parts HTTP/1.1
