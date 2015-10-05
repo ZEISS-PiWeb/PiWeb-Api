@@ -320,22 +320,22 @@
             Statischer Konstruktor.
             </summary>
         </member>
-        <member name="T:Common.Data.Converter.AttributeConverter">
+        <member name="T:Common.Data.Converter.AttributeArrayConverter">
             <summary>
-            Specialized <see cref="T:Newtonsoft.Json.JsonConverter"/> for <see cref="T:DataService.Attribute"/>-objects.
+            Specialized <see cref="T:Newtonsoft.Json.JsonConverter"/> for <see cref="T:DataService.Attribute"/> arrays.
             </summary>
         </member>
-        <member name="M:Common.Data.Converter.AttributeConverter.CanConvert(System.Type)">
+        <member name="M:Common.Data.Converter.AttributeArrayConverter.CanConvert(System.Type)">
             <summary>
             Determines whether this instance can convert the specified object type.
             </summary>
         </member>
-        <member name="M:Common.Data.Converter.AttributeConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
+        <member name="M:Common.Data.Converter.AttributeArrayConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
             <summary>
             Reads the JSON representation of the object.
             </summary>
         </member>
-        <member name="M:Common.Data.Converter.AttributeConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
+        <member name="M:Common.Data.Converter.AttributeArrayConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
             <summary>
             Writes the JSON representation of the object.
             </summary>
@@ -356,46 +356,6 @@
             </summary>
         </member>
         <member name="M:Common.Data.Converter.AttributeDefinitionConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
-            <summary>
-            Writes the JSON representation of the object.
-            </summary>
-        </member>
-        <member name="T:Common.Data.Converter.CatalogConverter">
-            <summary>
-            Specialized <see cref="T:Newtonsoft.Json.JsonConverter"/> for <see cref="T:DataService.Catalog"/>-objects.
-            </summary>
-        </member>
-        <member name="M:Common.Data.Converter.CatalogConverter.CanConvert(System.Type)">
-            <summary>
-            Determines whether this instance can convert the specified object type.
-            </summary>
-        </member>
-        <member name="M:Common.Data.Converter.CatalogConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
-            <summary>
-            Reads the JSON representation of the object.
-            </summary>
-        </member>
-        <member name="M:Common.Data.Converter.CatalogConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
-            <summary>
-            Writes the JSON representation of the object.
-            </summary>
-        </member>
-        <member name="T:Common.Data.Converter.CatalogEntryConverter">
-            <summary>
-            Specialized <see cref="T:Newtonsoft.Json.JsonConverter"/> for <see cref="T:DataService.CatalogEntry"/>-objects.
-            </summary>
-        </member>
-        <member name="M:Common.Data.Converter.CatalogEntryConverter.CanConvert(System.Type)">
-            <summary>
-            Determines whether this instance can convert the specified object type.
-            </summary>
-        </member>
-        <member name="M:Common.Data.Converter.CatalogEntryConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
-            <summary>
-            Reads the JSON representation of the object.
-            </summary>
-        </member>
-        <member name="M:Common.Data.Converter.CatalogEntryConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
             <summary>
             Writes the JSON representation of the object.
             </summary>
@@ -557,8 +517,8 @@
             <summary> Creates from <paramref name="path"/> a <see cref="T:DataService.PathInformation"/> object. 
             Depending on <paramref name="structure"/> it will be a part or a characteristic.</summary>
         </member>
-        <member name="M:Common.Data.PathHelper.String2PathInformationInternal(System.String,System.String,System.Nullable{DataService.InspectionPlanEntity})">
-            <summary> Internal method to create a <see cref="T:DataService.PathInformation"/> object from <paramref name="path"/>. </summary>
+        <member name="M:Common.Data.PathHelper.String2PathInformationInternal(System.String,DataService.InspectionPlanEntity)">
+            <summary> Creates from <paramref name="path"/> a <see cref="T:DataService.PathInformation"/> object with entity type <paramref name="entity"/>. </summary>
         </member>
         <member name="M:Common.Data.PathHelper.GetDepth(System.String)">
             <summary> Returns the depth of the <paramref name="path"/>. </summary>
@@ -1275,6 +1235,9 @@
         <member name="F:Common.Data.WellKnownServerFeatures.JobEngineNotSupported">
             <summary>The server does not support jobs.</summary>
         </member>
+        <member name="F:Common.Data.WellKnownServerFeatures.CharacteristicsBelowRoot">
+            <summary>The server supports characteristics below the root part and messurements attached to the root part.</summary>
+        </member>
         <member name="T:DataService.AbstractAttributeDefinition">
             <summary>
             This is the abstract base element which is used to define the possible attributes that an
@@ -1846,13 +1809,6 @@
             Contains the date and time of the last update applied to a Part instance.
             </summary>
         </member>
-        <member name="P:DataService.InspectionPlanBase.Current">
-            <summary>
-            Gets or sets a flag if this item represents the current version. If this flag is 
-            <code>false</code> a newer version of this entity exists and this entity is part
-            of the inspection plan history.
-            </summary>
-        </member>
         <member name="M:DataService.InspectionPlanBase.ToString">
             <summary>
             Overriden <see cref="M:System.Object.ToString"/> method.
@@ -1861,6 +1817,17 @@
         <member name="T:DataService.InspectionPlanCharacteristic">
             <summary>
             This element extends the entity Characteristic with an optional version history of old values.
+            </summary>
+        </member>
+        <member name="M:DataService.InspectionPlanCharacteristic.#ctor(DataService.InspectionPlanCharacteristic[])">
+            <summary>
+            This constructor is required for the JSON deserializer to be able
+            to identify concrete classes to use when deserializing <see cref="P:DataService.InspectionPlanCharacteristic.History"/> property.
+            </summary>
+        </member>
+        <member name="M:DataService.InspectionPlanCharacteristic.#ctor">
+            <summary>
+            Default Constructor
             </summary>
         </member>
         <member name="P:DataService.InspectionPlanCharacteristic.History">
@@ -1886,6 +1853,17 @@
         <member name="T:DataService.InspectionPlanPart">
             <summary>
             This element extends the entity Part with an optional version history of old values.
+            </summary>
+        </member>
+        <member name="M:DataService.InspectionPlanPart.#ctor(DataService.InspectionPlanPart[])">
+            <summary>
+            This constructor is required for the JSON deserializer to be able
+            to identify concrete classes to use when deserializing <see cref="P:DataService.InspectionPlanPart.History"/> property.
+            </summary>
+        </member>
+        <member name="M:DataService.InspectionPlanPart.#ctor">
+            <summary>
+            Default Constructor
             </summary>
         </member>
         <member name="P:DataService.InspectionPlanPart.History">
@@ -2396,11 +2374,12 @@
             <param name="parts">The parts to add.</param>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
         </member>
-        <member name="M:DataService.DataServiceRestClient.UpdateParts(DataService.InspectionPlanPart[],System.Threading.CancellationToken)">
+        <member name="M:DataService.DataServiceRestClient.UpdateParts(DataService.InspectionPlanPart[],System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Updates the specified parts in the database.
             </summary>
             <param name="parts">The parts to update.</param>
+            <param name="versioningEnabled">Specifies whether to create a new inspection plan version entry. </param>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
         </member>
         <member name="M:DataService.DataServiceRestClient.DeleteAllParts(System.Threading.CancellationToken)">
@@ -2464,11 +2443,12 @@
             <param name="characteristics">The characteristics to add.</param>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
         </member>
-        <member name="M:DataService.DataServiceRestClient.UpdateCharacteristics(DataService.InspectionPlanCharacteristic[],System.Threading.CancellationToken)">
+        <member name="M:DataService.DataServiceRestClient.UpdateCharacteristics(DataService.InspectionPlanCharacteristic[],System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Updates the specified characteristics in the database.
             </summary>
             <param name="characteristics">characteristics parts to update.</param>
+            <param name="versioningEnabled">Specifies whether to create a new inspection plan version entry.</param>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
         </member>
         <member name="M:DataService.DataServiceRestClient.DeleteCharacteristics(DataService.PathInformation,System.Threading.CancellationToken)">
@@ -3061,14 +3041,6 @@
             <summary>
             Gets or sets the MD5-Hash of the raw data object.
             </summary>
-        </member>
-        <member name="P:RawDataService.RawDataInformation.MD5String">
-            <summary>
-            Gets or sets the MD5-Hash of the raw data object.
-            </summary>
-            <remarks>
-            This property exists for serialization compatibility reasons only. This will be removed in a future version of this interface.
-            </remarks>
         </member>
         <member name="M:RawDataService.RawDataInformation.ToString">
             <summary>
