@@ -1635,7 +1635,7 @@ Updating a measurement does always affect the whole measurement. This means that
 
 {% capture jsonrequest %}
 {% highlight http %}
-POST /dataServiceRest/measurements HTTP/1.1
+PUT /dataServiceRest/measurements HTTP/1.1
 {% endhighlight %}
 
 {% highlight json %}
