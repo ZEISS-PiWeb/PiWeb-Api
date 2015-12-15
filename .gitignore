@@ -1,0 +1,4 @@
+*.dll
+*.xml
+SDK/Api/packages/Newtonsoft.Json.7.0.1/Newtonsoft.Json.7.0.1.nupkg
+*.ps1
