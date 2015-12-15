@@ -154,6 +154,11 @@ code{
   color: #FDFDFD;
 }
 
+navbar-nav-right>li{
+	display:inline;
+	margin-left:10px;
+}
+
 .navbar-default .navbar-nav>li>a,
 .navbar-default .navbar-nav>li>a:focus, 
 .navbar-default .navbar-nav>li>a:hover,
