@@ -115,6 +115,8 @@ http://your-piweb-server/dataServiceRest/measurements?limitResult=10
 ]
 ```
 
+Additional to the HTTP/S based REST API there is also a .NET client library.
+
 #### Learn more
 
 * Read the [API documentation guide](http://zeiss-piweb.github.io/PiWeb-Api)
