@@ -154,7 +154,7 @@ code{
   color: #FDFDFD;
 }
 
-navbar-nav-right>li{
+.navbar-nav-right>li{
 	display:inline;
 	margin-left:10px;
 }
