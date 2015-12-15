@@ -1,1 +1,6 @@
 *.suo
+SDK/Api/packages/Newtonsoft.Json.7.0.1/tools/install.ps1
+*.dll
+SDK/Api/packages/Newtonsoft.Json.7.0.1/lib/net20/Newtonsoft.Json.xml
+*.xml
+SDK/Api/packages/Newtonsoft.Json.7.0.1/Newtonsoft.Json.7.0.1.nupkg
