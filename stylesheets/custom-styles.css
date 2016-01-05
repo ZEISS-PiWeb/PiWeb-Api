@@ -28,12 +28,12 @@ h2{
 }
 
 /*Moves anker links to correct position after click*/
-h1[id]:before, h2[id]:before, h3[id]:before { 
-  display: block; 
-  content: " "; 
-  margin-top: -120px; 
-  height: 120px; 
-  visibility: hidden; 
+h1[id]:before, h2[id]:before, h3[id]:before {
+  display: block;
+  content: " ";
+  margin-top: -120px;
+  height: 120px;
+  visibility: hidden;
 }
 
 h5{
@@ -160,10 +160,10 @@ code{
 }
 
 .navbar-default .navbar-nav>li>a,
-.navbar-default .navbar-nav>li>a:focus, 
+.navbar-default .navbar-nav>li>a:focus,
 .navbar-default .navbar-nav>li>a:hover,
 .navbar-nav-right>li>span>a,
-.navbar-nav-right>li>span>a:focus, 
+.navbar-nav-right>li>span>a:focus,
 .navbar-nav-right>li>span>a:hover{
   color: #FDFDFD;
   padding-top: 4px;
@@ -210,7 +210,7 @@ nav>.affix{
 }
 
 @media (min-width: 768px) {
-.navbar>.container .navbar-brand, 
+.navbar>.container .navbar-brand,
 .navbar>.container-fluid .navbar-brand {
 		margin-left: 0px;
 	}
@@ -273,7 +273,7 @@ ul.subNavList>li>a:hover {
 	border-left: 2px dotted #437AB4;
 }
 
-#navcolumn>.nav .nav .active, 
+#navcolumn>.nav .nav .active,
 #navcolumn>.nav .nav .active:hover{
 	border-left: 2px solid #337ab7;
 }
@@ -296,7 +296,7 @@ ul.subNavList>li>a:hover {
 }
 
 #navcolumn>.nav .nav .active>a:hover{
-	border-left:none;	
+	border-left:none;
 }
 
 .table{
@@ -347,7 +347,7 @@ ul.subNavList>li>a:hover {
 }
 
 .tooltip.top .tooltip-arrow{
-	border-top-color: #437AB4;	
+	border-top-color: #437AB4;
 }
 
 div>.affix{
@@ -357,12 +357,12 @@ div>.affix{
 .footer{
 	text-align: center;
 	border-top: 5px solid #437AB4;
-  	padding: 20px;
+  	padding: 4px;
   	background-color: #245E9A;
 }
 
-.footer>a, 
-.footer>a:hover, 
+.footer>a,
+.footer>a:hover,
 .footer>a:visited{
 	color: #DDD;
 }
