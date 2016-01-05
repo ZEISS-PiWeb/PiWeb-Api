@@ -10,7 +10,7 @@ sections:
      whatis:
         title: What's the PiWeb API?
         anchor: gi-api
-    requirements:
+     requirements:
         title: Requirements
         anchor: gi-requirements
 ---
