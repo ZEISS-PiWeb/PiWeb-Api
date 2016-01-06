@@ -19,6 +19,7 @@ sections:
 <h1 id="{{page.sections['general'].anchor}}">{{page.sections['general'].title}}</h1>
 
 The .NET SDK is suitable for all .NET languages. You can include it to your project either by
+
 - using the source files from our [GitHub repository](https://github.com/ZEISS-PiWeb/PiWeb-Api) or
 - including the dll by using our [nuget package](https://www.nuget.org/packages/Zeiss.IMT.PiWebApi.Client/).
 
