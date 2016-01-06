@@ -4,7 +4,7 @@ title: PiWeb API
 permalink: "/piwebapi/"
 sections:
   general:
-    title: General Information
+    title: Overview
     anchor: gi
     secs:
      whatis:
