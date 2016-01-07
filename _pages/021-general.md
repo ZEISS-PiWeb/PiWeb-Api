@@ -53,9 +53,10 @@ To make a webservice request you can use the corresponding methods provided by t
 ///<param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 public async Task<InspectionPlanPart> GetPartByUuid( Guid partUuid, AttributeSelector requestedPartAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default(CancellationToken) )
 {
-var parameter =
- RestClientHelper.ParseToParameter( requestedPartAttributes: requestedPartAttributes, withHistory: withHistory );
-return await Get<InspectionPlanPart>( $"parts/{partUuid}", cancellationToken, parameter.ToArray() ).ConfigureAwait( false );
+  var parameter =
+   RestClientHelper.ParseToParameter( requestedPartAttributes: requestedPartAttributes, withHistory: withHistory );
+  return
+   await Get<InspectionPlanPart>( $"parts/{partUuid}", cancellationToken, parameter.ToArray() ).ConfigureAwait( false );
 }
 {% endhighlight %}
 
