@@ -44,17 +44,18 @@ var rawdataserviceRestClient = new RawDataServiceRestClient( "http://piwebserver
 To make a webservice request you can use the corresponding methods provided by the client classes. Please find detailed descriptions in each method's summary section (see example below).
 
 {% highlight csharp %}
-/// <summary>
-/// Fetches a single part by its uuid.
-/// </summary>
-/// <param name="partUuid">The part's uuid</param>
-/// <param name="withHistory">Determines whether to return the version history for the part.</param>
-/// <param name="requestedPartAttributes">The attribute selector to determine which attributes to return.</param>
-/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+///<summary>
+///Fetches a single part by its uuid.
+///</summary>
+///<param name="partUuid">The part's uuid</param>
+///<param name="withHistory">Determines whether to return the version history for the part.</param>
+///<param name="requestedPartAttributes">The attribute selector to determine which attributes to return.</param>
+///<param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 public async Task<InspectionPlanPart> GetPartByUuid( Guid partUuid, AttributeSelector requestedPartAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default(CancellationToken) )
 {
-	var parameter = RestClientHelper.ParseToParameter( requestedPartAttributes: requestedPartAttributes, withHistory: withHistory );
-	return await Get<InspectionPlanPart>( $"parts/{partUuid}", cancellationToken, parameter.ToArray() ).ConfigureAwait( false );
+var parameter =
+ RestClientHelper.ParseToParameter( requestedPartAttributes: requestedPartAttributes, withHistory: withHistory );
+return await Get<InspectionPlanPart>( $"parts/{partUuid}", cancellationToken, parameter.ToArray() ).ConfigureAwait( false );
 }
 {% endhighlight %}
 
