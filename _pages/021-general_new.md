@@ -63,7 +63,7 @@ public async Task<InspectionPlanPart> GetPartByUuid( Guid partUuid, AttributeSel
 Each method runs asynchronously and returns an awaitable `Task`. The result will be available once the `Task` has completed. All methods accept a `CancellationToken` which you can use to cancel a request.
 Useful hints can be found in the following Best practices section.
 
-<h2 id="{{page.sections['general']['secs']['bestpractices'].anchor}}">{{page.sections['general']['secs']['bestpractices'].title}}</h2>
+<h2 id="{{page.sections['general']['secs']['basics'].anchor}}">{{page.sections['general']['secs']['basics'].title}}</h2>
 
 ### Inspection Plan
 
@@ -74,12 +74,12 @@ In PiWeb the inspection plan consists of two different entity types - parts and 
 {% capture table %}
 Property                                          | Description
 --------------------------------------------------|--------------------------------------------------------------------
-<nobr><code>Guid</code> Uuid</nobr>               | Identifies this inspection plan entity uniquely
+<nobr><code>Guid</code> Uuid</nobr>               | Identifies this inspection plan entity uniquely.
 <nobr><code>PathInformation</code> Path</nobr>    | The path of this entity which describes the entity's hierarchical structure.
-<nobr><code>Attribute[]</code> Attributes</nobr>  | A set of attributes which describe the entity
-<nobr><code>string</code> Comment</nobr>          | A comment which describes the last inspection plan change
-<nobr><code>uint</code> Version</nobr>            | Contains the entity´s revision number. The revision number starts with `0` and is incremented by `1` each time changes are applied to the inspection plan. The version is only returned in case versioning is enabled in the server settings.
-<nobr><code>DateTime</code> TimeStamp</nobr>      | Contains the date and time of when the entity was last updated
+<nobr><code>Attribute[]</code> Attributes</nobr>  | A set of attributes which describe the entity.
+<nobr><code>string</code> Comment</nobr>          | A comment which describes the last inspection plan change.
+<nobr><code>uint</code> Version</nobr>            | Contains the entity´s revision number. The revision number starts. with `0` and is incremented by `1` each time changes are applied to the inspection plan. The version is only returned in case versioning is enabled in the server settings.
+<nobr><code>DateTime</code> TimeStamp</nobr>      | Contains the date and time of when the entity was last updated.
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
@@ -98,6 +98,7 @@ Property                                          | Description
 Parts as well as characteristic may contain a version history. For parts class `InspectionPlanPart` which is derived from `SimplePart` is used.
 
 #### `InspectionPlanCharacteristic` : `InspectionPlanBase`
+
 #### `InspectionPlanPart` : `SimplePart`
 
 {% capture table %}
