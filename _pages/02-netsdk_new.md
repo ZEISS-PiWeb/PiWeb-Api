@@ -14,9 +14,9 @@ sections:
       use:
         title: Using the client
         anchor: gi-use
-      bestPractices:
-        title: Best practices
-        anchor: gi-best
+      basics:
+        title: Basics
+        anchor: gi-basics
 ---
 
 <h1 id="{{page.sections['general'].anchor}}">{{page.sections['general'].title}}</h1>

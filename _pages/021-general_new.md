@@ -67,13 +67,13 @@ Useful hints can be found in the following Best practices section.
 
 ### Inspection Plan
 
-In PiWeb the inspection plan consists of two different entity types - parts and characteristics. Parts are hold in class `InspectionPlanPart` characteristics are hold in class `InspectionPlanCharacteristic`. Both are derived from the abstract base class `InspectionPlanBase` and consists of the following properties:
+In PiWeb the inspection plan consists of two different entity types - parts and characteristics. Parts are hold in class `SimplePart`, characteristics are hold in class `InspectionPlanCharacteristic`. Both are derived from the abstract base class `InspectionPlanBase` and consists of the following properties:
 
-### `InspectionPlanBase`
+#### `InspectionPlanBase`
 
 {% capture table %}
 Property                                          | Description
---------------------------------------------------|-----------------------
+--------------------------------------------------|--------------------------------------------------------------------
 <nobr><code>Guid</code> Uuid</nobr>               | Identifies this inspection plan entity uniquely
 <nobr><code>PathInformation</code> Path</nobr>    | The path of this entity which describes the entity's hierarchical structure.
 <nobr><code>Attribute[]</code> Attributes</nobr>  | A set of attributes which describe the entity
@@ -83,13 +83,27 @@ Property                                          | Description
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
+A `SimplePart` does additionally consist of the timestamp for the most recent characteristic change:
 
-### `InspectionPlanPart` : `InspectionPlanBase`
+#### `SimplePart` : `InspectionPlanBase`
 
 {% capture table %}
 Property                                          | Description
---------------------------------------------------|-----------------------
-<nobr><code>dateTime</code> CharChangeDate</nobr> | *(Parts only)* The timestamp for the most recent characteristic change on any characteristic that belongs to this part
+--------------------------------------------------|----------------------------------------------------------------
+<nobr><code>dateTime</code> CharChangeDate</nobr> | The timestamp for the most recent characteristic change on any characteristic below that part (but not below sub parts). This timestamp is updated by the server backend.
+
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
+
+Parts as well as characteristic may contain a version history. For parts class `InspectionPlanPart` which is derived from `SimplePart` is used.
+
+#### `InspectionPlanCharacteristic` : `InspectionPlanBase`
+#### `InspectionPlanPart` : `SimplePart`
+
+{% capture table %}
+Property                                               | Description
+-------------------------------------------------------|-----------------------------------------------------
+<nobr><code>InspectionPlanBase[]</code> History</nobr> | The version history for this inspection plan entity.
 
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
