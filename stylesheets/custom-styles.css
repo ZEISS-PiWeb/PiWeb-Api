@@ -115,6 +115,10 @@ code{
 	background-color: rgba(60,60,60,0.1);
 }
 
+h4 code{
+  font-weight: bold;
+}
+
 .container-header {
   background-color: #437AB4;
   color: #FDFDFD;

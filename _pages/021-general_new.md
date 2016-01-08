@@ -97,8 +97,7 @@ Property                                          | Description
 
 Parts as well as characteristic may contain a version history if versioning is enabled in server settings. In this case for parts class `InspectionPlanPart` which is derived from `SimplePart` does exist.
 
-<h4> `InspectionPlanCharacteristic` : `InspectionPlanBase` </h4>
-<h4> `InspectionPlanPart` : `SimplePart` </h4>
+#### `InspectionPlanCharacteristic` : `InspectionPlanBase` , `InspectionPlanPart` : `SimplePart`
 
 {% capture table %}
 Property                                               | Description
