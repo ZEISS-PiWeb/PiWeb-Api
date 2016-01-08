@@ -77,8 +77,8 @@ Property                                          | Description
 <nobr><code>Guid</code> Uuid</nobr>               | Identifies this inspection plan entity uniquely.
 <nobr><code>PathInformation</code> Path</nobr>    | The path of this entity which describes the entity's hierarchical structure.
 <nobr><code>Attribute[]</code> Attributes</nobr>  | A set of attributes which describe the entity.
-<nobr><code>string</code> Comment</nobr>          | A comment which describes the last inspection plan change.
-<nobr><code>uint</code> Version</nobr>            | Contains the entity´s revision number. The revision number starts. with `0` and is incremented by `1` each time changes are applied to the inspection plan. The version is only returned in case versioning is enabled in the server settings.
+<nobr><code>string</code> Comment</nobr>          | A comment which describes the last inspection plan change. The comment is only returned in case versioning is enabled in the server settings.
+<nobr><code>uint</code> Version</nobr>            | Contains the entity´s revision number. The revision number starts with `0` and is incremented by `1` each time changes are applied to the inspection plan.
 <nobr><code>DateTime</code> TimeStamp</nobr>      | Contains the date and time of when the entity was last updated.
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
@@ -95,10 +95,9 @@ Property                                          | Description
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
-Parts as well as characteristic may contain a version history. For parts class `InspectionPlanPart` which is derived from `SimplePart` is used.
+Parts as well as characteristic may contain a version history if versioning is enabled in server settings. In this case for parts class `InspectionPlanPart` which is derived from `SimplePart` does exist.
 
 #### `InspectionPlanCharacteristic` : `InspectionPlanBase`
-
 #### `InspectionPlanPart` : `SimplePart`
 
 {% capture table %}

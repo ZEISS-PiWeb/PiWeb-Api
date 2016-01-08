@@ -253,13 +253,13 @@ HTTP/1.1 200 Ok
 
 <h3 id="{{page.sections['dataservice']['secs']['configuration'].anchor}}-objectstructure">Object Structure</h3>
 
-The PiWeb configuration consists of a list of attributes for each entity type. 
-The different entity types are: 
+The PiWeb configuration consists of a list of attributes for each entity type.
+The different entity types are:
 
-* *parts*, 
-* *characteristics*, 
-* *measurements*, 
-* *values* and 
+* *parts*,
+* *characteristics*,
+* *measurements*,
+* *values* and
 * *catalogs*.
 
 The attributes are either `AttributeDefinition` or `CatalogAttributeDefinition`.
@@ -269,7 +269,7 @@ The attributes are either `AttributeDefinition` or `CatalogAttributeDefinition`.
 Property                             | Description
 -------------------------------------|--------------------------------------------------------------
 <nobr><code>ushort</code> key</nobr>            | The attribute's key, which serves as a unique id
-<nobr><code>string</code> description</nobr>    | The attribute's name or a short description 
+<nobr><code>string</code> description</nobr>    | The attribute's name or a short description
 <nobr><code>AttributeType</code> type</nobr>    | The attribute's type. *AlphaNumeric*, *Integer*, *Float* or *DateTime*
 <nobr><code>ushort</code> length</nobr>         | The attribute's maximum length. Only set if the type is *AlphaNumeric*
 <nobr><code>string</code> definitionType</nobr> | Always has the value 'AttributeDefinition' and is used to differentiate between  `AttributeDefinition` and `CatalogAttributeDefinition`
@@ -279,7 +279,7 @@ Property                             | Description
 Property                              | Description
 --------------------------------------|------------------------------------------------------------
 <nobr><code>ushort</code> key</nobr>             | The attribute's key, which serves as a unique id
-<nobr><code>string</code> description</nobr>     | The attribute's name or a short description 
+<nobr><code>string</code> description</nobr>     | The attribute's name or a short description
 <nobr><code>Guid</code> catalog</nobr>         | The id of the catalog that contains the possible attribute values
 <nobr><code>string</code> definitionType</nobr>  | Always has the value 'CatalogAttributeDefinition' and is used to differentiate between  `AttributeDefinition` and `CatalogAttributeDefinition`
 {% endcapture %}
@@ -564,7 +564,7 @@ There are two different options for deleting catalogs:
 
 * delete all catalogs or
 * delete one or more specific catalogs identified by their uuid. For this request you need to add the filter parameter `catalogUuids` to the request uri.
-* 
+*
 {% endcapture %}
 {% assign exampleCaption="Delete the catalog with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
 
@@ -613,7 +613,7 @@ HTTP/1.1 200 Ok
 
 <h3 id="{{page.sections['dataservice']['secs']['catalogs'].anchor}}-objectstructure">Object Structure</h3>
 
-Each catalog describes a list of entries. All entries have the same defined set of attributes, called *valid attributes*. 
+Each catalog describes a list of entries. All entries have the same defined set of attributes, called *valid attributes*.
 All valid attributes must be created as *catalog attributes* beforehand. `Catalog` and `CatalogEntry`have the following structures:
 
 #### Catalog
@@ -642,7 +642,7 @@ Property                              | Description
 
 <h3 id="{{page.sections['dataservice']['secs']['inspectionPlan'].anchor}}-endpoints">Endpoints</h3>
 
-You can fetch, create, update and delete parts and characteristics using the following endpoints: 
+You can fetch, create, update and delete parts and characteristics using the following endpoints:
 
 ####Parts
 
@@ -651,7 +651,7 @@ You can fetch, create, update and delete parts and characteristics using the fol
 {% assign endpoint="/parts" %}
 {% assign summary="Fetches parts" %}
 {% capture description %}
-You can fetch all parts or certain parts. Possible filter uri parameters are: 
+You can fetch all parts or certain parts. Possible filter uri parameters are:
 
 {% capture table %}
 Parameter name                                                                 | Description
@@ -831,7 +831,7 @@ HTTP/1.1 200 Ok
 {% assign endpoint="/parts" %}
 {% assign summary="Deletes parts" %}
 {% capture description %}
-There are two ways to delete parts, either by their path or by their uuids. This means that either the filter parameter `partPath` or `partUuids` has to be set: 
+There are two ways to delete parts, either by their path or by their uuids. This means that either the filter parameter `partPath` or `partUuids` has to be set:
 
 {% capture table %}
 Parameter name                                                                 | Description
@@ -910,7 +910,7 @@ Parameter name                                                                 |
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
 
-{{ site.images['info'] }}You can only request direct characteristics of the part, characteristics of child parts will be ignored. 
+{{ site.images['info'] }}You can only request direct characteristics of the part, characteristics of child parts will be ignored.
 
 {% endcapture %}
 {% assign exampleCaption="Fetch all characteristics beneath the part '/metal part' until depth=2" %}
@@ -1026,12 +1026,12 @@ POST /dataServiceRest/characteristics HTTP/1.1
 [
   {
      "path": "PC:/metal part/deviation_3/",
-     "attributes": 
-      { 
+     "attributes":
+      {
          "2004": "3",
          "2101": "0",
          "2110": "-0.5",
-         "2111": "0.5" 
+         "2111": "0.5"
       },
      "uuid": "27e23a7c-dbe7-4863-8461-6abf7b03ddd7"
   }
@@ -1101,7 +1101,7 @@ HTTP/1.1 200 Ok
 {% assign endpoint="/characteristics" %}
 {% assign summary="Deletes characteristics" %}
 {% capture description %}
-You have two options to delete characteristics, either by their paths or by their uuids. This means that either the filter parameter `charPath` or `charUuids` has to be set: 
+You have two options to delete characteristics, either by their paths or by their uuids. This means that either the filter parameter `charPath` or `charUuids` has to be set:
 
 {% capture table %}
 Parameter name                                                                 | Description
@@ -1162,12 +1162,12 @@ Both parts and characteristics are PiWeb inspection plan entities. They have the
 {% capture table %}
 Property                                          | Description
 --------------------------------------------------|-----------------------
-<nobr><code>Guid</code> uuid</nobr>               | Identifies this inspection plan entity uniquely
+<nobr><code>Guid</code> uuid</nobr>               | Identifies this inspection plan entity uniquely.
 <nobr><code>string</code> path</nobr>             | The path of this entity. It consists of the path's hierarchical structure followed by the path itself, e.g. `PCC:/metal part/deviation_3/.X/`. `P` stands for part and `C` for characteristic.
-<nobr><code>Attribute</code> attributes</nobr>    | A set of attributes which describe the entity
-<nobr><code>string</code> comment</nobr>          | A comment which describes the last inspection plan change
-<nobr><code>int</code> version</nobr>             | Contains the entity´s revision number. The revision number starts with `0` and is incremented by `1` each time changes are applied to the inspection plan. The version is only returned in case versioning is enabled in the server settings.
-<nobr><code>dateTime</code> timeStamp</nobr>      | Contains the date and time of when the entity was last updated
+<nobr><code>Attribute</code> attributes</nobr>    | A set of attributes which describe the entity.
+<nobr><code>string</code> comment</nobr>          | A comment which describes the last inspection plan change. The comment is only returned in case versioning is enabled in the server settings.
+<nobr><code>int</code> version</nobr>             | Contains the entity´s revision number. The revision number starts with `0` and is incremented by `1` each time changes are applied to the inspection plan.
+<nobr><code>dateTime</code> timeStamp</nobr>      | Contains the date and time of when the entity was last updated.
 <nobr><code>dateTime</code> charChangeDate</nobr> | *(Parts only)* The timestamp for the most recent characteristic change on any characteristic that belongs to this part
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
@@ -1176,7 +1176,7 @@ Property                                          | Description
 
 <h3 id="{{page.sections['dataservice']['secs']['measurementsAndValues'].anchor}}-endpoints">Endpoints</h3>
 
-You can fetch, create, update and delete measurements and values using the following endpoints: 
+You can fetch, create, update and delete measurements and values using the following endpoints:
 <br/>
 
 #### Measurements
@@ -1185,15 +1185,15 @@ You can fetch, create, update and delete measurements and values using the follo
 {% assign endpoint="/measurements" %}
 {% assign summary="Fetches measurements" %}
 {% capture description %}
-You can fetch all measurements or certain measurements only. Possible filter uri parameters are: 
+You can fetch all measurements or certain measurements only. Possible filter uri parameters are:
 
 {% capture table %}
 <code>Type</code> Parameter      |  Description <br> <code>Example</code>
 --------------------|-----------------------------------------------------------------------------------
 <nobr><code>Guid list</code> measurementUuids </nobr>         | Restricts the query to these measurements <br> `measurementUuids={5b59cac7-9ecd-403c-aa26-56dd25892421}`
 <nobr><code>Guid list</code> partUuids </nobr> | Restricts the query to these parts <br> `partUuids={e42c5327-6258-4c4c-b3e9-6d22c30938b2}`
-<nobr><code>Path</code> partPath </nobr> | Restricts the query to this part <br><br> `partPath=/metal%20part` 
-<nobr><code>bool</code> deep </nobr><br><i>default:</i> <code>false</code> | Determines whether the query should affect all levels of the inspection plan. <br> `deep=true` 
+<nobr><code>Path</code> partPath </nobr> | Restricts the query to this part <br><br> `partPath=/metal%20part`
+<nobr><code>bool</code> deep </nobr><br><i>default:</i> <code>false</code> | Determines whether the query should affect all levels of the inspection plan. <br> `deep=true`
 <nobr><code>OrderCriteria</code> orderBy </nobr><br><i>default:</i> <code>4 desc</code>   | Determines which attribute keys and which direction the keys should be ordered by <br> `orderBy:4 asc, 10 desc`
 <nobr><code>Condition</code> searchCondition </nobr>| The query will only return items matching all conditions. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ]. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`
 <nobr><code>DateTime</code> fromModificationDate </nobr> | Specifies a date to select all measurements that where modified after that date. Please note that the system modification date (lastModified property) is used and not the time attribute (creation date).
@@ -1244,7 +1244,7 @@ GET /dataServiceRest/measurements?partUuids={e42c5327-6258-4c4c-b3e9-6d22c30938b
 {% assign summary="Fetches a measurement by its :measUuid" %}
 {% capture description %}
 
-The request can be restricted by the following filter uri parameters: 
+The request can be restricted by the following filter uri parameters:
 
 {% capture table %}
 <code>Type</code> Parameter      |  Description <br> <code>Example</code>
@@ -1295,7 +1295,7 @@ GET /dataServiceRest/measurements/5b59cac7-9ecd-403c-aa26-56dd25892421 HTTP/1.1
 {% capture description %}
 To create a new measurement, you must send its JSON representation in the request body. Values for `uuid` and `path` are required, `attributes` and `comment` are optional. The attribute keys must be valid measurement attributes as specified in the <a href="#{{page.sections['dataservice']['secs']['configuration'].anchor}}">{{page.sections['dataservice']['secs']['configuration'].title}}</a>.
 
-{{ site.images['info'] }} The comment is only added if versioning is enabled in server settings. 
+{{ site.images['info'] }} The comment is only added if versioning is enabled in server settings.
 {% endcapture %}
 {% assign exampleCaption="Create a measurement" %}
 {% assign comment="" %}
@@ -1449,8 +1449,8 @@ You can fetch all measurements with values or only certain measurements with val
 --------------------|-----------------------------------------------------------------------------------
 <nobr><code>Guid list</code> measurementUuids </nobr>         | Restricts the query to these measurements <br> `measurementUuids={5b59cac7-9ecd-403c-aa26-56dd25892421}`
 <nobr><code>Guid list</code> partUuids </nobr> | Restricts the query to these parts <br> `partUuids={e42c5327-6258-4c4c-b3e9-6d22c30938b2}`
-<nobr><code>Path</code> partPath </nobr> | Restricts the query to this part <br><br> `partPath=/metal%20part` 
-<nobr><code>bool</code> deep </nobr><br><i>default:</i> <code>false</code> | Determines whether the query should affect all levels of the inspection plan. <br> `deep=true` 
+<nobr><code>Path</code> partPath </nobr> | Restricts the query to this part <br><br> `partPath=/metal%20part`
+<nobr><code>bool</code> deep </nobr><br><i>default:</i> <code>false</code> | Determines whether the query should affect all levels of the inspection plan. <br> `deep=true`
 <nobr><code>OrderCriteria</code> orderBy </nobr><br><i>default:</i> <code>4 desc</code>   | Determines which attribute keys and which direction the keys should be ordered by <br> `orderBy:4 asc, 10 desc`
 <nobr><code>Condition</code> searchCondition </nobr>| The query will only return items matching all conditions. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ]. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`
 <nobr><code>DateTime</code> fromModificationDate </nobr> | Specifies a date to select all measurements that where modified after that date. Please note that the system modification date (lastModified property) is used and not the time attribute (creation date).
@@ -1511,7 +1511,7 @@ GET /dataservicerest/values?partUuids={05040c4c-f0af-46b8-810e-30c0c00a379e}&sea
 {% assign endpoint="/values/:measUuid" %}
 {% assign summary="Fetches a measurement including measured values by its :measUuid" %}
 {% capture description %}
-The request can be restricted by the following uri filter parameters: Possible filters are: 
+The request can be restricted by the following uri filter parameters: Possible filters are:
 
 {% capture table %}
 <code>Type</code> Parameter      |  Description <br> <code>Example</code>
@@ -1573,7 +1573,7 @@ GET /dataServiceRest/values/5b59cac7-9ecd-403c-aa26-56dd25892421 HTTP/1.1
 {% capture description %}
 To create a measurement with values, you must send its JSON representation in the request body. Values for `uuid` and `path` are required, `attributes` and `comment` are optional. The attribute keys must be valid measurement attributes as specified in the <a href="#{{page.sections['dataservice']['secs']['configuration'].anchor}}">{{page.sections['dataservice']['secs']['configuration'].title}}</a>.
 
-{{ site.images['info'] }} The comment is only added if versioning is enabled in server settings. 
+{{ site.images['info'] }} The comment is only added if versioning is enabled in server settings.
 {% endcapture %}
 {% assign exampleCaption="Create a measurement with measured values" %}
 {% assign comment="" %}
