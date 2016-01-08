@@ -34,4 +34,4 @@ On nuget you can also find a [C# demo application](https://www.nuget.org/package
 
 <h1 id="{{page.sections['basics'].anchor}}">{{page.sections['basics'].title}}</h1>
 
-{% include_relative 022-basics.md}
+{% include_relative 022-basics.md %}
