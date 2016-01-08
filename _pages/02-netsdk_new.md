@@ -1,6 +1,4 @@
 ---
-area: sdk
-level: 0
 title: .NET SDK
 permalink: "/sdk_new/"
 sections:
