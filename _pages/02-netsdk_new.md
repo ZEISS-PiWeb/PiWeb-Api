@@ -19,6 +19,9 @@ sections:
       inspectionPlan:
         title: Inspection Plan
         anchor: basics-inspectionPlan
+      measurementsValues:
+        title: Measurements and Values
+        anchor: basics-measurementsValues
 ---
 
 <h1 id="{{page.sections['general'].anchor}}">{{page.sections['general'].title}}</h1>

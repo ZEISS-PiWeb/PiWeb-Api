@@ -19,6 +19,7 @@ sections:
 headers:
   example: "##### ![Example](/PiWeb-Api/images/document-info.png) Example: "
   bestPractice: "##### ![Best practice](/PiWeb-Api/images/footsteps.png) Best practice: "
+  information: "##### ![Information](/PiWeb-Api/images/info.png) Information: "
   request: "##### Request"
   response: "##### Response"
 gems:
