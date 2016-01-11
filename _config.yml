@@ -18,6 +18,7 @@ sections:
   deleteLabel: <span class="label label-danger">Delete</span>
 headers:
   example: "##### ![Example](/PiWeb-Api/images/document-info.png) Example: "
+  bestPractice: "##### ![Best practice](/PiWeb-Api/images/footsteps.png) Best practice: "
   request: "##### Request"
   response: "##### Response"
 gems:

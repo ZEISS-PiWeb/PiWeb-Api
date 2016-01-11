@@ -30,7 +30,7 @@ Property                                          | Description
 
 Parts as well as characteristic may contain a version history if versioning is enabled in server settings. In this case for parts class `InspectionPlanPart` which is derived from `SimplePart` does exist.
 
-#### `InspectionPlanCharacteristic` : `InspectionPlanBase` , `InspectionPlanPart` : `SimplePart`
+#### `InspectionPlanCharacteristic : InspectionPlanBase` , `InspectionPlanPart : SimplePart`
 
 {% capture table %}
 Property                                               | Description
@@ -39,3 +39,6 @@ Property                                               | Description
 
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
+
+
+{{ site.headers['bestPractice'] }} Create a  `PathInformation` object for a part entity
