@@ -42,3 +42,10 @@ Property                                               | Description
 
 
 {{ site.headers['bestPractice'] }} Create a  `PathInformation` object for a part entity
+As pointed in the upper section a `PathInformation` object includes an entity's path as well as its structure. To easily create a `PathInformation` use `PathHelper` class:
+
+{% highlight csharp %}
+//Fetch all characteristics for the part "MetalPart"
+var partPath = PathHelper.String2PartPathInformation("MetalPart"); 
+var characteristics = await RestDataServiceClient.GetCharacteristics( partPath );
+{% endhighlight %}
