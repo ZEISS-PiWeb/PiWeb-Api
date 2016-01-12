@@ -28,7 +28,7 @@ Property                                          | Description
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
-Parts as well as characteristic may contain a version history if versioning is enabled in server settings. In this case for parts class `InspectionPlanPart` which is derived from `SimplePart` does exist.
+Parts as well as characteristic may contain a version history if versioning is enabled in server settings. If so parts are represented by class `InspectionPlanPart` which is derived from `SimplePart`.
 
 #### `InspectionPlanCharacteristic : InspectionPlanBase` , `InspectionPlanPart : SimplePart`
 
@@ -50,6 +50,10 @@ var partPath = PathHelper.String2PartPathInformation("/MetalPart");
 var characteristics = await RestDataServiceClient.GetCharacteristics( partPath );
 {% endhighlight %}
 
+{{ site.headers['bestPractice'] }} Create or update multiple entities in one step
+
 <h2 id="{{page.sections['basics']['secs']['measurementsValues'].anchor}}">{{page.sections['basics']['secs']['measurementsValues'].title}}</h2>
 
 {{ site.images['info'] }} The `LastModfified` property is only relevant for fetching measurements. On creating or updating a measurement it is set by server automatically.
+
+<h2 id="{{page.sections['basics']['secs']['rawData'].anchor}}">{{page.sections['basics']['secs']['rawData'].title}}</h2>
