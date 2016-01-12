@@ -24,7 +24,7 @@ sections:
         anchor: basics-measurementsValues
       rawData:
         title: Raw Data
-        aqnchor: basics-rawData
+        anchor: basics-rawData
 ---
 
 <h1 id="{{page.sections['general'].anchor}}">{{page.sections['general'].title}}</h1>
