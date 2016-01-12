@@ -50,7 +50,7 @@ var partPath = PathHelper.String2PartPathInformation("/MetalPart");
 var characteristics = await RestDataServiceClient.GetCharacteristics( partPath );
 {% endhighlight %}
 
-{{ site.headers['bestPractice'] }} Create or update multiple entities in one step
+{{ site.headers['bestPractice'] }} Create or update multiple entities in a single call
 
 <h2 id="{{page.sections['basics']['secs']['measurementsValues'].anchor}}">{{page.sections['basics']['secs']['measurementsValues'].title}}</h2>
 
