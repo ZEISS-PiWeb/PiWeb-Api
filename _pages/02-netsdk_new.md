@@ -31,10 +31,16 @@ sections:
 
 The .NET SDK is suitable for all .NET languages. You can include it to your project either by
 
-- using the source files from our [GitHub repository](https://github.com/ZEISS-PiWeb/PiWeb-Api) or
-- including the dll by using our [nuget package](https://www.nuget.org/packages/Zeiss.IMT.PiWebApi.Client/).
+- including the dll by using our [nuget package](https://www.nuget.org/packages/Zeiss.IMT.PiWebApi.Client/) **recommended**
+- using the source files from our [GitHub repository](https://github.com/ZEISS-PiWeb/PiWeb-Api).
 
-On nuget you can also find a [C# demo application](https://www.nuget.org/packages/Zeiss.IMT.PiWebApi.Sample/) which provides an overview about the use of the most .NET SDK methods.
+{{ site.headers['bestPractice'] }} Use our sample application for better understanding
+
+On nuget you find a [C# demo application](https://www.nuget.org/packages/Zeiss.IMT.PiWebApi.Sample/) which provides an overview about the use of the most .NET SDK methods.
+For proper usage of this sample application:
+
+1. Create a WindowsForms project named 'PiWeb_HelloWorld'
+2. Add PiWebApi.Sample nuget package
 
 {% include_relative 021-general_new.md %}
 
