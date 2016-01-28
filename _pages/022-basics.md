@@ -52,6 +52,17 @@ var characteristics = await RestDataServiceClient.GetCharacteristics( partPath )
 
 {{ site.headers['bestPractice'] }} Create or update multiple entities in a single call
 
+{% highlight csharp %}
+var charPath1 = PathHelper.String2PathInformation( "/Part/Char1", "PC");
+var charPath2 = PathHelper.String2PathInformation( "/Part/Char2", "PC");
+var charPath3 = PathHelper.String2PathInformation( "/Part/Char3", "PC");
+var char1 = new InspectionPlanCharacteristic { Path = char1Path, Uuid = Guid.NewGuid() };
+var char2 = new InspectionPlanCharacteristic { Path = char2Path, Uuid = Guid.NewGuid() };
+var char3 = new InspectionPlanCharacteristic { Path = char3Path, Uuid = Guid.NewGuid() };
+var characteristics = new[] { char1, char2, char3 };
+await RestDataServiceClient.CreateCharacteristics( characteristics );
+{ endhighlight %}
+
 <h2 id="{{page.sections['basics']['secs']['measurementsValues'].anchor}}">{{page.sections['basics']['secs']['measurementsValues'].title}}</h2>
 
 {{ site.images['info'] }} The `LastModfified` property is only relevant for fetching measurements. On creating or updating a measurement it is set by server automatically.
