@@ -61,7 +61,7 @@ var char2 = new InspectionPlanCharacteristic { Path = char2Path, Uuid = Guid.New
 var char3 = new InspectionPlanCharacteristic { Path = char3Path, Uuid = Guid.NewGuid() };
 var characteristics = new[] { char1, char2, char3 };
 await RestDataServiceClient.CreateCharacteristics( characteristics );
-{ endhighlight %}
+{% endhighlight %}
 
 <h2 id="{{page.sections['basics']['secs']['measurementsValues'].anchor}}">{{page.sections['basics']['secs']['measurementsValues'].title}}</h2>
 
