@@ -264,7 +264,7 @@ The different entity types are:
 
 The attributes are either `AttributeDefinition` or `CatalogAttributeDefinition`.
 {% capture table %}
-####AttributeDefinition
+#### AttributeDefinition
 
 Property                             | Description
 -------------------------------------|--------------------------------------------------------------
@@ -274,7 +274,7 @@ Property                             | Description
 <nobr><code>ushort</code> length</nobr>         | The attribute's maximum length. Only set if the type is *AlphaNumeric*
 <nobr><code>string</code> definitionType</nobr> | Always has the value 'AttributeDefinition' and is used to differentiate between  `AttributeDefinition` and `CatalogAttributeDefinition`
 
-####CatalogAttributeDefinition
+#### CatalogAttributeDefinition
 
 Property                              | Description
 --------------------------------------|------------------------------------------------------------
@@ -644,7 +644,7 @@ Property                              | Description
 
 You can fetch, create, update and delete parts and characteristics using the following endpoints:
 
-####Parts
+#### Parts
 
 {% assign linkId="inspectionPlanEndpointGetAllParts" %}
 {% assign method="GET" %}
@@ -889,7 +889,7 @@ HTTP/1.1 200 Ok
 
 
 
-####Characteristics
+#### Characteristics
 
 {% assign linkId="inspectionPlanEndpointGetAllChars" %}
 {% assign method="GET" %}
