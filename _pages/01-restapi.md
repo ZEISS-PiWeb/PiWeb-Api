@@ -19,7 +19,7 @@ sections:
         title: Security
         anchor: gi-security
      parameter: 
-        title: Url Parameter
+        title: URL and Parameter
         anchor: gi-parameter
      codes: 
         title: Status Codes
