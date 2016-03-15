@@ -44,10 +44,14 @@ You can restrict requests by attaching certain parameters to the webservice URL 
 <br/>Example: 
 
 {% highlight http %}
-?deep=true&orderBy=4 asc
+?deep=true&order=4 asc
 {% endhighlight %}
 
+
 {{ site.images['info'] }} If the parameter contains lists of ids it needs to be surrounded by `{` and `}`, the values within the list are separated by `,`.
+
+{{ site.headers['bestPractice'] }} Encode the URL
+As some parameter defintions may contain special characters like space or plus it is highly recommended to encode the URL before sending requests to prevent unexpected behaviors.
 
 <h2 id="{{page.sections['general']['secs']['codes'].anchor}}">{{page.sections['general']['secs']['codes'].title}}</h2>
 
