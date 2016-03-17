@@ -1192,7 +1192,7 @@ You can fetch all measurements or certain measurements only. Possible filter uri
 --------------------|-----------------------------------------------------------------------------------
 <nobr><code>Guid list</code> measurementUuids </nobr>         | Restricts the query to these measurements <br> `measurementUuids={5b59cac7-9ecd-403c-aa26-56dd25892421}`
 <nobr><code>Guid list</code> partUuids </nobr> | Restricts the query to these parts <br> `partUuids={e42c5327-6258-4c4c-b3e9-6d22c30938b2}`
-<nobr><code>Path</code> partPath </nobr> | Restricts the query to this part <br><br> `partPath=/metal%20part`
+<nobr><code>Path</code> partPath </nobr> | Restricts the query to this part <br> `partPath=/metal%20part`
 <nobr><code>bool</code> deep </nobr><br><i>default:</i> <code>false</code> | Determines whether the query should affect all levels of the inspection plan. <br> `deep=true`
 <nobr><code>OrderCriteria</code> order </nobr><br><i>default:</i> <code>4 desc</code>   | Determines which attribute keys and which direction the keys should be ordered by <br> `order:4 asc, 10 desc`
 <nobr><code>Condition</code> searchCondition </nobr>| The query will only return items matching all conditions. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ]. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`
@@ -1389,7 +1389,7 @@ Delete condition for deleting measurements from a single or multiple parts may b
 --------------------|-----------------------------------------------------------------------------------
 <nobr><code>Guid list</code> measurementUuids </nobr>         | Restricts the query to these measurements <br> `measurementUuids={5b59cac7-9ecd-403c-aa26-56dd25892421}`
 <nobr><code>Guid list</code> partUuids </nobr> | Restricts the query to these parts <br> `partUuids={e42c5327-6258-4c4c-b3e9-6d22c30938b2}`
-<nobr><code>Path</code> partPath </nobr> | Restricts the query to this part <br><br> `partPath=/metal%20part`
+<nobr><code>Path</code> partPath </nobr> | Restricts the query to this part <br> `partPath=/metal%20part`
 <nobr><code>Condition</code> searchCondition </nobr>| The query will only return items matching all conditions. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ]. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`
 <nobr><code>Measurements, AggregationMeasurements, All</code> aggregation </nobr><br><i>default:</i> <code>Measurements</code> | Specifies which types of measurements will be fetched. <br> `aggregation=All`
 {% endcapture %}
