@@ -1378,16 +1378,20 @@ HTTP/1.1 200 OK
 You have multiple options for deleting measurements measurements:
 
 * Delete all measurements
+* Delete measurements by their uuids
 * Delete measurements from a single part by its path
 * Delete measurements from parts by its uuids
-* Delete measurements by their uuids
 
-The delete condition may be further restricted by the filter uri parameter `searchCondition`:
+Delete condition for deleting measurements from a single or multiple parts may be further restricted by the filter uri parameter `searchCondition`.
 
 {% capture table %}
 <code>Type</code> Parameter      |  Description <br> <code>Example</code>
 --------------------|-----------------------------------------------------------------------------------
+<nobr><code>Guid list</code> measurementUuids </nobr>         | Restricts the query to these measurements <br> `measurementUuids={5b59cac7-9ecd-403c-aa26-56dd25892421}`
+<nobr><code>Guid list</code> partUuids </nobr> | Restricts the query to these parts <br> `partUuids={e42c5327-6258-4c4c-b3e9-6d22c30938b2}`
+<nobr><code>Path</code> partPath </nobr> | Restricts the query to this part <br><br> `partPath=/metal%20part`
 <nobr><code>Condition</code> searchCondition </nobr>| The query will only return items matching all conditions. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ]. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`
+<nobr><code>Measurements, AggregationMeasurements, All</code> aggregation </nobr><br><i>default:</i> <code>Measurements</code> | Specifies which types of measurements will be fetched. <br> `aggregation=All`
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
 
