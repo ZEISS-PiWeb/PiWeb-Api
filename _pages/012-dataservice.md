@@ -1401,7 +1401,7 @@ Delete condition for deleting measurements from a single or multiple parts may b
 
 {% capture jsonrequest %}
 {% highlight http %}
-POST /dataServiceRest/measurements?partUuids={4b59cac7-9ecd-403c-aa26-56dd25892421}&searchCondition=4>[2015-01-01T00:00:00Z]+4<[2015-03-31T23:59:59Z] HTTP/1.1
+DELETE /dataServiceRest/measurements?partUuids={4b59cac7-9ecd-403c-aa26-56dd25892421}&searchCondition=4>[2015-01-01T00:00:00Z]+4<[2015-03-31T23:59:59Z] HTTP/1.1
 {% endhighlight %}
 {% endcapture %}
 
@@ -1424,7 +1424,7 @@ HTTP/1.1 200 OK
 
 {% capture jsonrequest %}
 {% highlight http %}
-POST /dataServiceRest/measurements/5b59cac7-9ecd-403c-aa26-56dd25892421 HTTP/1.1
+DELETE /dataServiceRest/measurements/5b59cac7-9ecd-403c-aa26-56dd25892421 HTTP/1.1
 {% endhighlight %}
 {% endcapture %}
 
