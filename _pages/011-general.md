@@ -1,4 +1,4 @@
-<h2 id="{{page.sections['general']['secs']['addresses'].anchor}}">{{page.sections['general']['secs']['addresses'].title}}</h2>
+{{ site.images['dataservice'] }} <h2 id="{{page.sections['general']['secs']['addresses'].anchor}}">{{page.sections['general']['secs']['addresses'].title}}</h2>
 
 The base addresses for the REST based services are:
 
@@ -38,10 +38,10 @@ Authorization: Basic QWRtaW5pc3RyYXRvcjphZG0hbiFzdHJhdDBy
 You can restrict requests by attaching certain parameters to the webservice URL in the following format:
 
 {% highlight http %}
-?parameter=value[&parameter=value] 
+?parameter=value[&parameter=value]
 {% endhighlight %}
 
-<br/>Example: 
+<br/>Example:
 
 {% highlight http %}
 ?deep=true&order=4 asc
@@ -58,7 +58,7 @@ As some parameter defintions may contain special characters like brackets, space
 {% capture table %}
 Method        | Statuscodes
 ------------- | -----------------------------------------------------------------------------------
-GET           | **200** (OK)<br> **400** (Bad request) - Request failed <br> **404** (Not found) - Endpoint or item does not exist 
+GET           | **200** (OK)<br> **400** (Bad request) - Request failed <br> **404** (Not found) - Endpoint or item does not exist
 POST           | **201** (Created)<br> **400** (Bad request) – Creation of at least one item failed, e.g. due to bad formatting <br> **404** (Not found) – Endpoint doesn't exist <br> **409** (Conflict) – An item does already exist
 PUT          | **200** (OK)<br> **400** (Bad request) –  Update of at least one item failed, e.g. due to bad formatting <br> **404** (Not found) – Endpoint or item(s) doesn't exist
 DELETE        | **200** (OK)<br>**400** (Bad request) – Request of at least one item failed <br> **404** (Not found) – Endpoint or items do not exist
@@ -71,7 +71,7 @@ Every response consists either of the requested data or of an error message retu
 
 {% highlight json %}
 {
-   "message": "Unable to insert inspection plan items. An item with path '/metal part/' 
+   "message": "Unable to insert inspection plan items. An item with path '/metal part/'
                [uuid: 05040c4c-f0af-46b8-810e-30c0c00a379e] does already exist."
 }
 {% endhighlight %}
