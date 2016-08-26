@@ -67,8 +67,7 @@ sections:
 
 <p class="dottedline" />
 
-<img src="/PiWeb-Api/images/database-table.png">
-<h1 id="{{page.sections['dataservice'].anchor}}">{{page.sections['dataservice'].title}}</h1>
+<p><img src="/PiWeb-Api/images/database-table.png"><h1 id="{{page.sections['dataservice'].anchor}}">{{page.sections['dataservice'].title}}</h1></p>
 
 {% include_relative 012-dataservice.md %}
 
