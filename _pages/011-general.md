@@ -1,4 +1,4 @@
-{{ site.images['dataservice'] }} <h2 id="{{page.sections['general']['secs']['addresses'].anchor}}">{{page.sections['general']['secs']['addresses'].title}}</h2>
+<h2 id="{{page.sections['general']['secs']['addresses'].anchor}}">{{page.sections['general']['secs']['addresses'].title}}</h2>
 
 The base addresses for the REST based services are:
 

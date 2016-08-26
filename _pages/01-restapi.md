@@ -5,58 +5,58 @@ title: REST Api
 redirect_from: "/"
 permalink: "/restapi/"
 sections:
-  general: 
+  general:
     title: General Information
     anchor: gi
     secs:
-     addresses: 
+     addresses:
         title: Addresses
         anchor: gi-addresses
-     formats: 
+     formats:
         title: Formats
         anchor: gi-formats
-     security: 
+     security:
         title: Security
         anchor: gi-security
-     parameter: 
+     parameter:
         title: URL and Parameter
         anchor: gi-parameter
-     codes: 
+     codes:
         title: Status Codes
         anchor: gi-codes
-     response: 
+     response:
         title: Response
         anchor: gi-response
   dataservice:
     title: Data Service
     anchor: ds
     secs:
-      serviceInformation: 
+      serviceInformation:
         title: Service Information
         anchor: ds-service-information
-      configuration: 
+      configuration:
         title: Configuration
         anchor: ds-configuration
-      catalogs: 
+      catalogs:
         title: Catalogs
         anchor: ds-catalogs
-      inspectionPlan: 
+      inspectionPlan:
         title: Inspection Plan
         anchor: ds-inspection-plan
-      measurementsAndValues: 
+      measurementsAndValues:
         title: Measurements And Values
         anchor: ds-measurements-and-values
   rawdataservice:
     title: Raw Data Service
     anchor: rs
     secs:
-      serviceInformation: 
+      serviceInformation:
         title: Service Information
         anchor: rs-service-information
-      rawDataInformation: 
+      rawDataInformation:
         title: Raw Data Information
         anchor: rs-raw-data-information
-      rawDataObjects: 
+      rawDataObjects:
         title: Raw Data Objects
         anchor: rs-raw-data-objects
 ---
@@ -67,7 +67,7 @@ sections:
 
 <p class="dottedline" />
 
-<h1 id="{{page.sections['dataservice'].anchor}}">{{page.sections['dataservice'].title}}</h1>
+{{ site.images['dataservice'] }} <h1 id="{{page.sections['dataservice'].anchor}}">{{page.sections['dataservice'].title}}</h1>
 
 {% include_relative 012-dataservice.md %}
 
@@ -76,4 +76,3 @@ sections:
 <h1 id="{{page.sections['rawdataservice'].anchor}}">{{page.sections['rawdataservice'].title}}</h1>
 
 {% include_relative 013-rawdataservice.md %}
-
