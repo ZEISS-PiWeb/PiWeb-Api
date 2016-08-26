@@ -67,7 +67,7 @@ sections:
 
 <p class="dottedline" />
 
-{{ site.images['dataservice'] }} <h1 id="{{page.sections['dataservice'].anchor}}">{{page.sections['dataservice'].title}}</h1>
+<h1 id="{{page.sections['dataservice'].anchor}}">{{page.sections['dataservice'].title}}</h1>
 
 {% include_relative 012-dataservice.md %}
 
