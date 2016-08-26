@@ -52,6 +52,8 @@ var characteristics = await RestDataServiceClient.GetCharacteristics( partPath )
 
 {{ site.headers['bestPractice'] }} Create or update multiple entities in a single call
 
+To achieve a good performance it is highly recommended to create or update inspection plan items in a single call. That is why all create and update methods expect an array parameter.
+
 {% highlight csharp %}
 var charPath1 = PathHelper.String2PathInformation( "/Part/Char1", "PC");
 var charPath2 = PathHelper.String2PathInformation( "/Part/Char2", "PC");
