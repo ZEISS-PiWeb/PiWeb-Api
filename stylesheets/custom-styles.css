@@ -273,7 +273,7 @@ ul.subNavList>li>a:hover {
 	font-weight:bold;
 }
 
-#navcolumn>nav p{
+#navcolumn>.nav p{
   margin:0;
 }
 
