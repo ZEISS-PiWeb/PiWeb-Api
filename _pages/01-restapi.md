@@ -68,8 +68,8 @@ sections:
 <p class="dottedline" />
 
 <!--Mehrer liquid variablen hintereinander....WIE??-->
-
-<h1 id="{{page.sections['dataservice'].anchor}}"><div>{{site.images['dataservice'] page.sections['dataservice'].title | markdownify}}</div></h1>
+{% capture caption %}{{page.sections['dataservice'].title}}{% endcapture %}
+<h1 id="{{page.sections['dataservice'].anchor}}"><div>{{site.images['dataservice']  | append: caption | markdownify}}</div></h1>
 
 {% include_relative 012-dataservice.md %}
 
