@@ -11,8 +11,10 @@ baseurl: "/PiWeb-Api"
 images:
   warning: "![Warning](/PiWeb-Api/images/warning.png)"
   info: "![Info](/PiWeb-Api/images/info.png)"
-  dataservice: "![DatabaseTable](/PiWeb-Api/images/database-table.png)"
-  rawdataservice: "![DatabaseAttach](/PiWeb-Api/images/database-attach.png)"
+  dataservice64: "![DatabaseTable](/PiWeb-Api/images/database-table64.png)"
+  rawdataservice64: "![DatabaseAttach](/PiWeb-Api/images/database-attach64.png)"
+  dataservice16: "![DatabaseTable](/PiWeb-Api/images/database-table16.png)"
+  rawdataservice16: "![DatabaseAttach](/PiWeb-Api/images/database-attach16.png)"
 sections:
   getLabel: <span class="label label-primary">Get</span>
   postLabel: <span class="label label-success">Post</span>

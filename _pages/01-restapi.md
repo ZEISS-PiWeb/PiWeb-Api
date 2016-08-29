@@ -7,6 +7,7 @@ permalink: "/restapi/"
 sections:
   general:
     title: General Information
+    iconName: dataservice16
     anchor: gi
     secs:
      addresses:
@@ -29,6 +30,7 @@ sections:
         anchor: gi-response
   dataservice:
     title: Data Service
+    iconName: dataservice16
     anchor: ds
     secs:
       serviceInformation:
@@ -48,6 +50,7 @@ sections:
         anchor: ds-measurements-and-values
   rawdataservice:
     title: Raw Data Service
+    iconName: rawdataservice16
     anchor: rs
     secs:
       serviceInformation:
@@ -67,14 +70,14 @@ sections:
 
 <p class="dottedline" />
 
-<!--Mehrer liquid variablen hintereinander....WIE??-->
 {% capture caption %} {{page.sections['dataservice'].title}}{% endcapture %}
-<h1 id="{{page.sections['dataservice'].anchor}}">{{site.images['dataservice']  | append: caption | markdownify}}</h1>
+<h1 id="{{page.sections['dataservice'].anchor}}">{{site.images['dataservice64']  | append: caption | markdownify}}</h1>
 
 {% include_relative 012-dataservice.md %}
 
 <p class="dottedline" />
 
-<h1 id="{{page.sections['rawdataservice'].anchor}}">{{page.sections['rawdataservice'].title}}</h1>
+{% capture caption %} {{page.sections['rawdataservice'].title}}{% endcapture %}
+<h1 id="{{page.sections['rawdataservice'].anchor}}">{{site.images['rawdataservice64']  | append: caption | markdownify}}</h1>
 
 {% include_relative 013-rawdataservice.md %}
