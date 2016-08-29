@@ -6,7 +6,7 @@
 		{% for sec in node.sections %}
 			<li>
 				{% capture iconName %}{{sec[1].iconName}}{% endcapture %}
-				<a href="#{{sec[1].anchor}}" data-target="#{{sec[1].anchor}}">{{site.images[iconName]  | append ' ' | append: sec[1].title | markdownify}}</a>
+				<a href="#{{sec[1].anchor}}" data-target="#{{sec[1].anchor}}">{{site.images[iconName]  | append: ' ' | append: sec[1].title | markdownify}}</a>
 				<ul class="nav">
 				{% for subsec in sec[1].secs %}
 					<li><a href="#{{subsec[1].anchor}}" data-target="#{{subsec[1].anchor}}">{{subsec[1].title}}</a></li>
