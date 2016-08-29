@@ -5,7 +5,8 @@
 		{% comment %}When you iterate over a hash using a variable called sec, sec[0] contains the key and sec[1] contains the value on each iteration.{% endcomment %}
 		{% for sec in node.sections %}
 			<li>
-				<a href="#{{sec[1].anchor}}" data-target="#{{sec[1].anchor}}">{{site.images[sec[1].iconName]  | append: sec[1].iconName | markdownify}}</a>
+				{% capture iconName %}{{sec[1].iconName}}{% endcapture %}
+				<a href="#{{sec[1].anchor}}" data-target="#{{sec[1].anchor}}">{{site.images[iconName]  | append: sec[1].title | markdownify}}</a>
 				<ul class="nav">
 				{% for subsec in sec[1].secs %}
 					<li><a href="#{{subsec[1].anchor}}" data-target="#{{subsec[1].anchor}}">{{subsec[1].title}}</a></li>
