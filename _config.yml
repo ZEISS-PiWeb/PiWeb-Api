@@ -11,6 +11,7 @@ baseurl: "/PiWeb-Api"
 images:
   warning: "![Warning](/PiWeb-Api/images/warning.png)"
   info: "![Info](/PiWeb-Api/images/info.png)"
+  generalInformation16: "![DatabaseInfo](/PiWeb-Api/images/database-info.png)"
   dataservice64: "![DatabaseTable](/PiWeb-Api/images/database-table64.png)"
   rawdataservice64: "![DatabaseAttach](/PiWeb-Api/images/database-attach64.png)"
   dataservice16: "![DatabaseTable](/PiWeb-Api/images/database-table.png)"

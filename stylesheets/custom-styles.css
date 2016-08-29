@@ -273,6 +273,10 @@ ul.subNavList>li>a:hover {
 	font-weight:bold;
 }
 
+#navcolumn>nav p{
+  margin:0;
+}
+
 #navcolumn>.nav .nav a:hover{
 	border-left: 2px dotted #437AB4;
 }

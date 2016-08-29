@@ -7,7 +7,7 @@ permalink: "/restapi/"
 sections:
   general:
     title: General Information
-    iconName: dataservice16
+    iconName: generalInformation16
     anchor: gi
     secs:
      addresses:
