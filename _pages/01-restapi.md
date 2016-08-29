@@ -64,7 +64,8 @@ sections:
         anchor: rs-raw-data-objects
 ---
 
-<h1 id="{{page.sections['general'].anchor}}">{{page.sections['general'].title}}</h1>
+{% capture caption %} {{page.sections['general'].title}}{% endcapture %}
+<h1 id="{{page.sections['general'].anchor}}">{{site.images['generalInformation16']  | append: caption | markdownify}}</h1>
 
 {% include_relative 011-general.md %}
 
