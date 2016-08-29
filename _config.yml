@@ -12,8 +12,9 @@ images:
   warning: "![Warning](/PiWeb-Api/images/warning.png)"
   info: "![Info](/PiWeb-Api/images/info.png)"
   generalInformation16: "![DatabaseInfo](/PiWeb-Api/images/database-info.png)"
-  dataservice64: "![DatabaseTable](/PiWeb-Api/images/database-table64.png)"
-  rawdataservice64: "![DatabaseAttach](/PiWeb-Api/images/database-attach64.png)"
+  generalInformation40: "![DatabaseInfo](/PiWeb-Api/images/database-info40.png)"
+  dataservice40: "![DatabaseTable](/PiWeb-Api/images/database-table40.png)"
+  rawdataservice40: "![DatabaseAttach](/PiWeb-Api/images/database-attach40.png)"
   dataservice16: "![DatabaseTable](/PiWeb-Api/images/database-table.png)"
   rawdataservice16: "![DatabaseAttach](/PiWeb-Api/images/database-attach.png)"
 sections:
