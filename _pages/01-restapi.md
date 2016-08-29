@@ -69,7 +69,7 @@ sections:
 
 <!--Mehrer liquid variablen hintereinander....WIE??-->
 {% capture caption %} {{page.sections['dataservice'].title}}{% endcapture %}
-<h1 id="{{page.sections['dataservice'].anchor}}"><div>{{site.images['dataservice']  | append: caption | markdownify}}</div></h1>
+<h1 id="{{page.sections['dataservice'].anchor}}">{{site.images['dataservice']  | append: caption | markdownify}}</h1>
 
 {% include_relative 012-dataservice.md %}
 
