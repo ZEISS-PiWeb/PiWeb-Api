@@ -572,7 +572,7 @@ HTTP/1.1 200 Ok
 
 {% include endpointTab.html %}
 
-{% assign linkId="catalogEndpointDeleteCatalogs" %}
+{% assign linkId="catalogEndpointDeleteCatalog" %}
 {% assign method="DELETE" %}
 {% assign endpoint="/catalogs/:catalogUuid" %}
 {% assign summary="Deletes the catalog specified by :catalogUuid" %}
@@ -593,7 +593,7 @@ HTTP/1.1 200 Ok
 
 {% include endpointTab.html %}
 
-{% assign linkId="catalogEndpointDeleteEntries" %}
+{% assign linkId="catalogEndpointDeleteAllEntries" %}
 {% assign method="DELETE" %}
 {% assign endpoint="/catalogs/:catalogUuid/" %}
 {% assign summary="Deletes all entries for the catalog specified by :catalogUuid" %}
