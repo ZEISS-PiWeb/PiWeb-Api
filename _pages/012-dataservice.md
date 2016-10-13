@@ -618,7 +618,7 @@ HTTP/1.1 200 Ok
 {% assign linkId="catalogEndpointDeleteEntries" %}
 {% assign method="DELETE" %}
 {% assign endpoint="/catalogs/:catalogUuid/{:catalogEntryKeys}" %}
-{% assign summary="Deletes entries specified by :catalogEntryKeys<br/> for the catalog with :catalogUuid" %}
+{% assign summary="Deletes :catalogEntryKeys<br/> for the catalog with :catalogUuid" %}
 {% assign description="" %}
 
 {% assign exampleCaption="Delete the entries with key 1 and 3 from the catalog with uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
