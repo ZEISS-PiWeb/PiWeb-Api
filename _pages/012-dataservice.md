@@ -362,7 +362,7 @@ GET /dataServiceRest/catalogs HTTP/1.1
 {% assign linkId="catalogEndpointGetSingle" %}
 {% assign method="GET" %}
 {% assign endpoint="/catalogs/:catalogUuid" %}
-{% assign summary="Fetches the catalog specified by the :catalogUuid" including its entries%}
+{% assign summary="Fetches the catalog specified by the :catalogUuid including its entries" %}
 {% assign description="" %}
 {% assign exampleCaption="Fetching the catalog with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
 
@@ -413,7 +413,7 @@ GET /dataServiceRest/catalogs/8c376bee-ffe3-4ee4-abb9-a55b492e69ad HTTP/1.1
 {% assign endpoint="/catalogs" %}
 {% assign summary="Creates catalogs" %}
 {% capture description %}
-To create a new catalog, the catalog object must be transmitted in the request's body. A valid add request must contain a unique identifier, the catalog name and the valid attributes. Catalog entries are optional. All valid attributes must be added as catalog attributes beforehand (see <a href="#{{page.sections['dataservice']['secs']['configuration'].anchor}}">{{page.sections['dataservice']['secs']['configuration'].title}}</a>).
+To create a new catalog, the catalog object must be transmitted in the request's body. A valid request contains a unique identifier, the catalog name and the valid attributes. Catalog entries are optional. All valid attributes must be added as catalog attributes beforehand (see <a href="#{{page.sections['dataservice']['secs']['configuration'].anchor}}">{{page.sections['dataservice']['secs']['configuration'].title}}</a>).
 
 {{ site.images['info'] }} If no catalog entries are specified, an empty catalog entry with key '0' and attribute value(s) 'not defined' ( in case of alphanumeric attributes ) is created by default.
 {% endcapture %}
@@ -465,13 +465,13 @@ HTTP/1.1 201 Created
 {% assign linkId="catalogEndpointCreateEntries" %}
 {% assign method="POST" %}
 {% assign endpoint="/catalogs/:catalogUuid" %}
-{% assign summary=" Creates entries for the catalog specified by the :catalogUuid" %}
-{% assign description="To add new entries to an existing catalog, you must specify all new entries in the request body. Each new entry must contain a unique key. Each entry attribute must be listed as a valid attribute in the catalog definition." %}
+{% assign summary=" Creates entries for the catalog specified by :catalogUuid" %}
+{% assign description="To add entries to an existing catalog they need to be specified in the request body. Each new entry must consist of a unique key. Each entry attribute must be listed as a valid attribute in the catalog definition." %}
 {% assign exampleCaption="Adding a catalog entry - add the inspector ‘Clarks’" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
-POST /dataServiceRest/catalogs/8c376bee-ffe3-4ee4-abb9-a55b492e69ad/entries
+POST /dataServiceRest/catalogs/8c376bee-ffe3-4ee4-abb9-a55b492e69ad HTTP/1.1
 {% endhighlight %}
 
 {% highlight json %}
@@ -554,19 +554,13 @@ HTTP/1.1 200 Ok
 {% assign linkId="catalogEndpointDeleteCatalogs" %}
 {% assign method="DELETE" %}
 {% assign endpoint="/catalogs" %}
-{% assign summary="Deletes catalogs" %}
-{% capture description %}
-There are two different options for deleting catalogs:
-
-* delete all catalogs or
-* delete one or more specific catalogs identified by their uuid. For this request you need to add the filter parameter `catalogUuids` to the request uri.
-*
-{% endcapture %}
-{% assign exampleCaption="Delete the catalog with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
+{% assign summary="Deletes all catalogs" %}
+{% assign description="" %}
+{% assign exampleCaption="Delete all catalogs" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
-DELETE /dataServiceRest/catalogs?catalogUuids={8c376bee-ffe3-4ee4-abb9-a55b492e69ad} HTTP/1.1
+DELETE /dataServiceRest/catalogs HTTP/1.1
 {% endhighlight %}
 {% endcapture %}
 
@@ -578,23 +572,60 @@ HTTP/1.1 200 Ok
 
 {% include endpointTab.html %}
 
+{% assign linkId="catalogEndpointDeleteCatalogs" %}
+{% assign method="DELETE" %}
+{% assign endpoint="/catalogs/:catalogUuid" %}
+{% assign summary="Deletes the catalog specified by :catalogUuid" %}
+{% assign description="" %}
+{% assign exampleCaption="Delete the catalog with uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
+
+{% capture jsonrequest %}
+{% highlight http %}
+DELETE /dataServiceRest/catalogs/8c376bee-ffe3-4ee4-abb9-a55b492e69ad HTTP/1.1
+{% endhighlight %}
+{% endcapture %}
+
+{% capture jsonresponse %}
+{% highlight http %}
+HTTP/1.1 200 Ok
+{% endhighlight %}
+{% endcapture %}
+
+{% include endpointTab.html %}
 
 {% assign linkId="catalogEndpointDeleteEntries" %}
 {% assign method="DELETE" %}
-{% assign endpoint="/catalogs/:catalogUuid" %}
-{% assign summary="Deletes entries for the catalog specified by the :catalogUuid" %}
-{% capture description %}
-There are two different options for deleting catalog entries:
+{% assign endpoint="/catalogs/:catalogUuid/" %}
+{% assign summary="Deletes all entries for the catalog specified by :catalogUuid" %}
+{% assign description="" %}
 
-* Delete all entries from a certain catalog identified by its uuid or
-* Delete one or more specific entries identified by their keys from a certain catalog identified by its uuid. For this request you need to add the filter parameter `entryIds` to the request uri.
+{% assign exampleCaption="Delete all entries from the catalog with uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
+
+{% capture jsonrequest %}
+{% highlight http %}
+DELETE /dataServiceRest/catalogs/8c376bee-ffe3-4ee4-abb9-a55b492e69ad/ HTTP/1.1
+{% endhighlight %}
 {% endcapture %}
+
+{% capture jsonresponse %}
+{% highlight http %}
+HTTP/1.1 200 Ok
+{% endhighlight %}
+{% endcapture %}
+
+{% include endpointTab.html %}
+
+{% assign linkId="catalogEndpointDeleteEntries" %}
+{% assign method="DELETE" %}
+{% assign endpoint="/catalogs/:catalogUuid/{:catalogEntryKeys}" %}
+{% assign summary="Deletes entries specified by :catalogEntryKeys for the catalog with :catalogUuid" %}
+{% assign description="" %}
 
 {% assign exampleCaption="Delete the entries with key 1 and 3 from the catalog with uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
-DELETE /dataServiceRest/catalogs/8c376bee-ffe3-4ee4-abb9-a55b492e69ad?entryIds={1,3} HTTP/1.1
+DELETE /dataServiceRest/catalogs/8c376bee-ffe3-4ee4-abb9-a55b492e69ad/{1,3} HTTP/1.1
 {% endhighlight %}
 {% endcapture %}
 
