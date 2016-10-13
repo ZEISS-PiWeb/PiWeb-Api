@@ -294,8 +294,8 @@ Catalogs and catalog entries can be fetched, created, updated and deleted using 
 {% assign linkId="catalogEndpointGetAll" %}
 {% assign method="GET" %}
 {% assign endpoint="/catalogs" %}
-{% assign summary="Fetches catalogs" %}
-{% assign description="This request can be restricted by the filter parameter `catalogUuids`, a list of catalog uuids to target only specific catalogs. " %}
+{% assign summary="Fetches all catalogs including its entries" %}
+{% assign description="" %}
 {% assign exampleCaption="Fetching all catalogs" %}
 
 {% capture jsonrequest %}
