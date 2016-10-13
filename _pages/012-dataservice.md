@@ -362,7 +362,7 @@ GET /dataServiceRest/catalogs HTTP/1.1
 {% assign linkId="catalogEndpointGetSingle" %}
 {% assign method="GET" %}
 {% assign endpoint="/catalogs/:catalogUuid" %}
-{% assign summary="Returns the catalog specified by the :catalogUuid" %}
+{% assign summary="Fetches the catalog specified by the :catalogUuid" including its entries%}
 {% assign description="" %}
 {% assign exampleCaption="Fetching the catalog with the uuid 8c376bee-ffe3-4ee4-abb9-a55b492e69ad" %}
 
