@@ -3,7 +3,7 @@
 
 The .NET REST clients provide multiple constructor overloads.
 
-###Data Service
+### Data Service
 
 {% capture table %}
 Constructor method | Description
@@ -21,7 +21,7 @@ var dataserviceRestClient = new DataServiceRestClient( "https", "piwebserver", 8
 {% endhighlight %}
 
 
-###Rawdata Service
+### Rawdata Service
 
 {% capture table %}
 Constructor method | Description
