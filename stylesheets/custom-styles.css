@@ -264,6 +264,7 @@ ul.subNavList>li>a:hover {
 
 #navcolumn>.nav .active .nav{
 	display:block;
+	margin-left: 6px;
 }
 
 #navcolumn>.nav>li>a{
