@@ -15,23 +15,33 @@ namespace DataService
 	#endregion
 
 	/// <summary>
-	/// This enumeration specifies all possible entities that are accessible via DataService.
+	/// Enumeration of possible entities.
 	/// </summary>
 	public enum Entity 
 	{
-		/// <summary>Part</summary>
+		/// <summary>
+		/// The entity is a part.
+		/// </summary>
 		Part,
 
-		/// <summary>Characteristic</summary>
+		/// <summary>
+		/// The entity is a characteristic.
+		/// </summary>
 		Characteristic,
 
-		/// <summary>Measurement value</summary>
+		/// <summary>
+		/// The entity is a measurement value.
+		/// </summary>
 		Value,
 
-		/// <summary>Measurement</summary>
+		/// <summary>
+		/// The entity is a measurement.
+		/// </summary>
 		Measurement,
 
-		/// <summary>Catalog</summary>
+		/// <summary>
+		/// The entity is a catalog.
+		/// </summary>
 		Catalog
 	}
 }

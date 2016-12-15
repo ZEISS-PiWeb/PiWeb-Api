@@ -9,7 +9,7 @@
 namespace DataService
 {
 	/// <summary>
-	/// This element specifies the direction of an order operation.
+	/// This enumeration specifies the order direction when searching for measurement .
 	/// </summary>
 	public enum OrderDirection 
 	{

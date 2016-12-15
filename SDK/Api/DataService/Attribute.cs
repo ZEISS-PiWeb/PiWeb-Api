@@ -16,10 +16,7 @@ namespace DataService
 	#endregion
 
 	/// <summary>
-	/// Every single instance of every entity (like Part, Characteristic etc.) may have an arbitrary
-	/// amount of attributes, which further describe the specific entity instance. This element
-	/// represents a single attribute, which has a key (e.g. <code>k1002</code> or <code>k2120</code>,
-	/// whereas only the numeric part is used) and a value.
+	/// Holds the unique key as well as description and further characterizes an entity.
 	/// </summary>
 	/// <remarks>This class is immutable.</remarks>
 	public class Attribute
@@ -39,7 +36,7 @@ namespace DataService
 		{ }
 
 		/// <summary>
-		/// Constructor. Creates a new attribute with key <code>key</code> and value <code>value</code>.
+		/// Creates a new attribute with key <code>key</code> and value <code>value</code>.
 		/// </summary>
 		/// <param name="key">The key of the newly created attribute.</param>
 		/// <param name="value">The value.</param>
@@ -51,7 +48,7 @@ namespace DataService
 		}
 
 		/// <summary>
-		/// Konstruktor. Creates a new attribute with key <code>key</code> and value <code>rawValue</code>.
+		/// Creates a new attribute with key <code>key</code> and value <code>rawValue</code>.
 		/// </summary>
 		/// <param name="key">The key of the newly created attribute.</param>
 		/// <param name="rawValue">The raw value.</param>
@@ -72,12 +69,12 @@ namespace DataService
 		public ushort Key { get; private set; }
 
 		/// <summary>
-		/// Returns the parsed attribute value of this attribute.
+		/// Returns the unparsed attribute value of this attribute.
 		/// </summary>
 		public object RawValue { get; private set; }
 
 		/// <summary>
-		/// Returns the attribute value of this attribute.
+		/// Returns the string parsed attribute value of this attribute.
 		/// </summary>
 		public string Value
 		{
@@ -102,7 +99,7 @@ namespace DataService
 		/// and attributes defining a null value (which could be interpreted as deletion during a merge). 
 		/// </summary>
 		/// <returns>
-		///   <c>true</c> if this attribute has no value; otherwise, <c>false</c>.
+		///   <code>true</code> if this attribute has no value; otherwise, <code>false</code>.
 		/// </returns>
 		public bool IsNull()
 		{

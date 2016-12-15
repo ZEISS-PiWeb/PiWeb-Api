@@ -19,9 +19,13 @@ namespace DataService
 	#endregion
 
 	/// <summary>
-	/// A complete path hierarchy consists of many path elements, each one discribing one node of
-	/// the path hierarchy. The order of the nodes has to match the hierarchical structure:
-	/// the top most node ist the first node in this list, a leaf node is the last node in this list.
+	/// Every inspection plan entity is uniquely identified by a path. The path contains a typed list of path elements (<see cref="PathElement"/>).
+	/// This list of path elements describes a hierarchy with the top most path element as the first element in that list and the deepest path element
+	/// as the last element in that list. Please note that a path has the following rules:
+	/// * The path elements are compared ignoring the case
+	/// * A part path element can have part path and characteristic path elements as children
+	/// * A characteristic path element can have other characteristic elements as children
+	/// * A characteristic path element can not have part elements as children
 	/// </summary>
 	[JsonConverter( typeof( Common.Data.Converter.PathInformationConverter ) )]
 	public sealed class PathInformation : IFormattable, IEnumerable<PathElement>

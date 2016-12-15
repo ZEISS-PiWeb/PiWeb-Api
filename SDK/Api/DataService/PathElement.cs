@@ -15,10 +15,10 @@ namespace DataService
 	#endregion
 
 	/// <summary>
-	/// Each element in a path hierarchy consists of the name of the current element and its type.
+	/// This class represents a single part of an inspection plan path. A path part has a <see cref="Value"/> and can either specify a characteristic or a part (<see cref="Type"/>).
 	/// Notice that comparision of path elements is case insensitiv per default.
 	/// </summary>
-	/// <remarks>Diese Klasse ist immutable!</remarks>
+	/// <remarks>This class is immutable!</remarks>
 	public sealed class PathElement
 	{
 		#region constants

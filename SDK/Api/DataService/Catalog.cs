@@ -17,9 +17,8 @@ namespace DataService
 	#endregion
 
 	/// <summary>
-	/// This element (in combination with its base element) describes the entity Catalog with its relation to zero or more catalog entries.
-	/// When received from the DataService as a result of <code>CatalogueSearch</code>, the element 
-	/// <code>validAttributes</code> contains a list of attribute keys, that are valid for the respective catalog.
+	/// This class represents a concrete catalog with a description of possible catalog attributes (<see cref="ValidAttributes"/>) for each entry (i.e. the colums of a catalog) and
+	/// the catalog entries (<see cref="CatalogEntries"/>).
 	/// </summary>
 	[JsonConverter( typeof( Common.Data.Converter.CatalogConverter ) )]
 	public class Catalog : SimpleCatalog
@@ -49,8 +48,9 @@ namespace DataService
 		}
 
 		/// <summary>
-		/// Gets or sets a list of attribute keys that are valid for the entries of this catalog.
+		/// Gets or sets a list of possible catalog entry attribute (i.e. columns of a catalog).
 		/// </summary>
+		[JsonProperty( "validAttributes" )]
 		public ushort[] ValidAttributes
 		{
 			get { return _ValidAttributes; }
@@ -58,8 +58,9 @@ namespace DataService
 		}
 
 		/// <summary>
-		/// Gets or sets the list of catalog entries in this catalog.
+		/// Gets or sets the list of catalog entries that belong to this catalog.
 		/// </summary>
+		[JsonProperty( "catalogEntries" )]
 		public CatalogEntry[] CatalogEntries
 		{
 			get { return _CatalogEntries; }

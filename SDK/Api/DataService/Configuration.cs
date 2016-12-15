@@ -21,16 +21,7 @@ namespace DataService
 	#endregion
 
 	/// <summary>
-	/// This element holds the configuration of the service.
-	/// It defines the possible attributes that each entity (like Part, Characteristic, ...) may have.
-	/// When a client wants to construct an entity, it must not use any attributes which are not defined
-	/// in the corresponding list.
-	/// The entities Part and Characteristic have significant attributes. The list of significant
-	/// attributes has the function of a primary key: There must be not more than one Part in the database
-	/// with the same values for the set of significant part attributes. The same applies to
-	/// Characteristics, but there must be not more than one Characteristic with a given
-	/// signature below a given root Part (a Part with no parent). This means, that there may be
-	/// several Characteristics with the same signature, but then each one has to have a different root Part.
+	/// Holds the configuration of the entire database and defines the possible attribute definitions of all entities.
 	/// </summary>
 	[JsonConverter( typeof( Common.Data.Converter.ConfigurationConverter ) )]
 	public class Configuration
@@ -133,6 +124,7 @@ namespace DataService
 		/// <summary>
 		/// Gets or sets a list of all part attribute definitions.
 		/// </summary>
+		[JsonProperty( "partAttributes" )]
 		public AbstractAttributeDefinition[] PartAttributes
 		{
 			get { return _PartAttributes; }
@@ -148,6 +140,7 @@ namespace DataService
 		/// <summary>
 		/// Gets or sets a list of all characteristic attribute definitions.
 		/// </summary>
+		[JsonProperty( "characteristicAttributes" )]
 		public AbstractAttributeDefinition[] CharacteristicAttributes
 		{
 			get { return _CharacteristicAttributes; }
@@ -163,6 +156,7 @@ namespace DataService
 		/// <summary>
 		/// Gets or sets a list of all measurement attribute definitions.
 		/// </summary>
+		[JsonProperty( "measurementAttributes" )]
 		public AbstractAttributeDefinition[] MeasurementAttributes
 		{
 			get { return _MeasurementAttributes; }
@@ -178,6 +172,7 @@ namespace DataService
 		/// <summary>
 		/// Gets or sets a list of all value attribute definitions.
 		/// </summary>
+		[JsonProperty( "valueAttributes" )]
 		public AbstractAttributeDefinition[] ValueAttributes
 		{
 			get { return _ValueAttributes; }
@@ -193,6 +188,7 @@ namespace DataService
 		/// <summary>
 		/// Gets or sets a list of all catalog attribute definitions.
 		/// </summary>
+		[JsonProperty( "catalogAttributes" )]
 		public AttributeDefinition[] CatalogAttributes
 		{
 			get { return _CatalogAttributes; }
@@ -206,7 +202,7 @@ namespace DataService
 		}
 
 		/// <summary>
-		/// The attribute <code>versioningType</code> defines, whether updates to Parts or Characteristics
+		/// The attribute <code>versioningType</code> defines, whether updates to parts or characteristics
 		/// overwrite existing values, or whether they create a new version of the entity.
 		/// </summary>
 		[JsonConverter( typeof( Newtonsoft.Json.Converters.StringEnumConverter ) )]

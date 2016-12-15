@@ -19,9 +19,8 @@ namespace DataService
 	#endregion
 
 	/// <summary>
-	/// This element describes the entity Measurement without any measurement values.
-	/// Like all other entities, the Measurement entity has an unique identifier, which is used as a primary key,
-	/// a type description, and zero or more attributes.
+	/// This class represents the base class for measurements with its attributes. The concrete class for measurements that also contains the measurement values is <see cref="DataMeasurement"/>.
+	/// A measurement is identified by an <see cref="Uuid"/>. A measurement always belongs to one and only one part.
 	/// </summary>
 	[DebuggerDisplay( "Measurement (Uuid={Uuid} Time={Time})" )]
 	public class SimpleMeasurement : IAttributeItem
@@ -46,11 +45,13 @@ namespace DataService
 		/// <summary>
 		/// Gets or sets the uuid of this measurement.
 		/// </summary>
+		[JsonProperty( "uuid" )]
 		public Guid Uuid { get; set; }
 
 		/// <summary>
 		/// Gets or sets the uuid the part this measurement belongs to.
 		/// </summary>
+		[JsonProperty( "partUuid" )]
 		public Guid PartUuid { get; set; }
 
 		/// <summary>
@@ -58,11 +59,13 @@ namespace DataService
 		/// timestamp whenever an attribute of this measurement is changed or whenever measurement values
 		/// of this measurement are updated, deleted and added.
 		/// </summary>
+		[JsonProperty( "lastModified" )]
 		public DateTime LastModified { get; set; }
 
 		/// <summary>
 		/// Gets or sets all attributes that belong to this measurement.
 		/// </summary>
+		[JsonProperty( "attributes" )]
 		public Attribute[] Attributes
 		{
 			get { return _Attributes; }
@@ -73,6 +76,7 @@ namespace DataService
 		/// Gets or sets the status information for this measurement. This status information can be requested when 
 		/// performing a measurement search using one of the values from <see cref="MeasurementStatistics"/>.
 		/// </summary>
+		[JsonProperty( "status" )]
 		public SimpleMeasurementStatus[] Status { get; set; }
 
 		/// <summary>

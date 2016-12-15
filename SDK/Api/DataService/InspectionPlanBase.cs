@@ -19,7 +19,10 @@ namespace DataService
 
 	#endregion
 
-	/// <remarks/>
+	/// <summary>
+	/// This is the base class for inspection plan entities (i.e. parts and characteristics). Each inspection plan entity is identified by an <see cref="Uuid"/> 
+	/// (constants, even when renamed) and a unique <see cref="Path"/>.
+	/// </summary>
 	[DebuggerDisplay( "{Path}" )]
 	public abstract class InspectionPlanBase : IAttributeItem
 	{
@@ -62,11 +65,13 @@ namespace DataService
 		/// Gets or sets the uuid of this inspection plan entity. The uuid is always constant, even if 
 		/// this entity is renamed.
 		/// </summary>
+		[JsonProperty( "uuid" )]
 		public Guid Uuid { get; set; }
 
 		/// <summary>
 		/// Gets or sets the comment of this inspection plan entity.
 		/// </summary>
+		[JsonProperty( "comment" )]
 		public string Comment { get; set; }
 
 		/// <summary>
@@ -80,15 +85,18 @@ namespace DataService
 		}
 
 		/// <summary>
-		/// Contains the revision number of a Part. The revision number starts with 
-		/// zero and is incremented by one each time when changes are applied to a Part.
+		/// This is the version number of this entity. The version number is using a global versioning scheme accross all 
+		/// version changes of the whole inspection plan. This means, that single instances of a part or characteristic can 
+		/// have non consecutive version numbers.
 		/// </summary>
+		[JsonProperty( "version" )]
 		[DefaultValue( 0 )]
 		public uint Version { get; set; }
 
 		/// <summary>
-		/// Contains the date and time of the last update applied to a Part instance.
+		/// Contains the date and time of the last change applied to this instance.
 		/// </summary>
+		[JsonProperty( "timestamp" )]
 		public DateTime Timestamp { get; set; }
 
 		/// <summary>

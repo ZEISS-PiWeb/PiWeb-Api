@@ -16,10 +16,8 @@ namespace DataService
 	#endregion
 
 	/// <summary>
-	/// This is the abstract base element which is used to define the possible attributes that an
-	/// entity (like Part, Characteristic etc.) may have.
-	/// Every attribute definition consists of a key, which is used to identify the attribute
-	/// (e.g. <code>1002</code> or <code>2120</code> and a description.
+	/// Abstract base class of <see cref="CatalogAttributeDefinition"/> ans <see cref="AttributeDefinition"/>.
+	/// It holds attribute's base properties key and description.
 	/// </summary>
 	[JsonConverter( typeof( Common.Data.Converter.AttributeDefinitionConverter ) )]
 	public abstract class AbstractAttributeDefinition
@@ -51,11 +49,13 @@ namespace DataService
 
 		/// <summary>
 		/// Gets or sets the key for this attribute definition.
+		/// The key is the attribute's unique identifier.
 		/// </summary>
 		public ushort Key { get; set; }
 
 		/// <summary>
 		/// Gets or sets the name of this attribute definition.
+		/// The attribute's name which is displayed in UI.
 		/// </summary>
 		public string Description { get; set; }
 		
@@ -63,7 +63,7 @@ namespace DataService
 		/// Determines whether this attribute is efficient for filtering operations.
 		/// </summary>
 		/// <remarks>
-		/// This flag is currently unused. This may be used in futere web service versions.
+		/// This flag is currently unused. This may be used in future web service versions.
 		/// </remarks>
 		public bool QueryEfficient { get; set; }
 

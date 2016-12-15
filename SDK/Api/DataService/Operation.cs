@@ -15,12 +15,12 @@ namespace DataService
 	#endregion
 
 	/// <summary>
-	/// This element contains the possible operations which can be used in search criteria expressions.
-	/// The different values of <code>In</code> and <code>NotIn</code> have to be separated by a
-	/// comma. If a value itself contains a comma, the value has to be quoted in single quotes. If a value
-	/// is quoted and it should contain a single quote, the quote has to be escaped by a second quoute.
-	/// Valid examples for <code>In</code>/<code>NotIn</code> are: <code>1,2</code>, <code>1,'2,0'</code>
-	/// and <code>1,'2,0''5'</code>.
+	/// This enumeration specifies the available search operations for measurement searches.
+	/// When searching with a list of values using <see cref="In"/> and <see cref="NotIn"/> the following rules apply:
+	/// * List values are separated by a comma, i.e. "abc,def"
+	/// * Whitespaces at the beginning and end of a values list are ignored, i.e. "  abc,def  " is the same as "abc,def"
+	/// * When a value inside the values list should contain a comma, the entry has to be quoted, i.e. "'value,with,two commas', othervalue"
+	/// * Dates have to be specified in ISO-8601 format 
 	/// </summary>
 	public enum Operation
 	{

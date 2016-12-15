@@ -16,14 +16,11 @@ namespace DataService
 	#endregion
 
 	/// <summary>
-	/// This element is used by search operations which return entities such as Parts,
-	/// Characteristics, Measurements etc. It specifies, if the entities, which match the search
-	/// criteria, should be returned with all their attributes, or if only the attributes
-	/// specified in this element should be returned.
+	/// Holds information about the attributes which should be returned on a search operation.
 	/// </summary>
 	public class AttributeSelector
 	{
-		#region constructor
+		#region constructors
 
 		/// <summary>
 		/// Constructor.

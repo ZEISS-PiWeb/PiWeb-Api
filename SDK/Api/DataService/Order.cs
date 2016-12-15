@@ -10,13 +10,13 @@ namespace DataService
 {
 	#region using
 
-	using System;
 	using System.ComponentModel;
+	using Newtonsoft.Json;
 
 	#endregion
 
 	/// <summary>
-	/// This class is used for specifying the sort order of e.g. measurements.
+	/// This class is used for specifying the sort order of measurements.
 	/// </summary>
 	public class Order
 	{
@@ -50,17 +50,20 @@ namespace DataService
 		/// <summary>
 		/// Gets or sets the entity that is used for sorting.
 		/// </summary>
+		[JsonProperty( "entity" )]
 		public Entity Entity { get; set; }
 
 		/// <summary>
 		/// Gets or sets the key of the attribute that is used for sorting.
 		/// </summary>
+		[JsonProperty( "attribute" )]
 		public ushort Attribute { get; set; }
 
 		/// <summary>
 		/// Gets or sets the sort direction.
 		/// </summary>
 		[DefaultValue( OrderDirection.Asc )]
+		[JsonProperty( "direction" )]
 		public OrderDirection Direction { get; set; }
 
 		#endregion

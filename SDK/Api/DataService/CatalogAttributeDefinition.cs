@@ -17,11 +17,7 @@ namespace DataService
 	#endregion
 
 	/// <summary>
-	/// The CatalogAttributeDefinition element (in combination with its base element) is used to
-	/// define the possible attributes that an entity (like Part, Characteristic etc.) may have.
-	/// In contrast to the element "AttributeDefinition", this element is used for attributes which
-	/// reference a Catalog. A Catalog consists of an uuid, a name and a map, which maps from
-	/// integer values to arbitrary attributes.
+	/// Defines an entity's attribute which is based on a <see cref="Catalog"/>.
 	/// </summary>
 	[JsonConverter( typeof( Common.Data.Converter.AttributeDefinitionConverter ) )]
 	public class CatalogAttributeDefinition : AbstractAttributeDefinition

@@ -19,15 +19,15 @@ namespace DataService
 	/// </summary>
 	public enum VersioningType
 	{
-		/// <summary>Versioning functionality is completly disabled.</summary>
+		/// <summary>Versioning is disabled by the server. The client cannot control versioning.</summary>
 		Off,
 
-		/// <summary>Versioning is enabled every time.</summary>
+		/// <summary>Versioning is enabled by the server. The client cannot control versioning.</summary>
 		On,
 
-		/// <summary>Client decides if versioning is enabled.</summary> 
-		/// <comment>This means that versioning is generally enabled and the client 
-		/// has the possibility to switch versioning on/off for certain changes.</comment>
+		/// <summary>
+		/// Versioning can be controlled by the client application for each inspection plan update.
+		/// </summary>
 		Client
 	}
 }

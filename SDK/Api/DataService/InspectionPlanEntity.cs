@@ -9,17 +9,17 @@
 namespace DataService
 {
 	/// <summary>
-	/// The entities which are allowed in InspectionPlanSearch  are defined in this element.
+	/// Enumeration of possible inspection plan entities.
 	/// </summary>
 	public enum InspectionPlanEntity : byte
 	{
 		/// <summary>
-		/// Specifies the entity type "Part"
+		/// The entity is a part.
 		/// </summary>
 		Part = 1,
 
 		/// <summary>
-		/// Specifies the entity type "Characteristic"
+		/// The entity is a characteristic.
 		/// </summary>
 		Characteristic = 2,
 	}

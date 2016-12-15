@@ -9,7 +9,7 @@
 namespace DataService
 {
 	/// <summary>
-	/// Each measurement includes characteristic entities, which include the measured data.
+	/// This is the concrete class of a measurement that contains measurement values as well.
 	/// </summary>
 	public class DataMeasurement : SimpleMeasurement
 	{

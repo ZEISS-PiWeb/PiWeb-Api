@@ -15,8 +15,7 @@ namespace DataService
 	#endregion
 
 	/// <summary>
-	/// This element describes the entity Characteristic in the context of measured data.
-	/// It extends its base element with a relation to the measured data.
+	/// This class represents a measurement value together with information about the characteristic this value belongs to.
 	/// </summary>
 	[JsonConverter( typeof( Common.Data.Converter.DataCharacteristicConverter ) )]
 	public class DataCharacteristic : InspectionPlanBase

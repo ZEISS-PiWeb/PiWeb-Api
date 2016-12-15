@@ -9,7 +9,7 @@
 namespace DataService
 {
 	/// <summary>
-	/// This element extends the entity Part with an optional version history of old values.
+	/// This class represents an inspection plan part with its attributes and the version history.
 	/// </summary>
 	public class InspectionPlanPart : SimplePart
 	{

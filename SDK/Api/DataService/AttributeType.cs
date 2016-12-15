@@ -15,30 +15,31 @@ namespace DataService
 	#endregion
 
 	/// <summary>
-	/// These are the possible data types of attributes.
+	/// Holds attributes' possible data types.
 	/// </summary>
 	public enum AttributeType 
 	{
 		/// <summary>
-		/// AlphaNumeric represents a string value.
+		/// A string value.
 		/// </summary>
 		AlphaNumeric,
 
 		/// <summary>
-		/// Integer is a signed 32-bit type.
+		/// Represents singned numbers which don't have any fractional digits in its lexical or value spaces.
+		/// Legal examples are: <code>12, -38</code> 
 		/// </summary>
 		Integer,
 		
 		/// <summary>
-		/// Float corresponds to the IEEE single-precision 32-bit floating point type. The following
-		/// xamples are legal literals for Float: <code>-1E4, 1267.43233E12, 12.78e-2, 12</code>.
+		/// Represents IEEE simple (32 bits) and double (64 bits) precision floating-point types.
+		/// Legal examples are: <code>-5E2, 1.35, 5.6e-2</code>.
 		/// </summary>
 		Float,
 		
 		/// <summary>
-		/// DateTime represents a specific instant of time. The lexical representation has to be 
-		/// in the format "CCYY-MM-DDThh:mm:ss". The letter "T" is the date/time separator. "ss" may
-		/// contain fractional seconds (like "ss.ssss...") to increase the precision.
+		/// Describes combination of a date and a time. Its lexical space is the extended format 
+		/// "CCYY-MM-DDThh:mm:ssZ".  The letter "T" is the date/time separator.
+		/// The timezone is specified as "Z" (UTC).
 		/// </summary>
 		DateTime
 	}

@@ -19,8 +19,7 @@ namespace DataService
 	#endregion
 
 	/// <summary>
-	/// This element describes a single entry of a catalog. Each entry has a key, which has to be
-	/// unique within the catalog in which it is used, and zero or more attributes.
+	/// Holds information of a <see cref="Catalog"/>'s entry
 	/// </summary>
 	[JsonConverter( typeof( Common.Data.Converter.CatalogEntryConverter ) )]
 	public class CatalogEntry : IAttributeItem
@@ -36,6 +35,7 @@ namespace DataService
 		/// <summary>
 		/// Gets or sets the attributes that belong to this catalog entry.
 		/// </summary>
+		[JsonProperty( "attributes" )]
 		public Attribute[] Attributes
 		{
 			get { return _Attributes; }
@@ -49,8 +49,9 @@ namespace DataService
 		}
 
 		/// <summary>
-		/// Gets or sets the key of this catalog entry.
+		/// Gets or sets the unique key of this catalog entry.
 		/// </summary>
+		[JsonProperty( "key" )]
 		public short Key { get; set; }
 
 		#endregion

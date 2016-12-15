@@ -16,7 +16,7 @@ namespace DataService
 	#endregion
 
 	/// <summary>
-	/// This element describes the entity Value in the context of measured data.
+	/// This class represents a single measurement value that belongs to one characteristic and one measurement.
 	/// </summary>
 	public class DataValue : IAttributeItem
 	{
@@ -51,7 +51,7 @@ namespace DataService
 
 		/// <summary>
 		/// Gets or sets the attributes that belong to the measurement value. By default, every measurement 
-		/// value has the attribute <code>K1</code> which is the measurent value as a double value.
+		/// value has the attribute with key <code>1</code> which is the measurent value as a double value.
 		/// </summary>
 		public Attribute[] Attributes { get; set; }
 

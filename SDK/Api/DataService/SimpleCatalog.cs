@@ -11,13 +11,13 @@ namespace DataService
 	#region using
 
 	using System;
+	using Newtonsoft.Json;
 
 	#endregion
 
 	/// <summary>
-	/// This element describes the entity Catalog without any relations to other entites.
-	/// The entity Catalog has an unique identifier, which is used as primary key, and a name,
-	/// which is used by an user to distinguish between different Catalogs.
+	/// This class represents the base class for cataalogs. The concrete class for catalogs that also contains the catalog entries is <see cref="Catalog"/>.
+	/// A catalog is identified by an <see cref="Uuid"/> and a catalog has a <see cref="Name"/>.
 	/// </summary>
 	public class SimpleCatalog
 	{
@@ -38,11 +38,13 @@ namespace DataService
 		/// <summary>
 		/// Gets or sets the uuid of this catalog.
 		/// </summary>
+		[JsonProperty( "uuid" )]
 		public Guid Uuid { get; set; }
 
 		/// <summary>
 		/// Gets or sets the name of the catalog.
 		/// </summary>
+		[JsonProperty( "name" )]
 		public string Name { get; set; }
 
 		#endregion
