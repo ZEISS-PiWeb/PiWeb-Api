@@ -43,10 +43,10 @@ sections:
         title: Catalogs
         anchor: ds-catalogs
       inspectionPlan:
-        title: Inspection Plan
+        title: Parts and Characteristics
         anchor: ds-inspection-plan
       measurementsAndValues:
-        title: Measurements And Values
+        title: Measurements and Values
         anchor: ds-measurements-and-values
   rawdataservice:
     title: Raw Data Service
