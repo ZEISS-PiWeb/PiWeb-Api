@@ -9,7 +9,7 @@ The PiWeb-API is a communication interface for the quality data management syste
 
 The PiWeb-API provides an extensive set of web service endpoints for reading and writing measurement and quality data from and to the PiWeb server. With these HTTP/S endpoints it is very easy to read and write the inspection plan structure as well as measurements and measurement values.
 
-#####Fetching the attribute configuration:
+##### Fetching the attribute configuration:
 
 ```http
 http://your-piweb-server/dataServiceRest/configuration
@@ -66,7 +66,7 @@ http://your-piweb-server/dataServiceRest/configuration
 }
 ```
 
-#####Fetching all parts
+##### Fetching all parts
 
 ```http
 http://your-piweb-server/dataServiceRest/parts?depth=10000
@@ -86,7 +86,7 @@ http://your-piweb-server/dataServiceRest/parts?depth=10000
 ]
 ```
 
-#####Fetching the 10 most recent measurements
+##### Fetching the 10 most recent measurements
 
 ```http
 http://your-piweb-server/dataServiceRest/measurements?limitResult=10
