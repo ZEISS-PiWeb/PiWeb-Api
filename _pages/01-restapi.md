@@ -65,7 +65,7 @@ sections:
 ---
 
 {% capture caption %} {{page.sections['general'].title}}{% endcapture %}
-<h1 id="{{page.sections['general'].anchor}}">{{site.images['generalInformation40']  | append: caption | markdownify}}</h1>
+<h1 id="{{page.sections['general'].anchor}}">{caption}}</h1>
 
 {% include_relative 011-general.md %}
 
