@@ -64,21 +64,18 @@ sections:
         anchor: rs-raw-data-objects
 ---
 
-{% capture caption %} {{page.sections['general'].title}}{% endcapture %}
-<h1 id="{{page.sections['general'].anchor}}">{{caption}}</h1>
+<h1 id="{{page.sections['general'].anchor}}">{{page.sections['general'].title}}</h1>
 
 {% include_relative 011-general.md %}
 
 <p class="dottedline" />
 
-{% capture caption %} {{page.sections['dataservice'].title}}{% endcapture %}
-<h1 id="{{page.sections['dataservice'].anchor}}">{{site.images['dataservice40']  | append: caption | markdownify}}</h1>
+<h1 id="{{page.sections['dataservice'].anchor}}">{{page.sections['dataservice'].title}}</h1>
 
 {% include_relative 012-dataservice.md %}
 
 <p class="dottedline" />
 
-{% capture caption %} {{page.sections['rawdataservice'].title}}{% endcapture %}
-<h1 id="{{page.sections['rawdataservice'].anchor}}">{{site.images['rawdataservice40']  | append: caption | markdownify}}</h1>
+<h1 id="{{page.sections['rawdataservice'].anchor}}">{{page.sections['rawdataservice'].title}}</h1>
 
 {% include_relative 013-rawdataservice.md %}
