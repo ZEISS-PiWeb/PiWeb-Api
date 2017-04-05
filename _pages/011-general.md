@@ -16,7 +16,7 @@ http(s)://serverUri:port/instanceName/RawDataServiceRest
 {% endhighlight %}
 
 <br/>
-<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> `instanceName` and `https` are optional and depend on the server settings.
+<span class="glyphicon glyphicon-info-sign glyphicon-text" aria-hidden="true"></span> `instanceName` and `https` are optional and depend on the server settings.
 
 <h2 id="{{page.sections['general']['secs']['formats'].anchor}}">{{page.sections['general']['secs']['formats'].title}}</h2>
 
@@ -48,7 +48,7 @@ You can restrict requests by attaching certain parameters to the webservice URL 
 {% endhighlight %}
 
 <br/>
-<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> If the parameter contains lists of ids it needs to be surrounded by `{` and `}`, the values within the list are separated by `,`.
+<span class="glyphicon glyphicon-info-sign glyphicon-text" aria-hidden="true"></span> If the parameter contains lists of ids it needs to be surrounded by `{` and `}`, the values within the list are separated by `,`.
 
 {{ site.headers['bestPractice'] }} Encode the URL
 As some parameter defintions may contain special characters like brackets, space or plus sign it is highly recommended to encode the URL before sending requests to prevent unexpected behaviors.
