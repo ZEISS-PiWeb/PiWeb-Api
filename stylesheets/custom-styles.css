@@ -27,7 +27,7 @@ h2{
   padding-bottom: 5px;
 }
 
-/*Moves anker links to correct position after click*/
+/*Moves anker links to correct position after a click*/
 h1[id]:before, h2[id]:before, h3[id]:before {
   display: block;
   content: " ";
