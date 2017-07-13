@@ -1361,7 +1361,7 @@ HTTP/1.1 201 Created
 {% assign endpoint="/measurements" %}
 {% assign summary="Updates measurements" %}
 {% capture description %}
-Updating a measurement does always affect the whole measurement. This means that you must send the whole measurement including attributes in the request body. The server then deletes the old measurement and creates the new one in a single transaction.
+Updating a measurement is about changing measurement attributes. Pass the whole measurement including all attributes in the request body. The server then deletes all attributes and creates the new one in a single transaction.
 {% endcapture %}
 
 {% assign exampleCaption="Update a measurement - add and change an attribute" %}
