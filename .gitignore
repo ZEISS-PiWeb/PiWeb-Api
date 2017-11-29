@@ -3,3 +3,5 @@ SDK/Api/bin/
 SDK/Api/obj/
 SDK/Api/packages/
 *.suo
+artifacts
+tools
