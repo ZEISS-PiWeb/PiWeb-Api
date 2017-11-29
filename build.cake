@@ -131,7 +131,10 @@ Task("Pack")
         ReleaseNotes             = new [] {"Adjusted summaries of classes and properties."},
         Tags                     = new [] {"Carl", "Zeiss", "PiWeb", "API"},
         RequireLicenseAcceptance = true,
-        Files                    = new [] { new NuSpecContent { Source = "PiWeb.Api.dll", Target = "lib" } },
+        Files                    = new [] { 
+		    new NuSpecContent { Source = "PiWeb.Api.dll", Target = "lib" },
+		    new NuSpecContent { Source = "PiWeb.Api.xml", Target = "lib" },
+		},
 		Dependencies             = new [] { new NuSpecDependency { Id = "Newtonsoft.Json", Version = "7.0.1" } },
         BasePath                 = buildDir,
         OutputDirectory          = artifactsDir
@@ -144,6 +147,7 @@ Task("Pack")
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
+    .IsDependentOn("AppVeyorSetup")
     .IsDependentOn("Pack");
 
 //////////////////////////////////////////////////////////////////////
