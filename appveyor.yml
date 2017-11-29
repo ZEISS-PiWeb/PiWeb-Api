@@ -1,12 +1,17 @@
 ﻿version: 1.0.{build}
 image: Visual Studio 2017
 nuget:
-  account_feed: true
-  project_feed: true
+  disable_publish_on_pr: true
 build:
   verbosity: minimal
 build_script:
 - cmd: ./build.cmd
+deploy:
+- provider: NuGet
+  server: https://ci.appveyor.com/nuget/piweb-api-3qunkupqpxhb
+  api_key:
+    secure: Z/4gUbkJHSQuhI5rprCjcNgIfdnrimokb2gKa42v6Ow=
+  skip_symbols: true
 artifacts:
 - path: 'artifacts/**.nupkg'
 - path: 'artifacts/ReleaseNotes.md'
