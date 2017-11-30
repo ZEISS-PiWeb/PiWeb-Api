@@ -8,9 +8,3 @@ build_script:
 artifacts:
 - path: artifacts/*.nupkg
 - path: artifacts/ReleaseNotes.md
-deploy:
-- provider: NuGet
-  server: https://ci.appveyor.com/nuget/piweb-api-3qunkupqpxhb
-  api_key:
-    secure: Z/4gUbkJHSQuhI5rprCjcNgIfdnrimokb2gKa42v6Ow=
-  skip_symbols: true
