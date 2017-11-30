@@ -162,6 +162,13 @@ if(-Not $SkipToolPackageRestore.IsPresent) {
         Remove-Item -Recurse
     }
 
+    Write-Verbose -Message "Listing NuGet sources..."
+    $NuGetSources = Invoke-Expression "&`"$NUGET_EXE`" sources"
+    if ($LASTEXITCODE -ne 0) {
+        Throw "An error occurred while displaying NuGet sources."
+    }
+    Write-Verbose -Message ($NuGetSources | out-string)
+
     Write-Verbose -Message "Restoring tools from NuGet..."
     $NuGetOutput = Invoke-Expression "&`"$NUGET_EXE`" install -ExcludeVersion -OutputDirectory `"$TOOLS_DIR`""
 
