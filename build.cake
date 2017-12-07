@@ -13,7 +13,7 @@ var configuration = Argument("configuration", "Release");
 //////////////////////////////////////////////////////////////////////
 
 // Define directories.
-var srcDir = Directory("./SDK/Api");
+var srcDir = Directory("./src");
 var solutionFile = srcDir + File("Api.sln");
 var buildDir = srcDir + Directory("bin") + Directory(configuration);
 var artifactsDir = Directory("./artifacts");
