@@ -1,7 +1,7 @@
-SDK/Api/.vs/
-SDK/Api/bin/
-SDK/Api/obj/
-SDK/Api/packages/
+src/.vs/
+src/bin/
+src/obj/
+src/packages/
 *.suo
 artifacts
 tools
