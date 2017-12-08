@@ -1,5 +1,6 @@
 ﻿#tool "nuget:?package=GitVersion.CommandLine"
 #tool "nuget:?package=GitReleaseNotes"
+#addin "nuget:?package=Cake.FileHelpers"
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -109,6 +110,14 @@ Task("ReleaseNotes")
         Version                  = nugetVersion,
         AllLabels                = true
     });
+
+	CopyFile(artifactsDir + File("ReleaseNotes.md"), artifactsDir + File("ReleaseNotes.txt"));
+
+	// inspired by https://github.com/stiang/remove-markdown/blob/master/index.js
+	// only remove markdown inline links, GitReleaseNotes does not seem to produce any further markdown markup 
+	// note that \ has to doubled as it has to be quoted in C# strings
+    // Remove inline links
+	ReplaceRegexInFiles(artifactsDir + File("ReleaseNotes.txt"), "\\[(.*?)\\][\\[\\(].*?[\\]\\)]", "$1");
 });
 
 Task("Pack")
@@ -116,20 +125,22 @@ Task("Pack")
     .IsDependentOn("ReleaseNotes")
     .Does(() =>
 {
+    var releaseNotes = FileReadLines(artifactsDir + File("ReleaseNotes.txt"));
+
     var nuGetPackSettings = new NuGetPackSettings {
         Id                       = "Zeiss.IMT.PiWebApi.Client",
         Version                  = nugetVersion,
-        Title                    = "Carl Zeiss PiWeb-API .NET Client",
-        Authors                  = new[] {"Carl Zeiss IZfM Dresden"},
-        Owners                   = new[] {"Carl Zeiss IZfM Dresden"},
-        Description              = "The Carl Zeiss PiWeb-API .NET Client provides an extensive set of methods for reading and writing  inspection plan structure as well as measurements and measurement values from and to the PiWeb server via HTTP(S)/REST based web service endpoints. PiWeb server &gt;= version 5.8 is required.",
+        Title                    = "ZEISS PiWeb-API .NET Client",
+        Authors                  = new[] {"Carl Zeiss Innovationszentrum für Messtechnik GmbH"},
+        Owners                   = new[] {"Carl Zeiss Innovationszentrum für Messtechnik GmbH"},
+        Description              = "ZEISS PiWeb-API .NET Client provides an extensive set of methods for reading and writing  inspection plan structure as well as measurements and measurement values to and from ZEISS PiWeb server via HTTP(S)/REST based web service endpoints. ZEISS PiWeb server &gt;= version 5.8 is required.",
         Summary                  = "A .NET client for HTTP(S)/REST based communication with the quality data managament system ZEISS PiWeb.",
         ProjectUrl               = new Uri("https://github.com/ZEISS-PiWeb/PiWeb-Api"),
         IconUrl                  = new Uri("https://raw.githubusercontent.com/ZEISS-PiWeb/PiWeb-Api/master/logo6464.png"),
         LicenseUrl               = new Uri("https://github.com/ZEISS-PiWeb/PiWeb-Api/blob/master/LICENSE.md"),
-        Copyright                = "© Carl Zeiss IZfM Dresden",
-        ReleaseNotes             = new [] {"Adjusted summaries of classes and properties."},
-        Tags                     = new [] {"Carl", "Zeiss", "PiWeb", "API"},
+        Copyright                = string.Format("Copyright © {0} Carl Zeiss Innovationszentrum für Messtechnik GmbH",DateTime.Now.Year),
+        ReleaseNotes             = releaseNotes,
+        Tags                     = new [] {"ZEISS", "PiWeb", "API"},
         RequireLicenseAcceptance = true,
         Files                    = new [] { 
 		    new NuSpecContent { Source = "PiWeb.Api.dll", Target = "lib" },
