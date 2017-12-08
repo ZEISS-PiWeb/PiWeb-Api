@@ -7,7 +7,7 @@ TL;DR
 * do development on "develop" branch or feature branches called "feature/<cool_new_feature>"
 * do NOT do development on "master" branch
 * use GitHub forks and pull requests, but do NOT merge to "master" branch
-** use development or feature branches instead
+    * use development or feature branches instead
 * tag release with "v<version_number>", e.g. "v1.0.1"
 * publish built NuGet package from AppVeyor to nuget.org
 * merge release tag to master branch
