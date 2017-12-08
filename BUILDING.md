@@ -9,7 +9,7 @@ TL;DR
 * use GitHub forks and pull requests, but do NOT merge to "master" branch
     * use development or feature branches instead
 * tag release with "v<version_number>", e.g. "v1.0.1"
-* publish built NuGet package from AppVeyor to nuget.org
+* publish automatically built NuGet package from AppVeyor to nuget.org
 * merge release tag to master branch
 
 Comprehensive
