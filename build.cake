@@ -111,13 +111,13 @@ Task("ReleaseNotes")
         AllLabels                = true
     });
 
-	CopyFile(artifactsDir + File("ReleaseNotes.md"), artifactsDir + File("ReleaseNotes.txt"));
+    CopyFile(artifactsDir + File("ReleaseNotes.md"), artifactsDir + File("ReleaseNotes.txt"));
 
-	// inspired by https://github.com/stiang/remove-markdown/blob/master/index.js
-	// only remove markdown inline links, GitReleaseNotes does not seem to produce any further markdown markup 
-	// note that \ has to doubled as it has to be quoted in C# strings
+    // inspired by https://github.com/stiang/remove-markdown/blob/master/index.js
+    // only remove markdown inline links, GitReleaseNotes does not seem to produce any further markdown markup 
+    // note that \ has to doubled as it has to be quoted in C# strings
     // Remove inline links
-	ReplaceRegexInFiles(artifactsDir + File("ReleaseNotes.txt"), "\\[(.*?)\\][\\[\\(].*?[\\]\\)]", "$1");
+    ReplaceRegexInFiles(artifactsDir + File("ReleaseNotes.txt"), "\\[(.*?)\\][\\[\\(].*?[\\]\\)]", "$1");
 });
 
 Task("Pack")
@@ -143,13 +143,13 @@ Task("Pack")
         Tags                     = new [] {"ZEISS", "PiWeb", "API"},
         RequireLicenseAcceptance = true,
         Files                    = new [] { 
-		      new NuSpecContent { Source = "PiWeb.Api.dll", Target = "lib" },
-		      new NuSpecContent { Source = "PiWeb.Api.xml", Target = "lib" },
-		    },
-		    Dependencies             = new [] {
-          new NuSpecDependency { Id = "Newtonsoft.Json", Version = "7.0.1" },
-          new NuSpecDependency { Id = "IdentityModel", Version = "1.13.0" },
-          new NuSpecDependency { Id = "System.IdentityModel.Tokens.Jwt", Version = "4.0.3.308261200" }
+            new NuSpecContent { Source = "PiWeb.Api.dll", Target = "lib" },
+            new NuSpecContent { Source = "PiWeb.Api.xml", Target = "lib" },
+        },
+        Dependencies             = new [] {
+            new NuSpecDependency { Id = "Newtonsoft.Json", Version = "7.0.1" },
+            new NuSpecDependency { Id = "IdentityModel", Version = "1.13.0" },
+            new NuSpecDependency { Id = "System.IdentityModel.Tokens.Jwt", Version = "4.0.3.308261200" }
         },
         BasePath                 = buildDir,
         OutputDirectory          = artifactsDir
