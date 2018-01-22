@@ -6,7 +6,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
 
-namespace Common.Client
+namespace Zeiss.IMT.PiWeb.Api.Common.Client
 {
 	/// <summary>
 	/// Class that represents a parameter value (name and value) of an uri.

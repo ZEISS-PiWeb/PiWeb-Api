@@ -1,21 +1,23 @@
-#region copyright
+﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
-namespace Common.Data
+namespace Zeiss.IMT.PiWeb.Api.Common.Data
 {
 	#region usings
 
-	using DataService;
+	using Zeiss.IMT.PiWeb.Api.DataService.Rest;
 
 	#endregion
 
 	/// <summary>
-	/// Klasse zum Parsen einer Filterzeichenkette f�r Messdaten.
+	/// Klasse zum Parsen einer Filterzeichenkette für Messdaten.
 	/// </summary>
 	public class GenericSearchCondition
 	{}
@@ -37,7 +39,7 @@ namespace Common.Data
 		/// Konstruktor
 		/// </summary>
 		public GenericSearchAnd()
-		{ }
+		{}
 
 		/// <summary>
 		/// Konstruktor
@@ -56,14 +58,30 @@ namespace Common.Data
 		#endregion
 	}
 
-	public class GenericSearchAttributeCondition : GenericSearchCondition
+	public class GenericSearchValueCondition : GenericSearchCondition
+	{
+		#region properties
+
+		public Operation Operation { get; set; }
+		public string Value { get; set; }
+
+		#endregion
+	}
+
+	public class GenericSearchAttributeCondition : GenericSearchValueCondition
 	{
 		#region properties
 
 		public ushort Attribute { get; set; }
 
-		public Operation Operation { get; set; }
-		public string Value { get; set; }
+		#endregion
+	}
+
+	public class GenericSearchFieldCondition : GenericSearchValueCondition
+	{
+		#region properties
+
+		public string FieldName { get; set; }
 
 		#endregion
 	}

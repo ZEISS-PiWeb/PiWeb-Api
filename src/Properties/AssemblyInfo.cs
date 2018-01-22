@@ -1,11 +1,11 @@
+ï»¿using System.Reflection;
 using System.Resources;
-using System.Reflection;
 
-[assembly: AssemblyCompany( "Carl Zeiss Innovationszentrum für Messtechnik GmbH" )]
+[assembly: AssemblyCompany( "Carl Zeiss Innovationszentrum fÃ¼r Messtechnik GmbH" )]
 [assembly: AssemblyProduct( "ZEISS PiWeb Api" )]
-[assembly: AssemblyCopyright( "Copyright © 2017 Carl Zeiss Innovationszentrum für Messtechnik GmbH" )]
+[assembly: AssemblyCopyright( "Copyright Â© 2018 Carl Zeiss Innovationszentrum fÃ¼r Messtechnik GmbH" )]
 [assembly: AssemblyTrademark( "PiWeb" )]
 [assembly: NeutralResourcesLanguage( "en" )]
 
-[assembly: AssemblyVersion( "0.0.0" )]
-
+[assembly: AssemblyVersion( "2.0.0" )]
+[assembly: AssemblyInformationalVersion( "2.0.0 Beta" )]

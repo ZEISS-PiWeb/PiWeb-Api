@@ -1,4 +1,4 @@
-#region copyright
+﻿#region copyright
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
@@ -6,7 +6,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
 
-namespace Common.Client
+namespace Zeiss.IMT.PiWeb.Api.Common.Client
 {
 	#region using
 

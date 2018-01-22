@@ -1,4 +1,4 @@
-#region copyright
+Ôªø#region copyright
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
@@ -6,7 +6,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
 
-namespace Common.Data
+namespace Zeiss.IMT.PiWeb.Api.Common.Data
 {
 	/// <summary>
 	/// Static class with well known attribute keys.
@@ -82,16 +82,16 @@ namespace Common.Data
 			/// <summary>Eingegeben von</summary>
 			public const ushort CreatedBy = 1507;
 
-			/// <summary>Ge‰ndert am</summary>
+			/// <summary>Ge√§ndert am</summary>
 			public const ushort UpdateDate = 1508;
 
-			/// <summary>Ge‰ndert von</summary>
+			/// <summary>Ge√§ndert von</summary>
 			public const ushort UpdatedBy = 1509;
 
 			/// <summary>Organisiationseinheit</summary>
 			public const ushort OrganisationalUnit = 1510;
 
-			/// <summary>Straﬂe</summary>
+			/// <summary>Stra√üe</summary>
 			public const ushort ProductionLine = 1511;
 
 			/// <summary>Verantwortlich</summary>
@@ -176,7 +176,7 @@ namespace Common.Data
 			/// <summary>Upper natural boundary</summary>
 			public const ushort UpperNaturallyBoundary = 2121;
 
-			/// <summary>The unit (mm, inch, ∞, etc.)</summary>
+			/// <summary>The unit (mm, inch, ¬∞, etc.)</summary>
 			public const ushort Unit = 2142;
 
 			/// <summary>Name of inspection plan</summary>
@@ -208,43 +208,43 @@ namespace Common.Data
 			/// <summary>
 			/// Stamp text
 			/// </summary>
-			public const ushort StampCaption = 3108;
+			public const ushort HasStamp = 2808;
 
 			/// <summary>
-			/// Determines whether this characteristic has a stamp (1) or not (0).
+			/// Stamp text
 			/// </summary>
-			public const ushort Stamp = 3109;
+			public const ushort StampCaption = 2809;
 
 			/// <summary>
 			/// Stamp position, x coordinate relative to bitmap
 			/// </summary>
-			public const ushort StampPositionX = 3110;
+			public const ushort StampPositionX = 2810;
 
 			/// <summary>
 			/// Stamp position, y coordinate relative to bitmap
 			/// </summary>
-			public const ushort StampPositionY = 3111;
+			public const ushort StampPositionY = 2811;
 
 			/// <summary>
 			/// Stamp target, x coordinate relative to bitmap
 			/// </summary>
-			public const ushort StampTargetX = 3112;
+			public const ushort StampTargetX = 2812;
 
 			/// <summary>
 			/// Stamp target, y coordinate relative to bitmap
 			/// </summary>
-			public const ushort StampTargetY = 3113;
+			public const ushort StampTargetY = 2813;
 
 			/// <summary>
 			/// Stamp radius relative to the bitmap width
 			/// </summary>
-			public const ushort StampRadius = 3114;
+			public const ushort StampRadius = 2814;
 
 			#endregion
-
+			
 			#region AUDI-specific
 
-			/// <summary>AUDI: Kategorie (Analysemaﬂ; Bemusterungsmaﬂ; Netzmaﬂ; ...)</summary>
+			/// <summary>AUDI: Kategorie (Analysema√ü; Bemusterungsma√ü; Netzma√ü; ...)</summary>
 			public const ushort AudiCategory = 2570;
 
 			/// <summary>AUDI: Funktionsgruppe</summary>
@@ -262,6 +262,11 @@ namespace Common.Data
 			/// <summary>AUDI: Kennzeichnung von manueller Toleranzeingabe</summary>
 			public const ushort ManualToleranceInput = 2583;
 
+			/// <summary>AUDI: Kennzeichnung von FM relevanten Punkten (Wert=1). FM relevante Merkmale sind 
+			/// √ºblicherweise die Merkmale, aus denen ein Funktionsma√ü gebildet wird (z.B. die Einzelpunkte 
+			/// einer Distanz).</summary>
+			public const ushort FM_Relevant = 2584;
+
 			/// <summary>Auditfunktion</summary>
 			public const ushort AuditFunction = 2805;
 
@@ -277,7 +282,7 @@ namespace Common.Data
 			/// <summary>Obere Warngrenze</summary>
 			public const ushort UpperWarningLimit = 8015;
 
-			/// <summary>Merkmalsart (variabel; attributiv und attributiv z‰hlend)</summary>
+			/// <summary>Merkmalsart (variabel; attributiv und attributiv z√§hlend)</summary>
 			public const ushort CharacteristicType = 12004;
 
 			/// <summary>Messwertkatalog zur Auswertung attributiver Merkmale</summary>
@@ -304,7 +309,7 @@ namespace Common.Data
 			/// <summary>Name des Messelementes des Merkmals</summary>
 			public const ushort FeatureName = 12360;
 
-			/// <summary>Typ der Verkn¸pfung (SYM; DIST; ..) eines Merkmals</summary>
+			/// <summary>Typ der Verkn√ºpfung (SYM; DIST; ..) eines Merkmals</summary>
 			public const ushort OperationType = 12361;
 
 			/// <summary>Messprogramm</summary>
@@ -324,6 +329,19 @@ namespace Common.Data
 
 			#endregion
 
+			#region KPI-specific
+
+			// These are sensible values for the new KPI keys;
+			// public const ushort GestampKPIWeight = 2830;
+			// public const ushort GestampControlPoint = 2831;
+
+			// We currently use these keys however, since these are in use by gestamp. Note how these keys do not fall into characteristic key range
+			// and therefore will cause trouble with .dfq files.
+			public const ushort GestampControlPoint = 860;
+			public const ushort GestampKpiWeight = 964;
+
+			#endregion
+
 			/// <summary>
 			/// The uri that can be used to create an interactive hyperlink that calls another application. This is used by PiWeb Monitor 
 			/// for example to switch back to the measuring application (Calypso, Caligo etc.) when clicking on a characteristic or part.
@@ -335,8 +353,62 @@ namespace Common.Data
 			/// </summary>
 			public const ushort CallbackUriText = 2097;
 
-			/// <summary>Measured quantity</summary>
-		    public const ushort MeasuredQuantity = 13266;
+			/// <summary>Measured quantity type</summary>
+		    public const ushort MeasuredQuantityType = 13266;
+
+			/// <summary>The sample size for a process distribution analysis.</summary>
+			public const ushort PdaSampleSize = 8500;
+
+			/// <summary>
+			/// Identifying different creation types of multi-samples for process distribution analysis.
+			/// </summary>
+			public const ushort PdaSampleType = 8501;
+
+			/// <summary>
+			/// Identifying the different modes for distribution analysis.
+			/// </summary>
+			public const ushort DistributionAnalysisMode = 13282;
+
+			#region ControlCharts
+
+			/// <summary>Regelkartenkonfiguration der Lagekarte</summary>
+			public const ushort LocationChartConfiguration = 9010;
+
+			/// <summary>Mittellinie der Lagekarte</summary>
+			public const ushort LocationChartAverageValue = 9011;
+
+			/// <summary>Untere Eingriffgrenze der Lagekarte</summary>
+			public const ushort LocationChartLowerControlLimit = 9012;
+
+			/// <summary>Obere Eingriffgrenze der Lagekarte</summary>
+			public const ushort LocationChartUpperControlLimit = 9013;
+
+			/// <summary>Untere Warngrenze der Lagekarte</summary>
+			public const ushort LocationChartLowerWarningLimit = 9014;
+
+			/// <summary>Obere Warngrenze der Lagekarte</summary>
+			public const ushort LocationChartUpperWarningLimit = 9015;
+
+
+			/// <summary>Regelkartenkonfiguration der Streuungskarte</summary>
+			public const ushort VariationChartConfiguration = 9110;
+
+			/// <summary>Mittellinie der Streuungskarte</summary>
+			public const ushort VariationChartAverageValue = 9111;
+
+			/// <summary>Untere Eingriffgrenze der Streuungskarte</summary>
+			public const ushort VariationChartLowerControlLimit = 9112;
+
+			/// <summary>Obere Eingriffgrenze der Streuungskarte</summary>
+			public const ushort VariationChartUpperControlLimit = 9113;
+
+			/// <summary>Untere Warngrenze der Streuungskarte</summary>
+			public const ushort VariationChartLowerWarningLimit = 9114;
+
+			/// <summary>Obere Warngrenze der Streuungskarte</summary>
+			public const ushort VariationChartUpperWarningLimit = 9115;
+
+			#endregion
 		}
 
 		#endregion
@@ -438,13 +510,12 @@ namespace Common.Data
 			/// <summary>Auditkatalog: Funktionsgruppe</summary>
 			public const ushort AuditFunctionGroupKey = 4401;
 
-			/// <summary>Auditkatalog: Priorit‰t</summary>
+			/// <summary>Auditkatalog: Priorit√§t</summary>
 			public const ushort AuditPriorityKey = 4402;
 
 			#endregion
 
-			/// <summary>Statistical distribution</summary>
-			public const ushort DistributionKey = 4403;
+			#region Misc
 
 			/// <summary>Color scheme position</summary>
 			public const ushort ColorSchemePositionKey = 2902;
@@ -458,8 +529,39 @@ namespace Common.Data
 			/// <summary>Upper class limit</summary>
 			public const ushort UpperClassLimitKey = 2136;
 
-			/// <summary>Measured quantity</summary>
-			public static ushort MeasuredQuantityKey = 13267;
+			#endregion
+
+			#region Statistics
+
+			/// <summary>The key for the distribution type.</summary>
+			public const ushort DistributionTypeKey = 4403;
+
+			/// <summary>The key for the measured quantity type.</summary>
+			public const ushort MeasuredQuantityTypeKey = 13267;
+
+			/// <summary>The description of the pda sample type.</summary>
+			public const ushort PdaSampleTypeDescription = 13270;
+
+			/// <summary>The key for the pda sample type.</summary>
+			public const ushort PdaSampleTypeKey = 13271;
+
+			/// <summary>The description for the distribution analysis mode.</summary>
+			public const ushort DistributionAnalysisModeDescription = 13280;
+
+			/// <summary>The key for the distribution analysis mode.</summary>
+			public const ushort DistributionAnalysisModeKey = 13281;
+
+			#endregion
+
+			#region KPI-specific
+
+			// These are sensible values for the new KPI keys;
+			//public const ushort GestampKpiWeightKey = 12201;
+
+			// We currently use these keys however, since these are in use by gestamp. Not how these keys do not fall into catalog key range.
+			public const ushort GestampKpiWeightKey = 963;
+
+			#endregion
 		}
 
 		#endregion
@@ -505,11 +607,11 @@ namespace Common.Data
 			/// <summary>Key for a measurement value attribute that contains the number of values (calculated by an aggregation job for example).</summary>
 			public const ushort AggregatedValueCount = 21010;
 
-			/// <summary>Key for a measurement value attribute that contains the number of characterteristics out of warning limit (calculated by an aggregation job for example).</summary>
-			public const ushort AggregatedOOW = 21011;
+			/// <summary>Key for a measurement value attribute that contains the number of characterteristics within yellow range (calculated by an aggregation job for example).</summary>
+			public const ushort AggregatedYellowRange = 21011;
 
-			/// <summary>Key for a measurement value attribute that contains the number of characterteristics out of tolerance (calculated by an aggregation job for example).</summary>
-			public const ushort AggregatedOOT = 21012;
+			/// <summary>Key for a measurement value attribute that contains the number of characterteristics within red range (calculated by an aggregation job for example).</summary>
+			public const ushort AggregatedRedRange = 21012;
 
 			/// <summary>
 			/// Collection of all measurement value attributes specific for aggregated measurements
@@ -531,8 +633,8 @@ namespace Common.Data
 						AggregatedCp,
 						AggregatedCpk,
 						AggregatedValueCount,
-						AggregatedOOW,
-						AggregatedOOT
+						AggregatedYellowRange,
+						AggregatedRedRange
 					};
 				}
 			}

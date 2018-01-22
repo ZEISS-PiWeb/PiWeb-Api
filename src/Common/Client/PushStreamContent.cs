@@ -6,7 +6,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
 
-namespace Common.Client
+namespace Zeiss.IMT.PiWeb.Api.Common.Client
 {
 	#region using
 
@@ -22,7 +22,7 @@ namespace Common.Client
 	/// <summary>
 	/// Special implementation of <see cref="HttpContent"/> that supports deferred streaming of the payload data.
 	/// </summary>
-	public class PushStreamContent : HttpContent
+	internal class PushStreamContent : HttpContent
 	{
 		#region members
 

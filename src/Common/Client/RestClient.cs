@@ -1,104 +1,503 @@
-﻿#region copyright
-/* * * * * * * * * * * * * * * * * * * * * * * * * */
+﻿/* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
-#endregion
 
-namespace Common.Client
+namespace Zeiss.IMT.PiWeb.Api.Common.Client
 {
 	#region usings
-
-	using Common.Data;
 
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.IO;
+	using System.Linq;
 	using System.Net;
 	using System.Net.Cache;
 	using System.Net.Http;
 	using System.Net.Http.Headers;
-	using System.Security.Cryptography.X509Certificates;
 	using System.Text;
 	using System.Threading;
 	using System.Threading.Tasks;
+	using Newtonsoft.Json;
+	using Zeiss.IMT.PiWeb.Api.Common.Data;
 
 	#endregion
 
 	/// <summary>
-	/// Base class for communication with REST based web services.
+	/// class for communication with REST based web services.
 	/// </summary>
-	[System.Diagnostics.DebuggerStepThrough]
-	public class RestClient
+	public class RestClient : IRestClient
 	{
 		#region constants
 
-		private const int DefaultTimeout = 5 * 60 * 1000;
-		private const int AbsoluteMaxUriLength = 15 * 1024;
-
 		/// <summary>Mimetype für JSON</summary>
 		public const string MimeTypeJson = "application/json";
+
+		/// <summary>
+		/// Default maximum length of the full URL inclusive any query string
+		/// </summary>
+		public const int DefaultMaxUriLength = 2048;
+
+		/// <summary>
+		/// Maximum length a path segment within an uri my have
+		/// </summary>
+		public const int MaximumPathSegmentLength = 255;
 
 		#endregion
 
 		#region members
 
-		private readonly HttpClient _HttpClient;
-		private readonly WebRequestHandler _WebRequestHandler;
+		/// <summary>
+		/// Default-Timeout of 5 minutes, which is used by RestClient if no timeout is given explicitly.
+		/// </summary>
+		public static readonly TimeSpan DefaultTimeout = TimeSpan.FromMinutes( 5 );
 
-		protected readonly int MaxUriLength;
+		/// <summary>
+		/// Default-Timeout which should be used for connection checks or other simple operations
+		/// </summary>
+		public static readonly TimeSpan DefaultTestTimeout = TimeSpan.FromSeconds( 5 );
+
+		/// <summary>
+		/// Default-Timeout which should be used for short running operations.
+		/// </summary>
+		public static readonly TimeSpan DefaultShortTimeout = TimeSpan.FromSeconds( 15 );
+
+		private readonly ILoginRequestHandler _LoginRequestHandler;
+
+		private HttpClient _HttpClient;
+		private WebRequestHandler _WebRequestHandler;
+
+		private AuthenticationContainer _AuthenticationContainer = new AuthenticationContainer( AuthenticationMode.NoneOrBasic );
+		private readonly IEnumerable<KeyValuePair<string, IEnumerable<string>>> _AdditionalHttpRequestHeaders;
+		private readonly bool _Chunked = true;
 
 		#endregion
 
 		#region constructors
 
 		/// <summary>Constructor.</summary>
-		protected RestClient( Uri serverUri, string endpointName, int timeoutInMilliseconds = DefaultTimeout, int? maxUriLength = null )
+		public RestClient( Uri serverUri, string endpointName, ILoginRequestHandler loginRequestHandler = null, TimeSpan? timeout = null, IEnumerable<KeyValuePair<string, string>> additionalHttpRequestHeader = null, int maxUriLength = DefaultMaxUriLength, bool chunked = true )
 		{
 			if( serverUri == null )
-				throw new ArgumentNullException( "serverUri" );
+				throw new ArgumentNullException( nameof(serverUri) );
 
 			ServiceLocation = new UriBuilder( serverUri )
 			{
-				Path = String.Concat( serverUri.AbsolutePath, "/", endpointName ).Replace( "//", "/" )
+				Path = ( serverUri.AbsolutePath.Replace( "/DataServiceSoap", "" ) + "/" + endpointName ).Replace( "//", "/" )
 			}.Uri;
 
-			_WebRequestHandler = new WebRequestHandler
+			_LoginRequestHandler = loginRequestHandler;
+			_Chunked = chunked;
+
+			MaxUriLength = maxUriLength;
+
+			if( additionalHttpRequestHeader != null )
 			{
-				CachePolicy = new HttpRequestCachePolicy( HttpRequestCacheLevel.Revalidate ),
-				AllowPipelining = true,
-				PreAuthenticate = true,
-				AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-			};
-
-			_HttpClient = new HttpClient( _WebRequestHandler )
+				_AdditionalHttpRequestHeaders = additionalHttpRequestHeader
+					.Select( entry => new KeyValuePair<string, IEnumerable<string>>( entry.Key, Enumerable.Repeat( entry.Value, 1 ) ) );
+			}
+			else
 			{
-				Timeout = TimeSpan.FromMilliseconds( timeoutInMilliseconds ),
-				BaseAddress = ServiceLocation
-			};
-			SetHeaders( _HttpClient.DefaultRequestHeaders );
+				_AdditionalHttpRequestHeaders = Enumerable.Empty<KeyValuePair<string, IEnumerable<string>>>();
+			}
 
-			MaxUriLength = Math.Min( maxUriLength ?? AbsoluteMaxUriLength, AbsoluteMaxUriLength );
-		}
-
-		/// <summary> Sets the HTTP headers fields for the <paramref name="headers"/> object. </summary>
-		/// <param name="headers">The headers object the values should be set for.</param>
-		private static void SetHeaders( HttpRequestHeaders headers )
-		{
-			headers.Accept.Add( new MediaTypeWithQualityHeaderValue( MimeTypeJson ) );
-			headers.AcceptEncoding.Add( new StringWithQualityHeaderValue( "gzip" ) );
-			headers.AcceptEncoding.Add( new StringWithQualityHeaderValue( "deflate" ) );
-			headers.AcceptLanguage.Add( new StringWithQualityHeaderValue( CultureInfo.CurrentCulture.Name ) );
-			headers.UserAgent.Add( new ProductInfoHeaderValue( ClientIdHelper.ClientProduct, ClientIdHelper.ClientVersion ) );
-			headers.TransferEncodingChunked = true;
-			headers.Add( "Keep-Alive", "true" );
+			BuildHttpClient( timeout );
 		}
 
 		#endregion
 
 		#region properties
+
+		public int MaxUriLength { get; }
+
+		#endregion
+
+		#region methods
+
+		public Task Request( Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		{
+			return PerformRequestAsync<object>( requestCreationHandler, false, null, true, cancellationToken );
+		}
+
+		public Task<T> Request<T>( Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		{
+			return PerformRequestAsync( requestCreationHandler, false, ResponseToObjectAsync<T>, true, cancellationToken );
+		}
+
+		public Task<Stream> RequestStream( Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		{
+			return PerformRequestAsync( requestCreationHandler, true, ResponseToStreamAsync, false, cancellationToken );
+		}
+
+		public Task<IEnumerable<T>> RequestEnumerated<T>( Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		{
+			return PerformRequestAsync( requestCreationHandler, true, ResponseToEnumerationAsync<T>, false, cancellationToken );
+		}
+
+		public Task<byte[]> RequestBytes( Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		{
+			return PerformRequestAsync( requestCreationHandler, false, ResponseToBytesAsync, true, cancellationToken );
+		}
+
+		private static async Task<T> ResponseToObjectAsync<T>( HttpResponseMessage response )
+		{
+			using( var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false ) )
+			{
+				return RestClientHelper.DeserializeObject<T>( responseStream );
+			}
+		}
+
+		private static async Task<IEnumerable<T>> ResponseToEnumerationAsync<T>( HttpResponseMessage response )
+		{
+			var stream = await ResponseToStreamAsync( response ).ConfigureAwait( false );
+			return GetEnumeratedResponse<T>( response, stream );
+		}
+
+		private static IEnumerable<T> GetEnumeratedResponse<T>( IDisposable response, Stream responseStream )
+		{
+			using( response )
+			{
+				using( responseStream )
+				{
+					foreach( var item in RestClientHelper.DeserializeEnumeratedObject<T>( responseStream ) )
+					{
+						yield return item;
+					}
+				}
+			}
+		}
+
+		private static async Task<byte[]> ResponseToBytesAsync( HttpResponseMessage response )
+		{
+			using( var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false ) )
+			{
+				if( response.Content.Headers.ContentLength.HasValue )
+				{
+					using( var memStream = new MemoryStream( new byte[( int ) response.Content.Headers.ContentLength.Value], 0, ( int ) response.Content.Headers.ContentLength.Value, true, true ) )
+					{
+						await responseStream.CopyToAsync( memStream ).ConfigureAwait( false );
+						return memStream.GetBuffer();
+					}
+				}
+				using( var memStream = new MemoryStream() )
+				{
+					await responseStream.CopyToAsync( memStream ).ConfigureAwait( false );
+					return memStream.ToArray();
+				}
+			}
+		}
+
+		private async Task<TResult> PerformRequestAsync<TResult>( Func<HttpRequestMessage> requestCreationHandler, bool streamed, Func<HttpResponseMessage, Task<TResult>> handler = null, bool autoDisposeResponse = true, CancellationToken cancellationToken = default( CancellationToken ) )
+		{
+			HttpResponseMessage response = null;
+
+			try
+			{
+				await CheckForCorrectAuthenticationInformationAsync().ConfigureAwait( false );
+
+				var completionOptions = streamed ? HttpCompletionOption.ResponseHeadersRead : HttpCompletionOption.ResponseContentRead;
+
+				while( true )
+				{
+					var request = requestCreationHandler();
+					SetDefaultHttpHeaders( request );
+					response = await _HttpClient.SendAsync( request, completionOptions, cancellationToken ).ConfigureAwait( false );
+
+					if( response.IsSuccessStatusCode )
+					{
+						if( handler != null )
+						{
+							return await handler( response ).ConfigureAwait( false );
+						}
+
+						return default( TResult );
+					}
+
+					var updatedAuthentication = await CheckForUpdatedAuthenticationInformationIfInvalidAsync( response ).ConfigureAwait( false );
+					if( updatedAuthentication != null )
+					{
+						response.Dispose();
+
+						AuthenticationContainer = updatedAuthentication;
+					}
+					else
+					{
+						await HandleFaultedResponse( response ).ConfigureAwait( false );
+					}
+				}
+			}
+			catch( HttpRequestException ex )
+			{
+				throw new RestClientException( $"Error fetching web service response for request [{response?.RequestMessage?.RequestUri}]: {ex.Message}", ex );
+			}
+			catch( TaskCanceledException ex )
+			{
+				if( ex.CancellationToken.IsCancellationRequested ||
+				    cancellationToken.IsCancellationRequested )
+				{
+					throw;
+				}
+
+				throw new TimeoutException( "Timeout reached", ex );
+			}
+			finally
+			{
+				if( autoDisposeResponse )
+				{
+					response?.Dispose();
+				}
+			}
+		}
+
+		private void SetDefaultHttpHeaders( HttpRequestMessage request )
+		{
+			request.Headers.Accept.Add( new MediaTypeWithQualityHeaderValue( MimeTypeJson ) );
+			request.Headers.AcceptEncoding.Add( new StringWithQualityHeaderValue( "gzip" ) );
+			request.Headers.AcceptEncoding.Add( new StringWithQualityHeaderValue( "deflate" ) );
+			request.Headers.UserAgent.Add( new ProductInfoHeaderValue( ClientIdHelper.ClientProduct, ClientIdHelper.ClientVersion ) );
+			request.Headers.TransferEncodingChunked = _Chunked;
+			request.Headers.Add( "Keep-Alive", "true" );
+
+			foreach( var header in _AdditionalHttpRequestHeaders )
+			{
+				_HttpClient.DefaultRequestHeaders.Add( header.Key, header.Value );
+			}
+
+			if( !Equals( CultureInfo.CurrentUICulture, CultureInfo.InvariantCulture ) )
+			{
+				request.Headers.AcceptLanguage.Add( new StringWithQualityHeaderValue( CultureInfo.CurrentUICulture.IetfLanguageTag, 1.0 ) );
+				request.Headers.AcceptLanguage.Add( new StringWithQualityHeaderValue( CultureInfo.CurrentUICulture.TwoLetterISOLanguageName, 0.8 ) );
+			}
+		}
+
+		/// <summary>
+		/// Reads and returns the response stream.
+		/// </summary>
+		private static Task<Stream> ResponseToStreamAsync( HttpResponseMessage response )
+		{
+			return response.Content.ReadAsStreamAsync();
+		}
+
+		private static async Task HandleFaultedResponse( HttpResponseMessage response )
+		{
+			await HandleClientBasedFaults( response ).ConfigureAwait( false );
+			HandleServerBasedFaults( response );
+		}
+
+		/// <summary>
+		/// Handles all responses with status codes between 400 and 499
+		/// </summary>
+		private static async Task HandleClientBasedFaults( HttpResponseMessage response )
+		{
+			if( response.StatusCode < HttpStatusCode.BadRequest || response.StatusCode >= HttpStatusCode.InternalServerError )
+				return;
+
+			using( var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false ) )
+			{
+				Error error;
+				try
+				{
+					error = RestClientHelper.DeserializeObject<Error>( responseStream );
+
+				}
+				catch( JsonReaderException )
+				{
+					var buffer = ( responseStream as MemoryStream )?.ToArray();
+					var content = buffer != null ? Encoding.UTF8.GetString( buffer ) : null;
+					error = new Error( $"Request {response.RequestMessage.Method} {response.RequestMessage.RequestUri} was not successful: {( int ) response.StatusCode} ({response.ReasonPhrase})" )
+					{
+						ExceptionMessage = content,
+					};
+				}
+				catch( Exception )
+				{
+					error = new Error( $"Request {response.RequestMessage.Method} {response.RequestMessage.RequestUri} was not successful: {( int ) response.StatusCode} ({response.ReasonPhrase})" );
+				}
+
+				throw new WrappedServerErrorException( error, response );
+			}
+		}
+
+		/// <summary>
+		/// Handles all responses with status codes between 500 and 505
+		/// </summary>
+		private static void HandleServerBasedFaults( HttpResponseMessage response )
+		{
+			if( response.StatusCode < HttpStatusCode.InternalServerError || response.StatusCode >= HttpStatusCode.HttpVersionNotSupported )
+				return;
+
+			var error = new Error( response.ReasonPhrase );
+			string exceptionType;
+
+			if( WrappedServerErrorExceptionExtensions.ServerBasedExceptions.TryGetValue( response.StatusCode, out exceptionType ))
+				error.ExceptionType = exceptionType;
+
+			throw new WrappedServerErrorException( error, response );
+		}
+
+		private void RebuildHttpClient()
+		{
+			var timeout = _HttpClient.Timeout;
+
+			_HttpClient?.Dispose();
+			_WebRequestHandler?.Dispose();
+
+			BuildHttpClient( timeout );
+		}
+
+		private void BuildHttpClient( TimeSpan? timeout )
+		{
+			_WebRequestHandler = new WebRequestHandler
+			{
+				// HttpRequestCacheLevel muss unbedingt auf Revalidate stehen, ansonsten werden Anfragen an alte Server
+				// gecacht, die eigentlich nicht gecacht werden dürfen!
+				CachePolicy = new HttpRequestCachePolicy( HttpCacheAgeControl.MaxAge, TimeSpan.FromDays( 0 ) ),
+				AllowPipelining = true,
+				PreAuthenticate = true,
+				AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+				// PIWEB-8519
+				// When using WindowsAuthentication, PiWeb Clients create lots of sockets in TIME_WAIT state.
+				// During QDB export with RawData this may lead to exhaustion of ephemeral ports for new connections
+				// resulting in exceptions.
+				// The following assignment disables closing of the socket connection but has a few security
+				// implications. After careful review I think these are not relevant for us currently.
+				// Therefore it should be safe for us to switch this on.
+				// Review:
+				// - HttpWebRequest.ConnectionGroupName is set to a hash of the instance hash code
+				// - PiWeb Clients do not do impersonation
+				// - PiWeb Clients are using single sign on exclusively, which means no user B can hijack a connection of user A
+				// - Inspecting Client/Server communication with Fiddler reveals that every request does a 401 roundtrip,
+				//     i.e. the Server is already authenticating every single request
+				UnsafeAuthenticatedConnectionSharing = true
+			};
+
+			_HttpClient = new HttpClient( _WebRequestHandler )
+			{
+				Timeout = timeout ?? DefaultTimeout,
+				BaseAddress = ServiceLocation
+			};
+		}
+
+		private async Task<AuthenticationContainer> CheckForUpdatedAuthenticationInformationIfInvalidAsync( HttpResponseMessage response )
+		{
+			var isUnauthorized = response.StatusCode == HttpStatusCode.Unauthorized
+			                     // TODO: this is currently a fallback since the cloud returns the wrong status code if the token is missing completely
+			                     || response.StatusCode == HttpStatusCode.BadRequest && ( ServiceLocation.Host == "service.piweb.cloud"
+			                                                                              || ServiceLocation.Host == "service.dev.piweb.cloud" );
+
+			if( isUnauthorized )
+			{
+				var instanceUri = GetInstanceUri();
+				_LoginRequestHandler.InvalidateCache( instanceUri );
+				var newAuthentication = await AuthenticationHelper.RequestAuthenticationInformationUpdateAsync( AuthenticationContainer.Mode, GetInstanceUri(), _LoginRequestHandler );
+				if( newAuthentication != null && !Equals( newAuthentication, AuthenticationContainer ) )
+					return newAuthentication;
+			}
+
+			return null;
+		}
+
+		private async Task<bool> CheckForCorrectAuthenticationInformationAsync()
+		{
+			if( !AuthenticationHelper.IsAuthenticationContainerIncomplete( _AuthenticationContainer ) ) return true;
+
+			var updatedAuthentication = await AuthenticationHelper.RequestAuthenticationInformationUpdateAsync(
+					_AuthenticationContainer.Mode,
+					GetInstanceUri(),
+					_LoginRequestHandler )
+				.ConfigureAwait( false );
+			if( updatedAuthentication != null )
+			{
+				AuthenticationContainer = updatedAuthentication;
+			}
+			else
+			{
+				return false;
+			}
+
+			return true;
+		}
+
+		private Uri GetInstanceUri() => new Uri( ServiceLocation, "../" );
+
+		private void UpdateAuthenticationInformation()
+		{
+			_WebRequestHandler.ClientCertificates.Clear();
+			_HttpClient.DefaultRequestHeaders.Authorization = null;
+
+			switch( _AuthenticationContainer.Mode )
+			{
+				case AuthenticationMode.NoneOrBasic:
+					UpdateUseWindowsCredentials( false );
+					if( _AuthenticationContainer.Credentials != null )
+					{
+						var parameter = $"{_AuthenticationContainer.Credentials.UserName}:{_AuthenticationContainer.Credentials.Password}";
+						_HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue( "basic", Convert.ToBase64String( Encoding.UTF8.GetBytes( parameter ) ) );
+					}
+					break;
+
+				case AuthenticationMode.Windows:
+					UpdateUseWindowsCredentials( _AuthenticationContainer.Credentials == null, _AuthenticationContainer.Credentials );
+					break;
+
+				case AuthenticationMode.Certificate:
+				case AuthenticationMode.HardwareCertificate:
+					UpdateUseWindowsCredentials( false );
+					if( _AuthenticationContainer.Certificate != null )
+					{
+						_WebRequestHandler.ClientCertificates.Add( _AuthenticationContainer.Certificate );
+					}
+					break;
+
+				case AuthenticationMode.OAuth:
+					UpdateUseWindowsCredentials( false );
+					if( _AuthenticationContainer.OAuthAccessToken != null )
+					{
+						_HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue( "Bearer", _AuthenticationContainer.OAuthAccessToken );
+					}
+					break;
+				default:
+					throw new NotSupportedException( $"unknown authentication mode '{_AuthenticationContainer.Mode}'" );
+			}
+
+			RaiseAuthenticationChanged();
+		}
+
+		private void UpdateUseWindowsCredentials( bool useDefaultCredentials, ICredentials credentials = null )
+		{
+			// if one of those properties changes we unfortunately need to rebuild the request handler and therefore the http client
+			if( _WebRequestHandler.UseDefaultCredentials == useDefaultCredentials && _WebRequestHandler.Credentials == null && credentials == null ) return;
+
+			RebuildHttpClient();
+			_WebRequestHandler.Credentials = credentials;
+			_WebRequestHandler.UseDefaultCredentials = useDefaultCredentials;
+		}
+
+		private void RaiseAuthenticationChanged()
+		{
+			AuthenticationChanged?.Invoke( this, EventArgs.Empty );
+		}
+
+		#endregion
+
+		#region interface IRestClient
+
+		/// <summary>
+		/// Gets or sets the request timeout.
+		/// </summary>
+		public TimeSpan Timeout
+		{
+			get { return _HttpClient.Timeout; }
+			set
+			{
+				if( _HttpClient.Timeout != value )
+				{
+					_HttpClient.Timeout = value;
+				}
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets if system default proxy should be used.
@@ -106,377 +505,44 @@ namespace Common.Client
 		public bool UseDefaultWebProxy
 		{
 			get { return _WebRequestHandler.UseProxy; }
-			set { _WebRequestHandler.UseProxy = value; }
+			set
+			{
+				if( _WebRequestHandler.UseProxy != value )
+				{
+					_WebRequestHandler.UseProxy = value;
+				}
+			}
 		}
+
+		public event EventHandler AuthenticationChanged;
 
 		/// <summary>
 		/// Returns the endpoint address of the webservice.
 		/// </summary>
-		public Uri ServiceLocation { get; private set; }
+		public Uri ServiceLocation { get; }
 
-		/// <summary>
-		/// Gets or sets the authentication (username + password) used by this class. 
-		/// </summary>
-		public NetworkCredential Credentials
+		public AuthenticationContainer AuthenticationContainer
 		{
-			get { return _WebRequestHandler.Credentials as NetworkCredential; }
+			get { return _AuthenticationContainer; }
 			set
 			{
-				_WebRequestHandler.Credentials = value;
-				UpdateAuthenticationHeader();
+				if( value == null ) throw new ArgumentNullException( nameof(value) );
+
+				if( _AuthenticationContainer == value ) return;
+
+				_AuthenticationContainer = value;
+				UpdateAuthenticationInformation();
 			}
 		}
 
 		/// <summary>
-		/// Gets or sets whether the current login credentials (single sign on) should be sent for authorization.
+		/// Disposes this instance.
 		/// </summary>
-		public bool UseDefaultCredentials
+		public void Dispose()
 		{
-			get { return _WebRequestHandler.UseDefaultCredentials; }
-			set
-			{
-				_WebRequestHandler.UseDefaultCredentials = value;
-				UpdateAuthenticationHeader();
-			}
+			_HttpClient?.Dispose();
+			_WebRequestHandler?.Dispose();
 		}
-
-		/// <summary> 
-		/// Gets or sets the client certificate that should be used for authorization.
-		/// </summary>
-		public X509Certificate ClientCertificate
-		{
-			get { return _WebRequestHandler.ClientCertificates.Count > 0 ? _WebRequestHandler.ClientCertificates[ 0 ] : null; }
-			set
-			{
-				if( value != null )
-					_WebRequestHandler.ClientCertificates.Add( value );
-				else
-					_WebRequestHandler.ClientCertificates.Clear();
-
-				UpdateAuthenticationHeader();
-			}
-		}
-
-		#endregion
-
-		#region methods
-
-		#region GET
-
-		/// <summary>GETs data asynchronously and returns a <see cref="Task"/> that contains a result of type <typeparamref name="T"/>.</summary>
-		/// <typeparam name="T">Result type that should be returned within the Task object.</typeparam>
-		/// <param name="requestUri">The string that should the base url extended by.</param>
-		/// <param name="cancellationToken">A <see cref="CancellationToken"/> the async call can be canceled with.</param>
-		/// <param name="parameterDefinitions">Query parameters the url can be extended by.</param>
-		protected Task<T> Get<T>( string requestUri, CancellationToken cancellationToken, params ParameterDefinition[] parameterDefinitions )
-		{
-			return GetResponse<T>( BuildRequest( HttpMethod.Get, requestUri, parameterDefinitions ), cancellationToken );
-		}
-
-		/// <summary>GETs data asynchronously and returns a <see cref="Task"/> that contains a result of type <see cref="IEnumerable{T}"/>.</summary>
-		/// <typeparam name="T">Result type that should be returned within the Task object.</typeparam>
-		/// <param name="requestUri">The string that should the base url extended by.</param>
-		/// <param name="cancellationToken">A <see cref="CancellationToken"/> the async call can be canceled with.</param>
-		/// <param name="parameterDefinitions">Query parameters the url can be extended by.</param>
-		protected Task<IEnumerable<T>> GetEnumerated<T>( string requestUri, CancellationToken cancellationToken, ParameterDefinition[] parameterDefinitions )
-		{
-			return GetEnumeratedResponse<T>( BuildRequest( HttpMethod.Get, requestUri, parameterDefinitions ), cancellationToken );
-		}
-
-		/// <summary>GETs data asynchronously and returns a <see cref="Task"/> that contains a result of type <see cref="Byte"/>-Array.</summary>
-		/// <param name="requestUri">The string that should the base url extended by.</param>
-		/// <param name="cancellationToken">A <see cref="CancellationToken"/> the async call can be canceled with.</param>
-		/// <param name="parameterDefinitions">Query parameters the url can be extended by.</param>
-		protected Task<Byte[]> GetBytes( string requestUri, CancellationToken cancellationToken, params ParameterDefinition[] parameterDefinitions )
-		{
-			return GetResponseBytes( BuildRequest( HttpMethod.Get, requestUri, parameterDefinitions ), cancellationToken );
-		}
-
-		/// <summary>GETs data asynchronously and returns a <see cref="Task"/> that contains a result of type <see cref="Stream"/>.</summary>
-		/// <param name="requestUri">The string that should the base url extended by.</param>
-		/// <param name="cancellationToken">A <see cref="CancellationToken"/> the async call can be canceled with.</param>
-		/// <param name="parameterDefinitions">Query parameters the url can be extended by.</param>
-		protected Task<Stream> GetStream( string requestUri, CancellationToken cancellationToken, params ParameterDefinition[] parameterDefinitions )
-		{
-			return GetResponseStream( BuildRequest( HttpMethod.Get, requestUri, parameterDefinitions ), cancellationToken );
-		}
-
-		#endregion
-
-		#region POST
-
-		/// <summary>POSTs data asynchronously and returns a <see cref="Task"/> that contains a result of type <typeparamref name="T"/>.</summary>
-		/// <typeparam name="T">Result type that should be returned within the Task object.</typeparam>
-		/// <param name="requestUri">The string that should the base url extended by.</param>
-		/// <param name="data">The data that should be posted within the HTTP body.</param>
-		/// <param name="cancellationToken">A <see cref="CancellationToken"/> the async call can be canceled with.</param>
-		/// <param name="parameterDefinitions">Query parameters the url can be extended by.</param>
-		protected Task<T> Post<T>( string requestUri, object data, CancellationToken cancellationToken, params ParameterDefinition[] parameterDefinitions )
-		{
-			return GetResponse<T>( BuildRequest( HttpMethod.Post, requestUri, data, parameterDefinitions ), cancellationToken );
-		}
-
-		/// <summary>POSTs data asynchronously and returns a <see cref="Task"/>.</summary>
-		/// <param name="requestUri">The string that should the base url extended by.</param>
-		/// <param name="data">The data that should be posted within the HTTP body.</param>
-		/// <param name="cancellationToken">A <see cref="CancellationToken"/> the async call can be canceled with.</param>
-		/// <param name="parameterDefinitions">Query parameters the url can be extended by.</param>
-		protected Task Post( string requestUri, object data, CancellationToken cancellationToken, params ParameterDefinition[] parameterDefinitions )
-		{
-			return GetResponse( BuildRequest( HttpMethod.Post, requestUri, data, parameterDefinitions ), cancellationToken );
-		}
-
-		/// <summary>POSTs data asynchronously and returns a <see cref="Task"/>.</summary>
-		/// <param name="requestUri">The string that should the base url extended by.</param>
-		/// <param name="data">The data that should be posted within the HTTP body.</param>
-		/// <param name="cancellationToken">A <see cref="CancellationToken"/> the async call can be canceled with.</param>
-		/// <param name="parameterDefinitions">Query parameters the url can be extended by.</param>
-		/// <param name="contentLength">The length of the content that should be send.</param>
-		/// <param name="mimeType">The mime type of the content to be sent.</param>
-		/// <param name="contentDisposition">The name of the file to be streamed.</param>
-		/// <param name="contentMD5">The MD5 sum of the file to be streamed.</param>
-		protected Task Post( string requestUri, Stream data, CancellationToken cancellationToken, long? contentLength, string mimeType, Guid? contentMD5, string contentDisposition, params ParameterDefinition[] parameterDefinitions )
-		{
-			return GetResponse( BuildStreamRequest( HttpMethod.Post, requestUri, data, mimeType, contentLength, contentMD5, contentDisposition, parameterDefinitions ), cancellationToken );
-		}
-
-		#endregion
-
-		#region PUT
-
-		/// <summary>PUTs data asynchronously and returns a <see cref="Task"/>.</summary>
-		/// <param name="requestUri">The string that should the base url extended by.</param>
-		/// <param name="data">The data that should be posted within the HTTP body.</param>
-		/// <param name="cancellationToken">A <see cref="CancellationToken"/> the async call can be canceled with.</param>
-		/// <param name="parameterDefinitions">Query parameters the url can be extended by.</param>
-		protected Task Put( string requestUri, object data, CancellationToken cancellationToken, params ParameterDefinition[] parameterDefinitions )
-		{
-			return GetResponse( BuildRequest( HttpMethod.Put, requestUri, data, parameterDefinitions ), cancellationToken );
-		}
-
-		/// <summary>PUTs data asynchronously and returns a <see cref="Task"/>.</summary>
-		/// <param name="requestUri">The string that should the base url extended by.</param>
-		/// <param name="data">The data that should be posted within the HTTP body.</param>
-		/// <param name="cancellationToken">A <see cref="CancellationToken"/> the async call can be canceled with.</param>
-		/// <param name="parameterDefinitions">Query parameters the url can be extended by.</param>
-		/// <param name="contentLength">The length of the content that should be send.</param>
-		/// <param name="mimeType">The mime type of the content to be sent.</param>
-		/// <param name="contentDisposition">The name of the file to be streamed.</param>
-		/// <param name="contentMD5">The MD5 sum of the file to be streamed.</param>
-		protected Task Put( string requestUri, Stream data, CancellationToken cancellationToken, long? contentLength, string mimeType, Guid? contentMD5, string contentDisposition, params ParameterDefinition[] parameterDefinitions )
-		{
-			return GetResponse( BuildStreamRequest( HttpMethod.Put, requestUri, data, mimeType, contentLength, contentMD5, contentDisposition, parameterDefinitions ), cancellationToken );
-		}
-
-		#endregion
-
-		#region DELETE
-
-		/// <summary>DELETEs data asynchronously and returns a <see cref="Task"/>.</summary>
-		/// <param name="requestUri">The string that should the base url extended by.</param>
-		/// <param name="cancellationToken">A <see cref="CancellationToken"/> the async call can be canceled with.</param>
-		/// <param name="parameterDefinitions">Query parameters the url can be extended by.</param>
-		protected Task Delete( string requestUri, CancellationToken cancellationToken, params ParameterDefinition[] parameterDefinitions )
-		{
-			return GetResponse( BuildRequest( HttpMethod.Delete, requestUri, parameterDefinitions ), cancellationToken );
-		}
-
-		#endregion
-
-		#region Helper methods
-
-		/// <summary>
-		/// Creates a new <see cref="HttpRequestMessage"/> to call the url <code>requestUri</code> with the HTTP 
-		/// verb <code>method</code> (GET, POST, PUT, DELETE).
-		/// </summary>
-		protected HttpRequestMessage BuildRequest( HttpMethod method, string requestUri, params ParameterDefinition[] parameterDefinitions )
-		{
-			return BuildRequest( method, requestUri, null, parameterDefinitions );
-		}
-
-		/// <summary>
-		/// Creates a new <see cref="HttpRequestMessage"/> to call the url <code>requestUri</code> with the HTTP 
-		/// verb <code>method</code> (GET, POST, PUT, DELETE) and data <code>payload</code>.
-		/// </summary>
-		protected HttpRequestMessage BuildRequest( HttpMethod method, string requestUri, object payload, params ParameterDefinition[] parameterDefinitions )
-		{
-			var request = BuildRequestInternal( method, requestUri, parameterDefinitions );
-			if( payload != null )
-			{
-				request.Content = new PushStreamContent( ( outputStream, content, context ) =>
-				{
-					using( var sw = new StreamWriter( outputStream, Encoding.UTF8, 64 * 1024, false ) )
-					{
-						RestClientHelper.CreateJsonSerializer().Serialize( sw, payload );
-					}
-				}, new MediaTypeWithQualityHeaderValue( MimeTypeJson ) );
-			}
-			return request;
-		}
-
-		private HttpRequestMessage BuildStreamRequest( HttpMethod method, string requestUri, Stream stream, string mimeType, long? contentLength, Guid? contentMD5, string contentDisposition, params ParameterDefinition[] parameterDefinitions )
-		{
-			var request = BuildRequestInternal( method, requestUri, parameterDefinitions );
-			if( stream != null )
-			{
-				request.Content = new StreamContent( stream );
-
-				if( contentLength.HasValue )
-					request.Content.Headers.Add( HttpRequestHeader.ContentLength.ToString(), contentLength.Value.ToString() );
-				if( !String.IsNullOrEmpty( mimeType ) )
-					request.Content.Headers.ContentType = new MediaTypeHeaderValue( mimeType );
-				if( !String.IsNullOrEmpty( contentDisposition ) )
-					request.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue( "attachment" ) { FileName = contentDisposition };
-				if( contentMD5.HasValue )
-					request.Content.Headers.ContentMD5 = contentMD5.Value.ToByteArray();
-			}
-			return request;
-		}
-
-		private HttpRequestMessage BuildRequestInternal( HttpMethod method, string requestUri, params ParameterDefinition[] parameterDefinitions )
-		{
-			var uriBuilder = new UriBuilder( ServiceLocation );
-			uriBuilder.Path += requestUri;
-
-			if( parameterDefinitions != null )
-			{
-				var queryString = new StringBuilder();
-				foreach( var parameterDefinition in parameterDefinitions )
-				{
-					if( queryString.Length > 0 )
-						queryString.Append( "&" );
-
-					queryString.Append( parameterDefinition.Name ).Append( "=" ).Append( Uri.EscapeDataString( parameterDefinition.Value ) );
-				}
-				uriBuilder.Query = queryString.ToString();
-			}
-			var request = new HttpRequestMessage( method, uriBuilder.Uri );
-			request.Headers.AcceptLanguage.Add( new StringWithQualityHeaderValue( CultureInfo.CurrentUICulture.IetfLanguageTag, 1.0 ) );
-			request.Headers.AcceptLanguage.Add( new StringWithQualityHeaderValue( CultureInfo.CurrentUICulture.TwoLetterISOLanguageName, 0.8 ) );
-
-			return request;
-		}
-
-		[System.Diagnostics.DebuggerStepThrough]
-		private async Task<T> GetResponse<T>( HttpRequestMessage request, CancellationToken cancellationToken = default( CancellationToken ) )
-		{
-			try
-			{
-				using( var response = await _HttpClient.SendAsync( request, cancellationToken ).ConfigureAwait( false ) )
-				{
-					await CheckForFaultedResponses( response ).ConfigureAwait( false );
-					using( var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false ) )
-					{
-						return RestClientHelper.DeserializeObject<T>( responseStream );
-					}
-				}
-			}
-			catch( HttpRequestException e )
-			{
-				throw new RestClientException( string.Format( "Error fetching web service response for request [{0}]: {1}", request.RequestUri, e.Message ), e );
-			}
-		}
-
-		private async Task<IEnumerable<T>> GetEnumeratedResponse<T>( HttpRequestMessage request, CancellationToken cancellationToken = default( CancellationToken ) )
-		{
-			var response = await _HttpClient.SendAsync( request, HttpCompletionOption.ResponseHeadersRead, cancellationToken ).ConfigureAwait( false );
-
-			await CheckForFaultedResponses( response );
-			var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false );
-
-			return GetEnumeratedResponse<T>( responseStream, response );
-		}
-
-		private static IEnumerable<T> GetEnumeratedResponse<T>( Stream responseStream, HttpResponseMessage response )
-		{
-			using( response )
-			using( responseStream )
-			{
-				foreach( var item in RestClientHelper.DeserializeEnumeratedObject<T>( responseStream ) )
-				{
-					yield return item;
-				}
-			}
-		}
-
-		private async Task<byte[]> GetResponseBytes( HttpRequestMessage request, CancellationToken cancellationToken = default( CancellationToken ) )
-		{
-			using( var response = await _HttpClient.SendAsync( request, HttpCompletionOption.ResponseHeadersRead, cancellationToken ).ConfigureAwait( false ) )
-			{
-				await CheckForFaultedResponses( response ).ConfigureAwait( false );
-				using( var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false ) )
-				{
-					if( response.Content.Headers.ContentLength.HasValue )
-					{
-						using( var memStream = new MemoryStream( new byte[ (int)response.Content.Headers.ContentLength.Value ], 0, (int)response.Content.Headers.ContentLength.Value, true, true ) )
-						{
-							await responseStream.CopyToAsync( memStream ).ConfigureAwait( false );
-							return memStream.GetBuffer();
-						}
-					}
-					using( var memStream = new MemoryStream() )
-					{
-						await responseStream.CopyToAsync( memStream ).ConfigureAwait( false );
-						return memStream.ToArray();
-					}
-				}
-			}
-		}
-
-		/// <summary>
-		/// Reads and returns the response stream.
-		/// </summary>
-		protected async Task<Stream> GetResponseStream( HttpRequestMessage request, CancellationToken cancellationToken = default( CancellationToken ) )
-		{
-			var response = await _HttpClient.SendAsync( request, HttpCompletionOption.ResponseHeadersRead, cancellationToken ).ConfigureAwait( false );
-			await CheckForFaultedResponses( response ).ConfigureAwait( false );
-			return await response.Content.ReadAsStreamAsync().ConfigureAwait( false );
-		}
-
-		/// <summary>
-		/// Reads the response stream and throws an exception in case of an error.
-		/// </summary>
-		protected async Task GetResponse( HttpRequestMessage request, CancellationToken cancellationToken = default( CancellationToken ) )
-		{
-			using( var response = await _HttpClient.SendAsync( request, cancellationToken ).ConfigureAwait( false ) )
-			{
-				await CheckForFaultedResponses( response ).ConfigureAwait( false );
-			}
-		}
-		
-		private static async Task CheckForFaultedResponses( HttpResponseMessage response )
-		{
-			if( response.IsSuccessStatusCode )
-				return;
-
-			using( var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false ) )
-			{
-				Error error = null;
-				try
-				{
-					error = RestClientHelper.DeserializeObject<Error>( responseStream );
-				}
-				catch
-				{
-					// ignored
-				}
-
-				if( error == null )
-					error = new Error( string.Format( "Request {0} {1} was not successful: {2} ({3})", response.RequestMessage.Method, response.RequestMessage.RequestUri, (int)response.StatusCode, response.ReasonPhrase ) );
-
-				throw new WrappedServerErrorException( error, response.StatusCode );
-			}
-		}
-
-		private void UpdateAuthenticationHeader()
-		{
-			if( UseDefaultCredentials || ClientCertificate != null || Credentials == null )
-				_HttpClient.DefaultRequestHeaders.Authorization = null;
-			else
-				_HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue( "basic", Convert.ToBase64String( Encoding.UTF8.GetBytes( string.Format( "{0}:{1}", Credentials.UserName, Credentials.Password ) ) ) );
-		}
-
-		#endregion
 
 		#endregion
 	}

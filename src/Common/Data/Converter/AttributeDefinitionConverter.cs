@@ -6,19 +6,18 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
 
-namespace Common.Data.Converter
+namespace Zeiss.IMT.PiWeb.Api.Common.Data.Converter
 {
 	#region using
 
 	using System;
 	using System.Globalization;
-
-	using DataService;
+	using Zeiss.IMT.PiWeb.Api.DataService.Rest;
 
 	#endregion
 
 	/// <summary>
-	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="DataService.AbstractAttributeDefinition"/>-objects.
+	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="AbstractAttributeDefinition"/>-objects.
 	/// </summary>
 	public class AttributeDefinitionConverter : Newtonsoft.Json.JsonConverter
 	{
@@ -74,7 +73,7 @@ namespace Common.Data.Converter
 			}
 
 			if( attributeDefinitionType == "AttributeDefinition" )
-				return new AttributeDefinition { Description = description, Key = key, Length = length, QueryEfficient = queryEfficient, Type = type };
+				return new AttributeDefinition { Description = description, Key = key, Length = length, LengthSpecified = true, QueryEfficient = queryEfficient, Type = type };
 	
 			if( attributeDefinitionType == "CatalogAttributeDefinition" )
 				return new CatalogAttributeDefinition { Description = description, Key = key, QueryEfficient = queryEfficient, Catalog = catalogUuid };
@@ -99,7 +98,7 @@ namespace Common.Data.Converter
 				var attributeDef = definition as AttributeDefinition;
 				if( attributeDef != null )
 				{
-					if( attributeDef.Length > 0 )
+					if( attributeDef.LengthSpecified )
 					{
 						writer.WritePropertyName( "length" );
 						writer.WriteValue( attributeDef.Length );

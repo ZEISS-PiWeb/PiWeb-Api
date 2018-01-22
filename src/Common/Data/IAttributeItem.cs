@@ -1,4 +1,4 @@
-#region copyright
+ï»¿#region copyright
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
@@ -6,16 +6,18 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
 
-namespace Common.Data
+namespace Zeiss.IMT.PiWeb.Api.Common.Data
 {
+	using Zeiss.IMT.PiWeb.Api.DataService.Rest;
+
 	/// <summary>
-	/// Interface für Objekte, die eine Liste von Attributen zur Verfügung stellen.
+	/// Interface fÃ¼r Objekte, die eine Liste von Attributen zur VerfÃ¼gung stellen.
 	/// </summary>
 	public interface IAttributeItem
 	{
 		/// <summary>
-		/// Gibt alle Attribute als Feld zurück.
+		/// Gibt alle Attribute als Feld zurÃ¼ck.
 		/// </summary>
-		DataService.Attribute[] Attributes { get; set; }
+		Attribute[] Attributes { get; set; }
 	}
 }

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ParsingError.AND" xml:space="preserve">
-    <value>'AND' erwarten, aber '{0}' gefunden.</value>
+    <value>Bedingungen müssen mit einem '+' verknüpft werden: {0}.</value>
   </data>
   <data name="ParsingError.Incomplete" xml:space="preserve">
     <value>Unvollständiger Ausdruck '{0}'.</value>

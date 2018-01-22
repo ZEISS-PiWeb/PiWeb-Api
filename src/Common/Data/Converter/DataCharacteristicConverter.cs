@@ -6,20 +6,19 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
 
-namespace Common.Data.Converter
+namespace Zeiss.IMT.PiWeb.Api.Common.Data.Converter
 {
 	#region using
 
 	using System;
-
-	using DataService;
-
 	using Newtonsoft.Json;
+	using Zeiss.IMT.PiWeb.Api.DataService.Rest;
+	using Attribute = Zeiss.IMT.PiWeb.Api.DataService.Rest.Attribute;
 
 	#endregion
 
 	/// <summary>
-	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="DataService.DataCharacteristic"/>-objects.
+	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="DataCharacteristic"/>-objects.
 	/// </summary>
 	public class DataCharacteristicConverter : JsonConverter
 	{
@@ -30,7 +29,7 @@ namespace Common.Data.Converter
 		/// </summary>
 		public override bool CanConvert( Type objectType )
 		{
-			return objectType.IsSubclassOf( typeof( DataCharacteristic ) ) || typeof( DataCharacteristic ) == objectType || typeof( DataCharacteristic[] ) == objectType;
+			return objectType == typeof( DataCharacteristic[] );
 		}
 
 		/// <summary>
@@ -45,7 +44,7 @@ namespace Common.Data.Converter
 				{
 					characteristic.Uuid = new Guid( (string)reader.Value );
 
-					var valueAttributes = new System.Collections.Generic.List<DataService.Attribute>();
+					var valueAttributes = new System.Collections.Generic.List<Attribute>();
 					if( reader.Read() && reader.TokenType == JsonToken.StartObject )
 					{
 						while( reader.Read() && reader.TokenType == JsonToken.PropertyName )
@@ -53,7 +52,7 @@ namespace Common.Data.Converter
 							var key = ushort.Parse( reader.Value.ToString(), System.Globalization.CultureInfo.InvariantCulture );
 							var value = reader.ReadAsString();
 
-							valueAttributes.Add( new DataService.Attribute( key, value ) );
+							valueAttributes.Add( new Attribute( key, value ) );
 						}
 					}
 					characteristic.Value = new DataValue( valueAttributes.ToArray() );
@@ -68,15 +67,15 @@ namespace Common.Data.Converter
 					var characteristic = new DataCharacteristic();
 					characteristic.Uuid = new Guid( (string) reader.Value );
 
-					var valueAttributes = new System.Collections.Generic.List<DataService.Attribute>();
+					var valueAttributes = new System.Collections.Generic.List<Attribute>();
 					if( reader.Read() && reader.TokenType == JsonToken.StartObject )
 					{
 						while( reader.Read() && reader.TokenType == JsonToken.PropertyName )
 						{
-							var key = ushort.Parse( reader.Value.ToString(), System.Globalization.CultureInfo.InvariantCulture );
+							var key = AttributeKeyCache.Cache.StringToKey( reader.Value.ToString() );
 							var value = reader.ReadAsString();
 
-							valueAttributes.Add( new DataService.Attribute( key, value ) );
+							valueAttributes.Add( new Attribute( key, value ) );
 						}
 					}
 					characteristic.Value = new DataValue( valueAttributes.ToArray() );
@@ -91,45 +90,27 @@ namespace Common.Data.Converter
 		/// </summary>
 		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer )
 		{
-			if( value is DataCharacteristic )
-			{
-				var dataCharacteristic = (DataCharacteristic)value;
-				if( dataCharacteristic.Value != null && dataCharacteristic.Value.Attributes.Length > 0 )
-				{
-					writer.WritePropertyName( dataCharacteristic.Uuid.ToString() );
-					writer.WriteStartObject();
-					foreach( var att in dataCharacteristic.Value.Attributes )
-					{
-						writer.WritePropertyName( att.Key.ToString( System.Globalization.CultureInfo.InvariantCulture ) );
-						writer.WriteValue( att.Value );
-					}
-					writer.WriteEndObject();
-				}
-			}
-			else
-			{
-				writer.WriteStartObject();
+			writer.WriteStartObject();
 
-				var dataCharacteristics = (DataCharacteristic[])value;
-				if( dataCharacteristics.Length > 0 )
+			var dataCharacteristics = (DataCharacteristic[])value;
+			if( dataCharacteristics.Length > 0 )
+			{
+				foreach( var dataCharacteristic in dataCharacteristics )
 				{
-					foreach( var dataCharacteristic in dataCharacteristics )
+					if( dataCharacteristic.Value != null && dataCharacteristic.Value.Attributes != null && dataCharacteristic.Value.Attributes.Length > 0 )
 					{
-						if( dataCharacteristic.Value != null && dataCharacteristic.Value.Attributes != null && dataCharacteristic.Value.Attributes.Length > 0 )
+						writer.WritePropertyName( dataCharacteristic.Uuid.ToString() );
+						writer.WriteStartObject();
+						foreach( var att in dataCharacteristic.Value.Attributes )
 						{
-							writer.WritePropertyName( dataCharacteristic.Uuid.ToString() );
-							writer.WriteStartObject();
-							foreach( var att in dataCharacteristic.Value.Attributes )
-							{
-								writer.WritePropertyName( att.Key.ToString( System.Globalization.CultureInfo.InvariantCulture ) );
-								writer.WriteValue( att.Value );
-							}
-							writer.WriteEndObject();
+							writer.WritePropertyName( AttributeKeyCache.Cache.KeyToString( att.Key ) );
+							writer.WriteValue( att.RawValue ?? att.Value );
 						}
+						writer.WriteEndObject();
 					}
 				}
-				writer.WriteEndObject();
 			}
+			writer.WriteEndObject();
 		}
 
 		#endregion

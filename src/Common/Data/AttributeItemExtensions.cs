@@ -1,4 +1,4 @@
-#region copyright
+﻿#region copyright
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
@@ -6,14 +6,15 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
 
-namespace Common.Data
+namespace Zeiss.IMT.PiWeb.Api.Common.Data
 {
 	#region using
 
 	using System;
 	using System.Globalization;
 	using System.Xml;
-	using DataService;
+	using Zeiss.IMT.PiWeb.Api.DataService.Rest;
+	using Attribute = Zeiss.IMT.PiWeb.Api.DataService.Rest.Attribute;
 
 	#endregion
 
@@ -25,7 +26,7 @@ namespace Common.Data
 		/// <summary>
 		/// Returns the attribute with the key <code>key</code>.
 		/// </summary>
-		public static DataService.Attribute GetAttribute( this IAttributeItem item, ushort key )
+		public static Attribute GetAttribute( this IAttributeItem item, ushort key )
 		{
 			int index;
 			return GetAttribute( item, key, out index );
@@ -34,7 +35,7 @@ namespace Common.Data
 		/// <summary>
 		/// Returns the attribute with the key <code>key</code>.
 		/// </summary>
-		public static DataService.Attribute GetAttribute( this IAttributeItem item, ushort key, out int index )
+		public static Attribute GetAttribute( this IAttributeItem item, ushort key, out int index )
 		{
 			if( item != null && item.Attributes != null )
 			{
@@ -144,7 +145,7 @@ namespace Common.Data
 		/// </summary>
 		public static void InsertNullAttribute( this IAttributeItem item, ushort key )
 		{
-			InternalSetAttribute( item, new DataService.Attribute( key, null ) );
+			InternalSetAttribute( item, new Attribute( key, null ) );
 		}
 
 		/// <summary>
@@ -152,13 +153,13 @@ namespace Common.Data
 		/// </summary>
 		public static void SetAttribute( this IAttributeItem item, ushort key, string value )
 		{
-			item.SetAttribute( new DataService.Attribute( key, value ) );
+			item.SetAttribute( new Attribute( key, value ) );
 		}
 
 		/// <summary>
 		/// Sets the <code>value</code> for the attribute with the key <code>key</code>.
 		/// </summary>
-		public static void SetAttribute( this IAttributeItem item, DataService.Attribute value )
+		public static void SetAttribute( this IAttributeItem item, Attribute value )
 		{
 			if( value != null )
 			{
@@ -183,7 +184,7 @@ namespace Common.Data
 			if( att != null )
 			{
 				// Remove attribute
-				var atts = new DataService.Attribute[ item.Attributes.Length - 1 ];
+				var atts = new Attribute[ item.Attributes.Length - 1 ];
 				Array.Copy( item.Attributes, 0, atts, 0, index );
 				Array.Copy( item.Attributes, index + 1, atts, index, item.Attributes.Length - index - 1 );
 
@@ -191,7 +192,7 @@ namespace Common.Data
 			}
 		}
 
-		private static void InternalSetAttribute( this IAttributeItem item, DataService.Attribute value )
+		private static void InternalSetAttribute( this IAttributeItem item, Attribute value )
 		{
 			int index;
 			var att = GetAttribute( item, value.Key, out index );
@@ -200,7 +201,7 @@ namespace Common.Data
 				// Add attribute
 				if( item.Attributes != null && item.Attributes.Length > 0 )
 				{
-					var atts = new DataService.Attribute[ item.Attributes.Length + 1 ];
+					var atts = new Attribute[ item.Attributes.Length + 1 ];
 					Array.Copy( item.Attributes, atts, item.Attributes.Length );
 					atts[ atts.Length - 1 ] = value;
 					item.Attributes = atts;
@@ -213,7 +214,12 @@ namespace Common.Data
 			else
 			{
 				// Replace attribute
-				item.Attributes[ index ] = value;
+				var atts = item.Attributes;
+				atts[ index ] = value;
+
+				// Hack, damit das Objekt (z.B. SimpleMeasurement) die Änderungen mitbekommt und 
+				// evtl. gecachte Daten wieder wegwirft (z.B. SimpleMeasurement._CachedTime)
+				item.Attributes = atts;
 			}
 		}
 	}

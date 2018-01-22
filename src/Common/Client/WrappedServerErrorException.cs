@@ -1,4 +1,4 @@
-#region copyright
+﻿#region copyright
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
@@ -6,13 +6,13 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
 
-namespace Common.Client
+namespace Zeiss.IMT.PiWeb.Api.Common.Client
 {
 	#region using
 
-	using System;
 	using System.Net;
-	using Common.Data;
+	using System.Net.Http;
+	using Zeiss.IMT.PiWeb.Api.Common.Data;
 
 	#endregion
 
@@ -27,12 +27,13 @@ namespace Common.Client
 		/// Constructor.
 		/// </summary>
 		/// <param name="error">The server side error.</param>
-		/// <param name="statusCode">The http status.</param>
-		public WrappedServerErrorException( Error error, HttpStatusCode statusCode ) :
-			base( string.Format( "Server error while processing the request: {0}", error != null ? error.Message : "<unknown>" ) )
+		/// <param name="response">The http response that failed.</param>
+		public WrappedServerErrorException( Error error, HttpResponseMessage response ) :
+			base( error?.Message ?? $"Server error while processing the request ({response.ReasonPhrase})." )
 		{
 			Error = error;
-			StatusCode = statusCode;
+			Response = response;
+			StatusCode = response.StatusCode;
 		}
 
 		#endregion
@@ -42,12 +43,22 @@ namespace Common.Client
 		/// <summary>
 		/// Returns the server side error.
 		/// </summary>
-		public Error Error { get; private set; }
+		public Error Error { get; }
 
 		/// <summary>
 		/// Returns the http status.
 		/// </summary>
-		public HttpStatusCode StatusCode { get; private set; }
+		public HttpStatusCode StatusCode { get;  }
+
+		/// <summary>
+		/// Returns the failed http request.
+		/// </summary>
+		public HttpRequestMessage Request => Response?.RequestMessage;
+
+		/// <summary>
+		/// Returns the failed http response.
+		/// </summary>
+		public HttpResponseMessage Response { get; }
 
 		#endregion
 	}

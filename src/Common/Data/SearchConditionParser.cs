@@ -1,12 +1,14 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
-namespace Common.Data
+namespace Zeiss.IMT.PiWeb.Api.Common.Data
 {
 	#region usings
 
@@ -15,8 +17,7 @@ namespace Common.Data
 	using System.Linq;
 	using System.Resources;
 	using System.Text;
-
-	using DataService;
+	using Zeiss.IMT.PiWeb.Api.DataService.Rest;
 
 	#endregion
 
@@ -74,6 +75,7 @@ namespace Common.Data
 
 			var and = condition as GenericSearchAnd;
 			var attr = condition as GenericSearchAttributeCondition;
+			var field = condition as GenericSearchFieldCondition;
 			if( and != null )
 			{
 				var first = true;
@@ -88,6 +90,11 @@ namespace Common.Data
 			{
 				result.Append( attr.Attribute ).Append( InverseOperations[ attr.Operation ] );
 				result.Append( "[" ).Append( attr.Value ).Append( "]" );
+			}
+			else if( field != null )
+			{
+				result.Append( field.FieldName ).Append( InverseOperations[ field.Operation ] );
+				result.Append( "[" ).Append( field.Value ).Append( "]" );
 			}
 			return result.ToString();
 		}
@@ -119,8 +126,8 @@ namespace Common.Data
 					}
 					if( i == first )
 					{
-						result = result.Length > item.Length ? result : item;
-					}
+					    result = ( result?.Length ?? 0 ) > ( item?.Length ?? 0 ) ? result : item;
+                    }
 				}
 				else
 				{
@@ -146,7 +153,7 @@ namespace Common.Data
 
 				while( searchIndex < searchFilter.Length )
 				{
-					var attrCondition = new GenericSearchAttributeCondition();
+					var condition = default ( GenericSearchValueCondition );
 					searchFilter = searchFilter.Substring( searchIndex ).Trim();
 
 					// --- AND ---
@@ -169,21 +176,28 @@ namespace Common.Data
 
 					ushort key;
 					if( !ushort.TryParse( token, out key ) )
-						throw new InvalidOperationException( string.Format( ResourceManager.GetString( "ParsingError.NoKey" ), token ) );
-					attrCondition.Attribute = key;
+					{
+						var fieldCondition = new GenericSearchFieldCondition { FieldName = token };
+						condition = fieldCondition;
+					}
+					else
+					{
+						var attributeCondition = new GenericSearchAttributeCondition { Attribute = key };
+						condition = attributeCondition;
+					}
 
 					// --- Operation ---
 					Operation op;
 					if( !Operations.TryGetValue( opStr, out op ) )
 						throw new InvalidOperationException( string.Format( ResourceManager.GetString( "ParsingError.InvalidOperator" ), token ) );
-					attrCondition.Operation = op;
+					condition.Operation = op;
 
 					// --- Parameters ---
 					searchIndex = searchFilter.IndexOf( '[', markerIndex );
 					if( searchIndex == -1 )
 						throw new InvalidOperationException( string.Format( ResourceManager.GetString( "ParsingError.NoValues" ), searchFilter ) );
 					if( searchFilter.Substring( markerIndex, searchIndex - markerIndex ).Trim() != String.Empty )
-						throw new InvalidOperationException( string.Format( ResourceManager.GetString( "ParsingError.Quotation" ), attrCondition.Operation ) );
+						throw new InvalidOperationException( string.Format( ResourceManager.GetString( "ParsingError.Quotation" ), condition.Operation ) );
 
 					markerIndex = searchIndex + 1;
 					searchIndex = searchFilter.IndexOf( ']', markerIndex );
@@ -196,8 +210,8 @@ namespace Common.Data
 
 					token = searchFilter.Substring( markerIndex, searchIndex - markerIndex );
 
-					attrCondition.Value = token;
-					conditions.Add( attrCondition );
+					condition.Value = token;
+					conditions.Add( condition );
 
 					++searchIndex;
 				}

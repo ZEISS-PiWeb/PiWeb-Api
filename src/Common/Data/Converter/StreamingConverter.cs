@@ -6,7 +6,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
 
-namespace Common.Data.Converter
+namespace Zeiss.IMT.PiWeb.Api.Common.Data.Converter
 {
 	#region using
 
@@ -14,7 +14,7 @@ namespace Common.Data.Converter
 	using System.Collections.Generic;
 	using System.Linq;
 	using Newtonsoft.Json;
-	
+
 	#endregion
 
 	/// <summary>
@@ -27,10 +27,7 @@ namespace Common.Data.Converter
 		/// <summary>
 		/// Returns <code>false</code>. No write support.
 		/// </summary>
-		public override bool CanWrite
-		{
-			get { return false; }
-		}
+		public override bool CanWrite => false;
 
 		/// <summary>
 		/// Determines whether this instance can convert the specified object type.
@@ -49,13 +46,12 @@ namespace Common.Data.Converter
 		{
 			if( typeof( T[] ) == objectType )
 				return StreamedReadJson( reader, serializer ).ToArray();
-			else if( typeof( List<T> ) == objectType )
+			if( typeof( List<T> ) == objectType )
 				return StreamedReadJson( reader, serializer ).ToList();
-			else
-				return StreamedReadJson( reader, serializer );
+			return StreamedReadJson( reader, serializer );
 		}
 
-		private IEnumerable<T> StreamedReadJson( JsonReader reader, JsonSerializer serializer )
+		private static IEnumerable<T> StreamedReadJson( JsonReader reader, JsonSerializer serializer )
 		{
 			if( reader.TokenType == JsonToken.StartArray )
 			{
@@ -95,10 +91,7 @@ namespace Common.Data.Converter
 		/// <summary>
 		/// Returns <code>false</code>. No read support.
 		/// </summary>
-		public override bool CanRead
-		{
-			get { return false; }
-		}
+		public override bool CanRead => false;
 
 		/// <summary>
 		/// Not supported right now.

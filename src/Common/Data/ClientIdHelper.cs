@@ -1,4 +1,4 @@
-#region copyright
+﻿#region copyright
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
@@ -6,7 +6,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
 
-namespace Common.Data
+namespace Zeiss.IMT.PiWeb.Api.Common.Data
 {
 	#region using
 
@@ -22,7 +22,7 @@ namespace Common.Data
 	{
 		#region contants
 
-		/// <summary> Default-Wert f�r die Client-ID die den einzelnen Webservice-Methoden mitgegeben wird. </summary>
+		/// <summary> Default-Wert für die Client-ID die den einzelnen Webservice-Methoden mitgegeben wird. </summary>
 		public static readonly string ClientId = "PiWeb";
 		
 		/// <summary> Produkt-Name des Clients</summary>

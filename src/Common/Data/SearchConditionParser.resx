@@ -223,7 +223,7 @@
     <value>CenterParent</value>
   </data>
   <data name="ParsingError.AND" xml:space="preserve">
-    <value>Expected 'AND' but found '{0}'.</value>
+    <value>Conditions must concatenated by '+':{0}.</value>
   </data>
   <data name="ParsingError.Incomplete" xml:space="preserve">
     <value>Incomplete expression '{0}'.</value>
