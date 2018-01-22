@@ -133,7 +133,7 @@ Task("Pack")
         Title                    = "ZEISS PiWeb-API .NET Client",
         Authors                  = new[] {"Carl Zeiss Innovationszentrum für Messtechnik GmbH"},
         Owners                   = new[] {"Carl Zeiss Innovationszentrum für Messtechnik GmbH"},
-        Description              = "ZEISS PiWeb-API .NET Client provides an extensive set of methods for reading and writing  inspection plan structure as well as measurements and measurement values to and from ZEISS PiWeb server via HTTP(S)/REST based web service endpoints. ZEISS PiWeb server &gt;= version 5.8 is required.",
+        Description              = "ZEISS PiWeb-API .NET Client provides an extensive set of methods for reading and writing  inspection plan structure as well as measurements and measurement values to and from ZEISS PiWeb server via HTTP(S)/REST based web service endpoints. ZEISS PiWeb server >= version 5.8 is required.",
         Summary                  = "A .NET client for HTTP(S)/REST based communication with the quality data managament system ZEISS PiWeb.",
         ProjectUrl               = new Uri("https://github.com/ZEISS-PiWeb/PiWeb-Api"),
         IconUrl                  = new Uri("https://raw.githubusercontent.com/ZEISS-PiWeb/PiWeb-Api/master/logo6464.png"),
@@ -143,10 +143,14 @@ Task("Pack")
         Tags                     = new [] {"ZEISS", "PiWeb", "API"},
         RequireLicenseAcceptance = true,
         Files                    = new [] { 
-		    new NuSpecContent { Source = "PiWeb.Api.dll", Target = "lib" },
-		    new NuSpecContent { Source = "PiWeb.Api.xml", Target = "lib" },
-		},
-		Dependencies             = new [] { new NuSpecDependency { Id = "Newtonsoft.Json", Version = "7.0.1" } },
+		      new NuSpecContent { Source = "PiWeb.Api.dll", Target = "lib" },
+		      new NuSpecContent { Source = "PiWeb.Api.xml", Target = "lib" },
+		    },
+		    Dependencies             = new [] {
+          new NuSpecDependency { Id = "Newtonsoft.Json", Version = "7.0.1" },
+          new NuSpecDependency { Id = "IdentityModel", Version = "1.13.0" },
+          new NuSpecDependency { Id = "System.IdentityModel.Tokens.Jwt", Version = "4.0.3.308261200" }
+        },
         BasePath                 = buildDir,
         OutputDirectory          = artifactsDir
     };
