@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Resources;
 
 [assembly: AssemblyCompany( "Carl Zeiss Innovationszentrum für Messtechnik GmbH" )]
@@ -7,5 +7,7 @@ using System.Resources;
 [assembly: AssemblyTrademark( "PiWeb" )]
 [assembly: NeutralResourcesLanguage( "en" )]
 
-[assembly: AssemblyVersion( "2.0.0" )]
-[assembly: AssemblyInformationalVersion( "2.0.0 Beta" )]
+[assembly: AssemblyVersion("1.99.1.0")]
+[assembly: AssemblyInformationalVersion("2.0.0-beta1")]
+
+[assembly: AssemblyFileVersion( "1.99.1.0" )]
