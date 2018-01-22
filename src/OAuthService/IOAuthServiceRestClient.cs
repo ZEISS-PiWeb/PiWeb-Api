@@ -37,7 +37,6 @@ namespace Zeiss.IMT.PiWeb.Api.OAuthService
 		/// <summary>
 		/// Get information about valid OAuth issues authorities and resource ids.
 		/// </summary>
-		/// <param name="cancellationToken">A cancelation token to cancel the web service call.</param>
 		Task<ServiceInformation> GetServiceInformation();
 
 		#endregion

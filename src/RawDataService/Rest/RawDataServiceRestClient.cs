@@ -191,7 +191,7 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 		#region Fetching of raw data entries
 
 		/// <summary>
-		/// Fetches raw data as a byte array for the raw data item identified by <paramref name="target"/> and <param name="rawDataKey"/>. 
+		/// Fetches raw data as a byte array for the raw data item identified by <paramref name="target"/> and <paramref name="rawDataKey"/>. 
 		/// </summary>
 		/// <param name="target">The <see cref="RawDataTargetEntity"/> that specifies the raw data object that should be fetched.</param>
 		/// <param name="rawDataKey">The unique key that identifies the raw data object for the specified target.</param>
@@ -288,7 +288,7 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 		#region Delete of raw data entries
 
 		/// <summary>
-		/// Deletes raw data for the element identified by <paramref name="target"/> and <param name="rawDataKey"/>.
+		/// Deletes raw data for the element identified by <paramref name="target"/> and <paramref name="rawDataKey"/>.
 		/// </summary>
 		/// <param name="target">The <see cref="RawDataTargetEntity"/> object containing the <see cref="RawDataEntity"/> type and the uuid of the raw data that should be deleted.</param>
 		/// <param name="rawDataKey">The key of the raw data object which should be deleted.</param>

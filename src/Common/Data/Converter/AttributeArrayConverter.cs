@@ -17,7 +17,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data.Converter
 	#endregion
 
 	/// <summary>
-	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref=Attribute"/> arrays.
+	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="Attribute"/> arrays.
 	/// </summary>
 	public class AttributeArrayConverter : Newtonsoft.Json.JsonConverter
 	{
