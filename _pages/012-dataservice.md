@@ -142,9 +142,9 @@ GET /dataServiceRest/configuration HTTP/1.1
 
 {% assign linkId="configurationEndpointAdd" %}
 {% assign method="POST" %}
-{% assign endpoint="/configuration/:entityType" %}
-{% assign summary="Creates the attributes for :entityType" %}
-{% assign description="Creates the attribute definitions transfered within the body of the request for the given `:entityType` which must be part of the uri" %}
+{% assign endpoint="/configuration/:pluralizedEntityType" %}
+{% assign summary="Creates the attributes for :pluralizedEntityType" %}
+{% assign description="Creates the attribute definitions transfered within the body of the request for the given `:pluralizedEntityType` which must be part of the uri" %}
 {% assign exampleCaption="Adding a part attribute with the key 1001 to the configuration" %}
 
 {% capture jsonrequest %}
@@ -176,9 +176,9 @@ HTTP/1.1 201 Created
 
 {% assign linkId="configurationEndpointUpdate" %}
 {% assign method="PUT" %}
-{% assign endpoint="/configuration/:entityType" %}
-{% assign summary="Updates the attributes for :entityType" %}
-{% assign description="Updates the attribute definitions transfered within the body of the request for the given `:entityType` which must be part of the uri" %}
+{% assign endpoint="/configuration/:pluralizedEntityType" %}
+{% assign summary="Updates the attributes for :pluralizedEntityType" %}
+{% assign description="Updates the attribute definitions transfered within the body of the request for the given `:pluralizedEntityType` which must be part of the uri" %}
 {% assign exampleCaption="Updating the part attribute with key 1001 - change length from 30 to 50" %}
 
 {% capture jsonrequest %}
@@ -232,9 +232,9 @@ HTTP/1.1 200 Ok
 
 {% assign linkId="configurationEndpointDelete2" %}
 {% assign method="DELETE" %}
-{% assign endpoint="/configuration/:entityType/:attributesIdList" %}
+{% assign endpoint="/configuration/:pluralizedEntityType/:attributesIdList" %}
 {% assign summary="Deletes the attributes in :attributedIdList for :entityType" %}
-{% assign description="Deletes all attribute definitions of which the id is in the `:attributeIdList` for the specified `:entityType`. If `:attributeIdList` is not specified, the request deletes all attributes of the `:entityType`." %}
+{% assign description="Deletes all attribute definitions of which the id is in the `:attributeIdList` for the specified `:pluralizedEntityType`. If `:attributeIdList` is not specified, the request deletes all attributes of the `:pluralizedEntityType`." %}
 {% assign exampleCaption="Delete the part attributes with the keys *1001* and *1002*" %}
 
 {% capture jsonrequest %}
@@ -256,11 +256,11 @@ HTTP/1.1 200 Ok
 The PiWeb configuration consists of a list of attributes for each entity type.
 The different entity types are:
 
-* *parts*,
-* *characteristics*,
-* *measurements*,
-* *values* and
-* *catalogs*.
+* *part*,
+* *characteristic*,
+* *measurement*,
+* *value* and
+* *catalog*.
 
 The attributes are either `AttributeDefinition` or `CatalogAttributeDefinition`.
 {% capture table %}
