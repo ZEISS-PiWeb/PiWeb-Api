@@ -8,8 +8,10 @@ TL;DR
 * do NOT do development on "master" branch
 * use GitHub forks and pull requests, but do NOT merge to "master" branch
     * use development or feature branches instead
+* put release notes into WHATSNEW.txt
 * tag release with "v<version_number>", e.g. "v1.0.1"
-* publish automatically built NuGet package from AppVeyor to nuget.org
+* NuGet package is automatically built by AppVeyor 
+* publish NuGet package from AppVeyor to nuget.org
 * merge release tag to master branch
 
 Comprehensive
@@ -44,9 +46,9 @@ Version numbers of assembly and nuget package follow the rules set by
 from tags in the git repository using
 [GitVersion](https://gitversion.readthedocs.io/en/latest/examples/).
 
-Release notes are automatically created from git commit messages using
-[GitReleaseNotes](https://github.com/GitTools/GitReleaseNotes) and put into
-the nuget package.
+The contents of the file WHATSNEW.txt is put into the release notes section
+of the nuget. So in order to tell the users about the great new features
+in the new version put a description into this file.
 
 The build scripting should support GitHub flow as well as long as tags with version
 numbers are created. You should be aware that with GitHub flow only bugfixes for the

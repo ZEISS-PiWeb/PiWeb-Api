@@ -1,0 +1,3 @@
+Short summary of changes for 2.0
+
+for details see online documentation at http://zeiss-piweb.github.io/PiWeb-Api/

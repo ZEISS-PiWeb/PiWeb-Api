@@ -1,5 +1,4 @@
 ﻿#tool "nuget:?package=GitVersion.CommandLine"
-#tool "nuget:?package=GitReleaseNotes"
 #addin "nuget:?package=Cake.FileHelpers"
 
 //////////////////////////////////////////////////////////////////////
@@ -99,33 +98,11 @@ Task("Build")
         settings.SetConfiguration(configuration));
 });
 
-Task("ReleaseNotes")
-    .IsDependentOn("AppVeyorSetup")
-    .Does(() =>
-{
-    GitReleaseNotes(artifactsDir + File("ReleaseNotes.md"), new GitReleaseNotesSettings {
-        WorkingDirectory         = ".",
-        Verbose                  = true,       
-        RepoBranch               = repoBranchName,    
-        Version                  = nugetVersion,
-        AllLabels                = true
-    });
-
-    CopyFile(artifactsDir + File("ReleaseNotes.md"), artifactsDir + File("ReleaseNotes.txt"));
-
-    // inspired by https://github.com/stiang/remove-markdown/blob/master/index.js
-    // only remove markdown inline links, GitReleaseNotes does not seem to produce any further markdown markup 
-    // note that \ has to doubled as it has to be quoted in C# strings
-    // Remove inline links
-    ReplaceRegexInFiles(artifactsDir + File("ReleaseNotes.txt"), "\\[(.*?)\\][\\[\\(].*?[\\]\\)]", "$1");
-});
-
 Task("Pack")
     .IsDependentOn("Build")
-    .IsDependentOn("ReleaseNotes")
     .Does(() =>
 {
-    var releaseNotes = FileReadLines(artifactsDir + File("ReleaseNotes.txt"));
+    var releaseNotes = FileReadLines(File("WHATSNEW.txt"));
 
     var nuGetPackSettings = new NuGetPackSettings {
         Id                       = "Zeiss.IMT.PiWebApi.Client",
