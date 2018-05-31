@@ -14,6 +14,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Xml;
+	using PiWebApi.Annotations;
 	using Zeiss.IMT.PiWeb.Api.Common.Client;
 	using Zeiss.IMT.PiWeb.Api.Common.Data;
 
@@ -97,6 +98,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		/// If the parse operation was not successful, an <see cref="InvalidOperationException"/> will be thrown.
 		/// </summary>
 		/// <returns>The <see cref="MeasurementValueFilterAttributes"/> with the parsed information.</returns>
+		[NotNull]
 		public static MeasurementValueFilterAttributes Parse(
 			string partUuids,
 			string measurementUuids,

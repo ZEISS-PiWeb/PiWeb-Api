@@ -32,17 +32,17 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 		/// <returns>
 		/// true, wenn die angegebenen Objekte gleich sind, andernfalls false.
 		/// </returns>
-		/// <param name="e1">Das erste zu vergleichende Objekt vom Typ <see cref="RawDataTargetEntity"/>.</param>
-		/// <param name="e2">Das zweite zu vergleichende Objekt vom Typ <see cref="RawDataTargetEntity"/>.</param>
-		public bool Equals( RawDataTargetEntity e1, RawDataTargetEntity e2 )
+		/// <param name="x">Das erste zu vergleichende Objekt vom Typ <see cref="RawDataTargetEntity"/>.</param>
+		/// <param name="y">Das zweite zu vergleichende Objekt vom Typ <see cref="RawDataTargetEntity"/>.</param>
+		public bool Equals( RawDataTargetEntity x, RawDataTargetEntity y )
 		{
-			if( ( e1 == null ) && ( e2 == null ) || ReferenceEquals( e1, e2 ) )
+			if( ( x == null ) && ( y == null ) || ReferenceEquals( x, y ) )
 				return true;
 
-			if( e1 == null || e2 == null )
+			if( x == null || y == null )
 				return false;
 
-			return ( e1.Entity == e2.Entity && e1.Uuid == e2.Uuid );
+			return ( x.Entity == y.Entity && x.Uuid == y.Uuid );
 		}
 
 		/// <summary>
@@ -51,14 +51,14 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 		/// <returns>
 		///     Ein Hashcode für das angegebene Objekt.
 		/// </returns>
-		/// <param name="e">Das <see cref="T:RawDataTargetEntity" />, für das ein Hashcode zurückgegeben werden soll.</param>
+		/// <param name="obj">Das <see cref="T:RawDataTargetEntity" />, für das ein Hashcode zurückgegeben werden soll.</param>
 		/// <exception cref="T:System.ArgumentNullException">
-		///     Der Typ von <paramref name="e" /> ist ein Referenztyp, und
-		///     <paramref name="e" /> ist null.
+		///     Der Typ von <paramref name="obj" /> ist ein Referenztyp, und
+		///     <paramref name="obj" /> ist null.
 		/// </exception>
-		public int GetHashCode( RawDataTargetEntity e )
+		public int GetHashCode( RawDataTargetEntity obj )
 		{
-			return e.Entity.GetHashCode() ^ ( e.Uuid ?? "" ).GetHashCode();
+			return obj.Entity.GetHashCode() ^ ( obj.Uuid ?? "" ).GetHashCode();
 		}
 
 		#endregion

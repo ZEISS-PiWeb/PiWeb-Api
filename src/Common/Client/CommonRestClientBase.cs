@@ -47,7 +47,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 			_RestClient.Dispose();
 		}
 
-		public AuthenticationContainer AuthenticationContainer
+		public virtual AuthenticationContainer AuthenticationContainer
 		{
 			get { return _RestClient.AuthenticationContainer; }
 			set { _RestClient.AuthenticationContainer = value; }

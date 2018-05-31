@@ -8,6 +8,7 @@
 
 namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 {
+
 	/// <summary>
 	/// Abstract base class of <see cref="CatalogAttributeDefinition"/> ans <see cref="AttributeDefinition"/>.
 	/// It holds attribute's base properties key and description.

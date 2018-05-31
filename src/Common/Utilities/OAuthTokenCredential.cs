@@ -16,7 +16,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 
 	#endregion
 
-	public class OAuthTokenCredential : ICredential
+	public sealed class OAuthTokenCredential : ICredential
 	{
 
 		#region constructors

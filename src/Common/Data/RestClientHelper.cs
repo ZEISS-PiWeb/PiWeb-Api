@@ -17,6 +17,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 	using System.Linq;
 	using System.Text;
 	using Newtonsoft.Json;
+	using Newtonsoft.Json.Bson;
 	using Newtonsoft.Json.Converters;
 	using Zeiss.IMT.PiWeb.Api.Common.Client;
 	using Zeiss.IMT.PiWeb.Api.DataService.Rest;
@@ -56,6 +57,20 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 		}
 
 		/// <summary>
+		/// Deserializes the <paramref name="data"/>-stream into a new object of type <typeparamref name="T"/>. The data is expected to be in BSON format.
+		/// </summary>
+		public static T DeserializeBinaryObject<T>( Stream data )
+		{
+			using( var reader = new BsonReader( new BinaryReader( data, Encoding.UTF8, true ) ) { CloseInput = false } )
+			{
+				reader.ReadRootValueAsArray = true;
+
+				var serializer = new JsonSerializer();
+				return serializer.Deserialize<T>( reader );
+			}
+		}
+
+		/// <summary>
 		/// Deserializes the <paramref name="data"/>-stream into a new enumerable object of type <typeparamref name="T"/>. The data is expected to be in JSON format.
 		/// </summary>
 		internal static IEnumerable<T> DeserializeEnumeratedObject<T>( Stream data )
@@ -85,7 +100,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 		/// <param name="requestedCharacteristicAttributes">Restricts the characteristic attributes that are returned.</param>
 		/// <param name="withHistory">Determines if the history should be returned.</param>
 		/// <returns></returns>
-		internal static List<ParameterDefinition> ParseToParameter( PathInformation partPath = null, Guid[] partUuids = null, Guid[] charUuids = null, ushort? depth = null, AttributeSelector requestedPartAttributes = null, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false )
+		public static List<ParameterDefinition> ParseToParameter( PathInformation partPath = null, Guid[] partUuids = null, Guid[] charUuids = null, ushort? depth = null, AttributeSelector requestedPartAttributes = null, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false )
 		{
 			var parameter = new List<ParameterDefinition>();
 			if( partPath != null )
@@ -161,30 +176,29 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 		/// <summary>Creates a list string from the ushorts <code>value</code>.</summary>
 		public static string ConvertUshortArrayToString( ushort[] value )
 		{
-			if( value == null || value.Length == 0 )
-				return "";
-
-			return ToListString( value.Select( v => v.ToString( CultureInfo.InvariantCulture ) ) );
+			return ConvertFormattableArrayToString( value, formatProvider: CultureInfo.InvariantCulture );
 		}
 
 		/// <summary>Creates a list string from the shorts <code>value</code>.</summary>
 		internal static string ConvertShortArrayToString( short[] value )
 		{
-			if( value == null || value.Length == 0 )
-				return "";
-
-			return ToListString( value.Select( v => v.ToString( CultureInfo.InvariantCulture ) ) );
+			return ConvertFormattableArrayToString( value, formatProvider: CultureInfo.InvariantCulture );
 		}
 
 		/// <summary>Creates a list string from the uuids <code>value</code>.</summary>
 		public static string ConvertGuidListToString( Guid[] value )
 		{
+			return ConvertFormattableArrayToString( value, "D" );
+		}
+
+		private static string ConvertFormattableArrayToString<T>( T[] value, string format = null, IFormatProvider formatProvider = null ) where T : IFormattable
+		{
 			if( value == null || value.Length == 0 )
 				return "";
 
-			return ToListString( value.Select( v => v.ToString( "D" ) ) );
+			return ToListString( value.Select( v => v.ToString( format, formatProvider ) ) );
 		}
-
+		
 		/// <summary>Creates a list string from <paramref name="list"/>.</summary>
 		internal static string ToListString( IEnumerable<string> list )
 		{

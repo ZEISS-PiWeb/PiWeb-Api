@@ -1,8 +1,12 @@
-﻿/* * * * * * * * * * * * * * * * * * * * * * * * * */
+﻿#region copyright
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
-/* (c) Carl Zeiss 2015                             */
+/* (c) Carl Zeiss 2016                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
+#endregion
 
 namespace Zeiss.IMT.PiWeb.Api.Common.Client
 {
@@ -21,6 +25,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 	using System.Threading;
 	using System.Threading.Tasks;
 	using Newtonsoft.Json;
+	using PiWebApi.Annotations;
 	using Zeiss.IMT.PiWeb.Api.Common.Data;
 
 	#endregion
@@ -38,7 +43,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 		/// <summary>
 		/// Default maximum length of the full URL inclusive any query string
 		/// </summary>
-		public const int DefaultMaxUriLength = 2048;
+		public const int DefaultMaxUriLength = 8 * 1024;
 
 		/// <summary>
 		/// Maximum length a path segment within an uri my have
@@ -64,14 +69,15 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 		/// </summary>
 		public static readonly TimeSpan DefaultShortTimeout = TimeSpan.FromSeconds( 15 );
 
+		[CanBeNull]
 		private readonly ILoginRequestHandler _LoginRequestHandler;
+		private readonly IEnumerable<KeyValuePair<string, IEnumerable<string>>> _AdditionalHttpRequestHeaders;
+		private readonly bool _Chunked = true;
 
 		private HttpClient _HttpClient;
 		private WebRequestHandler _WebRequestHandler;
 
 		private AuthenticationContainer _AuthenticationContainer = new AuthenticationContainer( AuthenticationMode.NoneOrBasic );
-		private readonly IEnumerable<KeyValuePair<string, IEnumerable<string>>> _AdditionalHttpRequestHeaders;
-		private readonly bool _Chunked = true;
 
 		#endregion
 
@@ -141,6 +147,11 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 			return PerformRequestAsync( requestCreationHandler, false, ResponseToBytesAsync, true, cancellationToken );
 		}
 
+		public Task<T> RequestBinary<T>( Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		{
+			return PerformRequestAsync( requestCreationHandler, false, BinaryResponseToObjectAsync<T>, true, cancellationToken );
+		}
+
 		private static async Task<T> ResponseToObjectAsync<T>( HttpResponseMessage response )
 		{
 			using( var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false ) )
@@ -181,6 +192,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 						return memStream.GetBuffer();
 					}
 				}
+
 				using( var memStream = new MemoryStream() )
 				{
 					await responseStream.CopyToAsync( memStream ).ConfigureAwait( false );
@@ -189,8 +201,17 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 			}
 		}
 
+		private static async Task<T> BinaryResponseToObjectAsync<T>( HttpResponseMessage response )
+		{
+			using( var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false ) )
+			{
+				return RestClientHelper.DeserializeBinaryObject<T>( responseStream );
+			}
+		}
+
 		private async Task<TResult> PerformRequestAsync<TResult>( Func<HttpRequestMessage> requestCreationHandler, bool streamed, Func<HttpResponseMessage, Task<TResult>> handler = null, bool autoDisposeResponse = true, CancellationToken cancellationToken = default( CancellationToken ) )
 		{
+			HttpRequestMessage request = null;
 			HttpResponseMessage response = null;
 
 			try
@@ -201,7 +222,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 
 				while( true )
 				{
-					var request = requestCreationHandler();
+					request = requestCreationHandler();
 					SetDefaultHttpHeaders( request );
 					response = await _HttpClient.SendAsync( request, completionOptions, cancellationToken ).ConfigureAwait( false );
 
@@ -230,7 +251,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 			}
 			catch( HttpRequestException ex )
 			{
-				throw new RestClientException( $"Error fetching web service response for request [{response?.RequestMessage?.RequestUri}]: {ex.Message}", ex );
+				throw new RestClientException( $"Error fetching web service response for request [{request?.RequestUri}]: {ex.Message}", ex );
 			}
 			catch( TaskCanceledException ex )
 			{
@@ -301,6 +322,8 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 				{
 					error = RestClientHelper.DeserializeObject<Error>( responseStream );
 
+					if( error == null )
+						error = new Error( $"Request {response.RequestMessage.Method} {response.RequestMessage.RequestUri} was not successful: {( int ) response.StatusCode} ({response.ReasonPhrase})" );
 				}
 				catch( JsonReaderException )
 				{
@@ -331,7 +354,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 			var error = new Error( response.ReasonPhrase );
 			string exceptionType;
 
-			if( WrappedServerErrorExceptionExtensions.ServerBasedExceptions.TryGetValue( response.StatusCode, out exceptionType ))
+			if( WrappedServerErrorExceptionExtensions.ServerBasedExceptions.TryGetValue( response.StatusCode, out exceptionType ) )
 				error.ExceptionType = exceptionType;
 
 			throw new WrappedServerErrorException( error, response );
@@ -351,8 +374,6 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 		{
 			_WebRequestHandler = new WebRequestHandler
 			{
-				// HttpRequestCacheLevel muss unbedingt auf Revalidate stehen, ansonsten werden Anfragen an alte Server
-				// gecacht, die eigentlich nicht gecacht werden dürfen!
 				CachePolicy = new HttpRequestCachePolicy( HttpCacheAgeControl.MaxAge, TimeSpan.FromDays( 0 ) ),
 				AllowPipelining = true,
 				PreAuthenticate = true,
@@ -382,10 +403,12 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 
 		private async Task<AuthenticationContainer> CheckForUpdatedAuthenticationInformationIfInvalidAsync( HttpResponseMessage response )
 		{
-			var isUnauthorized = response.StatusCode == HttpStatusCode.Unauthorized
+			var isUnauthorized = response.StatusCode == HttpStatusCode.Unauthorized ||
+			                     response.StatusCode == HttpStatusCode.Forbidden && ( AuthenticationContainer.Mode == AuthenticationMode.Certificate ||
+			                                                                          AuthenticationContainer.Mode == AuthenticationMode.HardwareCertificate ) ||
 			                     // TODO: this is currently a fallback since the cloud returns the wrong status code if the token is missing completely
-			                     || response.StatusCode == HttpStatusCode.BadRequest && ( ServiceLocation.Host == "service.piweb.cloud"
-			                                                                              || ServiceLocation.Host == "service.dev.piweb.cloud" );
+			                     response.StatusCode == HttpStatusCode.BadRequest && ( ServiceLocation.Host == "service.piweb.cloud" ||
+			                                                                           ServiceLocation.Host == "service.dev.piweb.cloud" );
 
 			if( isUnauthorized )
 			{
@@ -436,6 +459,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 						var parameter = $"{_AuthenticationContainer.Credentials.UserName}:{_AuthenticationContainer.Credentials.Password}";
 						_HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue( "basic", Convert.ToBase64String( Encoding.UTF8.GetBytes( parameter ) ) );
 					}
+
 					break;
 
 				case AuthenticationMode.Windows:
@@ -449,6 +473,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 					{
 						_WebRequestHandler.ClientCertificates.Add( _AuthenticationContainer.Certificate );
 					}
+
 					break;
 
 				case AuthenticationMode.OAuth:
@@ -457,6 +482,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 					{
 						_HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue( "Bearer", _AuthenticationContainer.OAuthAccessToken );
 					}
+
 					break;
 				default:
 					throw new NotSupportedException( $"unknown authentication mode '{_AuthenticationContainer.Mode}'" );

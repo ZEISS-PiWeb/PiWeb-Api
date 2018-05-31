@@ -8,11 +8,9 @@
 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.Common.Data
+namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 {
 	#region usings
-
-	using Zeiss.IMT.PiWeb.Api.DataService.Rest;
 
 	#endregion
 

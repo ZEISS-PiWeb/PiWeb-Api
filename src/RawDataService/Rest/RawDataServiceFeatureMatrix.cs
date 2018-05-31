@@ -36,12 +36,7 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 		// If the server supports at least this minor version filtering is possible.
 		public static Version RawDataAttributeFilterMinVersion { get; } = new Version( SupportedMajorVersion, 2 );
 
-		// If the server supports at least this minor version filtering is possible.
-		public static Version RawDataQueryMinVersion { get; } = new Version( SupportedMajorVersion, 3 );
-
 		public bool SupportsRawDataAttributeFilter => CurrentInterfaceVersion >= RawDataAttributeFilterMinVersion;
-
-		public bool SupportsRawDataQuery => CurrentInterfaceVersion >= RawDataQueryMinVersion;
 
 		#endregion
 	}

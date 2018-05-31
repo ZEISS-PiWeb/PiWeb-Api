@@ -22,7 +22,9 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 		/// <summary>
 		/// Contains mappings of HTTP statuscodes to .NET based exceptions for server based exceptions (500 HTTP status codes)
 		/// </summary>
-		public static readonly Dictionary<HttpStatusCode, string> ServerBasedExceptions = new Dictionary<HttpStatusCode, string>
+		public static IReadOnlyDictionary<HttpStatusCode, string> ServerBasedExceptions => InternalServerBasedExceptions;
+
+		private static readonly Dictionary<HttpStatusCode, string> InternalServerBasedExceptions = new Dictionary<HttpStatusCode, string>
 		{
 			{ HttpStatusCode.InternalServerError, typeof( CommunicationException ).ToString() },
 			{ HttpStatusCode.NotImplemented, typeof( NotImplementedException ).ToString() },
@@ -44,7 +46,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 		/// </summary>
 		public static bool IncludesExceptionOfType<T>( this WrappedServerErrorException exception )
 		{
-			return exception.Error.ExceptionType != null && exception.Error.ExceptionType == typeof( T ).ToString();
+			return string.Equals( exception?.Error?.ExceptionType, typeof( T ).ToString(), StringComparison.Ordinal );
 		}
 
 		/// <summary>
@@ -53,7 +55,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 		/// </summary>
 		public static bool IsServerBasedFault( this WrappedServerErrorException exception )
 		{
-			return exception.Error.ExceptionType != null && ServerBasedExceptions.ContainsValue( exception.Error.ExceptionType );
+			return exception?.Error?.ExceptionType != null && InternalServerBasedExceptions.ContainsValue( exception.Error.ExceptionType );
 		}
 
 		/// <summary>

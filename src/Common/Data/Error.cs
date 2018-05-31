@@ -13,12 +13,14 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 	#region usings
 
 	using System;
+	using System.Xml.Serialization;
 
 	#endregion
 
 	/// <summary> 
 	/// Class holds an error which can occur on calling a webservice method. 
 	/// </summary>
+	[XmlType( Namespace = "http://www.zeiss.com/CmmService" )]
 	public class Error
 	{
 		#region constructors

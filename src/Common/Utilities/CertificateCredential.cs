@@ -21,7 +21,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 	/// <summary>
 	/// Credential that contains certificate information.
 	/// </summary>
-	public class CertificateCredential : ICredential
+	public sealed class CertificateCredential : ICredential
 	{
 		#region constructors
 
@@ -31,9 +31,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 		/// <param name="certificate"></param>
 		public CertificateCredential( [NotNull] X509Certificate2 certificate )
 		{
-			if( certificate == null ) throw new ArgumentNullException( nameof(certificate) );
-
-			Certificate = certificate;
+			Certificate = certificate ?? throw new ArgumentNullException( nameof( certificate ) );
 			DisplayId = CertificateHelper.ThumbPrintToFriendlyText( certificate.Thumbprint );
 		}
 

@@ -45,6 +45,9 @@
     <DocumentationFile>bin\Release\PiWeb.Api.XML</DocumentationFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>Zeiss.IMT.PiWeb.Api</RootNamespace>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -118,7 +121,6 @@
     <Compile Include="Common\Data\FilterString\Tree\TokenType.cs" />
     <Compile Include="Common\Data\FilterString\Tree\FilterTree.cs" />
     <Compile Include="Common\Data\FilterString\Tree\IFilterTree.cs" />
-    <Compile Include="Common\Data\GenericSearchCondition.cs" />
     <Compile Include="Common\Data\IAttributeItem.cs" />
     <Compile Include="Common\Data\InterfaceVersionRange.cs" />
     <Compile Include="Common\Data\PathHelper.cs" />
@@ -154,15 +156,16 @@
     <Compile Include="DataService\Rest\Configuration.cs" />
     <Compile Include="DataService\Rest\DataCharacteristic.cs" />
     <Compile Include="DataService\Rest\DataMeasurement.cs" />
-    <Compile Include="DataService\Rest\DataServiceFileConnectionFeatureMatrix.cs" />
     <Compile Include="DataService\Rest\DataServiceFeatureMatrix.cs" />
     <Compile Include="DataService\Rest\DataValue.cs" />
     <Compile Include="DataService\Rest\Entity.cs" />
     <Compile Include="DataService\Rest\FieldDefinition.cs" />
     <Compile Include="DataService\Rest\FieldDefinitions.cs" />
     <Compile Include="DataService\Rest\FieldType.cs" />
+    <Compile Include="DataService\Rest\GenericSearchCondition.cs" />
     <Compile Include="DataService\Rest\IDataServiceRestClient.cs" />
     <Compile Include="DataService\Rest\AbstractMeasurementFilterAttributes.cs" />
+    <Compile Include="DataService\Rest\IDataServiceRestClientBase.cs" />
     <Compile Include="DataService\Rest\MeasurementDeleteBehavior.cs" />
     <Compile Include="DataService\Rest\DataServiceRestClientExtensions.cs" />
     <Compile Include="DataService\Rest\DistinctMeasurementFilterAttributes.cs" />
@@ -222,9 +225,7 @@
     <Compile Include="RawDataService\Rest\RawDataServiceFeatureMatrix.cs" />
     <Compile Include="RawDataService\Rest\RawDataTargetEntity.cs" />
     <Compile Include="RawDataService\Rest\RawDataServiceRestClient.cs" />
-    <Compile Include="RawDataService\Rest\RawDataQuery.cs" />
     <Compile Include="RawDataService\Rest\RawDataTargetEntityComparer.cs" />
-    <Compile Include="RawDataService\Rest\RawDataValueQuery.cs" />
     <Compile Include="RawDataService\Rest\ServiceInformation.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -21,7 +21,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 	/// <summary>
 	/// Credential that contains username / Password information.
 	/// </summary>
-	public class UsernamePasswordCredential : ICredential
+	public sealed class UsernamePasswordCredential : ICredential
 	{
 		#region constructors
 
@@ -30,11 +30,8 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 		/// </summary>
 		public UsernamePasswordCredential( [NotNull] string username, [NotNull] string password )
 		{
-			if( username == null ) throw new ArgumentNullException( nameof(username) );
-			if( password == null ) throw new ArgumentNullException( nameof(password) );
-
-			Username = username;
-			Password = password;
+			Username = username ?? throw new ArgumentNullException( nameof( username ) );
+			Password = password ?? throw new ArgumentNullException( nameof( password ) );
 		}
 
 		#endregion
