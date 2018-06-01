@@ -5,12 +5,14 @@ TL;DR
 -----
 
 * do development on "develop" branch or feature branches called "feature/<cool_new_feature>"
+* do release stabilization on release branches called "release/<version_number>", e.g. "release/1.0.0"
 * do NOT do development on "master" branch
-* use GitHub forks and pull requests, but do NOT merge to "master" branch
-    * use development or feature branches instead
 * put release notes into WHATSNEW.txt
 * tag release with "v<version_number>", e.g. "v1.0.1"
-* NuGet package is automatically built by AppVeyor 
+* NuGet package is automatically built by AppVeyor
+    * changes on develop branch will trigger unstable builds
+    * changes on release branches will trigger beta builds
+    * tags on release branches will trigger release builds
 * publish NuGet package from AppVeyor to nuget.org
 * merge release tag to master branch
 
