@@ -216,6 +216,7 @@
     <Compile Include="RawDataService\Filter\Conditions\LikeFilterCondition.cs" />
     <Compile Include="RawDataService\Filter\Conditions\StringListFilterCondition.cs" />
     <Compile Include="RawDataService\Filter\Conditions\StringCompareFilterCondition.cs" />
+    <Compile Include="RawDataService\Rest\IRawDataServiceRestClientBase.cs" />
     <Compile Include="RawDataService\Rest\RawData.cs" />
     <Compile Include="RawDataService\Rest\RawDataListParameters.cs" />
     <Compile Include="RawDataService\Rest\RawDataServiceRestClientExtensions.cs" />
