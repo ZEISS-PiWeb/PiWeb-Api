@@ -7,4 +7,3 @@ build_script:
 - cmd: ./build.cmd
 artifacts:
 - path: artifacts/*.nupkg
-- path: artifacts/ReleaseNotes.md
