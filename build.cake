@@ -18,24 +18,16 @@ var solutionFile = srcDir + File("Api.sln");
 var buildDir = srcDir + Directory("bin") + Directory(configuration);
 var artifactsDir = Directory("./artifacts");
 
-var repoBranchName = "master";
-
+var nugetVersion = "0.0.0";
 var isDeveloperBuild = BuildSystem.IsLocalBuild;
 
 var gitVersionInfo = GitVersion(new GitVersionSettings {
     OutputType = GitVersionOutput.Json
 });
 
-var nugetVersion = isDeveloperBuild ? "0.0.0" : gitVersionInfo.NuGetVersion;
-
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
 ///////////////////////////////////////////////////////////////////////////////
-Setup(context =>
-{
-    Information("Building v{0}", nugetVersion);    
-});
-
 Teardown(context =>
 {
     Information("Finished running tasks.");
@@ -45,22 +37,42 @@ Teardown(context =>
 // PRIVATE TASKS
 //////////////////////////////////////////////////////////////////////
 
+Task("UpdateAssemblyInfo")
+    .Does(() =>
+{
+    gitVersionInfo = GitVersion(new GitVersionSettings {
+        UpdateAssemblyInfo = true,
+        OutputType = GitVersionOutput.Json
+    });
+
+    nugetVersion = isDeveloperBuild ? "0.0.0" : gitVersionInfo.NuGetVersion;
+
+    Information("AssemblyVersion -> {0}", gitVersionInfo.AssemblySemVer);
+    Information("AssemblyFileVersion -> {0}", $"{gitVersionInfo.MajorMinorPatch}.0");
+    Information("AssemblyInformationalVersion -> {0}", gitVersionInfo.InformationalVersion);
+
+    if(BuildSystem.AppVeyor.IsRunningOnAppVeyor)
+    {
+        Information("Nuget Version -> {0}", nugetVersion);
+    }
+    else
+    {
+        Warning("Nuget Version -> {0} (developer build)", nugetVersion);
+    }
+});
+
 Task("AppVeyorSetup")
+    .IsDependentOn("UpdateAssemblyInfo")
     .Does(() =>
 {
     if(BuildSystem.AppVeyor.IsRunningOnAppVeyor)
     {
         var appVeyorBuildNumber = EnvironmentVariable("APPVEYOR_BUILD_NUMBER");
         var appVeyorBuildVersion = $"{nugetVersion}+{appVeyorBuildNumber}";
-        repoBranchName = EnvironmentVariable("APPVEYOR_REPO_BRANCH");
-        Information("AppVeyor branch name is " + repoBranchName);
+        Information("AppVeyor branch name is " + EnvironmentVariable("APPVEYOR_REPO_BRANCH"));
         Information("AppVeyor build version is " + appVeyorBuildVersion);
         BuildSystem.AppVeyor.UpdateBuildVersion(appVeyorBuildVersion);
     }
-    else
-    {
-        Information("Not running on AppVeyor");
-    }    
 });
 
 Task("Clean")
@@ -74,18 +86,6 @@ Task("Restore")
     .Does(() =>
 {
     NuGetRestore(solutionFile);
-});
-
-Task("UpdateAssemblyInfo")
-    .Does(() =>
-{
-    GitVersion(new GitVersionSettings {
-        UpdateAssemblyInfo = true
-    });
-
-    Information("AssemblyVersion -> {0}", gitVersionInfo.AssemblySemVer);
-    Information("AssemblyFileVersion -> {0}", $"{gitVersionInfo.MajorMinorPatch}.0");
-    Information("AssemblyInformationalVersion -> {0}", gitVersionInfo.InformationalVersion);
 });
 
 Task("Build")
