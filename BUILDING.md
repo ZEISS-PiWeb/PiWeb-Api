@@ -5,14 +5,12 @@ TL;DR
 -----
 
 * do development on "develop" branch or feature branches called "feature/<cool_new_feature>"
-* do release stabilization on release branches called "release/<version_number>", e.g. "release/1.0.0"
 * do NOT do development on "master" branch
+* use GitHub forks and pull requests, but do NOT merge to "master" branch
+    * use development or feature branches instead
 * put release notes into WHATSNEW.txt
 * tag release with "v<version_number>", e.g. "v1.0.1"
-* NuGet package is automatically built by AppVeyor
-    * changes on develop branch will trigger unstable builds
-    * changes on release branches will trigger beta builds
-    * tags on release branches will trigger release builds
+* NuGet package is automatically built by AppVeyor 
 * publish NuGet package from AppVeyor to nuget.org
 * merge release tag to master branch
 
@@ -61,3 +59,13 @@ The AppVeyor [project feed](https://ci.appveyor.com/nuget/piweb-api) provides
 an easy way to consume any built version including unstable versions.
 Stable release nuget packages are meant to be deployed to nuget.org making them
 official.
+
+
+Known Issues
+------------
+
+In case the NuGet version is wrong, GitVersion and AppVeyor have an known incompatibility.
+See issue [1289|https://github.com/GitTools/GitVersion/issues/1289] in GitVersion project.
+This is fixed in the latest beta build v4.0.0-beta.13 of GitVersion which unfortunately
+is not available on nuget.org. The workaround is not to have multiple branches pointing
+to the very same commit.
