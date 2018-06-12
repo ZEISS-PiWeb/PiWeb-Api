@@ -33,7 +33,7 @@ sections:
     {{page.version}}
     <span class="caret"></span>
   </button>
-  <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
     <li><a href="#">2.0</a></li>
     <li role="separator" class="divider"></li>
     <li><a href="#">1.0</a></li>
