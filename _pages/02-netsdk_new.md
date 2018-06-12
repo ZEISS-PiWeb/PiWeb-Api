@@ -1,6 +1,6 @@
 ---
 title: .NET SDK
-version: 1.0
+version: v1.0
 permalink: "/sdk_new/"
 sections:
   general:
@@ -34,9 +34,9 @@ sections:
     <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <li><a href="#">2.0</a></li>
+    <li><a href="#">v2.0</a></li>
     <li role="separator" class="divider"></li>
-    <li><a href="#">1.0</a></li>
+    <li><a href="#">v1.0</a></li>
   </ul>
 </div>
 
