@@ -370,6 +370,10 @@ div>.affix{
 	margin-top: -80px;
 }
 
+.dropdown-menu{
+	min-wifth:inherit;
+}
+
 .footer{
 	text-align: center;
 	border-top: 5px solid #437AB4;
