@@ -1,6 +1,6 @@
 ---
 title: .NET SDK
-version: 1.0.1
+version: 1.0
 permalink: "/sdk_new/"
 sections:
   general:
@@ -28,8 +28,6 @@ sections:
         anchor: basics-rawData
 ---
 
-<h1 id="{{page.sections['general'].anchor}}">{{page.sections['general'].title}}</h1>
-
 <div class="dropdown" style="float:right;">
   <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
     {{page.version}}
@@ -41,6 +39,8 @@ sections:
     <li><a href="#">1.0</a></li>
   </ul>
 </div>
+
+<h1 id="{{page.sections['general'].anchor}}">{{page.sections['general'].title}}</h1>
 
 The .NET SDK is suitable for all .NET languages. You can include it to your project either by
 
