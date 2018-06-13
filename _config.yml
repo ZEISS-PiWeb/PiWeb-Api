@@ -9,6 +9,7 @@ include: ['_pages']
 relative_permalinks: false
 baseurl: "/PiWeb-Api"
 images:
+  ok: "![Ok](/PiWeb-Api/images/ok.png)"
   warning: "![Warning](/PiWeb-Api/images/warning.png)"
   info: "![Info](/PiWeb-Api/images/info.png)"
   generalInformation16: "![DatabaseInfo](/PiWeb-Api/images/database-info.png)"
