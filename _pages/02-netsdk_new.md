@@ -5,7 +5,7 @@ version: v1.0
 permalink: "/sdk_new/"
 sections:
   general:
-    title: General Information
+    title: General Information about the SDK
     anchor: gi
     secs:
       create:
