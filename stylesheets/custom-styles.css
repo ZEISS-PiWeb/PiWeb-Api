@@ -379,7 +379,7 @@ div>.affix{
 
 .dropdown-menu>li>a.active{
 	font-weight: 700;
-	background: url({{ site.images['ok'] }}) left 7px no-repeat
+	background: url({{ site.images['ok'] | markdownify }}) left 7px no-repeat
 }
 
 .footer{
