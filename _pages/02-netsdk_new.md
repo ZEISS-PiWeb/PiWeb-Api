@@ -1,4 +1,5 @@
 ---
+area: sdk_v2
 title: .NET SDK
 version: v1.0
 permalink: "/sdk_new/"
