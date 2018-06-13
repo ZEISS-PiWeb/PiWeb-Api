@@ -2,10 +2,10 @@
 area: sdk_v2
 title: .NET SDK
 version: v1.0
-permalink: "/sdk_new/"
+permalink: "/sdk/v2"
 sections:
   general:
-    title: General Information about the SDK
+    title: General Information
     anchor: gi
     secs:
       create:
