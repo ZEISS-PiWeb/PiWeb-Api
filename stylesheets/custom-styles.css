@@ -374,6 +374,10 @@ div>.affix{
 	min-width: 0;
 }
 
+.dropdown-menu>li>a.active{
+	font-weight: 700;	
+}
+
 .footer{
 	text-align: center;
 	border-top: 5px solid #437AB4;
