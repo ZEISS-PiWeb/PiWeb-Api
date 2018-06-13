@@ -1,7 +1,7 @@
 ---
-area: sdk_v2
+area: sdk
 title: .NET SDK
-version: v1.0
+version: 2.0
 permalink: "/sdk/v2"
 sections:
   general:
