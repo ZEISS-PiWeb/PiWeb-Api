@@ -5,8 +5,8 @@
   </button>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
     {% for node in site.pages %}
-		
-			<li><a href="{{site.baseurl}}{{ node.url }}">v{{node.version}}</a></li>
+		{% if node.level == 0 %}
+			<li><a href="{{site.baseurl}}{{ node.url }}">v{{node.version}} {{node.area}}|{{page.area}}</a></li>
 		
 {% endfor %}
   </ul>
