@@ -29,17 +29,7 @@ sections:
         anchor: basics-rawData
 ---
 
-<div class="dropdown" style="float:right;">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    {{page.version}}
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <li><a href="#">v2.0</a></li>
-    <li role="separator" class="divider"></li>
-    <li><a href="#">v1.0</a></li>
-  </ul>
-</div>
+{% include version_combobox.html %}
 
 <h1 id="{{page.sections['general'].anchor}}">{{page.sections['general'].title}}</h1>
 
