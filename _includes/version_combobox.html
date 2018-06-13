@@ -7,7 +7,7 @@
     {% for node in site.pages %}
 		{% if node.level == 0 %}
 			<li><a href="{{site.baseurl}}{{ node.url }}">v{{node.version}} {{node.area}}|{{page.area}}</a></li>
-		
+		{% endif %}
 {% endfor %}
   </ul>
 </div>
