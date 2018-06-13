@@ -375,7 +375,8 @@ div>.affix{
 }
 
 .dropdown-menu>li>a.active{
-	font-weight: 700;	
+	font-weight: 700;
+	background: url({{ site.images['ok'] }}) left 7px no-repeat
 }
 
 .footer{
