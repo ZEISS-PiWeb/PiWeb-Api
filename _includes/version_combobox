@@ -1,0 +1,13 @@
+<div class="dropdown" style="float:right;">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    {{page.version}}
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    {% for node in site.pages %}
+		{% if node.level == 0 and node.area == page.area %}
+			<li><a href="{{site.baseurl}}{{ node.url }}">v{{node.version}}</a></li>
+		{% endif %}
+{% endfor %}
+  </ul>
+</div>
