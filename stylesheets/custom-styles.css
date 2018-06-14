@@ -378,7 +378,8 @@ div>.affix{
 }
 
 .dropdown-menu>li>a{
-	padding-left: 25px;	
+	padding-left: 25px;
+	padding-right: 10px;
 }
 
 .dropdown-menu>li>a.active{
