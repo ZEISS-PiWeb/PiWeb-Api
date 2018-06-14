@@ -379,7 +379,7 @@ div>.affix{
 
 .dropdown-menu>li>a.active{
 	font-weight: 700;
-	background: url(../images/ok.png) left 7px no-repeat
+	background: url(../images/ok.png) left 7px no-repeat;
 }
 
 .footer{
