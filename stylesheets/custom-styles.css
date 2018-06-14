@@ -377,9 +377,13 @@ div>.affix{
 	min-width: 0;
 }
 
+.dropdown-menu>li>a{
+	padding-left: 25px;	
+}
+
 .dropdown-menu>li>a.active{
 	font-weight: 700;
-	background: url(../images/ok.png) left 7px no-repeat;
+	background: url(../images/ok.png) 5px no-repeat;
 }
 
 .footer{
