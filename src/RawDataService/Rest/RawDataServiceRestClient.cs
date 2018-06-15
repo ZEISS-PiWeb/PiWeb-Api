@@ -53,9 +53,8 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 		/// <param name="serverUri">The PiWeb Server uri, including port and instance</param>
 		/// <param name="loginRequestHandler"></param>
 		/// <param name="maxUriLength">The uri length limit</param>
-		/// <param name="additionalHttpRequestHeader">List of additional http request header</param>
-		public RawDataServiceRestClient( Uri serverUri, KeyValuePair<string, string>[] additionalHttpRequestHeader = null, int maxUriLength = RestClient.DefaultMaxUriLength, ILoginRequestHandler loginRequestHandler = null )
-			: base( new RestClient( serverUri, EndpointName, loginRequestHandler, additionalHttpRequestHeader: additionalHttpRequestHeader, maxUriLength: maxUriLength ) )
+		public RawDataServiceRestClient( Uri serverUri, int maxUriLength = RestClient.DefaultMaxUriLength, ILoginRequestHandler loginRequestHandler = null )
+			: base( new RestClient( serverUri, EndpointName, loginRequestHandler, maxUriLength: maxUriLength ) )
 		{
 		}
 

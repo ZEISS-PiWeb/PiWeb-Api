@@ -71,7 +71,6 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 
 		[CanBeNull]
 		private readonly ILoginRequestHandler _LoginRequestHandler;
-		private readonly IEnumerable<KeyValuePair<string, IEnumerable<string>>> _AdditionalHttpRequestHeaders;
 		private readonly bool _Chunked = true;
 
 		private HttpClient _HttpClient;
@@ -84,7 +83,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 		#region constructors
 
 		/// <summary>Constructor.</summary>
-		public RestClient( Uri serverUri, string endpointName, ILoginRequestHandler loginRequestHandler = null, TimeSpan? timeout = null, IEnumerable<KeyValuePair<string, string>> additionalHttpRequestHeader = null, int maxUriLength = DefaultMaxUriLength, bool chunked = true )
+		public RestClient( Uri serverUri, string endpointName, ILoginRequestHandler loginRequestHandler = null, TimeSpan? timeout = null, int maxUriLength = DefaultMaxUriLength, bool chunked = true )
 		{
 			if( serverUri == null )
 				throw new ArgumentNullException( nameof(serverUri) );
@@ -98,16 +97,6 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 			_Chunked = chunked;
 
 			MaxUriLength = maxUriLength;
-
-			if( additionalHttpRequestHeader != null )
-			{
-				_AdditionalHttpRequestHeaders = additionalHttpRequestHeader
-					.Select( entry => new KeyValuePair<string, IEnumerable<string>>( entry.Key, Enumerable.Repeat( entry.Value, 1 ) ) );
-			}
-			else
-			{
-				_AdditionalHttpRequestHeaders = Enumerable.Empty<KeyValuePair<string, IEnumerable<string>>>();
-			}
 
 			BuildHttpClient( timeout );
 		}
@@ -280,11 +269,6 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 			request.Headers.UserAgent.Add( new ProductInfoHeaderValue( ClientIdHelper.ClientProduct, ClientIdHelper.ClientVersion ) );
 			request.Headers.TransferEncodingChunked = _Chunked;
 			request.Headers.Add( "Keep-Alive", "true" );
-
-			foreach( var header in _AdditionalHttpRequestHeaders )
-			{
-				_HttpClient.DefaultRequestHeaders.Add( header.Key, header.Value );
-			}
 
 			if( !Equals( CultureInfo.CurrentUICulture, CultureInfo.InvariantCulture ) )
 			{
