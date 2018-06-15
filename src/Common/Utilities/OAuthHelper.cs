@@ -230,7 +230,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 			return new TokenClient( authority + "/connect/token", ClientId, ClientSecret );
 		}
 
-		public static async Task<OAuthTokenCredential> GetAuthenticationInformationForDatabaseUrlAsync( string databaseUrl, string refreshToken = null, Func<OAuthRequest, Task<OAuthReponse>> requestCallbackAsync = null )
+		public static async Task<OAuthTokenCredential> GetAuthenticationInformationForDatabaseUrlAsync( string databaseUrl, string refreshToken = null, Func<OAuthRequest, Task<OAuthResponse>> requestCallbackAsync = null )
 		{
 			var instanceUrl = GetInstanceUrl( databaseUrl );
 
@@ -275,7 +275,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 			return null;
 		}
 
-		public static OAuthTokenCredential GetAuthenticationInformationForDatabaseUrl( string databaseUrl, string refreshToken = null, Func<OAuthRequest, OAuthReponse> requestCallback = null )
+		public static OAuthTokenCredential GetAuthenticationInformationForDatabaseUrl( string databaseUrl, string refreshToken = null, Func<OAuthRequest, OAuthResponse> requestCallback = null )
 		{
 			var instanceUrl = GetInstanceUrl( databaseUrl );
 

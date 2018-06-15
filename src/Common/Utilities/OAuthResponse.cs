@@ -16,7 +16,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 
 	#endregion
 
-	public class OAuthReponse
+	public class OAuthResponse
 	{
 		#region members
 
@@ -26,7 +26,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 
 		#region constructors
 
-		public OAuthReponse( string resultUrl )
+		public OAuthResponse( string resultUrl )
 		{
 			if( !string.IsNullOrEmpty( resultUrl ) )
 			{

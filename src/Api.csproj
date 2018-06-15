@@ -136,9 +136,9 @@
     <Compile Include="Common\Utilities\CertificateHelper.cs" />
     <Compile Include="Common\Utilities\CollectionParameterDefinition.cs" />
     <Compile Include="Common\Utilities\ICredential.cs" />
-    <Compile Include="Common\Utilities\OAuthReponse.cs" />
     <Compile Include="Common\Utilities\OAuthRequest.cs" />
     <Compile Include="Common\Utilities\OAuthHelper.cs" />
+    <Compile Include="Common\Utilities\OAuthResponse.cs" />
     <Compile Include="Common\Utilities\OAuthTokenCredential.cs" />
     <Compile Include="Common\Utilities\UsernamePasswordCredential.cs" />
     <Compile Include="Common\Utilities\ParameterSplitter.cs" />
