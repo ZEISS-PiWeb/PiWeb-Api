@@ -32,7 +32,7 @@ Property                                          | Description
 
 Parts as well as characteristic may contain a version history if versioning is enabled in server settings. If so parts are represented by class `InspectionPlanPart` which is derived from `SimplePart`.
 
-#### `InspectionPlanCharacteristic : InspectionPlanBase`, #### `InspectionPlanPart : SimplePart`
+#### `InspectionPlanCharacteristic : InspectionPlanBase`, `InspectionPlanPart : SimplePart`
 
 {% capture table %}
 Property                                               | Description
