@@ -1,5 +1,7 @@
 <h2 id="{{page.sections['basics']['secs']['inspectionPlan'].anchor}}">{{page.sections['basics']['secs']['inspectionPlan'].title}}</h2>
 
+{{ site.images['inspectionplanSchema'] }}
+
 An inspection plan object contains entities of two different types - parts and characteristics. Parts are hold in class `SimplePart`, characteristics are hold in class `InspectionPlanCharacteristic`. Both are derived from the abstract base class `InspectionPlanBase` and consists of the following properties:
 
 #### `InspectionPlanBase`
@@ -30,7 +32,8 @@ Property                                          | Description
 
 Parts as well as characteristic may contain a version history if versioning is enabled in server settings. If so parts are represented by class `InspectionPlanPart` which is derived from `SimplePart`.
 
-#### `InspectionPlanCharacteristic : InspectionPlanBase` , `InspectionPlanPart : SimplePart`
+#### `InspectionPlanCharacteristic : InspectionPlanBase` , 
+#### `InspectionPlanPart : SimplePart`
 
 {% capture table %}
 Property                                               | Description
