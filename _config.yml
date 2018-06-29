@@ -18,6 +18,7 @@ images:
   rawdataservice40: "![DatabaseAttach](/PiWeb-Api/images/database-attach40.png)"
   dataservice16: "![DatabaseTable](/PiWeb-Api/images/database-table.png)"
   rawdataservice16: "![DatabaseAttach](/PiWeb-Api/images/database-attach.png)"
+  inspectionplanSchema: "![InspectionPlanSchema](/PiWeb-Api/images/inspection-plan-schema.png)"
 sections:
   getLabel: <span class="label label-primary">Get</span>
   postLabel: <span class="label label-success">Post</span>
