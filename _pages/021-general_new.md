@@ -12,7 +12,7 @@ Constructor method | Description
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
-{{ site.headers['example'] }} A data service client for a server using https on host "piwebserver" on port 8080.
+{{ site.headers['example'] }} A data service client pointed to "http://piwebserver:8080.
 
 {% highlight csharp %}
 var uri = new Uri("http://piwerbserver:8080");
@@ -33,7 +33,7 @@ Constructor method | Description
 
 {% highlight csharp %}
 var uri = new Uri("http://piwerbserver:8082");
-var rawdataserviceRestClient = new RawDataServiceRestClient( "http://piwebserver:8082" );
+var rawdataserviceRestClient = new RawDataServiceRestClient( uri );
 {% endhighlight %}
 
 <h2 id="{{page.sections['general']['secs']['use'].anchor}}">{{page.sections['general']['secs']['use'].title}}</h2>
@@ -63,4 +63,17 @@ public async Task<InspectionPlanPart> GetPartByUuid( Guid partUuid, AttributeSel
 
 {{ site.images['info'] }} All methods accept a `CancellationToken` which you can use to cancel a request.
 
-Useful hints can be found in the following Best practices section.
+{{ site.headers['bestPractice'] }} Create or update multiple entities in a single call
+
+To achieve a good performance it is highly recommended to create or update items in a single call. That is why all create and update methods expect an array parameter.
+
+{% highlight csharp %}
+var charPath1 = PathHelper.String2PathInformation( "/Part/Char1", "PC");
+var charPath2 = PathHelper.String2PathInformation( "/Part/Char2", "PC");
+var charPath3 = PathHelper.String2PathInformation( "/Part/Char3", "PC");
+var char1 = new InspectionPlanCharacteristic { Path = char1Path, Uuid = Guid.NewGuid() };
+var char2 = new InspectionPlanCharacteristic { Path = char2Path, Uuid = Guid.NewGuid() };
+var char3 = new InspectionPlanCharacteristic { Path = char3Path, Uuid = Guid.NewGuid() };
+var characteristics = new[] { char1, char2, char3 };
+await RestDataServiceClient.CreateCharacteristics( characteristics );
+{% endhighlight %}

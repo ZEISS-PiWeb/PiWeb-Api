@@ -25,7 +25,7 @@ A `SimplePart` does additionally consist of the timestamp for the most recent ch
 {% capture table %}
 Property                                          | Description
 --------------------------------------------------|----------------------------------------------------------------
-<nobr><code>dateTime</code> CharChangeDate</nobr> | The timestamp for the most recent characteristic change on any characteristic below that part (but not below sub parts). This timestamp is updated by the server backend.
+<nobr><code>DateTime</code> CharChangeDate</nobr> | The timestamp for the most recent characteristic change on any characteristic below that part (but not below sub parts). This timestamp is updated by the server backend.
 
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
@@ -43,28 +43,23 @@ Property                                               | Description
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 
-{{ site.headers['bestPractice'] }} Create a  `PathInformation` object for a part entity
-As pointed in the upper section a `PathInformation` object includes an entity's path as well as its structure. To easily create a `PathInformation` use `PathHelper` class:
+{{ site.headers['bestPractice'] }} Create a  `PathInformation` object for an entity
+As pointed in the upper section a `PathInformation` object includes an entity's path as well as its structure. To create a `PathInformation` object you might use PathHelper classw hich includes several helper methods:
+
+{% capture table %}
+Method                                                                                                          | Description
+----------------------------------------------------------------------------------------------------------------|-----------------------------------------------------
+<nobr><code>public PathInformation String2PartPathInformation( string path )</code></nobr>                      | Creates a path information object based on `path` parameter including plain part structure
+<nobr><code>public PathInformation String2CharacteristicPathInformation( string path )</code></nobr>            | Creates a path information object based on `path` parameter including plain characteristic structure
+<nobr><code>public PathInformation DatabaseString2PathInformation( string path, string structure)</code></nobr> | Creates a path information object based on `path` and `structure` parameter
+
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 {% highlight csharp %}
 //Fetch all characteristics for the part "MetalPart"
-var partPath = PathHelper.String2PartPathInformation("/MetalPart");
+var partPath = PathHelper.String2PartPathInformation( "/MetalPart" );
 var characteristics = await RestDataServiceClient.GetCharacteristics( partPath );
-{% endhighlight %}
-
-{{ site.headers['bestPractice'] }} Create or update multiple entities in a single call
-
-To achieve a good performance it is highly recommended to create or update inspection plan items in a single call. That is why all create and update methods expect an array parameter.
-
-{% highlight csharp %}
-var charPath1 = PathHelper.String2PathInformation( "/Part/Char1", "PC");
-var charPath2 = PathHelper.String2PathInformation( "/Part/Char2", "PC");
-var charPath3 = PathHelper.String2PathInformation( "/Part/Char3", "PC");
-var char1 = new InspectionPlanCharacteristic { Path = char1Path, Uuid = Guid.NewGuid() };
-var char2 = new InspectionPlanCharacteristic { Path = char2Path, Uuid = Guid.NewGuid() };
-var char3 = new InspectionPlanCharacteristic { Path = char3Path, Uuid = Guid.NewGuid() };
-var characteristics = new[] { char1, char2, char3 };
-await RestDataServiceClient.CreateCharacteristics( characteristics );
 {% endhighlight %}
 
 <h2 id="{{page.sections['basics']['secs']['measurementsValues'].anchor}}">{{page.sections['basics']['secs']['measurementsValues'].title}}</h2>
