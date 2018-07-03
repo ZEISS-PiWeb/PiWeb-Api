@@ -56,8 +56,9 @@ Method                                                                          
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
+{{ site.headers['example'] }} Fetch all characteristics for the part "MetalPart"
+
 {% highlight csharp %}
-//Fetch all characteristics for the part "MetalPart"
 var partPath = PathHelper.String2PartPathInformation( "/MetalPart" );
 var characteristics = await RestDataServiceClient.GetCharacteristics( partPath );
 {% endhighlight %}

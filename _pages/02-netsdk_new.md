@@ -15,6 +15,9 @@ sections:
       use:
         title: Using the client
         anchor: gi-use
+      security:
+        title: Security
+        anchor: gi-security
   basics:
     title: Basics
     anchor: basics
