@@ -22,6 +22,9 @@ sections:
     title: Basics
     anchor: basics
     secs:
+      configuration:
+        title: Configuration
+        anchor: basics-configuration
       inspectionPlan:
         title: Inspection Plan
         anchor: basics-inspectionPlan
@@ -53,5 +56,7 @@ For proper usage of this sample application:
 {% include_relative 021-general_new.md %}
 
 <h1 id="{{page.sections['basics'].anchor}}">{{page.sections['basics'].title}}</h1>
+
+{% include_relative 0221-configuration.md %}
 
 {% include_relative 022-basics.md %}
