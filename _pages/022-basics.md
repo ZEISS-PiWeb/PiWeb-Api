@@ -9,12 +9,13 @@ An inspection plan object contains entities of two different types - parts and c
 {% capture table %}
 Property                                          | Description
 --------------------------------------------------|--------------------------------------------------------------------
-<nobr><code>Guid</code> Uuid</nobr>               | Identifies this inspection plan entity uniquely.
-<nobr><code>PathInformation</code> Path</nobr>    | The path of this entity which describes the entity's hierarchical structure.
 <nobr><code>Attribute[]</code> Attributes</nobr>  | A set of attributes which describe the entity.
 <nobr><code>string</code> Comment</nobr>          | A comment which describes the last inspection plan change. The comment is only returned in case versioning is enabled in the server settings.
-<nobr><code>uint</code> Version</nobr>            | Contains the entity´s revision number. The revision number starts with `0` and is incremented by `1` each time changes are applied to the inspection plan.
+<nobr><code>PathInformation</code> Path</nobr>    | The path of this entity which describes the entity's hierarchical structure.
+<nobr><code>Guid</code> Uuid</nobr>               | Identifies this inspection plan entity uniquely.
+<nobr><code>string</code> this[ushort key]</nobr> | Indexer for accessing inspection plan's attribute value with the specified key
 <nobr><code>DateTime</code> TimeStamp</nobr>      | Contains the date and time of when the entity was last updated.
+<nobr><code>uint</code> Version</nobr>            | Contains the entity´s revision number. The revision number starts with `0` and is globally incremented by `1` each time changes are applied to the inspection plan.
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
