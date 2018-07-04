@@ -12,7 +12,7 @@ Property                                          | Description
 <nobr><code>Attribute[]</code> Attributes</nobr>  | A set of attributes which describe the entity.
 <nobr><code>string</code> Comment</nobr>          | A comment which describes the last inspection plan change. The comment is only returned in case versioning is enabled in the server settings.
 <nobr><code>PathInformation</code> Path</nobr>    | The path of this entity which describes the entity's hierarchical structure.
-<nobr><code>string</code> this[ushort key]</nobr> | Indexer for accessing inspection plan's attribute value with the specified key
+<nobr><code>string</code> this[ushort key]</nobr> | Indexer for accessing entity's attribute value directly with the specified key
 <nobr><code>DateTime</code> TimeStamp</nobr>      | Contains the date and time of when the entity was last updated.
 <nobr><code>Guid</code> Uuid</nobr>               | Identifies this inspection plan entity uniquely.
 <nobr><code>uint</code> Version</nobr>            | Contains the entity´s revision number. The revision number starts with `0` and is globally incremented by `1` each time changes are applied to the inspection plan.
@@ -21,7 +21,7 @@ Property                                          | Description
 
 A `SimplePart` does additionally consist of the timestamp for the most recent characteristic change:
 
-#### `SimplePart : InspectionPlanBase`
+#### `SimplePart`
 
 {% capture table %}
 Property                                          | Description
@@ -33,7 +33,7 @@ Property                                          | Description
 
 Parts as well as characteristic may contain a version history if versioning is enabled in server settings. If so parts are represented by class `InspectionPlanPart` which is derived from `SimplePart`.
 
-#### `InspectionPlanCharacteristic : InspectionPlanBase`, `InspectionPlanPart : SimplePart`
+#### `InspectionPlanCharacteristic`, `InspectionPlanPart`
 
 {% capture table %}
 Property                                               | Description
