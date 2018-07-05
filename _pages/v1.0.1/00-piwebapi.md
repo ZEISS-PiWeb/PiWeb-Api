@@ -1,7 +1,7 @@
 ---
 area: piwebapi
 title: PiWeb API
-permalink: "/piwebapi/"
+permalink: "/"
 sections:
   general:
     title: Overview
