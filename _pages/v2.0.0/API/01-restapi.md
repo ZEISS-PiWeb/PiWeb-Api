@@ -73,4 +73,4 @@ sections:
 
 <h1 id="{{page.sections['dataservice'].anchor}}">{{page.sections['dataservice'].title}}</h1>
 
-{% include_relative 0121-dataservice-serviceinformation.md %}
+{% include_relative 012-dataservice/0121-dataservice-serviceinformation.md %}
