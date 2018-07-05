@@ -59,7 +59,7 @@ For proper usage of this sample application:
 
 <h1 id="{{page.sections['basics'].anchor}}">{{page.sections['basics'].title}}</h1>
 
-{% include_relative 022-basics/0221-configuration.md %}
+{% include_relative 022-basics/0221-basics-configuration.md %}
 
 {% include_relative 022-basics/0223-basics-inspectionplan.md %}
 
