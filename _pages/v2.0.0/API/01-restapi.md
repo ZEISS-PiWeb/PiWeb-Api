@@ -4,7 +4,7 @@ level: 0
 version: 2.0.0
 title: REST Api
 #redirect_from: "/"
-permalink: "/restapi/v2.0.0"
+permalink: "/restapi/v200"
 sections:
   general:
     title: General Information
