@@ -53,7 +53,7 @@ For proper usage of this sample application:
 1. Create a WindowsForms project named 'PiWeb_HelloWorld'
 2. Add PiWebApi.Sample nuget package
 
-{% include_relative 021-general_new.md %}
+{% include_relative 021-general.md %}
 
 <h1 id="{{page.sections['basics'].anchor}}">{{page.sections['basics'].title}}</h1>
 
