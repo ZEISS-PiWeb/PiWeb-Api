@@ -1,0 +1,1 @@
+<h2 id="{{page.sections['basics']['secs']['rawData'].anchor}}">{{page.sections['basics']['secs']['rawData'].title}}</h2>

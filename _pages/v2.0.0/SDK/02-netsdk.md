@@ -3,7 +3,7 @@ area: sdk
 title: .NET SDK
 level: 0
 version: 2.0.0
-permalink: "/sdk/v2"
+permalink: "/sdk/v2.0.0"
 sections:
   general:
     title: General Information
@@ -55,8 +55,14 @@ For proper usage of this sample application:
 
 {% include_relative 021-general.md %}
 
+<p class="dottedline" />
+
 <h1 id="{{page.sections['basics'].anchor}}">{{page.sections['basics'].title}}</h1>
 
 {% include_relative 0221-configuration.md %}
 
-{% include_relative 022-basics.md %}
+{% include_relative 0223-basics-inspectionplan.md %}
+
+{% include_relative 0224-basics-measurementsandvalues.md %}
+
+{% include_relative 0225-basics-rawdata.md %}

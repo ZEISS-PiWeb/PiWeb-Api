@@ -1,6 +1,10 @@
 <h2 id="{{page.sections['basics']['secs']['configuration'].anchor}}">{{page.sections['basics']['secs']['configuration'].title}}</h2>
 
-All types of entities can be described by several attributes. `Configuration` class includes all possible attributes for each entity identified by particular property:
+All types of entities can be described by several attributes. 
+
+## Explain QDAS K-Values an link to WellKnownKey class
+
+`Configuration` class includes all possible attributes for each entity identified by particular property:
 
 <img src="/PiWeb-Api/images/configuration-schema.png" class="img-responsive center-block">
 
@@ -45,4 +49,3 @@ await client.CreateAttributeDefinition( Entity.Part, attributeDefinition );
 
 
 Explain different AttributeDefinition classes
-Explain QDAS K-Values an link to WellKnownKey class
