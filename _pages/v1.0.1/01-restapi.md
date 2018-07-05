@@ -4,7 +4,7 @@ level: 0
 version: 1.0.1
 isCurrent: true
 title: REST Api
-redirect_from: "/"
+# redirect_from: "/"
 permalink: "/restapi/"
 sections:
   general:
