@@ -813,10 +813,6 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 					await _RestClient.Request( RequestBuilder.CreateDelete( "measurements", parameter ), cancellationToken ).ConfigureAwait( false );
 				}
 			}
-			else
-			{
-				await _RestClient.Request( RequestBuilder.CreateDelete( "measurements" ), cancellationToken ).ConfigureAwait( false );
-			}
 		}
 
 		#endregion
