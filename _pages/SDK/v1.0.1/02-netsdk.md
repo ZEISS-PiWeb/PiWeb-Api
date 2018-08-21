@@ -1,7 +1,7 @@
 ---
 area: sdk
 level: 0
-version: 1.0.1
+version: 1.0
 isCurrent: true
 title: .NET SDK
 permalink: "/sdk/"

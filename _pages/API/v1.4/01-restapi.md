@@ -1,11 +1,9 @@
 ---
 area: restApi
 level: 0
-version: 1.0.1
-isCurrent: true
+version: 1.4
 title: REST Api
-redirect_from: "/"
-permalink: "/restapi/"
+permalink: /restapi/v2.0/
 sections:
   general:
     title: General Information
@@ -66,6 +64,8 @@ sections:
         anchor: rs-raw-data-objects
 ---
 
+{% include version_combobox.html %}
+
 <h1 id="{{page.sections['general'].anchor}}">{{page.sections['general'].title}}</h1>
 
 {% include_relative 011-general.md %}
@@ -74,10 +74,22 @@ sections:
 
 <h1 id="{{page.sections['dataservice'].anchor}}">{{page.sections['dataservice'].title}}</h1>
 
-{% include_relative 012-dataservice.md %}
+{% include_relative 012-dataservice/0121-dataservice-serviceinformation.md %}
+
+{% include_relative 012-dataservice/0122-dataservice-configuration.md %}
+
+{% include_relative 012-dataservice/0123-dataservice-catalogs.md %}
+
+{% include_relative 012-dataservice/0124-dataservice-inspectionplan.md %}
+
+{% include_relative 012-dataservice/0125-dataservice-measurementsandvalues.md %}
 
 <p class="dottedline" />
 
 <h1 id="{{page.sections['rawdataservice'].anchor}}">{{page.sections['rawdataservice'].title}}</h1>
 
-{% include_relative 013-rawdataservice.md %}
+{% include_relative 013-rawdataservice/0131-rawdataservice-serviceinformation.md %}
+
+{% include_relative 013-rawdataservice/0132-rawdataservice-rawdatainformation.md %}
+
+{% include_relative 013-rawdataservice/0133-rawdataservice-rawdataobjects.md %}
