@@ -3,7 +3,8 @@ area: restApi
 level: 0
 version: 1.4
 title: REST Api
-permalink: /restapi/v2.0/
+permalink: /restapi/v1.4/
+layout: frame1
 sections:
   general:
     title: General Information
