@@ -4,6 +4,7 @@ title: .NET SDK
 level: 0
 version: 2.0
 permalink: "/sdk/v2.0/"
+layout: frame1
 sections:
   general:
     title: General Information
