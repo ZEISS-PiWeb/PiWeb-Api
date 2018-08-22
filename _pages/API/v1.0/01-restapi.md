@@ -2,7 +2,7 @@
 area: restApi
 level: 0
 version: 1.0
-isCurrent: true
+isCurrentVersion: true
 title: REST Api
 redirect_from: 
   - /
