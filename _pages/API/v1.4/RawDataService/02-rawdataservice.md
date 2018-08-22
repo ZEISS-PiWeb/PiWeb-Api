@@ -28,6 +28,6 @@ sections:
 
 {% include_relative 021-rawdataservice-serviceinformation.md %}
 
-{% include_relative 022-rawdataservice/0132-rawdataservice-rawdatainformation.md %}
+{% include_relative 022-rawdataservice-rawdatainformation.md %}
 
-{% include_relative 023-rawdataservice/0133-rawdataservice-rawdataobjects.md %}
+{% include_relative 023-rawdataservice-rawdataobjects.md %}
