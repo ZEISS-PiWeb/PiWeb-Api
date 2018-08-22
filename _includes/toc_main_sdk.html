@@ -1,0 +1,23 @@
+<ul class="nav navbar-nav-right">
+    <li style="border-left:1px dotted;">
+        <span>
+            {% for node in site.pages %}
+		    {% if node.level == 0 and node.area == sdk and node.isCurrentVersion and node.isCurrentVersion == true %}
+			    <li><a {% if node.area == page.area %}class="active" {% endif %}href="{{site.baseurl}}{{ node.url }}">{{ node.title }}</a></li>
+		    {% endif %}
+            {% endfor %}
+        </span>
+    </li>
+    <li>
+        <span>
+        <img src="/PiWeb-Api/images/octocat-small.png">	
+        <a href="https://github.com/ZEISS-PiWeb/PiWeb-Api">Github page</a>
+        </span>
+    </li>
+    <li>
+        <span>
+        <img src="/PiWeb-Api/images/nugeticon.png" width="16px" height="16px">	
+        <a href="https://www.nuget.org/profiles/Zeiss_IZFM">nuget packages</a>
+        </span>
+    </li>
+</ul>

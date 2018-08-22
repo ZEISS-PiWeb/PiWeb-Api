@@ -2,7 +2,7 @@
 area: general
 level: 0
 version: 1.4
-title: General
+title: General Information
 permalink: /v1.4/
 layout: frame1
 sections:

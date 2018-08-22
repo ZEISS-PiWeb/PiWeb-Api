@@ -26,8 +26,8 @@ sections:
 
 <h1 id="{{page.sections['rawdataservice'].anchor}}">{{page.sections['rawdataservice'].title}}</h1>
 
-{% include_relative 013-rawdataservice/0131-rawdataservice-serviceinformation.md %}
+{% include_relative 021-rawdataservice-serviceinformation.md %}
 
-{% include_relative 013-rawdataservice/0132-rawdataservice-rawdatainformation.md %}
+{% include_relative 022-rawdataservice/0132-rawdataservice-rawdatainformation.md %}
 
-{% include_relative 013-rawdataservice/0133-rawdataservice-rawdataobjects.md %}
+{% include_relative 023-rawdataservice/0133-rawdataservice-rawdataobjects.md %}
