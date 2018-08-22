@@ -1,5 +1,3 @@
-isCurrent-->isCurrentVersion
-
 {% for node in site.pages %}
 		{% if node.level == 0 and node.isCurrentVersion and node.isCurrentVersion == true %}
 			<li><a {% if node.area == page.area %}class="active" {% endif %}href="{{site.baseurl}}{{ node.url }}">{{ node.title }}</a></li>
