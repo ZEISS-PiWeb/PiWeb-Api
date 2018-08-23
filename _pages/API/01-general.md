@@ -5,7 +5,7 @@ version: 1.4
 title: General Information
 permalink: /
 redirect_from: 
-  - /
+  - /PiWeb-Api/restapi/
 layout: frame1
 sections:
   general:
