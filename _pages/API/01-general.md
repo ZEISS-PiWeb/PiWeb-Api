@@ -6,7 +6,6 @@ title: General Information
 permalink: /general
 redirect_from: 
   - /
-layout: frame1
 sections:
   general:
     title: General Information
