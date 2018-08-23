@@ -1,5 +1,5 @@
 ---
-area: restApi
+area: dataService
 level: 0
 version: 1.4
 title: Data Service

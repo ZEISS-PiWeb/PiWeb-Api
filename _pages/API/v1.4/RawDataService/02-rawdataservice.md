@@ -1,5 +1,5 @@
 ---
-area: restApi
+area: rawDataService
 level: 0
 version: 1.4
 title: Rawdata Service
