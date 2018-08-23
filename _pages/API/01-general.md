@@ -3,9 +3,9 @@ area: general
 level: 0
 version: 1.4
 title: General Information
-permalink: /
+permalink: /general
 redirect_from: 
-  - /PiWeb-Api/restapi/
+  - /
 layout: frame1
 sections:
   general:
