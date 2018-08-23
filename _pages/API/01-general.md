@@ -3,7 +3,9 @@ area: general
 level: 0
 version: 1.4
 title: General Information
-permalink: /v1.4/
+permalink: /
+redirect_from: 
+  - /
 layout: frame1
 sections:
   general:

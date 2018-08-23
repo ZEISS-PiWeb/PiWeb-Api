@@ -1,3 +1,27 @@
+---
+area: rawDataService
+level: 0
+version: 1.0
+isCurrentVersion: true
+title: Rawdata Service
+permalink: /rawdataservice/
+sections:
+  rawdataservice:
+    title: Raw Data Service
+    iconName: rawdataservice16
+    anchor: rs
+    secs:
+      serviceInformation:
+        title: Service Information
+        anchor: rs-service-information
+      rawDataInformation:
+        title: Raw Data Information
+        anchor: rs-raw-data-information
+      rawDataObjects:
+        title: Raw Data Objects
+        anchor: rs-raw-data-objects
+---
+
 <h2 id="{{page.sections['rawdataservice']['secs']['serviceInformation'].anchor}}">{{page.sections['rawdataservice']['secs']['serviceInformation'].title}}</h2>
 
 ### Endpoints

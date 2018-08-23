@@ -4,7 +4,6 @@ level: 0
 version: 1.4
 title: Data Service
 permalink: /dataservice/v1.4/
-layout: frame1
 sections:
   dataservice:
     title: Data Service

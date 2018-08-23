@@ -4,7 +4,6 @@ level: 0
 version: 1.4
 title: Rawdata Service
 permalink: /rawdataservice/v1.4/
-layout: frame1
 sections:
   rawdataservice:
     title: Raw Data Service
