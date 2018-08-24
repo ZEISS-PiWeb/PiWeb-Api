@@ -1,7 +1,7 @@
 ---
 area: general
 level: 0
-version: 1.4
+isCurrentVersion: true
 title: General Information
 permalink: /general
 redirect_from: 
