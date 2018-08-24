@@ -178,8 +178,8 @@ h4 code{
   text-decoration: none;
 }
 
-.navbar-default .navbar-nav>a.active,
-.navbar-default .navbar-nav-right>a.active{
+.navbar-default .navbar-nav>li>a.active,
+.navbar-default .navbar-nav-right>li>span>a.active{
 	background-color: #245E9A;
 	border-radius: 4px;
 }
