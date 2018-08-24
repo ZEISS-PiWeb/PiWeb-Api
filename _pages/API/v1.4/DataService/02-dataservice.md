@@ -31,12 +31,12 @@ sections:
 
 <h1 id="{{page.sections['dataservice'].anchor}}">{{page.sections['dataservice'].title}}</h1>
 
-{% include_relative 011-dataservice-serviceinformation.md %}
+{% include_relative 021-dataservice-serviceinformation.md %}
 
-{% include_relative 012-dataservice-configuration.md %}
+{% include_relative 022-dataservice-configuration.md %}
 
-{% include_relative 013-dataservice-catalogs.md %}
+{% include_relative 023-dataservice-catalogs.md %}
 
-{% include_relative 014-dataservice-inspectionplan.md %}
+{% include_relative 024-dataservice-inspectionplan.md %}
 
-{% include_relative 015-dataservice-measurementsandvalues.md %}
+{% include_relative 025-dataservice-measurementsandvalues.md %}
