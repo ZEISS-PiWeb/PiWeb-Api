@@ -3,7 +3,7 @@
         <span>
             {% for node in site.pages %}
 		    {% if node.level == 0 and node.area == 'sdk' and node.isCurrentVersion and node.isCurrentVersion == true %}
-			    <a {% if node.area == page.area %}class="active" {% endif %}href="{{site.baseurl}}{{ node.url }}">{{ node.title }} {{node.area}} {{page.area}}</a>
+			    <a {% if node.area == page.area %}class="active" {% endif %}href="{{site.baseurl}}{{ node.url }}">{{ node.title }}</a>
 		    {% endif %}
             {% endfor %}
         </span>
