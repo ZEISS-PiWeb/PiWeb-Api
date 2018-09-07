@@ -594,6 +594,28 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		public async Task<SimpleMeasurement[]> GetMeasurements( PathInformation partPath = null, MeasurementFilterAttributes filter = null, CancellationToken cancellationToken = default( CancellationToken ) )
 		{
+			if( filter?.MergeAttributes?.Length > 0 )
+			{
+				var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+				if( !featureMatrix.SupportsRestrictMeasurementSearchByMergeAttributes )
+				{
+					throw new OperationNotSupportedOnServerException(
+						"Restricting measurement search by merge attributes is not supported by this server.",
+						DataServiceFeatureMatrix.RestrictMeasurementSearchByMergeAttributesMinVersion,
+						featureMatrix.CurrentInterfaceVersion );
+				}
+			}
+			if( filter?.MergeMasterPart != null )
+			{
+				var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+				if( !featureMatrix.SupportRestrictMeasurementSearchByMergeMasterPart )
+				{
+					throw new OperationNotSupportedOnServerException(
+						"Restricting measurement search by merge master part is not supported by this server.",
+						DataServiceFeatureMatrix.RestrictMeasurementSearchByMergeAttributesMinVersion,
+						featureMatrix.CurrentInterfaceVersion );
+				}
+			}
 			const string requestPath = "measurements";
 
 			// split multiple measurement uuids into chunks of uuids using multiple requests to avoid "Request-URI Too Long" exception
@@ -647,6 +669,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 				var requestUrl = RequestBuilder.CreateGet( requestPath, parameterDefinitions );
 				return await _RestClient.Request<SimpleMeasurement[]>( requestUrl, cancellationToken ).ConfigureAwait( false );
 			}
+
 		}
 
 		/// <summary>
@@ -830,6 +853,18 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		public async Task<DataMeasurement[]> GetMeasurementValues( PathInformation partPath = null, MeasurementValueFilterAttributes filter = null, CancellationToken cancellationToken = default( CancellationToken ) )
 		{
+			if( filter?.MergeAttributes?.Length > 0 )
+			{
+				var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+				if( !featureMatrix.SupportsRestrictMeasurementSearchByMergeAttributes )
+				{
+					throw new OperationNotSupportedOnServerException(
+						"Restricting measurement search by merge attributes is not supported by this server.",
+						DataServiceFeatureMatrix.RestrictMeasurementSearchByMergeAttributesMinVersion,
+						featureMatrix.CurrentInterfaceVersion );
+				}
+			}
+
 			if( filter?.MeasurementUuids?.Length > 0 )
 				return await GetMeasurementValuesSplitByMeasurement( partPath, filter, cancellationToken ).ConfigureAwait( false );
 
