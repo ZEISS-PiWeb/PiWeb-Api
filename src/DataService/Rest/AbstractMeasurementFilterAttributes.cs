@@ -16,7 +16,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 	{
 		#region constants
 
-		protected const string PartUuidsParamName = "partuuids";
+		public const string PartUuidsParamName = "partuuids";
 		protected const string DeepParamName = "deep";
 		protected const string LimitResultParamName = "limitresult";
 		protected const string OrderByParamName = "order";

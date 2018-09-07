@@ -620,6 +620,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 
 			const string requestPath = "measurements";
 
+			// split multiple measurement uuids into chunks of uuids using multiple requests to avoid "Request-URI Too Long" exception
 			if( filter?.MeasurementUuids?.Length > 0 )
 			{
 				var newFilter = filter.Clone();
@@ -641,7 +642,30 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 
 				return result.SelectMany( r => r ).ToArray();
 			}
-			else
+
+			// split multiple part uuids into chunks of uuids using multiple requests to avoid "Request-URI Too Long" exception
+			if( filter?.PartUuids?.Length > 0 )
+			{
+				var newFilter = filter.Clone();
+				newFilter.PartUuids = null;
+
+				var parameterName = AbstractMeasurementFilterAttributes.PartUuidsParamName;
+				var parameterDefinitions = CreateParameterDefinitions( partPath, newFilter );
+
+				//Split into multiple parameter sets to limit uuid parameter lenght
+				var splitter = new ParameterSplitter( this, requestPath );
+				var collectionParameter = CollectionParameterFactory.Create( parameterName, filter.PartUuids );
+				var parameterSets = splitter.SplitAndMerge( collectionParameter, parameterDefinitions );
+
+				//Execute requests in parallel
+				var requests = parameterSets
+					.Select( set => RequestBuilder.CreateGet( requestPath, set.ToArray() ) )
+					.Select( request => _RestClient.Request<SimpleMeasurement[]>( request, cancellationToken ) );
+				var result = await Task.WhenAll( requests ).ConfigureAwait( false );
+
+				return result.SelectMany( r => r ).ToArray();
+			}
+
 			{
 				var parameterDefinitions = CreateParameterDefinitions( partPath, filter ).ToArray();
 				var requestUrl = RequestBuilder.CreateGet( requestPath, parameterDefinitions );
