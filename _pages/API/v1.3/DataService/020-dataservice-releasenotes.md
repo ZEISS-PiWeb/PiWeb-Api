@@ -11,7 +11,7 @@
       <li>New endpoint for searching mesaurement attributes</li>
     </ul>
 {% endcapture %}
-{% capture features %}
+{% capture bugfixes %}
     <ul>
       <li>Characteristics containing measurement values can be moved, now if parent part has not changed.</li>
       <li>If versioning enabled all attributes were deleted if a characteristics was moved.</li>
