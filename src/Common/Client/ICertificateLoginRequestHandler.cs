@@ -13,6 +13,8 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 	#region usings
 
 	using System;
+	using System.Collections.Generic;
+	using System.Security.Cryptography.X509Certificates;
 	using System.Threading.Tasks;
 	using Zeiss.IMT.PiWeb.Api.Common.Utilities;
 
@@ -20,6 +22,12 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 
 	public interface ICertificateLoginRequestHandler : ICacheClearable
 	{
+		#region properties
+
+		ISet<StoreLocation> CertificateStoreLocations { get; }
+
+		#endregion
+
 		#region methods
 
 		Task<CertificateCredential> CertificateRequestAsync( Uri uri, bool preferHardwareCertificate = false );

@@ -13,8 +13,6 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 	#region usings
 
 	using System;
-	using System.Collections.Generic;
-	using System.Security.Cryptography.X509Certificates;
 	using System.Threading.Tasks;
 	using Zeiss.IMT.PiWeb.Api.Common.Utilities;
 
@@ -27,8 +25,6 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 		Task<UsernamePasswordCredential> CredentialRequestAsync( Uri uri );
 
 		UsernamePasswordCredential CredentialRequest( Uri uri );
-
-		ISet<StoreLocation> CertificateStoreLocations { get; }
 
 		#endregion
 	}
