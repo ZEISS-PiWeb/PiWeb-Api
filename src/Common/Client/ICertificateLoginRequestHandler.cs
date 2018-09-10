@@ -27,6 +27,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 	/// </remarks>
 	public interface ICertificateLoginRequestHandler : ICacheClearable
 	{
+
 		#region methods
 
 		/// <summary>
