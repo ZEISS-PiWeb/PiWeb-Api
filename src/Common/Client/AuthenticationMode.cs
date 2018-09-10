@@ -11,32 +11,32 @@
 namespace Zeiss.IMT.PiWeb.Api.Common.Client
 {
 	/// <summary>
-	/// Aufzählung, mit der eingestellt werden kann, ob ein Zertifikat an den Server gesendet werden soll.
+	/// Enum which is used to define the authentication mode when communicating to a server.
 	/// </summary>
 	public enum AuthenticationMode
 	{
 		/// <summary>
-		/// Kein Zertifikat und kein Windowstoken senden - eventuell nach Nutzername/Passwort fragen, falls der Server Basic-Authentifizierung nutzt.
+		/// Send no certificate or windows token - eventually use username / password if the Server uses Basic-Authentication.
 		/// </summary>
 		NoneOrBasic,
 
 		/// <summary>
-		/// Integrierte Windows-Authentifizierung nutzen.
+		/// Use integrated Windows authentication.
 		/// </summary>
 		Windows,
 
 		/// <summary>
-		/// Zertifikat nutzen.
+		/// Use certificate authentication.
 		/// </summary>
 		Certificate,
 
 		/// <summary>
-		/// Hardware-Zertifikat nutzen.
+		/// Use hardware certification authentication
 		/// </summary>
 		HardwareCertificate,
 
 		/// <summary>
-		/// Authentifizierung via OAuth-Protokoll.
+		/// Use OAuth protocol authentication.
 		/// </summary>
 		OAuth,
 	}
