@@ -7,7 +7,7 @@
     {% assign pages = site.pages | sort: 'version' | reversed  %}
     {% for node in pages %}
 		{% if node.level == 0 and node.area == page.area %}
-			<li><a {% if node.version == page.version %}class="active" {% endif %}href="{{site.baseurl}}{{ node.url }}">v{{node.title}}</a></li>
+			<li><a {% if node.version == page.version %}class="active" {% endif %}href="{{site.baseurl}}{{ node.url }}">v{{node.version}}</a></li>
 		{% endif %}
 {% endfor %}
   </ul>
