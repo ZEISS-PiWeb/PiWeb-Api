@@ -1,0 +1,20 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">
+      <span><h3 class="panel-title">{{ version }}</h3></span>
+      <span style="float: right;"></span>
+    </div>
+
+    {% if features %}
+    <div class="panel-body">
+      <b>Features</b><br/>
+      {{ features }}
+    </div>
+    {% endif %}
+
+    {% if bugfixes %}
+    <div class="panel-body">
+      <b>Bugfixes</b><br/>
+      {{ bugfixes }}
+    </div>
+    {% endif %}
+  </div>
