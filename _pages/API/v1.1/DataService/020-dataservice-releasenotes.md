@@ -2,7 +2,7 @@
 
 <p></p>
 
-{% assign version="1.2.0" %}
+{% assign version="1.1.0" %}
 {% capture features %}
     <ul>
       <li>It is possible to fetch current supported interface version by calling service root uri.</li>
