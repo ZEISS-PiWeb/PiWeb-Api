@@ -18,7 +18,7 @@
       <li>It was possible to create a catalog with an empty uuid.</li>
       <li>Path names colid extend maximum length of database cloumn.</li>
       <li>It was not possible to delete mlitiple catalogs at once.</li>
-      <li><i>LastModified</i> restriction on fetching measurements did not work.</li>
+      <li>Restriction by <i>LastModified</i> parameter on fetching measurements did not work.</li>
     </ul>
 {% endcapture %}
 
