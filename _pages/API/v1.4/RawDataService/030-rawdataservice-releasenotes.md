@@ -2,7 +2,7 @@
 
 <p></p>
 
-{% assign version="1.2.0" %}
+{% assign version="1.4.0" %}
 {% capture features %}
     <ul>
       <li>Internal improvements</li>
