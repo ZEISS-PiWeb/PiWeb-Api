@@ -5,7 +5,7 @@
   </button>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
     {% assign pages = site.pages | sort: 'version'  %}
-    {% for node in pages %}
+    {% for node in pages | reversed %}
 		{% if node.level == 0 and node.area == page.area %}
 			<li><a {% if node.version == page.version %}class="active" {% endif %}href="{{site.baseurl}}{{ node.url }}">v{{node.version}}</a></li>
 		{% endif %}
