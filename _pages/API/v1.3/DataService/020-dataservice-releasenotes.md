@@ -9,6 +9,7 @@
       <li>Until now to change catalog's valid attributes, the catalog needed to be deleted an re-created again. This can be done by calling update endpoint, now.</li>
       <li>Endpoint for fetching measurements was extended by <i>mergeAttributes</i> parameter</li>
       <li>New endpoint for searching mesaurement attributes</li>
+      <li>Added HTTP caching to inspection plan search, configuration search and catalog search.</li>
     </ul>
 {% endcapture %}
 {% capture bugfixes %}
