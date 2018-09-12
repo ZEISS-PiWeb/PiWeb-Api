@@ -1,9 +1,9 @@
 ---
 area: rawDataService
 level: 0
-version: 1.4
+version: 1.3
 title: Rawdata Service
-permalink: /rawdataservice/v1.4/
+permalink: /rawdataservice/v1.3/
 sections:
   rawdataservice:
     title: Raw Data Service
