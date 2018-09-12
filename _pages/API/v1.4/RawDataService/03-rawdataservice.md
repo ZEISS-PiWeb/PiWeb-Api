@@ -10,6 +10,9 @@ sections:
     iconName: rawdataservice16
     anchor: rs
     secs:
+      releaseNotes:
+        title: Release Notes
+        anchor: rs-release-notes
       serviceInformation:
         title: Service Information
         anchor: rs-service-information
