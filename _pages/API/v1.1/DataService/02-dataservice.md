@@ -13,6 +13,9 @@ sections:
       releaseNotes:
         title: Release Notes
         anchor: ds-release-notes
+      interfaceinformation:
+        title: Interface Information
+        anchor: ds-interface-information
       serviceInformation:
         title: Service Information
         anchor: ds-service-information
@@ -36,12 +39,14 @@ sections:
 
 {% include_relative 020-dataservice-releasenotes.md %}
 
-{% include_relative 021-dataservice-serviceinformation.md %}
+{% include_relative 021-dataservice-interfaceinformation.md %}
 
-{% include_relative 022-dataservice-configuration.md %}
+{% include_relative 022-dataservice-serviceinformation.md %}
 
-{% include_relative 023-dataservice-catalogs.md %}
+{% include_relative 023-dataservice-configuration.md %}
 
-{% include_relative 024-dataservice-inspectionplan.md %}
+{% include_relative 024-dataservice-catalogs.md %}
 
-{% include_relative 025-dataservice-measurementsandvalues.md %}
+{% include_relative 025-dataservice-inspectionplan.md %}
+
+{% include_relative 026-dataservice-measurementsandvalues.md %}
