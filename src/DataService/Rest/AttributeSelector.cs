@@ -39,7 +39,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		public AttributeSelector( ushort[] attributes )
 		{
 			AllAttributes = AllAttributeSelection.False;
-			AllAttributesSpecified = true;
+			AllAttributesSpecified = false;
 			Attributes = attributes;
 		}
 
