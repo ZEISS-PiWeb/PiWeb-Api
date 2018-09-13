@@ -13,7 +13,7 @@ sections:
       releaseNotes:
         title: Release Notes
         anchor: ds-release-notes
-      interfaceinformation:
+      interfaceInformation:
         title: Interface Information
         anchor: ds-interface-information
       serviceInformation:
