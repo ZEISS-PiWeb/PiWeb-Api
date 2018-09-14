@@ -41,12 +41,12 @@ sections:
 
 {% include_relative 021-dataservice-interfaceinformation.md %}
 
-{% include_relative 021-dataservice-serviceinformation.md %}
+{% include_relative 022-dataservice-serviceinformation.md %}
 
-{% include_relative 022-dataservice-configuration.md %}
+{% include_relative 023-dataservice-configuration.md %}
 
-{% include_relative 023-dataservice-catalogs.md %}
+{% include_relative 024-dataservice-catalogs.md %}
 
-{% include_relative 024-dataservice-inspectionplan.md %}
+{% include_relative 025-dataservice-inspectionplan.md %}
 
-{% include_relative 025-dataservice-measurementsandvalues.md %}
+{% include_relative 026-dataservice-measurementsandvalues.md %}
