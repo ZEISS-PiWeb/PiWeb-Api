@@ -72,6 +72,10 @@ GET /dataServiceRest/configuration HTTP/1.1
 {% assign summary="Checks if at least an attribute with :key and :value exists" %}
 {% assign description="If at least one entry with value for the given key exists HTTP status code 204 otherwise 404 is returned." %}
 
+{% assign exampleCaption="" %}
+{% assign jsonrequest="" %}
+{% assign jsonresponse="" %}
+
 {% include endpointTab.html %}
 
 
