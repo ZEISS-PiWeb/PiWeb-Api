@@ -33,7 +33,9 @@
         aria-labelledby={{ '"heading' | append: linkId | append: '"' }}>
     <div class="panel-body">
       {{ description | markdownify }}
-      {% include exampleFieldset.html %}
+      {% if jsonrequest.size > 0 %}
+        {% include exampleFieldset.html %}
+      {% endif %}
     </div>
   </div>
 </div>

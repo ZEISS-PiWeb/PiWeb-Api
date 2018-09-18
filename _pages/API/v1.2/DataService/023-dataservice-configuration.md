@@ -68,7 +68,7 @@ GET /dataServiceRest/configuration HTTP/1.1
 
 {% assign linkId="configurationCheckEndpointGet" %}
 {% assign method="GET" %}
-{% assign endpoint="/configuration/:key/:value" %}
+{% assign endpoint="/attributes/:key/:value" %}
 {% assign summary="Checks if at least an attribute with :key and :value exists" %}
 {% assign description="If at least one entry with value for the given key exists HTTP status code 204 otherwise 404 is returned." %}
 
