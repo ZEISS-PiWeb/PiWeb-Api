@@ -7,7 +7,7 @@
     <ul>
       <li>Endpoint for deleting measurements was extended by parameter <i>deep</i> and <i>aggregation.</i></li>
       <li>Endpoint for fetching service information returns last modified timestamp for catalogs, now.</li>
-      <li>New endpoint <i>configuration/{key}/{value}</i> was added. It checks if a certain attribute does exist.</li>
+      <li>New endpoint <i>attributes/{key}/{value}</i> was added. It checks if a certain attribute with the given value does exist.</li>
     </ul>
 {% endcapture %}
 {% capture bugfixes %}
