@@ -218,6 +218,7 @@ Delete condition for deleting measurements from a single or multiple parts may b
 <nobr><code>Path</code> partPath </nobr> | Restricts the query to this part <br> `partPath=/metal%20part`
 <nobr><code>Condition</code> searchCondition </nobr>| The query will only return items matching all conditions. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ]. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`
 <nobr><code>Measurements, AggregationMeasurements, All</code> aggregation </nobr><br><i>default:</i> <code>Measurements</code> | Specifies which types of measurements will be deleted. <br> `aggregation=All`
+<nobr><code>bool</code> deep </nobr><br><i>default:</i> <code>false</code> | Determines whether the query should delete only measurements for the given part(s) specified by either <i>partPath</i> or <i>partUuids.</i><br> `deep=true`
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
 

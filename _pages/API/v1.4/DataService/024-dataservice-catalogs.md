@@ -216,9 +216,10 @@ Update a catalog when you want to:
 * rename the catalog and/or
 * update existing catalog entries.
 
-To update a catalog, the whole object, excluding the valid attributes, needs to be transmitted in the body of the HTTP request. Updating a catalog essentially replaces the current catalog entries with the new one (*delete* followed by an *add*) in a single transaction.
+To update a catalog, the whole object, including the valid attributes, needs to be transmitted in the body of the HTTP request. Updating a catalog essentially replaces the current catalog entries with the new one (*delete* followed by an *add*) in a single transaction. 
 
-{{site.images['info']}} To change the valid attributes, the catalog needs to be deleted an re-created again.
+{{site.images['warning']}} All attribute entries for existing entities are set to *undefined*!
+
 {% endcapture %}
 {% assign exampleCaption="Rename the catalog from 'InspectorCatalog' to 'Inspectors' and change the inspector's name from 'Smith' to  'Clarks'" %}
 

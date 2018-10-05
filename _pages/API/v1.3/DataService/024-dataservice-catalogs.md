@@ -217,6 +217,7 @@ Update a catalog when you want to:
 * update existing catalog entries.
 
 To update a catalog, the whole object, including the valid attributes, needs to be transmitted in the body of the HTTP request. Updating a catalog essentially replaces the current catalog entries with the new one (*delete* followed by an *add*) in a single transaction. 
+
 {{site.images['warning']}} All attribute entries for existing entities are set to *undefined*!
 
 {% endcapture %}

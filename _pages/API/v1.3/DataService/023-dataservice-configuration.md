@@ -66,7 +66,6 @@ GET /dataServiceRest/configuration HTTP/1.1
 
 {% include endpointTab.html %}
 
-
 {% assign linkId="configurationEndpointAdd" %}
 {% assign method="POST" %}
 {% assign endpoint="/configuration/:pluralizedEntityType" %}
@@ -175,6 +174,20 @@ DELETE /dataServiceRest/configuration/part/{1001, 1002} HTTP/1.1
 HTTP/1.1 200 Ok
 {% endhighlight %}
 {% endcapture %}
+
+{% include endpointTab.html %}
+
+<br/>
+
+{% assign linkId="configurationCheckEndpointGet" %}
+{% assign method="GET" %}
+{% assign endpoint="/attributes/:key/:value" %}
+{% assign summary="Checks if at least an attribute with :key and :value exists" %}
+{% assign description="If at least one entry with value for the given key exists HTTP status code 204 otherwise 404 is returned." %}
+
+{% assign exampleCaption="" %}
+{% assign jsonrequest="" %}
+{% assign jsonresponse="" %}
 
 {% include endpointTab.html %}
 

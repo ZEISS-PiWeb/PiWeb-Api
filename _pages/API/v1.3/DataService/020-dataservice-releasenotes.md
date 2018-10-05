@@ -7,9 +7,10 @@
     <ul>
       <li>Endpoint for getting characteristics was changed: Restriction by part uuids was removed and restriction by characteristic uuids was added.</li>
       <li>Until now to change catalog's valid attributes, the catalog needed to be deleted an re-created again. This can be done by calling update endpoint, now.</li>
-      <li>Endpoint for fetching measurements was extended by <i>mergeAttributes</i> parameter</li>
-      <li>New endpoint for searching mesaurement attributes</li>
-      <li>Added HTTP caching to inspection plan search, configuration search and catalog search.</li>
+      <li>Endpoint for fetching measurements was extended by <i>mergeAttributes</i> parameter.</li>
+      <li>New endpoint for searching measurement attributes.</li>
+      <li>Added HTTP caching to inspection plan search.</li>
+      <li>Added caching logic on server to increase performance on fetching configuration or catalog(s).</li>
     </ul>
 {% endcapture %}
 {% capture bugfixes %}

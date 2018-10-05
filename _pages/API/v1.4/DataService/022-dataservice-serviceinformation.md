@@ -68,5 +68,6 @@ Property                                                   | Description
 <nobr><code>DateTime</code> inspectionPlanTimestamp</nobr> | Timestamp of the last inspection plan modification
 <nobr><code>DateTime</code> measurementTimestamp</nobr>    | Timestamp of the last measurement modification
 <nobr><code>DateTime</code> configurationTimestamp</nobr>  | Timestamp of the last configuration modification
+<nobr><code>DateTime</code> catalogTimestamp</nobr>        | Timestamp of the last catalog modification
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
