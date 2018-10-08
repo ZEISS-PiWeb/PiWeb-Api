@@ -105,8 +105,6 @@
     <Compile Include="Common\Data\Converter\DataCharacteristicConverter.cs" />
     <Compile Include="Common\Data\Converter\PathInformationConverter.cs" />
     <Compile Include="Common\Data\Converter\StreamingConverter.cs" />
-    <Compile Include="Common\Data\DatabaseSynchronizationInformation.cs" />
-    <Compile Include="Common\Data\DatabaseSynchronizationResult.cs" />
     <Compile Include="Common\Data\FilterString\FilterStringException.cs" />
     <Compile Include="Common\Data\FilterString\Formatter\FilterTreeFormatter.cs" />
     <Compile Include="Common\Data\FilterString\Formatter\FormaterException.cs" />
