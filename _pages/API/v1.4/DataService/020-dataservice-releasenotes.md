@@ -15,7 +15,7 @@
 {% capture Features %}
     <ul>
     <li>Endpoint for getting measurements was extended by parameters <i>mergeCondition</i> and <i>mergeMasterPart</i>.</li>
-    <li>Sever setting: Possibility to prevent a part to be deleted if there measurements belong to this part.</li>
+    <li>Sever setting: Possibility to prevent a part to be deleted if there are still measurements belonging to this part.</li>
     </ul>
 {% endcapture %}
 {% capture Bugfixes %}

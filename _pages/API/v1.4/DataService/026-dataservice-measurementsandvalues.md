@@ -29,6 +29,8 @@ You can fetch all measurements or certain measurements only. Possible filter uri
 <nobr><code>None, Simple, Detailed</code> statistics </nobr><br><i>default:</i> <code>None</code> | Indicates how statistical informtaion should be returned: <br><code>None</code> = Return no information<br><code>Simple</code> = Return statistical information including numvber of characteristics out of warning limit, number of characteristics out of tolerance and number of characteristics in warning limit and tolerance<br><code>Detailed</code> = Return statistical information the same way as <code>Simple</code> plus the guid for each characteristic <br> `statistics=Simple`
 <nobr><code>Measurements, AggregationMeasurements, All</code> aggregation </nobr><br><i>default:</i> <code>Measurements</code> | Specifies which types of measurements will be fetched. <br> `aggregation=All`
 <nobr><code>int List</code> mergeAttributes</nobr> | Specifies the list of primary measurement keys to be used for joining measurements accross multiple parts on the server side. <br> `mergeAttributes=4,6`
+<nobr><code>None, MeasurementsInAtLeastTwoParts, MeasurementsInAllParts</code> mergeCondition <br><i>default:</i> <code>MeasurementsInAllParts</code></nobr> | Specifies the condition that must be adhered to when merging measurements accross multiple parts using a primary key.
+<nobr><code>Guid</code> mergeMasterPart</nobr> | Specifies the part to be used as master part when merging measurements accross multiple parts using a primary key.
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
 

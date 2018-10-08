@@ -203,6 +203,8 @@ Parameter name                                                                 |
 
 In both cases the request deletes the part itself as well as all its child parts and child characteristics. If both parameters are set only the `partUuids` parameter will be considered.
 
+{{ site.images['info'] }} If option "Parts with measurement data can be deleted" is deactivated parts containing measurements will not be deleted.
+
 {% endcapture %}
 
 {% assign exampleCaption="Delete the part 'metal part' and its children." %}
@@ -227,6 +229,8 @@ HTTP/1.1 200 Ok
 {% assign summary="Delete a part by its :partUuid" %}
 {% capture description %}
 Deleting a part also deletes all its children.
+
+{{ site.images['info'] }} If option "Parts with measurement data can be deleted" is deactivated parts containing measurements will not be deleted.
 {% endcapture %}
 
 {% assign exampleCaption="Delete the part 'metal part' and all entities beneath it by the part's guid" %}
