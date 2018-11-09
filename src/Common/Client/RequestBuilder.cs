@@ -150,7 +150,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 			return request;
 		}
 
-		internal static string AppendParameters( string relativeUri, IEnumerable<ParameterDefinition> parameterDefinitions )
+		public static string AppendParameters( string relativeUri, IEnumerable<ParameterDefinition> parameterDefinitions )
 		{
 			if( parameterDefinitions == null )
 				return relativeUri;

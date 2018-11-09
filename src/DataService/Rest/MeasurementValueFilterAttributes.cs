@@ -31,10 +31,6 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		private const string RequestedMeasurementAttributesParamName = "requestedmeasurementattributes";
 		public const string CharacteristicsUuidListParamName = "characteristicuuids";
 
-		private const string MergeAttributesParamName = "mergeattributes";
-		private const string MergeConditionParamName = "mergecondition";
-		private const string MergeMasterPartParamName = "mergemasterpart";
-
 		#endregion
 
 		#region constructors
@@ -46,9 +42,6 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		{
 			RequestedValueAttributes = new AttributeSelector( AllAttributeSelection.True );
 			RequestedMeasurementAttributes = new AttributeSelector( AllAttributeSelection.True );
-
-			MergeCondition = MeasurementMergeCondition.MeasurementsInAllParts;
-			MergeMasterPart = null;
 		}
 
 		#endregion
@@ -69,25 +62,6 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		/// Gets or sets the list of characteristic uuids that should be returned.
 		/// </summary>
 		public Guid[] CharacteristicsUuidList { get; set; }
-
-		/// <summary>
-		/// Specifies the list of primary measurement keys to be used for joining measurements accross multiple parts on the server side.
-		/// </summary>
-		public ushort[] MergeAttributes { get; set; }
-
-		/// <summary>
-		/// Specifies the condition that must be adhered to
-		/// when merging measurements accross multiple parts using a primary key.
-		/// Default value is <code>MeasurementMergeCondition.MeasurementsInAllParts</code>.
-		/// </summary>
-		public MeasurementMergeCondition MergeCondition { get; set; }
-
-		/// <summary>
-		/// Specifies the part to be used as master part
-		/// when merging measurements accross multiple parts using a primary key.
-		/// Default value is <code>false</code>.
-		/// </summary>
-		public Guid? MergeMasterPart { get; set; }
 
 		#endregion
 
@@ -111,10 +85,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 			string searchCondition,
 			string aggregation,
 			string fromModificationDate,
-			string toModificationDate,
-			string mergeAttributes,
-			string mergeCondition,
-			string mergeMasterPart )
+			string toModificationDate )
 		{
 			var items = new[]
 			{
@@ -130,9 +101,6 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 				Tuple.Create( AggregationParamName, aggregation ),
 				Tuple.Create( FromModificationDateParamName, fromModificationDate ),
 				Tuple.Create( ToModificationDateParamName, toModificationDate ),
-				Tuple.Create( MergeAttributesParamName, mergeAttributes ),
-				Tuple.Create( MergeConditionParamName, mergeCondition ),
-				Tuple.Create( MergeMasterPartParamName, mergeMasterPart )
 			};
 
 			var result = new MeasurementValueFilterAttributes();
@@ -184,15 +152,6 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 						case FromModificationDateParamName:
 							result.FromModificationDate = XmlConvert.ToDateTime( value, XmlDateTimeSerializationMode.RoundtripKind );
 							break;
-						case MergeAttributesParamName:
-							result.MergeAttributes = RestClientHelper.ConvertStringToUInt16List( value );
-							break;
-						case MergeConditionParamName:
-							result.MergeCondition = (MeasurementMergeCondition)Enum.Parse( typeof( MeasurementMergeCondition ), value );
-							break;
-						case MergeMasterPartParamName:
-							result.MergeMasterPart = string.IsNullOrWhiteSpace( value ) ? (Guid?)null : Guid.Parse( value );
-							break;
 					}
 				}
 				catch( Exception ex )
@@ -209,9 +168,6 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 						"orderBy:[ushort asc|desc, ushort asc|desc, ...]\r\n" +
 						"searchCondition:[search filter string]\r\n" +
 						"aggregation:[Measurements|AggregationMeasurements|Default|All]\r\n" +
-						"mergeAttributes:[list of measurement attributes]\r\n" +
-						"mergeCondition: [None|MeasurementsInAtLeastTwoParts|MeasurementsInAllParts]\r\n" +
-						"mergeMasterPart: [part uuid]\r\n" +
 						"fromModificationDate:[Date]\r\n" +
 						"toModificationDate:[Date]" ), ex );
 				}
@@ -237,10 +193,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 				MeasurementUuids = MeasurementUuids,
 				AggregationMeasurements = AggregationMeasurements,
 				FromModificationDate = FromModificationDate,
-				ToModificationDate = ToModificationDate,
-				MergeAttributes = MergeAttributes,
-				MergeCondition = MergeCondition,
-				MergeMasterPart = MergeMasterPart
+				ToModificationDate = ToModificationDate
 			};
 		}
 
@@ -286,15 +239,6 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 
 			if( ToModificationDate.HasValue )
 				result.Add( ParameterDefinition.Create( ToModificationDateParamName, XmlConvert.ToString( ToModificationDate.Value, XmlDateTimeSerializationMode.RoundtripKind ) ) );
-
-			if( MergeAttributes != null && MergeAttributes.Length > 0 )
-				result.Add( ParameterDefinition.Create( MergeAttributesParamName, RestClientHelper.ConvertUshortArrayToString( MergeAttributes ) ) );
-
-			if( MergeCondition != MeasurementMergeCondition.MeasurementsInAllParts )
-				result.Add( ParameterDefinition.Create( MergeConditionParamName, MergeCondition.ToString() ) );
-
-			if( MergeMasterPart != null )
-				result.Add( ParameterDefinition.Create( MergeMasterPartParamName, MergeMasterPart.ToString() ) );
 
 			return result.ToArray();
 		}

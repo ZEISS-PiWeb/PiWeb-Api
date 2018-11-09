@@ -24,7 +24,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 	/// Represents a HTTP GET parameter that has a collection of values.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	internal class CollectionParameterDefinition<T>
+	public  class CollectionParameterDefinition<T>
 	{
 		#region constants
 
@@ -95,7 +95,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 	/// <summary>
 	/// Helper Factory to create typed CollectionParameterDefinitions.
 	/// </summary>
-	internal static class CollectionParameterFactory
+	public static class CollectionParameterFactory
 	{
 		public static CollectionParameterDefinition<Guid> Create( string name, IEnumerable<Guid> values )
 		{
