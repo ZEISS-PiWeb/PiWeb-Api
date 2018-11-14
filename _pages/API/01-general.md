@@ -41,16 +41,17 @@ sections:
 
 This section gives you a brief overview of the PiWeb domain model and explains common terminology used for the PiWeb API.
 
-The PiWeb domain model is centered around the idea of a **part**. A part describes a workpiece in general.
-Each part has multiple **characteristics** whose **values** can be measured.
-Measured **values** can either be numerical (e.g. a diameter) or attributive (e.g. a surface might be _scratched_ or _dented_).
-**Measurements** and **measurement values** can also contain **binary data**, e.g. an image or plotted outline of the workpiece. **Binary data** can further be uploaded to parts, most commonly a CAD model.
+The PiWeb domain model is centered around the idea of a **part**. A part describes a workpiece in general, in other words a workpiece type. A part can also be used to represent a workpiece during the different stages of manufacturing, e.g. PartA_stage1 and PartA_stage2.
+Each part has multiple **characteristics**. Parts and characteristics are organized in a tree structure. Parts can be nested within other parts. And characteristics can contain sub-characteristics.
 
-Parts, characteristics, measurements and measurement values are **PiWeb entities**. Each entity type has a separate configuration of **attributes**. Common attributes for measurements are, for example, the measurement date or the part identifier. The latter identifies the specific workpiece that was manufactured. Attributes can be numbers, dates, text or a predefined set of values, a so-called **catalog**.
+A measurements always measures a set of characteristics of a specific part. This means that each measurement may contain multiple *measurement values*. **Measurement values** can either be numerical (e.g. a diameter) or attributive (e.g. a surface might be _scratched_ or _dented_), depending on the type of characteristic.
+
+In PiWeb we can further attach binary data to **measurements** and **measurement values**, e.g. an image or plotted outline of the workpiece. **Binary data** can also be attached to parts, most commonly CAD models.
+
+Parts, characteristics, measurements and measurement values are **PiWeb entities**. Each entity type has a separate configuration of **attributes**. Common attributes for measurements are the measurement date or a part identifier. The latter identifies the specific workpiece. Attributes can be numbers, dates, text or a predefined set of values, a so-called **catalog**.
 
 The following image represents a simplified version of the PiWeb domain model.
 
-<br>
 <br>
 
 <img src="/PiWeb-Api/images/model.png">
