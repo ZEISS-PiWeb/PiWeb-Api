@@ -39,17 +39,15 @@ sections:
 
 <h2 id="{{page.sections['general']['secs']['model'].anchor}}">{{page.sections['general']['secs']['model'].title}}</h2>
 
-<img src="/PiWeb-Api/images/model.png">
-
-The PiWeb domain model is centered around the idea of a **part**. A **part** describes a workpiece in general.
-
-Each part has multiple **characteristics** whose **values** must be measured.
-
+The PiWeb domain model is centered around the idea of a **part**. A part describes a workpiece in general.
+Each part has multiple **characteristics** whose **values** can be measured.
 Measured **values** can either be numerical (e.g. a diameter) or attributive (e.g. a surface might be _scratched_ or _dented_).
+**Measurements** and **measurement values** can also contain **binary data**, e.g. an image or plotted outline of the workpiece. **Binary data** can further be uploaded to parts, most commonly a CAD model.
 
-**Measurements** can also contain **binary data**, e.g. an image or plotted outline of the workpiece.
+Parts, characteristics, measurements and measurement values are **PiWeb entities**. Each entity type has a separate configuration of **attributes**. Common attributes for measurements are, for example, the measurement date or the part identifier. The latter identifies the specific workpiece that was manufactured. Attributes can be numbers, dates, text or a predefined set of values, a so-called **catalog**.
 
-Measurements also contain the information which specific workpiece was measured, e.g. through a part identifier.
+The following image represents a simplified version of the PiWeb domain model.
+<img src="/PiWeb-Api/images/model.png">
 
 <h2 id="{{page.sections['general']['secs']['addresses'].anchor}}">{{page.sections['general']['secs']['addresses'].title}}</h2>
 
