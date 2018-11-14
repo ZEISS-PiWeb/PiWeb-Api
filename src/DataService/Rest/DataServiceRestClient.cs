@@ -605,6 +605,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 						featureMatrix.CurrentInterfaceVersion );
 				}
 			}
+
 			if( filter?.MergeMasterPart != null )
 			{
 				var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
@@ -616,6 +617,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 						featureMatrix.CurrentInterfaceVersion );
 				}
 			}
+
 			const string requestPath = "measurements";
 
 			// split multiple measurement uuids into chunks of uuids using multiple requests to avoid "Request-URI Too Long" exception

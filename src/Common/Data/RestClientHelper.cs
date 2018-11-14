@@ -217,7 +217,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 		/// <summary>
 		/// Returns the length of an elment of type <typeparam name="T"/> within an uri
 		/// </summary>
-		public static int LengthOfListElementInUri<T>( T listElement )
+		internal static int LengthOfListElementInUri<T>( T listElement )
 		{
 			var escapedElement = Uri.EscapeDataString( listElement.ToString() );
 			var length = escapedElement.Length;
@@ -229,7 +229,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 		/// Provides the remaining size for parameters calculated by difference of <paramref name="maxUriLength"/> and the combination <paramref name="serviceLocation"/>, <paramref name="requestPath"/> and <paramref name="parameterDefinitions"/>
 		/// <remarks><paramref name="requestPath"/> and <paramref name="parameterDefinitions"/> must not contain any values (except for lists: empty brackets) but only fix parameter name </remarks>
 		/// </summary>
-		public static int GetUriTargetSize( Uri serviceLocation, string requestPath, int maxUriLength, params ParameterDefinition[] parameterDefinitions )
+		internal static int GetUriTargetSize( Uri serviceLocation, string requestPath, int maxUriLength, params ParameterDefinition[] parameterDefinitions )
 		{
 			var endpointUriString = RequestUriHelper.MakeRequestUri( serviceLocation, requestPath, parameterDefinitions ).ToString();
 			return Math.Max( maxUriLength - endpointUriString.Length, 0 );

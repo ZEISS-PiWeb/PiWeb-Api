@@ -24,7 +24,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 	/// <summary>
 	/// Used to split collection parameters into smaller chunks, to prevent errors caused by long URIs.
 	/// </summary>
-	public class ParameterSplitter
+	internal class ParameterSplitter
 	{
 		#region members
 

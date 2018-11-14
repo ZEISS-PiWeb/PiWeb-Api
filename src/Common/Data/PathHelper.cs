@@ -326,7 +326,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 		/// Converts <paramref name="path"/> to a string in database format.
 		/// </summary>
 		[NotNull]
-		public static string PathInformation2DatabaseString( [NotNull]PathInformation path )
+		internal static string PathInformation2DatabaseString( [NotNull]PathInformation path )
 		{
 			if( path == null ) throw new ArgumentNullException( nameof( path ) );
 
