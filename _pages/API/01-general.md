@@ -39,6 +39,8 @@ sections:
 
 <h2 id="{{page.sections['general']['secs']['model'].anchor}}">{{page.sections['general']['secs']['model'].title}}</h2>
 
+This section gives you a brief overview of the PiWeb domain model and explains common terminology used for the PiWeb API.
+
 The PiWeb domain model is centered around the idea of a **part**. A part describes a workpiece in general.
 Each part has multiple **characteristics** whose **values** can be measured.
 Measured **values** can either be numerical (e.g. a diameter) or attributive (e.g. a surface might be _scratched_ or _dented_).
@@ -47,6 +49,10 @@ Measured **values** can either be numerical (e.g. a diameter) or attributive (e.
 Parts, characteristics, measurements and measurement values are **PiWeb entities**. Each entity type has a separate configuration of **attributes**. Common attributes for measurements are, for example, the measurement date or the part identifier. The latter identifies the specific workpiece that was manufactured. Attributes can be numbers, dates, text or a predefined set of values, a so-called **catalog**.
 
 The following image represents a simplified version of the PiWeb domain model.
+
+<br>
+<br>
+
 <img src="/PiWeb-Api/images/model.png">
 
 <h2 id="{{page.sections['general']['secs']['addresses'].anchor}}">{{page.sections['general']['secs']['addresses'].title}}</h2>
