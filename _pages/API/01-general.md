@@ -12,6 +12,9 @@ sections:
     iconName: generalInformation16
     anchor: gi
     secs:
+     model:
+        title: Domain Model
+        anchor: gi-model
      addresses:
         title: Addresses
         anchor: gi-addresses
@@ -33,6 +36,20 @@ sections:
 ---
 
 <h1 id="{{page.sections['general'].anchor}}">{{page.sections['general'].title}}</h1>
+
+<h2 id="{{page.sections['general']['secs']['model'].anchor}}">{{page.sections['general']['secs']['model'].title}}</h2>
+
+<img src="/PiWeb-Api/images/model.png">
+
+The PiWeb domain model is centered around the idea of a **part**. A **part** describes a workpiece in general.
+
+Each part has multiple **characteristics** whose **values** must be measured.
+
+Measured **values** can either be numerical (e.g. a diameter) or attributive (e.g. a surface might be _scratched_ or _dented_).
+
+**Measurements** can also contain **binary data**, e.g. an image or plotted outline of the workpiece.
+
+Measurements also contain the information which specific workpiece was measured, e.g. through a part identifier.
 
 <h2 id="{{page.sections['general']['secs']['addresses'].anchor}}">{{page.sections['general']['secs']['addresses'].title}}</h2>
 
