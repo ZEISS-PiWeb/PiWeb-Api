@@ -12,6 +12,9 @@ sections:
     iconName: generalInformation16
     anchor: gi
     secs:
+     model:
+        title: Domain Model
+        anchor: gi-model
      addresses:
         title: Addresses
         anchor: gi-addresses
@@ -33,6 +36,24 @@ sections:
 ---
 
 <h1 id="{{page.sections['general'].anchor}}">{{page.sections['general'].title}}</h1>
+
+<h2 id="{{page.sections['general']['secs']['model'].anchor}}">{{page.sections['general']['secs']['model'].title}}</h2>
+
+This section gives you a brief overview of the PiWeb domain model and explains common terminology used for the PiWeb API.
+
+The PiWeb domain model is centered around the idea of a **part**. A part describes a workpiece in general, in other words a workpiece type. Each part has multiple **characteristics**. Parts and characteristics are organized in a tree structure. Parts can be nested within other parts. And characteristics can contain sub-characteristics.
+
+A measurements always measures a set of characteristics of a specific part. This means that each measurement may contain multiple *measurement values*. **Measurement values** can either be numerical (e.g. a diameter) or attributive (e.g. a surface might be _scratched_ or _dented_), depending on the type of characteristic.
+
+In PiWeb we can further attach binary data to **measurements** and **measurement values**, e.g. an image or plotted outline of the workpiece. **Binary data** can also be attached to parts, most commonly CAD models.
+
+Parts, characteristics, measurements and measurement values are **PiWeb entities**. Each entity type has a separate configuration of **attributes**. Common attributes for measurements are the measurement date or a part identifier. The latter identifies the specific workpiece. Attributes can be numbers, dates, text or a predefined set of values, a so-called **catalog**.
+
+The following image represents a simplified version of the PiWeb domain model.
+
+<br>
+
+<img src="/PiWeb-Api/images/model.png">
 
 <h2 id="{{page.sections['general']['secs']['addresses'].anchor}}">{{page.sections['general']['secs']['addresses'].title}}</h2>
 
