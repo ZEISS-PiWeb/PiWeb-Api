@@ -13,6 +13,9 @@ sections:
       releaseNotes:
         title: Release Notes
         anchor: rs-release-notes
+      interfaceInformation:
+        title: Interface Information
+        anchor: rs-interface-information
       serviceInformation:
         title: Service Information
         anchor: rs-service-information
@@ -30,8 +33,10 @@ sections:
 
 {% include_relative 030-rawdataservice-releasenotes.md %}
 
-{% include_relative 031-rawdataservice-serviceinformation.md %}
+{% include_relative 031-rawdataservice-interfaceinformation.md %}
 
-{% include_relative 032-rawdataservice-rawdatainformation.md %}
+{% include_relative 032-rawdataservice-serviceinformation.md %}
 
-{% include_relative 033-rawdataservice-rawdataobjects.md %}
+{% include_relative 033-rawdataservice-rawdatainformation.md %}
+
+{% include_relative 034-rawdataservice-rawdataobjects.md %}
