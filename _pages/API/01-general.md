@@ -53,7 +53,7 @@ The following image represents a simplified version of the PiWeb domain model.
 
 <br>
 
-<img src="/PiWeb-Api/images/model.png">
+<img src="/PiWeb-Api/images/model.png" class="img-responsive center-block">
 
 <h2 id="{{page.sections['general']['secs']['addresses'].anchor}}">{{page.sections['general']['secs']['addresses'].title}}</h2>
 
