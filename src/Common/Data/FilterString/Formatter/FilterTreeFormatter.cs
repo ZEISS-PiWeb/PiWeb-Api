@@ -14,7 +14,8 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data.FilterString.Formatter
 
 	using System;
 	using System.Collections.Generic;
-	using PiWebApi.Annotations;
+
+	using JetBrains.Annotations;
 	using Zeiss.IMT.PiWeb.Api.Common.Data.FilterString.Tree;
 
 	#endregion

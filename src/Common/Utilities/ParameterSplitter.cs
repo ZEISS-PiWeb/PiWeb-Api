@@ -15,7 +15,8 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using PiWebApi.Annotations;
+
+	using JetBrains.Annotations;
 	using Zeiss.IMT.PiWeb.Api.Common.Client;
 	using Zeiss.IMT.PiWeb.Api.Common.Data;
 

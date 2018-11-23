@@ -14,7 +14,8 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data.FilterString.Tree
 
 	using System;
 	using System.Text;
-	using PiWebApi.Annotations;
+
+	using JetBrains.Annotations;
 
 	#endregion
 

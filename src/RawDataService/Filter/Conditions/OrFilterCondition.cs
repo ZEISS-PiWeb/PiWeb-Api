@@ -15,7 +15,7 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Filter.Conditions
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using PiWebApi.Annotations;
+	using JetBrains.Annotations;
 	using Zeiss.IMT.PiWeb.Api.Common.Data.FilterString.Tree;
 
 	#endregion

@@ -10,7 +10,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data.FilterString.Formatter
 {
 	#region usings
 
-	using PiWebApi.Annotations;
+	using JetBrains.Annotations;
 	using Zeiss.IMT.PiWeb.Api.Common.Data.FilterString.Tree;
 
 	#endregion

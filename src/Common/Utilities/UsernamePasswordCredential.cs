@@ -14,7 +14,8 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 
 	using System;
 	using System.Net;
-	using PiWebApi.Annotations;
+	using JetBrains.Annotations;
+
 
 	#endregion
 
