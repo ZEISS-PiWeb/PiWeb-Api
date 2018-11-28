@@ -243,14 +243,9 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 			{
 				throw new RestClientException( $"Error fetching web service response for request [{request?.RequestUri}]: {ex.Message}", ex );
 			}
-			catch( TaskCanceledException ex )
+			catch( TaskCanceledException ex ) when ( !cancellationToken.IsCancellationRequested )
 			{
-				if( ex.CancellationToken.IsCancellationRequested ||
-				    cancellationToken.IsCancellationRequested )
-				{
-					throw;
-				}
-
+				// we expect the TaskCanceledException to be a timeout if the passed token has not been canceled
 				throw new TimeoutException( "Timeout reached", ex );
 			}
 			finally
