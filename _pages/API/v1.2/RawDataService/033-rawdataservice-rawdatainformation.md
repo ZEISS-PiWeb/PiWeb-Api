@@ -15,8 +15,66 @@ Returns a list of raw data file information entries for all entities with type :
 {% capture table %}
 Parameter name | Description  <br> *Example* 
 ---------------|---------------------------
-`uuids`        | Restricts the query to the entities identified by the given uuids. <br> {{site.images['warning']}} Entites of type 'Value' are identified by a compound key, which consists of the uuid of the measurement, '&#124;' and the characteristics uuid <br><br> *uuids={652ae7a0-d1e1-4ee2-b3a5-d4526f6ba822&#124;78bd15c6-dc70-4ab4-bd3c-8ab2b5780b52}*
-`filter`       | Contains one or multiple attribute conditions to restrict the query. Possible attribute are *MimeType, FileName, LastModified, Created, Length and MD5*.
+`uuids`        | Restricts the query to the entities identified by the given uuids. <br/> {{site.images['warning']}} Entites of type 'Value' are identified by a compound key, which consists of the uuid of the measurement, '&#124;' and the characteristics uuid <br/><br/> *uuids={652ae7a0-d1e1-4ee2-b3a5-d4526f6ba822&#124;78bd15c6-dc70-4ab4-bd3c-8ab2b5780b52}*
+`filter`       | Contains one or multiple attribute conditions to restrict the query. Possible attributes are *MimeType, FileName, LastModified, Created, Length* and *MD5*.<br/><br/>
+**Filter syntax**<br/><br/>
+Basic module is attribute expression <br/> <code>&lt;attribute&gt; &lt;operator&gt; &lt;value&gt;</code> or <br/> <code>&lt;attribute&gt; &lt;set operator&gt; (&lt;value1&gt;, &lt;value2&gt;, ...)</code> <br/><br/>
+**&lt;attribute&gt;** might have following values:<br/>
+*MimeType*: MimeType of raw data object<br/>
+*FileName*: File name of raw data object<br/>
+*LastModified*: Date of last change made to raw data object<br/>
+*Created*: Date of creation of raw data object<br/>
+*Length*: Size of raw data object in bytes<br/>
+*MD5*: Check sum of raw data object<br/><br/>
+
+**&lt;Operator&gt;** might have following values:<br/>
+*eq*: Checks if attribute equals &lt;value&gt;<br/>
+*ne*: Checks if attribute is not equal to &lt;value&gt;<br/>
+*lt*: Checks if attribute is lower than &lt;value&gt;<br/>
+*le*: Checks if attribute is equal or lower than &lt;value&gt;<br/>
+*gt*: Checks if attribute is greater than &lt;value&gt;<br/>
+*ge*: Checks if attribute is equal or greater than &lt;value&gt;<br/>
+*like*: Compares attribute with a wildcard string. Character '*' represents any number of any characters. Character '?' represents exactly one of any characters. If you want to use one of these wildcard characters within a filter expression use '\' to mask it. Use '\' to mask '\' as well. Use of like operator is only available for string attributes.<br/><br/>
+
+**&lt;List operator&gt;** might have following values:<br/>
+*in*: Checks if attribute exists in a list of values<br/>
+*notin*: Checks if attribute does not exist in a list of values<br/><br/>
+
+**&lt;Value&gt;** can be formatted differently and needs to match type of attribute:<br/>
+- *Strings* need to be surrounded by a single quote. If value contains a single quote it needs to be masked by another single quote:<br />
+<code>'Some Value'</code> or <code>This string contains a single '' character.</code>
+- Decimal seperator for *Numbers* is a point.
+- *Date specifications* may be absolute or relative to current server time.
+  - Absolute date specifications are ISO formatted strings and have to explicitly contain a time zone<br/>
+  <code>'2018-01-21T16:12:30+01:00'</code>
+  - Relative data specifications are strings in following format: <code> -&lt;Offset&gt;[mhdwMy]</code> where <br/><br/> 
+  m = minutes<br/>
+  h = hours<br/>
+  d = days<br/>
+  w = weeks<br/>
+  M = months<br/>
+  y = years<br/><br/>
+  e.g. '-1w' or '-5d'<br/><br/>
+
+  **&lt;
+**Value list (&lt;Value&gt;, &lt;Value&gt;, ...) contains any number of elements which need to meet the conditions described in above &lt;Value&gt; section.<br/> <br/>
+
+Attribute conditions can be combined by logical operators <code>and</code>, <code>or</code> or <code>not</code>:<br/>
+<code>
+&lt;Condition1&gt; and &lt;Condition2&gt;
+&lt;Condition1&gt; or &lt;Condition2&gt;
+not &lt;Condition1&gt;
+</code><br/><br/>
+
+
+Exampels:<br/>
+<code>
+Filename like '*.txt' or MimeType eq 'text/plain' <br/>
+Length lt 5000<br/>
+(MimeType like 'text/* or Filename like '*.txt') and Length lt 5000<br/>
+not MimeType like 'text/*'<br/>
+Filename in ('some_file.txt', 'some_other_file.html')
+</code>
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
