@@ -12,7 +12,7 @@
 Supported by DataService API-Version >= 1.2
 -------------------------------------------
 
-- ??? Possibility to authenticate by OAuth (only for PiWeb Cloud)
+- Possibility to authenticate by OAuth (only for PiWeb Cloud)
 
 - DeleteMeasurements method was extended by Parameter aggregation and deep.
 <<Aggregation>> indicates if all mesurements or only normal or aggregated 
