@@ -8,6 +8,8 @@
 
 #endregion
 
+using JetBrains.Annotations;
+
 namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 {
 	#region usings
@@ -23,7 +25,6 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 	using IdentityModel;
 	using IdentityModel.Client;
 	using Newtonsoft.Json;
-	using PiWebApi.Annotations;
 	using Zeiss.IMT.PiWeb.Api.OAuthService;
 
 	#endregion

@@ -8,6 +8,7 @@
 
 #endregion
 
+
 namespace Zeiss.IMT.PiWeb.Api.Common.Client
 {
 	#region usings
@@ -16,7 +17,6 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.IO;
-	using System.Linq;
 	using System.Net;
 	using System.Net.Cache;
 	using System.Net.Http;
@@ -24,8 +24,9 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 	using System.Text;
 	using System.Threading;
 	using System.Threading.Tasks;
+
 	using Newtonsoft.Json;
-	using PiWebApi.Annotations;
+	using JetBrains.Annotations;
 	using Zeiss.IMT.PiWeb.Api.Common.Data;
 
 	#endregion
@@ -242,14 +243,9 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 			{
 				throw new RestClientException( $"Error fetching web service response for request [{request?.RequestUri}]: {ex.Message}", ex );
 			}
-			catch( TaskCanceledException ex )
+			catch( TaskCanceledException ex ) when ( !cancellationToken.IsCancellationRequested )
 			{
-				if( ex.CancellationToken.IsCancellationRequested ||
-				    cancellationToken.IsCancellationRequested )
-				{
-					throw;
-				}
-
+				// we expect the TaskCanceledException to be a timeout if the passed token has not been canceled
 				throw new TimeoutException( "Timeout reached", ex );
 			}
 			finally

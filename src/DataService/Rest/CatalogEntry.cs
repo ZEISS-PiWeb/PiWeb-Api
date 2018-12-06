@@ -12,8 +12,9 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 
 	using System;
 	using System.Linq;
+
+	using JetBrains.Annotations;
 	using Newtonsoft.Json;
-	using PiWebApi.Annotations;
 	using Zeiss.IMT.PiWeb.Api.Common.Data;
 	using Zeiss.IMT.PiWeb.Api.Common.Data.Converter;
 

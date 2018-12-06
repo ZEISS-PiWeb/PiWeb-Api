@@ -61,7 +61,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 		/// </summary>
 		public static T DeserializeBinaryObject<T>( Stream data )
 		{
-			using( var reader = new BsonReader( new BinaryReader( data, Encoding.UTF8, true ) ) { CloseInput = false } )
+			using( var reader = new BsonDataReader( new BinaryReader( data, Encoding.UTF8, true ) ) { CloseInput = false } )
 			{
 				reader.ReadRootValueAsArray = true;
 

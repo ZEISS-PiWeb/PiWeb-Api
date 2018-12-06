@@ -14,7 +14,8 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 	using System.Collections.Generic;
 	using System.Runtime.CompilerServices;
 	using System.Text;
-	using PiWebApi.Annotations;
+
+	using JetBrains.Annotations;
 	using Zeiss.IMT.PiWeb.Api.DataService.Rest;
 
 	#endregion

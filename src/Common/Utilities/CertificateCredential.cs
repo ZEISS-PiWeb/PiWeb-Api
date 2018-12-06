@@ -8,13 +8,14 @@
 
 #endregion
 
+
 namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 {
 	#region usings
 
 	using System;
 	using System.Security.Cryptography.X509Certificates;
-	using PiWebApi.Annotations;
+	using JetBrains.Annotations;
 
 	#endregion
 

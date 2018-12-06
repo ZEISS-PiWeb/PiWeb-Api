@@ -14,7 +14,8 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 
 	using System;
 	using System.Threading.Tasks;
-	using PiWebApi.Annotations;
+
+	using JetBrains.Annotations;
 	using Zeiss.IMT.PiWeb.Api.Common.Utilities;
 
 	#endregion

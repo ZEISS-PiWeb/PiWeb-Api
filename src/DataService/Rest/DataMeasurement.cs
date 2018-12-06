@@ -11,7 +11,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 	#region using
 
 	using Newtonsoft.Json;
-	using PiWebApi.Annotations;
+	using JetBrains.Annotations;
 
 	#endregion
 
