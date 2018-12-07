@@ -16,7 +16,11 @@ Returns a list of raw data file information entries for all entities with type :
 Parameter name | Description  <br> *Example* 
 ---------------|---------------------------
 `uuids`        | Restricts the query to the entities identified by the given uuids. <br/> {{site.images['warning']}} Entites of type 'Value' are identified by a compound key, which consists of the uuid of the measurement, '&#124;' and the characteristics uuid <br/><br/> *uuids={652ae7a0-d1e1-4ee2-b3a5-d4526f6ba822&#124;78bd15c6-dc70-4ab4-bd3c-8ab2b5780b52}*
-`filter`       | Contains one or multiple attribute conditions to restrict the query. Possible attributes are *MimeType, FileName, LastModified, Created, Length* and *MD5*.<br/><br/>
+`filter`       | Contains one or multiple attribute conditions to restrict the query. Details can be found below.
+
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
+
 <b>Filter syntax</b><br/><br/>
 Basic module is attribute expression <br/> <code>&lt;attribute&gt; &lt;operator&gt; &lt;value&gt;</code> or <br/> <code>&lt;attribute&gt; &lt;set operator&gt; (&lt;value1&gt;, &lt;value2&gt;, ...)</code> <br/><br/>
 <b>&lt;attribute&gt;</b> might have following values:<br/>
@@ -75,8 +79,6 @@ Length lt 5000<br/>
 not MimeType like 'text/*'<br/>
 Filename in ('some_file.txt', 'some_other_file.html')
 </code>
-{% endcapture %}
-{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 {% endcapture %}
 
