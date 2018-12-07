@@ -17,9 +17,9 @@ Parameter name | Description  <br> *Example*
 ---------------|---------------------------
 `uuids`        | Restricts the query to the entities identified by the given uuids. <br/> {{site.images['warning']}} Entites of type 'Value' are identified by a compound key, which consists of the uuid of the measurement, '&#124;' and the characteristics uuid <br/><br/> *uuids={652ae7a0-d1e1-4ee2-b3a5-d4526f6ba822&#124;78bd15c6-dc70-4ab4-bd3c-8ab2b5780b52}*
 `filter`       | Contains one or multiple attribute conditions to restrict the query. Possible attributes are *MimeType, FileName, LastModified, Created, Length* and *MD5*.<br/><br/>
-**Filter syntax**<br/><br/>
+<b>Filter syntax</b><br/><br/>
 Basic module is attribute expression <br/> <code>&lt;attribute&gt; &lt;operator&gt; &lt;value&gt;</code> or <br/> <code>&lt;attribute&gt; &lt;set operator&gt; (&lt;value1&gt;, &lt;value2&gt;, ...)</code> <br/><br/>
-**&lt;attribute&gt;** might have following values:<br/>
+<b>&lt;attribute&gt;</b> might have following values:<br/>
 *MimeType*: MimeType of raw data object<br/>
 *FileName*: File name of raw data object<br/>
 *LastModified*: Date of last change made to raw data object<br/>
@@ -27,7 +27,7 @@ Basic module is attribute expression <br/> <code>&lt;attribute&gt; &lt;operator&
 *Length*: Size of raw data object in bytes<br/>
 *MD5*: Check sum of raw data object<br/><br/>
 
-**&lt;Operator&gt;** might have following values:<br/>
+<b>&lt;Operator&gt;</b> might have following values:<br/>
 *eq*: Checks if attribute equals &lt;value&gt;<br/>
 *ne*: Checks if attribute is not equal to &lt;value&gt;<br/>
 *lt*: Checks if attribute is lower than &lt;value&gt;<br/>
@@ -36,11 +36,11 @@ Basic module is attribute expression <br/> <code>&lt;attribute&gt; &lt;operator&
 *ge*: Checks if attribute is equal or greater than &lt;value&gt;<br/>
 *like*: Compares attribute with a wildcard string. Character '*' represents any number of any characters. Character '?' represents exactly one of any characters. If you want to use one of these wildcard characters within a filter expression use '\' to mask it. Use '\' to mask '\' as well. Use of like operator is only available for string attributes.<br/><br/>
 
-**&lt;List operator&gt;** might have following values:<br/>
+<b>&lt;List operator&gt;</b> might have following values:<br/>
 *in*: Checks if attribute exists in a list of values<br/>
 *notin*: Checks if attribute does not exist in a list of values<br/><br/>
 
-**&lt;Value&gt;** can be formatted differently and needs to match type of attribute:<br/>
+<b>&lt;Value&gt;</b> can be formatted differently and needs to match type of attribute:<br/>
 - *Strings* need to be surrounded by a single quote. If value contains a single quote it needs to be masked by another single quote:<br />
 <code>'Some Value'</code> or <code>This string contains a single '' character.</code>
 - Decimal seperator for *Numbers* is a point.
@@ -56,8 +56,8 @@ Basic module is attribute expression <br/> <code>&lt;attribute&gt; &lt;operator&
   y = years<br/><br/>
   e.g. '-1w' or '-5d'<br/><br/>
 
-  **&lt;
-**Value list (&lt;Value&gt;, &lt;Value&gt;, ...) contains any number of elements which need to meet the conditions described in above &lt;Value&gt; section.<br/> <br/>
+  <b>&lt;
+<b>Value list (&lt;Value&gt;, &lt;Value&gt;, ...)</b> contains any number of elements which need to meet the conditions described in above &lt;Value&gt; section.<br/> <br/>
 
 Attribute conditions can be combined by logical operators <code>and</code>, <code>or</code> or <code>not</code>:<br/>
 <code>
