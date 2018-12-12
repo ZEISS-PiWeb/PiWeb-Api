@@ -22,10 +22,10 @@ Parameter name | Description  <br> *Example*
 
 **Filter syntax**
 
-Basic module is expression `&lt;attribute&gt; &lt;operator&gt; &lt;value&gt;` or `&lt;attribute&gt; &lt;set operator&gt; (&lt;value1&gt;, &lt;value2&gt;, ...)`
+Basic module is expression `<attribute&gt; <operator&gt; <value&gt;` or `<attribute&gt; <set operator&gt; (<value1&gt;, <value2&gt;, ...)`
 
 {% capture table %}
-Possible &lt;attribute&gt; values | Description 
+Possible <attribute&gt; values | Description 
 ----------------------------------|---------------------------
 `MimeType` | MimeType of raw data object
 `FileName` | File name of raw data object
@@ -37,14 +37,14 @@ Possible &lt;attribute&gt; values | Description
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 {% capture table %}
-Possible &lt;operator&gt; values | Description 
+Possible <operator&gt; values | Description 
 ---------------------------------|---------------------------
-`eq` | Checks if attribute equals &lt;value&gt;
-`ne` | Checks if attribute is not equal to &lt;value&gt;
-`lt` | Checks if attribute is lower than &lt;value&gt;
-`le` | Checks if attribute is equal or lower than &lt;value&gt;
-`gt` | Checks if attribute is greater than &lt;value&gt;
-`ge` | Checks if attribute is equal or greater than &lt;value&gt;
+`eq` | Checks if attribute equals <value&gt;
+`ne` | Checks if attribute is not equal to <value&gt;
+`lt` | Checks if attribute is lower than <value&gt;
+`le` | Checks if attribute is equal or lower than <value&gt;
+`gt` | Checks if attribute is greater than <value&gt;
+`ge` | Checks if attribute is equal or greater than <value&gt;
 `like` | Compares attribute with a wildcard string. Character '*' represents any number of any characters. Character '?' represents exactly one of any characters. If you want to use one of these wildcard characters within a filter expression use '\' to mask it. Use '\' to mask '\' as well. Use of like operator is only available for string attributes.
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
@@ -63,11 +63,12 @@ Possible &lt;List operator&gt; values | Description
 - *Date specifications* may be absolute or relative to current server time.
   - Absolute date specifications are ISO formatted strings and have to explicitly contain a time zone
   `'2018-01-21T16:12:30+01:00'`
-  - Relative data specifications are strings in following format: `-&lt;Offset&gt;[mhdwMy] `where m = minutes, h = hours, d = days, w = weeks, M = months, y = years, e.g. '-1w' or '-5d'
+  - Relative data specifications are strings in following format: `-<Offset>[mhdwMy] `where m = minutes, h = hours, d = days, w = weeks, M = months, y = years, e.g. '-1w' or '-5d'
 
-**Value list (<Value1>, <Value2>, ...)** contains any number of elements which need to meet the conditions described in above <Value> section.
+**Value list (&lt;Value1&gt;, &lt;Value2&gt;, ...)** contains any number of elements which need to meet the conditions described in above <Value> section.
 
 Attribute conditions can be combined by logical operators `and`, `or` or `not`:
+
 `<Condition1> and <Condition2>`
 `<Condition1> or <Condition2>`
 `not <Condition1>`
