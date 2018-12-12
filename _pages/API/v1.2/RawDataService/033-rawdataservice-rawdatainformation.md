@@ -56,41 +56,29 @@ Possible &lt;List operator&gt; values | Description
 `notin` | Checks if attribute does not exist in a list of values
 {% endcapture %}
 
-<b>&lt;Value&gt;</b> can be formatted differently and needs to match type of attribute:<br/>
-- *Strings* need to be surrounded by a single quote. If value contains a single quote it needs to be masked by another single quote:<br />
-<code>'Some Value'</code> or <code>This string contains a single '' character.</code>
+**<Value>** can be formatted differently and needs to match type of attribute:
+- *Strings* need to be surrounded by a single quote. If value contains a single quote it needs to be masked by another single quote:
+`'Some Value'` or `This string contains a single '' character.`
 - Decimal seperator for *Numbers* is a point.
 - *Date specifications* may be absolute or relative to current server time.
-  - Absolute date specifications are ISO formatted strings and have to explicitly contain a time zone<br/>
-  <code>'2018-01-21T16:12:30+01:00'</code>
-  - Relative data specifications are strings in following format: <code> -&lt;Offset&gt;[mhdwMy]</code> where <br/><br/> 
-  m = minutes<br/>
-  h = hours<br/>
-  d = days<br/>
-  w = weeks<br/>
-  M = months<br/>
-  y = years<br/><br/>
-  e.g. '-1w' or '-5d'<br/><br/>
+  - Absolute date specifications are ISO formatted strings and have to explicitly contain a time zone
+  `'2018-01-21T16:12:30+01:00'`
+  - Relative data specifications are strings in following format: `-&lt;Offset&gt;[mhdwMy] `where m = minutes, h = hours, d = days, w = weeks, M = months, y = years, e.g. '-1w' or '-5d'
 
-  <b>&lt;
-<b>Value list (&lt;Value&gt;, &lt;Value&gt;, ...)</b> contains any number of elements which need to meet the conditions described in above &lt;Value&gt; section.<br/> <br/>
+**Value list (<Value1>, <Value2>, ...)** contains any number of elements which need to meet the conditions described in above <Value> section.
 
-Attribute conditions can be combined by logical operators <code>and</code>, <code>or</code> or <code>not</code>:<br/>
-<code>
-&lt;Condition1&gt; and &lt;Condition2&gt;
-&lt;Condition1&gt; or &lt;Condition2&gt;
-not &lt;Condition1&gt;
-</code><br/><br/>
+Attribute conditions can be combined by logical operators `and`, `or` or `not`:
+`<Condition1> and <Condition2>`
+`<Condition1> or <Condition2>`
+`not <Condition1>`
 
 
-Exampels:<br/>
-<code>
-Filename like '*.txt' or MimeType eq 'text/plain' <br/>
-Length lt 5000<br/>
-(MimeType like 'text/* or Filename like '*.txt') and Length lt 5000<br/>
-not MimeType like 'text/*'<br/>
-Filename in ('some_file.txt', 'some_other_file.html')
-</code>
+Examples:
+`Filename like '*.txt' or MimeType eq 'text/plain'`
+`Length lt 5000`
+`(MimeType like 'text/* or Filename like '*.txt') and Length lt 5000`
+`not MimeType like 'text/*'`
+`Filename in ('some_file.txt', 'some_other_file.html')`
 
 {% endcapture %}
 
