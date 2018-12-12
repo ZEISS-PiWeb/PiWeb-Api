@@ -22,10 +22,10 @@ Parameter name | Description  <br> *Example*
 
 **Filter syntax**
 
-Basic module is expression `<attribute&gt; <operator&gt; <value&gt;` or `<attribute&gt; <set operator&gt; (<value1&gt;, <value2&gt;, ...)`
+Basic module is expression `<attribute> <operator> <value>` or `<attribute> <set operator> (<value1>, <value2>, ...)`
 
 {% capture table %}
-Possible <attribute&gt; values | Description 
+Possible <attribute> values | Description 
 ----------------------------------|---------------------------
 `MimeType` | MimeType of raw data object
 `FileName` | File name of raw data object
@@ -37,20 +37,20 @@ Possible <attribute&gt; values | Description
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 {% capture table %}
-Possible <operator&gt; values | Description 
+Possible <operator> values | Description 
 ---------------------------------|---------------------------
-`eq` | Checks if attribute equals <value&gt;
-`ne` | Checks if attribute is not equal to <value&gt;
-`lt` | Checks if attribute is lower than <value&gt;
-`le` | Checks if attribute is equal or lower than <value&gt;
-`gt` | Checks if attribute is greater than <value&gt;
-`ge` | Checks if attribute is equal or greater than <value&gt;
+`eq` | Checks if attribute equals <value>
+`ne` | Checks if attribute is not equal to <value>
+`lt` | Checks if attribute is lower than <value>
+`le` | Checks if attribute is equal or lower than <value>
+`gt` | Checks if attribute is greater than <value>
+`ge` | Checks if attribute is equal or greater than <value>
 `like` | Compares attribute with a wildcard string. Character '*' represents any number of any characters. Character '?' represents exactly one of any characters. If you want to use one of these wildcard characters within a filter expression use '\' to mask it. Use '\' to mask '\' as well. Use of like operator is only available for string attributes.
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 {% capture table %}
-Possible &lt;List operator&gt; values | Description 
+Possible <List operator> values | Description 
 --------------------------------------|---------------------------
 `in` | Checks if attribute exists in a list of values
 `notin` | Checks if attribute does not exist in a list of values
@@ -68,7 +68,6 @@ Possible &lt;List operator&gt; values | Description
 **Value list (&lt;Value1&gt;, &lt;Value2&gt;, ...)** contains any number of elements which need to meet the conditions described in above <Value> section.
 
 Attribute conditions can be combined by logical operators `and`, `or` or `not`:
-
 `<Condition1> and <Condition2>`
 `<Condition1> or <Condition2>`
 `not <Condition1>`
