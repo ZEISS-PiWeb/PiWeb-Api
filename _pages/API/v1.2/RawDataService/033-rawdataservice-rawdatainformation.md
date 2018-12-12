@@ -20,8 +20,9 @@ Parameter name | Description  <br> *Example*
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
-<b>Filter syntax</b><br/><br/>
-Basic module is attribute expression <br/> <code>&lt;attribute&gt; &lt;operator&gt; &lt;value&gt;</code> or <br/> <code>&lt;attribute&gt; &lt;set operator&gt; (&lt;value1&gt;, &lt;value2&gt;, ...)</code> <br/><br/>
+**Filter syntax**
+
+Basic module is attribute expression <code>&lt;attribute&gt; &lt;operator&gt; &lt;value&gt;</code> or <code>&lt;attribute&gt; &lt;set operator&gt; (&lt;value1&gt;, &lt;value2&gt;, ...)</code> <br/><br/>
 <b>&lt;attribute&gt;</b> might have following values:<br/>
 *MimeType*: MimeType of raw data object<br/>
 *FileName*: File name of raw data object<br/>
