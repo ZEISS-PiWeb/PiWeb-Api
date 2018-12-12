@@ -56,7 +56,7 @@ Possible &lt;List operator&gt; values | Description
 `notin` | Checks if attribute does not exist in a list of values
 {% endcapture %}
 
-**<Value>** can be formatted differently and needs to match type of attribute:
+**&lt;Value&gt;** can be formatted differently and needs to match type of attribute:
 - *Strings* need to be surrounded by a single quote. If value contains a single quote it needs to be masked by another single quote:
 `'Some Value'` or `This string contains a single '' character.`
 - Decimal seperator for *Numbers* is a point.
