@@ -22,14 +22,11 @@ Parameter name | Description  <br> *Example*
 
 **Filter syntax**
 
-Basic module is expression <code>&lt;attribute&gt; &lt;operator&gt; &lt;value&gt;</code> or <code>&lt;attribute&gt; &lt;set operator&gt; (&lt;value1&gt;, &lt;value2&gt;, ...)</code>
-
-
-<b>&lt;attribute&gt;</b> might have following values:
+Basic module is expression `&lt;attribute&gt; &lt;operator&gt; &lt;value&gt;` or `&lt;attribute&gt; &lt;set operator&gt; (&lt;value1&gt;, &lt;value2&gt;, ...)`
 
 {% capture table %}
-Parameter name | Description 
----------------|---------------------------
+Possible &lt;attribute&gt; values | Description 
+----------------------------------|---------------------------
 `MimeType` | MimeType of raw data object
 `FileName` | File name of raw data object
 `LastModified` | Date of last change made to raw data object
@@ -39,18 +36,25 @@ Parameter name | Description
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
-<b>&lt;Operator&gt;</b> might have following values:<br/>
-`eq`: Checks if attribute equals &lt;value&gt;<br/>
-`ne`: Checks if attribute is not equal to &lt;value&gt;<br/>
-`lt`: Checks if attribute is lower than &lt;value&gt;<br/>
-`le`: Checks if attribute is equal or lower than &lt;value&gt;<br/>
-`gt`: Checks if attribute is greater than &lt;value&gt;<br/>
-`ge`: Checks if attribute is equal or greater than &lt;value&gt;<br/>
-`like`: Compares attribute with a wildcard string. Character '*' represents any number of any characters. Character '?' represents exactly one of any characters. If you want to use one of these wildcard characters within a filter expression use '\' to mask it. Use '\' to mask '\' as well. Use of like operator is only available for string attributes.<br/><br/>
+{% capture table %}
+Possible &lt;operator&gt; values | Description 
+---------------------------------|---------------------------
+`eq` | Checks if attribute equals &lt;value&gt;
+`ne` | Checks if attribute is not equal to &lt;value&gt;
+`lt` | Checks if attribute is lower than &lt;value&gt;
+`le` | Checks if attribute is equal or lower than &lt;value&gt;
+`gt` | Checks if attribute is greater than &lt;value&gt;
+`ge` | Checks if attribute is equal or greater than &lt;value&gt;
+`like` | Compares attribute with a wildcard string. Character '*' represents any number of any characters. Character '?' represents exactly one of any characters. If you want to use one of these wildcard characters within a filter expression use '\' to mask it. Use '\' to mask '\' as well. Use of like operator is only available for string attributes.
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
-<b>&lt;List operator&gt;</b> might have following values:<br/>
-`in`: Checks if attribute exists in a list of values<br/>
-`notin`: Checks if attribute does not exist in a list of values<br/><br/>
+{% capture table %}
+Possible &lt;List operator&gt; values | Description 
+--------------------------------------|---------------------------
+`in` | Checks if attribute exists in a list of values
+`notin` | Checks if attribute does not exist in a list of values
+{% endcapture %}
 
 <b>&lt;Value&gt;</b> can be formatted differently and needs to match type of attribute:<br/>
 - *Strings* need to be surrounded by a single quote. If value contains a single quote it needs to be masked by another single quote:<br />
