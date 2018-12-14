@@ -22,7 +22,7 @@ Parameter name | Description  <br> *Example*
 
 **Filter syntax**
 
-Basic module is expression `<attribute> <operator> <value>` or `<attribute> <set operator> (<value1>, <value2>, ...)`
+Basic module is expression `<attribute> <operator> <value>` or `<attribute> <list operator> (<value1>, <value2>, ...)`
 
 {% capture table %}
 Possible &lt;attribute&gt; values | Description 
@@ -55,6 +55,7 @@ Possible &lt;List operator&gt; values | Description
 `in` | Checks if attribute exists in a list of values
 `notin` | Checks if attribute does not exist in a list of values
 {% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 **&lt;Value&gt;** can be formatted differently and needs to match type of attribute:
 - *Strings* need to be surrounded by a single quote. If value contains a single quote it needs to be masked by another single quote:
@@ -65,7 +66,7 @@ Possible &lt;List operator&gt; values | Description
   `'2018-01-21T16:12:30+01:00'`
   - Relative data specifications are strings in following format: `-<Offset>[mhdwMy] `where m = minutes, h = hours, d = days, w = weeks, M = months, y = years, e.g. '-1w' or '-5d'
 
-**Value list (&lt;Value1&gt;, &lt;Value2&gt;, ...)** contains any number of elements which need to meet the conditions described in above <Value> section.
+Value list **(&lt;Value1&gt;, &lt;Value2&gt;, ...)** contains any number of elements which need to meet the conditions described in above <Value> section.
 
 Attribute conditions can be combined by logical operators `and`, `or` or `not`:
 `<Condition1> and <Condition2>`
