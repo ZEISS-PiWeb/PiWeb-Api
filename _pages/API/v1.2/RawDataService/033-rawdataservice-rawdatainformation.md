@@ -25,7 +25,7 @@ Parameter name | Description  <br> *Example*
 Basic module is expression `<attribute> <operator> <value>` or `<attribute> <set operator> (<value1>, <value2>, ...)`
 
 {% capture table %}
-Possible <attribute> values | Description 
+Possible &lt;attribute&gt; values | Description 
 ----------------------------------|---------------------------
 `MimeType` | MimeType of raw data object
 `FileName` | File name of raw data object
@@ -37,20 +37,20 @@ Possible <attribute> values | Description
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 {% capture table %}
-Possible <operator> values | Description 
+Possible &lt;operator&gt; values | Description 
 ---------------------------------|---------------------------
-`eq` | Checks if attribute equals <value>
-`ne` | Checks if attribute is not equal to <value>
-`lt` | Checks if attribute is lower than <value>
-`le` | Checks if attribute is equal or lower than <value>
-`gt` | Checks if attribute is greater than <value>
-`ge` | Checks if attribute is equal or greater than <value>
+`eq` | Checks if attribute equals &lt;value&gt;
+`ne` | Checks if attribute is not equal to &lt;value&gt;
+`lt` | Checks if attribute is lower than &lt;value&gt;
+`le` | Checks if attribute is equal or lower than &lt;value&gt;
+`gt` | Checks if attribute is greater than &lt;value&gt;
+`ge` | Checks if attribute is equal or greater than &lt;value&gt;
 `like` | Compares attribute with a wildcard string. Character '*' represents any number of any characters. Character '?' represents exactly one of any characters. If you want to use one of these wildcard characters within a filter expression use '\' to mask it. Use '\' to mask '\' as well. Use of like operator is only available for string attributes.
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 {% capture table %}
-Possible <List operator> values | Description 
+Possible &lt;List operator&gt; values | Description 
 --------------------------------------|---------------------------
 `in` | Checks if attribute exists in a list of values
 `notin` | Checks if attribute does not exist in a list of values
