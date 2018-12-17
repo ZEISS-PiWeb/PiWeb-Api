@@ -28,10 +28,16 @@ You can fetch all measurements or certain measurements only. Possible filter uri
 <nobr><code>All, None, Id list</code> requestedMeasurementAttributes </nobr><br><i>default:</i> <code>All</code> | Restricts the query to the attributes that should be returned for measurements. <br> `requestedMeasurementAttributes={4,8}`
 <nobr><code>None, Simple, Detailed</code> statistics </nobr><br><i>default:</i> <code>None</code> | Indicates how statistical informtaion should be returned: <br><code>None</code> = Return no information<br><code>Simple</code> = Return statistical information including numvber of characteristics out of warning limit, number of characteristics out of tolerance and number of characteristics in warning limit and tolerance<br><code>Detailed</code> = Return statistical information the same way as <code>Simple</code> plus the guid for each characteristic <br> `statistics=Simple`
 <nobr><code>Measurements, AggregationMeasurements, All</code> aggregation </nobr><br><i>default:</i> <code>Measurements</code> | Specifies which types of measurements will be fetched. <br> `aggregation=All`
+<nobr><code>int List</code> mergeAttributes</nobr> | Specifies the list of primary measurement keys to be used for joining measurements accross multiple parts on the server side. (Please find more detailed information below.) <br> `mergeAttributes=4,6`	
+<nobr><code>None, MeasurementsInAtLeastTwoParts, MeasurementsInAllParts</code> mergeCondition <br><i>default:</i> <code>MeasurementsInAllParts</code></nobr> | Specifies the condition that must be adhered to when merging measurements accross multiple parts using a primary key.	(Please find more detailed information below.)
+<nobr><code>Guid</code> mergeMasterPart</nobr> | Specifies the part to be used as master part when merging measurements accross multiple parts using a primary key. (Please find more detailed information below.)
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
 
 {% endcapture %}
+
+{% include_relative 027-dataservice-measurementsandvalues-primarymeasurementkey.md %}
+
 {% assign exampleCaption="Fetch measurements newer than 01.01.2015 for the part with the guid e42c5327-6258-4c4c-b3e9-6d22c30938b2" %}
 
 {% capture jsonrequest %}
