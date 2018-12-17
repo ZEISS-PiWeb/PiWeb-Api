@@ -12,6 +12,7 @@ PiWeb allows you to filter your measurement query on server side, so the returne
 
 In this documentation, we are going to work with the following little measurement table:
 
+
 <img src="/PiWeb-Api/images/default.png" class="img-responsive center-block">
 
 Please note that these are measurements from three different inspection plan parts which are identified by attribute `14`, which has the name `Key`. In the following examples, all returned measurements will be highlighted. The number in the row headers indicates pivot rows, while the matching color highlights measurements, that are returned because they match a primary measurement key of a pivot row.
@@ -24,6 +25,7 @@ Please note that these are measurements from three different inspection plan par
 |------------------|--------------------------------------------------------------------|
 | **orderBy** | `4` | 
 | **limitResult** | `3` | 
+
 
 <img src="/PiWeb-Api/images/limitResult.png" class="img-responsive center-block">
 
@@ -43,6 +45,7 @@ In our example, we are using attribute `14` as our primary measurement key. PiWe
 | **mergeCondition** | `MeasurementsInAllParts` **(default)** |
 | **mergeMasterPart** | `null` **(default)** |
 
+
 <img src="/PiWeb-Api/images/measurementsInAllParts.png" class="img-responsive center-block">
 
 The query returns three measurements with the Key `O` since it's the only key that appears in all three parts, `Assembly`, `Cmm` and `Inline`. 
@@ -56,6 +59,7 @@ Compared to the last query, the result will also include measurements with keys,
 | **mergeAttributes** | `{14}` | 
 | **mergeCondition** | `MeasurementsInAtLeastTwoParts` | 
 | **mergeMasterPart** | `null` **(default)** |
+
 
 <img src="/PiWeb-Api/images/measurementsInAtLeastTwoParts.png" class="img-responsive center-block">
 
@@ -71,6 +75,7 @@ Setting the `mergeCondition` to `None` will result in single, non-matched measur
 | **mergeCondition** | `None` | 
 | **mergeMasterPart** | `null` **(default)** |
 
+
 <img src="/PiWeb-Api/images/mergeAttributes.png" class="img-responsive center-block">
 
 All measurements will be returned, only limited by the parameter `limitResult` which is set to `3`. Therefore, all measurements of the three most recently measured keys will be returned.
@@ -84,6 +89,7 @@ When the parameter `mergeMasterPart` is set, PiWeb will search for unique values
 | **mergeAttributes** | `{14}` | 
 | **mergeCondition** | `None` | 
 | **mergeMasterPart** | `uuid of part 'Inline'` |
+
 
 
 <img src="/PiWeb-Api/images/mergeMasterPart.png" class="img-responsive center-block">

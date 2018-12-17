@@ -34,9 +34,9 @@ You can fetch all measurements or certain measurements only. Possible filter uri
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
 
-{% endcapture %}
-
 {% include_relative 027-dataservice-measurementsandvalues-primarymeasurementkey.md %}
+
+{% endcapture %}
 
 {% assign exampleCaption="Fetch measurements newer than 01.01.2015 for the part with the guid e42c5327-6258-4c4c-b3e9-6d22c30938b2" %}
 
