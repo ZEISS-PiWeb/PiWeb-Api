@@ -4,11 +4,14 @@ The primary measurement key can be used to filter and fetch multiple measurement
 
 PiWeb allows you to filter your measurement query on server side, so the returned result set contains exactly the data you need. Three new parameters are introduced to the query:
 
+{% capture table %}
 | **Parameter** | Description |
 |------------------|--------------------------------------------------------------------|
 | **mergeAttributes** | A list of attribute keys, by which the measurements are grouped. Currently, you can only specify one attribute. | 
 | **mergeCondition** | Specifies whether the primary measurement key has to appear in only one or multiple parts| 
 | **mergeMasterPart** | Specifies the part on which PiWeb searches for distinct values of the primary key attribute
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
 
 In this documentation, we are going to work with the following little measurement table:
 
