@@ -5,7 +5,7 @@
 {% assign version="1.3.0" %}
 {% capture features %}
     <ul>
-      <li>New endpoints to fetch raw data objects more efficently were created.</li>
+      <li>Internal functions</li>
     </ul>
 {% endcapture %}
 

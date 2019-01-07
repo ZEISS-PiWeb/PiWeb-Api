@@ -5,7 +5,7 @@
 {% assign version="1.4.0" %}
 {% capture features %}
     <ul>
-      <li>Internal improvements</li>
+      <li>Internal functions</li>
     </ul>
 {% endcapture %}
 

@@ -24,3 +24,5 @@
     <li>Moving and renaming characteristics in one call is not possible. If tried an error message is returned, now.</li>
     </ul>
 {% endcapture %}
+
+{% include releaseNotes.html %}
