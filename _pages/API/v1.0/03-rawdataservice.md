@@ -2,7 +2,6 @@
 area: rawDataService
 level: 0
 version: 1.0
-isCurrentVersion: true
 title: Rawdata Service
 permalink: /rawdataservice/
 sections:
@@ -21,6 +20,8 @@ sections:
         title: Raw Data Objects
         anchor: rs-raw-data-objects
 ---
+
+{% include version_combobox.html %}
 
 <h2 id="{{page.sections['rawdataservice']['secs']['serviceInformation'].anchor}}">{{page.sections['rawdataservice']['secs']['serviceInformation'].title}}</h2>
 

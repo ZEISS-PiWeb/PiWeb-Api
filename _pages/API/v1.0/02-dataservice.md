@@ -2,7 +2,6 @@
 area: dataService
 level: 0
 version: 1.0
-isCurrentVersion: true
 title: Data Service
 permalink: /dataservice/
 sections:
@@ -27,6 +26,8 @@ sections:
         title: Measurements and Values
         anchor: ds-measurements-and-values
 ---
+
+{% include version_combobox.html %}
 
 <h1 id="{{page.sections['dataservice'].anchor}}">{{page.sections['dataservice'].title}}</h1>
 
