@@ -1,5 +1,25 @@
 ===========================================================================================
 -------------------------------------------------------------------------------------------
+ Version 2.0.2                                                                         
+-------------------------------------------------------------------------------------------
+===========================================================================================
+
+Add missing nuget dependency on Jetbrains.Annotations
+
+
+
+===========================================================================================
+-------------------------------------------------------------------------------------------
+ Version 2.0.1                                                                           
+-------------------------------------------------------------------------------------------
+===========================================================================================
+
+Add missing nuget dependency on Newtonsoft.Json.Bson
+
+
+
+===========================================================================================
+-------------------------------------------------------------------------------------------
  Version 2.0.0                                                                           
 -------------------------------------------------------------------------------------------
 ===========================================================================================
@@ -93,7 +113,7 @@ method DeleteAllRawDataForPart, DeleteAllRawDataForCharacteristic,
 DeleteAllRawDataForMeasurement or DeleteAllRawDataForValue not all but 
 only first entry was deleted
 
-??? - Implemented handling for possible UriTooLong exception due to too many parameters
+- Implemented handling for possible UriTooLong exception due to too many parameters
 
 - Versioning entries can be created on creating parts and characteristics if 
 flag <<versioningEnabled>> is set to true, now.
