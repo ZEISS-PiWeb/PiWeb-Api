@@ -390,7 +390,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 			                     response.StatusCode == HttpStatusCode.BadRequest && ( ServiceLocation.Host == "service.piweb.cloud" ||
 			                                                                           ServiceLocation.Host == "service.dev.piweb.cloud" );
 
-			if( isUnauthorized )
+			if( isUnauthorized && _LoginRequestHandler != null )
 			{
 				var instanceUri = GetInstanceUri();
 				_LoginRequestHandler.InvalidateCache( instanceUri );
