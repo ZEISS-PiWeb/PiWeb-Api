@@ -1,5 +1,5 @@
 <ul class="nav navbar-nav">
-    <li style="border-right:1px dotted; padding-right: 10px;">
+    <li style="border-right:1px dotted; margin-right: 10px;">
             {% for node in site.pages %}
 		    {% if node.level == 0 and node.area == 'sdk' and node.isCurrentVersion and node.isCurrentVersion == true %}
 			    <a {% if node.area == page.area %}class="active" {% endif %}href="{{site.baseurl}}{{ node.url }}">{{ node.title }}</a>
