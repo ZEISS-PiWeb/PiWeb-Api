@@ -158,6 +158,7 @@ h4 code{
 
 .navbar-nav-right>li{
 	float: left;
+	padding-left: 20px;
 }
 
 .navbar-default .navbar-nav>li>a,
@@ -174,10 +175,13 @@ h4 code{
 
 #octocat{
 	background: transparent url('/PiWeb-Api/images/octocat-small.png') no-repeat center left;
+	padding-left: 20px;
 }
 
 #nuget{
 	background: transparent url('/PiWeb-Api/images/nugeticon.png') no-repeat center left;
+	background-size: 20px;
+	padding-left: 25px;
 }
 
 .navbar-default .navbar-nav>li>a.active,
