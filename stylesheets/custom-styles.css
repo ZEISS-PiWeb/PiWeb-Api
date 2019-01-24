@@ -157,24 +157,31 @@ h4 code{
 }
 
 .navbar-nav-right>li{
-	display:inline;
-	margin-left:10px;
+	padding-left: 20px;
 }
 
 .navbar-default .navbar-nav>li>a,
 .navbar-default .navbar-nav>li>a:focus,
 .navbar-default .navbar-nav>li>a:hover,
-.navbar-nav-right>li>span>a,
-.navbar-nav-right>li>span>a:focus,
-.navbar-nav-right>li>span>a:hover{
+.navbar-nav-right>li>a,
+.navbar-nav-right>li>a:focus,
+.navbar-nav-right>li>a:hover{
   color: #FDFDFD;
   font-size: 1.1em;
   background-color: transparent;
   text-decoration: none;
 }
 
+#octocat{
+	background: transparent url('/PiWeb-Api/images/octocat-small.png') no-repeat center left;
+}
+
+#nuget{
+	background: transparent url('/PiWeb-Api/images/nugeticon.png') no-repeat center left;
+}
+
 .navbar-default .navbar-nav>li>a.active,
-.navbar-default .navbar-nav-right>li>span>a.active{
+.navbar-default .navbar-nav-right>li>a.active{
 	background-color: #245E9A;
 	border-radius: 4px;
 }
