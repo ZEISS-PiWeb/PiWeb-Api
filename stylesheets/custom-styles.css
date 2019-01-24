@@ -120,10 +120,13 @@ h4 code{
 }
 
 .container-header {
-  background-color: #437AB4;
+  background-image: linear-gradient(#245E9A, #437AB4, #245E9A);
+  border-radius: 4px;
   color: #FDFDFD;
   padding-left: 10px;
-  height: 50px;
+  height: 70px;
+  margin-top: 10px;
+  box-shadow: 0 2px 10px -1px rgba(0,0,0,0.4);
 }
 
 @media (min-width: 767px) {
@@ -139,12 +142,6 @@ h4 code{
 .navbar-right{
 	margin-right:0;
 	text-align:right;
-}
-
-.container-header-footer{
-	background-color: #245E9A;
-	box-shadow: 0 2px 10px -1px rgba(0,0,0,0.4);
-  	height: 5px;
 }
 
 .navbar-default {
@@ -171,10 +168,8 @@ h4 code{
 .navbar-nav-right>li>span>a:focus,
 .navbar-nav-right>li>span>a:hover{
   color: #FDFDFD;
-  padding-top: 4px;
-  padding-bottom: 5px;
+  font-size: 1.1em;
   background-color: transparent;
-  vertical-align: sub;
   text-decoration: none;
 }
 
@@ -202,8 +197,8 @@ nav>.affix{
 }
 
 .navbar-collapse .navbar-nav{
-  margin-top:12px;
-  margin-left: 90px;
+  margin-top: 12px;
+  margin-left: 54px;
 }
 
 .navbar-collapse .navbar-nav-right{
@@ -212,7 +207,8 @@ nav>.affix{
 }
 
 .navbar-brand {
-  font-size: 2.3em;
+  font-size: 2.8em;
+  margin-top: 10px;
 }
 
 @media (min-width: 768px) {
