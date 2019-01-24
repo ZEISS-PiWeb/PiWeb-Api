@@ -157,7 +157,7 @@ h4 code{
 }
 
 .navbar-nav-right>li{
-	padding-left: 20px;
+	float: left;
 }
 
 .navbar-default .navbar-nav>li>a,
