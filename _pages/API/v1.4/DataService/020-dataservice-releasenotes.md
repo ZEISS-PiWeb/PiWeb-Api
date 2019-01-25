@@ -1,6 +1,21 @@
 <h2 id="{{page.sections['dataservice']['secs']['releaseNotes'].anchor}}">{{page.sections['dataservice']['secs']['releaseNotes'].title}}</h2>
 
 <p></p>
+
+{% assign version="1.4.4" %}
+{% capture bugfixes %}
+    <ul><li>Error in internal convert method.</li></ul>
+{% endcapture %}
+
+{% include releaseNotes.html %}
+
+{% assign version="1.4.3" %}
+{% capture bugfixes %}
+    <ul><li>Possible NullReferenceException on delete measurements endpoint.</li></ul>
+{% endcapture %}
+
+{% include releaseNotes.html %}
+
 {% assign version="1.4.2" %}
 {% capture bugfixes %}
     <ul><li>Update attribute endpoint did return wrong status code.</li></ul>
