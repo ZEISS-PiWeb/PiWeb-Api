@@ -180,9 +180,13 @@ h4 code{
 	background-color: #245E9A;
 	border-radius: 4px;
 }
+
 @media (max-width: 767px) {
 	.navbar-default .navbar-nav>li>a.active{
 		border-radius: 0;
+	}
+	.navbar-default .navbar-nav>li>a{
+		background-color:  #437AB4;
 	}
 }
 
@@ -198,9 +202,11 @@ nav>.affix{
   	z-index: 1030;
 }
 
-.navbar-collapse .navbar-nav{
-  margin-top: 12px;
-  margin-left: 54px;
+@media (min-width: 768px){
+	.navbar-collapse .navbar-nav{
+		margin-top: 12px;
+		margin-left: 54px;
+	}
 }
 
 .navbar-brand {
