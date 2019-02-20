@@ -2,9 +2,8 @@
 area: sdk
 level: 0
 version: 1.0
-isCurrentVersion: true
 title: .NET SDK
-permalink: "/sdk/"
+permalink: "/sdk/old/"
 sections:
   general:
     title: General Information

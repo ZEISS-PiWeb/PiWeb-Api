@@ -97,5 +97,3 @@ var uri = new Uri("http://piwerbserver:8080");
 var dataserviceRestClient = new DataServiceRestClient( uri );
 dataServiceRestClient.AuthenticationContainer = new AuthenticationContainer(AuthenticationMode.Windows);
 {% endhighlight %}
-
-{{ site.images['info'] }} For more complex authentication modes use static `AuthenticationHelper` class. Detailed information about usage can be found in our sample application. 

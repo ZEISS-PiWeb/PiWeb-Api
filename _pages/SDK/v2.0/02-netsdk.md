@@ -3,7 +3,8 @@ area: sdk
 title: .NET SDK
 level: 0
 version: 2.0
-permalink: "/sdk/v2.0/"
+isCurrentVersion: true
+permalink: "/sdk/"
 sections:
   general:
     title: General Information
@@ -47,11 +48,7 @@ The .NET SDK is suitable for all .NET languages. You can include it to your proj
 
 {{ site.headers['bestPractice'] }} Use our sample application for better understanding
 
-On nuget you find a [C# demo application](https://www.nuget.org/packages/Zeiss.IMT.PiWebApi.Sample/) which provides an overview about the use of the most .NET SDK methods.
-For proper usage of this sample application:
-
-1. Create a WindowsForms project named 'PiWeb_HelloWorld'
-2. Add PiWebApi.Sample nuget package
+On Github you find a [C# sample application](https://github.com/ZEISS-PiWeb/PiWeb-Training) which provides several lessons about the use of the most .NET SDK methods.
 
 {% include_relative 021-general.md %}
 
