@@ -53,13 +53,3 @@ On Github you find a [C# sample application](https://github.com/ZEISS-PiWeb/PiWe
 {% include_relative 021-general.md %}
 
 <p class="dottedline" />
-
-<h1 id="{{page.sections['basics'].anchor}}">{{page.sections['basics'].title}}</h1>
-
-{% include_relative 022-basics/0221-basics-configuration.md %}
-
-{% include_relative 022-basics/0223-basics-inspectionplan.md %}
-
-{% include_relative 022-basics/0224-basics-measurementsandvalues.md %}
-
-{% include_relative 022-basics/0225-basics-rawdata.md %}
