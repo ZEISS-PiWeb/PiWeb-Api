@@ -19,25 +19,7 @@ sections:
       security:
         title: Security
         anchor: gi-security
-  basics:
-    title: Basics
-    anchor: basics
-    secs:
-      configuration:
-        title: Configuration
-        anchor: basics-configuration
-      inspectionPlan:
-        title: Inspection Plan
-        anchor: basics-inspectionPlan
-      measurementsValues:
-        title: Measurements and Values
-        anchor: basics-measurementsValues
-      rawData:
-        title: Raw Data
-        anchor: basics-rawData
 ---
-
-{% include version_combobox.html %}
 
 <h1 id="{{page.sections['general'].anchor}}">{{page.sections['general'].title}}</h1>
 
