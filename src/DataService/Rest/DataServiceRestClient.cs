@@ -350,7 +350,9 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 				var result = new List<InspectionPlanPart>( partUuids.Length );
 				foreach( var uuid in partUuids )
 				{
-					result.Add( await GetPartByUuid( uuid, requestedPartAttributes, withHistory, cancellationToken ).ConfigureAwait( false ) );
+					var inspectionPlanPart = await GetPartByUuid( uuid, requestedPartAttributes, withHistory, cancellationToken ).ConfigureAwait( false );
+					if( inspectionPlanPart != null )
+						result.Add( inspectionPlanPart );
 				}
 				return result;
 			}
@@ -483,7 +485,9 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 			{
 				foreach( var uuid in charUuids )
 				{
-					result.Add( await GetCharacteristicByUuid( uuid, requestedCharacteristicAttributes, withHistory, cancellationToken ).ConfigureAwait( false ) );
+					var inspectionPlanCharacteristic = await GetCharacteristicByUuid( uuid, requestedCharacteristicAttributes, withHistory, cancellationToken ).ConfigureAwait( false );
+					if(inspectionPlanCharacteristic != null)
+						result.Add( inspectionPlanCharacteristic );
 				}
 			}
 			else
