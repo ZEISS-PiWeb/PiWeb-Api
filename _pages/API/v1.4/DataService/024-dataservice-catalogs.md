@@ -130,7 +130,7 @@ To create a new catalog, the catalog object must be transmitted in the request's
 
 {{ site.images['info'] }} If no catalog entries are specified, an empty catalog entry with key '0' and attribute value(s) 'not defined' ( in case of alphanumeric attributes ) is created by default.
 
-{{ site.images['info'] }} If catalog entries are specified entering -1 as catalog entry's key lead server to generate a new unique key for that entry.
+{{ site.images['info'] }} If catalog entries are specified setting -1 as catalog entry's key leads server to generate a new unique key for that entry.
 {% endcapture %}
 {% assign exampleCaption="Adding the catalog InspectorCatalog" %}
 
