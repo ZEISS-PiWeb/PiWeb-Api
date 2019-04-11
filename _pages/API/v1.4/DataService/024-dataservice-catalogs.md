@@ -160,7 +160,7 @@ POST /dataServiceRest/catalogs HTTP/1.1
                    "attributes": { "4092": "20", "4093": "Miller" }
                },
                {
-                   "key": 3,
+                   "key": -1,  //Server will autogenerate next free unique key
                    "attributes": { "4092": "23", "4093": "Williams" }
                }
             ]
