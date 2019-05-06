@@ -24,7 +24,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 	{
 		#region members
 
-		private readonly Dictionary<short, CatalogEntry> _Dictionary = new Dictionary<short, CatalogEntry>();
+		private readonly Dictionary<int, CatalogEntry> _Dictionary = new Dictionary<int, CatalogEntry>();
 		private CatalogEntry[] _CatalogEntries = new CatalogEntry[ 0 ];
 		private ushort[] _ValidAttributes = new ushort[ 0 ];
 
@@ -35,7 +35,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		/// <summary>
 		/// Returns the catalog entry with index <code>key</code>.
 		/// </summary>
-		public CatalogEntry this[ short key ]
+		public CatalogEntry this[ int key ]
 		{
 			get
 			{

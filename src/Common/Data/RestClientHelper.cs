@@ -185,6 +185,12 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 			return ConvertFormattableArrayToString( value, formatProvider: CultureInfo.InvariantCulture );
 		}
 
+        /// <summary>Creates a list string from the shorts <code>value</code>.</summary>
+        internal static string ConvertIntArrayToString( int[] value )
+        {
+            return ConvertFormattableArrayToString( value, formatProvider: CultureInfo.InvariantCulture );
+        }
+
 		/// <summary>Creates a list string from the uuids <code>value</code>.</summary>
 		public static string ConvertGuidListToString( Guid[] value )
 		{

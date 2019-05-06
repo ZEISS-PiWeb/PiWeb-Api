@@ -311,7 +311,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		/// <param name="catalogUuid">The uuid of the catalog to remove the entries from.</param>
 		/// <param name="keys">The keys of the catalog entries to delete.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public async Task DeleteCatalogEntries( Guid catalogUuid, short[] keys = null, CancellationToken cancellationToken = default( CancellationToken ) )
+		public async Task DeleteCatalogEntries( Guid catalogUuid, int[] keys = null, CancellationToken cancellationToken = default( CancellationToken ) )
 		{
 			var uri = $"catalogs/{catalogUuid}";
 
@@ -323,7 +323,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 			{
 				foreach( var keyList in ArrayHelper.Split( keys, RestClient.MaximumPathSegmentLength, RestClientHelper.LengthOfListElementInUri ) )
 				{
-					var restriction = $"/{RestClientHelper.ConvertShortArrayToString( keyList )}";
+					var restriction = $"/{RestClientHelper.ConvertIntArrayToString( keyList )}";
 					await _RestClient.Request( RequestBuilder.CreateDelete( string.Concat( uri, restriction ) ), cancellationToken ).ConfigureAwait( false );
 				}
 			}
