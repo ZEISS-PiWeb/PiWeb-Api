@@ -59,7 +59,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		/// Gets or sets the unique key of this catalog entry.
 		/// </summary>
 		[JsonProperty( "key" )]
-		public short Key { get; set; }
+		public int Key { get; set; }
 
 		#endregion
 
