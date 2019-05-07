@@ -7,7 +7,7 @@ using System.Resources;
 [assembly: AssemblyTrademark( "PiWeb" )]
 [assembly: NeutralResourcesLanguage( "en" )]
 
-[assembly: AssemblyVersion( "2.0.3" )]
-[assembly: AssemblyInformationalVersion("2.0.3")]
+[assembly: AssemblyVersion( "2.0.6" )]
+[assembly: AssemblyInformationalVersion("2.0.6")]
 
-[assembly: AssemblyFileVersion( "2.0.3" )]
+[assembly: AssemblyFileVersion( "2.0.6" )]
