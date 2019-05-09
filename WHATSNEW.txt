@@ -5,3 +5,5 @@
 ===========================================================================================
 
 fix: To use complete range for catalog entries index internal used datatype was switched from short to int.
+
+feat: Update Annotations nuget package to v2018.2.1
