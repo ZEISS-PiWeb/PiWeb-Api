@@ -128,7 +128,7 @@ Task("Pack")
             new NuSpecDependency { Id = "Newtonsoft.Json.Bson", Version = "1.0.1" },
             new NuSpecDependency { Id = "IdentityModel", Version = "1.13.0" },
             new NuSpecDependency { Id = "System.IdentityModel.Tokens.Jwt", Version = "4.0.3.308261200" },
-            new NuSpecDependency { Id = "ReSharper.Annotations", Version = "2018.2.1" }
+            new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2018.2.1" }
         },
         BasePath                 = buildDir,
         OutputDirectory          = artifactsDir
