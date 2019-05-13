@@ -128,6 +128,9 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 			/// <summary>Measurement point role</summary>
 			public const ushort MeasurementPointRole = 2343;
 
+			/// <summary>Type of alignment (RPS, 321, ...)</summary>
+			public const ushort AlignmentType = 2297;
+
 			/// <summary>Position of a characteristic (left; right)</summary>
 			public const ushort Position = 2298;
 
@@ -181,6 +184,9 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 
 			/// <summary>Name of inspection plan</summary>
 			public const ushort NameOfQualityControlPlan = 2342;
+
+			/// <summary>Name of the alignment (Ausrichtung_RPS, ...)</summary>
+			public const ushort AlignmentName = 2511;
 
 			/// <summary>Normal vector, x coordinate</summary>
 			public const ushort I = 2540;
