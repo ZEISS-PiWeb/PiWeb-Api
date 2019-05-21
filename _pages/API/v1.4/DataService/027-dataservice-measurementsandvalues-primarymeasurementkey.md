@@ -1,4 +1,6 @@
-**Using the primary measurement key**
+<hr />
+
+<h4>Using the primary measurement key</h4>
 
 The primary measurement key can be used to filter and fetch multiple measurements of the same physical part. This is a common use case when parts are measured multiple times on different machines or assembly stages.
 
@@ -39,7 +41,7 @@ This query will fetch the last 3 measurements of all parts. The result set conta
 
 In our example, we are using attribute `14` as our primary measurement key. PiWeb will only return measurements, that have a value for the primary measurement key that exists in all specified parts. You can change this behavior later.
 
-> PiWeb needs the parameter `partUuids` to be specified when applying the primary measurement keys. Querys with the parameter `partPath` specified and the parameter `deep` set to `true` are **not allowed**.
+{{ site.images['info'] }} PiWeb needs the parameter `partUuids` to be specified when applying the primary measurement keys. Querys with the parameter `partPath` specified and the parameter `deep` set to `true` are **not allowed**.
 
 
 | **Full query:** | `/measurements?&orderBy=4&limitResult=3&partUuids={uuid1,uuid2,uuid3}&mergeAttributes={14}` |
@@ -98,3 +100,5 @@ When the parameter `mergeMasterPart` is set, PiWeb will search for unique values
 <img src="/PiWeb-Api/images/mergeMasterPart.png" class="img-responsive center-block">
 
 As you noticed, the measurements with the keys `Y` and `J` are not included in the result set, because none of them is measured on the master part `Inline`.
+
+<hr />
