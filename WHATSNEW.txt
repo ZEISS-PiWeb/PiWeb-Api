@@ -9,6 +9,7 @@
  New Features
 ==========================================
 
+feat: Update to target framework v4.7.2
 feat: Update Annotations nuget package to v2018.2.1
 feat: Update Newtonsoft.Json nuget package to v12.0.1
 
