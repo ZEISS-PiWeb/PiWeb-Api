@@ -4,6 +4,24 @@
 -------------------------------------------------------------------------------------------
 ===========================================================================================
 
-fix: To use complete range for catalog entries index internal used datatype was switched from short to int.
+
+==========================================
+ New Features
+==========================================
 
 feat: Update Annotations nuget package to v2018.2.1
+feat: Update Newtonsoft.Json nuget package to v12.0.1
+
+
+==========================================
+ Bugfixes
+==========================================
+
+Return int datatype for call of GetRawValue(typeof(int))
+
+
+Supported only by DataService API-Version >= 1.5
+-------------------------------------------
+
+To use complete supported range for catalog entries index internal used datatype was switched from short to int.
+
