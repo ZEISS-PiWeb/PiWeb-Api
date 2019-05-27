@@ -20,13 +20,13 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 	{
 		#region members
 
-		protected readonly RestClient _RestClient;
+		protected readonly RestClientBase _RestClient;
 
 		#endregion
 
 		#region constructors
 
-		protected CommonRestClientBase( RestClient restClient )
+		protected CommonRestClientBase( RestClientBase restClient )
 		{
 			_RestClient = restClient;
 

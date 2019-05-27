@@ -79,16 +79,12 @@
   <ItemGroup>
     <Compile Include="Common\Client\ArrayHelper.cs" />
     <Compile Include="Common\Client\AuthenticationContainer.cs" />
-    <Compile Include="Common\Client\AuthenticationHelper.cs" />
     <Compile Include="Common\Client\AuthenticationMode.cs" />
+    <Compile Include="Common\Client\RestClientBase.cs" />
     <Compile Include="Common\Client\CommonRestClientBase.cs" />
     <Compile Include="Common\Client\FeatureMatrix.cs" />
     <Compile Include="Common\Client\FetchBehavior.cs" />
     <Compile Include="Common\Client\ICacheClearable.cs" />
-    <Compile Include="Common\Client\ICertificateLoginRequestHandler.cs" />
-    <Compile Include="Common\Client\ILoginRequestHandler.cs" />
-    <Compile Include="Common\Client\ICredentialLoginRequestHandler.cs" />
-    <Compile Include="Common\Client\IOAuthLoginRequestHandler.cs" />
     <Compile Include="Common\Client\IRestClient.cs" />
     <Compile Include="Common\Client\LoginCanceledException.cs" />
     <Compile Include="Common\Client\ParameterDefinition.cs" />
@@ -140,12 +136,12 @@
     <Compile Include="Common\Utilities\CertificateHelper.cs" />
     <Compile Include="Common\Utilities\CollectionParameterDefinition.cs" />
     <Compile Include="Common\Utilities\ICredential.cs" />
-    <Compile Include="Common\Utilities\OAuthRequest.cs" />
     <Compile Include="Common\Utilities\OAuthHelper.cs" />
+    <Compile Include="Common\Utilities\OAuthRequest.cs" />
     <Compile Include="Common\Utilities\OAuthResponse.cs" />
     <Compile Include="Common\Utilities\OAuthTokenCredential.cs" />
-    <Compile Include="Common\Utilities\UsernamePasswordCredential.cs" />
     <Compile Include="Common\Utilities\ParameterSplitter.cs" />
+    <Compile Include="Common\Utilities\UsernamePasswordCredential.cs" />
     <Compile Include="DataService\Rest\AbstractAttributeDefinition.cs" />
     <Compile Include="DataService\Rest\AggregationMeasurementSelection.cs" />
     <Compile Include="DataService\Rest\AllAttributeSelection.cs" />
