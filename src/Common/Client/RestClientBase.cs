@@ -255,13 +255,13 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
         // ReSharper disable once VirtualMemberNeverOverridden.Global
         protected virtual Task<bool> CheckAuthenticationContainerAsync()
         {
-            return null;
+            return Task.FromResult( false );
         }
 
         // ReSharper disable once VirtualMemberNeverOverridden.Global
         protected virtual Task<AuthenticationContainer> UpdateAuthenticationInformationAsync( HttpResponseMessage response )
         {
-            return null;
+            return Task.FromResult<AuthenticationContainer>( null );
         }
 
 		private void SetDefaultHttpHeaders( HttpRequestMessage request )
