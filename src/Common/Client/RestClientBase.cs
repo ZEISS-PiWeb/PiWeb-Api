@@ -96,11 +96,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 
 		public int MaxUriLength { get; }
 
-        public Func<Task> CheckAuthenticationContainerAsync{get; set;}
-
-        public Func<HttpResponseMessage, Task<AuthenticationContainer>> UpdateAuthenticationInformationAsync{get; set;}
-
-		#endregion
+        #endregion
 
 		#region methods
 
@@ -202,8 +198,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 
 			try
 			{
-				if(CheckAuthenticationContainerAsync != null)
-                    await CheckAuthenticationContainerAsync().ConfigureAwait( false );
+                await CheckAuthenticationContainerAsync().ConfigureAwait( false );
 
 				var completionOptions = streamed ? HttpCompletionOption.ResponseHeadersRead : HttpCompletionOption.ResponseContentRead;
 
@@ -225,8 +220,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 
 					AuthenticationContainer updatedAuthentication = null;
 
-                    if( UpdateAuthenticationInformationAsync != null )
-                        updatedAuthentication = await UpdateAuthenticationInformationAsync( response ).ConfigureAwait( false );
+                    updatedAuthentication = await UpdateAuthenticationInformationAsync( response ).ConfigureAwait( false );
 					
                     if( updatedAuthentication != null )
 					{
@@ -257,6 +251,18 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 				}
 			}
 		}
+
+        // ReSharper disable once VirtualMemberNeverOverridden.Global
+        protected virtual Task<bool> CheckAuthenticationContainerAsync()
+        {
+            return null;
+        }
+
+        // ReSharper disable once VirtualMemberNeverOverridden.Global
+        protected virtual Task<AuthenticationContainer> UpdateAuthenticationInformationAsync( HttpResponseMessage response )
+        {
+            return null;
+        }
 
 		private void SetDefaultHttpHeaders( HttpRequestMessage request )
 		{
