@@ -1,183 +1,32 @@
 ===========================================================================================
 -------------------------------------------------------------------------------------------
- Version 2.0.7                                                                         
+ Version 3.0.0                                                                         
 -------------------------------------------------------------------------------------------
 ===========================================================================================
 
-fix: Possible NullReferenceException if no LoginRequestHandler is set.
-
-
-
-===========================================================================================
--------------------------------------------------------------------------------------------
- Version 2.0.6                                                                         
--------------------------------------------------------------------------------------------
-===========================================================================================
-
-fix: Adjust internal assembly version.
-
-
-
-===========================================================================================
--------------------------------------------------------------------------------------------
- Version 2.0.5                                                                         
--------------------------------------------------------------------------------------------
-===========================================================================================
-
-fix: Newtonsoft.Json nuget dependency was broken which caused a runtime error.
-
-
-
-===========================================================================================
--------------------------------------------------------------------------------------------
- Version 2.0.4                                                                         
--------------------------------------------------------------------------------------------
-===========================================================================================
-
-Updatefix: Fetching parts or characteristics by uuid lead to empty list entries if no entity with the given uuid is found.
-
-
-
-===========================================================================================
--------------------------------------------------------------------------------------------
- Version 2.0.3                                                                         
--------------------------------------------------------------------------------------------
-===========================================================================================
-
-fix: Possible NullReferenceException if no LoginRequestHandler is set.
-
-
-
-===========================================================================================
--------------------------------------------------------------------------------------------
- Version 2.0.2                                                                         
--------------------------------------------------------------------------------------------
-===========================================================================================
-
-fix: Add missing nuget dependency on Jetbrains.Annotations
-
-
-
-===========================================================================================
--------------------------------------------------------------------------------------------
- Version 2.0.1                                                                           
--------------------------------------------------------------------------------------------
-===========================================================================================
-
-fix: Add missing nuget dependency on Newtonsoft.Json.Bson
-
-
-
-===========================================================================================
--------------------------------------------------------------------------------------------
- Version 2.0.0                                                                           
--------------------------------------------------------------------------------------------
-===========================================================================================
 
 ==========================================
  New Features
 ==========================================
 
-
-Supported by DataService API-Version >= 1.2
--------------------------------------------
-
-- Possibility to authenticate by OAuth (only for PiWeb Cloud)
-
-- DeleteMeasurements method was extended by Parameter aggregation and deep.
-<<Aggregation>> indicates if all mesurements or only normal or aggregated 
-mesaurments hould be deleted.
-<<Deep>> indicates if only measurements for the curent part specified by 
-partPath or also all measurements of child parts should be deleted
-
-- ServiceInformation object contains CatalogTimestamp property that specifies 
-when catalogs were modifeid last time
-
-- Measurements can be deleted by part uuid, now. DeleteMeasurements methods are 
-obsolete as they have been replaced by DeleteMeasurementsByPartPath, 
-DeleteMeasurementsByPartUuids und DeleteMeasurementsByUuid.
-
-- WrappedServerException includes not only status code but complete HttpRequestMessage
-and HttpResponseMessage
-
-- WrappedServerException property Error includes more exception details
-
-- New methods to check usage of attributes (CheckAttributeUsage) and usage of catalog 
-entries (ChechCatalogEntryUsage)
-
-- GetCatalogs method was replaced by new methods GetAllCatalogs and GetCatalog which 
-returns catalog for a certain catalog uuid
-
-- Possibility to filter search by database fields was added (6691)
-
-- Simplification: Removed multiple constructors of DataServcieRestClient for better clarity
-
-- DataServcieRestClient now supports ILoginRequestHandler parameter for dynamic login requesting 
-
-- GetMeasurements and GetValues methods can additionally be restricted by partUuids parameter
-
-- Added method GetDistinctMeasurementAttributeValues that fetches a list of measurement attribute 
-values of a certain attribute for a given part. The search operation can be parameterized using the 
-specified by a filter. If this filter is empty, all values for the specified key will be fetched.
-
-- Removed possibility to stream response for GetMeasurements and GetMeasurementValues as it work not 
-
-
-Supported by RawDataService API-Version >= 1.2
-----------------------------------------------
-
-- On fetching raw data information it is possible to pass a filter, now.
-
-- Simplification: Removed multiple constructors of RawDataServcieRestClient for better clarity
-
-- RawDataServcieRestClient now supports ILoginRequestHandler parameter for dynamic login requesting 
-
-
-Supported by DataService API-Version >= 1.3
--------------------------------------------
-
-- GetCharacteristics: Removed parameter partUuids and introduced GetCharactersitcisByUuid method, which 
-allows fetching multiple characteristics by their uuid in one call.
-
-- When fetching the last n measurements, n is now represented by an integer value instead of short 
-which allows fetching more than 32768 items.
-
-
-Supported by DataService API-Version >= 1.4
--------------------------------------------
-
-- GetMeasurements and GetValues methods can be restricted by primary measurement keys which 
-are used for joining measurements accross multiple parts on the server side
+- Update to target framework v4.7.2
+- Update Annotations nuget package to v2018.2.1
+- Update Newtonsoft.Json nuget package to v12.0.1
+- Remove unused methods from CertificateHelper class
+- Remove unused class AuthenticationHelper
+- Remove unused loginRequestHandler parameter from 
+  DataServiceRestClient and RawDataServiceRestClient constructors
 
 
 ==========================================
  Bugfixes
 ==========================================
 
-- Order did not work on fetching measurements or values
-
-- Deleting parts or characteristics did not work as expected
-
-- On deleting all raw data entries for a certain entity by using particular 
-method DeleteAllRawDataForPart, DeleteAllRawDataForCharacteristic, 
-DeleteAllRawDataForMeasurement or DeleteAllRawDataForValue not all but 
-only first entry was deleted
-
-- Implemented handling for possible UriTooLong exception due to too many parameters
-
-- Versioning entries can be created on creating parts and characteristics if 
-flag <<versioningEnabled>> is set to true, now.
-
-- DataServiceRestClient method DeleteAllParts methods did not work as ecpected.
-
-- DataServiceRestClient method DeleteCatalogs did not work as expected.
-
-- Renamed DataServiceRestClient method UpdateAttributeDefinition to UpdateAttributeDefinitions.
-
-- On creating a catalog entry the key is initially set to -1 instead of 0. Previous behavior may
-lead to unexpected behavior by possibly overwriting an aleready exiting entry.
+Return int datatype for call of GetRawValue(typeof(int))
 
 
+Supported only by DataService API-Version >= 1.4.5
+-------------------------------------------
 
+To use complete supported range for catalog entries index internal used datatype was switched from short to int.
 
-For details see online documentation at http://zeiss-piweb.github.io/PiWeb-Api/

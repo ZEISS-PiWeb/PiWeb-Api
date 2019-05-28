@@ -42,14 +42,14 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 
 		#region constructor
 
-		/// <summary>
-		/// Main Constructor. Initilization of the client class for communicating with the DataService via the given <paramref name="serverUri"/>
-		/// </summary>
-		/// <param name="serverUri">The PiWeb Server uri, including port and instance</param>
-		/// <param name="loginRequestHandler"></param>
-		/// <param name="maxUriLength">The uri length limit</param>
-		public DataServiceRestClient( Uri serverUri, ILoginRequestHandler loginRequestHandler = null, int maxUriLength = RestClient.DefaultMaxUriLength )
-			: base( new RestClient( serverUri, EndpointName, loginRequestHandler, maxUriLength: maxUriLength ) )
+        /// <summary>
+        /// Main Constructor. Initilization of the client class for communicating with the DataService via the given <paramref name="serverUri"/>
+        /// </summary>
+        /// <param name="serverUri">The PiWeb Server uri, including port and instance</param>
+        /// <param name="maxUriLength">The uri length limit</param>
+        /// <param name="restClient">Custom implementation of RestClient</param>
+        public DataServiceRestClient( Uri serverUri, int maxUriLength = RestClientBase.DefaultMaxUriLength, RestClientBase restClient = null )
+			: base( restClient ?? new RestClient( serverUri, EndpointName, maxUriLength: maxUriLength ) )
 		{
 		}
 
@@ -311,7 +311,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		/// <param name="catalogUuid">The uuid of the catalog to remove the entries from.</param>
 		/// <param name="keys">The keys of the catalog entries to delete.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public async Task DeleteCatalogEntries( Guid catalogUuid, short[] keys = null, CancellationToken cancellationToken = default( CancellationToken ) )
+		public async Task DeleteCatalogEntries( Guid catalogUuid, int[] keys = null, CancellationToken cancellationToken = default( CancellationToken ) )
 		{
 			var uri = $"catalogs/{catalogUuid}";
 
@@ -323,7 +323,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 			{
 				foreach( var keyList in ArrayHelper.Split( keys, RestClient.MaximumPathSegmentLength, RestClientHelper.LengthOfListElementInUri ) )
 				{
-					var restriction = $"/{RestClientHelper.ConvertShortArrayToString( keyList )}";
+					var restriction = $"/{RestClientHelper.ConvertIntArrayToString( keyList )}";
 					await _RestClient.Request( RequestBuilder.CreateDelete( string.Concat( uri, restriction ) ), cancellationToken ).ConfigureAwait( false );
 				}
 			}

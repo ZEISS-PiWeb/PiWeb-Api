@@ -47,14 +47,14 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 
 		#region constructors
 
-		/// <summary>
-		/// Main Constructor. Initilization of the client class for communicating with the RawDataService via the given <paramref name="serverUri"/>
-		/// </summary>
-		/// <param name="serverUri">The PiWeb Server uri, including port and instance</param>
-		/// <param name="loginRequestHandler"></param>
-		/// <param name="maxUriLength">The uri length limit</param>
-		public RawDataServiceRestClient( Uri serverUri, int maxUriLength = RestClient.DefaultMaxUriLength, ILoginRequestHandler loginRequestHandler = null )
-			: base( new RestClient( serverUri, EndpointName, loginRequestHandler, maxUriLength: maxUriLength ) )
+        /// <summary>
+        /// Main Constructor. Initilization of the client class for communicating with the RawDataService via the given <paramref name="serverUri"/>
+        /// </summary>
+        /// <param name="serverUri">The PiWeb Server uri, including port and instance</param>
+        /// <param name="maxUriLength">The uri length limit</param>
+        /// <param name="restClient">Custom implementation of RestClient</param>
+        public RawDataServiceRestClient( Uri serverUri, int maxUriLength = RestClientBase.DefaultMaxUriLength, RestClientBase restClient = null )
+			: base( restClient ?? new RestClient( serverUri, EndpointName, maxUriLength: maxUriLength ) )
 		{
 		}
 
