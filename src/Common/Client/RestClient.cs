@@ -406,19 +406,16 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 		{
 			if( !AuthenticationHelper.IsAuthenticationContainerIncomplete( _AuthenticationContainer ) ) return true;
 
-			var updatedAuthentication = await AuthenticationHelper.RequestAuthenticationInformationUpdateAsync(
-					_AuthenticationContainer.Mode,
-					GetInstanceUri(),
-					_LoginRequestHandler )
-				.ConfigureAwait( false );
-			if( updatedAuthentication != null )
-			{
+            AuthenticationContainer updatedAuthentication = null;
+            
+            if( _LoginRequestHandler != null )
+                updatedAuthentication = await AuthenticationHelper.RequestAuthenticationInformationUpdateAsync( _AuthenticationContainer.Mode, GetInstanceUri(), _LoginRequestHandler )
+               .ConfigureAwait( false );
+			
+            if( updatedAuthentication != null )
 				AuthenticationContainer = updatedAuthentication;
-			}
 			else
-			{
 				return false;
-			}
 
 			return true;
 		}
