@@ -120,8 +120,8 @@ Task("Pack")
         Tags                     = new [] {"ZEISS", "PiWeb", "API"},
         RequireLicenseAcceptance = true,
         Files                    = new [] { 
-            new NuSpecContent { Source = "PiWeb.Api.dll", Target = "lib/net45" },
-            new NuSpecContent { Source = "PiWeb.Api.xml", Target = "lib/net45" },
+            new NuSpecContent { Source = "PiWeb.Api.dll", Target = "lib/net472" },
+            new NuSpecContent { Source = "PiWeb.Api.xml", Target = "lib/net472" },
         },
         Dependencies             = new [] {
             new NuSpecDependency { Id = "Newtonsoft.Json", Version = "12.0.1" },
