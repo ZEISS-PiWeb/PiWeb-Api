@@ -42,14 +42,14 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 
 		#region constructor
 
-		/// <summary>
-		/// Main Constructor. Initilization of the client class for communicating with the DataService via the given <paramref name="serverUri"/>
-		/// </summary>
-		/// <param name="serverUri">The PiWeb Server uri, including port and instance</param>
-		/// <param name="loginRequestHandler"></param>
-		/// <param name="maxUriLength">The uri length limit</param>
-		public DataServiceRestClient( Uri serverUri, ILoginRequestHandler loginRequestHandler = null, int maxUriLength = RestClient.DefaultMaxUriLength )
-			: base( new RestClient( serverUri, EndpointName, loginRequestHandler, maxUriLength: maxUriLength ) )
+        /// <summary>
+        /// Main Constructor. Initilization of the client class for communicating with the DataService via the given <paramref name="serverUri"/>
+        /// </summary>
+        /// <param name="serverUri">The PiWeb Server uri, including port and instance</param>
+        /// <param name="maxUriLength">The uri length limit</param>
+        /// <param name="restClient">Custom implementation of RestClient</param>
+        public DataServiceRestClient( Uri serverUri, int maxUriLength = RestClientBase.DefaultMaxUriLength, RestClientBase restClient = null )
+			: base( restClient ?? new RestClient( serverUri, EndpointName, maxUriLength: maxUriLength ) )
 		{
 		}
 
