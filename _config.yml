@@ -29,5 +29,5 @@ headers:
   bestPractice: "#### ![Best practice](/PiWeb-Api/images/footsteps.png) Best practice: "
   request: "##### Request"
   response: "##### Response"
-gems:
+plugins:
   - jekyll-redirect-from

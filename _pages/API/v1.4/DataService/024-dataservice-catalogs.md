@@ -181,7 +181,7 @@ HTTP/1.1 201 Created
 {% assign method="POST" %}
 {% assign endpoint="/catalogs/:catalogUuid" %}
 {% assign summary=" Creates entries for the catalog specified by :catalogUuid" %}
-{% assign description="To add entries to an existing catalog they need to be specified in the request body. Each new entry must consist of a unique key. Each entry attribute must be listed as a valid attribute in the catalog definition." 
+{% assign description="To add entries to an existing catalog they need to be specified in the request body. Each new entry must consist of a unique key. Each entry attribute must be listed as a valid attribute in the catalog definition." %}
 
 {{ site.images['info'] }} Setting -1 as catalog entry's key leads server to generate a new unique key for that entry.
 %}
