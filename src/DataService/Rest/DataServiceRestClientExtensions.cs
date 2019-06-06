@@ -57,7 +57,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		/// <param name="catalogUuid">The uuid of the catalog to remove the entry from.</param>
 		/// <param name="key">The key of the catalog entry to delete.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public static Task DeleteCatalogEntry<T>( this IDataServiceRestClientBase<T> client, Guid catalogUuid, int key, CancellationToken cancellationToken = default( CancellationToken ) ) where T : DataServiceFeatureMatrix
+		public static Task DeleteCatalogEntry<T>( this IDataServiceRestClientBase<T> client, Guid catalogUuid, short key, CancellationToken cancellationToken = default( CancellationToken ) ) where T : DataServiceFeatureMatrix
 		{
 			return client.DeleteCatalogEntries( catalogUuid, new[] { key }, cancellationToken );
 		}

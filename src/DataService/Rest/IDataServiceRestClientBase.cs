@@ -146,7 +146,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		/// <param name="catalogUuid">The uuid of the catalog to remove the entries from.</param>
 		/// <param name="keys">The keys of the catalog entries to delete.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task DeleteCatalogEntries( Guid catalogUuid, int[] keys = null, CancellationToken cancellationToken = default( CancellationToken ) );
+		Task DeleteCatalogEntries( Guid catalogUuid, short[] keys = null, CancellationToken cancellationToken = default( CancellationToken ) );
 
 		/// <summary>
 		/// Fetches a list of parts below <paramref name="partPath"/>. The result list always contains the specified parent part too. If the parent part
