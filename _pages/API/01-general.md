@@ -150,7 +150,6 @@ As the name suggests, catalogs represent a collection of different values. An en
 <hr>
 ### Additional Data
 Additional data are attachments that can be added to any entity in the inspection plan. This can be text, images, log files, CAD models or any binary file. There is no limit to the number of files and you can edit or remove additional data as desired.
-<hr>
 
 <h2 id="{{page.sections['general']['secs']['services'].anchor}}">{{page.sections['general']['secs']['services'].title}}</h2>
 
