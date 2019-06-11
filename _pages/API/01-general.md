@@ -89,7 +89,7 @@ PiWeb's data structure is based on the following four entities: **parts**, **cha
 Parts can represent a simple component up to complex assemblies. They describe a workpiece in general, in other words the workpiece type. This means that real parts that are later measured do not occur individually in the system, but are assigned to the workpiece as the respective measurement. It is also possible to assign subparts to a part, this can be repeated numerous times.
 
 #### Characteristics
-Characteristics can be described as distinctive or important properties of a part. Examples would be bores, curves or oblong holes, i.e. places where accuracy needs to be checked. A characteristic can again have characteristic, which can be repeated many times. An example would be a hole that contains diameter and coordinates as sub-characteristics. <br>
+Characteristics can be described as distinctive or important properties of a part. Examples would be bores, curves or oblong holes, i.e. places where accuracy needs to be checked. A characteristic can again have characteristics, which can be repeated many times. An example would be a hole that contains diameter and coordinates as sub-characteristics. <br>
 
 Types of characteristics:
 + *Characteristic* <br>
@@ -110,15 +110,15 @@ A measurement is a specific measurement process that can affect several characte
 #### Measured Values
 A measured value describes an actual measured or recorded value that is assigned to a characteristic or attribute. They are part of a measurement. Values can be **numerical**, e.g. a simple floating point number, or **attributive**. Values of attributive characteristics can be categorized. An example would be the result of a quality inspection, which can either be *passed* or *failed*. These categories can be counted, so in this case the number would be two. <br>
 
- **Attributively counting** characteristics are those that consider the number of a certain characteristic. If you examine a painted component for damaged spots, you can also count the occurrences. The part then has, for example, two damaged spots, whereby this again represents a category, namely the parts with the exact number of two defects. These characteristics are therefore not "measurable" in the conventional sense.
+ **Attributively counting** characteristics are those that consider the number of a certain characteristic. If you examine a painted component for damaged spots, you can also count the occurrences. If the part has two damaged spots, this again represents a category, namely the parts with the exact number of two defects. These characteristics are therefore not "measurable" in the conventional sense.
 <hr>
 ### Configuration
-The configuration defines attributes and catalogs. Both can be created, existing ones edited or removed.
+The configuration defines attributes and catalogs. Both can be created, edited or removed.
 
 #### Attributes
 Characteristic and attribute have a similar meaning, but need to be distinguished in PiWeb. Attributes are divided into four groups according to their affiliation to an entity. Therefore, there are part-, characteristic-, measurement- and measured value attributes. These can be seen as properties of an entity. For example, a characteristic can contain attributes such as characteristic-ID, upper and lower limit, target value, and much more. For parts there are attributes like part-ID, the factory area or a short description. The most important attribute of a measured value is the actual value, but there are no restrictions.
 
-Attributes are part of the configuration, and can be set individually. You assign a unique key to each attribute, define description, data type and length. The available data types are `string`, `integer`, `floating-point`, `date` and `catalog`. Catalog entries also have attributes and form a kind of fifth group, although they are not an explicit entity.
+Attributes are part of the configuration, and can be set individually. You assign a unique key to each attribute, define description, data type and length. The available data types are `string`, `integer`, `floating-point`, `date` and `catalog`. Catalog entries also have attributes and form a fifth group, although they are not an explicit entity.
 
 The unique key is important, as it has the purpose of an identifier for PiWeb to identify different attributes. The measurement date as an example has the key K4. PiWeb knows different important attributes and their keys, changing them is not advised.
 
@@ -144,7 +144,7 @@ A limit that determines when actions regarding production should be taken based 
 A limit that determines when a warning about bad values should be triggered
 
 #### Catalogs
-As the name suggests, catalogs represent a collection of different values. An entry has a number and can have several other attributes. Catalogs are used to simplify decisions at certain points by specifying the possible values. The user does not have to enter data by hand, and cannot cause unintended typing errors.
+Catalogs represent a collection of different values. An entry has a number and can have several other attributes. Catalogs are used to simplify decisions at certain points by specifying the available values. The user does not have to enter data by hand, and cannot cause unintended typing errors.
 
  An example would be the machine catalog. This contains the different machines which could be used to measure a part. Additional information for each machine can be noted there too. Now an inspector selects the responsible machine from the catalog when entering a measurement, which makes things a lot easier. Other values than those stored in the catalog are not possible. Also simple variants, like the direction catalog, which contains directions like left and right, are possible.
 <hr>
@@ -183,7 +183,7 @@ PiWeb uses **Semantic Versioning** ([SemVer](https://semver.org/ "Semantic Versi
 If the major version changes, we implemented a change that is not compatible with older API versions. This means that the changed functionality is only supported as of this major release. Examples are changes in the behavior of methods, addition of non-optional parameters or changing data types.
 
 + **Minor**: *Compatible Change* <br>
-A change to the minor version indicates the addition of a backwards compatible feature. This means that existing features and their usages still return the expected results. Software with an older version can communicate with the newer version, not supported features are marked as such.
+A change to the minor version indicates the addition of a backwards compatible feature. This means that existing features and their usages still return the expected results. Software with an older version can communicate with the newer version, unsupported features are marked as such.
 
 + **Patch**: *Compatible Bugfix* <br>
 The change of this version number indicates a patch, i.e. fixing of internal errors or bugs. This is downward compatible and has no relevance regarding the API interface.
