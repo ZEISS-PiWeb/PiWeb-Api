@@ -36,16 +36,19 @@ sections:
      response:
         title: Response
         anchor: gi-response
+     details:
+        title: Details
+        anchor: gi-details
 ---
 
 <h1 id="{{page.sections['general'].anchor}}">{{page.sections['general'].title}}</h1>
 
 ### What is PiWeb?
-PiWeb is a quality data management system capable of saving, managing, retrieving and analyzing quality inspection data from production. All data is available anytime and anywhere through a web-service, which makes you independent of your current location. Thanks to real-time data analysis, it is possible to react quickly to any problems within production. Further information can be found at
+PiWeb is a quality data management system capable of saving, managing, retrieving and analyzing quality inspection data. All data is available at anytime and from anywhere through web-services. Thanks to real-time data analysis, it is possible to react quickly to any problems within production. Further information can be found at
 [ZEISS PiWeb](https://www.zeiss.com/metrology/products/software/piweb.html "ZEISS Metrology products").
 
 ### What is the PiWeb API?
-The PiWeb-API provides the public interface of the web service through which various requests can be sent to the PiWeb server. You can create, manage and remove data, or retrieve relevant files and information from the PiWeb server. The used architecture is based on REpresentational State Transfer (REST), a detailed description can be found [here](https://medium.com/@sagar.mane006/understanding-rest-representational-state-transfer-85256b9424aa "Understanding REST").
+The PiWeb API provides the public interface of the web service through which various requests can be sent to the PiWeb server. You can create, manage and remove data, or retrieve relevant files and information from the PiWeb server. The used architecture is based on REpresentational State Transfer (REST), a detailed description can be found [here](https://medium.com/@sagar.mane006/understanding-rest-representational-state-transfer-85256b9424aa "Understanding REST").
 
 **The API fulfils two purposes:**
 
@@ -61,7 +64,7 @@ Furthermore, the API offers the possibility to query and retrieve measurement da
 {% capture table %}
 REST API        | .NET SDK (C# API)
 ------------- | -----------------------------------------------------------------------------------
-This is the actual interface of the PiWeb-server. It consists of two main services, DataService and RawDataService. For more information, see [Services](#gi-services "Services"). Requests are made using HTTP(S), and data is transferred in JSON format, see [Formats](#gi-formats "Formats"). | This development kit implements Data- and RawData Client, which offer different functionalities of the respective REST endpoints. This way you can develop software using .NET objects, methods and available properties instead of pure HTTP(S) and JSON. You can find further information in the [.NET SDK documentation](http://zeiss-piweb.github.io/PiWeb-Api/sdk/ ".NET SDK documentation")
+This is the interface provided directly by PiWeb server. It consists of two main services, DataService and RawDataService. For more information, see [Services](#gi-services "Services"). Requests are made using HTTP(S), and data is transferred in JSON format, see [Formats](#gi-formats "Formats"). | The .NET SDK offers C# client implementations for DataService and RawDataService. This way you can develop software using C# objects, methods and available properties instead of pure HTTP(S) and JSON. You can find further information in the [.NET SDK documentation](http://zeiss-piweb.github.io/PiWeb-Api/sdk/ ".NET SDK documentation")
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
@@ -73,8 +76,10 @@ This section gives you a brief overview of the PiWeb domain model and explains c
 <br>
 <img src="/PiWeb-Api/images/domain_model_en.png" class="img-responsive center-block">
 
+A detailed model can be found in the section [Details](#gi-details "Details").
+
 ### Inspection Plan
-Inspection plans specify the structure of parts, characteristics and possible sub-parts and sub-characteristics. In order to get a better understanding of these, they are displayed in a tree structure. The uppermost part forms a root part, and the entries following in further levels subnodes or leaves. Implicitly, the connected PiWeb server represents the general root node of all objects, from which any arbitrary one can be reached. <br>
+Inspection plans specify the structure of parts, characteristics and possible sub-parts and sub-characteristics. In order to get a better understanding of these, they are displayed in a tree structure. The uppermost part forms a root part, and the entries following in further levels form subnodes or leaves. The connected PiWeb server always contains a root node for all objects, from which any arbitrary part or characteristic can be reached. <br>
 You can create inspection plans on the basis of the desired parts you want to measure and monitor. The inspection plan allows nesting, so that parts and characteristics can again contain such entities. Characteristics cannot contain any parts.
 
 The following image shows an example of a simple inspection plan:
@@ -86,7 +91,7 @@ The following image shows an example of a simple inspection plan:
 PiWeb's data structure is based on the following four entities: **parts**, **characteristics**, **measurements** and **measured values**. An entity is therefore an object that has certain properties and interaction possibilities. They form the center of the logic that runs within the system.
 
 #### Parts
-Parts can represent a simple component up to complex assemblies. They describe a workpiece in general, in other words the workpiece type. This means that real parts that are later measured do not occur individually in the system, but are assigned to the workpiece as the respective measurement. It is also possible to assign subparts to a part, this can be repeated numerous times.
+Parts can represent a simple component up to complex assemblies. They describe a workpiece in general, i.e. the workpiece type. This means that real parts that are later measured do not occur individually in the system, but are assigned to the workpiece in form of a measurement. It is also possible to assign subparts to a part, this can be repeated numerous times.
 
 #### Characteristics
 Characteristics can be described as distinctive or important properties of a part. Examples would be bores, curves or oblong holes, i.e. places where accuracy needs to be checked. A characteristic can again have characteristics, which can be repeated many times. An example would be a hole that contains diameter and coordinates as sub-characteristics. <br>
@@ -190,11 +195,11 @@ The change of this version number indicates a patch, i.e. fixing of internal err
 
 A list of changes can be found in the Release Notes.
 
-#### How do I get the API versions supported by the PiWeb server?
+#### How do I get the API versions supported by PiWeb server?
 <br>
 The .NET SDK has a global version, depending on your chosen NuGet package or GitHub source files. <br>
-The REST API instead doesn't have a version as a whole, there are only the versions of the endpoints. <br>
-A request to the desired services endpoint provides the supported versions:
+The REST API instead doesn't have a version as a whole, each service has its own version. <br>
+You can find out the supported service versions by making a GET request to its base URL:
 ```html
 http(s)://ServerUri:Port/instanceName/dataServiceRest
 or
@@ -275,4 +280,13 @@ Every response consists either of the requested data or of an error message retu
                [uuid: 05040c4c-f0af-46b8-810e-30c0c00a379e] does already exist."
 }
 ```
-<br>
+
+<h2 id="{{page.sections['general']['secs']['details'].anchor}}">{{page.sections['general']['secs']['details'].title}}</h2>
+
+This section contains detailed information about the domain model.
+
+Complete image of the domain model:
+<img src="/PiWeb-Api/images/domain_model_full.png" class="img-responsive center-block">
+
+Relations of additional data:
+<img src="/PiWeb-Api/images/domain_model_additional_data.png" class="img-responsive center-block">
