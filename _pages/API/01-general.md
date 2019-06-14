@@ -159,7 +159,7 @@ Additional data are attachments that can be added to any entity in the inspectio
 <h2 id="{{page.sections['general']['secs']['services'].anchor}}">{{page.sections['general']['secs']['services'].title}}</h2>
 
 #### DataService
-The REST DataService is the endpoint for everything related to PiWeb data like parts, characteristics, measurements, measured values, attributes and catalogs. Creating, managing and removing data is done using requests send to this service. <br>
+The REST DataService is the endpoint for everything related to PiWeb data like parts, characteristics, measurements, measured values, attributes and catalogs. Creating, managing and removing data is done using requests sent to this service. <br>
 
 The base address is:
 ```http
