@@ -1,6 +1,7 @@
 <h1 id="{{page.sections['basics'].anchor}}">{{page.sections['basics'].title}}</h1>
 
 This section represents a brief overview of the most frequent use cases of the .NET API and the available methods.
+Each section contains a table of content, where the performed examples in this section are listed.
 
 {% include_relative 022-basics/0220-basics-create.md %}
 

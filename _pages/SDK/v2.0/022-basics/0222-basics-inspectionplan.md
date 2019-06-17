@@ -1,5 +1,13 @@
 <h2 id="{{page.sections['basics']['secs']['inspectionPlan'].anchor}}">{{page.sections['basics']['secs']['inspectionPlan'].title}}</h2>
 
+Examples in this section:
++ [Using the PathHelper class](#-example--using-the-pathhelper-class)
++ [Creating a part with a sub-part](#-example--creating-a-part-with-a-sub-part)
++ [Fetching different entities](#-example--fetching-different-entities)
++ [Creating characteristics for the part “MetalPart”](#-example--creating-characteristics-for-the-part-metalpart)
++ [Deleting “MetalPart”](#-example--deleting-metalpart)
+<hr>
+
 An inspection plan object contains entities of two different types - parts and characteristics. Parts are hold in class `SimplePart`, characteristics are hold in class `InspectionPlanCharacteristic`. Both are derived from the abstract base class `InspectionPlanBase` and consists of the following properties:
 
 <img src="/PiWeb-Api/images/inspection-plan-schema.png" class="img-responsive center-block">
@@ -67,7 +75,7 @@ Method                                               | Description
 var characteristicPath = PathHelper.RoundtripString2PathInformation( "PPC:/MetalPart/SubPart/Char1" );
 {% endhighlight %}
 
-In the above example a simple path is created using our PathHelper.String2PathInformation method. The method needs the path in [roundtrip format](https://en.wikipedia.org/wiki/Round-trip_format_conversion), consisting of structure and path.
+In the above example a simple path is created using our PathHelper.RoundtripString2PathInformation method. The method needs the path in [roundtrip format](https://en.wikipedia.org/wiki/Round-trip_format_conversion), consisting of structure and path.
 
 The structure is a list of the letters *P* and *C*, which are the short form of *part* and *characteristic*. The list is ordered according to the occuring types of entities in the following path string. The example structure is `PPC`, standing for `/Part/Part/Characteristic`, which matches the types of `/MetalPart/SubPart/Char1` in the exact order.
 
@@ -75,7 +83,7 @@ The structure is a list of the letters *P* and *C*, which are the short form of 
 
 >{{ site.images['info'] }} `DataServiceClient` in examples refers to an actual instance of `DataServiceRestClient` pointing to a server.
 
-{{ site.headers['example'] }} Create a part with a sub-part
+{{ site.headers['example'] }} Creating a part with a sub-part
 
 {% highlight csharp %}
 //Create a new part
@@ -96,7 +104,7 @@ await DataServiceClient.CreateParts( new[] { parentPart, childPart } );
 {% endhighlight %}
 The name of the part is specified within its path. Nesting is easy as you just create the path and structure according to your desired hirarchy. Remember again that characteristics cannot contain parts.
 
-{{ site.headers['example'] }} Fetch different entities
+{{ site.headers['example'] }} Fetching different entities
 
 {% highlight csharp %}
 //Create PathInformation of "MetalPart"
@@ -113,7 +121,7 @@ You can fetch different entities with the corresponding method. The path specifi
 >{{ site.headers['bestPractice'] }} Create or update multiple entities in a single call
 To achieve a good performance it is highly recommended to create or update items in a single call. That is why all create and update methods expect an array parameter.
 
-{{ site.headers['example'] }} Create characteristics for the part "MetalPart"
+{{ site.headers['example'] }} Creating characteristics for the part "MetalPart"
 
 {% highlight csharp %}
 //Create characteristics for MetalPart
@@ -132,7 +140,7 @@ await RestDataServiceClient.CreateCharacteristics( new[] {char1, char2, char3} )
 {% endhighlight %}
 
 <br>
-{{ site.headers['example'] }} Delete "MetalPart"
+{{ site.headers['example'] }} Deleting "MetalPart"
 
 {% highlight csharp %}
 //Create PathInformation of "MetalPart"

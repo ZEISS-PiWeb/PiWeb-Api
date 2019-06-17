@@ -1,6 +1,15 @@
 <h2 id="{{page.sections['basics']['secs']['measurementsValues'].anchor}}">{{page.sections['basics']['secs']['measurementsValues'].title}}</h2>
 
-[Test](#creating-measurements-and-measured-values)
+Examples in this section:
++ [Creating a measurement with values](#-example--creating-a-measurement-with-values)
++ [Writing values using the attribute](#-example--writing-values-using-the-attribute)
++ [Assigning values to measurement attributes](#-example--assigning-values-to-measurement-attributes)
++ [Fetching measurements of a part](#-example--fetching-measurements-of-a-part)
++ [Fetching measurements in a time range](#-example--fetching-measurements-in-a-time-range)
++ [Fetching specified attributes](#-example--fetching-specified-attributes)
++ [Using search conditions](#-example--using-search-conditions)
+
+<hr>
 
 Measurements contain measured values for specific characteristics, and are assigned to exactly one part. A measurement is represented by the class `SimpleMeasurement` and `DataMeasurement`, and measured values are hold in class `DataValue`
 
@@ -36,7 +45,7 @@ In most cases however you want to create a measurement with actual measured valu
 
 >{{ site.images['info'] }} The `LastModfified` property is only relevant for fetching measurements. On creating or updating a measurement it is set by server automatically.
 
-{{ site.headers['example'] }} Create a measurement with values
+{{ site.headers['example'] }} Creating a measurement with values
 
 {% highlight csharp %}
 //Create an attribute that stores the measured value (if it not exists already)
@@ -71,6 +80,7 @@ var Measurement = new DataMeasurement
 await DataServiceClient.CreateMeasurementValues( new[] { Measurement } );
 {% endhighlight %}
 The `DataCharacteristic` represents a connection between an actual measured value and a characteristic. It is linked to the characteristic via its path and uuid, and contains the value in form of a `DataValue` object.
+>{{ site.images['info'] }} The method `CreateMeasurementValues` is used to create measurements *with* measured values, not only measured values alone.
 
 >{{ site.images['info'] }} The `Value` property in `DataCharacteristic` is a shortcut to the attribute with key *K1*, which is the measured value.
 
@@ -100,10 +110,11 @@ var MeasurementAttributeDefinition = new AttributeDefinition( WellKnownKeys.Meas
 "Inspector", AttributeType.AlphaNumeric, 30 );
 
 //Create the measurement
-private static readonly DataMeasurement Measurement = new DataMeasurement
+var Measurement = new DataMeasurement
 {
   Uuid = Guid.NewGuid(),
   PartUuid = Part.Uuid,
+  Time = DateTime.Now,
   Attributes = new[]
     {
       new Zeiss.IMT.PiWeb.Api.DataService.Rest.Attribute( MeasurementAttributeDefinition.Key, "Ryan, Andrew" )
@@ -113,9 +124,14 @@ private static readonly DataMeasurement Measurement = new DataMeasurement
 };
 {% endhighlight %}
 
+>{{ site.headers['bestPractice'] }} Use the property `Time`
+This property of a `Measurement` is a shortcut to the attribute *Time* with key *K4*.
+
 >{{ site.images['info'] }} Please use the `Zeiss.IMT.PiWeb.Api.DataService.Rest.Attribute` class, not the standard `System.Attribute`!
 <hr>
 ### Fetching measurements and measured values
+
+>{{ site.images['info'] }} To improve performance the path information of characteristics in measurements are not returned when fetching data.
 
 Next to creating or updating measurements, another important functionality is fetching those measurements and measurde values according to different criterias.
 
@@ -162,5 +178,59 @@ Property                                          | Description
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
+To demonstrate the usefulness of these filters we will use examples, the part path is the same as in the first example of this section.
+
+{{ site.headers['example'] }} Fetching measurements in a time range
+{% highlight csharp %}
+//Fetch all measurements of the part
+var FetchedMeasurements = await DataServiceClient.GetMeasurementValues(
+  PartPath,
+  new MeasurementValueFilterAttributes
+  {
+    AggregationMeasurements = AggregationMeasurementSelection.All,
+    Deep = true,
+    FromModificationDate = DateTime.Now - TimeSpan.FromDays(2),
+    ToModificationDate =  DateTime.Now
+  })
+{% endhighlight %}
+This returns the measurements of the last two days. You can also use actual dates instead of a time range. It is not required to specify both dates, you could use `FromModificationDate` and `ToModificationDate` independently.
+
+{{ site.headers['example'] }} Fetching specified attributes
+{% highlight csharp %}
+//Fetch all measurements of the part
+var FetchedMeasurements = await DataServiceClient.GetMeasurementValues(
+  PartPath,
+  new MeasurementValueFilterAttributes
+  {
+    AggregationMeasurements = AggregationMeasurementSelection.All,
+    Deep = true,
+    FromModificationDate = DateTime.Now - TimeSpan.FromDays(2),
+    ToModificationDate =  DateTime.Now
+    RequestedMeasurementAttributes =  new AttributeSelector(){ Attributes = new ushort[]{ 4, 8, 53 } }  
+  })
+{% endhighlight %}
+To retrieve only a subset of attributes you can use the option `RequestedValueAttributes`, which requires an `AttributeSelector`. You simply add the keys of the desired attributes to the `Attribute` property.
+
+{{ site.headers['example'] }} Using search conditions
+{% highlight csharp %}
+//Fetch all measurements of the part
+var FetchedMeasurements = await DataServiceClient.GetMeasurementValues(
+  PartPath,
+  new MeasurementValueFilterAttributes
+  {
+    SearchCondition = new GenericSearchAttributeCondition
+    {
+      Attribute = WellKnownKeys.Measurement.Time,
+      Operation = Operation.GreaterThan,
+      Value = XmlConvert.ToString(DateTime.UtcNow - TimeSpan.FromDays(2), XmlDateTimeSerializationMode.Utc)
+    }
+  })
+{% endhighlight %}
+In this case we use a `GenericSearchAttributeCondition`, a search condition for attributes. You specify the attribute key with the value of interest, an operation and the value you want to check against. This example again returns the measurements of the last 48 hours.
+We offer other search conditions to create more complex filters, like `GenericSearchAnd`, `GenericSearchOr` and `GenericSearchNot`. <br>
+You can realize more options like filtering for a specific measurement by its id or sorting with the respective properties of the `FilterAttribute` classes.
+
+>{{ site.headers['bestPractice'] }} Consider filtering on client side
+Instead of defining complex queries to retrieve filtered results, you should consider requesting data with less restrictions, and filter it on client side according to your criteria. This reduces workload for the server, as filtering requires more ressources.
 
 TODO: Was passiert bei Messungsabruf wenn alle drei Parameter angegeben? Measurement Uuid>part Uuid>path

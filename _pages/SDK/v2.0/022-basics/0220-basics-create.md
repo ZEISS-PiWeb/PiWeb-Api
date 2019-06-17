@@ -1,37 +1,27 @@
 <h2 id="{{page.sections['basics']['secs']['create'].anchor}}">{{page.sections['basics']['secs']['create'].title}}</h2>
 
-Creating a .NET REST client is quite simple:
+Examples in this section:
++ [Creating a DataServiceClient](#-example--creating-a-dataserviceclient)
++ [Creating a RawDataServiceClient](#-example--creating-a-rawdataserviceclient)
+<hr>
 
-### DataService
+Creating a .NET REST client is quite simple. You choose the required client based on the use case (DataService for parts, measurements, values, configuration and RawDataService for additional data), and pass in the `Uri` object pointing to your server.
 
-{% capture table %}
-Constructor method | Description
--------------------|-------------
-`public DataServiceRestClient( Uri serverUri, ILoginRequestHandler loginRequestHandler = null, int maxUriLength = RestClient.DefaultMaxUriLength )` | Instantiates the client with the server uri passed as Uri object.
-{% endcapture %}
-{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
-
-{{ site.headers['example'] }} A data service client pointed to "http://piwebserver:8080.
+{{ site.headers['example'] }} Creating a DataServiceClient
 
 {% highlight csharp %}
+//The Uri of your PiWeb server
 var uri = new Uri("http://piwebserver:8080");
+
 var dataserviceRestClient = new DataServiceRestClient( uri );
 {% endhighlight %}
-
-
-### RawDataService
-
-{% capture table %}
-Constructor method | Description
--------------------|-------------
-`public RawDataServiceRestClient( Uri serverUri, ILoginRequestHandler loginRequestHandler = null, int maxUriLength = RestClient.DefaultMaxUriLength )` | Instantiates the client with the server uri passed as Uri object.
-{% endcapture %}
-{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
-
-{{ site.headers['example'] }} A raw data service client pointed to "http://piwebserver:8082"
+<br>
+{{ site.headers['example'] }} Creating a RawDataServiceClient
 
 {% highlight csharp %}
-var uri = new Uri("http://piwebserver:8082");
+//The Uri of your PiWeb server
+var uri = new Uri("http://piwebserver:8080");
+
 var rawdataserviceRestClient = new RawDataServiceRestClient( uri );
 {% endhighlight %}
 <br>

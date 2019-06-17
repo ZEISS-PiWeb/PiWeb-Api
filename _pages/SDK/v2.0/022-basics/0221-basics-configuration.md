@@ -1,5 +1,11 @@
 <h2 id="{{page.sections['basics']['secs']['configuration'].anchor}}">{{page.sections['basics']['secs']['configuration'].title}}</h2>
 
+Examples in this section:
++ [Creating a new AttributeDefinition](#-example--creating-a-new-attributedefinition)
++ [Creating a new CatalogAttributeDefinition](#-example--creating-a-new-catalogattributedefinition)
++ [Creating a new attribute for a part](#-example--creating-a-new-attribute-for-a-part)
+<hr>
+
 All types of entities can be described by several attributes.
 Every attribute has an unique key. This key is important, as it has the purpose of an identifier for PiWeb to identify different attributes. PiWeb knows different important attributes and their keys, changing them is not advised.
 
@@ -11,7 +17,7 @@ The .NET SDK provides the `WellKnownKeys` class where you can find important sta
 var partDescriptionKey = WellKnownKeys.Part.Description;
 {% endhighlight %}
 
-The class `Configuration` includes all possible attributes for each entity identified by particular property:
+The class `Configuration` includes all possible attributes for each entity identified by a particular property:
 
 <img src="/PiWeb-Api/images/configuration-schema.png" class="img-responsive center-block">
 
@@ -65,7 +71,7 @@ Property                                          | Description
 
 While `AttributeDefinition` describes an attribute for parts, characteristics, measurements, measured values and catalogs, `CatalogAttributeDefinition` is an attribute definition based on an existing catalog. This means that a `CatalogAttributeDefinition` doesn't define an attribute that can be used *in a catalog*, but the definition of an attributes value *as a catalog* entry. The following example will help to understand the difference.
 
-{{ site.headers['example'] }} Create a new `AttributeDefinition`;
+{{ site.headers['example'] }} Creating a new `AttributeDefinition`
 
 {% highlight csharp %}
 //Create an AttributeDefinition;
@@ -73,7 +79,7 @@ AbstractAttributeDefinition AttributeDefinition = new AttributeDefinition( 11001
 {% endhighlight %}
 Here we create an attribute *Description*, which can be used in parts, catalogs etc.
 
-{{ site.headers['example'] }} Create a new `CatalogAttributeDefinition`;
+{{ site.headers['example'] }} Creating a new `CatalogAttributeDefinition`
 
 {% highlight csharp %}
 Catalog TestCatalog = new Catalog
@@ -97,7 +103,7 @@ Here we create a new catalog *TestCatalog*. The next step is to create a `Catalo
 >{{ site.headers['bestPractice'] }} Check if a key already exists in the configuration
 Keys are unique, so creating an attribute with the same key will result in an exception. You should always check if an attribute already exists, see example below.
 
-{{ site.headers['example'] }} Create a new attribute for a part
+{{ site.headers['example'] }} Creating a new attribute for a part
 
 {% highlight csharp %}
 //Create the client and fetch the configuration

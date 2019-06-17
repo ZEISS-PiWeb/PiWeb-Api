@@ -113,9 +113,9 @@ A special type of measurement point that can be used to calculate distance, symm
 A measurement is a specific measurement process that can affect several characteristics. For example, if an inspector measures a part and records one, several, or all existing characteristics, this procedure and its values describe a measurement. Not all characteristics need to be measured. A measurement always belongs to only one part, deleting the part also removes the measurements.
 
 #### Measured Values
-A measured value describes an actual measured or recorded value that is assigned to a characteristic or attribute. They are part of a measurement. Values can be **numerical**, e.g. a simple floating point number, or **attributive**. Values of attributive characteristics can be categorized. An example would be the result of a quality inspection, which can either be *passed* or *failed*. These categories can be counted, so in this case the number would be two. <br>
+A measured value describes an actual measured or recorded value that is assigned to a characteristic or attribute. They are part of a measurement. Values can be **numerical**, e.g. a simple floating point number, **attributive** or **enumerated**. Values of attributive characteristics can be categorized. An example would be the result of a quality inspection, which can either be *passed* or *failed*. These categories can be counted, so in this case the number would be two. <br>
 
- **Attributively counting** characteristics are those that consider the number of a certain characteristic. If you examine a painted component for damaged spots, you can also count the occurrences. If the part has two damaged spots, this again represents a category, namely the parts with the exact number of two defects. These characteristics are therefore not "measurable" in the conventional sense.
+ **Enumerated** characteristics are those that consider the number of a certain characteristic. If you examine a painted component for damaged spots, you can also count the occurrences. If the part has two damaged spots, this again represents a category, namely the parts with the exact number of two defects. These characteristics are therefore not "measurable" in the conventional sense.
 <hr>
 ### Configuration
 The configuration defines attributes and catalogs. Both can be created, edited or removed.
@@ -125,7 +125,7 @@ Characteristic and attribute have a similar meaning, but need to be distinguishe
 
 Attributes are part of the configuration, and can be set individually. You assign a unique key to each attribute, define description, data type and length. The available data types are `string`, `integer`, `floating-point`, `date` and `catalog`. Catalog entries also have attributes and form a fifth group, although they are not an explicit entity.
 
-The unique key is important, as it has the purpose of an identifier for PiWeb to identify different attributes. The measurement date as an example has the key K4. PiWeb knows different important attributes and their keys, changing them is not advised.
+The unique key is important, as it has the purpose of an identifier for PiWeb to identify different attributes. The time/date attribute as an example has the key K4. PiWeb knows different important attributes and their keys, changing them is not advised.
 
 #### Important attributes
 To get a better understanding of important attributes, you can find some basic information below:
@@ -133,16 +133,16 @@ To get a better understanding of important attributes, you can find some basic i
 + *Measured value: K1* <br>
 The attribute of a measured value, which contains the actual value.
 
-+ *Measurement date: K4* <br>
++ *Time/Date: K4* <br>
 The date of measurement.
 
-+ *Nominal value: K2100* <br>
++ *Target value: K2100* <br>
 The desired value a characteristic should have, to which the actual measured value should be as close as possible
 
 + *Lower/Upper limit: K2110/K2111*<br>
-The limit of acceptable tolerance between the nominal value and actual values.
+The limit of acceptable tolerance between the target value and actual values.
 
-+ *Lower/Upper contact limit: K8012/K8013*<br>
++ *Lower/Upper control limit: K8012/K8013*<br>
 A limit that determines when actions regarding production should be taken based on the number of bad parts
 
 + *Lower/Upper warning limit: K8014/K8015*<br>
