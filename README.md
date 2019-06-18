@@ -3,6 +3,9 @@ PiWeb-Api
 
 ![ZEISS PiWeb](https://github.com/ZEISS-PiWeb/PiWeb-Api/blob/master/Logo.png)
 
+[![Build status](https://ci.appveyor.com/api/projects/status/q48run5x0ge40h9p/branch/master?svg=true&passingText=master%20-%20OK&pendingText=master%20-%20PENDING&failingText=master%20-%20FAILED)](https://ci.appveyor.com/project/czjlorenz/piweb-api/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/q48run5x0ge40h9p/branch/develop?svg=true&passingText=develop%20-%20OK&pendingText=develop%20-%20PENDING&failingText=develop%20-%20FAILED)](https://ci.appveyor.com/project/czjlorenz/piweb-api/branch/develop)
+
 The PiWeb-API is a communication interface for the quality data management system [ZEISS PiWeb](http://www.zeiss.com/industrial-metrology/en_de/products/software/piweb.html). The interface is based on an HTTP/S web service architecture.
 
 #### What's the PiWeb-API?
@@ -122,5 +125,3 @@ Additional to the HTTP/S based REST API there is also a .NET client library.
 * Read the [API documentation guide](http://zeiss-piweb.github.io/PiWeb-Api)
 * Get the [.NET based Api.dll on nuget](https://www.nuget.org/packages/Zeiss.IMT.PiWebApi.Client/)
 * Get the [C# sample project](https://https://github.com/ZEISS-PiWeb/PiWeb-Training)
-
-[![Build status](https://ci.appveyor.com/api/projects/status/q48run5x0ge40h9p?svg=true)](https://ci.appveyor.com/project/czjlorenz/piweb-api)
