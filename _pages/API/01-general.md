@@ -55,7 +55,7 @@ The PiWeb API provides the public interface of the web service through which var
 + **Purpose 1**: *Writing new measurement data / connecting measurement software to the system* <br>
 The interface allows you to write new measurement data to the database from software other than PiWeb itself. This enables communication between various measuring instruments and the PiWeb server.
 
-+ **Purpose 2**: *Customer-specific evaluation of measurement data* <br>
++ **Purpose 2**: *Custom evaluation of measurement data* <br>
 Furthermore, the API offers the possibility to query and retrieve measurement data according to certain criteria, in order to be able to process them in a special way. This means that customer-specific evaluations which are not provided by PiWeb itself can still be executed with custom software. You can find information about the structure of API requests in this documentation.
 
 <br>
@@ -64,7 +64,7 @@ Furthermore, the API offers the possibility to query and retrieve measurement da
 {% capture table %}
 REST API        | .NET SDK (C# API)
 ------------- | -----------------------------------------------------------------------------------
-This is the interface provided directly by PiWeb server. It consists of two main services, DataService and RawDataService. For more information, see [Services](#gi-services "Services"). Requests are made using HTTP(S), and data is transferred in JSON format, see [Formats](#gi-formats "Formats"). | The .NET SDK offers C# client implementations for DataService and RawDataService. This way you can develop software using C# objects, methods and available properties instead of pure HTTP(S) and JSON. You can find further information in the [.NET SDK documentation](http://zeiss-piweb.github.io/PiWeb-Api/sdk/ ".NET SDK documentation")
+This is the interface provided directly by PiWeb server. It consists of two main services, DataService and RawDataService, explained in the section [Services](#gi-services "Services"). Requests are made using HTTP(S), and data is transferred in [JSON format](#gi-formats "Formats"). | The .NET SDK offers C# client implementations for DataService and RawDataService. This way you can develop software using C# objects, methods and available properties instead of pure HTTP(S) and JSON. You can find further information in the [.NET SDK documentation](http://zeiss-piweb.github.io/PiWeb-Api/sdk/ ".NET SDK documentation").
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
@@ -79,7 +79,7 @@ This section gives you a brief overview of the PiWeb domain model and explains c
 A detailed model can be found in the section [Details](#gi-details "Details").
 
 ### Inspection Plan
-Inspection plans specify the structure of parts, characteristics and possible sub-parts and sub-characteristics. In order to get a better understanding of these, they are displayed in a tree structure. The uppermost part forms a root part, and the entries following in further levels form subnodes or leaves. The connected PiWeb server always contains a root node for all objects, from which any arbitrary part or characteristic can be reached. <br>
+Inspection plans specify the structure of parts, characteristics and possible sub-parts and child characteristics. In order to get a better understanding of these, they are displayed in a tree structure. The uppermost part forms a root part, and the entries following in further levels form subnodes or leaves. The connected PiWeb server always contains a root node for all objects, from which any arbitrary part or characteristic can be reached. <br>
 You can create inspection plans on the basis of the desired parts you want to measure and monitor. The inspection plan allows nesting, so that parts and characteristics can again contain such entities. Characteristics cannot contain any parts.
 
 The following image shows an example of a simple inspection plan:
@@ -91,10 +91,10 @@ The following image shows an example of a simple inspection plan:
 PiWeb's data structure is based on the following four entities: **parts**, **characteristics**, **measurements** and **measured values**. An entity is therefore an object that has certain properties and interaction possibilities. They form the center of the logic that runs within the system.
 
 #### Parts
-Parts can represent a simple component up to complex assemblies. They describe a workpiece in general, i.e. the workpiece type. This means that real parts that are later measured do not occur individually in the system, but are assigned to the workpiece in form of a measurement. It is also possible to assign subparts to a part, this can be repeated numerous times.
+Parts can represent a simple component up to complex assemblies. They describe a workpiece in general, i.e. the workpiece type. This means that real parts that are later measured do not occur individually in the system, but are assigned to the workpiece in form of a measurement. It is also possible to assign sub-parts to a part, this can be repeated numerous times.
 
 #### Characteristics
-Characteristics can be described as distinctive or important properties of a part. Examples would be bores, curves or oblong holes, i.e. places where accuracy needs to be checked. A characteristic can again have characteristics, which can be repeated many times. An example would be a hole that contains diameter and coordinates as sub-characteristics. <br>
+Characteristics can be described as distinctive or important properties of a part. Examples would be bores, curves or oblong holes, i.e. places where accuracy needs to be checked. A characteristic can again have characteristics, which can be repeated many times. An example would be a hole that contains diameter and coordinates as child characteristics. <br>
 
 Types of characteristics:
 + *Characteristic* <br>
@@ -127,7 +127,7 @@ Attributes are part of the configuration, and can be set individually. You assig
 
 The unique key is important, as it has the purpose of an identifier for PiWeb to identify different attributes. The time/date attribute as an example has the key K4. PiWeb knows different important attributes and their keys, changing them is not advised.
 
-#### Important attributes
+#### Important Attributes
 To get a better understanding of important attributes, you can find some basic information below:
 
 + *Measured value: K1* <br>
@@ -193,7 +193,7 @@ A change to the minor version indicates the addition of a backwards compatible f
 + **Patch**: *Compatible Bugfix* <br>
 The change of this version number indicates a patch, i.e. fixing of internal errors or bugs. This is downward compatible and has no relevance regarding the API interface.
 
-A list of changes can be found in the Release Notes.
+A list of changes can be found in the release notes.
 
 #### How do I get the API versions supported by PiWeb server?
 <br>
