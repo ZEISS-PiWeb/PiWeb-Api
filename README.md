@@ -124,4 +124,4 @@ Additional to the HTTP/S based REST API there is also a .NET client library.
 
 * Read the [API documentation guide](http://zeiss-piweb.github.io/PiWeb-Api)
 * Get the [.NET based Api.dll on nuget](https://www.nuget.org/packages/Zeiss.IMT.PiWebApi.Client/)
-* Get the [C# sample project](https://https://github.com/ZEISS-PiWeb/PiWeb-Training)
+* Get the [C# sample project](https://github.com/ZEISS-PiWeb/PiWeb-Training)
