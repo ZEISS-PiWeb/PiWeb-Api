@@ -11,18 +11,20 @@ Creating a .NET REST client is quite simple. You choose the required client base
 
 {% highlight csharp %}
 //The Uri of your PiWeb server
-var uri = new Uri("http://piwebserver:8080");
+var uri = new Uri( "http://piwebserver:8080" );
 
-var dataserviceRestClient = new DataServiceRestClient( uri );
+//Creating the client
+var DataServiceClient = new DataServiceRestClient( uri );
 {% endhighlight %}
 <br>
 {{ site.headers['example'] }} Creating a RawDataServiceClient
 
 {% highlight csharp %}
 //The Uri of your PiWeb server
-var uri = new Uri("http://piwebserver:8080");
+var uri = new Uri( "http://piwebserver:8080" );
 
-var rawdataserviceRestClient = new RawDataServiceRestClient( uri );
+//Creating the client
+var RawDataServiceClient = new RawDataServiceRestClient( uri );
 {% endhighlight %}
 <br>
 >{{ site.images['info'] }} Each method runs asynchronously and returns an awaitable `Task`. The result will be available once the `Task` has completed.

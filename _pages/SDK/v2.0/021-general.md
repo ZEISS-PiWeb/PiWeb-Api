@@ -6,6 +6,6 @@ The .NET SDK is suitable for all .NET languages. You can include it to your proj
 - using the source files from our [GitHub repository](https://github.com/ZEISS-PiWeb/PiWeb-Api).
 
 >{{ site.headers['bestPractice'] }} Use our sample application for better understanding
-On Github you can find a [C# sample application](https://github.com/ZEISS-PiWeb/PiWeb-Training) which provides several lessons about the use of the most .NET SDK methods.
+On GitHub you can find a [C# sample application](https://github.com/ZEISS-PiWeb/PiWeb-Training) which provides several lessons about the use of the most .NET SDK methods.
 
 <p class="dottedline" />

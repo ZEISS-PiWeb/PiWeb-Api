@@ -7,7 +7,7 @@ Examples in this section:
 <hr>
 
 All types of entities can be described by several attributes.
-Every attribute has an unique key. This key is important, as it has the purpose of an identifier for PiWeb to identify different attributes. PiWeb knows different important attributes and their keys, changing them is not advised.
+Every attribute has a unique key. This key is important, as it has the purpose of an identifier for PiWeb to identify different attributes. PiWeb knows different important attributes and their keys, changing them is not advised.
 
 >{{ site.headers['bestPractice'] }} Use the `WellKnownKeys` class
 The .NET SDK provides the `WellKnownKeys` class where you can find important standardized attribute keys.
@@ -17,7 +17,7 @@ The .NET SDK provides the `WellKnownKeys` class where you can find important sta
 var partDescriptionKey = WellKnownKeys.Part.Description;
 {% endhighlight %}
 
-The class `Configuration` includes all possible attributes for each entity identified by a particular property:
+The class `Configuration` includes all possible attributes for each entity in a particular property:
 
 <img src="/PiWeb-Api/images/configuration-schema.png" class="img-responsive center-block">
 
@@ -25,7 +25,7 @@ The class `Configuration` includes all possible attributes for each entity ident
 Property                                          | Description
 --------------------------------------------------|--------------------------------------------------------------------
 <nobr><code>AbstractAttributeDefinition</code> AllAttributes</nobr>  | Returns a list of all attribute definitions in this configuration.
-<nobr><code>AttributeDefinition</code> CatalogAttributes</nobr>  | Returns a list of all attribute catalog definitions in this configuration.
+<nobr><code>AttributeDefinition</code> CatalogAttributes</nobr>  | Returns a list of all attribute definitions for a catalog entry in this configuration.
 <nobr><code>AbstractAttributeDefinition</code> CharacteristicAttributes</nobr>  | Returns a list of all characteristic attribute definitions in this configuration.
 <nobr><code>AbstractAttributeDefinition</code> MeasurementAttributes</nobr>  | Returns a list of all measurement attribute definitions in this configuration.
 <nobr><code>AbstractAttributeDefinition</code> PartAttributes</nobr>  | Returns a list of all part attribute definitions in this configuration.
@@ -36,7 +36,7 @@ Property                                          | Description
 
 As you can see in above class diagram `Configuration` consists of several methods to easily handle entities' attribute definitions.
 
-`AbstractAttributeDefinition` has two implementations: `AttributeDefinition`and `CatalogAttributeDefinition`:
+`AbstractAttributeDefinition` has two implementations: `AttributeDefinition` and `CatalogAttributeDefinition`:
 
 <img src="/PiWeb-Api/images/attributedefinition-schema.png" class="img-responsive center-block">
 
@@ -82,6 +82,7 @@ Here we create an attribute *Description*, which can be used in parts, catalogs 
 {{ site.headers['example'] }} Creating a new `CatalogAttributeDefinition`
 
 {% highlight csharp %}
+//Create a catalog
 Catalog TestCatalog = new Catalog
 {
   Name = "TestCatalog",
@@ -90,7 +91,8 @@ Catalog TestCatalog = new Catalog
   CatalogEntries = new[]{...}
 };
 
-AbstractAttributeDefinition CatalogAttributeDefinition = new CatalogAttributeDefinition
+//Create a CatalogAttributeDefinition
+var CatalogAttributeDefinition = new CatalogAttributeDefinition
 {
   Catalog = TestCatalog.Uuid,
   Description = "Row_with_catalog_as_value",
