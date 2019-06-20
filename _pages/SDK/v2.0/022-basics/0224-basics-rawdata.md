@@ -6,6 +6,7 @@ Examples in this section:
 + [Fetching additional data](#-example--fetching-additional-data)
 + [Updating additional data](#-example--updating-additional-data)
 + [Deleting additional data](#-example--deleting-additional-data)
++ [Creating or fetching additional data of measured values](#-example--creating-or-fetching-additional-data-of-measured-values)
 <hr>
 
 Additional data are attachments that can be added to any entity in the inspection plan. This can be text, images, log files, CAD models or any binary file. There is no limit to the number of files and you can edit or remove additional data as desired.
@@ -130,3 +131,40 @@ await RawDataServiceClient.DeleteRawDataForPart( Part.Uuid );
 
 >{{ site.headers['bestPractice'] }} Use the specific delete method per entity
 The `DataServiceRestClient` offers a delete method for each type of entity which can contain additional data. They need the entity uuid and the additional data key to delete a specific file, or only the entity uuid to delete all additional data of the entity.
+
+When creating or fetching additional data for measured values, you need a combination of the measurement Uuid and the characteristic Uuid that contains the value with data of interest:
+
+{{ site.headers['example'] }} Creating or fetching additional data of measured values
+
+{% highlight csharp %}
+//SampleMeasurement is a fetched/created measurement of a part
+//SampleChar is the characteristic that contains the value
+//Create the measured value as target
+var target = RawDataTargetEntity.CreateForValue( SampleMeasurement.Uuid, SampleChar.Uuid);
+
+//Create the additional data
+var additionalData = Encoding.UTF8.GetBytes("This is additional data of a measured value.");
+var information = new RawDataInformation{...}; //see first example
+await RawDataServiceClient.CreateRawData(information, additionalData);
+
+//Fetching again using the target
+var additionalDataInformation = await RawDataServiceClient.ListRawData( new[] { target } );
+{% endhighlight %}
+
+>{{ site.headers['bestPractice'] }} A helper for Uuids
+The API offers the class `StringUuidTools` containing different useful methods for working with Uuids.
+
+#### StringUuidTools
+{% capture table %}
+Method                                          | Description
+------------------------------------------------|------------------------------------------------------------------
+<nobr><code>void CheckUuid( RawDataEntity entity, string uuid )</code></nobr> | Check if a Uuid has the valid syntax. Throws an `ArgumentOutOfRangeException` if not.
+<nobr><code>void CheckUuids( RawDataEntity entity, IEnumerable&lt;string&gt; uuids )</code></nobr> |  Check a list of Uuids for valid syntax. Throws an `ArgumentOutOfRangeException` if a Uuid is not correct.
+<nobr><code>string CreateStringUuidPair( Guid measurementGuid, Guid characteristicGuid )</code></nobr> | Creates a string containig a measurementUuid and a characteristicUuid in the form measurementUuid&#x007C;characteristicUuid.
+<nobr><code>bool IsStringUuidPair( string uuidPair )</code></nobr> | Checks if a given string is a unique UUID pair (in the form measurementUuid&#x007C;characteristicUuid).
+<nobr><code>ValueRawDataIdentifier SplitStringUuidPair( string uuidPair )</code></nobr> | Splits a string containig a measurementUuid and a characteristicUuid in the form measurementUuid&#x007C;characteristicUuid.
+<nobr><code>List<Guid> StringUuidListToGuidList( IEnumerable&lt;string&gt; uuids )</code></nobr> | Creates a list of Uuids from a list of Uuid strings.
+<nobr><code>Guid StringUuidToGuid( string uuid )</code></nobr> | Create a Uuid from a Uuid string.
+<nobr><code>bool TrySplitStringUuidPair( string uuidPair, out ValueRawDataIdentifier result )</code></nobr> | Try to splits a string containig a measurementUuid and a characteristicUuid in the form measurementUuid&#x007C;characteristicUuid.
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}

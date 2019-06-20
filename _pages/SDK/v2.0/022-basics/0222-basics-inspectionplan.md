@@ -27,6 +27,10 @@ Property                                          | Description
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
+>{{ site.images['info'] }} The version is only updated if *Versioning* is enabled.
+
+>{{ site.images['info'] }} The version/revision of an entity is global. This means that the version counter is the same for every entity in the inspection plan. A part with a version of 34 did not necessarily change 34 times, the version indicates that the 34th change in the whole inspection plan was done to this entity.
+
 A `SimplePart` additionally consists of the timestamp for the most recent characteristic change:
 
 #### SimplePart
@@ -78,6 +82,8 @@ var characteristicPath = PathHelper.RoundtripString2PathInformation( "PPC:/Metal
 In the above example a simple path is created using our PathHelper.RoundtripString2PathInformation method. The method needs the path in [roundtrip format](https://en.wikipedia.org/wiki/Round-trip_format_conversion), consisting of structure and path.
 
 The structure is a list of the letters *P* and *C*, which are the short form of *part* and *characteristic*. The list is ordered according to the occurring types of entities in the following path string. The example structure is `PPC`, standing for `/Part/Part/Characteristic/`, which matches the types of `/MetalPart/SubPart/Char1/` in the exact order. A path needs to end with `/`.
+
+>{{ site.images['info'] }} Please note that a part or characteristic must not contain a backslash `\`.
 
 <hr>
 

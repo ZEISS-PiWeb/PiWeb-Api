@@ -143,10 +143,13 @@ Next to creating or updating measurements, another important functionality is fe
 //Create PathInformation of the desired part that contains measurements
 var PartPath = PathHelper.RoundtripString2PathInformation("P:/Measured part/"))
 
-//Fetch all measurements of this part
+//Fetch all measurements of this part without measured values
+var FetchedMeasurements = await DataServiceClient.GetMeasurements( PartPath )
+
+//Or fetch all measurements of this part with measured values
 var FetchedMeasurements = await DataServiceClient.GetMeasurementValues( PartPath )
 {% endhighlight %}
-This is the simplest way to fetch measurements and the associated measured values, it returns all measurements of the specified part. Since this can result in a large collection of results, you have the possibility to filter based on different criteria.
+This is the simplest way to fetch measurements and the associated measured values, it returns all measurements of the specified part. A measurement then contains the `DataCharacteristic` objects linking values to characteristics. Since this can result in a large collection of results, you have the possibility to filter based on different criteria.
 For this you can use `FilterAttributes`. The base class is `AbstractMeasurementFilterAttributes`:
 
 <img src="/PiWeb-Api/images/measurementFilterAttributes_model.png" class="img-responsive center-block">
@@ -176,8 +179,8 @@ Property                                          | Description
 <nobr><code>ushort[]</code> MergeAttributes</nobr> | The list of primary measurement keys to be used for joining measurements across multiple parts on the server side.
 <nobr><code>MeasurementMergeCondition</code> MergeCondition</nobr> | Specifies the condition that must be met when merging measurements across multiple parts using a primary key. Default value is <code>MeasurementMergeCondition.MeasurementsInAllParts</code>.
 <nobr><code>Guid</code> MergeMasterPart</nobr> | Specifies the part to be used as master part when merging measurements across multiple parts using a primary key.
-<nobr><code>AttributeSelector</code> RequestedMeasurementAttributes</nobr> | The selector for the measurement attributes.
-<nobr><code>AttributeSelector</code> RequestedValueAttributes</nobr> | The selector for the measurement value attributes.
+<nobr><code>AttributeSelector</code> RequestedMeasurementAttributes</nobr> | The selector for the measurement attributes. Default: all
+<nobr><code>AttributeSelector</code> RequestedValueAttributes</nobr> | The selector for the measurement value attributes. Default: all
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
@@ -212,7 +215,9 @@ var FetchedMeasurements = await DataServiceClient.GetMeasurementValues(
     RequestedMeasurementAttributes = new AttributeSelector(){ Attributes = new ushort[]{ 4, 8, 53 } }  
   })
 {% endhighlight %}
-To retrieve only a subset of attributes you can use the option `RequestedValueAttributes`, which requires an `AttributeSelector`. You simply add the keys of the desired attributes to the `Attribute` property.
+To retrieve only a subset of measurement attributes we use the option `RequestedMeasurementAttributes`, which requires an `AttributeSelector`. You simply add the keys of the desired attributes to the `Attributes` property, so in this case the attributes with keys *4*, *8* and *53*. The property `RequestedValueAttributes` works the same way for measured value attributes.
+
+>{{ site.images['info'] }} The measured value attribute `K1` is always returned in the `Value` property of a `DataCharacteristic`, even when not explicitly requested in `AttributeSelector`.
 
 {{ site.headers['example'] }} Using search conditions
 {% highlight csharp %}
@@ -235,5 +240,3 @@ You can realize more options like filtering for a specific measurement by its id
 
 >{{ site.headers['bestPractice'] }} Consider filtering on client side
 Instead of defining complex queries to retrieve filtered results, you should consider requesting data with less restrictions, and filter it on client side according to your criteria. This reduces workload for the server, as filtering requires more resources.
-
-TODO: Was passiert bei Messungsabruf wenn alle drei Parameter angegeben? Measurement Uuid>part Uuid>path

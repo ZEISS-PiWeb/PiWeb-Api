@@ -9,6 +9,8 @@ Examples in this section:
 All types of entities can be described by several attributes.
 Every attribute has a unique key. This key is important, as it has the purpose of an identifier for PiWeb to identify different attributes. PiWeb knows different important attributes and their keys, changing them is not advised.
 
+We often display a key with the letter *K* prior to the actual value, e.g. *K1234*, to mark it as a key. In code you only use the value, so *1234*. Leading zeros are ignored, a key *0024* is the same as *24*.
+
 >{{ site.headers['bestPractice'] }} Use the `WellKnownKeys` class
 The .NET SDK provides the `WellKnownKeys` class where you can find important standardized attribute keys.
 
@@ -113,13 +115,13 @@ var client = new DataServiceRestClient( "https://piwebserver:8080" );
 var configuration = await client.GetConfiguration();
 
 //Create a new AttributeDefinition with key 11001
-AbstractAttributeDefinition attributeDefinition = new AttributeDefinition( 11001, "Description", AttributeType.AlphaNumeric, 255 );
+var attributeDefinition = new AttributeDefinition( 11001, "Description", AttributeType.AlphaNumeric, 255 );
 
 //Check if attribute does already exist
-bool attributeDoesAlreadyExist = configuration.GetDefinition( 11001 );
+var attributeDoesAlreadyExist = configuration.GetDefinition( 11001 );
 
 //Create new attribute if not existing
-if(!attributeDoesAlreadyExist)
+if(attributeDoesAlreadyExist != null)
 {
 await client.CreateAttributeDefinition( Entity.Part, attributeDefinition );
 }

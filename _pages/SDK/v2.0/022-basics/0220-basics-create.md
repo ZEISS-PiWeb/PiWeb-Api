@@ -5,7 +5,7 @@ Examples in this section:
 + [Creating a RawDataServiceClient](#-example--creating-a-rawdataserviceclient)
 <hr>
 
-Creating a .NET REST client is quite simple. You choose the required client based on the use case (DataService for parts, measurements, values, configuration and RawDataService for additional data), and pass in the `Uri` object pointing to your server.
+Creating a .NET REST client is quite simple. You choose the required client based on the use case (DataService for parts, measurements, values and configuration, or RawDataService for additional data), and pass in the `Uri` object pointing to your PiWeb server.
 
 {{ site.headers['example'] }} Creating a DataServiceClient
 
