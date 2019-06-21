@@ -155,7 +155,6 @@ HTTP/1.1 200 Ok
 
 {% include endpointTab.html %}
 
-
 {% assign linkId="configurationEndpointDelete2" %}
 {% assign method="DELETE" %}
 {% assign endpoint="/configuration/:pluralizedEntityType/:attributesIdList" %}
@@ -165,7 +164,7 @@ HTTP/1.1 200 Ok
 
 {% capture jsonrequest %}
 {% highlight http %}
-DELETE /dataServiceRest/configuration/part/{1001, 1002} HTTP/1.1
+DELETE /dataServiceRest/configuration/part/{1001,1002} HTTP/1.1
 {% endhighlight %}
 {% endcapture %}
 
@@ -176,8 +175,6 @@ HTTP/1.1 200 Ok
 {% endcapture %}
 
 {% include endpointTab.html %}
-
-<br/>
 
 {% assign linkId="configurationCheckEndpointGet" %}
 {% assign method="GET" %}

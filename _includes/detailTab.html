@@ -1,0 +1,24 @@
+<div class="panel panel-default">
+  <div class="panel-heading"
+        role="tab"
+        id={{ '"heading' | append: linkId | append: '"' }}
+        data-toggle="collapse"
+        href={{ '"#collapse' | append: linkId | append: '"' }}
+        aria-expanded="false"
+        aria-controls={{ '"#collapse' | append: linkId | append: '"' }}>
+    <ul class="nav">
+      <li class="navbar-left"><span class="glyphicon glyphicon-menu-right"></span></li>
+      <li class="navbar-left fixedWidth"><span class="label label-info">Details</span></li>
+      <li class="navbar-left">{{ title }}</li>
+    </ul>
+  </div>
+
+  <div  id={{ '"collapse' | append: linkId | append: '"' }}
+        class="panel-collapse collapse"
+        role="tabpanel"
+        aria-labelledby={{ '"heading' | append: linkId | append: '"' }}>
+    <div class="panel-body">
+      {{ content | markdownify }}
+    </div>
+  </div>
+</div>
