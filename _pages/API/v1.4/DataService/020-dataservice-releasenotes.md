@@ -2,6 +2,13 @@
 
 <p></p>
 
+{% assign version="1.4.5" %}
+{% capture bugfixes %}
+    <ul><li>It was possible to insert catalog entrys with an index out of range.</li></ul>
+{% endcapture %}
+
+{% include releaseNotes.html %}
+
 {% assign version="1.4.4" %}
 {% capture bugfixes %}
     <ul><li>Error in internal convert method.</li></ul>

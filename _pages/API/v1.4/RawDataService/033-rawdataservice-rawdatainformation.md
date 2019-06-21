@@ -59,12 +59,12 @@ Possible &lt;List operator&gt; values | Description
 
 **&lt;Value&gt;** can be formatted differently and needs to match type of attribute:
 - *Strings* need to be surrounded by a single quote. If value contains a single quote it needs to be masked by another single quote:
-`'Some Value'` or `This string contains a single '' character.`
+`'Some Value'` or `'This string contains a single '' character.'`.
 - Decimal seperator for *Numbers* is a point.
 - *Date specifications* may be absolute or relative to current server time.
   - Absolute date specifications are ISO formatted strings and have to explicitly contain a time zone
   `'2018-01-21T16:12:30+01:00'`
-  - Relative data specifications are strings in following format: `-<Offset>[mhdwMy] `where m = minutes, h = hours, d = days, w = weeks, M = months, y = years, e.g. '-1w' or '-5d'
+  - Relative data specifications are strings in following format: `'-<Offset>[mhdwMy]'` where m = minutes, h = hours, d = days, w = weeks, M = months, y = years, e.g. '-1w' or '-5d'
 
 Value list **(&lt;Value1&gt;, &lt;Value2&gt;, ...)** contains any number of elements which need to meet the conditions described in above <Value> section.
 
