@@ -27,6 +27,7 @@ sections:
 headers:
   example: "##### ![Example](/PiWeb-Api/images/document-info.png) Example: "
   bestPractice: "#### ![Best practice](/PiWeb-Api/images/footsteps.png) Best practice: "
+  knownLimitation: "#### ![Known limitation](/PiWeb-Api/images/cancel.png) Known limitation: "
   request: "##### Request"
   response: "##### Response"
 plugins:

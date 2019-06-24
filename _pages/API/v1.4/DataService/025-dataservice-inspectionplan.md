@@ -525,6 +525,9 @@ HTTP/1.1 200 Ok
 
 {% include endpointTab.html %}
 
+>{{ site.headers['knownLimitation'] }} Handling of ß (german sharp s)
+The german letter **ß** is represented as **ss** internally. This means that names for parts or characteristics like *Masse* and *Maße* are not unique.
+
 <br/>
 
 <h3 id="{{page.sections['dataservice']['secs']['inspectionPlan'].anchor}}-objectstructure">Object Structure</h3>

@@ -78,3 +78,6 @@ Please note that this format uses [Coordinated Universal Time (UTC)](https://en.
 
 {% endcapture %}
 {% include detailTab.html %}
+
+>{{ site.headers['knownLimitation'] }} Missing filter possibilities
+Not all endpoints provide extensive filter possibilities, as it is much more performant to filter on client side. This reduces additional workload for the server.

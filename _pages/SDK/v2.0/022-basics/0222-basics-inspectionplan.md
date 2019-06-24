@@ -85,6 +85,9 @@ The structure is a list of the letters *P* and *C*, which are the short form of 
 
 >{{ site.images['info'] }} Please note that a part or characteristic must not contain a backslash `\`.
 
+>{{ site.headers['knownLimitation'] }} Handling of ß (german sharp s)
+The german letter **ß** is represented as **ss** internally. This means that names for parts or characteristics like *Masse* and *Maße* are not unique.
+
 <hr>
 
 >{{ site.images['info'] }} `DataServiceClient` in examples refers to an actual instance of `DataServiceRestClient` pointing to a server.
@@ -123,6 +126,9 @@ var parts = await DataServiceClient.GetParts( partPath );
 var characteristics = await DataServiceClient.GetCharacteristics( partPath );
 {% endhighlight %}
 You can fetch different entities with the corresponding method. The path specifies the entry point from where you want to fetch data. Setting the search depth is also possible, the default value is null, which is equal to an unlimited search and returns all characteristics of the part with their child characteristics. Please note that this does not include characteristics of subparts, to fetch these you have to use the according subpart-path.
+
+>{{ site.headers['knownLimitation'] }} Missing filter possibilities
+Not all endpoints provide extensive filter possibilities, as it is much more performant to filter on client side. This reduces additional workload for the server.
 
 >{{ site.headers['bestPractice'] }} Create or update multiple entities in a single call
 To achieve a good performance, it is highly recommended to create or update items in a single call. That is why all create and update methods expect an array parameter.

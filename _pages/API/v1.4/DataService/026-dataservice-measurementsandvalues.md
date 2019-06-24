@@ -624,6 +624,9 @@ The **Like** operator lets you specify a pattern. `%` represents zero, one or mu
 {% endcapture %}
 {% include detailTab.html %}
 
+>{{ site.headers['knownLimitation'] }} Attributes only
+Search conditions can be applied to attributes only, not to paths or names. For this you would need a respective attribute.
+
 <h3 id="{{page.sections['dataservice']['secs']['measurementsAndValues'].anchor}}-objectStructure">Object Structure</h3>
 
 Measurements do always belong to a single inspection plan part. Depending on the purpose, the measured values are included within a measurement or not. Each measurement has the following properties:
