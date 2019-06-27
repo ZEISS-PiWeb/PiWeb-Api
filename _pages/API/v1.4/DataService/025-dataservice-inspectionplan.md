@@ -108,7 +108,7 @@ GET /dataServiceRest/parts/05040c4c-f0af-46b8-810e-30c0c00a379e HTTP/1.1
 
 To create a new part, you must send its JSON representation in the request body. Values for `uuid` and `path` are required, `attributes` and `comment` are optional. The attribute keys must be valid part attributes as specified in the <a href="#{{page.sections['dataservice']['secs']['configuration'].anchor}}">{{page.sections['dataservice']['secs']['configuration'].title}}</a>.
 
-{{ site.images['info'] }} The comment is only added if versioning is enabled in the server settings.
+>{{ site.images['info'] }} The comment is only added if versioning is enabled in the server settings.
 {% endcapture %}
 
 {% assign exampleCaption="Adding the 'metal part' part with the uuid 05040c4c-f0af-46b8-810e-30c0c00a379e" %}
@@ -149,7 +149,7 @@ If you update a part you might want to:
 * Rename/move parts or
 * change attributes of parts.
 
-{{site.images['info']}} If versioning is activated on the server side, every update creates a new version entry. If versioning is set to 'Controlled by the client' on server side it can be contolled by the following parameter:
+>{{site.images['info']}} If versioning is activated on the server side, every update creates a new version entry. If versioning is set to 'Controlled by the client' on server side it can be contolled by the following parameter:
 
 {% capture table %}
 Parameter name                                                                 | Description
@@ -203,7 +203,7 @@ Parameter name                                                                 |
 
 In both cases the request deletes the part itself as well as all its child parts and child characteristics. If both parameters are set only the `partUuids` parameter will be considered.
 
-{{ site.images['info'] }} If option "Parts with measurement data can be deleted" is deactivated parts containing measurements will not be deleted.
+>{{ site.images['info'] }} Deleting a part also deletes its characteristics, measurements, measured values and addtional data. This is only possible if the server setting “Parts with measurement data can be deleted” is enabled.
 
 {% endcapture %}
 
@@ -230,7 +230,8 @@ HTTP/1.1 200 Ok
 {% capture description %}
 Deleting a part also deletes all its children.
 
-{{ site.images['info'] }} If option "Parts with measurement data can be deleted" is deactivated parts containing measurements will not be deleted.
+>{{ site.images['info'] }} Deleting a part also deletes its characteristics, measurements, measured values and addtional data. This is only possible if the server setting “Parts with measurement data can be deleted” is enabled.
+
 {% endcapture %}
 
 {% assign exampleCaption="Delete the part 'metal part' and all entities beneath it by the part's guid" %}
@@ -274,7 +275,7 @@ Parameter name                                                                 |
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
 
-{{ site.images['info'] }}You can only request direct characteristics of the part, characteristics of child parts will be ignored.
+>{{ site.images['info'] }}You can only request direct characteristics of the part, characteristics of child parts will be ignored.
 
 {% endcapture %}
 {% assign exampleCaption="Fetch all characteristics beneath the part '/metal part' until depth=2" %}
@@ -376,7 +377,9 @@ GET /dataServiceRest/characteristics/27e23a7c-dbe7-4863-8461-6abf7b03ddd7 HTTP/1
 
 To create characteristics, you must send a JSON representation of the characteristics in the request body. Values for `uuid` and `path` are required, `attributes` and `comment` are optional. The attribute keys must be valid characteristic attributes as specified in the <a href="#{{page.sections['dataservice']['secs']['configuration'].anchor}}">{{page.sections['dataservice']['secs']['configuration'].title}}</a>.
 
-{{ site.images['info'] }} The comment is only added if versioning is enabled in the server settings.
+>{{ site.images['info'] }} The property `LastModified`/`Timestamp` is updated by the server automatically. User input is ignored.
+
+>{{ site.images['info'] }} The comment is only added if versioning is enabled in the server settings.
 {% endcapture %}
 
 {% assign exampleCaption="Adding the characteristic 'metal part/deviation_3'" %}
@@ -411,7 +414,6 @@ HTTP/1.1 201 Created
 
 {% include endpointTab.html %}
 
-
 {% assign linkId="inspectionPlanEndpointUpdateChars" %}
 {% assign method="PUT" %}
 {% assign endpoint="/characteristics" %}
@@ -423,7 +425,9 @@ If you update characteristics you want to:
 * Rename/move characteristics or
 * change attributes of characteristics.
 
-{{site.images['info']}} If versioning is activated on server side, every update of one or more characteristics creates a new version entry. If versioning is set to 'Controlled by the client' on server side it can be contolled by the following parameter:
+>{{ site.images['info'] }} The property `LastModified`/`Timestamp` is updated by the server automatically. User input is ignored.
+
+>{{site.images['info']}} If versioning is activated on server side, every update of one or more characteristics creates a new version entry. If versioning is set to 'Controlled by the client' on server side it can be contolled by the following parameter:
 
 {% capture table %}
 Parameter name                                                                 | Description
@@ -475,7 +479,10 @@ Parameter name                                                                 |
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
 
-In both cases the request deletes the characteristic itself as well as all its children. If both parameters are set only the `charUuids` parameter will be considered.
+If both parameters are set only the `charUuids` parameter will be considered.
+
+>{{ site.images['info'] }} Deleting a characteristic also deletes its child characteristics, measured values and addtional data.
+
 {% endcapture %}
 
 {% assign exampleCaption="Delete the characteristic 'metal part/deviation_3' and all entities beneath it" %}
@@ -493,13 +500,14 @@ HTTP/1.1 200 Ok
 
 {% include endpointTab.html %}
 
-
 {% assign linkId="inspectionPlanEndpointDeleteChar" %}
 {% assign method="DELETE" %}
 {% assign endpoint="/characteristics/:charUuid" %}
 {% assign summary="Delete a characteristic by its :charUuid" %}
 {% capture description %}
-Deleting a characteristic also deletes all its children.
+
+>{{ site.images['info'] }} Deleting a characteristic also deletes its child characteristics, measured values and addtional data.
+
 {% endcapture %}
 
 {% assign exampleCaption="Delete the characteristic 'metal part/deviation_3' and all entities beneath it by its guid" %}
@@ -516,6 +524,9 @@ HTTP/1.1 200 Ok
 {% endcapture %}
 
 {% include endpointTab.html %}
+
+>{{ site.headers['knownLimitation'] }} Handling of ß (german sharp s)
+The german letter **ß** is represented as **ss** internally. This means that names for parts or characteristics like *Masse* and *Maße* are not unique.
 
 <br/>
 

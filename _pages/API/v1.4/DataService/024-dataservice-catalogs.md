@@ -128,9 +128,9 @@ GET /dataServiceRest/catalogs/8c376bee-ffe3-4ee4-abb9-a55b492e69ad HTTP/1.1
 {% capture description %}
 To create a new catalog, the catalog object must be transmitted in the request's body. A valid request contains a unique identifier, the catalog name and the valid attributes. Catalog entries are optional. All valid attributes must be added as catalog attributes beforehand (see <a href="#{{page.sections['dataservice']['secs']['configuration'].anchor}}">{{page.sections['dataservice']['secs']['configuration'].title}}</a>).
 
-{{ site.images['info'] }} If no catalog entries are specified, an empty catalog entry with key '0' and attribute value(s) 'not defined' ( in case of alphanumeric attributes ) is created by default.
+>{{ site.images['info'] }} If no catalog entries are specified, an empty catalog entry with key '0' and attribute value(s) 'not defined' ( in case of alphanumeric attributes ) is created by default.
 
-{{ site.images['info'] }} If catalog entries are specified setting -1 as catalog entry's key leads server to generate a new unique key for that entry.
+>{{ site.images['info'] }} If catalog entries are specified setting -1 as catalog entry's key leads server to generate a new unique key for that entry.
 {% endcapture %}
 {% assign exampleCaption="Adding the catalog InspectorCatalog" %}
 
@@ -181,10 +181,12 @@ HTTP/1.1 201 Created
 {% assign method="POST" %}
 {% assign endpoint="/catalogs/:catalogUuid" %}
 {% assign summary=" Creates entries for the catalog specified by :catalogUuid" %}
-{% assign description="To add entries to an existing catalog they need to be specified in the request body. Each new entry must consist of a unique key. Each entry attribute must be listed as a valid attribute in the catalog definition." %}
+{% capture description %}
+To add entries to an existing catalog they need to be specified in the request body. Each new entry must consist of a unique key. Each entry attribute must be listed as a valid attribute in the catalog definition.
 
-{{ site.images['info'] }} Setting -1 as catalog entry's key leads server to generate a new unique key for that entry.
+>{{ site.images['info'] }} Setting -1 as catalog entry's key leads server to generate a new unique key for that entry.
 
+{% endcapture %}
 {% assign exampleCaption="Adding a catalog entry - add the inspector ‘Clarks’" %}
 
 {% capture jsonrequest %}

@@ -10,7 +10,7 @@ You can can fetch, create, update and delete raw data objects by using the follo
 {% assign summary="Returns the one specific file identified by :entity, :uuid and :key" %}
 {% capture description %}
 
-The server caches raw data fetch requests. When you request a raw data file for the first time the response will contain the file itself and several HTTP headers. One of these headers is the *ETag* header. An ETag is a unique hash value to identify the file. It is a combination of the file's MD5 checksum and the last modification date. If you send the ETag value in the *If-None-Match* header, the server can respond two different ways, depending in whether the file has been modified since the last request:
+The server caches raw data fetch requests. When you request a raw data file for the first time the response will contain the file itself and several HTTP headers. One of these headers is the *ETag* header. An ETag is a unique hash value to identify the file. It is a combination of the file's MD5 checksum and the last modification date. If you send the ETag value in the *If-None-Match* header, the server can respond two different ways, depending on whether the file has been modified since the last request:
 
 1. *Not modified*: The server will return a *304 - Not modified* HTTP status code and the response body will be emtpy.
 2. *Modified*: The server will return the file.
@@ -102,9 +102,10 @@ Content-Type         | Includes file's MIME type    | "application/x-zeiss-piweb
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
-When adding a file, you can pass the desired file key as part of the uri. If you pass -1 or no key, the next available key will automatically assigned by the server. (recommended)
+>{{site.images['info']}} When adding a file, you can pass the desired file key as part of the uri. If you pass -1 or no key, the next available key will automatically assigned by the server. (recommended)
 
-{{site.images['warning']}} If you pass a key which is already assigned to another file, this file will be replaced.
+>{{site.images['warning']}} If you pass a key which is already assigned to another file, this file will be replaced.
+
 {% endcapture %}
 
 {% assign exampleCaption="Add a raw data object to a part with the uuid b8f5d3fe-5bd5-406b-8053-67f647f09dc7" %}

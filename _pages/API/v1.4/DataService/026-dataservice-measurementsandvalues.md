@@ -21,14 +21,14 @@ You can fetch all measurements or certain measurements only. Possible filter uri
 <nobr><code>Path</code> partPath </nobr> | Restricts the query to this part <br> `partPath=/metal%20part`
 <nobr><code>bool</code> deep </nobr><br><i>default:</i> <code>false</code> | Determines whether the query should affect all levels of the inspection plan. <br> `deep=true`
 <nobr><code>OrderCriteria</code> order </nobr><br><i>default:</i> <code>4 desc</code>   | Determines which attribute keys and which direction the keys should be ordered by <br> `order:4 asc, 10 desc`
-<nobr><code>Condition</code> searchCondition </nobr>| The query will only return items matching all conditions. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ]. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`
+<nobr><code>Condition</code> searchCondition </nobr>| The query will only return items matching all conditions. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+' (encoded as `%2B`). The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ]. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`
 <nobr><code>DateTime</code> fromModificationDate </nobr> | Specifies a date to select all measurements that where modified after that date. Please note that the system modification date (lastModified property) is used and not the time attribute (creation date).
 <nobr><code>DateTime</code> toModificationDate </nobr> | Specifies a date to select all measurements that where modified before that date. Please note that the system modification date (lastModified property) is used and not the time attribute (creation date).
 <nobr><code>int</code> limitResult </nobr>| Restricts the number of result items. <br> `limitResult=100`
 <nobr><code>All, None, Id list</code> requestedMeasurementAttributes </nobr><br><i>default:</i> <code>All</code> | Restricts the query to the attributes that should be returned for measurements. <br> `requestedMeasurementAttributes={4,8}`
 <nobr><code>None, Simple, Detailed</code> statistics </nobr><br><i>default:</i> <code>None</code> | Indicates how statistical informtaion should be returned: <br><code>None</code> = Return no information<br><code>Simple</code> = Return statistical information including numvber of characteristics out of warning limit, number of characteristics out of tolerance and number of characteristics in warning limit and tolerance<br><code>Detailed</code> = Return statistical information the same way as <code>Simple</code> plus the guid for each characteristic <br> `statistics=Simple`
 <nobr><code>Measurements, AggregationMeasurements, All</code> aggregation </nobr><br><i>default:</i> <code>Measurements</code> | Specifies which types of measurements will be fetched. <br> `aggregation=All`
-<nobr><code>int List</code> mergeAttributes</nobr> | Specifies the list of primary measurement keys to be used for joining measurements accross multiple parts on the server side. (Please find more detailed information below.) <br> `mergeAttributes=4,6`	
+<nobr><code>int List</code> mergeAttributes</nobr> | Specifies the list of primary measurement keys to be used for joining measurements accross multiple parts on the server side. (Please find more detailed information below.) <br> `mergeAttributes=4,6`
 <nobr><code>None, MeasurementsInAtLeastTwoParts, MeasurementsInAllParts</code> mergeCondition <br><i>default:</i> <code>MeasurementsInAllParts</code></nobr> | Specifies the condition that must be adhered to when merging measurements accross multiple parts using a primary key.	(Please find more detailed information below.)
 <nobr><code>Guid</code> mergeMasterPart</nobr> | Specifies the part to be used as master part when merging measurements accross multiple parts using a primary key. (Please find more detailed information below.)
 {% endcapture %}
@@ -127,7 +127,8 @@ GET /dataServiceRest/measurements/5b59cac7-9ecd-403c-aa26-56dd25892421 HTTP/1.1
 {% capture description %}
 To create a new measurement, you must send its JSON representation in the request body. Values for `uuid` and `path` are required, `attributes` and `comment` are optional. The attribute keys must be valid measurement attributes as specified in the <a href="#{{page.sections['dataservice']['secs']['configuration'].anchor}}">{{page.sections['dataservice']['secs']['configuration'].title}}</a>.
 
-{{ site.images['info'] }} The comment is only added if versioning is enabled in server settings.
+>{{ site.images['info'] }} The comment is only added if versioning is enabled in server settings.
+
 {% endcapture %}
 {% assign exampleCaption="Create a measurement" %}
 {% assign comment="" %}
@@ -287,7 +288,7 @@ You can fetch all given attribute values for a measurement attribute. Measuremen
 <nobr><code>Path</code> partPath </nobr> | Restricts the query to this part <br><br> `partPath=/metal%20part`
 <nobr><code>bool</code> deep </nobr><br><i>default:</i> <code>false</code> | Determines whether the query should affect all levels of the inspection plan. <br> `deep=true`
 <nobr><code>OrderCriteria</code> order </nobr><br><i>default:</i> <code>4 desc</code>   | Determines which attribute keys and which direction the keys should be ordered by <br> `order:4 asc, 10 desc`
-<nobr><code>Condition</code> searchCondition </nobr>| The query will only return items matching all conditions. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ]. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`
+<nobr><code>Condition</code> searchCondition </nobr>| The query will only return items matching all conditions. More details in the section [Search conditions](#search-condtitions).
 <nobr><code>DateTime</code> fromModificationDate </nobr> | Specifies a date to select all measurements that where modified after that date. Please note that the system modification date (lastModified property) is used and not the time attribute (creation date).
 <nobr><code>DateTime</code> toModificationDate </nobr> | Specifies a date to select all measurements that where modified before that date. Please note that the system modification date (lastModified property) is used and not the time attribute (creation date).
 <nobr><code>int</code> limitResult </nobr>| Restricts the number of result items. <br> `limitResult=100`
@@ -334,7 +335,7 @@ You can fetch all measurements with values or only certain measurements with val
 <nobr><code>Path</code> partPath </nobr> | Restricts the query to this part <br><br> `partPath=/metal%20part`
 <nobr><code>bool</code> deep </nobr><br><i>default:</i> <code>false</code> | Determines whether the query should affect all levels of the inspection plan. <br> `deep=true`
 <nobr><code>OrderCriteria</code> order </nobr><br><i>default:</i> <code>4 desc</code>   | Determines which attribute keys and which direction the keys should be ordered by <br> `order:4 asc, 10 desc`
-<nobr><code>Condition</code> searchCondition </nobr>| The query will only return items matching all conditions. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ]. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`
+<nobr><code>Condition</code> searchCondition </nobr>| The query will only return items matching all conditions. More details in the section [Search conditions](#search-condtitions).
 <nobr><code>DateTime</code> fromModificationDate </nobr> | Specifies a date to select all measurements that where modified after that date. Please note that the system modification date (lastModified property) is used and not the time attribute (creation date).
 <nobr><code>DateTime</code> toModificationDate </nobr> | Specifies a date to select all measurements that where modified before that date. Please note that the system modification date (lastModified property) is used and not the time attribute (creation date).
 <nobr><code>int</code> limitResult </nobr>| Restricts the number of result items. <br> `limitResult=100`
@@ -454,7 +455,8 @@ GET /dataServiceRest/values/5b59cac7-9ecd-403c-aa26-56dd25892421 HTTP/1.1
 {% capture description %}
 To create a measurement with values, you must send its JSON representation in the request body. Values for `uuid` and `path` are required, `attributes` and `comment` are optional. The attribute keys must be valid measurement attributes as specified in the <a href="#{{page.sections['dataservice']['secs']['configuration'].anchor}}">{{page.sections['dataservice']['secs']['configuration'].title}}</a>.
 
-{{ site.images['info'] }} The comment is only added if versioning is enabled in server settings.
+>{{ site.images['info'] }} The comment is only added if versioning is enabled in server settings.
+
 {% endcapture %}
 {% assign exampleCaption="Create a measurement with measured values" %}
 {% assign comment="" %}
@@ -558,6 +560,72 @@ HTTP/1.1 200 OK
 
 {% include endpointTab.html %}
 
+#### Search condtitions
+
+When fetching measurements or values, the endpoints offer the possibility to filter based on search conditions. The query then will only return items matching all conditions.
+
+{% assign linkId="details-searchCondition" %}
+{% assign title="Search condtitions" %}
+{% capture content %}
+
+A search condition has the following syntax: <br>
+`searchCondition=AttributeKey|Operator|[FilterValue]` -> Example: `searchCondition=4>[2019-12-12T13:45:00Z]`
+
+Possible operators are: **>**, **<**, **>=**, **<=**, **=**, **<>**, **In**, **NotIn** and **Like**.
+
+Not all operations are possible on any attribute type.
+
+{% capture table %}
+Attribute type                                          | Operators
+--------------------------------------------------------|------------------------------------------
+AlphaNumeric | =, <>, In, NotIn, Like
+Integer | >, <, >=, <=, =, <>, In, NotIn, Like
+Float | >, <, >=, <=, =, <>, In, NotIn
+DateTime | >, <, >=, <=, =, <>, In, NotIn
+Catalog | >, <, >=, <=, =, <>, In, NotIn, Like. The value returned is the catalog entry index, not the entry itself.
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
+<br>
+You can combine multiple conditions with '+'. Remember to encode it according to the section [Encoding URLs](#-best-practice--encode-the-url). <br>
+All values need to be surrounded by `[` and `]`. <br>
+
+>{{ site.images['info'] }} The following examples are not encoded. Remember to replace plus signs or spaces with the right <a href="#-best-practice--encode-the-url">encoding</a>.
+
+{{ site.headers['example'] }} Fetching measurements after 21th June 2019
+{% highlight http %}
+GET /dataServiceRest/measurements?SearchCondition=4>[2019-06-21T00:00:00Z]
+{% endhighlight %}
+<br>
+{{ site.headers['example'] }} Fetching measurements in a time range
+{% highlight http %}
+GET /dataServiceRest/measurements?SearchCondition=4>[2019-06-21T00:00:00Z]+4<[2019-06-21T12:00:00Z]
+{% endhighlight %}
+<br>
+{{ site.headers['example'] }} Fetching measurements made by a list of inspectors
+{% highlight http %}
+//Remember that only the catalog entry index is returned.
+//Here we assume: 28=Mr. Johnson, 37=Mr. Kramer etc.
+GET /dataServiceRest/measurements?SearchCondition=8In[28,37]
+{% endhighlight %}
+<br>
+{{ site.headers['example'] }} Compare to AlphaNumeric value
+{% highlight http %}
+GET /dataServiceRest/measurements?SearchCondition=9=[SomeText]
+
+//Alle measurements where attribute 9 starts with `A`
+GET /dataServiceRest/measurements?SearchCondition=9Like[A%]
+{% endhighlight %}
+The **Like** operator lets you specify a pattern. `%` represents zero, one or multiple characters, and `_` represents a single character.<br>
++ `A%` starting with A
++ `%m` ending with m
++ `%er%` er somewhere in the text
++ `_e` second letter is e
+
+{% endcapture %}
+{% include detailTab.html %}
+
+>{{ site.headers['knownLimitation'] }} Attributes only
+Search conditions can be applied to attributes only, not to paths or names. For this you would need a respective attribute.
 
 <h3 id="{{page.sections['dataservice']['secs']['measurementsAndValues'].anchor}}-objectStructure">Object Structure</h3>
 
