@@ -1,6 +1,6 @@
 ===========================================================================================
 -------------------------------------------------------------------------------------------
- Version 4.0.0                                                                         
+ Version 5.0.0                                                                         
 -------------------------------------------------------------------------------------------
 ===========================================================================================
 
@@ -9,17 +9,11 @@
  New Features
 ==========================================
 
-- Update to target framework v4.7.2
-- Update Annotations nuget package to v2018.2.1
-- Update Newtonsoft.Json nuget package to v12.0.1
-- Remove unused methods from CertificateHelper class
-- Remove unused class AuthenticationHelper
-- Remove unused loginRequestHandler parameter from 
-  DataServiceRestClient and RawDataServiceRestClient constructors
+- Added/removed some keys from WellKnownKeys
+- WellKnownKeys class now only contains keys of the PiWeb standard configuration
 
 
 ==========================================
  Bugfixes
 ==========================================
 
-Return int datatype for call of GetRawValue(typeof(int))
