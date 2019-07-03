@@ -7,19 +7,19 @@ Examples in this section:
 <hr>
 
 All types of entities can be described by several attributes.
-Every attribute has a unique key. This key is important, as it has the purpose of an identifier for PiWeb to identify different attributes. PiWeb knows different important attributes and their keys, changing them is not advised.
+Every attribute is identified by a unique key. PiWeb's configuration consists of well known attributes, changing them is not advised.
 
-We often display a key with the letter *K* prior to the actual value, e.g. *K1234*, to mark it as a key. In code you only use the value, so *1234*. Leading zeros are ignored, a key *0024* is the same as *24*.
+To mark an attribute as a key in PiWeb it is often displayed with the letter *K* prior to the actual value, e.g. *K1234*. In code you only use the value, so *1234*. Leading zeros are ignored, a key *0024* is the same as *24*.
 
->{{ site.headers['bestPractice'] }} Use the `WellKnownKeys` class
-The .NET SDK provides the `WellKnownKeys` class where you can find important standardized attribute keys.
+>{{ site.headers['bestPractice'] }} Use `WellKnownKeys` class
+Our .NET SDK provides `WellKnownKeys` class including important standardized attribute keys.
 
 {% highlight csharp %}
-//Get a standardized key for the part description
+//Get standardized key for the part description
 var partDescriptionKey = WellKnownKeys.Part.Description;
 {% endhighlight %}
 
-The class `Configuration` includes all possible attributes for each entity in a particular property:
+`Configuration` class includes all possible attributes for each entity in a particular property:
 
 <img src="/PiWeb-Api/images/configuration-schema.png" class="img-responsive center-block">
 
@@ -48,7 +48,7 @@ Property                                          | Description
 --------------------------------------------------|------------------------------------------------------------------
 `string` Description | The description of the attribute.
 `ushort` Key | The unique key/identifier.
-`bool` QueryEfficient | Indicates if the attribute is efficient for filtering operations.
+`bool` QueryEfficient | Indicates if the attribute is efficient for filtering operations. This flag is currently unused but may be used in future web service versions.
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
@@ -57,7 +57,7 @@ Property                                          | Description
 Property                                          | Description
 --------------------------------------------------|------------------------------------------------------------------
 `ushort` Length | The maximal lenght of an attribute. Only valid if the type is AlphaNumeric.
-`bool` LengthSpecified | Indicates if the length is specified.
+`bool` LengthSpecified | Indicates if the length is specified. Only internally used.
 `AttributeType` Type | The attribute type, i.e. `AlphaNumeric`, `Float`, `Integer` or `DateTime`.
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
@@ -84,25 +84,25 @@ Here we create an attribute *Description*, which can be used in parts, catalogs 
 {{ site.headers['example'] }} Creating a new `CatalogAttributeDefinition`
 
 {% highlight csharp %}
-//Create a catalog
+//Create a catalog using recently created AttributeDefinition as catalog's valid attribute
 Catalog TestCatalog = new Catalog
 {
   Name = "TestCatalog",
   Uuid = Guid.NewGuid(),
-  ValidAttributes = new[]{...},
-  CatalogEntries = new[]{...}
+  ValidAttributes = new[]{ AttributeDefinition.Key, ... },
+  CatalogEntries = new[]{ ... }
 };
 
 //Create a CatalogAttributeDefinition
 var CatalogAttributeDefinition = new CatalogAttributeDefinition
 {
   Catalog = TestCatalog.Uuid,
-  Description = "Row_with_catalog_as_value",
+  Description = "Catalog Based Attribute",
   Key = 11002
 };
 {% endhighlight %}
 
-Here we create a new catalog *TestCatalog*. The next step is to create a `CatalogAttributeDefinition` that defines a new attribute `Row_with_catalog_as_value`, and to assign the `TestCatalog` to this attribute. Now the catalog entries can be used as values for this attribute.
+Here we create a new catalog *TestCatalog*. The next step is to create a `CatalogAttributeDefinition` that defines a new attribute `Catalog Based Attribute`, and to assign the `TestCatalog` to this attribute. Now the catalog entries can be used as values for this attribute.
 
 >{{ site.headers['bestPractice'] }} Check if a key already exists in the configuration
 Keys are unique, so creating an attribute with the same key will result in an exception. You should always check if an attribute already exists, see example below.
@@ -123,6 +123,6 @@ var attributeDoesAlreadyExist = configuration.GetDefinition( 11001 );
 //Create new attribute if not existing
 if(attributeDoesAlreadyExist != null)
 {
-await client.CreateAttributeDefinition( Entity.Part, attributeDefinition );
+  await client.CreateAttributeDefinition( Entity.Part, attributeDefinition );
 }
 {% endhighlight %}

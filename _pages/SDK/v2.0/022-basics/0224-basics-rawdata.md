@@ -16,30 +16,29 @@ Every additional data is linked to a `RawDataInformation` object:
 
 #### RawDataInformation
 {% capture table %}
-Property                                          | Description
---------------------------------------------------|------------------------------------------------------------------
-`DateTime` Created | The time of creation, *set by server*
-`string` FileName | The filename of the additional data, which does not have to be unique (unlike in a real filesystem).
-`int` Key | A unique key that identifies this specific additional data for a corresponding entity. Entities can have multiple additional data objects that are distinct by this key.
-`LastModified` |  The time of the last modification, *set by server*
-`Guid` MD5 | A Uuid using the MD5-Hash of the additional data object (the file).
-`string` MimeType | The <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types">MIME-Type</a> of the additional data. <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types">List of MIME-Types</a>.
-`int` Size | The size of the additional data in bytes.
+Property           									 | Description
+-----------------------------------------------------|------------------------------------------------------------------
+`DateTime` Created 									 | The time of creation, *set by server*
+`string` FileName  									 | The filename of the additional data, which does not have to be unique (unlike in a real filesystem).
+`int` Key          									 | A unique key that identifies this specific additional data for a corresponding entity. Entities can have multiple additional data objects that are distincted by this key.
+`LastModified`     									 | The time of the last modification, *set by server*
+`Guid` MD5         									 | A uuid using the MD5-Hash of the additional data object (the file).
+`string` MimeType  									 | The MIME-Type of the additional data. (<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types">List of MIME-Types</a>)
+`int` Size                                           | The size of the additional data in bytes.
 <nobr><code>RawDataTargetEntity</code> Target</nobr> | The target object this additional data object belongs to.
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
-The `RawDataTargetEntity` Target links the additional data to the associated entity by its Uuid.
 >{{ site.headers['bestPractice'] }} Use the helper methods of `RawDataTargetEntity`
 This class offers several helper methods to create the link to the associated entity.
 
 #### RawDataTargetEntity
 {% capture table %}
-Method                                          | Description
-------------------------------------------------|------------------------------------------------------------------
-<nobr><code>RawDataTargetEntity CreateForCharacteristic(Guid uuid)</code></nobr> | The target is a characteristic.
-<nobr><code>RawDataTargetEntity CreateForPart(Guid uuid)</code></nobr> | The target is a part.
-<nobr><code>RawDataTargetEntity CreateForMeasurement(Guid uuid)</code></nobr> | The target is a measurement.
+Method                                          															| Description
+------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------
+<nobr><code>RawDataTargetEntity CreateForCharacteristic(Guid uuid)</code></nobr> 							| The target is a characteristic.
+<nobr><code>RawDataTargetEntity CreateForPart(Guid uuid)</code></nobr> 										| The target is a part.
+<nobr><code>RawDataTargetEntity CreateForMeasurement(Guid uuid)</code></nobr> 								| The target is a measurement.
 <nobr><code>RawDataTargetEntity CreateForValue(Guid measurementUuid, Guid characteristicUuid)</code></nobr> | The target is a measured value of a specific measurement.
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
@@ -67,7 +66,7 @@ var information = new RawDataInformation
 await RawDataServiceClient.CreateRawData(information, additionalData);
 {% endhighlight %}
 
->{{ site.images['info'] }} When using -1 as the key the server will generate a new unique key.
+>{{ site.images['info'] }} When using -1 the server will generate a new unique key.
 
 {{ site.headers['example'] }} Fetching information about additional data
 
@@ -79,7 +78,7 @@ var target = RawDataTargetEntity.CreateForPart( SamplePart.Uuid );
 var additionalDataInformation = await RawDataServiceClient.ListRawData( new[] { target } );
 {% endhighlight %}
 
-This will result in an array of all `RawDataInformation` objects linked to the specified part, in this case the SamplePart with only our SampleFile.txt as additional data. This means that we only get information about the files associated with our part, but not the files itself. We don't want to transfer data we are not interested in, and produce unnecessary network traffic. <br>
+This will result in an array of all `RawDataInformation` objects linked to the specified part, in this case the SamplePart with only our SampleFile.txt as additional data. This means that we only get information about the files associated with our part but not the files itself. <br>
 With the overview of the available additional data we can fetch the files of interest:
 
 {{ site.headers['example'] }} Fetching additional data
@@ -115,7 +114,7 @@ informationAboutSampleFile.length = sampleFile.length;
 await RawDataServiceClient.UpdateRawData(informationAboutSampleFile, sampleFile);
 {% endhighlight %}
 
-It is important to update the `RawDataInformation` as well, so it matches the new file. The hash and length need to be updated, while the key and target stays the same. Changing the filename or MIME-Type is also possible. The server automatically updates the property `LastModified`, the date of creation is instead not changed because we only updated our data.
+It is important to update the `RawDataInformation` as well, so it matches the new file. The hash and length need to be updated while key and target stays the same. Changing the filename or MIME-Type is also possible. The server automatically updates the property `LastModified`, the date of creation is instead not changed because we only updated our data.
 
 {{ site.headers['example'] }} Deleting additional data
 
@@ -130,9 +129,9 @@ await RawDataServiceClient.DeleteRawDataForPart( Part.Uuid );
 {% endhighlight %}
 
 >{{ site.headers['bestPractice'] }} Use the specific delete method per entity
-The `DataServiceRestClient` offers a delete method for each type of entity which can contain additional data. They need the entity uuid and the additional data key to delete a specific file, or only the entity uuid to delete all additional data of the entity.
+The `RawDataServiceRestClient` offers a delete method for each type of entity which can contain additional data. They need the entity's uuid and the additional data key to delete a specific file or only the entity uuid to delete all additional data of the entity.
 
-When creating or fetching additional data for measured values, you need a combination of the measurement Uuid and the characteristic Uuid that contains the value with data of interest:
+>{{ site.images['info'] }} When creating or fetching additional data for measured values, you need a combination of the measurement Uuid and the characteristic Uuid that contains the value with data of interest:
 
 {{ site.headers['example'] }} Creating or fetching additional data of measured values
 
@@ -156,15 +155,15 @@ The API offers the class `StringUuidTools` containing different useful methods f
 
 #### StringUuidTools
 {% capture table %}
-Method                                          | Description
-------------------------------------------------|------------------------------------------------------------------
-<nobr><code>void CheckUuid( RawDataEntity entity, string uuid )</code></nobr> | Check if a Uuid has the valid syntax. Throws an `ArgumentOutOfRangeException` if not.
-<nobr><code>void CheckUuids( RawDataEntity entity, IEnumerable&lt;string&gt; uuids )</code></nobr> |  Check a list of Uuids for valid syntax. Throws an `ArgumentOutOfRangeException` if a Uuid is not correct.
-<nobr><code>string CreateStringUuidPair( Guid measurementGuid, Guid characteristicGuid )</code></nobr> | Creates a string containig a measurementUuid and a characteristicUuid in the form measurementUuid&#x007C;characteristicUuid.
-<nobr><code>bool IsStringUuidPair( string uuidPair )</code></nobr> | Checks if a given string is a unique UUID pair (in the form measurementUuid&#x007C;characteristicUuid).
-<nobr><code>ValueRawDataIdentifier SplitStringUuidPair( string uuidPair )</code></nobr> | Splits a string containig a measurementUuid and a characteristicUuid in the form measurementUuid&#x007C;characteristicUuid.
-<nobr><code>List<Guid> StringUuidListToGuidList( IEnumerable&lt;string&gt; uuids )</code></nobr> | Creates a list of Uuids from a list of Uuid strings.
-<nobr><code>Guid StringUuidToGuid( string uuid )</code></nobr> | Create a Uuid from a Uuid string.
+Method                                          															| Description
+------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------
+<nobr><code>void CheckUuid( RawDataEntity entity, string uuid )</code></nobr> 								| Check if a Uuid has the valid syntax. Throws an `ArgumentOutOfRangeException` if not.
+<nobr><code>void CheckUuids( RawDataEntity entity, IEnumerable&lt;string&gt; uuids )</code></nobr> 			|  Check a list of Uuids for valid syntax. Throws an `ArgumentOutOfRangeException` if a Uuid is not correct.
+<nobr><code>string CreateStringUuidPair( Guid measurementGuid, Guid characteristicGuid )</code></nobr> 		| Creates a string containig a measurementUuid and a characteristicUuid in the form measurementUuid&#x007C;characteristicUuid.
+<nobr><code>bool IsStringUuidPair( string uuidPair )</code></nobr> 											| Checks if a given string is a unique UUID pair (in the form measurementUuid&#x007C;characteristicUuid).
+<nobr><code>ValueRawDataIdentifier SplitStringUuidPair( string uuidPair )</code></nobr> 					| Splits a string containig a measurementUuid and a characteristicUuid in the form measurementUuid&#x007C;characteristicUuid.
+<nobr><code>List<Guid> StringUuidListToGuidList( IEnumerable&lt;string&gt; uuids )</code></nobr> 			| Creates a list of Uuids from a list of Uuid strings.
+<nobr><code>Guid StringUuidToGuid( string uuid )</code></nobr> 												| Create a Uuid from a Uuid string.
 <nobr><code>bool TrySplitStringUuidPair( string uuidPair, out ValueRawDataIdentifier result )</code></nobr> | Try to splits a string containig a measurementUuid and a characteristicUuid in the form measurementUuid&#x007C;characteristicUuid.
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}

@@ -11,7 +11,7 @@ Examples in this section:
 
 <hr>
 
-Measurements contain measured values for specific characteristics, and are assigned to exactly one part. A measurement is represented by the class `SimpleMeasurement` and `DataMeasurement`, and measured values are hold in class `DataValue`
+Measurements contain measured values for specific characteristics, and belong to exactly one part. A measurement is represented by the class `SimpleMeasurement` and `DataMeasurement`, measured values are hold in class `DataValue`
 
 >{{ site.images['info'] }} A `SimpleMeasurement` is a measurement without values, whilst a `DataMeasurement` describes a measurement with measured values.
 
@@ -21,13 +21,13 @@ Measurements contain measured values for specific characteristics, and are assig
 {% capture table %}
 Property                                          | Description
 --------------------------------------------------|------------------------------------------------------------------
-`Attribute[]` Attributes | The attributes that belong to that measurement
-`DateTime` Created | The time of creation, *set by server*
-`DateTime` LastModified | The time of the last modification, *set by server*
-`Guid` PartUuid | The Uuid of the part to which the measurement belongs
-`SimpleMeasurementStatus` Status | A status containing information about characteristics in/out tolerance
-`DateTime` Time | The actual time of measuring
-`Guid` Uuid | The Uuid of the measurement
+`Attribute[]` Attributes                          | The attributes that belong to that measurement
+`DateTime` Created                                | The time of creation, *set by server*
+`DateTime` LastModified                           | The time of the last modification, *set by server*
+`Guid` PartUuid                                   | The Uuid of the part to which the measurement belongs
+`SimpleMeasurementStatus` Status                  | A status containing information about characteristics in/out tolerance
+`DateTime` Time                                   | The actual time of measuring
+`Guid` Uuid                                       | The Uuid of the measurement
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 A `SimpleMeasurement` contains important information about the measurement itself like the linked part or the measurement attributes. You can use this class to create a measurement without measured values.
@@ -36,7 +36,7 @@ A `SimpleMeasurement` contains important information about the measurement itsel
 {% capture table %}
 Property                                          | Description
 --------------------------------------------------|------------------------------------------------------------------
-`DataCharacteristic[]` Characteristics | The affected characteristics and their measured values
+`DataCharacteristic[]` Characteristics            | The affected characteristics and their measured values
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 In most cases however you want to create a measurement with actual measured values. The `DataMeasurement` class contains an additional list of `DataCharacteristic` objects, which stores information about a characteristic and the corresponding value.
@@ -128,15 +128,15 @@ await DataServiceClient.CreateMeasurementValues( new[] { Measurement } );
 {% endhighlight %}
 
 >{{ site.headers['bestPractice'] }} Use the property `Time`
-This property of a `Measurement` is a shortcut to the attribute *Time* with key *K4*.
+This property is a shortcut to the attribute *Time* with key *K4*.
 
 >{{ site.images['info'] }} Please use the `Zeiss.IMT.PiWeb.Api.DataService.Rest.Attribute` class, not the standard `System.Attribute`!
 <hr>
 ### Fetching measurements and measured values
 
->{{ site.images['info'] }} To improve performance, the path information of characteristics in measurements are not returned when fetching data.
-
 Next to creating or updating measurements, another important functionality is fetching those measurements and measured values according to different criteria.
+
+>{{ site.images['info'] }} To improve performance path information of characteristics in `DataMeasurement`s are always blank when fetching data.
 
 {{ site.headers['example'] }} Fetching measurements of a part
 {% highlight csharp %}
@@ -149,42 +149,42 @@ var FetchedMeasurements = await DataServiceClient.GetMeasurements( PartPath )
 //Or fetch all measurements of this part with measured values
 var FetchedMeasurements = await DataServiceClient.GetMeasurementValues( PartPath )
 {% endhighlight %}
-This is the simplest way to fetch measurements and the associated measured values, it returns all measurements of the specified part. A measurement then contains the `DataCharacteristic` objects linking values to characteristics. Since this can result in a large collection of results, you have the possibility to filter based on different criteria.
-For this you can use `FilterAttributes`. The base class is `AbstractMeasurementFilterAttributes`:
+This is the simplest way to fetch measurements and the associated measured values as the unfiltered method returns all measurements of the specified part. Each measurement then contains a `DataCharacteristic` objects linking values to characteristics. Since this can result in a large collection of results you have the possibility to create a filter based on different criteria.
+This can be done by using `FilterAttributes` which is derived from `AbstractMeasurementFilterAttributes`:
 
 <img src="/PiWeb-Api/images/measurementFilterAttributes_model.png" class="img-responsive center-block">
 
 #### AbstractMeasurementFilterAttributes
 {% capture table %}
-Property                                          | Description
---------------------------------------------------|------------------------------------------------------------------
+Property                                                                          | Description
+----------------------------------------------------------------------------------|------------------------------------------------------------------
 <nobr><code>AggregationMeasurementSelection</code> AggregationMeasurements</nobr> | Specifies what types of measurements will be returned (normal/aggregated measurements or both).
-<nobr><code>bool</code> Deep</nobr> | `false` if only the part should be searched, `true` if the part and contained subparts should be searched.
-<nobr><code>DateTime</code> FromModificationDate</nobr> | Specifies a date to select all measurements that where modified after that date. Uses the attribute `LastModified`, and not `Time`.
-<nobr><code>int</code> LimitResult</nobr> | The maximum number of measurements that should be returned, unlimited if set to -1 (default).
-<nobr><code>Guid[]</code> MeasurementUuids</nobr> | The list of measurements that should be returned.
-<nobr><code>Order[]</code> OrderBy</nobr> | The sort order of the resulting measurements.
-<nobr><code>Guid[]</code> PartUuids</nobr> | The list of parts that should be used to restrict the measurement search.
-<nobr><code>GenericSearchCondition</code> SearchCondition</nobr> | The search condition that should be used.
-<nobr><code>DateTime</code> ToModificationDate</nobr> | Specifies a date to select all measurements that where modified before that date. Uses the attribute `LastModified`, and not `Time`.
+<nobr><code>bool</code> Deep</nobr>                                               | `false` if measurements for only the given part should be searched, `true` if measurements for the given part and contained subparts should be searched.
+<nobr><code>DateTime</code> FromModificationDate</nobr>                           | Specifies a date to select all measurements that where modified after that date.
+<nobr><code>DateTime</code> ToModificationDate</nobr>                             | Specifies a date to select all measurements that where modified before that date.
+<nobr><code>int</code> LimitResult</nobr>                                         | The maximum number of measurements that should be returned, unlimited if set to -1 (default).
+<nobr><code>Guid[]</code> MeasurementUuids</nobr>                                 | List of uuids of measurements that should be returned.
+<nobr><code>Order[]</code> OrderBy</nobr>                                         | The sort order of the resulting measurements.
+<nobr><code>Guid[]</code> PartUuids</nobr>                                        | The list of parts that should be used to restrict the measurement search.
+<nobr><code>GenericSearchCondition</code> SearchCondition</nobr>                  | The search condition that should be used.
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 The class `MeasurementValueFilterAttributes` contains further possibilities.
 #### MeasurementValueFilterAttributes
 {% capture table %}
-Property                                          | Description
---------------------------------------------------|------------------------------------------------------------------
-<nobr><code>Guid[]</code> CharacteristicsUuidList</nobr> | The list of characteristics that should be returned.
-<nobr><code>ushort[]</code> MergeAttributes</nobr> | The list of primary measurement keys to be used for joining measurements across multiple parts on the server side.
-<nobr><code>MeasurementMergeCondition</code> MergeCondition</nobr> | Specifies the condition that must be met when merging measurements across multiple parts using a primary key. Default value is <code>MeasurementMergeCondition.MeasurementsInAllParts</code>.
-<nobr><code>Guid</code> MergeMasterPart</nobr> | Specifies the part to be used as master part when merging measurements across multiple parts using a primary key.
+Property                                                                   | Description
+---------------------------------------------------------------------------|------------------------------------------------------------------
+<nobr><code>Guid[]</code> CharacteristicsUuidList</nobr>                   | The list of characteristics including its measured values that should be returned.
+<nobr><code>ushort[]</code> MergeAttributes</nobr>                         | The list of primary measurement keys to be used for joining measurements across multiple parts on the server side.
+<nobr><code>MeasurementMergeCondition</code> MergeCondition</nobr>         | Specifies the condition that must be met when merging measurements across multiple parts using a primary key. Default value is <code>MeasurementMergeCondition.MeasurementsInAllParts</code>.
+<nobr><code>Guid</code> MergeMasterPart</nobr>                             | Specifies the part to be used as master part when merging measurements across multiple parts using a primary key.
 <nobr><code>AttributeSelector</code> RequestedMeasurementAttributes</nobr> | The selector for the measurement attributes. Default: all
-<nobr><code>AttributeSelector</code> RequestedValueAttributes</nobr> | The selector for the measurement value attributes. Default: all
+<nobr><code>AttributeSelector</code> RequestedValueAttributes</nobr>       | The selector for the measurement value attributes. Default: all
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
-To demonstrate the usefulness of these filters we will use examples, the part path is the same as in the first example of this section.
+Please find some usefull examples for usage of the filter in the following section. The part path is the same as in the first example of this section.
 
 {{ site.headers['example'] }} Fetching measurements in a time range
 {% highlight csharp %}
@@ -212,10 +212,10 @@ var FetchedMeasurements = await DataServiceClient.GetMeasurementValues(
     Deep = true,
     FromModificationDate = DateTime.Now - TimeSpan.FromDays(2),
     ToModificationDate = DateTime.Now
-    RequestedMeasurementAttributes = new AttributeSelector(){ Attributes = new ushort[]{ 4, 8, 53 } }  
+    RequestedMeasurementAttributes = new AttributeSelector(){ Attributes = new ushort[]{ WellKnownKeys.Measurement.Time, WellKnownKeys.Measurement.OperatorName, WellKnownKeys.Measurement.Conctract } }  
   })
 {% endhighlight %}
-To retrieve only a subset of measurement attributes we use the option `RequestedMeasurementAttributes`, which requires an `AttributeSelector`. You simply add the keys of the desired attributes to the `Attributes` property, so in this case the attributes with keys *4*, *8* and *53*. The property `RequestedValueAttributes` works the same way for measured value attributes.
+To retrieve only a subset of measurement attributes we set `RequestedMeasurementAttributes`, which requires an `AttributeSelector`. Simply add the keys of the desired attributes to the `Attributes` property, so in this case *time*, *operator name* and *contract* attributes. The property `RequestedValueAttributes` works the same way for measured value attributes.
 
 >{{ site.images['info'] }} The measured value attribute `K1` is always returned in the `Value` property of a `DataCharacteristic`, even when not explicitly requested in `AttributeSelector`.
 
@@ -235,8 +235,7 @@ var FetchedMeasurements = await DataServiceClient.GetMeasurementValues(
   })
 {% endhighlight %}
 In this case we use a `GenericSearchAttributeCondition`, a search condition for attributes. You specify the attribute key with the value of interest, an operation and the value you want to check against. This example again returns the measurements of the last 48 hours.
-We offer other search conditions to create more complex filters, like `GenericSearchAnd`, `GenericSearchOr` and `GenericSearchNot`. <br>
-You can realize more options like filtering for a specific measurement by its id or sorting with the respective properties of the `FilterAttribute` classes.
+To create more complex filters please use  `GenericSearchAnd`, `GenericSearchOr` and/or `GenericSearchNot`. <br>
 
 >{{ site.headers['bestPractice'] }} Consider filtering on client side
 Instead of defining complex queries to retrieve filtered results, you should consider requesting data with less restrictions, and filter it on client side according to your criteria. This reduces workload for the server, as filtering requires more resources.

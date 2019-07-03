@@ -17,7 +17,7 @@ An inspection plan object contains entities of two different types - parts and c
 {% capture table %}
 Property                                          | Description
 --------------------------------------------------|--------------------------------------------------------------------
-<nobr><code>Attribute[]</code> Attributes</nobr>  | A set of attributes which describe the entity.
+<nobr><code>Attribute[]</code> Attributes</nobr>  | A set of attributes which describes the entity.
 <nobr><code>string</code> Comment</nobr>          | A comment which describes the last inspection plan change. The comment is only returned if versioning is enabled in the server settings.
 <nobr><code>PathInformation</code> Path</nobr>    | The path of this entity which describes the entity's hierarchical structure.
 <nobr><code>string</code> this[ushort key]</nobr> | Indexer for accessing entity's attribute value directly with the specified key
@@ -27,11 +27,9 @@ Property                                          | Description
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
->{{ site.images['info'] }} The version is only updated if *Versioning* is enabled.
+>{{ site.images['info'] }} The version is only updated if versioning is enabled in server settings.
 
->{{ site.images['info'] }} The version/revision of an entity is global. This means that the version counter is the same for every entity in the inspection plan. A part with a version of 34 did not necessarily change 34 times, the version indicates that the 34th change in the whole inspection plan was done to this entity.
-
-A `SimplePart` additionally consists of the timestamp for the most recent characteristic change:
+>{{ site.images['info'] }} The version/revision of a part or characteristic is global. This means that the version counter is the same for every entity in the inspection plan. A part with a version of 34 did not necessarily change 34 times but the version indicates that the 34th change in the whole inspection plan was done to this entity.
 
 #### SimplePart
 
@@ -55,16 +53,27 @@ Property                                               | Description
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
+#### PathInformation
+The inspection plan is organized in a tree structure but saved to the database in a flat representation. Path information helps to convert from flat to tree structure.
+A `PathInformation` object includes an array of entity's path elements. These path elements contains of the following properties:
 
->{{ site.headers['bestPractice'] }} Create a  `PathInformation` object for an entity
-The inspection plan is organized in a tree structure, but saved to the database in a flat representation. The path information helps to convert from flat to tree structure.
-
-As pointed in the upper section a `PathInformation` object includes an entity's path as well as its structure. To create a `PathInformation` object you might use the `PathHelper` class which includes several helper methods:
+#### PathElement
 
 {% capture table %}
-Method                                               | Description
------------------------------------------------------|-----------------------------------------------------
-<nobr><code>PathInformation RoundtripString2PathInformation( string path )</code></nobr> | Creates a path information object based on `path` parameter in roundtrip format ("structure:database path")
+Property                                               | Description
+-------------------------------------------------------|-----------------------------------------------------
+<nobr><code>InspectionPlanEntity</code> Type</nobr>    | Type of the path element (Part or Characteristic)
+<nobr><code>String</code> Value</nobr>                 | Path elments' name
+
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
+
+>{{ site.headers['bestPractice'] }} To create a `PathInformation` object you might use the `PathHelper` class which includes several helper methods:
+
+{% capture table %}
+Method                                                                                                   | Description
+---------------------------------------------------------------------------------------------------------|-----------------------------------------------------
+<nobr><code>PathInformation RoundtripString2PathInformation( string path )</code></nobr>                 | Creates a path information object based on `path` parameter in roundtrip format ("structure:database path")
 <nobr><code>PathInformation String2PartPathInformation( string path )</code></nobr>                      | Creates a path information object based on `path` parameter including plain part structure
 <nobr><code>PathInformation String2CharacteristicPathInformation( string path )</code></nobr>            | Creates a path information object based on `path` parameter including plain characteristic structure
 <nobr><code>PathInformation DatabaseString2PathInformation( string path, string structure)</code></nobr> | Creates a path information object based on `path` and `structure` parameter
@@ -72,7 +81,10 @@ Method                                               | Description
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
-<br>
+#### Examples
+
+>{{ site.images['info'] }} `DataServiceClient` in examples refers to an actual instance of `DataServiceRestClient` pointing to a server.
+
 {{ site.headers['example'] }} Using the `PathHelper` class
 
 {% highlight csharp %}
@@ -84,13 +96,6 @@ In the above example a simple path is created using our PathHelper.RoundtripStri
 The structure is a list of the letters *P* and *C*, which are the short form of *part* and *characteristic*. The list is ordered according to the occurring types of entities in the following path string. The example structure is `PPC`, standing for `/Part/Part/Characteristic/`, which matches the types of `/MetalPart/SubPart/Char1/` in the exact order. A path needs to end with `/`.
 
 >{{ site.images['info'] }} Please note that a part or characteristic must not contain a backslash `\`.
-
->{{ site.headers['knownLimitation'] }} Handling of ß (german sharp s)
-The german letter **ß** is represented as **ss** internally. This means that names for parts or characteristics like *Masse* and *Maße* are not unique.
-
-<hr>
-
->{{ site.images['info'] }} `DataServiceClient` in examples refers to an actual instance of `DataServiceRestClient` pointing to a server.
 
 {{ site.headers['example'] }} Creating a part with a subpart
 
