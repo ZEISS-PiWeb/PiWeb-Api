@@ -1,8 +1,8 @@
 <h2 id="{{page.sections['basics']['secs']['security'].anchor}}">{{page.sections['basics']['secs']['security'].title}}</h2>
 
 Examples in this section:
-+ [Authenticate with basic authentication](#-example--authenticate-yourself-with-basic-authentication)
-+ [Authenticate using ActiveDirectory (Windows)](#-example--authenticate-yourself-using-activedirectory-windows)
++ [Authenticate with basic authentication](#-example--authenticate-with-basic-authentication)
++ [Authenticate using ActiveDirectory (Windows)](#-example--authenticate-using-activedirectory-windows)
 <hr>
 
 Access to PiWeb server service might require authentication. Our .NET client supports all authentication modes:
