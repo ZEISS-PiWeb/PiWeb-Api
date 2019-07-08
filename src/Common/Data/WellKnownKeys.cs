@@ -239,14 +239,6 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 
 			/// <summary>Name of inspection plan</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort NameOfQualityControlPlan = 2342; //TODO change to MeasurementModule
-
-			/// <summary>Name of inspection plan</summary>
-			/// <remarks>AlphaNumeric</remarks>
-			public const ushort Category = 2342; //TODO change to MeasurementModule
-
-			/// <summary>Name of inspection plan</summary>
-			/// <remarks>AlphaNumeric</remarks>
 			public const ushort MeasurementModule = 2342;
 
 			/// <summary>Name of the alignment (Ausrichtung_RPS, ...)</summary>
@@ -296,10 +288,6 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 			/// <summary>Layer</summary>
 			/// <remarks>Integer</remarks>
 			public const ushort Layer = 2555;
-
-			/// <summary>Auditfunktion</summary>
-			/// <remarks>Catalog</remarks>
-			public const ushort AuditFunction = 2805;
 
 			/// <summary>Untere Eingriffgrenze</summary>
 			/// <remarks>Float</remarks>
@@ -660,14 +648,6 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 			/// <summary>Reason for test</summary>
 			/// <remarks>AlphaNumeric</remarks>
 			public const ushort Reason = 4391;
-
-			/// <summary>Audit: functional group</summary>
-			/// <remarks>AlphaNumeric</remarks>
-			public const ushort AuditFunctionGroupKey = 4401;
-
-			/// <summary>Audit: priority</summary>
-			/// <remarks>AlphaNumeric</remarks>
-			public const ushort AuditPriorityKey = 4402;
 
 			/// <summary>Key for the distribution type.</summary>
 			/// <remarks>Integer</remarks>
