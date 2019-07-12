@@ -16,7 +16,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 
 	using System;
 	using System.Collections.Generic;
-	using System.IdentityModel.Tokens;
+	using System.IdentityModel.Tokens.Jwt;
 	using System.IO;
 	using System.Linq;
 	using System.Security.Claims;
