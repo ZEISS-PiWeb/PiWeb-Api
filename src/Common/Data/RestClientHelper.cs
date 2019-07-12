@@ -120,17 +120,17 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 
 			if( requestedPartAttributes != null )
 			{
-				if( requestedPartAttributes.AllAttributes == AllAttributeSelection.False )
-					parameter.Add( ParameterDefinition.Create( "requestedPartAttributes", "None" ) );
-				else if( requestedPartAttributes.AllAttributes != AllAttributeSelection.True && requestedPartAttributes.Attributes != null )
+				if( requestedPartAttributes.AllAttributes != AllAttributeSelection.True && requestedPartAttributes.Attributes != null )
 					parameter.Add( ParameterDefinition.Create( "requestedPartAttributes", ConvertUshortArrayToString( requestedPartAttributes.Attributes ) ) );
+				else if( requestedPartAttributes.AllAttributes == AllAttributeSelection.False )
+					parameter.Add( ParameterDefinition.Create( "requestedPartAttributes", "None" ) );
 			}
 			if( requestedCharacteristicAttributes != null )
 			{
-				if( requestedCharacteristicAttributes.AllAttributes == AllAttributeSelection.False )
-					parameter.Add( ParameterDefinition.Create( "requestedCharacteristicAttributes", "None" ) );
-				else if( requestedCharacteristicAttributes.AllAttributes != AllAttributeSelection.True && requestedCharacteristicAttributes.Attributes != null )
+				if( requestedCharacteristicAttributes.AllAttributes != AllAttributeSelection.True && requestedCharacteristicAttributes.Attributes != null )
 					parameter.Add( ParameterDefinition.Create( "requestedCharacteristicAttributes", ConvertUshortArrayToString( requestedCharacteristicAttributes.Attributes ) ) );
+				else if( requestedCharacteristicAttributes.AllAttributes == AllAttributeSelection.False )
+					parameter.Add( ParameterDefinition.Create( "requestedCharacteristicAttributes", "None" ) );
 			}
 			return parameter;
 		}
