@@ -122,7 +122,7 @@ POST /dataServiceRest/parts HTTP/1.1
 [
   {
     "uuid": "05040c4c-f0af-46b8-810e-30c0c00a379e",
-    "path": "/metal part",
+    "path": "P:/metal part/",
     "attributes": { "1001": "4466", "1003": "mp" }       
   }
 ]
@@ -170,7 +170,7 @@ PUT /dataServiceRest/parts HTTP/1.1
 {% highlight json %}
 [
   {
-     "path": "/metal part",
+     "path": "P:/metal part/",
      "attributes": { "1001": "4469", "1003": "metalpart" }       
      "uuid": "05040c4c-f0af-46b8-810e-30c0c00a379e",
   }
@@ -448,7 +448,7 @@ PUT /dataServiceRest/characteristics HTTP/1.1
 {% highlight json %}
 [
   {
-     "path": "/metal part/deviation_3",
+     "path": "PC:/metal part/deviation_3",
      "attributes": { "2110": "-1.0", "2111": "1.0"  }       
      "uuid": "05040c4c-f0af-46b8-810e-30c0c00a379e",
   }
