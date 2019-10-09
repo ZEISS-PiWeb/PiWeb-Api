@@ -35,7 +35,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 		/// <summary>The server does not support jobs.</summary>
 		public const string JobEngineNotSupported = "JobEngineNotSupported";
 
-		/// <summary>The server supports characteristics below the root part and messurements attached to the root part.</summary>
+		/// <summary>The server supports characteristics below the root part and measurements attached to the root part.</summary>
 		public const string CharacteristicsBelowRoot = "CharacteristicsBelowRoot";
 
 		/// <summary>The server supports the modification of catalog attributes without data loss
@@ -47,5 +47,11 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 
 		/// <summary>The server supports measurement filter attributes with a LastN value greater than <see cref="short.MaxValue"/>.</summary>
 		public const string MeasurementLimitResultInt32 = "MeasurementLimitResultInt32";
+
+        /// <summary>The server supports generation of notifications.</summary>
+        public const string NotificationFeatureSupported = "NotificationFeatureSupported";
+        
+        /// <summary>The server supports internal generation of event based alarms.</summary>
+        public const string AlarmFeatureSupported = "AlarmFeatureSupported";
 	}
 }
