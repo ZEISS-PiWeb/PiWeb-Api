@@ -445,7 +445,25 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 			}
 		}
 
-		#endregion
+        /// <inheritdoc/>
+        public async Task ClearPart( Guid partUuid, IEnumerable<ClearPartKeepEntities> clearPartKeepEntities, CancellationToken cancellationToken = default(CancellationToken) )
+        {
+            var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+            if( !featureMatrix.SupportClearPart )
+            {
+                throw new OperationNotSupportedOnServerException(
+                                                                 "Clearing a part is not supported by this server.",
+                                                                 DataServiceFeatureMatrix.ClearPartMinVersion,
+                                                                 featureMatrix.CurrentInterfaceVersion );
+            }
+
+            var keepRestriction = RestClientHelper.ToListString( clearPartKeepEntities.Select( p => p.ToString() ) );
+            var keepListParameter = ParameterDefinition.Create( "keep", keepRestriction );
+
+            await _RestClient.Request( RequestBuilder.CreateDelete( $"parts/{partUuid}/clear", keepListParameter ), cancellationToken ).ConfigureAwait( false );
+        }
+
+        #endregion
 
 		#region Characteristics
 

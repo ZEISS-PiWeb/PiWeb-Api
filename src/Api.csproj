@@ -161,6 +161,7 @@
     <Compile Include="DataService\Rest\CatalogAttributeDefinition.cs" />
     <Compile Include="DataService\Rest\CatalogCollection.cs" />
     <Compile Include="DataService\Rest\CatalogEntry.cs" />
+    <Compile Include="DataService\Rest\ClearPartKeepEntities.cs" />
     <Compile Include="DataService\Rest\Configuration.cs" />
     <Compile Include="DataService\Rest\DataCharacteristic.cs" />
     <Compile Include="DataService\Rest\DataMeasurement.cs" />
