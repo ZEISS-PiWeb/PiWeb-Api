@@ -10,6 +10,7 @@
 ==========================================
 
 - Updated System.IdentityModel.Tokens.Jwt to 5.2.1
+- Added NotificationFeatureSupported and AlarmFeatureSupported properties to WellKnownServerFeatures class.
 
 ==========================================
  Bugfixes
