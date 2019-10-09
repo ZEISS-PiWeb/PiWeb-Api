@@ -44,6 +44,9 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		//Restrict a measurement search by merge master part if server supports at least this minor version
 		public static readonly Version RestrictMeasurementSearchByMergeMasterPartMinVersion = new Version( SupportedMajorVersion, 4 );
 
+        //Clearing a part
+        public static readonly Version ClearPartMinVersion = new Version( SupportedMajorVersion, 5 );
+
 		#endregion
 
 		#region constructor
@@ -69,7 +72,9 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 
 		public bool SupportRestrictMeasurementSearchByMergeMasterPart => CurrentInterfaceVersion >= RestrictMeasurementSearchByMergeMasterPartMinVersion;
 
+        public bool SupportClearPart => CurrentInterfaceVersion >= ClearPartMinVersion;
 
-		#endregion
-	}
+
+        #endregion
+    }
 }
