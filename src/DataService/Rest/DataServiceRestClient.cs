@@ -446,7 +446,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		}
 
         /// <inheritdoc/>
-        public async Task ClearPart( Guid partUuid, IEnumerable<ClearPartKeepEntities> clearPartKeepEntities, CancellationToken cancellationToken = default(CancellationToken) )
+        public async Task ClearPart( Guid partUuid, IEnumerable<ClearPartKeepEntities> clearPartKeepEntities = default, CancellationToken cancellationToken = default(CancellationToken) )
         {
             var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
             if( !featureMatrix.SupportClearPart )
@@ -457,10 +457,18 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
                                                                  featureMatrix.CurrentInterfaceVersion );
             }
 
-            var keepRestriction = RestClientHelper.ToListString( clearPartKeepEntities.Select( p => p.ToString() ) );
-            var keepListParameter = ParameterDefinition.Create( "keep", keepRestriction );
+            if( clearPartKeepEntities != null )
+            {
+                var clearPartListString = clearPartKeepEntities?.Select( p => p.ToString() );
+                var keepRestriction = RestClientHelper.ToListString( clearPartListString );
+                var keepListParameter = ParameterDefinition.Create( "keep", keepRestriction );
 
-            await _RestClient.Request( RequestBuilder.CreateDelete( $"parts/{partUuid}/clear", keepListParameter ), cancellationToken ).ConfigureAwait( false );
+                await _RestClient.Request( RequestBuilder.CreateDelete( $"parts/{partUuid}/clear", keepListParameter ), cancellationToken ).ConfigureAwait( false );
+            }
+            else
+            {
+                await _RestClient.Request( RequestBuilder.CreateDelete( $"parts/{partUuid}/clear" ), cancellationToken ).ConfigureAwait( false );
+            }
         }
 
         #endregion
