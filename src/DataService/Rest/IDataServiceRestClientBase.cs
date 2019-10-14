@@ -216,7 +216,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
         /// <param name="partUuid">The uuid of the part to be cleared.</param>
         /// <param name="clearPartKeepEntities">Contains entities which should not be affected on clearing part</param>
         /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-        Task ClearPart( System.Guid partUuid, IEnumerable<ClearPartKeepEntities> clearPartKeepEntities, CancellationToken cancellationToken = default(CancellationToken) );
+        Task ClearPart( System.Guid partUuid, IEnumerable<ClearPartKeepEntities> clearPartKeepEntities = default, CancellationToken cancellationToken = default(CancellationToken) );
 
 		/// <summary>
 		/// Fetches a list of characteristics below <paramref name="partPath"/>. Parts below <paramref name="partPath"/> are ignored.
