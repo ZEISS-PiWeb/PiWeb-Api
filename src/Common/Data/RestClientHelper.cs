@@ -165,12 +165,12 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 		}
 
 		/// <summary>Parses a list of strings.</summary>
-		private static IEnumerable<string> ParseListToStringArray( string value )
+		public static IEnumerable<string> ParseListToStringArray( string value )
 		{
 			if( value.StartsWith( QueryListStart ) && value.EndsWith( QueryListStop ) )
 				value = value.Substring( 1, value.Length - 2 );
 
-			return value.Split( ',' ).Select( p => p.Trim() ).ToArray();
+			return value.Split( ',' ).Select( p => p.Trim() );
 		}
 
 		/// <summary>Creates a list string from the ushorts <code>value</code>.</summary>
