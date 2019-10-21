@@ -446,7 +446,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		}
 
         /// <inheritdoc/>
-        public async Task ClearPart( Guid partUuid, IEnumerable<ClearPartKeepEntities> clearPartKeepEntities = default, CancellationToken cancellationToken = default(CancellationToken) )
+        public async Task ClearPart( Guid partUuid, IEnumerable<ClearPartKeepEntities> clearPartKeepEntities = null, CancellationToken cancellationToken = default(CancellationToken) )
         {
             var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
             if( !featureMatrix.SupportClearPart )
