@@ -12,6 +12,7 @@
 - Updated System.IdentityModel.Tokens.Jwt to 5.2.1
 - Added NotificationFeatureSupported and AlarmFeatureSupported properties to WellKnownServerFeatures class.
 - Add method to data service rest client to use new clear part endpoint
+- Add JobEngineSupported property to WellKnownServerFeatures list. This property inverts JobEngineNotSupported property which will be removed in future release and therefore has been marked as obsolete.
 
 ==========================================
  Bugfixes
