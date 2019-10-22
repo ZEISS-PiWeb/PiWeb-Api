@@ -6,6 +6,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
 
+using System;
 using Zeiss.IMT.PiWeb.Api.DataService.Rest;
 
 namespace Zeiss.IMT.PiWeb.Api.Common.Data
@@ -33,7 +34,11 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 		public const string ReadOnlyDatabase = "ReadOnlyDB";
 
 		/// <summary>The server does not support jobs.</summary>
-		public const string JobEngineNotSupported = "JobEngineNotSupported";
+		[Obsolete("Property will be removed in future release. Please use inverted JobEngineSupported property instead.")]
+        public const string JobEngineNotSupported = "JobEngineNotSupported";
+
+        /// <summary>The server supports jobs.</summary>
+        public const string JobEngineSupported = "JobEngineSupported";
 
 		/// <summary>The server supports characteristics below the root part and measurements attached to the root part.</summary>
 		public const string CharacteristicsBelowRoot = "CharacteristicsBelowRoot";
