@@ -133,7 +133,12 @@ Task("Pack")
             new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2018.2.1" }
         },
         BasePath                 = buildDir,
-        OutputDirectory          = artifactsDir
+        OutputDirectory          = artifactsDir,
+        Repository = new NuGetRepository {
+            Type = "git",
+            Url = "https://github.com/ZEISS-PiWeb/PiWeb-Api"
+        },
+        ArgumentCustomization = args => args.Append("-Symbols -SymbolPackageFormat snupkg")
     };
     NuGetPack(nuGetPackSettings);
 });
