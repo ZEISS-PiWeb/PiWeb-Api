@@ -122,6 +122,7 @@ Task("Pack")
         Files                    = new [] { 
             new NuSpecContent { Source = "PiWeb.Api.dll", Target = "lib/net472" },
             new NuSpecContent { Source = "PiWeb.Api.xml", Target = "lib/net472" },
+            new NuSpecContent { Source = "PiWeb.Api.pdb", Target = "lib/net472" },
         },
         Dependencies             = new [] {
             new NuSpecDependency { Id = "Newtonsoft.Json", Version = "12.0.1" },
