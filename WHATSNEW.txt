@@ -19,7 +19,7 @@
 ==========================================
 
 - Fixed a bug where given measurement attributes were no longer imported via the program ID
-
+- Prevent possible FormatExceptions due to empty strings on fething attribute raw value
 
 
 ===========================================================================================

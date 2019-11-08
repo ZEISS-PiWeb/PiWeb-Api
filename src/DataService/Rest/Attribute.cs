@@ -131,15 +131,19 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 					if( type == typeof( string ) )
 						return _Value;
 
-					if( type == typeof( DateTime ) )
-						return XmlConvert.ToDateTime( _Value, XmlDateTimeSerializationMode.RoundtripKind );
-					
-					if( type == typeof( float ) || type == typeof( double ) )
-						return XmlConvert.ToDouble( _Value );
+                    if( !string.IsNullOrEmpty( _Value ) )
+                    {
 
-					if( type == typeof( int ) )
-						return XmlConvert.ToInt32( _Value );
-				}
+                        if( type == typeof( DateTime ) )
+                            return XmlConvert.ToDateTime( _Value, XmlDateTimeSerializationMode.RoundtripKind );
+
+                        if( type == typeof( float ) || type == typeof( double ) )
+                            return XmlConvert.ToDouble( _Value );
+
+                        if( type == typeof( int ) )
+                            return XmlConvert.ToInt32( _Value );
+                    }
+                }
 				catch
 				{
 					// ignored
