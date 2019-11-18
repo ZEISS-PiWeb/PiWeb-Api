@@ -463,11 +463,11 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
                 var keepRestriction = RestClientHelper.ToListString( clearPartListString );
                 var keepListParameter = ParameterDefinition.Create( "keep", keepRestriction );
 
-                await _RestClient.Request( RequestBuilder.CreateDelete( $"parts/{partUuid}/clear", keepListParameter ), cancellationToken ).ConfigureAwait( false );
+                await _RestClient.Request( RequestBuilder.CreatePost( $"parts/{partUuid}/clear", Payload.Empty, keepListParameter ), cancellationToken ).ConfigureAwait( false );
             }
             else
             {
-                await _RestClient.Request( RequestBuilder.CreateDelete( $"parts/{partUuid}/clear" ), cancellationToken ).ConfigureAwait( false );
+                await _RestClient.Request( RequestBuilder.CreatePost( $"parts/{partUuid}/clear", Payload.Empty ), cancellationToken ).ConfigureAwait( false );
             }
         }
 
