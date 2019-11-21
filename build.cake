@@ -127,7 +127,9 @@ Task("Pack")
             new NuSpecDependency { Id = "Newtonsoft.Json", Version = "12.0.1" },
             new NuSpecDependency { Id = "Newtonsoft.Json.Bson", Version = "1.0.2" },
             new NuSpecDependency { Id = "IdentityModel", Version = "1.13.0" },
-            new NuSpecDependency { Id = "System.IdentityModel.Tokens.Jwt", Version = "4.0.3.308261200" },
+            new NuSpecDependency { Id = "Microsoft.IdentityModel.Logging", Version = "5.2.1" },
+            new NuSpecDependency { Id = "Microsoft.IdentityModel.Tokens", Version = "5.2.1" },
+            new NuSpecDependency { Id = "System.IdentityModel.Tokens.Jwt", Version = "5.2.1" },
             new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2018.2.1" }
         },
         BasePath                 = buildDir,

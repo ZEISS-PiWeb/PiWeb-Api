@@ -205,6 +205,19 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		Task DeleteParts( Guid[] partUuids, CancellationToken cancellationToken = default( CancellationToken ) );
 
+        /// <summary>
+        /// Clears a part by deleting:
+        /// - all raw data items belonging the part specified by <paramref name="partUuid"/>,
+        /// - all raw data for values of measurements belonging to parts below the part specified by <paramref name="partUuid"/>,
+        /// - all values of measurements belonging to parts below the part specified by <paramref name="partUuid"/>,
+        /// - all values of measurements belonging to parts the part specified by <paramref name="partUuid"/>,
+        /// - all characteristics below the part specified by <paramref name="partUuid"/>,
+        /// </summary>
+        /// <param name="partUuid">The uuid of the part to be cleared.</param>
+        /// <param name="clearPartKeepEntities">Contains entities which should not be affected on clearing part</param>
+        /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+        Task ClearPart( System.Guid partUuid, IEnumerable<ClearPartKeepEntities> clearPartKeepEntities = null, CancellationToken cancellationToken = default(CancellationToken) );
+
 		/// <summary>
 		/// Fetches a list of characteristics below <paramref name="partPath"/>. Parts below <paramref name="partPath"/> are ignored.
 		/// If the parent part is <code>null</code> the characteristics below the root part will be returned.

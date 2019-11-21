@@ -1,6 +1,21 @@
 ===========================================================================================
 -------------------------------------------------------------------------------------------
- Version 4.0.0                                                                         
+ Version 5.0.1                                                                     
+-------------------------------------------------------------------------------------------
+===========================================================================================
+
+
+==========================================
+ Bugfixes
+==========================================
+
+- Fixed a bug where given measurement attributes were no longer imported via the program ID
+- Prevent possible FormatExceptions due to empty strings on fething attribute raw value
+
+
+===========================================================================================
+-------------------------------------------------------------------------------------------
+ Version 5.0.0                                                                   
 -------------------------------------------------------------------------------------------
 ===========================================================================================
 
@@ -9,17 +24,9 @@
  New Features
 ==========================================
 
-- Update to target framework v4.7.2
-- Update Annotations nuget package to v2018.2.1
-- Update Newtonsoft.Json nuget package to v12.0.1
-- Remove unused methods from CertificateHelper class
-- Remove unused class AuthenticationHelper
-- Remove unused loginRequestHandler parameter from 
-  DataServiceRestClient and RawDataServiceRestClient constructors
-
-
-==========================================
- Bugfixes
-==========================================
-
-Return int datatype for call of GetRawValue(typeof(int))
+- Added/removed some keys from WellKnownKeys
+- WellKnownKeys class now only contains keys of the PiWeb standard configuration
+- Updated System.IdentityModel.Tokens.Jwt to 5.2.1
+- Added NotificationFeatureSupported and AlarmFeatureSupported properties to WellKnownServerFeatures class.
+- Add method to data service rest client to use new clear part endpoint
+- Add JobEngineSupported property to WellKnownServerFeatures list. This property inverts JobEngineNotSupported property which will be removed in future release and therefore has been marked as obsolete.
