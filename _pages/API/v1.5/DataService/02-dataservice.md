@@ -1,9 +1,10 @@
 ---
 area: dataService
 level: 0
-version: 1.4
+version: 1.5
 title: Data Service
-permalink: /dataservice/v1.4/
+isCurrentVersion: true
+permalink: /dataservice/v1.5/
 sections:
   dataservice:
     title: Data Service
