@@ -9,8 +9,8 @@ PiWeb allows you to filter your measurement query on server side, so the returne
 {% capture table %}
 | **Parameter** | Description |
 |------------------|--------------------------------------------------------------------|
-| **mergeAttributes** | A list of attribute keys, by which the measurements are grouped. Currently, you can only specify one attribute. | 
-| **mergeCondition** | Specifies whether the primary measurement key has to appear in only one or multiple parts| 
+| **mergeAttributes** | A list of attribute keys, by which the measurements are grouped. Currently, you can only specify one attribute. |
+| **mergeCondition** | Specifies whether the primary measurement key has to appear in only one or multiple parts|
 | **mergeMasterPart** | Specifies the part on which PiWeb searches for distinct values of the primary key attribute
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
@@ -28,8 +28,8 @@ Please note that these are measurements from three different inspection plan par
 
 | **Full query:** | `/measurements?&orderBy=4&limitResult=3` |
 |------------------|--------------------------------------------------------------------|
-| **orderBy** | `4` | 
-| **limitResult** | `3` | 
+| **orderBy** | `4` |
+| **limitResult** | `3` |
 
 
 <img src="/PiWeb-Api/images/limitResult.png" class="img-responsive center-block">
@@ -41,19 +41,19 @@ This query will fetch the last 3 measurements of all parts. The result set conta
 
 In our example, we are using attribute `14` as our primary measurement key. PiWeb will only return measurements, that have a value for the primary measurement key that exists in all specified parts. You can change this behavior later.
 
-{{ site.images['info'] }} PiWeb needs the parameter `partUuids` to be specified when applying the primary measurement keys. Querys with the parameter `partPath` specified and the parameter `deep` set to `true` are **not allowed**.
+>{{ site.images['info'] }} PiWeb needs the parameter `partUuids` to be specified when applying the primary measurement keys. Querys with the parameter `partPath` specified and the parameter `deep` set to `true` are **not allowed**.
 
 
 | **Full query:** | `/measurements?&orderBy=4&limitResult=3&partUuids={uuid1,uuid2,uuid3}&mergeAttributes={14}` |
 |------------------|--------------------------------------------------------------------|
-| **mergeAttributes** | `{14}` | 
+| **mergeAttributes** | `{14}` |
 | **mergeCondition** | `MeasurementsInAllParts` **(default)** |
 | **mergeMasterPart** | `null` **(default)** |
 
 
 <img src="/PiWeb-Api/images/measurementsInAllParts.png" class="img-responsive center-block">
 
-The query returns three measurements with the Key `O` since it's the only key that appears in all three parts, `Assembly`, `Cmm` and `Inline`. 
+The query returns three measurements with the Key `O` since it's the only key that appears in all three parts, `Assembly`, `Cmm` and `Inline`.
 
 **3. Adding the parameter `mergeCondition` with value `MeasurementsInAtLeastTwoParts`**
 
@@ -61,8 +61,8 @@ Compared to the last query, the result will also include measurements with keys,
 
 | **Full query:** | `/measurements?&orderBy=4&limitResult=3&partUuids={uuid1,uuid2,uuid3}&mergeAttributes={14}&mergeCondition=MeasurementsInAtLeastTwoParts` |
 |------------------|--------------------------------------------------------------------|
-| **mergeAttributes** | `{14}` | 
-| **mergeCondition** | `MeasurementsInAtLeastTwoParts` | 
+| **mergeAttributes** | `{14}` |
+| **mergeCondition** | `MeasurementsInAtLeastTwoParts` |
 | **mergeMasterPart** | `null` **(default)** |
 
 
@@ -72,12 +72,12 @@ The result set contains measurements with the keys `O` and `J` because the measu
 
 **4. Adding the parameter `mergeCondition` with value `None`**
 
-Setting the `mergeCondition` to `None` will result in single, non-matched measurements to be returned. 
+Setting the `mergeCondition` to `None` will result in single, non-matched measurements to be returned.
 
 | **Full query:** | `/measurements?&orderBy=4&limitResult=3&partUuids={uuid1,uuid2,uuid3}&mergeAttributes={14}&mergeCondition=None` |
 |------------------|--------------------------------------------------------------------|
-| **mergeAttributes** | `{14}` | 
-| **mergeCondition** | `None` | 
+| **mergeAttributes** | `{14}` |
+| **mergeCondition** | `None` |
 | **mergeMasterPart** | `null` **(default)** |
 
 
@@ -91,8 +91,8 @@ When the parameter `mergeMasterPart` is set, PiWeb will search for unique values
 
 | **Full query:** | `/measurements?&orderBy=4&limitResult=3&partUuids={uuid1,uuid2,uuid3}&mergeAttributes={14}&mergeCondition=None&mergeMasterPart=uuid` |
 |------------------|--------------------------------------------------------------------|
-| **mergeAttributes** | `{14}` | 
-| **mergeCondition** | `None` | 
+| **mergeAttributes** | `{14}` |
+| **mergeCondition** | `None` |
 | **mergeMasterPart** | `uuid of part 'Inline'` |
 
 
