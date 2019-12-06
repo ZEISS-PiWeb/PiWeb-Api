@@ -32,12 +32,11 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		/// <param name="type">The datatype of this attribute</param>
 		/// <param name="length">The length of a string attribute (only valid if <code>type</code> is <code>AttributeType.AlphaNumeric</code></param>
 		/// <param name="queryEfficient"><code>true</code> if this attribute is efficient for filtering operations</param>
-		public AttributeDefinition( ushort key, string description, AttributeType type, ushort length, bool queryEfficient = false )
+		public AttributeDefinition( ushort key, string description, AttributeType type, ushort? length, bool queryEfficient = false )
 			: base( key, description, queryEfficient )
 		{
 			Type = type;
-			Length = length;
-			LengthSpecified = true;
+            Length = Type == AttributeType.AlphaNumeric ? length : null;
 		}
 
 		#endregion
@@ -52,13 +51,8 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		/// <summary>
 		/// Gets or sets the length of this attribute definition (if the definitions data type is <see cref="AttributeType.AlphaNumeric"/>.
 		/// </summary>
-		public ushort Length { get; set; }
+		public ushort? Length { get; set; }
 
-		/// <summary>
-		/// Determines whether the property <see cref="Length"/> has a value (used by the XmlSerializer infrastructure).
-		/// </summary>
-		[JsonIgnore]
-		public bool LengthSpecified { get; set; }
 		#endregion
 	}
 }

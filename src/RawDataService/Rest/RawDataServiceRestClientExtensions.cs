@@ -115,7 +115,7 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		public static Task<byte[]> GetRawData( this IRawDataServiceRestClient client, RawDataInformation info, CancellationToken cancellationToken = default( CancellationToken ) )
 		{
-			return client.GetRawData( info.Target, info.Key, info.MD5, cancellationToken );
+			return client.GetRawData( info.Target, info.Key.GetValueOrDefault(), info.MD5, cancellationToken );
 		}
 
 		/// <summary> 

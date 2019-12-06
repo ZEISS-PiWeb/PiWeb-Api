@@ -274,7 +274,7 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 			if( string.IsNullOrEmpty( info.FileName ) )
 				throw new ArgumentException( "FileName needs to be set.", nameof(info) );
 
-			var requestString = info.KeySpecified && info.Key >= 0
+			var requestString = info.Key.HasValue && info.Key >= 0
 				? $"rawData/{info.Target.Entity}/{info.Target.Uuid}/{info.Key}"
 				: $"rawData/{info.Target.Entity}/{info.Target.Uuid}";
 

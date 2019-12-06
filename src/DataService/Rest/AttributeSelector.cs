@@ -21,7 +21,6 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		public AttributeSelector()
 		{
 			AllAttributes = AllAttributeSelection.True;
-			AllAttributesSpecified = true;
 		}
 
 		/// <summary>
@@ -30,7 +29,6 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		public AttributeSelector( AllAttributeSelection allAttributes )
 		{
 			AllAttributes = allAttributes;
-			AllAttributesSpecified = true;
 		}
 
 		/// <summary>
@@ -39,7 +37,6 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		public AttributeSelector( ushort[] attributes )
 		{
 			AllAttributes = AllAttributeSelection.False;
-			AllAttributesSpecified = false;
 			Attributes = attributes;
 		}
 
@@ -55,13 +52,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		/// <summary>
 		/// Gets or sets a value that determines whether to fetch all, no or just the query efficient attributes.
 		/// </summary>
-		public AllAttributeSelection AllAttributes { get; set; }
-
-		/// <summary>
-		/// Used for infrastructure reasons only.
-		/// </summary>
-		[Newtonsoft.Json.JsonIgnore]
-		public bool AllAttributesSpecified { get; set; }
+		public AllAttributeSelection? AllAttributes { get; set; }
 
 		#endregion
 	}

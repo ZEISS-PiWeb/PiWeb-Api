@@ -40,7 +40,6 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 		{
 			Target = entity;
 			Key = key;
-			KeySpecified = ( key > -1 );
 		}
 
 		/// <summary>
@@ -53,7 +52,6 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 
 			Target = data.Target;
 			Key = data.Key;
-			KeySpecified = data.KeySpecified;
 			FileName = data.FileName;
 			MimeType = data.MimeType;
 			Created = data.Created;
@@ -77,13 +75,7 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 		/// can have multiple raw data object that are distinct by this key.
 		/// </summary>
 		[JsonProperty( "key" )]
-		public int Key { get; set; }
-
-		/// <summary>
-		/// This property only supports the .Net serialization infrastructure and will be removed in future versions of the interface.
-		/// </summary>
-		[JsonIgnore]
-		public bool KeySpecified { get; set; }
+		public int? Key { get; set; }
 
 		/// <summary>
 		/// Gets or sets the filename of the raw data object.

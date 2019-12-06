@@ -97,61 +97,31 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 		/// Gets or sets the timestamp of the last inspection plan modification accross the whole server.
 		/// </summary>
 		[JsonProperty( "inspectionPlanTimestamp" )]
-		public DateTime InspectionPlanTimestamp { get; set; }
-
-		/// <summary>
-		/// Gets or sets of the <see cref="InspectionPlanTimestamp"/> contains a values.
-		/// </summary>
-		[JsonIgnore]
-		public bool InspectionPlanTimestampSpecified;
+		public DateTime? InspectionPlanTimestamp { get; set; }
 
 		/// <summary>
 		/// Gets or sets the timestamp of the last structure modification accross the whole server.
 		/// </summary>
 		[JsonProperty( "structureTimestamp" )]
-		public DateTime StructureTimestamp { get; set; }
-
-		/// <summary>
-		/// Gets or sets of the <see cref="StructureTimestamp"/> contains a values.
-		/// </summary>
-		[JsonIgnore]
-		public bool StructureTimestampSpecified;
+		public DateTime? StructureTimestamp { get; set; }
 
 		/// <summary>
 		/// Gets or sets the timestamp of the last measurement modification accross the whole server.
 		/// </summary>
 		[JsonProperty( "measurementTimestamp" )]
-		public DateTime MeasurementTimestamp { get; set; }
-
-		/// <summary>
-		/// Gets or sets of the <see cref="MeasurementTimestamp"/> contains a values.
-		/// </summary>
-		[JsonIgnore]
-		public bool MeasurementTimestampSpecified;
+		public DateTime? MeasurementTimestamp { get; set; }
 
 		/// <summary>
 		/// Gets or sets the timestamp for the last modification of the server configuration.
 		/// </summary>
 		[JsonProperty( "configurationTimestamp" )]
-		public DateTime ConfigurationTimestamp { get; set; }
-
-		/// <summary>
-		/// Gets or sets of the <see cref="ConfigurationTimestamp"/> contains a values.
-		/// </summary>
-		[JsonIgnore]
-		public bool ConfigurationTimestampSpecified;
+		public DateTime? ConfigurationTimestamp { get; set; }
 
 		/// <summary>
 		/// Gets or sets the timestamp for the last modification of the catalogs.
 		/// </summary>
 		[JsonProperty( "catalogTimestamp" )]
-		public DateTime CatalogTimestamp { get; set; }
-
-		/// <summary>
-		/// Gets or sets of the <see cref="CatalogTimestamp"/> contains a values.
-		/// </summary>
-		[JsonIgnore]
-		public bool CatalogTimestampSpecified;
+		public DateTime? CatalogTimestamp { get; set; }
 
 		/// <summary>
 		/// Convenience property that combines <see cref="VersionWsdlMajor"/> and <see cref="VersionWsdlMinor"/>.

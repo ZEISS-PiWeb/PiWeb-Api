@@ -73,7 +73,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data.Converter
 			}
 
 			if( attributeDefinitionType == "AttributeDefinition" )
-				return new AttributeDefinition { Description = description, Key = key, Length = length, LengthSpecified = true, QueryEfficient = queryEfficient, Type = type };
+				return new AttributeDefinition { Description = description, Key = key, Length = length, QueryEfficient = queryEfficient, Type = type };
 	
 			if( attributeDefinitionType == "CatalogAttributeDefinition" )
 				return new CatalogAttributeDefinition { Description = description, Key = key, QueryEfficient = queryEfficient, Catalog = catalogUuid };
@@ -98,10 +98,10 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data.Converter
 				var attributeDef = definition as AttributeDefinition;
 				if( attributeDef != null )
 				{
-					if( attributeDef.LengthSpecified )
+					if( attributeDef.Length.HasValue )
 					{
 						writer.WritePropertyName( "length" );
-						writer.WriteValue( attributeDef.Length );
+						writer.WriteValue( attributeDef.Length.Value );
 					}
 					writer.WritePropertyName( "type" );
 					serializer.Serialize( writer, attributeDef.Type );
