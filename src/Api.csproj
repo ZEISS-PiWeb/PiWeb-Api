@@ -11,6 +11,7 @@
 
   <PropertyGroup Label="Assembly information">
     <AssemblyTitle>A .NET client for HTTP(S)/REST based communication with the quality data managament system ZEISS PiWeb</AssemblyTitle>
+    <AssemblyName>PiWeb.Api</AssemblyName>
     <AssemblyVersion>6.0.0</AssemblyVersion>
     <Company>Carl Zeiss Innovationszentrum für Messtechnik GmbH</Company>
     <Copyright>Copyright © 2020 $(Company)</Copyright>
@@ -24,18 +25,16 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Nuget package specifications">
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder); .xml;</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb; .xml;</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <Authors>$(Company)</Authors>
     <EmbedAllSources>true</EmbedAllSources>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <IncludeSymbols>true</IncludeSymbols>
     <PackageIconUrl>https://raw.githubusercontent.com/ZEISS-PiWeb/PiWeb-Api/master/logo6464.png</PackageIconUrl>
     <PackageId>Zeiss.IMT.PiWebApi.Client</PackageId>
     <PackageLicenseFile>License.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/ZEISS-PiWeb/PiWeb-Api</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageTags>ZEISS PiWeb API</PackageTags>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <Version>$(InformationalVersion)</Version>
   </PropertyGroup>
   
@@ -67,4 +66,5 @@
   <ItemGroup>
   <None Include="license.txt" Pack="true" PackagePath="$(PackageLicenseFile)" />
   </ItemGroup>
+
 </Project>
