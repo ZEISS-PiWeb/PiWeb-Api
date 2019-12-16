@@ -19,7 +19,7 @@
     as measurements and measurement values to and from ZEISS PiWeb server via HTTP(S)/REST based web service endpoints.
     </Description>
     <FileVersion>$(AssemblyVersion)</FileVersion>
-    <InformationalVersion>$(AssemblyVersion)-alpha0001</InformationalVersion>
+    <InformationalVersion>$(AssemblyVersion)-alpha0002</InformationalVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <Product>ZEISS PiWeb API</Product>
   </PropertyGroup>
@@ -36,6 +36,10 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageTags>ZEISS PiWeb API</PackageTags>
     <Version>$(InformationalVersion)</Version>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DebugType>Full</DebugType>
   </PropertyGroup>
   
   <ItemGroup Label=".NET references">
@@ -65,6 +69,14 @@
   
   <ItemGroup>
   <None Include="license.txt" Pack="true" PackagePath="$(PackageLicenseFile)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="**/*.resx" />
+    <EmbeddedResource Update="**/*.resx">
+      <DependentUpon Condition="Exists('$([System.String]::Copy(&quot;%(RelativeDir)%(FileName)&quot;).Replace(&quot;.de&quot;, &quot;&quot;)).cs')">$([System.String]::Copy('%(FileName)').Replace('.de', '')).cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
