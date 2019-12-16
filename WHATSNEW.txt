@@ -10,3 +10,8 @@
 ==========================================
 
 - Removed deprecated properties
+- API project was switched to new csproj format:
+    ○ app.config and packages.config were removed
+    ○ csproj file consits of all neccesary assembly informationen, now. That prevents redundant information (version, company name). 
+    ○ Setting property <GeneratePackageOnBuild>true</GeneratePackageOnBuild> results on every build procress in a nuget package located in bin/Debug folder. Package version is taken from property <Version>. 
+    ○ Created nuget package consits of .pdb file including source files. This enables debugging into API source code when adding nuget package to a project.
