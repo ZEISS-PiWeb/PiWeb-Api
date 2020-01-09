@@ -12,6 +12,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 
 	using System;
 	using System.Collections.Generic;
+	using System.IdentityModel.Tokens.Jwt;
 	using System.Linq;
 
 	#endregion
@@ -27,7 +28,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 			AccessToken = accessToken;
 			AccessTokenExpiration = accessTokenExpiration;
 			RefreshToken = refreshToken;
-			MailAddress = OAuthHelper.TokenToMailAddress( AccessToken );
+			MailAddress = TokenToMailAddress( AccessToken );
 		}
 
 		#endregion
@@ -50,12 +51,67 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 
 		public static OAuthTokenCredential CreateWithIdentityToken( string identityToken, string accessToken, DateTime accessTokenExpiration, string refreshToken )
 		{
-			return new OAuthTokenCredential( OAuthHelper.TokenToFriendlyText( identityToken ), accessToken, accessTokenExpiration, refreshToken );
+			return new OAuthTokenCredential( TokenToFriendlyText( identityToken ), accessToken, accessTokenExpiration, refreshToken );
 		}
 
 		public static OAuthTokenCredential CreateWithClaims( IEnumerable<Tuple<string, string>> claims, string accessToken, DateTime accessTokenExpiration, string refreshToken )
 		{
-			return new OAuthTokenCredential( OAuthHelper.IdentityClaimsToFriendlyText( claims.ToList() ), accessToken, accessTokenExpiration, refreshToken );
+			return new OAuthTokenCredential( IdentityClaimsToFriendlyText( claims.ToList() ), accessToken, accessTokenExpiration, refreshToken );
+		}
+
+		private static JwtSecurityToken DecodeSecurityToken( string jwtEncodedString )
+		{
+			return new JwtSecurityToken( jwtEncodedString );
+		}
+
+		private static string IdentityClaimsToFriendlyText( IList<Tuple<string, string>> claims )
+		{
+			var name = claims.SingleOrDefault( claim => claim.Item1 == "name" )?.Item2;
+			var email = claims.SingleOrDefault( claim => claim.Item1 == "email" )?.Item2;
+
+			return $"{name} ({email})";
+		}
+
+		private static string TokenToFriendlyText( string jwtEncodedString )
+		{
+			if( string.IsNullOrEmpty( jwtEncodedString ) )
+				return "";
+
+			try
+			{
+				var decodedToken = DecodeSecurityToken( jwtEncodedString );
+				if( decodedToken != null )
+				{
+					return IdentityClaimsToFriendlyText( decodedToken.Claims.Select( claim => Tuple.Create( claim.Type, claim.Value ) ).ToList() );
+				}
+			}
+			catch
+			{
+				// ignored
+			}
+
+			return "";
+		}
+
+		private static string TokenToMailAddress( string jwtEncodedString )
+		{
+			if( string.IsNullOrEmpty( jwtEncodedString ) )
+				return "";
+
+			try
+			{
+				var decodedToken = DecodeSecurityToken( jwtEncodedString );
+				if( decodedToken != null )
+				{
+					return decodedToken.Claims.SingleOrDefault( c => string.Equals( c.Type, "email" ) )?.Value;
+				}
+			}
+			catch
+			{
+				// ignored
+			}
+
+			return "";
 		}
 
 		#endregion
