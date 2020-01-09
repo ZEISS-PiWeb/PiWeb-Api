@@ -120,17 +120,22 @@ Task("Pack")
         Tags                     = new [] {"ZEISS", "PiWeb", "API"},
         RequireLicenseAcceptance = true,
         Files                    = new [] { 
-            new NuSpecContent { Source = "PiWeb.Api.dll", Target = "lib/net472" },
-            new NuSpecContent { Source = "PiWeb.Api.xml", Target = "lib/net472" },
+            new NuSpecContent { Source = "net48/PiWeb.Api.dll", Target = "lib/net48" },
+            new NuSpecContent { Source = "net48/PiWeb.Api.xml", Target = "lib/net48" },
+            new NuSpecContent { Source = "netstandard2.0/PiWeb.Api.dll", Target = "lib/netstandard2.0" },
+            new NuSpecContent { Source = "netstandard2.0/PiWeb.Api.xml", Target = "lib/netstandard2.0" },
+            new NuSpecContent { Source = "netcoreapp3.0/PiWeb.Api.dll", Target = "lib/netcoreapp3.0" },
+            new NuSpecContent { Source = "netcoreapp3.0/PiWeb.Api.xml", Target = "lib/netcoreapp3.0" },
         },
         Dependencies             = new [] {
             new NuSpecDependency { Id = "Newtonsoft.Json", Version = "12.0.1" },
             new NuSpecDependency { Id = "Newtonsoft.Json.Bson", Version = "1.0.2" },
-            new NuSpecDependency { Id = "IdentityModel", Version = "1.13.0" },
+            new NuSpecDependency { Id = "IdentityModel", Version = "2.0.0" },
             new NuSpecDependency { Id = "Microsoft.IdentityModel.Logging", Version = "5.2.1" },
             new NuSpecDependency { Id = "Microsoft.IdentityModel.Tokens", Version = "5.2.1" },
             new NuSpecDependency { Id = "System.IdentityModel.Tokens.Jwt", Version = "5.2.1" },
-            new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2018.2.1" }
+            new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2018.2.1" },
+            new NuSpecDependency { Id = "System.Resources.Extensions", Version = "4.7.0" }
         },
         BasePath                 = buildDir,
         OutputDirectory          = artifactsDir
