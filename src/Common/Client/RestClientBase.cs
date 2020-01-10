@@ -273,7 +273,8 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 			request.Headers.AcceptEncoding.Add( new StringWithQualityHeaderValue( "gzip" ) );
 			request.Headers.AcceptEncoding.Add( new StringWithQualityHeaderValue( "deflate" ) );
 			request.Headers.UserAgent.Add( new ProductInfoHeaderValue( ClientIdHelper.ClientProduct, ClientIdHelper.ClientVersion ) );
-			request.Headers.TransferEncodingChunked = _Chunked;
+			if( request.Content != null )
+				request.Headers.TransferEncodingChunked = _Chunked;
 			request.Headers.Add( "Keep-Alive", "true" );
 
 			if( !Equals( CultureInfo.CurrentUICulture, CultureInfo.InvariantCulture ) )
