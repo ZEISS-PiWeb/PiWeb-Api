@@ -1,9 +1,8 @@
-src/.vs/
-src/bin/
-src/obj/
-src/packages/
+.vs/
+bin/
+obj/
+artifacts/
+tools/
 *.suo
-artifacts
-tools
-/bin
+*.user
 /PiWeb.Api.XML
