@@ -13,7 +13,6 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 	using System;
 	using System.Collections.Generic;
 	using System.Net;
-	using System.ServiceModel;
 
 	#endregion
 
@@ -26,19 +25,19 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 
 		private static readonly Dictionary<HttpStatusCode, string> InternalServerBasedExceptions = new Dictionary<HttpStatusCode, string>
 		{
-			{ HttpStatusCode.InternalServerError, typeof( CommunicationException ).ToString() },
+			{ HttpStatusCode.InternalServerError, "System.ServiceModel.CommunicationException" },
 			{ HttpStatusCode.NotImplemented, typeof( NotImplementedException ).ToString() },
-			{ HttpStatusCode.BadGateway, typeof( EndpointNotFoundException ).ToString() },
-			{ HttpStatusCode.ServiceUnavailable, typeof( ServiceActivationException ).ToString() },
+			{ HttpStatusCode.BadGateway, "System.ServiceModel.EndpointNotFoundException" },
+			{ HttpStatusCode.ServiceUnavailable, "System.ServiceModel.ServiceActivationException" },
 			{ HttpStatusCode.GatewayTimeout, typeof( TimeoutException ).ToString() }
 		};
 
 		/// <summary>
-		/// Indicates if <paramref name="exception"/> includes an <see cref="EndpointNotFoundException"/>
+		/// Indicates if <paramref name="exception"/> includes an <c>System.ServiceModel.EndpointNotFoundException</c>
 		/// </summary>
 		public static bool IncludesNotFoundException( this WrappedServerErrorException exception )
 		{
-			return exception.IncludesExceptionOfType<EndpointNotFoundException>();
+			return string.Equals( exception?.Error?.ExceptionType, "System.EndpointNotFoundException", StringComparison.Ordinal );
 		}
 
 		/// <summary>

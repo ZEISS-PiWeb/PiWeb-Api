@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net;
-using System.Net.Cache;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -22,6 +21,10 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Zeiss.IMT.PiWeb.Api.Common.Data;
+
+#if NETFRAMEWORK
+using System.Net.Cache;
+#endif
 
 namespace Zeiss.IMT.PiWeb.Api.Common.Client
 {
@@ -65,7 +68,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 		private readonly bool _Chunked = true;
 
 		private HttpClient _HttpClient;
-		private WebRequestHandler _WebRequestHandler;
+		private HttpClientHandler _WebRequestHandler;
 
 		private AuthenticationContainer _AuthenticationContainer = new AuthenticationContainer( AuthenticationMode.NoneOrBasic );
 
@@ -270,7 +273,8 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 			request.Headers.AcceptEncoding.Add( new StringWithQualityHeaderValue( "gzip" ) );
 			request.Headers.AcceptEncoding.Add( new StringWithQualityHeaderValue( "deflate" ) );
 			request.Headers.UserAgent.Add( new ProductInfoHeaderValue( ClientIdHelper.ClientProduct, ClientIdHelper.ClientVersion ) );
-			request.Headers.TransferEncodingChunked = _Chunked;
+			if( request.Content != null )
+				request.Headers.TransferEncodingChunked = _Chunked;
 			request.Headers.Add( "Keep-Alive", "true" );
 
 			if( !Equals( CultureInfo.CurrentUICulture, CultureInfo.InvariantCulture ) )
@@ -359,6 +363,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 
 		private void BuildHttpClient( TimeSpan? timeout )
 		{
+#if NETFRAMEWORK
 			_WebRequestHandler = new WebRequestHandler
 			{
 				CachePolicy = new HttpRequestCachePolicy( HttpCacheAgeControl.MaxAge, TimeSpan.FromDays( 0 ) ),
@@ -380,6 +385,13 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 				//     i.e. the Server is already authenticating every single request
 				UnsafeAuthenticatedConnectionSharing = true
 			};
+#else
+			_WebRequestHandler = new HttpClientHandler
+			{
+				PreAuthenticate = true,
+				AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+			};
+#endif
 
 			_HttpClient = new HttpClient( _WebRequestHandler )
 			{
