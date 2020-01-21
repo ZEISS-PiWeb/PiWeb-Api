@@ -58,10 +58,10 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 			return new JwtSecurityToken( jwtEncodedString );
 		}
 
-		public static string IdentityClaimsToFriendlyText( IList<Tuple<string, string>> claims )
+		public static string IdentityClaimsToFriendlyText( IList<Claim> claims )
 		{
-			var name = claims.SingleOrDefault( claim => claim.Item1 == "name" )?.Item2;
-			var email = claims.SingleOrDefault( claim => claim.Item1 == "email" )?.Item2;
+			var name = claims.SingleOrDefault( claim => claim.Type == "name" )?.Value;
+			var email = claims.SingleOrDefault( claim => claim.Type == "email" )?.Value;
 
 			return $"{name} ({email})";
 		}
@@ -76,7 +76,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 				var decodedToken = DecodeSecurityToken( jwtEncodedString );
 				if ( decodedToken != null )
 				{
-					return IdentityClaimsToFriendlyText( decodedToken.Claims.Select( claim => Tuple.Create( claim.Type, claim.Value ) ).ToList() );
+					return IdentityClaimsToFriendlyText( decodedToken.Claims.ToList() );
 				}
 			}
 			catch
@@ -144,10 +144,14 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 				if( !tokenResponse.IsError )
 				{
 					// TODO: discover userinfo endpoint via ".well-known/openid-configuration"
-					var infoClient = new UserInfoClient( new Uri( authority + "/connect/userinfo" ), tokenResponse.AccessToken );
-					var userInfo = await infoClient.GetAsync().ConfigureAwait( false );
+					var infoClient = new UserInfoClient(authority + "/connect/userinfo");
+					var userInfo = await infoClient.GetAsync(tokenResponse.AccessToken).ConfigureAwait(false);
 
-					return OAuthTokenCredential.CreateWithClaims( userInfo.Claims, tokenResponse.AccessToken, DateTime.UtcNow + TimeSpan.FromSeconds( tokenResponse.ExpiresIn ), tokenResponse.RefreshToken );
+					return OAuthTokenCredential.CreateWithClaims(
+						userInfo.Claims, 
+						tokenResponse.AccessToken, 
+						DateTime.UtcNow + TimeSpan.FromSeconds(tokenResponse.ExpiresIn), 
+						tokenResponse.RefreshToken);
 				}
 			}
 
