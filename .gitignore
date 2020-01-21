@@ -6,3 +6,4 @@ tools/
 *.suo
 *.user
 /PiWeb.Api.XML
+.idea/
