@@ -8,8 +8,6 @@
 
 #endregion
 
-using JetBrains.Annotations;
-
 namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 {
 	#region usings
@@ -24,7 +22,6 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 	using System.Threading.Tasks;
 	using IdentityModel;
 	using IdentityModel.Client;
-	using Newtonsoft.Json;
 	using Zeiss.IMT.PiWeb.Api.OAuthService;
 
 	#endregion
@@ -37,7 +34,6 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 		private const string ClientSecret = "d2940022-7469-4790-9498-776e3adac79f";
 		private const string RedirectUri = "urn:ietf:wg:oauth:2.0:oob";
 
-		private static readonly string _CacheFileDirectory = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ), @"Zeiss\PiWeb" );
 		private static readonly string _CacheFilePath = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ), @"Zeiss\PiWeb\OpenIdTokens.dat" );
 
 		#endregion
@@ -45,9 +41,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 		#region members
 
 		// FUTURE: replace by a real cache with cleanup, this is a memory leak for long running processes
-		private static Dictionary<string, OAuthTokenCredential> _AccessTokenCache = new Dictionary<string, OAuthTokenCredential>();
-		private static DateTime _FileLastWriteTime;
-		private static long _FileLength;
+		private static readonly CredentialRepository _AccessTokenCache = new CredentialRepository(_CacheFilePath);
 
 		#endregion
 
@@ -115,10 +109,10 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 		}
 
 		private static OAuthTokenCredential TryGetCurrentOAuthToken( string instanceUrl, ref string refreshToken )
-		{
-			OAuthTokenCredential result;
-			// if access token is still valid (5min margin to allow for clock skew), just return it from the cache
-			if( _AccessTokenCache.TryGetValue( instanceUrl, out result ) )
+        {
+            OAuthTokenCredential result;
+            // if access token is still valid (5min margin to allow for clock skew), just return it from the cache
+			if( _AccessTokenCache.TryGetCredential( instanceUrl, out result ) )
 			{
 				if( string.IsNullOrEmpty( refreshToken ) )
 				{
@@ -192,18 +186,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 
 			return null;
 		}
-
-		private static void StoreToken( string instanceUrl, [NotNull] OAuthTokenCredential result )
-		{
-			if( result == null ) throw new ArgumentNullException( nameof( result ) );
-
-			var newCache = new Dictionary<string, OAuthTokenCredential>( _AccessTokenCache );
-			newCache[ instanceUrl ] = result;
-			_AccessTokenCache = newCache;
-
-			SerializeTokenCache();
-		}
-
+		
 		private static string CreateOAuthStartUrl( string authority, CryptoNumbers cryptoNumbers )
 		{
 			// FUTURE: discover authorize endpoint via ".well-known/openid-configuration"
@@ -239,9 +222,6 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 		{
 			var instanceUrl = GetInstanceUrl( databaseUrl );
 
-			// deserialize token cache from file (only if file exists and has changed since last deserialization)
-			DeserializeTokenCache();
-
 			var result = TryGetCurrentOAuthToken( instanceUrl, ref refreshToken );
 			if( result != null )
 			{
@@ -253,8 +233,8 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 
 			result = await TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, authority, refreshToken ).ConfigureAwait( false );
 			if( result != null )
-			{
-				StoreToken( instanceUrl, result );
+            {
+                _AccessTokenCache.Store(instanceUrl, result);
 				return result;
 			}
 
@@ -271,7 +251,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 					result = await TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response ).ConfigureAwait( false );
 					if( result != null )
 					{
-						StoreToken( instanceUrl, result );
+                        _AccessTokenCache.Store(instanceUrl, result);
 						return result;
 					}
 				}
@@ -283,9 +263,6 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 		public static OAuthTokenCredential GetAuthenticationInformationForDatabaseUrl( string databaseUrl, string refreshToken = null, Func<OAuthRequest, OAuthResponse> requestCallback = null )
 		{
 			var instanceUrl = GetInstanceUrl( databaseUrl );
-
-			// deserialize token cache from file (only if file exists and has changed since last deserialization)
-			DeserializeTokenCache();
 
 			var result = TryGetCurrentOAuthToken( instanceUrl, ref refreshToken );
 			if( result != null )
@@ -307,7 +284,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 
 			if( result != null )
 			{
-				StoreToken( instanceUrl, result );
+                _AccessTokenCache.Store(instanceUrl, result);
 				return result;
 			}
 
@@ -327,7 +304,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 						.GetResult();
 					if( result != null )
 					{
-						StoreToken( instanceUrl, result );
+                        _AccessTokenCache.Store(instanceUrl, result);
 						return result;
 					}
 				}
@@ -377,107 +354,14 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 				return string.Equals( cHash.Value, codeHashB64, StringComparison.Ordinal );
 			}
 		}
-
-		public static void SerializeTokenCache()
-		{
-			if( !Environment.UserInteractive )
-				return;
-
-			if( !Directory.Exists( _CacheFileDirectory ) )
-				Directory.CreateDirectory( _CacheFileDirectory );
-
-			var serialized = JsonConvert.SerializeObject( _AccessTokenCache );
-			var bytes = System.Text.Encoding.UTF8.GetBytes( serialized );
-			bytes = ProtectedData.Protect( bytes, null, DataProtectionScope.CurrentUser );
-
-			using( var stream = WaitForFileStream( _CacheFilePath, FileMode.Create, FileAccess.Write, FileShare.None ) )
-			{
-				stream.Write( bytes, 0, bytes.Length );
-			}
-
-			var fileInfo = new FileInfo( _CacheFilePath );
-			_FileLastWriteTime = fileInfo.LastWriteTimeUtc;
-			_FileLength = fileInfo.Length;
-		}
-
-		private static void DeserializeTokenCache()
-		{
-			if( !Environment.UserInteractive )
-				return;
-
-			var fileInfo = new FileInfo( _CacheFilePath );
-			if( fileInfo.Exists )
-			{
-				var fileChanged = ( _FileLastWriteTime != fileInfo.LastWriteTimeUtc ) || ( _FileLength != fileInfo.Length );
-
-				if( fileChanged )
-				{
-					using( var memStream = new MemoryStream() )
-					{
-						using( var stream = WaitForFileStream( _CacheFilePath, FileMode.Open, FileAccess.Read, FileShare.Read ) )
-						{
-							stream.CopyTo( memStream );
-						}
-						var bytes = ProtectedData.Unprotect( memStream.ToArray(), null, DataProtectionScope.CurrentUser );
-						var serialized = System.Text.Encoding.UTF8.GetString( bytes );
-
-						_AccessTokenCache = JsonConvert.DeserializeObject<Dictionary<string, OAuthTokenCredential>>( serialized );
-
-						_FileLastWriteTime = fileInfo.LastWriteTimeUtc;
-						_FileLength = fileInfo.Length;
-					}
-				}
-			}
-			else
-			{
-				_AccessTokenCache = new Dictionary<string, OAuthTokenCredential>();
-				_FileLastWriteTime = default( DateTime );
-				_FileLength = 0;
-			}
-		}
-
-		/// <summary>
-		/// Inspired by https://stackoverflow.com/a/3677960
-		/// </summary>
-		private static FileStream WaitForFileStream( string path, FileMode mode, FileAccess access, FileShare share )
-		{
-			int numTries = 10;
-			int i = 0;
-			while( true )
-			{
-				FileStream fileStream = null;
-				try
-				{
-					fileStream = new FileStream( path, mode, access, share );
-					return fileStream;
-				}
-				catch( IOException )
-				{
-					if( fileStream != null )
-						fileStream.Dispose();
-
-					if( i >= numTries )
-						throw;
-					else
-						System.Threading.Thread.Sleep( 50 );
-
-					i += 1;
-				}
-			}
-		}
-
+		
 		public static void ClearAuthenticationInformationForDatabaseUrl( string databaseUrl )
-		{
-			var instanceUrl = databaseUrl.Replace( "/DataServiceSoap", "" );
-
-			var newCache = new Dictionary<string, OAuthTokenCredential>( _AccessTokenCache );
-			newCache.Remove( instanceUrl );
-			_AccessTokenCache = newCache;
-
+        {
+            var instanceUrl = GetInstanceUrl(databaseUrl);
+            _AccessTokenCache.Remove(instanceUrl);
+			
 			// FUTURE: call endsession endpoint of identity server
 			// https://identityserver.github.io/Documentation/docsv2/endpoints/endSession.html
-
-			SerializeTokenCache();
 		}
 
 		#endregion
