@@ -8,6 +8,8 @@
 
 #endregion
 
+using JetBrains.Annotations;
+
 namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 {
 	#region usings
@@ -100,13 +102,15 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 			return "";
 		}
 
-		private static string GetInstanceUrl( string databaseUrl )
+		private static string GetInstanceUrl( [NotNull] string databaseUrl )
 		{
 			if( databaseUrl == null )
 				throw new ArgumentNullException( nameof( databaseUrl ) );
 
-			return databaseUrl.Replace( "/DataServiceSoap", "" );
-		}
+            databaseUrl = databaseUrl.Replace( "/DataServiceSoap", string.Empty );
+            databaseUrl = databaseUrl.Trim('/');
+            return databaseUrl;
+        }
 
 		private static OAuthTokenCredential TryGetCurrentOAuthToken( string instanceUrl, ref string refreshToken )
         {
