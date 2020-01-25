@@ -8,162 +8,180 @@
 
 #endregion
 
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.IO;
-using System.Security.Cryptography;
-using JetBrains.Annotations;
-using Newtonsoft.Json;
-
 namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 {
-    internal sealed class CredentialRepository
-    {
-        private readonly string _Filename;
-        private readonly string _Directory;
+	#region usings
 
-        private readonly ConcurrentDictionary<string, OAuthTokenCredential> _CredentialCache = new ConcurrentDictionary<string, OAuthTokenCredential>();
-        private DateTime _FileLastWriteTime;
-        private long _FileLength;
+	using System;
+	using System.Collections.Concurrent;
+	using System.Collections.Generic;
+	using System.IO;
+	using System.Security.Cryptography;
+	using System.Text;
+	using System.Threading;
+	using JetBrains.Annotations;
+	using Newtonsoft.Json;
 
-        public CredentialRepository(string filename)
-        {
-            if (string.IsNullOrWhiteSpace(filename))
-            {
-                throw new ArgumentException(@"Missing storage location", nameof(filename));
-            }
+	#endregion
 
-            _Filename = filename;
-            _Directory = Directory.GetParent(_Filename).FullName;
-        }
+	internal sealed class CredentialRepository
+	{
+		#region members
 
-        public bool TryGetCredential(string url, out OAuthTokenCredential credential)
-        {
-            ReadFromFile();
+		private readonly string _Filename;
+		private readonly string _Directory;
 
-            return _CredentialCache.TryGetValue(url, out credential);
-        }
+		private readonly ConcurrentDictionary<string, OAuthTokenCredential> _CredentialCache = new ConcurrentDictionary<string, OAuthTokenCredential>();
+		private DateTime _FileLastWriteTime;
+		private long _FileLength;
 
-        public void Store(string url, [NotNull] OAuthTokenCredential credential)
-        {
-            if (credential == null)
-            {
-                throw new ArgumentNullException(nameof(credential));
-            }
+		#endregion
 
-            _CredentialCache.AddOrUpdate(url, key => credential, (key, value) => credential);
-            
-            SaveToFile();
-        }
+		#region constructors
 
-        public void Remove(string url)
-        {
-            if (_CredentialCache.TryRemove(url, out _))
-            {
-                SaveToFile();
-            }
-        }
+		public CredentialRepository( string filename )
+		{
+			if( string.IsNullOrWhiteSpace( filename ) )
+			{
+				throw new ArgumentException( @"Missing storage location", nameof( filename ) );
+			}
 
-        public void SaveToFile()
-        {
-            if( !Environment.UserInteractive )
-                return;
+			_Filename = filename;
+			_Directory = Directory.GetParent( _Filename ).FullName;
+		}
 
-            if( !Directory.Exists( _Directory ) )
-                Directory.CreateDirectory( _Directory );
+		#endregion
 
-            var serialized = JsonConvert.SerializeObject( _CredentialCache );
-            var bytes = System.Text.Encoding.UTF8.GetBytes( serialized );
-            bytes = ProtectedData.Protect( bytes, null, DataProtectionScope.CurrentUser );
+		#region methods
 
-            using( var stream = WaitForFileStream( _Filename, FileMode.Create, FileAccess.Write, FileShare.None ) )
-            {
-                stream.Write( bytes, 0, bytes.Length );
-            }
+		public bool TryGetCredential( string url, out OAuthTokenCredential credential )
+		{
+			ReadFromFile();
 
-            var fileInfo = new FileInfo( _Filename );
-            _FileLastWriteTime = fileInfo.LastWriteTimeUtc;
-            _FileLength = fileInfo.Length;
-        }
+			return _CredentialCache.TryGetValue( url, out credential );
+		}
 
-        private void ReadFromFile()
-        {
-            if( !Environment.UserInteractive )
-                return;
+		public void Store( string url, [NotNull] OAuthTokenCredential credential )
+		{
+			if( credential == null )
+			{
+				throw new ArgumentNullException( nameof( credential ) );
+			}
 
-            var fileInfo = new FileInfo( _Filename );
-            if( fileInfo.Exists )
-            {
-                var fileChanged = ( _FileLastWriteTime != fileInfo.LastWriteTimeUtc ) || ( _FileLength != fileInfo.Length );
+			_CredentialCache.AddOrUpdate( url, key => credential, ( key, value ) => credential );
 
-                if( fileChanged )
-                {
-                    using( var memStream = new MemoryStream() )
-                    {
-                        using( var stream = WaitForFileStream( _Filename, FileMode.Open, FileAccess.Read, FileShare.Read ) )
-                        {
-                            stream.CopyTo( memStream );
-                            if (stream.Position == 0)
-                            {
-                                // File is empty
-                                _FileLastWriteTime = default;
-                                _FileLength = 0;
-                                return;
-                            }
-                        }
+			SaveToFile();
+		}
 
-                        var bytes = ProtectedData.Unprotect( memStream.ToArray(), null, DataProtectionScope.CurrentUser );
-                        var serialized = System.Text.Encoding.UTF8.GetString( bytes );
+		public void Remove( string url )
+		{
+			if( _CredentialCache.TryRemove( url, out _ ) )
+			{
+				SaveToFile();
+			}
+		}
 
-                        var deserialized = JsonConvert.DeserializeObject<Dictionary<string, OAuthTokenCredential>>( serialized );
-                        
-                        _CredentialCache.Clear();
-                        foreach (var entry in deserialized)
-                        {
-                            _CredentialCache.AddOrUpdate(entry.Key, key => entry.Value, (key, value) => entry.Value);
-                        }
+		public void SaveToFile()
+		{
+			if( !Environment.UserInteractive )
+				return;
 
-                        _FileLastWriteTime = fileInfo.LastWriteTimeUtc;
-                        _FileLength = fileInfo.Length;
-                    }
-                }
-            }
-            else
-            {
-                _FileLastWriteTime = default;
-                _FileLength = 0;
-            }
-        }
+			if( !Directory.Exists( _Directory ) )
+				Directory.CreateDirectory( _Directory );
 
-        /// <summary>
-        /// Inspired by https://stackoverflow.com/a/3677960
-        /// </summary>
-        private static FileStream WaitForFileStream( string path, FileMode mode, FileAccess access, FileShare share )
-        {
-            int numTries = 10;
-            int i = 0;
-            while( true )
-            {
-                FileStream fileStream = null;
-                try
-                {
-                    fileStream = new FileStream( path, mode, access, share );
-                    return fileStream;
-                }
-                catch( IOException )
-                {
-                    if( fileStream != null )
-                        fileStream.Dispose();
+			var serialized = JsonConvert.SerializeObject( _CredentialCache );
+			var bytes = Encoding.UTF8.GetBytes( serialized );
+			bytes = ProtectedData.Protect( bytes, null, DataProtectionScope.CurrentUser );
 
-                    if( i >= numTries )
-                        throw;
-                    else
-                        System.Threading.Thread.Sleep( 50 );
+			using( var stream = WaitForFileStream( _Filename, FileMode.Create, FileAccess.Write, FileShare.None ) )
+			{
+				stream.Write( bytes, 0, bytes.Length );
+			}
 
-                    i += 1;
-                }
-            }
-        }
-    }
+			var fileInfo = new FileInfo( _Filename );
+			_FileLastWriteTime = fileInfo.LastWriteTimeUtc;
+			_FileLength = fileInfo.Length;
+		}
+
+		private void ReadFromFile()
+		{
+			if( !Environment.UserInteractive )
+				return;
+
+			var fileInfo = new FileInfo( _Filename );
+			if( fileInfo.Exists )
+			{
+				var fileChanged = ( _FileLastWriteTime != fileInfo.LastWriteTimeUtc ) || ( _FileLength != fileInfo.Length );
+
+				if( fileChanged )
+				{
+					using( var memStream = new MemoryStream() )
+					{
+						using( var stream = WaitForFileStream( _Filename, FileMode.Open, FileAccess.Read, FileShare.Read ) )
+						{
+							stream.CopyTo( memStream );
+							if( stream.Position == 0 )
+							{
+								// File is empty
+								_FileLastWriteTime = default;
+								_FileLength = 0;
+								return;
+							}
+						}
+
+						var bytes = ProtectedData.Unprotect( memStream.ToArray(), null, DataProtectionScope.CurrentUser );
+						var serialized = Encoding.UTF8.GetString( bytes );
+
+						var deserialized = JsonConvert.DeserializeObject<Dictionary<string, OAuthTokenCredential>>( serialized );
+
+						_CredentialCache.Clear();
+						foreach( var entry in deserialized )
+						{
+							_CredentialCache.AddOrUpdate( entry.Key, key => entry.Value, ( key, value ) => entry.Value );
+						}
+
+						_FileLastWriteTime = fileInfo.LastWriteTimeUtc;
+						_FileLength = fileInfo.Length;
+					}
+				}
+			}
+			else
+			{
+				_FileLastWriteTime = default;
+				_FileLength = 0;
+			}
+		}
+
+		/// <summary>
+		/// Inspired by https://stackoverflow.com/a/3677960
+		/// </summary>
+		private static FileStream WaitForFileStream( string path, FileMode mode, FileAccess access, FileShare share )
+		{
+			int numTries = 10;
+			int i = 0;
+			while( true )
+			{
+				FileStream fileStream = null;
+				try
+				{
+					fileStream = new FileStream( path, mode, access, share );
+					return fileStream;
+				}
+				catch( IOException )
+				{
+					if( fileStream != null )
+						fileStream.Dispose();
+
+					if( i >= numTries )
+						throw;
+					else
+						Thread.Sleep( 50 );
+
+					i += 1;
+				}
+			}
+		}
+
+		#endregion
+	}
 }

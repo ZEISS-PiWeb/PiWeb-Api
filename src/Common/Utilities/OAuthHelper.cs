@@ -8,8 +8,6 @@
 
 #endregion
 
-using JetBrains.Annotations;
-
 namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 {
 	#region usings
@@ -21,9 +19,11 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 	using System.Linq;
 	using System.Security.Claims;
 	using System.Security.Cryptography;
+	using System.Text;
 	using System.Threading.Tasks;
 	using IdentityModel;
 	using IdentityModel.Client;
+	using JetBrains.Annotations;
 	using Zeiss.IMT.PiWeb.Api.OAuthService;
 
 	#endregion
@@ -36,14 +36,14 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 		private const string ClientSecret = "d2940022-7469-4790-9498-776e3adac79f";
 		private const string RedirectUri = "urn:ietf:wg:oauth:2.0:oob";
 
-		private static readonly string _CacheFilePath = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ), @"Zeiss\PiWeb\OpenIdTokens.dat" );
-
 		#endregion
 
 		#region members
 
+		private static readonly string _CacheFilePath = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ), @"Zeiss\PiWeb\OpenIdTokens.dat" );
+
 		// FUTURE: replace by a real cache with cleanup, this is a memory leak for long running processes
-		private static readonly CredentialRepository _AccessTokenCache = new CredentialRepository(_CacheFilePath);
+		private static readonly CredentialRepository _AccessTokenCache = new CredentialRepository( _CacheFilePath );
 
 		#endregion
 
@@ -64,13 +64,13 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 
 		public static string TokenToFriendlyText( string jwtEncodedString )
 		{
-			if ( string.IsNullOrEmpty( jwtEncodedString ) )
+			if( string.IsNullOrEmpty( jwtEncodedString ) )
 				return "";
 
 			try
 			{
 				var decodedToken = DecodeSecurityToken( jwtEncodedString );
-				if ( decodedToken != null )
+				if( decodedToken != null )
 				{
 					return IdentityClaimsToFriendlyText( decodedToken.Claims.ToList() );
 				}
@@ -79,6 +79,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 			{
 				// ignored
 			}
+
 			return "";
 		}
 
@@ -99,6 +100,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 			{
 				// ignored
 			}
+
 			return "";
 		}
 
@@ -107,15 +109,15 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 			if( databaseUrl == null )
 				throw new ArgumentNullException( nameof( databaseUrl ) );
 
-            databaseUrl = databaseUrl.Replace( "/DataServiceSoap", string.Empty );
-            databaseUrl = databaseUrl.Trim('/');
-            return databaseUrl;
-        }
+			databaseUrl = databaseUrl.Replace( "/DataServiceSoap", string.Empty );
+			databaseUrl = databaseUrl.Trim( '/' );
+			return databaseUrl;
+		}
 
 		private static OAuthTokenCredential TryGetCurrentOAuthToken( string instanceUrl, ref string refreshToken )
-        {
-            OAuthTokenCredential result;
-            // if access token is still valid (5min margin to allow for clock skew), just return it from the cache
+		{
+			OAuthTokenCredential result;
+			// if access token is still valid (5min margin to allow for clock skew), just return it from the cache
 			if( _AccessTokenCache.TryGetCredential( instanceUrl, out result ) )
 			{
 				if( string.IsNullOrEmpty( refreshToken ) )
@@ -142,14 +144,14 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 				if( !tokenResponse.IsError )
 				{
 					// TODO: discover userinfo endpoint via ".well-known/openid-configuration"
-					var infoClient = new UserInfoClient(authority + "/connect/userinfo");
-					var userInfo = await infoClient.GetAsync(tokenResponse.AccessToken).ConfigureAwait(false);
+					var infoClient = new UserInfoClient( authority + "/connect/userinfo" );
+					var userInfo = await infoClient.GetAsync( tokenResponse.AccessToken ).ConfigureAwait( false );
 
 					return OAuthTokenCredential.CreateWithClaims(
-						userInfo.Claims, 
-						tokenResponse.AccessToken, 
-						DateTime.UtcNow + TimeSpan.FromSeconds(tokenResponse.ExpiresIn), 
-						tokenResponse.RefreshToken);
+						userInfo.Claims,
+						tokenResponse.AccessToken,
+						DateTime.UtcNow + TimeSpan.FromSeconds( tokenResponse.ExpiresIn ),
+						tokenResponse.RefreshToken );
 				}
 			}
 
@@ -190,7 +192,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 
 			return null;
 		}
-		
+
 		private static string CreateOAuthStartUrl( string authority, CryptoNumbers cryptoNumbers )
 		{
 			// FUTURE: discover authorize endpoint via ".well-known/openid-configuration"
@@ -232,13 +234,13 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 				return result;
 			}
 
-			var authority = await CreateAuthorityAsync( instanceUrl ).ConfigureAwait(false);
+			var authority = await CreateAuthorityAsync( instanceUrl ).ConfigureAwait( false );
 			var tokenClient = CreateTokenClient( authority );
 
 			result = await TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, authority, refreshToken ).ConfigureAwait( false );
 			if( result != null )
-            {
-                _AccessTokenCache.Store(instanceUrl, result);
+			{
+				_AccessTokenCache.Store( instanceUrl, result );
 				return result;
 			}
 
@@ -255,7 +257,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 					result = await TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response ).ConfigureAwait( false );
 					if( result != null )
 					{
-                        _AccessTokenCache.Store(instanceUrl, result);
+						_AccessTokenCache.Store( instanceUrl, result );
 						return result;
 					}
 				}
@@ -275,7 +277,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 			}
 
 			var authority = CreateAuthorityAsync( instanceUrl )
-				.ConfigureAwait(false)
+				.ConfigureAwait( false )
 				.GetAwaiter()
 				.GetResult();
 
@@ -288,7 +290,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 
 			if( result != null )
 			{
-                _AccessTokenCache.Store(instanceUrl, result);
+				_AccessTokenCache.Store( instanceUrl, result );
 				return result;
 			}
 
@@ -308,7 +310,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 						.GetResult();
 					if( result != null )
 					{
-                        _AccessTokenCache.Store(instanceUrl, result);
+						_AccessTokenCache.Store( instanceUrl, result );
 						return result;
 					}
 				}
@@ -349,7 +351,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 
 			using( var sha = SHA256.Create() )
 			{
-				var codeHash = sha.ComputeHash( System.Text.Encoding.ASCII.GetBytes( authorizationCode ) );
+				var codeHash = sha.ComputeHash( Encoding.ASCII.GetBytes( authorizationCode ) );
 				var leftBytes = new byte[ 16 ];
 				Array.Copy( codeHash, leftBytes, 16 );
 
@@ -358,20 +360,24 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 				return string.Equals( cHash.Value, codeHashB64, StringComparison.Ordinal );
 			}
 		}
-		
+
 		public static void ClearAuthenticationInformationForDatabaseUrl( string databaseUrl )
-        {
-            var instanceUrl = GetInstanceUrl(databaseUrl);
-            _AccessTokenCache.Remove(instanceUrl);
-			
+		{
+			var instanceUrl = GetInstanceUrl( databaseUrl );
+			_AccessTokenCache.Remove( instanceUrl );
+
 			// FUTURE: call endsession endpoint of identity server
 			// https://identityserver.github.io/Documentation/docsv2/endpoints/endSession.html
 		}
 
 		#endregion
 
+		#region class CryptoNumbers
+
 		private class CryptoNumbers
 		{
+			#region constructors
+
 			public CryptoNumbers()
 			{
 				Nonce = CryptoRandom.CreateUniqueId(); // only default length of 16 as this is included in the access token which should small
@@ -380,10 +386,18 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 				Challenge = Verifier.ToCodeChallenge();
 			}
 
+			#endregion
+
+			#region properties
+
 			public string Nonce { get; }
 			public string State { get; }
 			public string Verifier { get; }
 			public string Challenge { get; }
+
+			#endregion
 		}
+
+		#endregion
 	}
 }
