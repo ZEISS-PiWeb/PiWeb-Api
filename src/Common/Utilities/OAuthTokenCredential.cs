@@ -1,12 +1,12 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2016                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
-#endregion
 
-using System.Security.Claims;
+#endregion
 
 namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 {
@@ -14,14 +14,13 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 
 	using System;
 	using System.Collections.Generic;
-	using System.IdentityModel.Tokens.Jwt;
 	using System.Linq;
+	using System.Security.Claims;
 
 	#endregion
 
 	public sealed class OAuthTokenCredential : ICredential
 	{
-
 		#region constructors
 
 		public OAuthTokenCredential( string displayId, string accessToken, DateTime accessTokenExpiration, string refreshToken )
@@ -37,8 +36,6 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 
 		#region properties
 
-		public string DisplayId { get; }
-
 		public string AccessToken { get; }
 
 		public DateTime AccessTokenExpiration { get; }
@@ -52,10 +49,10 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 		#region methods
 
 		public static OAuthTokenCredential CreateWithIdentityToken( string identityToken, string accessToken, DateTime accessTokenExpiration, string refreshToken )
-        {
-            var identity = OAuthHelper.TokenToFriendlyText( identityToken );
-            return new OAuthTokenCredential( identity, accessToken, accessTokenExpiration, refreshToken );
-        }
+		{
+			var identity = OAuthHelper.TokenToFriendlyText( identityToken );
+			return new OAuthTokenCredential( identity, accessToken, accessTokenExpiration, refreshToken );
+		}
 
 		public static OAuthTokenCredential CreateWithClaims( IEnumerable<Claim> claims, string accessToken, DateTime accessTokenExpiration, string refreshToken )
 		{
@@ -63,22 +60,20 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 			return new OAuthTokenCredential( identity, accessToken, accessTokenExpiration, refreshToken );
 		}
 
-		#endregion
-
 		public bool Equals( OAuthTokenCredential other )
 		{
 			return other != null
-				&& string.Equals( DisplayId, other.DisplayId ) 
-				&& string.Equals( AccessToken, other.AccessToken ) 
-				&& AccessTokenExpiration.Equals( other.AccessTokenExpiration ) 
-				&& string.Equals( RefreshToken, other.RefreshToken ) 
-				&& string.Equals( MailAddress, other.MailAddress );
+					&& string.Equals( DisplayId, other.DisplayId )
+					&& string.Equals( AccessToken, other.AccessToken )
+					&& AccessTokenExpiration.Equals( other.AccessTokenExpiration )
+					&& string.Equals( RefreshToken, other.RefreshToken )
+					&& string.Equals( MailAddress, other.MailAddress );
 		}
 
-		public bool Equals( ICredential other ) => Equals( other as OAuthTokenCredential );
-
+		/// <inheritdoc />
 		public override bool Equals( object other ) => Equals( other as OAuthTokenCredential );
 
+		/// <inheritdoc />
 		public override int GetHashCode()
 		{
 			unchecked
@@ -91,5 +86,17 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 				return hashCode;
 			}
 		}
+
+		#endregion
+
+		#region interface ICredential
+
+		/// <inheritdoc />
+		public string DisplayId { get; }
+
+		/// <inheritdoc />
+		public bool Equals( ICredential other ) => Equals( other as OAuthTokenCredential );
+
+		#endregion
 	}
 }
