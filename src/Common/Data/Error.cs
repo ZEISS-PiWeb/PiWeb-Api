@@ -54,6 +54,8 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 			ExceptionType = ex.GetType().ToString();
 
 			StackTrace = ex.StackTrace;
+
+			ErrorCode = TryExtractErrorCode( ex );
 		}
 
 		#endregion
@@ -85,6 +87,11 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 		/// </summary>
 		public Error InnerError { get; set; }
 
+		/// <summary>
+		/// PiWeb error code, null if not specified.
+		/// </summary>
+		public int? ErrorCode { get; set; }
+
 		#endregion
 
 		#region methods
@@ -97,6 +104,18 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 			if( !string.IsNullOrEmpty( ExceptionMessage ) )
 				return Message + ": " + ExceptionMessage;
 			return Message;
+		}
+
+		/// <summary>
+		/// Attempts to extract an error code from given exception. 
+		/// </summary>
+		/// <param name="ex"></param>
+		/// <returns>Error code as int, or null if no code is specified</returns>
+		private static int? TryExtractErrorCode( Exception ex )
+		{
+			var property = ex.GetType().GetProperty( "Number" )?.GetValue( ex, null );
+			if( property is int errorCode ) return errorCode;
+			return null;
 		}
 
 		#endregion

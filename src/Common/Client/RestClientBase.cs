@@ -330,6 +330,8 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 					error = new Error( $"Request {response.RequestMessage.Method} {response.RequestMessage.RequestUri} was not successful: {( int ) response.StatusCode} ({response.ReasonPhrase})" );
 				}
 
+				if( error.ErrorCode != null ) HandlePiWebErrorCode( error );
+
 				throw new WrappedServerErrorException( error, response );
 			}
 		}
@@ -359,6 +361,17 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 			_WebRequestHandler?.Dispose();
 
 			BuildHttpClient( timeout );
+		}
+
+		/// <summary>
+		/// Handles errors with special error codes provided by PiWeb.
+		/// </summary>
+		private static void HandlePiWebErrorCode( Error error )
+		{
+			if( error.ErrorCode is 1205 )
+			{
+				throw new ServerTooBusyException();
+			}
 		}
 
 		private void BuildHttpClient( TimeSpan? timeout )
