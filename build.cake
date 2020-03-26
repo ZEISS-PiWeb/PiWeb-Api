@@ -135,7 +135,6 @@ Task("Pack")
             new NuSpecDependency { Id = "Microsoft.IdentityModel.Tokens", Version = "5.2.1" },
             new NuSpecDependency { Id = "System.IdentityModel.Tokens.Jwt", Version = "5.2.1" },
             new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2018.2.1" },
-            new NuSpecDependency { Id = "System.Resources.Extensions", Version = "4.7.0" }
         },
         BasePath                 = buildDir,
         OutputDirectory          = artifactsDir
