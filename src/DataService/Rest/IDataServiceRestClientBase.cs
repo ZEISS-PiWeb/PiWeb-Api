@@ -15,8 +15,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 	using System.Threading;
 	using System.Threading.Tasks;
 	using JetBrains.Annotations;
-	using Zeiss.IMT.PiWeb.Api.Common.Client;
-	using Zeiss.IMT.PiWeb.Api.Common.Data;
+	using Zeiss.PiWeb.Api.Dtos;
 
 	public interface IDataServiceRestClientBase<T> where T : DataServiceFeatureMatrix
 	{

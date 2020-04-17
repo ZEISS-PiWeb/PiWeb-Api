@@ -14,8 +14,9 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 	using System.Threading;
 	using System.Threading.Tasks;
 	using Zeiss.IMT.PiWeb.Api.Common.Client;
-	using Zeiss.IMT.PiWeb.Api.Common.Data;
 	using Zeiss.IMT.PiWeb.Api.RawDataService.Filter.Conditions;
+	using Zeiss.PiWeb.Api.Dtos;
+	using Zeiss.PiWeb.Api.Dtos.RawData;
 
 	public interface IRawDataServiceRestClientBase<T> where T : RawDataServiceFeatureMatrix
 	{

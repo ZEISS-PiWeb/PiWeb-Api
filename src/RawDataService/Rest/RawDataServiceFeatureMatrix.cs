@@ -14,7 +14,7 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 
 	using System;
 	using Zeiss.IMT.PiWeb.Api.Common.Client;
-	using Zeiss.IMT.PiWeb.Api.Common.Data;
+	using Zeiss.PiWeb.Api.Dtos;
 
 	#endregion
 

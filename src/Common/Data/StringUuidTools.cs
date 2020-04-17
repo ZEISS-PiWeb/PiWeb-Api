@@ -14,7 +14,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 	using System.Collections.Generic;
 	using System.Linq;
 	using JetBrains.Annotations;
-	using Zeiss.IMT.PiWeb.Api.RawDataService.Rest;
+	using Zeiss.PiWeb.Api.Dtos.RawData;
 
 	#endregion
 

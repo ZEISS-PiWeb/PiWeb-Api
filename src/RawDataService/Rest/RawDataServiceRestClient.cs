@@ -20,10 +20,12 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 	using System.Threading.Tasks;
 	using JetBrains.Annotations;
 	using Zeiss.IMT.PiWeb.Api.Common.Client;
-	using Zeiss.IMT.PiWeb.Api.Common.Data;
 	using Zeiss.IMT.PiWeb.Api.Common.Data.FilterString.Formatter;
 	using Zeiss.IMT.PiWeb.Api.Common.Utilities;
 	using Zeiss.IMT.PiWeb.Api.RawDataService.Filter.Conditions;
+	using Zeiss.PiWeb.Api.Dtos;
+	using Zeiss.PiWeb.Api.Dtos.RawData;
+	using StringUuidTools = Zeiss.IMT.PiWeb.Api.Common.Data.StringUuidTools;
 
 	#endregion
 
@@ -76,7 +78,7 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 		}
 
 		/// <summary> 
-		/// Method for fetching the <see cref="InterfaceVersionRange"/>.
+		/// Method for fetching the <see cref="Zeiss.PiWeb.Api.Dtos.InterfaceVersionRange"/>.
 		/// </summary>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		public async Task<InterfaceVersionRange> GetInterfaceInformation( CancellationToken cancellationToken = default( CancellationToken ) )
