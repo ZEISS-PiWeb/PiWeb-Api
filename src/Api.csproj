@@ -73,4 +73,8 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Api.Definitions\Api.Definitions.csproj" />
+  </ItemGroup>
+
 </Project>
