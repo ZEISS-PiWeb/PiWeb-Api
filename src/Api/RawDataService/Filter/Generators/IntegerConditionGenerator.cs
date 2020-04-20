@@ -8,14 +8,14 @@
 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.RawDataService.Filter.Generators
+namespace Zeiss.PiWeb.Api.RawDataService.Filter.Generators
 {
 	#region usings
 
 	using System;
 	using System.Collections.Generic;
 	using JetBrains.Annotations;
-	using Zeiss.IMT.PiWeb.Api.RawDataService.Filter.Conditions;
+	using Zeiss.PiWeb.Api.RawDataService.Filter.Conditions;
 
 	#endregion
 

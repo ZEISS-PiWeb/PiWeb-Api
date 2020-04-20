@@ -6,7 +6,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
+namespace Zeiss.PiWeb.Api.RawDataService.Rest
 {
 	#region using
 
@@ -19,14 +19,14 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 	using System.Threading;
 	using System.Threading.Tasks;
 	using JetBrains.Annotations;
-	using Zeiss.IMT.PiWeb.Api.Common.Client;
-	using Zeiss.IMT.PiWeb.Api.Common.Data.FilterString.Formatter;
-	using Zeiss.IMT.PiWeb.Api.Common.Utilities;
-	using Zeiss.IMT.PiWeb.Api.Contracts;
-	using Zeiss.IMT.PiWeb.Api.RawDataService.Filter.Conditions;
+	using Zeiss.PiWeb.Api.Common.Client;
+	using Zeiss.PiWeb.Api.Common.Data;
+	using Zeiss.PiWeb.Api.Common.Data.FilterString.Formatter;
+	using Zeiss.PiWeb.Api.Common.Utilities;
+	using Zeiss.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Dtos;
 	using Zeiss.PiWeb.Api.Dtos.RawData;
-	using StringUuidTools = Zeiss.IMT.PiWeb.Api.Common.Data.StringUuidTools;
+	using Zeiss.PiWeb.Api.RawDataService.Filter.Conditions;
 
 	#endregion
 

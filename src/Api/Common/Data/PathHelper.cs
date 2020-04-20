@@ -6,7 +6,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.Common.Data
+namespace Zeiss.PiWeb.Api.Common.Data
 {
 	#region usings
 
@@ -14,7 +14,6 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 	using System.Collections.Generic;
 	using System.Runtime.CompilerServices;
 	using System.Text;
-
 	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Dtos.Data;
 

@@ -8,15 +8,15 @@
 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
+namespace Zeiss.PiWeb.Api.Common.Utilities
 {
 	#region usings
 
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using Zeiss.IMT.PiWeb.Api.Common.Client;
-	using Zeiss.IMT.PiWeb.Api.Common.Data;
+	using Zeiss.PiWeb.Api.Common.Client;
+	using Zeiss.PiWeb.Api.Common.Data;
 	using Zeiss.PiWeb.Api.Dtos;
 
 	#endregion

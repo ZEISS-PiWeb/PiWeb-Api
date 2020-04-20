@@ -8,7 +8,7 @@
 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
+namespace Zeiss.PiWeb.Api.Common.Utilities
 {
 	#region usings
 
@@ -24,7 +24,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 	using IdentityModel;
 	using IdentityModel.Client;
 	using JetBrains.Annotations;
-	using Zeiss.IMT.PiWeb.Api.OAuthService;
+	using Zeiss.PiWeb.Api.OAuthService;
 
 	#endregion
 

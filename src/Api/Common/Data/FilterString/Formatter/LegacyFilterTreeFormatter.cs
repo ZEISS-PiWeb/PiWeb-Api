@@ -8,14 +8,14 @@
 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.Common.Data.FilterString.Formatter
+namespace Zeiss.PiWeb.Api.Common.Data.FilterString.Formatter
 {
 	#region usings
 
 	using System;
 	using System.Collections.Generic;
 	using JetBrains.Annotations;
-	using Zeiss.IMT.PiWeb.Api.Common.Data.FilterString.Tree;
+	using Zeiss.PiWeb.Api.Common.Data.FilterString.Tree;
 
 	#endregion
 

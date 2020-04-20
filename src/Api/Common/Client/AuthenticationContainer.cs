@@ -8,13 +8,13 @@
 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.Common.Client
+namespace Zeiss.PiWeb.Api.Common.Client
 {
 	#region usings
 
 	using System.Net;
 	using System.Security.Cryptography.X509Certificates;
-	using Zeiss.IMT.PiWeb.Api.Common.Utilities;
+	using Zeiss.PiWeb.Api.Common.Utilities;
 
 	#endregion
 

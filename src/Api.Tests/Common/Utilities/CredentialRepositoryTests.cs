@@ -8,7 +8,7 @@
 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.Tests.Common.Utilities
+namespace Zeiss.PiWeb.Api.Tests.Common.Utilities
 {
 	#region usings
 
@@ -17,7 +17,7 @@ namespace Zeiss.IMT.PiWeb.Api.Tests.Common.Utilities
 	using System.IO;
 	using FluentAssertions;
 	using NUnit.Framework;
-	using Zeiss.IMT.PiWeb.Api.Common.Utilities;
+	using Zeiss.PiWeb.Api.Common.Utilities;
 
 	#endregion
 

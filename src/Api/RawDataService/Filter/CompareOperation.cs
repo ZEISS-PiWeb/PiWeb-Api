@@ -8,7 +8,7 @@
 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.RawDataService.Filter
+namespace Zeiss.PiWeb.Api.RawDataService.Filter
 {
 	public enum CompareOperation
 	{

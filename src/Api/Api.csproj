@@ -4,7 +4,7 @@
     <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <RootNamespace>Zeiss.IMT.PiWeb.Api</RootNamespace>
+    <RootNamespace>Zeiss.PiWeb.Api</RootNamespace>
     <TargetFrameworks>netstandard2.0;netcoreapp3.0;net48</TargetFrameworks>
   </PropertyGroup>
 

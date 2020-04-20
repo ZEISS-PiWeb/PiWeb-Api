@@ -8,7 +8,7 @@
 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.Tests
+namespace Zeiss.PiWeb.Api.Tests
 {
 	#region usings
 
@@ -17,7 +17,7 @@ namespace Zeiss.IMT.PiWeb.Api.Tests
 	using AutoFixture;
 	using Newtonsoft.Json;
 	using NUnit.Framework;
-	using Zeiss.IMT.PiWeb.Api.DataService.Rest;
+	using Zeiss.PiWeb.Api.DataService.Rest;
 	using Zeiss.PiWeb.Api.Dtos.Data;
 
 	#endregion

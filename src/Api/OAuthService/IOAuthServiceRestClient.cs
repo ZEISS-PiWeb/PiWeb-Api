@@ -8,13 +8,13 @@
 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.OAuthService
+namespace Zeiss.PiWeb.Api.OAuthService
 {
 	#region usings
 
 	using System.Threading;
 	using System.Threading.Tasks;
-	using Zeiss.IMT.PiWeb.Api.Common.Client;
+	using Zeiss.PiWeb.Api.Common.Client;
 
 	#endregion
 

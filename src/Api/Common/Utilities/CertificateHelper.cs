@@ -8,14 +8,12 @@
 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
+namespace Zeiss.PiWeb.Api.Common.Utilities
 {
 	#region usings
 
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
-	using System.Security.Cryptography;
 	using System.Security.Cryptography.X509Certificates;
 
 	#endregion

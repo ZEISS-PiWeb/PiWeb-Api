@@ -8,7 +8,7 @@
 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.Common.Data.FilterString.Tree
+namespace Zeiss.PiWeb.Api.Common.Data.FilterString.Tree
 {
 	public enum TokenType
 	{

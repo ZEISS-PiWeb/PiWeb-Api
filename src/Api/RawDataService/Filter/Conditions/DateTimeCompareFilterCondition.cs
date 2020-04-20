@@ -8,13 +8,13 @@
 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.RawDataService.Filter.Conditions
+namespace Zeiss.PiWeb.Api.RawDataService.Filter.Conditions
 {
 	#region usings
 
 	using System;
 	using System.Xml;
-	using Zeiss.IMT.PiWeb.Api.Common.Data.FilterString.Tree;
+	using Zeiss.PiWeb.Api.Common.Data.FilterString.Tree;
 
 	#endregion
 

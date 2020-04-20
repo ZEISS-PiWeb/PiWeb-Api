@@ -20,7 +20,7 @@ namespace Zeiss.PiWeb.Api.Dtos
     /// <summary> 
     /// Helper class to convert a pair of measurementUuid and characteristicUuid to a string in form measurementUuid|characteristicUuid and vice versa. 
     /// </summary>
-	public static class StringUuidTools
+	internal static class StringUuidTools
 	{
 		/// <summary> Creates a string containig a measurementUuid and a characteristicUuid in form measurementUuid|characteristicUuid. </summary>
 		public static string CreateStringUuidPair( Guid measGuid, Guid charGuid )

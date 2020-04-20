@@ -6,7 +6,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.OAuthService
+namespace Zeiss.PiWeb.Api.OAuthService
 {
 	#region using
 

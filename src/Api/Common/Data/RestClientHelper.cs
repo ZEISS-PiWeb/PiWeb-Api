@@ -6,7 +6,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.Common.Data
+namespace Zeiss.PiWeb.Api.Common.Data
 {
 	#region using
 
@@ -19,7 +19,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Bson;
 	using Newtonsoft.Json.Converters;
-	using Zeiss.IMT.PiWeb.Api.Common.Client;
+	using Zeiss.PiWeb.Api.Common.Client;
 	using Zeiss.PiWeb.Api.Dtos;
 	using Zeiss.PiWeb.Api.Dtos.Data;
 

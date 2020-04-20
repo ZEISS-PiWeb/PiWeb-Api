@@ -5,7 +5,7 @@
 // /* (c) Carl Zeiss 2016                             */
 // /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
-namespace Zeiss.IMT.PiWeb.Api.Contracts
+namespace Zeiss.PiWeb.Api.Contracts
 {
 	#region usings
 

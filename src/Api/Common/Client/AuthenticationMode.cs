@@ -8,7 +8,7 @@
 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.Common.Client
+namespace Zeiss.PiWeb.Api.Common.Client
 {
 	/// <summary>
 	/// Enum which is used to define the authentication mode when communicating to a server.

@@ -9,25 +9,11 @@
 #endregion
 
 
-namespace Zeiss.IMT.PiWeb.Api.Common.Client
+namespace Zeiss.PiWeb.Api.Common.Client
 {
 	#region usings
 
 	using System;
-	using System.Collections.Generic;
-	using System.Globalization;
-	using System.IO;
-	using System.Net;
-	using System.Net.Cache;
-	using System.Net.Http;
-	using System.Net.Http.Headers;
-	using System.Text;
-	using System.Threading;
-	using System.Threading.Tasks;
-
-	using Newtonsoft.Json;
-	using JetBrains.Annotations;
-	using Zeiss.IMT.PiWeb.Api.Common.Data;
 
 	#endregion
 

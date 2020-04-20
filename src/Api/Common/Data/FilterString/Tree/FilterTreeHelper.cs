@@ -6,7 +6,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.Common.Data.FilterString.Tree
+namespace Zeiss.PiWeb.Api.Common.Data.FilterString.Tree
 {
 	using System;
 	using System.Globalization;
@@ -28,7 +28,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data.FilterString.Tree
 					var expectedValue = ToDouble( expected.Token.Value );
 					var actualValue = ToDouble( actual.Token.Value );
 
-					// a precision of 10^-12 is enough (same as defined in Zeiss.IMT.PiWeb.Common.Util.DoubleCompareHelper)
+					// a precision of 10^-12 is enough (same as defined in Zeiss.PiWeb.Common.Util.DoubleCompareHelper)
 					return Math.Abs( expectedValue - actualValue ) <= 1e-12;
 				}
 

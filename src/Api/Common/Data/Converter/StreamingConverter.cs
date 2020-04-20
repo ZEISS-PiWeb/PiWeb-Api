@@ -6,7 +6,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.Common.Data.Converter
+namespace Zeiss.PiWeb.Api.Common.Data.Converter
 {
 	#region using
 

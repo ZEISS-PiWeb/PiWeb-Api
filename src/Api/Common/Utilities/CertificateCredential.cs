@@ -9,7 +9,7 @@
 #endregion
 
 
-namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
+namespace Zeiss.PiWeb.Api.Common.Utilities
 {
 	#region usings
 

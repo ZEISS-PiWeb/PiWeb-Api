@@ -9,7 +9,7 @@
 #endregion
 
 
-namespace Zeiss.IMT.PiWeb.Api.Common.Client
+namespace Zeiss.PiWeb.Api.Common.Client
 {
 	using System;
 	using System.Collections.Generic;
@@ -18,9 +18,8 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 	using System.Net.Http;
 	using System.Net.Http.Headers;
 	using System.Text;
-	
 	using JetBrains.Annotations;
-	using Zeiss.IMT.PiWeb.Api.Common.Data;
+	using Zeiss.PiWeb.Api.Common.Data;
 	using Zeiss.PiWeb.Api.Dtos;
 
 	public static class RequestBuilder

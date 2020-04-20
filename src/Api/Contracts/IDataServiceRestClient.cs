@@ -8,7 +8,7 @@
 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.Contracts
+namespace Zeiss.PiWeb.Api.Contracts
 {
 	/// <summary>
 	/// Client interface for communicating with the REST based data service.

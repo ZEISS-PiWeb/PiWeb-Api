@@ -8,9 +8,9 @@
 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.Common.Data.FilterString.Formatter
+namespace Zeiss.PiWeb.Api.Common.Data.FilterString.Formatter
 {
-	using Zeiss.IMT.PiWeb.Api.Common.Data.FilterString.Tree;
+	using Zeiss.PiWeb.Api.Common.Data.FilterString.Tree;
 
 	public class UnsupportedCharacterException : FormaterException
 	{

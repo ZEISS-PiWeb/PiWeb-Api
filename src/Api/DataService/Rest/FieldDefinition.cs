@@ -8,7 +8,7 @@
 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
+namespace Zeiss.PiWeb.Api.DataService.Rest
 {
 	public class FieldDefinition
 	{

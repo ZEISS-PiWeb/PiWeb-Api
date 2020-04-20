@@ -8,7 +8,7 @@
 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.Common.Data.FilterString.Formatter
+namespace Zeiss.PiWeb.Api.Common.Data.FilterString.Formatter
 {
 	#region usings
 

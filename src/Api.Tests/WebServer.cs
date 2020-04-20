@@ -8,7 +8,7 @@
 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.Tests
+namespace Zeiss.PiWeb.Api.Tests
 {
 	#region usings
 

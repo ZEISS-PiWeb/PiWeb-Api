@@ -8,7 +8,7 @@
 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
+namespace Zeiss.PiWeb.Api.RawDataService.Rest
 {
 	#region usings
 
@@ -17,10 +17,10 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 	using System.Linq;
 	using System.Threading;
 	using System.Threading.Tasks;
-	using Zeiss.IMT.PiWeb.Api.Common.Data;
-	using Zeiss.IMT.PiWeb.Api.Contracts;
-	using Zeiss.IMT.PiWeb.Api.RawDataService.Filter.Conditions;
+	using Zeiss.PiWeb.Api.Common.Data;
+	using Zeiss.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Dtos.RawData;
+	using Zeiss.PiWeb.Api.RawDataService.Filter.Conditions;
 
 	#endregion
 

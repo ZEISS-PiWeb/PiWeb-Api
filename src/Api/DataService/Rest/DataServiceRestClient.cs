@@ -6,7 +6,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
+namespace Zeiss.PiWeb.Api.DataService.Rest
 {
 	#region using
 
@@ -16,10 +16,10 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 	using System.Net;
 	using System.Threading;
 	using System.Threading.Tasks;
-	using Zeiss.IMT.PiWeb.Api.Common.Client;
-	using Zeiss.IMT.PiWeb.Api.Common.Data;
-	using Zeiss.IMT.PiWeb.Api.Common.Utilities;
-	using Zeiss.IMT.PiWeb.Api.Contracts;
+	using Zeiss.PiWeb.Api.Common.Client;
+	using Zeiss.PiWeb.Api.Common.Data;
+	using Zeiss.PiWeb.Api.Common.Utilities;
+	using Zeiss.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Dtos;
 	using Zeiss.PiWeb.Api.Dtos.Data;
 

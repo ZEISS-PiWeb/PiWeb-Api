@@ -8,13 +8,12 @@
 
 #endregion
 
-using JetBrains.Annotations;
-
-namespace Zeiss.IMT.PiWeb.Api.Common.Client
+namespace Zeiss.PiWeb.Api.Common.Client
 {
 	#region usings
 
 	using System;
+	using JetBrains.Annotations;
 
 	#endregion
 
