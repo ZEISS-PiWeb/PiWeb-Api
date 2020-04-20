@@ -121,7 +121,7 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		/// <exception cref="InvalidOperationException">No uuids and no filter was specified.</exception>
 		/// <exception cref="OperationNotSupportedOnServerException">An attribute filter for raw data is not supported by this server.</exception>
-		public async Task<RawDataInformation[]> ListRawData( RawDataEntity entity, string[] uuids, FilterCondition filter, CancellationToken cancellationToken = default( CancellationToken ) )
+		public async Task<RawDataInformation[]> ListRawData( RawDataEntity entity, string[] uuids, IFilterCondition filter, CancellationToken cancellationToken = default( CancellationToken ) )
 		{
 			if( uuids == null && filter == null )
 				throw new InvalidOperationException( "Either a filter or at least one uuid must be specified." );
@@ -143,7 +143,7 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 				: await ListRawDataForAllEntities( entity, filter, cancellationToken ).ConfigureAwait( false );
 		}
 
-		private Task<RawDataInformation[]> ListRawDataForAllEntities( RawDataEntity entity, [NotNull] FilterCondition filter, CancellationToken cancellationToken = default( CancellationToken ) )
+		private Task<RawDataInformation[]> ListRawDataForAllEntities( RawDataEntity entity, [NotNull] IFilterCondition filter, CancellationToken cancellationToken = default( CancellationToken ) )
 		{
 			if( filter == null )
 				throw new ArgumentNullException( nameof(filter) );
@@ -151,7 +151,7 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 			var requestPath = $"rawData/{entity}";
 
 			var parameterDefinitionList = new List<ParameterDefinition>();
-			var filterTree = filter.BuildFilterTree();
+			var filterTree = ((FilterCondition)filter).BuildFilterTree();
 			var filterString = new FilterTreeFormatter().FormatString( filterTree );
 			var filterParameter = ParameterDefinition.Create( "filter", filterString );
 			parameterDefinitionList.Add( filterParameter );
@@ -159,7 +159,7 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 			return _RestClient.Request<RawDataInformation[]>( RequestBuilder.CreateGet( requestPath, parameterDefinitionList.ToArray() ), cancellationToken );
 		}
 
-		private async Task<RawDataInformation[]> ListRawDataByUuidList( RawDataEntity entity, string[] uuids, FilterCondition filter, CancellationToken cancellationToken = default( CancellationToken ) )
+		private async Task<RawDataInformation[]> ListRawDataByUuidList( RawDataEntity entity, string[] uuids, IFilterCondition filter, CancellationToken cancellationToken = default( CancellationToken ) )
 		{
 			StringUuidTools.CheckUuids( entity, uuids );
 
@@ -168,7 +168,7 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 
 			if( filter != null )
 			{
-				var filterTree = filter.BuildFilterTree();
+				var filterTree = ((FilterCondition)filter).BuildFilterTree();
 				var filterString = new FilterTreeFormatter().FormatString( filterTree );
 				var filterParameter = ParameterDefinition.Create( "filter", filterString );
 				parameterDefinitions.Add( filterParameter );

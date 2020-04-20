@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Zeiss.IMT.PiWeb.Api.Common.Data;
+using Zeiss.IMT.PiWeb.Api.Contracts;
 using Zeiss.PiWeb.Api.Dtos;
 
 #if NETFRAMEWORK

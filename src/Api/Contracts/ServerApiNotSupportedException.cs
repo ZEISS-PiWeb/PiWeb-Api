@@ -6,7 +6,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.Common.Client
+namespace Zeiss.IMT.PiWeb.Api.Contracts
 {
 	public class ServerApiNotSupportedException : RestClientException
 	{

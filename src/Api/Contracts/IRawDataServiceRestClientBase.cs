@@ -13,8 +13,6 @@ namespace Zeiss.IMT.PiWeb.Api.Contracts
 	using System;
 	using System.Threading;
 	using System.Threading.Tasks;
-	using Zeiss.IMT.PiWeb.Api.Common.Client;
-	using Zeiss.IMT.PiWeb.Api.RawDataService.Filter.Conditions;
 	using Zeiss.PiWeb.Api.Dtos;
 	using Zeiss.PiWeb.Api.Dtos.RawData;
 
@@ -52,7 +50,7 @@ namespace Zeiss.IMT.PiWeb.Api.Contracts
 		/// <param name="cancellationToken">A token to cancel the hronous operation.</param>
 		/// <exception cref="InvalidOperationException">No uuids and no filter was specified.</exception>
 		/// <exception cref="OperationNotSupportedOnServerException">An attribute filter for raw data is not supported by this server.</exception>
-		Task<RawDataInformation[]> ListRawData( RawDataEntity entity, string[] uuids, FilterCondition filter = null, CancellationToken cancellationToken = default( CancellationToken ) );
+		Task<RawDataInformation[]> ListRawData( RawDataEntity entity, string[] uuids, IFilterCondition filter = null, CancellationToken cancellationToken = default( CancellationToken ) );
 
 		/// <summary>
 		/// Fetches raw data as a byte array for the raw data item identified by <paramref name="target"/> and <paramref name="rawDataKey"/>. 

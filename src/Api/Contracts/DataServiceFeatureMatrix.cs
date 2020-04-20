@@ -11,7 +11,6 @@ namespace Zeiss.IMT.PiWeb.Api.Contracts
 	#region usings
 
 	using System;
-	using Zeiss.IMT.PiWeb.Api.Common.Client;
 	using Zeiss.PiWeb.Api.Dtos;
 
 	#endregion

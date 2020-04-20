@@ -8,7 +8,7 @@
 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.Common.Client
+namespace Zeiss.IMT.PiWeb.Api.Contracts
 {
 	#region usings
 

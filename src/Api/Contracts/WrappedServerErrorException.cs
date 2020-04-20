@@ -6,7 +6,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.Common.Client
+namespace Zeiss.IMT.PiWeb.Api.Contracts
 {
 	#region using
 
@@ -17,7 +17,8 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 	#endregion
 
 	/// <summary>
-	/// Base class for server side exceptions that are thrown by the <see cref="RestClient"/> in case of errors.
+	/// Base class for server side exceptions that are thrown by the REST clients
+	/// (<see cref="IRawDataServiceRestClient"/>, <see cref="IDataServiceRestClient"/>) in case of errors.
 	/// </summary>
 	public class WrappedServerErrorException : RestClientException
 	{

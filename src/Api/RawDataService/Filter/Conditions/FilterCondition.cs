@@ -16,11 +16,12 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Filter.Conditions
 	using System.Collections.Generic;
 	using JetBrains.Annotations;
 	using Zeiss.IMT.PiWeb.Api.Common.Data.FilterString.Tree;
+	using Zeiss.IMT.PiWeb.Api.Contracts;
 	using Zeiss.IMT.PiWeb.Api.RawDataService.Filter.Generators;
 
 	#endregion
 
-	public abstract class FilterCondition
+	public abstract class FilterCondition : IFilterCondition
 	{
 		internal FilterCondition()
 		{
