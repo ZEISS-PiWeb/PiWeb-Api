@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Api.Definitions\Api.Definitions.csproj" />
+    <ProjectReference Include="..\Api.Definitions\Api.Definitions.csproj" />
   </ItemGroup>
   
 </Project>
