@@ -18,7 +18,7 @@ namespace Zeiss.PiWeb.Api.Dtos
 	/// <summary>
 	/// Hilfsklasse zur Ermittlung der ClientId die an die diversen Services gesendet wird.
 	/// </summary>
-	public static class ClientIdHelper
+	internal static class ClientIdHelper
 	{
 		#region contants
 

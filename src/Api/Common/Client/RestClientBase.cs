@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Zeiss.IMT.PiWeb.Api.Common.Data;
+using Zeiss.PiWeb.Api.Dtos;
 
 #if NETFRAMEWORK
 using System.Net.Cache;
@@ -28,7 +29,7 @@ using System.Net.Cache;
 
 namespace Zeiss.IMT.PiWeb.Api.Common.Client
 {
-    public abstract class RestClientBase
+	public abstract class RestClientBase
     {
         #region constants
 

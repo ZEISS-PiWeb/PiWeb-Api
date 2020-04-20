@@ -12,7 +12,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 
 	using System.Net;
 	using System.Net.Http;
-	using Zeiss.IMT.PiWeb.Api.Common.Data;
+	using Zeiss.PiWeb.Api.Dtos;
 
 	#endregion
 
