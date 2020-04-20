@@ -14,6 +14,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 
 	using System.Collections.Generic;
 	using System.Linq;
+	using Zeiss.PiWeb.Api.Dtos.Data;
 
 	#endregion
 

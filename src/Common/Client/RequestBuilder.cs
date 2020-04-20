@@ -21,6 +21,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Client
 	
 	using JetBrains.Annotations;
 	using Zeiss.IMT.PiWeb.Api.Common.Data;
+	using Zeiss.PiWeb.Api.Dtos;
 
 	public static class RequestBuilder
 	{

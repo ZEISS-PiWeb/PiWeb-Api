@@ -16,7 +16,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 	using System.Text;
 
 	using JetBrains.Annotations;
-	using Zeiss.IMT.PiWeb.Api.DataService.Rest;
+	using Zeiss.PiWeb.Api.Dtos.Data;
 
 	#endregion
 

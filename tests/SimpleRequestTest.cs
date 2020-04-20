@@ -18,6 +18,7 @@ namespace Zeiss.IMT.PiWeb.Api.Tests
 	using Newtonsoft.Json;
 	using NUnit.Framework;
 	using Zeiss.IMT.PiWeb.Api.DataService.Rest;
+	using Zeiss.PiWeb.Api.Dtos.Data;
 
 	#endregion
 

@@ -20,6 +20,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 	using Zeiss.IMT.PiWeb.Api.Common.Data;
 	using Zeiss.IMT.PiWeb.Api.Common.Utilities;
 	using Zeiss.PiWeb.Api.Dtos;
+	using Zeiss.PiWeb.Api.Dtos.Data;
 
 	#endregion
 

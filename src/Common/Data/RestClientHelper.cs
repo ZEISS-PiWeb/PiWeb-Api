@@ -20,7 +20,8 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Data
 	using Newtonsoft.Json.Bson;
 	using Newtonsoft.Json.Converters;
 	using Zeiss.IMT.PiWeb.Api.Common.Client;
-	using Zeiss.IMT.PiWeb.Api.DataService.Rest;
+	using Zeiss.PiWeb.Api.Dtos;
+	using Zeiss.PiWeb.Api.Dtos.Data;
 
 	#endregion
 

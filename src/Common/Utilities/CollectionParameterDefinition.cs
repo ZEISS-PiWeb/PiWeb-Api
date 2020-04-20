@@ -17,6 +17,7 @@ namespace Zeiss.IMT.PiWeb.Api.Common.Utilities
 	using System.Linq;
 	using Zeiss.IMT.PiWeb.Api.Common.Client;
 	using Zeiss.IMT.PiWeb.Api.Common.Data;
+	using Zeiss.PiWeb.Api.Dtos;
 
 	#endregion
 
