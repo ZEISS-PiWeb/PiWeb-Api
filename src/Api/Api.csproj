@@ -74,7 +74,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Api.Definitions\Api.Definitions.csproj" />
+    <ProjectReference Include="..\Api.Definitions\Api.Definitions.csproj" />
     <ProjectReference Include="..\..\Api.Dtos\Api.Dtos.csproj" />
   </ItemGroup>
 
