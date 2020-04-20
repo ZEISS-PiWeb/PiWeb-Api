@@ -8,7 +8,7 @@
 // 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
+namespace Zeiss.IMT.PiWeb.Api.Contracts
 {
 	using System;
 	using System.Collections.Generic;

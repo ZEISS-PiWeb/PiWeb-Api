@@ -8,11 +8,11 @@
 
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
+namespace Zeiss.IMT.PiWeb.Api.Contracts
 {
 	/// <summary>
-	/// Client class for communicating with the REST based raw data service.
+	/// Client interface for communicating with the REST based data service.
 	/// </summary>
-	public interface IRawDataServiceRestClient : IRawDataServiceRestClientBase<RawDataServiceFeatureMatrix>
+	public interface IDataServiceRestClient : IDataServiceRestClientBase<DataServiceFeatureMatrix>
 	{}
 }

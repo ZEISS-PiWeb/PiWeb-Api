@@ -19,6 +19,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 	using Zeiss.IMT.PiWeb.Api.Common.Client;
 	using Zeiss.IMT.PiWeb.Api.Common.Data;
 	using Zeiss.IMT.PiWeb.Api.Common.Utilities;
+	using Zeiss.IMT.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Dtos;
 	using Zeiss.PiWeb.Api.Dtos.Data;
 

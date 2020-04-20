@@ -6,7 +6,7 @@
 // /* * * * * * * * * * * * * * * * * * * * * * * * * */
 #endregion
 
-namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
+namespace Zeiss.IMT.PiWeb.Api.Contracts
 {
 	#region usings
 

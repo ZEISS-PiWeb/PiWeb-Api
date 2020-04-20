@@ -15,6 +15,7 @@ namespace Zeiss.IMT.PiWeb.Api.DataService.Rest
 	using System;
 	using System.Threading;
 	using System.Threading.Tasks;
+	using Zeiss.IMT.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Dtos.Data;
 
 	#endregion

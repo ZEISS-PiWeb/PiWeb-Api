@@ -22,6 +22,7 @@ namespace Zeiss.IMT.PiWeb.Api.RawDataService.Rest
 	using Zeiss.IMT.PiWeb.Api.Common.Client;
 	using Zeiss.IMT.PiWeb.Api.Common.Data.FilterString.Formatter;
 	using Zeiss.IMT.PiWeb.Api.Common.Utilities;
+	using Zeiss.IMT.PiWeb.Api.Contracts;
 	using Zeiss.IMT.PiWeb.Api.RawDataService.Filter.Conditions;
 	using Zeiss.PiWeb.Api.Dtos;
 	using Zeiss.PiWeb.Api.Dtos.RawData;
