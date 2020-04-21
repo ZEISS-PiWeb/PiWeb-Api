@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Zeiss.PiWeb.Api.Definitions</RootNamespace>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AssemblyName>Zeiss.PiWeb.Api.Definitions</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
