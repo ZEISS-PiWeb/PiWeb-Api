@@ -227,10 +227,13 @@ Task("Pack_Client")
         RequireLicenseAcceptance = true,
         Files                    = new [] {
             new NuSpecContent { Source = "net48/license.txt", Target = "" },
+            new NuSpecContent { Source = "net48/de/Zeiss.PiWeb.Api.Rest.resources.dll", Target = "lib/net48/de" },
             new NuSpecContent { Source = "net48/Zeiss.PiWeb.Api.Rest.dll", Target = "lib/net48" },
             new NuSpecContent { Source = "net48/Zeiss.PiWeb.Api.Rest.xml", Target = "lib/net48" },
+            new NuSpecContent { Source = "netstandard2.0/de/Zeiss.PiWeb.Api.Rest.resources.dll", Target = "lib/netstandard2.0/de" },
             new NuSpecContent { Source = "netstandard2.0/Zeiss.PiWeb.Api.Rest.dll", Target = "lib/netstandard2.0" },
             new NuSpecContent { Source = "netstandard2.0/Zeiss.PiWeb.Api.Rest.xml", Target = "lib/netstandard2.0" },
+            new NuSpecContent { Source = "netcoreapp3.1/de/Zeiss.PiWeb.Api.Rest.resources.dll", Target = "lib/netcoreapp3.1/de" },
             new NuSpecContent { Source = "netcoreapp3.1/Zeiss.PiWeb.Api.Rest.dll", Target = "lib/netcoreapp3.1" },
             new NuSpecContent { Source = "netcoreapp3.1/Zeiss.PiWeb.Api.Rest.xml", Target = "lib/netcoreapp3.1" },
         },
