@@ -139,8 +139,8 @@ Task("Pack_Definitions")
         RequireLicenseAcceptance = true,
         Files                    = new [] {
             new NuSpecContent { Source = "netstandard2.0/License.txt", Target = "" },
-            new NuSpecContent { Source = "netstandard2.0/Api.Definitions.dll", Target = "lib/netstandard2.0" },
-            new NuSpecContent { Source = "netstandard2.0/Api.Definitions.xml", Target = "lib/netstandard2.0" },
+            new NuSpecContent { Source = "netstandard2.0/Zeiss.PiWeb.Api.Definitions.dll", Target = "lib/netstandard2.0" },
+            new NuSpecContent { Source = "netstandard2.0/Zeiss.PiWeb.Api.Definitions.xml", Target = "lib/netstandard2.0" },
         },
         Dependencies             = new [] {
             new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2018.2.1" }
