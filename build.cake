@@ -112,7 +112,9 @@ Task("Pack_Definitions")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    nugetVersion_Definitions = GetAssemblyVersion(buildDir_Definitions, "Zeiss.PiWeb.Api.Definitions.dll");
+    var nugetVersion_Definitions = GetAssemblyVersion(buildDir_Definitions, "Zeiss.PiWeb.Api.Definitions.dll");
+    Information("AssemblyVersion of Zeiss.PiWeb.Api.Definitions -> {0}", nugetVersion_Definitions);
+
     var releaseNotes = FileReadLines(File("src/Api.Definitions/WHATSNEW_Definitions.txt"));
     var licenseFile = new NuSpecLicense
     {
@@ -153,7 +155,9 @@ Task("Pack_Dtos")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    nugetVersion_Dtos = GetAssemblyVersion(buildDir_Dtos, "Zeiss.PiWeb.Api.Rest.Dtos.dll");
+    var nugetVersion_Dtos = GetAssemblyVersion(buildDir_Dtos, "Zeiss.PiWeb.Api.Rest.Dtos.dll");
+    Information("AssemblyVersion of Zeiss.PiWeb.Api.Rest.Dtos -> {0}", nugetVersion_Dtos);
+
     var releaseNotes = FileReadLines(File("src/Api.Rest.Dtos/WHATSNEW_Dtos.txt"));
     var licenseFile = new NuSpecLicense
     {
@@ -197,6 +201,8 @@ Task("Pack_Client")
     .Does(() =>
 {
     var nugetVersion_Client = GetAssemblyVersion(buildDir_Client, "Zeiss.PiWeb.Api.Rest.dll");
+    Information("AssemblyVersion of Zeiss.PiWeb.Api.Rest -> {0}", nugetVersion_Client);
+
     var releaseNotes = FileReadLines(File("WHATSNEW.txt"));
     var licenseFile = new NuSpecLicense
     {
