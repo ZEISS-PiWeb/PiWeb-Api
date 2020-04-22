@@ -5,7 +5,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <RootNamespace>Zeiss.PiWeb.Api.Rest</RootNamespace>
-    <TargetFrameworks>netstandard2.0;netcoreapp3.0;net48</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netcoreapp3.1;net48</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Label="Assembly information">
@@ -14,7 +14,7 @@
     <AssemblyVersion>6.0.0</AssemblyVersion>
     <Company>Carl Zeiss Innovationszentrum für Messtechnik GmbH</Company>
     <Copyright>Copyright © 2020 $(Company)</Copyright>
-    <Description>ZEISS PiWeb-API .NET Client provides an extensive set of methods for reading and writing  inspection plan structure as well 
+    <Description>ZEISS PiWeb-API .NET Client provides an extensive set of methods for reading and writing  inspection plan structure as well
     as measurements and measurement values to and from ZEISS PiWeb server via HTTP(S)/REST based web service endpoints.
     </Description>
     <FileVersion>$(AssemblyVersion)</FileVersion>
@@ -44,7 +44,7 @@
   <ItemGroup Label=".NET references" Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
     <Reference Include="System.Net.Http.WebRequest" />
   </ItemGroup>
-    
+
   <ItemGroup Label="NuGet references">
     <PackageReference Include="IdentityModel" Version="2.0.0" />
     <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
@@ -55,9 +55,14 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.2.1" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="4.7.0" />
   </ItemGroup>
-  
+
   <ItemGroup>
-    <None Include="..\license.txt" Pack="true" PackagePath="$(PackageLicenseFile)" />
+    <Content Include="..\License.txt">
+      <Link>License.txt</Link>
+      <Pack>true</Pack>
+      <PackagePath></PackagePath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
