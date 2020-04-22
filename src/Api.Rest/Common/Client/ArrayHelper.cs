@@ -15,6 +15,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using JetBrains.Annotations;
 
 	#endregion
 
@@ -29,7 +30,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// This method splits the source enumeration into multiple smaller arrays with size <paramref name="targetSize"/>.
 		/// The default weighting of every item is 1. A specific weighting can be calculated for every item with function <paramref name="calcWeightingOfOneItem"/>.
 		/// </summary>
-		public static IEnumerable<T[]> Split<T>( IEnumerable<T> items, int targetSize, Func<T, int> calcWeightingOfOneItem = null )
+		public static IEnumerable<T[]> Split<T>( [CanBeNull] IEnumerable<T> items, int targetSize, Func<T, int> calcWeightingOfOneItem = null )
 		{
 			if( items == null ) yield break;
 
@@ -40,17 +41,17 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			{
 				var blockSize = targetSize;
 
-				if( items is ICollection<T> )
-					blockSize = Math.Min( targetSize, ( ( ICollection<T> ) items ).Count );
-				else if( items is ICollection )
-					blockSize = Math.Min( targetSize, ( ( ICollection ) items ).Count );
+				if( items is ICollection<T> genericCollection )
+					blockSize = Math.Min( targetSize, genericCollection.Count );
+				else if( items is ICollection nonGenericCollection )
+					blockSize = Math.Min( targetSize, nonGenericCollection.Count );
 
 				bulk.Capacity = blockSize;
 			}
 
 			foreach( var item in items )
 			{
-				var size = calcWeightingOfOneItem != null ? calcWeightingOfOneItem( item ) : 1;
+				var size = calcWeightingOfOneItem?.Invoke( item ) ?? 1;
 
 				if( count + size > targetSize )
 				{
@@ -64,7 +65,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				}
 
 				bulk.Add( item );
-				count = count + size;
+				count += size;
 			}
 
 			if( bulk.Count > 0 ) yield return bulk.ToArray();

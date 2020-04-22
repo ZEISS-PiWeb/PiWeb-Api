@@ -42,7 +42,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		#region constructors
 
 		/// <summary>
-		/// Creates a CollectionParameter that can be split.
+		/// Initializes a new instance of the <see cref="CollectionParameterDefinition{T}"/> class.
 		/// </summary>
 		/// <param name="name">Name of the collection parameter, e.g. 'uuids'</param>
 		/// <param name="values">The separate values as string.</param>
@@ -91,24 +91,5 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		}
 
 		#endregion
-	}
-
-	/// <summary>
-	/// Helper Factory to create typed CollectionParameterDefinitions.
-	/// </summary>
-	internal static class CollectionParameterFactory
-	{
-		public static CollectionParameterDefinition<Guid> Create( string name, IEnumerable<Guid> values )
-		{
-			var conversion = new Func<IEnumerable<Guid>, string>(
-				guids => RestClientHelper.ConvertGuidListToString( guids.ToArray() ) );
-
-			return new CollectionParameterDefinition<Guid>( name, values, conversion );
-		}
-
-		public static CollectionParameterDefinition<string> Create( string name, IEnumerable<string> values )
-		{
-			return new CollectionParameterDefinition<string>( name, values, RestClientHelper.ToListString );
-		}
 	}
 }

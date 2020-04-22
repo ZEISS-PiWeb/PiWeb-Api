@@ -1,9 +1,11 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Common.Data
@@ -98,7 +100,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		/// Creates from <paramref name="path"/> in colloquial format a part <see cref="PathInformation"/> object.
 		/// </summary>
 		[NotNull]
-		public static PathInformation String2PartPathInformation( [NotNull]string path )
+		public static PathInformation String2PartPathInformation( [NotNull] string path )
 		{
 			return ColloquialString2PathInformationInternal( path, InspectionPlanEntity.Part );
 		}
@@ -107,7 +109,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		/// Creates from <paramref name="path"/> in colloquial format a characteristic <see cref="PathInformation"/> object.
 		/// </summary>
 		[NotNull]
-		public static PathInformation String2CharPathInformation( [NotNull]string path )
+		public static PathInformation String2CharPathInformation( [NotNull] string path )
 		{
 			return ColloquialString2PathInformationInternal( path, InspectionPlanEntity.Characteristic );
 		}
@@ -117,7 +119,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		/// All path elements will be of the type given in <paramref name="entity"/>.
 		/// </summary>
 		[NotNull]
-		private static PathInformation ColloquialString2PathInformationInternal( [NotNull]string path, InspectionPlanEntity entity )
+		private static PathInformation ColloquialString2PathInformationInternal( [NotNull] string path, InspectionPlanEntity entity )
 		{
 			if( string.IsNullOrEmpty( path ) )
 				throw new ArgumentException( "The path string must not be null or empty.", nameof( path ) );
@@ -136,7 +138,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 				path = DelimiterString + path;
 			// convert to database format by appending a delimiter if it is not already present (beware of escaping)
 			if( !path.EndsWith( DelimiterString ) || path.EndsWith( EscapedDelimiter ) )
-				path = path + DelimiterString;
+				path += DelimiterString;
 
 			return String2PathInformationInternal( path, null, i => entity );
 		}
@@ -145,7 +147,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		/// Creates from <paramref name="path"/> in roundtrip format ("structure:database path") a <see cref="PathInformation"/> object.
 		/// </summary>
 		[NotNull]
-		public static PathInformation RoundtripString2PathInformation( [NotNull]string path )
+		public static PathInformation RoundtripString2PathInformation( [NotNull] string path )
 		{
 			if( string.IsNullOrEmpty( path ) )
 				throw new ArgumentException( "The path string must not be null or empty.", nameof( path ) );
@@ -165,7 +167,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		/// Depending on <paramref name="structure"/> it will be a part or a characteristic.
 		/// </summary>
 		[NotNull]
-		public static PathInformation DatabaseString2PathInformation( [NotNull]string path, string structure )
+		public static PathInformation DatabaseString2PathInformation( [NotNull] string path, string structure )
 		{
 			if( string.IsNullOrEmpty( path ) )
 				throw new ArgumentException( "The path string must not be null or empty.", nameof( path ) );
@@ -184,7 +186,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		}
 
 		[NotNull]
-		private static PathInformation String2PathInformationInternal( [NotNull]string path, string maybeStructure, Func<int, InspectionPlanEntity> entitySelector )
+		private static PathInformation String2PathInformationInternal( [NotNull] string path, string maybeStructure, Func<int, InspectionPlanEntity> entitySelector )
 		{
 			// tests for path invariants
 			// 1) start with delimiter
@@ -193,9 +195,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 			// 2) end with delimiter - not tested easily as it might be escaped
 
 			var initialCount = maybeStructure?.Length ?? 2;
-			var result = path.Contains( EscapeString )?
+			var result = path.Contains( EscapeString )
+				?
 				// difficult code with quoting
-				GetPathElementsFromQuotedString( path, entitySelector, initialCount, maybeStructure ) :
+				GetPathElementsFromQuotedString( path, entitySelector, initialCount, maybeStructure )
+				:
 				// easy code without quoting
 				GetPathElementsFromUnquotedString( path, entitySelector, initialCount );
 
@@ -289,8 +293,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		/// The result for a the root path is always "/".
 		/// For all other paths the result does NOT start with a delimiter.
 		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="path"/> is <see langword="null" />.</exception>
 		[NotNull]
-		public static string PathInformation2String( [NotNull]PathInformation path )
+		public static string PathInformation2String( [NotNull] PathInformation path )
 		{
 			if( path == null ) throw new ArgumentNullException( nameof( path ) );
 
@@ -306,8 +311,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		/// <summary>
 		/// Converts <paramref name="path"/> to a string in roundtrip format ("structure:database path").
 		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="path"/> is <see langword="null" />.</exception>
 		[NotNull]
-		public static string PathInformation2RoundtripString( [NotNull]PathInformation path )
+		public static string PathInformation2RoundtripString( [NotNull] PathInformation path )
 		{
 			if( path == null ) throw new ArgumentNullException( nameof( path ) );
 
@@ -325,8 +331,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		/// <summary>
 		/// Converts <paramref name="path"/> to a string in database format.
 		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="path"/> is <see langword="null" />.</exception>
 		[NotNull]
-		internal static string PathInformation2DatabaseString( [NotNull]PathInformation path )
+		internal static string PathInformation2DatabaseString( [NotNull] PathInformation path )
 		{
 			if( path == null ) throw new ArgumentNullException( nameof( path ) );
 
@@ -341,7 +348,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 			return sb.ToString();
 		}
 
-		private static void PathInformation2StringInternal( [NotNull]StringBuilder sb, [NotNull]PathInformation path )
+		private static void PathInformation2StringInternal( [NotNull] StringBuilder sb, [NotNull] PathInformation path )
 		{
 			var count = path.Count;
 			for( var i = 0; i < path.Count; i++ )
@@ -355,8 +362,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		/// <summary>
 		/// Returns the structure of the <paramref name="path"/>.
 		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="path"/> is <see langword="null" />.</exception>
 		[NotNull]
-		public static string GetStructure( [NotNull]PathInformation path )
+		public static string GetStructure( [NotNull] PathInformation path )
 		{
 			if( path == null ) throw new ArgumentNullException( nameof( path ) );
 
@@ -365,6 +373,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 			{
 				result[ i ] = path[ i ].Type == InspectionPlanEntity.Part ? 'P' : 'C';
 			}
+
 			return new string( result );
 		}
 

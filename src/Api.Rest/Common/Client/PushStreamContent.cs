@@ -1,14 +1,16 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Common.Client
 {
-	#region using
+	#region usings
 
 	using System;
 	using System.IO;
@@ -16,6 +18,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using System.Net.Http;
 	using System.Net.Http.Headers;
 	using System.Threading.Tasks;
+	using JetBrains.Annotations;
 
 	#endregion
 
@@ -30,30 +33,34 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		#endregion
 
-		#region constructor
+		#region constructors
 
-		public PushStreamContent( Action<Stream, HttpContent, TransportContext> onStreamAvailable )
-			: this( onStreamAvailable, (MediaTypeHeaderValue) null )
-		{}
-
-		public PushStreamContent( Action<Stream, HttpContent, TransportContext> onStreamAvailable, MediaTypeHeaderValue mediaType )
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PushStreamContent"/> class.
+		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="onStreamAvailable"/> is <see langword="null" />.</exception>
+		public PushStreamContent(
+			[NotNull] Action<Stream, HttpContent, TransportContext> onStreamAvailable,
+			[CanBeNull] MediaTypeHeaderValue mediaType = null )
 		{
-			if( onStreamAvailable == null )
-				throw new ArgumentNullException( "onStreamAvailable" );
-
-			_OnStreamAvailable = onStreamAvailable;
+			_OnStreamAvailable = onStreamAvailable ?? throw new ArgumentNullException( nameof( onStreamAvailable ) );
 			Headers.ContentType = mediaType ?? new MediaTypeHeaderValue( "application/octet-stream" );
 		}
 
-		public PushStreamContent( Action<Stream, HttpContent, TransportContext> onStreamAvailable, string mediaType )
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PushStreamContent"/> class.
+		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="onStreamAvailable"/> is <see langword="null" />.</exception>
+		public PushStreamContent( [NotNull] Action<Stream, HttpContent, TransportContext> onStreamAvailable, [NotNull] string mediaType )
 			: this( onStreamAvailable, new MediaTypeHeaderValue( mediaType ) )
-		{}
+		{ }
 
 		#endregion
 
 		#region methods
 
-		protected override Task SerializeToStreamAsync( Stream stream, TransportContext context )
+		/// <inheritdoc />
+		protected override Task SerializeToStreamAsync( [NotNull] Stream stream, TransportContext context )
 		{
 			var serializeToStreamTask = new TaskCompletionSource<bool>();
 			try
@@ -64,9 +71,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			{
 				serializeToStreamTask.TrySetException( exception );
 			}
+
 			return serializeToStreamTask.Task;
 		}
 
+		/// <inheritdoc />
 		protected override bool TryComputeLength( out long length )
 		{
 			length = -1;
@@ -77,148 +86,176 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		#region class CompleteTaskOnCloseStream
 
-		internal class CompleteTaskOnCloseStream : DelegatingStream
+		private class CompleteTaskOnCloseStream : DelegatingStream
 		{
-			private TaskCompletionSource<bool> _SerializeToStreamTask;
+			#region members
 
-			public CompleteTaskOnCloseStream( Stream innerStream, TaskCompletionSource<bool> serializeToStreamTask )
+			private readonly TaskCompletionSource<bool> _SerializeToStreamTask;
+
+			#endregion
+
+			#region constructors
+
+			public CompleteTaskOnCloseStream( [NotNull] Stream innerStream, [NotNull] TaskCompletionSource<bool> serializeToStreamTask )
 				: base( innerStream )
 			{
 				_SerializeToStreamTask = serializeToStreamTask;
 			}
 
+			#endregion
+
+			#region methods
+
+			/// <inheritdoc />
 			public override void Close()
 			{
 				_SerializeToStreamTask.TrySetResult( true );
 			}
+
+			#endregion
 		}
 
 		#endregion
 
 		#region class DelegatingStream
 
-		internal abstract class DelegatingStream : Stream
+		private abstract class DelegatingStream : Stream
 		{
-			private Stream _InnerStream;
+			#region constructors
 
-			protected DelegatingStream( Stream innerStream )
+			/// <summary>
+			/// Initializes a new instance of the <see cref="DelegatingStream"/> class.
+			/// </summary>
+			/// <exception cref="ArgumentNullException"><paramref name="innerStream"/> is <see langword="null" />.</exception>
+			protected DelegatingStream( [NotNull] Stream innerStream )
 			{
-				if( innerStream == null )
-					throw new ArgumentNullException( "innerStream" );
-				_InnerStream = innerStream;
+				InnerStream = innerStream ?? throw new ArgumentNullException( nameof( innerStream ) );
 			}
 
+			#endregion
+
+			#region properties
+
+			/// <inheritdoc />
+			public override bool CanRead => InnerStream.CanRead;
+
+			/// <inheritdoc />
+			public override bool CanSeek => InnerStream.CanSeek;
+
+			/// <inheritdoc />
+			public override bool CanTimeout => InnerStream.CanTimeout;
+
+			/// <inheritdoc />
+			public override bool CanWrite => InnerStream.CanWrite;
+
+			protected Stream InnerStream { get; }
+
+			/// <inheritdoc />
+			public override long Length => InnerStream.Length;
+
+			/// <inheritdoc />
+			public override long Position
+			{
+				get => InnerStream.Position;
+				set => InnerStream.Position = value;
+			}
+
+			/// <inheritdoc />
+			public override int ReadTimeout
+			{
+				get => InnerStream.ReadTimeout;
+				set => InnerStream.ReadTimeout = value;
+			}
+
+			/// <inheritdoc />
+			public override int WriteTimeout
+			{
+				get => InnerStream.WriteTimeout;
+				set => InnerStream.WriteTimeout = value;
+			}
+
+			#endregion
+
+			#region methods
+
+			/// <inheritdoc />
 			public override IAsyncResult BeginRead( byte[] buffer, int offset, int count, AsyncCallback callback, object state )
 			{
-				return _InnerStream.BeginRead( buffer, offset, count, callback, state );
+				return InnerStream.BeginRead( buffer, offset, count, callback, state );
 			}
 
+			/// <inheritdoc />
 			public override IAsyncResult BeginWrite( byte[] buffer, int offset, int count, AsyncCallback callback, object state )
 			{
-				return _InnerStream.BeginWrite( buffer, offset, count, callback, state );
+				return InnerStream.BeginWrite( buffer, offset, count, callback, state );
 			}
 
+			/// <inheritdoc />
 			protected override void Dispose( bool disposing )
 			{
 				if( disposing )
 				{
-					_InnerStream.Dispose();
+					InnerStream.Dispose();
 				}
+
 				base.Dispose( disposing );
 			}
 
+			/// <inheritdoc />
 			public override int EndRead( IAsyncResult asyncResult )
 			{
-				return _InnerStream.EndRead( asyncResult );
+				return InnerStream.EndRead( asyncResult );
 			}
 
+			/// <inheritdoc />
 			public override void EndWrite( IAsyncResult asyncResult )
 			{
-				_InnerStream.EndWrite( asyncResult );
+				InnerStream.EndWrite( asyncResult );
 			}
 
+			/// <inheritdoc />
 			public override void Flush()
 			{
-				_InnerStream.Flush();
+				InnerStream.Flush();
 			}
 
+			/// <inheritdoc />
 			public override int Read( byte[] buffer, int offset, int count )
 			{
-				return _InnerStream.Read( buffer, offset, count );
+				return InnerStream.Read( buffer, offset, count );
 			}
 
+			/// <inheritdoc />
 			public override int ReadByte()
 			{
-				return _InnerStream.ReadByte();
+				return InnerStream.ReadByte();
 			}
 
+			/// <inheritdoc />
 			public override long Seek( long offset, SeekOrigin origin )
 			{
-				return _InnerStream.Seek( offset, origin );
+				return InnerStream.Seek( offset, origin );
 			}
 
+			/// <inheritdoc />
 			public override void SetLength( long value )
 			{
-				_InnerStream.SetLength( value );
+				InnerStream.SetLength( value );
 			}
 
+			/// <inheritdoc />
 			public override void Write( byte[] buffer, int offset, int count )
 			{
-				_InnerStream.Write( buffer, offset, count );
+				InnerStream.Write( buffer, offset, count );
 			}
 
+			/// <inheritdoc />
 			public override void WriteByte( byte value )
 			{
-				_InnerStream.WriteByte( value );
+				InnerStream.WriteByte( value );
 			}
 
-			public override bool CanRead
-			{
-				get { return _InnerStream.CanRead; }
-			}
-
-			public override bool CanSeek
-			{
-				get { return _InnerStream.CanSeek; }
-			}
-
-			public override bool CanTimeout
-			{
-				get { return _InnerStream.CanTimeout; }
-			}
-
-			public override bool CanWrite
-			{
-				get { return _InnerStream.CanWrite; }
-			}
-
-			protected Stream InnerStream
-			{
-				get { return _InnerStream; }
-			}
-
-			public override long Length
-			{
-				get { return _InnerStream.Length; }
-			}
-
-			public override long Position
-			{
-				get { return _InnerStream.Position; }
-				set { _InnerStream.Position = value; }
-			}
-
-			public override int ReadTimeout
-			{
-				get { return _InnerStream.ReadTimeout; }
-				set { _InnerStream.ReadTimeout = value; }
-			}
-
-			public override int WriteTimeout
-			{
-				get { return _InnerStream.WriteTimeout; }
-				set { _InnerStream.WriteTimeout = value; }
-			}
+			#endregion
 		}
 
 		#endregion

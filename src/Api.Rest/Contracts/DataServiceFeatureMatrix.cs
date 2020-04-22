@@ -1,9 +1,11 @@
 ﻿#region copyright
-// /* * * * * * * * * * * * * * * * * * * * * * * * * */
-// /* Carl Zeiss IMT (IZM Dresden)                    */
-// /* Softwaresystem PiWeb                            */
-// /* (c) Carl Zeiss 2016                             */
-// /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Carl Zeiss IMT (IZM Dresden)                    */
+/* Softwaresystem PiWeb                            */
+/* (c) Carl Zeiss 2016                             */
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Contracts
@@ -11,6 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 	#region usings
 
 	using System;
+	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 
 	#endregion
@@ -20,7 +23,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 	/// </summary>
 	public class DataServiceFeatureMatrix : FeatureMatrix
 	{
-		#region constants
+		#region members
 
 		// Deleting of measuremnts for sub parts is possible if server supports at least this minor version
 		public static readonly Version DeleteMeasurementsForSubPartsMinVersion = new Version( SupportedMajorVersion, 2 );
@@ -43,15 +46,19 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		//Restrict a measurement search by merge master part if server supports at least this minor version
 		public static readonly Version RestrictMeasurementSearchByMergeMasterPartMinVersion = new Version( SupportedMajorVersion, 4 );
 
-        //Clearing a part
-        public static readonly Version ClearPartMinVersion = new Version( SupportedMajorVersion, 5 );
+		//Clearing a part
+		public static readonly Version ClearPartMinVersion = new Version( SupportedMajorVersion, 5 );
 
 		#endregion
 
-		#region constructor
+		#region constructors
 
-		public DataServiceFeatureMatrix( InterfaceVersionRange interfaceVersionRange ) : base( interfaceVersionRange )
-		{}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DataServiceFeatureMatrix"/> class.
+		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="interfaceVersionRange"/> is <see langword="null" />.</exception>
+		public DataServiceFeatureMatrix( [NotNull] InterfaceVersionRange interfaceVersionRange ) : base( interfaceVersionRange )
+		{ }
 
 		#endregion
 
@@ -71,9 +78,8 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 
 		public bool SupportRestrictMeasurementSearchByMergeMasterPart => CurrentInterfaceVersion >= RestrictMeasurementSearchByMergeMasterPartMinVersion;
 
-        public bool SupportClearPart => CurrentInterfaceVersion >= ClearPartMinVersion;
+		public bool SupportClearPart => CurrentInterfaceVersion >= ClearPartMinVersion;
 
-
-        #endregion
-    }
+		#endregion
+	}
 }

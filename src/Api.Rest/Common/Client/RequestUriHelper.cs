@@ -15,6 +15,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using System;
 	using System.Collections.Generic;
 	using System.Text;
+	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 
 	#endregion
@@ -23,7 +24,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	{
 		#region methods
 
-		internal static Uri MakeRequestUri( Uri serviceLocation, string requestPath, IEnumerable<ParameterDefinition> parameterDefinitions )
+		internal static Uri MakeRequestUri( [NotNull] Uri serviceLocation, string requestPath, [CanBeNull] IEnumerable<ParameterDefinition> parameterDefinitions )
 		{
 			var uriBuilder = new UriBuilder( serviceLocation );
 			uriBuilder.Path += requestPath;
@@ -38,6 +39,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 					queryString.Append( parameterDefinition.Name ).Append( "=" ).Append( Uri.EscapeDataString( parameterDefinition.Value ) );
 				}
+
 				uriBuilder.Query = queryString.ToString();
 			}
 

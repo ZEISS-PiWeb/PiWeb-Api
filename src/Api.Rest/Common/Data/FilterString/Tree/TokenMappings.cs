@@ -12,7 +12,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 {
 	#region usings
 
+	using System;
 	using System.Collections.Generic;
+	using JetBrains.Annotations;
 
 	#endregion
 
@@ -55,7 +57,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 
 		#region members
 
-		public static Dictionary<string, TokenType> KeywordToTokenTypeMap = new Dictionary<string, TokenType>
+		public static readonly Dictionary<string, TokenType> KeywordToTokenTypeMap = new Dictionary<string, TokenType>
 		{
 			{ Equal, TokenType.Equal },
 			{ NotEqual, TokenType.NotEqual },
@@ -74,7 +76,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 			{ Null, TokenType.Null }
 		};
 
-		public static Dictionary<string, TokenType> OperatorToTokenTypeMap = new Dictionary<string, TokenType>
+		public static readonly Dictionary<string, TokenType> OperatorToTokenTypeMap = new Dictionary<string, TokenType>
 		{
 			{ OpGreaterOrEqual, TokenType.GreaterOrEqual },
 			{ OpLessOrEqual, TokenType.LessOrEqual },
@@ -91,7 +93,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 			{ LegacyAnd, TokenType.And }
 		};
 
-		public static Dictionary<TokenType, string> TokenTypeToDefaultValueMap = new Dictionary<TokenType, string>
+		public static readonly Dictionary<TokenType, string> TokenTypeToDefaultValueMap = new Dictionary<TokenType, string>
 		{
 			{ TokenType.Equal, Equal },
 			{ TokenType.NotEqual, NotEqual },
@@ -109,7 +111,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 			{ TokenType.False, False }
 		};
 
-		public static Dictionary<TokenType, string> TokenTypeToLegacyValueMap = new Dictionary<TokenType, string>
+		public static readonly Dictionary<TokenType, string> TokenTypeToLegacyValueMap = new Dictionary<TokenType, string>
 		{
 			{ TokenType.Equal, OpEqual },
 			{ TokenType.NotEqual, OpNotEqual },
@@ -123,7 +125,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 			{ TokenType.And, LegacyAnd }
 		};
 
-		public static HashSet<TokenType> SimpleOperators = new HashSet<TokenType>
+		public static readonly HashSet<TokenType> SimpleOperators = new HashSet<TokenType>
 		{
 			TokenType.Equal,
 			TokenType.NotEqual,
@@ -134,28 +136,28 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 			TokenType.Like
 		};
 
-		public static HashSet<TokenType> ListOperators = new HashSet<TokenType>
+		public static readonly HashSet<TokenType> ListOperators = new HashSet<TokenType>
 		{
 			TokenType.In,
 			TokenType.NotIn
 		};
 
-		public static HashSet<TokenType> ComparisonOperators = ComputeComparisonOperators();
+		public static readonly HashSet<TokenType> ComparisonOperators = ComputeComparisonOperators();
 
-		public static HashSet<TokenType> LogicalOperators = new HashSet<TokenType>
+		public static readonly HashSet<TokenType> LogicalOperators = new HashSet<TokenType>
 		{
 			TokenType.Or,
 			TokenType.And,
 			TokenType.Not
 		};
 
-		public static HashSet<TokenType> BooleanValues = new HashSet<TokenType>
+		public static readonly HashSet<TokenType> BooleanValues = new HashSet<TokenType>
 		{
 			TokenType.True,
 			TokenType.False
 		};
 
-		public static HashSet<TokenType> Values = new HashSet<TokenType>
+		public static readonly HashSet<TokenType> Values = new HashSet<TokenType>
 		{
 			TokenType.String,
 			TokenType.Real,
@@ -175,38 +177,52 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 			return result;
 		}
 
-		public static bool IsLogicalOperation( Token token )
+		/// <exception cref="ArgumentNullException"><paramref name="token"/> is <see langword="null" />.</exception>
+		public static bool IsLogicalOperation( [NotNull] Token token )
 		{
+			if( token == null ) throw new ArgumentNullException( nameof( token ) );
 			return LogicalOperators.Contains( token.Type );
 		}
 
-		public static bool IsBinaryLogicalOperation( Token token )
+		/// <exception cref="ArgumentNullException"><paramref name="token"/> is <see langword="null" />.</exception>
+		public static bool IsBinaryLogicalOperation( [NotNull] Token token )
 		{
+			if( token == null ) throw new ArgumentNullException( nameof( token ) );
 			return token.Type == TokenType.And || token.Type == TokenType.Or;
 		}
 
-		public static bool IsUnaryLogicalOperation( Token token )
+		/// <exception cref="ArgumentNullException"><paramref name="token"/> is <see langword="null" />.</exception>
+		public static bool IsUnaryLogicalOperation( [NotNull] Token token )
 		{
+			if( token == null ) throw new ArgumentNullException( nameof( token ) );
 			return token.Type == TokenType.Not;
 		}
 
-		public static bool IsComparisonOperation( Token token )
+		/// <exception cref="ArgumentNullException"><paramref name="token"/> is <see langword="null" />.</exception>
+		public static bool IsComparisonOperation( [NotNull] Token token )
 		{
+			if( token == null ) throw new ArgumentNullException( nameof( token ) );
 			return ComparisonOperators.Contains( token.Type );
 		}
 
-		public static bool IsListOperation( Token token )
+		/// <exception cref="ArgumentNullException"><paramref name="token"/> is <see langword="null" />.</exception>
+		public static bool IsListOperation( [NotNull] Token token )
 		{
+			if( token == null ) throw new ArgumentNullException( nameof( token ) );
 			return ListOperators.Contains( token.Type );
 		}
 
-		public static bool IsBoolean( Token token )
+		/// <exception cref="ArgumentNullException"><paramref name="token"/> is <see langword="null" />.</exception>
+		public static bool IsBoolean( [NotNull] Token token )
 		{
+			if( token == null ) throw new ArgumentNullException( nameof( token ) );
 			return BooleanValues.Contains( token.Type );
 		}
 
-		public static bool IsValue( Token token )
+		/// <exception cref="ArgumentNullException"><paramref name="token"/> is <see langword="null" />.</exception>
+		public static bool IsValue( [NotNull] Token token )
 		{
+			if( token == null ) throw new ArgumentNullException( nameof( token ) );
 			return Values.Contains( token.Type );
 		}
 

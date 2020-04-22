@@ -22,22 +22,28 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 	{
 		#region constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Token"/> class.
+		/// </summary>
 		public Token( TokenType type )
 		{
 			Type = type;
 			Value = string.Empty;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Token"/> class.
+		/// </summary>
 		/// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langword="null" />.</exception>
 		public Token( TokenType type, [NotNull] string value )
 		{
-			if( value == null )
-				throw new ArgumentNullException( nameof( value ) );
-
 			Type = type;
-			Value = value;
+			Value = value ?? throw new ArgumentNullException( nameof( value ) );
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Token"/> class.
+		/// </summary>
 		/// <exception cref="ArgumentNullException"><paramref name="lexicalToken"/> is <see langword="null" />.</exception>
 		public Token( TokenType type, [NotNull] LexicalToken lexicalToken )
 		{
@@ -49,18 +55,16 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 			LexicalToken = lexicalToken;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Token"/> class.
+		/// </summary>
 		/// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langword="null" />.</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="lexicalToken"/> is <see langword="null" />.</exception>
 		public Token( TokenType type, [NotNull] string value, [NotNull] LexicalToken lexicalToken )
 		{
-			if( value == null )
-				throw new ArgumentNullException( nameof( value ) );
-			if( lexicalToken == null )
-				throw new ArgumentNullException( nameof( lexicalToken ) );
-
 			Type = type;
-			Value = value;
-			LexicalToken = lexicalToken;
+			Value = value ?? throw new ArgumentNullException( nameof( value ) );
+			LexicalToken = lexicalToken ?? throw new ArgumentNullException( nameof( lexicalToken ) );
 		}
 
 		#endregion
@@ -69,10 +73,15 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 
 		public TokenType Type { get; }
 		public string Value { get; }
+
 		[CanBeNull]
 		public LexicalToken LexicalToken { get; }
-		
 
+		#endregion
+
+		#region methods
+
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			var builder = new StringBuilder();
@@ -96,6 +105,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 					builder.Append( Value );
 					builder.Append( '\'' );
 				}
+
 				builder.Append( ')' );
 			}
 			else

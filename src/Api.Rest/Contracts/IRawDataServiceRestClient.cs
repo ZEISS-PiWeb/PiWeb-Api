@@ -14,5 +14,5 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 	/// Client class for communicating with the REST based raw data service.
 	/// </summary>
 	public interface IRawDataServiceRestClient : IRawDataServiceRestClientBase<RawDataServiceFeatureMatrix>
-	{}
+	{ }
 }

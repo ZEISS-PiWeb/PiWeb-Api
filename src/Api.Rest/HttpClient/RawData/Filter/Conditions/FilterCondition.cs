@@ -23,10 +23,24 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter.Conditions
 
 	public abstract class FilterCondition : IFilterCondition
 	{
-		internal FilterCondition()
-		{
-			
-		}
+		#region members
+
+		public static readonly AndFilterCondition True = new AndFilterCondition( new FilterCondition[ 0 ] );
+		public static readonly OrFilterCondition False = new OrFilterCondition( new FilterCondition[ 0 ] );
+
+		#endregion
+
+		#region constructors
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FilterCondition"/> class.
+		/// </summary>
+		protected FilterCondition()
+		{ }
+
+		#endregion
+
+		#region properties
 
 		public static StringConditionGenerator Filename { get; } = new StringConditionGenerator( StringAttributes.Filename );
 		public static StringConditionGenerator Md5 { get; } = new StringConditionGenerator( StringAttributes.Md5 );
@@ -37,8 +51,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter.Conditions
 
 		public static IntegerConditionGenerator Length { get; } = new IntegerConditionGenerator( IntegerAttributes.Length );
 
-		public static readonly AndFilterCondition True = new AndFilterCondition( new FilterCondition[0] );
-		public static readonly OrFilterCondition False = new OrFilterCondition( new FilterCondition[0] );
+		#endregion
 
 		#region methods
 

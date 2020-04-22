@@ -18,6 +18,12 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 	public interface IRestClient : IDisposable
 	{
+		#region events
+
+		event EventHandler AuthenticationChanged;
+
+		#endregion
+
 		#region properties
 
 		AuthenticationContainer AuthenticationContainer { get; set; }
@@ -27,8 +33,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		TimeSpan Timeout { get; set; }
 
 		bool UseDefaultWebProxy { get; set; }
-
-		event EventHandler AuthenticationChanged;
 
 		#endregion
 	}

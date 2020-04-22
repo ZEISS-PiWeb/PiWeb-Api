@@ -1,14 +1,16 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2016                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 {
-	#region using
+	#region usings
 
 	using System;
 	using Newtonsoft.Json;
@@ -54,9 +56,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 
 		#region methods
 
-		/// <summary>
-		/// Overriden <see cref="System.Object.ToString"/> method.
-		/// </summary>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return DateCreated + " - " + Comment;

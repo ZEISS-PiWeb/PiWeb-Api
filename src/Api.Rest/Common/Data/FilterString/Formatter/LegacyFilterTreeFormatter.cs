@@ -14,7 +14,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Formatter
 
 	using System;
 	using System.Collections.Generic;
-	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree;
 
 	#endregion
@@ -22,15 +21,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Formatter
 	public class LegacyFilterTreeFormatter : IFilterTreeFormatter
 	{
 		#region methods
-
-		/// <exception cref="ArgumentNullException"><paramref name="tree"/> is <see langword="null" />.</exception>
-		public string FormatString( [NotNull] IFilterTree tree )
-		{
-			if( tree == null )
-				throw new ArgumentNullException( nameof( tree ) );
-
-			return FormatExpression( tree );
-		}
 
 		private string FormatExpression( IFilterTree tree )
 		{
@@ -55,7 +45,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Formatter
 				operandTexts.Add( FormatExpression( childItem ) );
 
 			var resultExpression = string.Join( $" {operatorText} ", operandTexts );
-			
+
 			return resultExpression;
 		}
 
@@ -64,7 +54,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Formatter
 			var attributeText = tree.GetChild( 0 ).Token.Value;
 			var operatorText = TokenMappings.TokenTypeToLegacyValueMap[ tree.Token.Type ];
 
-			var contentText = TokenMappings.IsListOperation( tree.Token ) 
+			var contentText = TokenMappings.IsListOperation( tree.Token )
 				? FormatValueList( tree.GetChild( 1 ) )
 				: FormatValue( tree.GetChild( 1 ) );
 
@@ -107,12 +97,26 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Formatter
 		{
 			var isEmpty = value.Length == 0;
 			var hasLeadingWhitspace = value.Length > 0 && char.IsWhiteSpace( value[ 0 ] );
-			var hasTrailingWhitspace = value.Length > 0 && char.IsWhiteSpace( value[value.Length - 1] );
+			var hasTrailingWhitspace = value.Length > 0 && char.IsWhiteSpace( value[ value.Length - 1 ] );
 			var containsComma = value.IndexOf( ',' ) != -1;
 			var containsQuote = value.IndexOf( '\'' ) != -1;
 			var containsClosingBracket = value.IndexOf( ']' ) != -1;
 
 			return isEmpty || hasLeadingWhitspace || hasTrailingWhitspace || containsComma || containsQuote || containsClosingBracket;
+		}
+
+		#endregion
+
+		#region interface IFilterTreeFormatter
+
+		/// <inheritdoc />
+		/// <exception cref="ArgumentNullException"><paramref name="tree"/> is <see langword="null" />.</exception>
+		public string FormatString( IFilterTree tree )
+		{
+			if( tree == null )
+				throw new ArgumentNullException( nameof( tree ) );
+
+			return FormatExpression( tree );
 		}
 
 		#endregion

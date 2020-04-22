@@ -32,7 +32,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 		/// quaranteed that this method returns quickly and does perform a lot of work server side.
 		/// </remarks>
 		/// </summary>
-		Task<OAuthTokenInformation> GetOAuthTokenInformation( CancellationToken cancellationToken = default( CancellationToken ) );
+		Task<OAuthTokenInformation> GetOAuthTokenInformation( CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Get information about valid OAuth issues authorities and resource ids.

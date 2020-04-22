@@ -23,6 +23,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 	{
 		#region constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="OAuthTokenCredential"/> class.
+		/// </summary>
 		public OAuthTokenCredential( string displayId, string accessToken, DateTime accessTokenExpiration, string refreshToken )
 		{
 			DisplayId = displayId;
@@ -78,7 +81,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		{
 			unchecked
 			{
-				var hashCode = ( DisplayId != null ? DisplayId.GetHashCode() : 0 );
+				var hashCode = DisplayId != null ? DisplayId.GetHashCode() : 0;
 				hashCode = ( hashCode * 397 ) ^ ( AccessToken != null ? AccessToken.GetHashCode() : 0 );
 				hashCode = ( hashCode * 397 ) ^ AccessTokenExpiration.GetHashCode();
 				hashCode = ( hashCode * 397 ) ^ ( RefreshToken != null ? RefreshToken.GetHashCode() : 0 );
@@ -95,7 +98,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		public string DisplayId { get; }
 
 		/// <inheritdoc />
-		public bool Equals( ICredential other ) => Equals( other as OAuthTokenCredential );
+		public bool Equals( ICredential other )
+		{
+			return Equals( other as OAuthTokenCredential );
+		}
 
 		#endregion
 	}

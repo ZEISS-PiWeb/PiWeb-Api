@@ -17,6 +17,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 	using System.Linq;
 	using System.Threading;
 	using System.Threading.Tasks;
+	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Common.Data;
 	using Zeiss.PiWeb.Api.Rest.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos.RawData;
@@ -37,8 +38,12 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <param name="client">The client class to use.</param>
 		/// <param name="target">The target entity to fetch the raw data information.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public static Task<RawDataInformation[]> ListRawData( this IRawDataServiceRestClient client, RawDataTargetEntity target, CancellationToken cancellationToken = default( CancellationToken ) )
+		/// <exception cref="ArgumentNullException"><paramref name="client"/> or <paramref name="target"/> is <see langword="null" />.</exception>
+		public static Task<RawDataInformation[]> ListRawData( [NotNull] this IRawDataServiceRestClient client, [NotNull] RawDataTargetEntity target, CancellationToken cancellationToken = default )
 		{
+			if( client == null ) throw new ArgumentNullException( nameof( client ) );
+			if( target == null ) throw new ArgumentNullException( nameof( target ) );
+
 			return client.ListRawData( target.Entity, new[] { target.Uuid }, null, cancellationToken );
 		}
 
@@ -50,15 +55,25 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <param name="entities">The entities the raw data information should be fetched for.</param>
 		/// <param name="filter">A condition used to filter the result.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public static async Task<RawDataInformation[]> ListRawData( this IRawDataServiceRestClient client, IEnumerable<RawDataTargetEntity> entities, FilterCondition filter = null, CancellationToken cancellationToken = default( CancellationToken ) )
+		/// <exception cref="ArgumentNullException"><paramref name="client"/> or <paramref name="entities"/> is <see langword="null" />.</exception>
+		public static Task<RawDataInformation[]> ListRawData( [NotNull] this IRawDataServiceRestClient client, [NotNull] IEnumerable<RawDataTargetEntity> entities, FilterCondition filter = null, CancellationToken cancellationToken = default )
 		{
-			var infoList = new List<RawDataInformation>();
-			foreach( var group in entities.GroupBy( p => p.Entity ) )
+			if( client == null ) throw new ArgumentNullException( nameof( client ) );
+			if( entities == null ) throw new ArgumentNullException( nameof( entities ) );
+
+			async Task<RawDataInformation[]> ListRawData()
 			{
-				var infos = await client.ListRawData( group.Key, group.Select( p => p.Uuid.ToString() ).ToArray(), filter, cancellationToken ).ConfigureAwait( false );
-				infoList.AddRange( infos );
+				var infoList = new List<RawDataInformation>();
+				foreach( var group in entities.GroupBy( p => p.Entity ) )
+				{
+					var infos = await client.ListRawData( group.Key, group.Select( p => p.Uuid.ToString() ).ToArray(), filter, cancellationToken ).ConfigureAwait( false );
+					infoList.AddRange( infos );
+				}
+
+				return infoList.ToArray();
 			}
-			return infoList.ToArray();
+
+			return ListRawData();
 		}
 
 		/// <summary> 
@@ -68,8 +83,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <param name="partUuids">The list of part uuids the raw data information should be fetched for.</param>
 		/// <param name="filter">A condition used to filter the result.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public static Task<RawDataInformation[]> ListRawDataForParts( this IRawDataServiceRestClient client, Guid[] partUuids, FilterCondition filter = null, CancellationToken cancellationToken = default( CancellationToken ) )
+		/// <exception cref="ArgumentNullException"><paramref name="client"/> is <see langword="null" />.</exception>
+		public static Task<RawDataInformation[]> ListRawDataForParts( [NotNull] this IRawDataServiceRestClient client, [CanBeNull] Guid[] partUuids, FilterCondition filter = null, CancellationToken cancellationToken = default )
 		{
+			if( client == null ) throw new ArgumentNullException( nameof( client ) );
 			return client.ListRawData( RawDataEntity.Part, partUuids?.Select( u => u.ToString() ).ToArray(), filter, cancellationToken );
 		}
 
@@ -80,8 +97,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <param name="charateristicUuids">The list of characteristic uuids the raw data information should be fetched for.</param>
 		/// <param name="filter">A condition used to filter the result.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public static Task<RawDataInformation[]> ListRawDataForCharacteristics( this IRawDataServiceRestClient client, Guid[] charateristicUuids, FilterCondition filter = null, CancellationToken cancellationToken = default( CancellationToken ) )
+		/// <exception cref="ArgumentNullException"><paramref name="client"/> is <see langword="null" />.</exception>
+		public static Task<RawDataInformation[]> ListRawDataForCharacteristics( [NotNull] this IRawDataServiceRestClient client, [CanBeNull] Guid[] charateristicUuids, FilterCondition filter = null, CancellationToken cancellationToken = default )
 		{
+			if( client == null ) throw new ArgumentNullException( nameof( client ) );
 			return client.ListRawData( RawDataEntity.Characteristic, charateristicUuids?.Select( u => u.ToString() ).ToArray(), filter, cancellationToken );
 		}
 
@@ -92,8 +111,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <param name="measurementUuids">The list of measurement uuids the raw data information should be fetched for.</param>
 		/// <param name="filter">A condition used to filter the result.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public static Task<RawDataInformation[]> ListRawDataForMeasurements( this IRawDataServiceRestClient client, Guid[] measurementUuids, FilterCondition filter = null, CancellationToken cancellationToken = default( CancellationToken ) )
+		/// <exception cref="ArgumentNullException"><paramref name="client"/> is <see langword="null" />.</exception>
+		public static Task<RawDataInformation[]> ListRawDataForMeasurements( [NotNull] this IRawDataServiceRestClient client, [CanBeNull] Guid[] measurementUuids, FilterCondition filter = null, CancellationToken cancellationToken = default )
 		{
+			if( client == null ) throw new ArgumentNullException( nameof( client ) );
 			return client.ListRawData( RawDataEntity.Measurement, measurementUuids?.Select( u => u.ToString() ).ToArray(), filter, cancellationToken );
 		}
 
@@ -104,8 +125,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <param name="measurementValueUuids">The list of value uuids the raw data information should be fetched for.</param>
 		/// <param name="filter">A condition used to filter the result.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public static Task<RawDataInformation[]> ListRawDataForValues( this IRawDataServiceRestClient client, ValueRawDataIdentifier[] measurementValueUuids, FilterCondition filter = null, CancellationToken cancellationToken = default( CancellationToken ) )
+		/// <exception cref="ArgumentNullException"><paramref name="client"/> is <see langword="null" />.</exception>
+		public static Task<RawDataInformation[]> ListRawDataForValues( [NotNull] this IRawDataServiceRestClient client, [CanBeNull] ValueRawDataIdentifier[] measurementValueUuids, FilterCondition filter = null, CancellationToken cancellationToken = default )
 		{
+			if( client == null ) throw new ArgumentNullException( nameof( client ) );
 			return client.ListRawData( RawDataEntity.Value, measurementValueUuids?.Select( StringUuidTools.CreateStringUuidPair ).ToArray(), filter, cancellationToken );
 		}
 
@@ -115,8 +138,12 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <param name="client">The client class to use.</param>
 		/// <param name="info">The <see cref="RawDataInformation"/> that specifies the raw data object that should be fetched.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public static Task<byte[]> GetRawData( this IRawDataServiceRestClient client, RawDataInformation info, CancellationToken cancellationToken = default( CancellationToken ) )
+		/// <exception cref="ArgumentNullException"><paramref name="client"/> or <paramref name="info"/> is <see langword="null" />.</exception>
+		public static Task<byte[]> GetRawData( [NotNull] this IRawDataServiceRestClient client, [NotNull] RawDataInformation info, CancellationToken cancellationToken = default )
 		{
+			if( client == null ) throw new ArgumentNullException( nameof( client ) );
+			if( info == null ) throw new ArgumentNullException( nameof( info ) );
+
 			return client.GetRawData( info.Target, info.Key.GetValueOrDefault(), info.MD5, cancellationToken );
 		}
 
@@ -127,8 +154,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <param name="partUuid">The uuid of the part to fetch the raw data object for.</param>
 		/// <param name="rawDataKey">The unique key that identifies the raw data object for the specified part.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public static Task<byte[]> GetRawDataForPart( this IRawDataServiceRestClient client, Guid partUuid, int rawDataKey, CancellationToken cancellationToken = default( CancellationToken ) )
+		/// <exception cref="ArgumentNullException"><paramref name="client"/> is <see langword="null" />.</exception>
+		public static Task<byte[]> GetRawDataForPart( [NotNull] this IRawDataServiceRestClient client, Guid partUuid, int rawDataKey, CancellationToken cancellationToken = default )
 		{
+			if( client == null ) throw new ArgumentNullException( nameof( client ) );
 			return client.GetRawData( RawDataTargetEntity.CreateForPart( partUuid ), rawDataKey, cancellationToken: cancellationToken );
 		}
 
@@ -139,8 +168,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <param name="characteristicUuid">The uuid of the characteristic to fetch the raw data object for.</param>
 		/// <param name="rawDataKey">The unique key that identifies the raw data object for the specified characteristic.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public static Task<byte[]> GetRawDataForCharacteristic( this IRawDataServiceRestClient client, Guid characteristicUuid, int rawDataKey, CancellationToken cancellationToken = default( CancellationToken ) )
+		/// <exception cref="ArgumentNullException"><paramref name="client"/> is <see langword="null" />.</exception>
+		public static Task<byte[]> GetRawDataForCharacteristic( [NotNull] this IRawDataServiceRestClient client, Guid characteristicUuid, int rawDataKey, CancellationToken cancellationToken = default )
 		{
+			if( client == null ) throw new ArgumentNullException( nameof( client ) );
 			return client.GetRawData( RawDataTargetEntity.CreateForCharacteristic( characteristicUuid ), rawDataKey, cancellationToken: cancellationToken );
 		}
 
@@ -151,8 +182,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <param name="measurementUuid">The uuid of the measurement to fetch the raw data object for.</param>
 		/// <param name="rawDataKey">The unique key that identifies the raw data object for the specified measurement.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public static Task<byte[]> GetRawDataForMeasurement( this IRawDataServiceRestClient client, Guid measurementUuid, int rawDataKey, CancellationToken cancellationToken = default( CancellationToken ) )
+		/// <exception cref="ArgumentNullException"><paramref name="client"/> is <see langword="null" />.</exception>
+		public static Task<byte[]> GetRawDataForMeasurement( [NotNull] this IRawDataServiceRestClient client, Guid measurementUuid, int rawDataKey, CancellationToken cancellationToken = default )
 		{
+			if( client == null ) throw new ArgumentNullException( nameof( client ) );
 			return client.GetRawData( RawDataTargetEntity.CreateForMeasurement( measurementUuid ), rawDataKey, cancellationToken: cancellationToken );
 		}
 
@@ -164,8 +197,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <param name="characteristicUuid">The uuid of the characteristic to fetch the raw data object for.</param>
 		/// <param name="rawDataKey">The unique key that identifies the raw data object for the specified measurement value.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public static Task<byte[]> GetRawDataForValue( this IRawDataServiceRestClient client, Guid measurementUuid, Guid characteristicUuid, int rawDataKey, CancellationToken cancellationToken = default( CancellationToken ) )
+		/// <exception cref="ArgumentNullException"><paramref name="client"/> is <see langword="null" />.</exception>
+		public static Task<byte[]> GetRawDataForValue( [NotNull] this IRawDataServiceRestClient client, Guid measurementUuid, Guid characteristicUuid, int rawDataKey, CancellationToken cancellationToken = default )
 		{
+			if( client == null ) throw new ArgumentNullException( nameof( client ) );
 			return client.GetRawData( RawDataTargetEntity.CreateForValue( measurementUuid, characteristicUuid ), rawDataKey, cancellationToken: cancellationToken );
 		}
 
@@ -175,8 +210,12 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <param name="info">The raw data entry to delete.</param>
 		/// <param name="client">The client class to use.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public static Task DeleteRawData( this IRawDataServiceRestClient client, RawDataInformation info, CancellationToken cancellationToken = default( CancellationToken ) )
+		/// <exception cref="ArgumentNullException"><paramref name="client"/> or <paramref name="info"/> is <see langword="null" />.</exception>
+		public static Task DeleteRawData( [NotNull] this IRawDataServiceRestClient client, [NotNull] RawDataInformation info, CancellationToken cancellationToken = default )
 		{
+			if( client == null ) throw new ArgumentNullException( nameof( client ) );
+			if( info == null ) throw new ArgumentNullException( nameof( info ) );
+
 			return client.DeleteRawData( info.Target, info.Key, cancellationToken );
 		}
 
@@ -187,8 +226,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <param name="partUuid">The uuid of the part the raw data objects belongs to.</param>
 		/// <param name="rawDataKey">The key of the raw data object which should be deleted.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public static Task DeleteRawDataForPart( this IRawDataServiceRestClient client, Guid partUuid, int? rawDataKey = null, CancellationToken cancellationToken = default( CancellationToken ) )
+		/// <exception cref="ArgumentNullException"><paramref name="client"/> is <see langword="null" />.</exception>
+		public static Task DeleteRawDataForPart( [NotNull] this IRawDataServiceRestClient client, Guid partUuid, int? rawDataKey = null, CancellationToken cancellationToken = default )
 		{
+			if( client == null ) throw new ArgumentNullException( nameof( client ) );
 			return client.DeleteRawData( RawDataTargetEntity.CreateForPart( partUuid ), rawDataKey, cancellationToken );
 		}
 
@@ -199,8 +240,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <param name="characteristicUuid">The uuid of the part the raw data objects belongs to. </param>
 		/// <param name="rawDataKey">The key of the raw data object which should be deleted.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public static Task DeleteRawDataForCharacteristic( this IRawDataServiceRestClient client, Guid characteristicUuid, int? rawDataKey = null, CancellationToken cancellationToken = default( CancellationToken ) )
+		/// <exception cref="ArgumentNullException"><paramref name="client"/> is <see langword="null" />.</exception>
+		public static Task DeleteRawDataForCharacteristic( [NotNull] this IRawDataServiceRestClient client, Guid characteristicUuid, int? rawDataKey = null, CancellationToken cancellationToken = default )
 		{
+			if( client == null ) throw new ArgumentNullException( nameof( client ) );
 			return client.DeleteRawData( RawDataTargetEntity.CreateForCharacteristic( characteristicUuid ), rawDataKey, cancellationToken );
 		}
 
@@ -211,8 +254,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <param name="measurementUuid">The uuid of the part the raw data objects belongs to. </param>
 		/// <param name="rawDataKey">The key of the raw data object which should be deleted.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public static Task DeleteRawDataForMeasurement( this IRawDataServiceRestClient client, Guid measurementUuid, int? rawDataKey = null, CancellationToken cancellationToken = default( CancellationToken ) )
+		/// <exception cref="ArgumentNullException"><paramref name="client"/> is <see langword="null" />.</exception>
+		public static Task DeleteRawDataForMeasurement( [NotNull] this IRawDataServiceRestClient client, Guid measurementUuid, int? rawDataKey = null, CancellationToken cancellationToken = default )
 		{
+			if( client == null ) throw new ArgumentNullException( nameof( client ) );
 			return client.DeleteRawData( RawDataTargetEntity.CreateForMeasurement( measurementUuid ), rawDataKey, cancellationToken );
 		}
 
@@ -224,8 +269,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <param name="characteristicUuid">The uuid of the characteristic the raw data object belongs to.</param>
 		/// <param name="rawDataKey">The key of the raw data object that should be deleted.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public static Task DeleteRawDataForValue( this IRawDataServiceRestClient client, Guid measurementUuid, Guid characteristicUuid, int? rawDataKey = null, CancellationToken cancellationToken = default( CancellationToken ) )
+		/// <exception cref="ArgumentNullException"><paramref name="client"/> is <see langword="null" />.</exception>
+		public static Task DeleteRawDataForValue( [NotNull] this IRawDataServiceRestClient client, Guid measurementUuid, Guid characteristicUuid, int? rawDataKey = null, CancellationToken cancellationToken = default )
 		{
+			if( client == null ) throw new ArgumentNullException( nameof( client ) );
 			return client.DeleteRawData( RawDataTargetEntity.CreateForValue( measurementUuid, characteristicUuid ), rawDataKey, cancellationToken );
 		}
 

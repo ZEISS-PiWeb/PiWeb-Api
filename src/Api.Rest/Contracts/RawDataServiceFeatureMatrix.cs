@@ -13,6 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 	#region usings
 
 	using System;
+	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 
 	#endregion
@@ -24,9 +25,12 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 	{
 		#region constructors
 
-		public RawDataServiceFeatureMatrix( InterfaceVersionRange interfaceVersionRange ) : base( interfaceVersionRange )
-		{
-		}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RawDataServiceFeatureMatrix"/> class.
+		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="interfaceVersionRange"/> is <see langword="null" />.</exception>
+		public RawDataServiceFeatureMatrix( [NotNull] InterfaceVersionRange interfaceVersionRange ) : base( interfaceVersionRange )
+		{ }
 
 		#endregion
 

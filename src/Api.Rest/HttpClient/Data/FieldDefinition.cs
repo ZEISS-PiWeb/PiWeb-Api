@@ -14,6 +14,9 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 	{
 		#region constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FieldDefinition"/> class.
+		/// </summary>
 		public FieldDefinition( string fieldName, FieldType fieldType )
 		{
 			FieldName = fieldName;

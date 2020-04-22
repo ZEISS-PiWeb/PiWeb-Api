@@ -14,5 +14,5 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 	/// Client interface for communicating with the REST based data service.
 	/// </summary>
 	public interface IDataServiceRestClient : IDataServiceRestClientBase<DataServiceFeatureMatrix>
-	{}
+	{ }
 }

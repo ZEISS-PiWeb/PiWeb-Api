@@ -8,7 +8,6 @@
 
 #endregion
 
-
 namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 {
 	#region usings
@@ -22,7 +21,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 
 	#endregion
 
-	[DebuggerDisplay("{Token.Type}")]
+	[DebuggerDisplay( "{Token.Type}" )]
 	public class FilterTree : IFilterTree
 	{
 		#region members
@@ -33,60 +32,60 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 
 		#region constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FilterTree"/> class.
+		/// </summary>
 		/// <exception cref="ArgumentNullException"><paramref name="token"/> is <see langword="null" />.</exception>
 		public FilterTree( [NotNull] Token token )
 		{
-			if( token == null )
-				throw new ArgumentNullException( nameof( token ) );
-
 			_Children = new ReadOnlyCollection<IFilterTree>( new List<IFilterTree>() );
-			Token = token;
+			Token = token ?? throw new ArgumentNullException( nameof( token ) );
 
 			PositionSetup();
 		}
 
-		/// <exception cref="ArgumentNullException"><paramref name="token"/> is <see langword="null" />.</exception>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FilterTree"/> class.
+		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="token"/> or <paramref name="children"/> is <see langword="null" />.</exception>
 		public FilterTree( [NotNull] Token token, [NotNull] IEnumerable<IFilterTree> children )
 		{
-			if( token == null )
-				throw new ArgumentNullException( nameof( token ) );
 			if( children == null )
 				throw new ArgumentNullException( nameof( children ) );
 
 			_Children = new ReadOnlyCollection<IFilterTree>( new List<IFilterTree>( children ) );
-			Token = token;
+			Token = token ?? throw new ArgumentNullException( nameof( token ) );
 
 			PositionSetup();
 		}
 
-		/// <exception cref="ArgumentNullException"><paramref name="token"/> is <see langword="null" />.</exception>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FilterTree"/> class.
+		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="token"/> or <paramref name="child"/> is <see langword="null" />.</exception>
 		public FilterTree( [NotNull] Token token, [NotNull] IFilterTree child )
 		{
-			if( token == null )
-				throw new ArgumentNullException( nameof( token ) );
 			if( child == null )
 				throw new ArgumentNullException( nameof( child ) );
 
 			_Children = new ReadOnlyCollection<IFilterTree>( new List<IFilterTree> { child } );
-			Token = token;
+			Token = token ?? throw new ArgumentNullException( nameof( token ) );
 
 			PositionSetup();
 		}
 
+		#endregion
+
+		#region methods
+
 		public static IFilterTree MakeAnd( params IFilterTree[] children )
 		{
-			if( children.Length == 0 )
-				return MakeTrue();
-
-			return new FilterTree( new Token( TokenType.And ), children );
+			return children.Length == 0 ? MakeTrue() : new FilterTree( new Token( TokenType.And ), children );
 		}
 
 		public static IFilterTree MakeOr( params IFilterTree[] children )
 		{
-			if( children.Length == 0 )
-				return MakeFalse();
-
-			return new FilterTree( new Token( TokenType.Or ), children );
+			return children.Length == 0 ? MakeFalse() : new FilterTree( new Token( TokenType.Or ), children );
 		}
 
 		public static IFilterTree MakeNot( IFilterTree child )
@@ -103,8 +102,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 		{
 			return new FilterTree( new Token( TokenType.False ) );
 		}
-
-
 
 
 		public static IFilterTree MakeEqual( string attrName, string value )
@@ -147,9 +144,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 			return new FilterTree( new Token( TokenType.Equal ), new[] { attrItem, valueTree } );
 		}
 
-		
-
-
 		public static IFilterTree MakeNotEqual( string attrName, string value )
 		{
 			var attrItem = MakeAttr( attrName );
@@ -181,8 +175,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 
 			return new FilterTree( new Token( TokenType.NotEqual ), new[] { attrItem, valueTree } );
 		}
-
-
 
 		public static IFilterTree MakeLess( string attrName, string value )
 		{
@@ -216,9 +208,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 			return new FilterTree( new Token( TokenType.Less ), new[] { attrItem, valueTree } );
 		}
 
-
-
-
 		public static IFilterTree MakeLessOrEqual( string attrName, string value )
 		{
 			var attrItem = MakeAttr( attrName );
@@ -250,9 +239,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 
 			return new FilterTree( new Token( TokenType.LessOrEqual ), new[] { attrItem, valueTree } );
 		}
-
-		
-
 
 		public static IFilterTree MakeGreaterOrEqual( string attrName, string value )
 		{
@@ -286,8 +272,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 			return new FilterTree( new Token( TokenType.GreaterOrEqual ), new[] { attrItem, valueTree } );
 		}
 
-
-
 		public static IFilterTree MakeGreater( string attrName, string value )
 		{
 			var attrItem = MakeAttr( attrName );
@@ -320,9 +304,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 			return new FilterTree( new Token( TokenType.Greater ), new[] { attrItem, valueTree } );
 		}
 
-
-
-
 		public static IFilterTree MakeLike( string attrName, string value )
 		{
 			var attrItem = MakeAttr( attrName );
@@ -338,9 +319,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 
 			return new FilterTree( new Token( TokenType.Like ), new[] { attrItem, valueTree } );
 		}
-
-
-
 
 		public static IFilterTree MakeIn( string attrName, params IFilterTree[] values )
 		{
@@ -381,9 +359,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 
 			return new FilterTree( new Token( TokenType.In ), new[] { attrItem, valueList } );
 		}
-		
-
-
 
 		public static IFilterTree MakeNotIn( string attrName, params IFilterTree[] values )
 		{
@@ -425,10 +400,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 			return new FilterTree( new Token( TokenType.NotIn ), new[] { attrItem, valueList } );
 		}
 
-
-
-
-
 		public static IFilterTree MakeAttr( string name )
 		{
 			return new FilterTree( new Token( TokenType.AttributeIdentifier, name ) );
@@ -436,10 +407,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 
 		public static IFilterTree MakeValueList( params string[] values )
 		{
-			var items = new IFilterTree[values.Length];
+			var items = new IFilterTree[ values.Length ];
 			for( var i = 0; i < values.Length; ++i )
 			{
-				items[i] = MakeValue( values[i] );
+				items[ i ] = MakeValue( values[ i ] );
 			}
 
 			return new FilterTree( new Token( TokenType.ValueList ), items );
@@ -447,10 +418,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 
 		public static IFilterTree MakeValueList( params int?[] values )
 		{
-			var items = new IFilterTree[values.Length];
+			var items = new IFilterTree[ values.Length ];
 			for( var i = 0; i < values.Length; ++i )
 			{
-				items[i] = MakeValue( values[i] );
+				items[ i ] = MakeValue( values[ i ] );
 			}
 
 			return new FilterTree( new Token( TokenType.ValueList ), items );
@@ -458,10 +429,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 
 		public static IFilterTree MakeValueList( params double?[] values )
 		{
-			var items = new IFilterTree[values.Length];
+			var items = new IFilterTree[ values.Length ];
 			for( var i = 0; i < values.Length; ++i )
 			{
-				items[i] = MakeValue( values[i] );
+				items[ i ] = MakeValue( values[ i ] );
 			}
 
 			return new FilterTree( new Token( TokenType.ValueList ), items );
@@ -474,10 +445,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 
 		public static IFilterTree MakeLegacyValueList( params string[] values )
 		{
-			var items = new IFilterTree[values.Length];
+			var items = new IFilterTree[ values.Length ];
 			for( var i = 0; i < values.Length; ++i )
 			{
-				items[i] = MakeLegacyValue( values[i] );
+				items[ i ] = MakeLegacyValue( values[ i ] );
 			}
 
 			return new FilterTree( new Token( TokenType.LegacyValueList ), items );
@@ -485,7 +456,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 
 		public static IFilterTree MakeValue( string value )
 		{
-			return value != null 
+			return value != null
 				? new FilterTree( new Token( TokenType.String, value ) )
 				: MakeNull();
 		}
@@ -547,18 +518,27 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 
 		#endregion
 
-		#region interface ITreeItem
+		#region interface IFilterTree
 
+		/// <inheritdoc />
 		public Token Token { get; }
+
+		/// <inheritdoc />
 		public int ChildCount => _Children.Count;
+
+		/// <inheritdoc />
 		public int? Position { get; private set; }
+
+		/// <inheritdoc />
 		public int? Length { get; private set; }
 
+		/// <inheritdoc />
 		public IFilterTree GetChild( int index )
 		{
 			return _Children[ index ];
 		}
 
+		/// <inheritdoc />
 		public IEnumerable<IFilterTree> GetChildren()
 		{
 			return _Children;

@@ -24,12 +24,15 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter.Conditions
 	{
 		#region members
 
-		readonly List<FilterCondition> _ChildConditions;
+		private readonly List<FilterCondition> _ChildConditions;
 
 		#endregion
 
 		#region constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="OrFilterCondition"/> class.
+		/// </summary>
 		/// <exception cref="ArgumentNullException"><paramref name="childConditions"/> is <see langword="null" />.</exception>
 		public OrFilterCondition( [NotNull] IEnumerable<FilterCondition> childConditions )
 		{
@@ -43,6 +46,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter.Conditions
 
 		#region methods
 
+		/// <inheritdoc />
 		public override IFilterTree BuildFilterTree()
 		{
 			var subTrees = _ChildConditions.Select( condition => condition.BuildFilterTree() );

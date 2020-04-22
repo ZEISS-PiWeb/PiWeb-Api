@@ -32,6 +32,9 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter.Conditions
 
 		#region constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DateTimeListFilterCondition"/> class.
+		/// </summary>
 		/// <exception cref="ArgumentNullException"><paramref name="values"/> is <see langword="null" />.</exception>
 		public DateTimeListFilterCondition( DateTimeAttributes attribute, ListOperation operation, [NotNull] IEnumerable<DateTime?> values )
 		{
@@ -46,6 +49,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter.Conditions
 
 		#region methods
 
+		/// <inheritdoc />
 		public override IFilterTree BuildFilterTree()
 		{
 			var valuesStrings = new List<string>();
@@ -58,7 +62,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter.Conditions
 
 				valuesStrings.Add( valueString );
 			}
-			
+
 			var attributeName = FilterHelper.GetAttributeName( _Attribute );
 			var operatorTokenType = FilterHelper.GetOperatorTokenType( _Operation );
 

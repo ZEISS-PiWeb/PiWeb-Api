@@ -11,6 +11,5 @@
 namespace Zeiss.PiWeb.Api.Rest.Contracts
 {
 	public interface IFilterCondition
-	{
-	}
+	{ }
 }

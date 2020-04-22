@@ -15,6 +15,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 	using System;
 	using System.Threading;
 	using System.Threading.Tasks;
+	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Common.Client;
 
 	#endregion
@@ -32,10 +33,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 		/// <param name="serverUri">
 		/// The base url of the PiWeb-Server. Please note that the required "OAuthServiceRest/" will automatically be appended to this url.
 		/// </param>
-		public OAuthServiceRestClient( Uri serverUri )
+		/// <exception cref="ArgumentNullException"><paramref name="serverUri"/> is <see langword="null" />.</exception>
+		public OAuthServiceRestClient( [NotNull] Uri serverUri )
 			: base( new RestClient( serverUri, "OAuthServiceRest/" ) )
-		{
-		}
+		{ }
 
 		#endregion
 
@@ -50,16 +51,16 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 		/// </summary>
 		public Task<ServiceInformation> GetServiceInformation()
 		{
-			return _RestClient.Request<ServiceInformation>( RequestBuilder.CreateGet( "serviceInformation" ), default( CancellationToken ) );
+			return _RestClient.Request<ServiceInformation>( RequestBuilder.CreateGet( "serviceInformation" ), default );
 		}
 
 		/// <summary>
 		/// Get information about valid OAuth issues authorities and resource ids.
 		/// </summary>
 		/// <param name="cancellationToken">A cancelation token to cancel the web service call.</param>
-		public Task<OAuthTokenInformation> GetOAuthTokenInformation( CancellationToken cancellationToken = default( CancellationToken ) )
+		public Task<OAuthTokenInformation> GetOAuthTokenInformation( CancellationToken cancellationToken = default )
 		{
-			return _RestClient.Request<OAuthTokenInformation>( RequestBuilder.CreateGet( "oauthTokenInformation" ), default( CancellationToken ) );
+			return _RestClient.Request<OAuthTokenInformation>( RequestBuilder.CreateGet( "oauthTokenInformation" ), default );
 		}
 
 		#endregion

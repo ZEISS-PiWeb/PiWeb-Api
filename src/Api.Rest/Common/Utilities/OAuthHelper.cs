@@ -40,10 +40,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 		#region members
 
-		private static readonly string _CacheFilePath = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ), @"Zeiss\PiWeb\OpenIdTokens.dat" );
+		private static readonly string CacheFilePath = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ), @"Zeiss\PiWeb\OpenIdTokens.dat" );
 
 		// FUTURE: replace by a real cache with cleanup, this is a memory leak for long running processes
-		private static readonly CredentialRepository _AccessTokenCache = new CredentialRepository( _CacheFilePath );
+		private static readonly CredentialRepository AccessTokenCache = new CredentialRepository( CacheFilePath );
 
 		#endregion
 
@@ -116,9 +116,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 		private static OAuthTokenCredential TryGetCurrentOAuthToken( string instanceUrl, ref string refreshToken )
 		{
-			OAuthTokenCredential result;
 			// if access token is still valid (5min margin to allow for clock skew), just return it from the cache
-			if( _AccessTokenCache.TryGetCredential( instanceUrl, out result ) )
+			if( AccessTokenCache.TryGetCredential( instanceUrl, out var result ) )
 			{
 				if( string.IsNullOrEmpty( refreshToken ) )
 				{
@@ -240,7 +239,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			result = await TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, authority, refreshToken ).ConfigureAwait( false );
 			if( result != null )
 			{
-				_AccessTokenCache.Store( instanceUrl, result );
+				AccessTokenCache.Store( instanceUrl, result );
 				return result;
 			}
 
@@ -257,7 +256,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 					result = await TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response ).ConfigureAwait( false );
 					if( result != null )
 					{
-						_AccessTokenCache.Store( instanceUrl, result );
+						AccessTokenCache.Store( instanceUrl, result );
 						return result;
 					}
 				}
@@ -290,7 +289,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 			if( result != null )
 			{
-				_AccessTokenCache.Store( instanceUrl, result );
+				AccessTokenCache.Store( instanceUrl, result );
 				return result;
 			}
 
@@ -310,7 +309,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 						.GetResult();
 					if( result != null )
 					{
-						_AccessTokenCache.Store( instanceUrl, result );
+						AccessTokenCache.Store( instanceUrl, result );
 						return result;
 					}
 				}
@@ -364,7 +363,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		public static void ClearAuthenticationInformationForDatabaseUrl( string databaseUrl )
 		{
 			var instanceUrl = GetInstanceUrl( databaseUrl );
-			_AccessTokenCache.Remove( instanceUrl );
+			AccessTokenCache.Remove( instanceUrl );
 
 			// FUTURE: call endsession endpoint of identity server
 			// https://identityserver.github.io/Documentation/docsv2/endpoints/endSession.html

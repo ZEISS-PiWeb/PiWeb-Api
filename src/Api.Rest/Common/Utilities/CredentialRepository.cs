@@ -39,6 +39,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 		#region constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CredentialRepository"/> class.
+		/// </summary>
+		/// <exception cref="ArgumentException"><paramref name="filename"/> is <see langword="null" /> or whitespace.</exception>
 		public CredentialRepository( string filename )
 		{
 			if( string.IsNullOrWhiteSpace( filename ) )
@@ -61,6 +65,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			return _CredentialCache.TryGetValue( url, out credential );
 		}
 
+		/// <exception cref="ArgumentException"><paramref name="credential"/> is <see langword="null" />.</exception>
 		public void Store( string url, [NotNull] OAuthTokenCredential credential )
 		{
 			if( credential == null )
@@ -157,8 +162,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		/// </summary>
 		private static FileStream WaitForFileStream( string path, FileMode mode, FileAccess access, FileShare share )
 		{
-			int numTries = 10;
-			int i = 0;
+			const int numTries = 10;
+			var i = 0;
 			while( true )
 			{
 				FileStream fileStream = null;
@@ -169,13 +174,12 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 				}
 				catch( IOException )
 				{
-					if( fileStream != null )
-						fileStream.Dispose();
+					fileStream?.Dispose();
 
 					if( i >= numTries )
 						throw;
-					else
-						Thread.Sleep( 50 );
+
+					Thread.Sleep( 50 );
 
 					i += 1;
 				}

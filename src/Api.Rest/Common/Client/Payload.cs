@@ -13,6 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	#region usings
 
 	using System;
+	using JetBrains.Annotations;
 
 	#endregion
 
@@ -26,9 +27,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		#region constructors
 
+		/// <summary>
+		/// Prevents a default instance of the <see cref="Payload"/> class from being created.
+		/// </summary>
 		private Payload()
-		{
-		}
+		{ }
 
 		#endregion
 
@@ -40,9 +43,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		#region methods
 
-		public static Payload Create( object value )
+		/// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langword="null" />.</exception>
+		public static Payload Create( [NotNull] object value )
 		{
-			if( value == null ) throw new ArgumentNullException( nameof(value) );
+			if( value == null ) throw new ArgumentNullException( nameof( value ) );
 
 			return new Payload { Value = value };
 		}

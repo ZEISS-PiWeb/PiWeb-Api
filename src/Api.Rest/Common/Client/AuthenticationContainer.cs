@@ -22,35 +22,53 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	{
 		#region constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AuthenticationContainer" /> class.
+		/// </summary>
 		public AuthenticationContainer( AuthenticationMode authenticationMode )
 		{
 			Mode = authenticationMode;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AuthenticationContainer" /> class.
+		/// </summary>
 		public AuthenticationContainer( NetworkCredential credentials )
 		{
 			Mode = AuthenticationMode.NoneOrBasic;
 			Credentials = credentials;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AuthenticationContainer" /> class.
+		/// </summary>
 		public AuthenticationContainer( X509Certificate2 certificate )
 		{
 			Mode = AuthenticationMode.Certificate;
 			Certificate = certificate;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AuthenticationContainer" /> class.
+		/// </summary>
 		public AuthenticationContainer( string oAuthAccessToken )
 		{
 			Mode = AuthenticationMode.OAuth;
 			OAuthAccessToken = oAuthAccessToken;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AuthenticationContainer" /> class.
+		/// </summary>
 		public AuthenticationContainer( AuthenticationMode authenticationMode, NetworkCredential credentials )
 		{
 			Mode = authenticationMode;
 			Credentials = credentials;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AuthenticationContainer" /> class.
+		/// </summary>
 		public AuthenticationContainer( AuthenticationMode authenticationMode, X509Certificate2 certificate )
 		{
 			Mode = authenticationMode;
@@ -94,24 +112,44 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				: null;
 		}
 
+		/// <inheritdoc />
 		public override bool Equals( object obj )
 		{
 			var other = obj as AuthenticationContainer;
 
 			return other != null
-			       && Equals( Mode, other.Mode )
-			       && CredentialEquals( Credentials, other.Credentials )
-			       && CertificateEquals( Certificate, other.Certificate )
-			       && Equals( OAuthAccessToken, other.OAuthAccessToken );
+					&& Equals( Mode, other.Mode )
+					&& CredentialEquals( Credentials, other.Credentials )
+					&& CertificateEquals( Certificate, other.Certificate )
+					&& Equals( OAuthAccessToken, other.OAuthAccessToken );
 		}
 
-		public override int GetHashCode() => (int) Mode;
+		/// <inheritdoc />
+		public override int GetHashCode() => (int)Mode;
 
+		/// <summary>
+		/// Indicates whether the values of two specified <see cref="AuthenticationContainer" /> instances are equal.
+		/// </summary>
+		/// <param name="a">The first <see cref="AuthenticationContainer" /> to compare.</param>
+		/// <param name="b">The seconds <see cref="AuthenticationContainer" /> to compare.</param>
+		/// <returns>
+		/// Returns <see langword="true" /> if <paramref name="a" /> and <paramref name="b" /> points to the exactly
+		/// same <see cref="AuthenticationContainer"/>; Otherwise returns <see langword="false" />.
+		/// </returns>
 		public static bool operator ==( AuthenticationContainer a, AuthenticationContainer b )
 		{
 			return Equals( a, b );
 		}
 
+		/// <summary>
+		/// Indicates whether the values of two specified <see cref="AuthenticationContainer" /> instances are not equal.
+		/// </summary>
+		/// <param name="a">The first <see cref="AuthenticationContainer" /> to compare.</param>
+		/// <param name="b">The seconds <see cref="AuthenticationContainer" /> to compare.</param>
+		/// <returns>
+		/// Returns <see langword="true" /> if <paramref name="a" /> and <paramref name="b" /> points to different
+		/// authentication container; Otherwise returns <see langword="false" />.
+		/// </returns>
 		public static bool operator !=( AuthenticationContainer a, AuthenticationContainer b )
 		{
 			return !Equals( a, b );
@@ -123,7 +161,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			if( a == null || b == null ) return false;
 
 			return Equals( a.UserName, b.UserName )
-			       && Equals( a.Password, b.Password );
+					&& Equals( a.Password, b.Password );
 		}
 
 		private static bool CertificateEquals( X509Certificate2 a, X509Certificate2 b )

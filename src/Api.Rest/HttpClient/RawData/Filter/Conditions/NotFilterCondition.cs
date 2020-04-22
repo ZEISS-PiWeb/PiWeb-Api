@@ -28,22 +28,23 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter.Conditions
 
 		#region constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="NotFilterCondition"/> class.
+		/// </summary>
 		/// <exception cref="ArgumentNullException"><paramref name="childCondition"/> is <see langword="null" />.</exception>
 		public NotFilterCondition( [NotNull] FilterCondition childCondition )
 		{
-			if( childCondition == null )
-				throw new ArgumentNullException( nameof( childCondition ) );
-
-			_ChildCondition = childCondition;
+			_ChildCondition = childCondition ?? throw new ArgumentNullException( nameof( childCondition ) );
 		}
 
 		#endregion
 
 		#region methods
 
+		/// <inheritdoc />
 		public override IFilterTree BuildFilterTree()
 		{
-			var subTree = _ChildCondition.BuildFilterTree(); 
+			var subTree = _ChildCondition.BuildFilterTree();
 			return FilterTree.MakeNot( subTree );
 		}
 
