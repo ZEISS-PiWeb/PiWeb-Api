@@ -1,21 +1,28 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
-#endregion
 
-using System;
+#endregion
 
 namespace Zeiss.PiWeb.Api.Definitions
 {
+	#region usings
+
+	using System;
+
+	#endregion
+
 	/// <summary>
-	/// Static class with constants that are used by <see cref="ServiceInformation.FeatureList"/>
-	/// to indicate the availability of certain server features.
+	/// Static class with constants that are used by ServiceInformation service to indicate the availability of certain server features.
 	/// </summary>
 	public static class WellKnownServerFeatures
 	{
+		#region constants
+
 		/// <summary>Server supports server side querying of merged measurements (like a primary key for measurement search).</summary>
 		public const string MergeAttributes = "MergeAttributes";
 
@@ -33,11 +40,11 @@ namespace Zeiss.PiWeb.Api.Definitions
 		public const string ReadOnlyDatabase = "ReadOnlyDB";
 
 		/// <summary>The server does not support jobs.</summary>
-		[Obsolete("Property will be removed in future release. Please use inverted JobEngineSupported property instead.")]
-        public const string JobEngineNotSupported = "JobEngineNotSupported";
+		[Obsolete( "Property will be removed in future release. Please use inverted JobEngineSupported property instead." )]
+		public const string JobEngineNotSupported = "JobEngineNotSupported";
 
-        /// <summary>The server supports jobs.</summary>
-        public const string JobEngineSupported = "JobEngineSupported";
+		/// <summary>The server supports jobs.</summary>
+		public const string JobEngineSupported = "JobEngineSupported";
 
 		/// <summary>The server supports characteristics below the root part and measurements attached to the root part.</summary>
 		public const string CharacteristicsBelowRoot = "CharacteristicsBelowRoot";
@@ -52,10 +59,12 @@ namespace Zeiss.PiWeb.Api.Definitions
 		/// <summary>The server supports measurement filter attributes with a LastN value greater than <see cref="short.MaxValue"/>.</summary>
 		public const string MeasurementLimitResultInt32 = "MeasurementLimitResultInt32";
 
-        /// <summary>The server supports generation of notifications.</summary>
-        public const string NotificationFeatureSupported = "NotificationFeatureSupported";
-        
-        /// <summary>The server supports internal generation of event based alarms.</summary>
-        public const string AlarmFeatureSupported = "AlarmFeatureSupported";
+		/// <summary>The server supports generation of notifications.</summary>
+		public const string NotificationFeatureSupported = "NotificationFeatureSupported";
+
+		/// <summary>The server supports internal generation of event based alarms.</summary>
+		public const string AlarmFeatureSupported = "AlarmFeatureSupported";
+
+		#endregion
 	}
 }

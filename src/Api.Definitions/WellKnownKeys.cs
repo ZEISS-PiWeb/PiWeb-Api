@@ -1,9 +1,11 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2019                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Definitions
@@ -13,121 +15,153 @@ namespace Zeiss.PiWeb.Api.Definitions
 	/// </summary>
 	public static class WellKnownKeys
 	{
-		#region Part
+		#region class Catalog
 
-		/// <summary>Well known keys for accessing part attributes.</summary>
-		public static class Part
+		/// <summary>Well known keys for accessing value attributes.</summary>
+		public static class Catalog
 		{
-			/// <summary>Part number</summary>
+			#region constants
+
+			/// <summary>Direction</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort Number = 1001;
+			public const ushort Direction = 2009;
 
-			/// <summary>Part description</summary>
+			/// <summary>Orientation</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort Description = 1002;
+			public const ushort Orientation = 2090;
 
-			/// <summary>Part abbreviation</summary>
+			/// <summary>Location</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort Abbreviation = 1003;
+			public const ushort Location = 2091;
 
-			/// <summary>Drawing status</summary>
+			/// <summary>Lower class limit</summary>
+			/// <remarks>Float</remarks>
+			public const ushort LowerClassLimitKey = 2135;
+
+			/// <summary>Upper class limit</summary>
+			/// <remarks>Float</remarks>
+			public const ushort UpperClassLimitKey = 2136;
+
+			/// <summary>Reference system</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort DrawingStatus = 1004;
+			public const ushort ReferenceSystem = 2520;
 
-			/// <summary>Line</summary>
+			/// <summary>Color scheme position</summary>
+			/// <remarks>Integer</remarks>
+			public const ushort ColorSchemePositionKey = 2902;
+
+			/// <summary>Status color</summary>
+			/// <remarks>Integer</remarks>
+			public const ushort StatusColorKey = 2903;
+
+			/// <summary>Machine number</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort Line = 1008;
+			public const ushort MachineNumber = 4062;
 
-			/// <summary>Documented flag</summary>
-			/// <remarks>Catalog</remarks>
-			public const ushort ControlItem = 1010;
-
-			/// <summary>Model</summary>
+			/// <summary>Machine name</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort VariantOfLine = 1011;
+			public const ushort MachineName = 4063;
 
-			/// <summary>Drawing number</summary>
+			/// <summary>Gage number</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort DrawingNumber = 1041;
+			public const ushort GageNumber = 4072;
 
-			/// <summary>Drawing name</summary>
+			/// <summary>Gage name</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort DrawingName = 1046;
+			public const ushort GageName = 4073;
 
-			/// <summary>Operation</summary>
+			/// <summary>Gage group</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort Operation = 1086;
+			public const ushort GageGroup = 4074;
 
-			/// <summary>Organization</summary>
+			/// <summary>Operator number</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort Organisation = 1100;
+			public const ushort OperatorNumber = 4092;
 
-			/// <summary>Division of company</summary>
+			/// <summary>Operator name</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort Division = 1101;
+			public const ushort OperatorName = 4093;
 
-			/// <summary>Cost center</summary>
+			/// <summary>Result</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort CostCenter = 1103;
+			public const ushort Result = 4230;
 
-			/// <summary>Inspection type</summary>
+			/// <summary>Cavity number</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort InspectionType = 1209;
+			public const ushort CavityNumber = 4252;
 
-			/// <summary>Company</summary>
+			/// <summary>Cavity name</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort Company = 1301;
+			public const ushort CavityName = 4253;
 
-			/// <summary>Production plant</summary>
+			/// <summary>Group type</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort Plant = 1303;
+			public const ushort GroupType = 4300;
 
-			/// <summary>Name of inspection plan</summary>
+			/// <summary>Approval</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort InspectionPlanName = 1342;
+			public const ushort Approval = 4320;
 
-			/// <summary>Date of creation</summary>
-			/// <remarks>Date</remarks>
-			public const ushort CreatedDate = 1343;
-
-			/// <summary>Creator</summary>
+			/// <summary>Reason for test</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort CreatedBy = 1344;
+			public const ushort Reason = 4391;
 
-			/// <summary>Date of changes</summary>
-			/// <remarks>Date</remarks>
-			public const ushort ChangedDate = 1508;
+			/// <summary>Key for the distribution type.</summary>
+			/// <remarks>Integer</remarks>
+			public const ushort DistributionTypeKey = 4403;
 
-			/// <summary>Person that changed the part</summary>
+			/// <summary>Distribution type.</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort ChangedBy = 1509;
+			public const ushort DistributionType = 4404;
 
-			/// <summary>Comment</summary>
+			/// <summary>Long-term measurement</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort Comment = 1900;
+			public const ushort LongTermMeasurement = 4411;
 
-			/// <summary>
-			/// The uri that can be used to create an interactive hyperlink that calls another application. This is used by PiWeb Monitor 
-			/// for example to switch back to the measuring application (Calypso, Caligo etc.) when clicking on a characteristic or part.
-			/// </summary>
+			/// <summary>Yes/No</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort CallbackUri = 11098;
+			public const ushort YesNo = 4527;
 
-			/// <summary>
-			/// This is a descriptive text for the <see cref="CallbackUri"/>.
-			/// </summary>
+			/// <summary>Characteristic type</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort CallbackUriText = 11097;
+			public const ushort CharacteristicType = 12013;
 
+			/// <summary>Limit type</summary>
+			/// <remarks>AlphaNumeric</remarks>
+			public const ushort LimitType = 12120;
+
+			/// <summary>The key for the measured quantity type.</summary>
+			/// <remarks>Integer</remarks>
+			public const ushort MeasuredQuantityTypeKey = 13267;
+
+			/// <summary>The description of the pda sample type.</summary>
+			/// <remarks>AlphaNumeric</remarks>
+			public const ushort PdaSampleTypeDescription = 13270;
+
+			/// <summary>The key for the pda sample type.</summary>
+			/// <remarks>Integer</remarks>
+			public const ushort PdaSampleTypeKey = 13271;
+
+			/// <summary>The description for the distribution analysis mode.</summary>
+			/// <remarks>AlphaNumeric</remarks>
+			public const ushort DistributionAnalysisModeDescription = 13280;
+
+			/// <summary>The key for the distribution analysis mode.</summary>
+			/// <remarks>Integer</remarks>
+			public const ushort DistributionAnalysisModeKey = 13281;
+
+			#endregion
 		}
 
 		#endregion
 
-		#region Characteristic
+		#region class Characteristic
 
 		/// <summary>Well known keys for accessing part characteristic.</summary>
 		public static class Characteristic
 		{
+			#region constants
+
 			/// <summary>Characteristic number</summary>
 			/// <remarks>AlphaNumeric</remarks>
 			public const ushort Number = 2001;
@@ -339,8 +373,6 @@ namespace Zeiss.PiWeb.Api.Definitions
 			/// <remarks>Catalog</remarks>
 			public const ushort DistributionAnalysisMode = 13282;
 
-			#region ControlCharts
-
 			/// <summary>Regelkartenkonfiguration der Lagekarte</summary>
 			/// <remarks>AlphaNumeric</remarks>>
 			public const ushort LocationChartConfiguration = 9010;
@@ -365,7 +397,6 @@ namespace Zeiss.PiWeb.Api.Definitions
 			/// <remarks>Float</remarks>
 			public const ushort LocationChartUpperWarningLimit = 9015;
 
-
 			/// <summary>Regelkartenkonfiguration der Streuungskarte</summary>
 			/// <remarks>AlphaNumeric</remarks>
 			public const ushort VariationChartConfiguration = 9110;
@@ -389,10 +420,6 @@ namespace Zeiss.PiWeb.Api.Definitions
 			/// <summary>Obere Warngrenze der Streuungskarte</summary>
 			/// <remarks>Float</remarks>
 			public const ushort VariationChartUpperWarningLimit = 9115;
-
-			#endregion
-
-			#region Stamps
 
 			/// <summary>Stamp text</summary>
 			/// <remarks>Integer</remarks>
@@ -423,16 +450,17 @@ namespace Zeiss.PiWeb.Api.Definitions
 			public const ushort StampRadius = 2814;
 
 			#endregion
-
 		}
 
 		#endregion
 
-		#region Measurement
+		#region class Measurement
 
 		/// <summary>Well known keys for accessing measurement attributes.</summary>
 		public static class Measurement
 		{
+			#region constants
+
 			/// <summary>Time</summary>
 			/// <remarks>Date</remarks>
 			public const ushort Time = 4;
@@ -541,166 +569,145 @@ namespace Zeiss.PiWeb.Api.Definitions
 			/// <remarks>Integer</remarks>
 			public const ushort PartNumberIncremental = 10096;
 
+			#endregion
+
+			#region properties
+
 			/// <summary>
 			/// Collection of all measurement attributes specific for aggregated measurements
 			/// </summary>
-			public static ushort[] AggregatedMeasurementKeys
+			public static ushort[] AggregatedMeasurementKeys => new[]
 			{
-				get
-				{
-					return new[]
-					{
-						AggregationJobUuid,
-						AggregationInterval,
-						AggregatedMeasurementCount
-					};
-				}
-			}
+				AggregationJobUuid,
+				AggregationInterval,
+				AggregatedMeasurementCount
+			};
+
+			#endregion
 		}
 
 		#endregion
 
-		#region Catalog
+		#region class Part
 
-		/// <summary>Well known keys for accessing value attributes.</summary>
-		public static class Catalog
+		/// <summary>Well known keys for accessing part attributes.</summary>
+		public static class Part
 		{
-			/// <summary>Direction</summary>
+			#region constants
+
+			/// <summary>Part number</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort Direction = 2009;
+			public const ushort Number = 1001;
 
-			/// <summary>Orientation</summary>
+			/// <summary>Part description</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort Orientation = 2090;
+			public const ushort Description = 1002;
 
-			/// <summary>Location</summary>
+			/// <summary>Part abbreviation</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort Location = 2091;
+			public const ushort Abbreviation = 1003;
 
-			/// <summary>Lower class limit</summary>
-			/// <remarks>Float</remarks>
-			public const ushort LowerClassLimitKey = 2135;
-
-			/// <summary>Upper class limit</summary>
-			/// <remarks>Float</remarks>
-			public const ushort UpperClassLimitKey = 2136;
-
-			/// <summary>Reference system</summary>
+			/// <summary>Drawing status</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort ReferenceSystem = 2520;
+			public const ushort DrawingStatus = 1004;
 
-			/// <summary>Color scheme position</summary>
-			/// <remarks>Integer</remarks>
-			public const ushort ColorSchemePositionKey = 2902;
-
-			/// <summary>Status color</summary>
-			/// <remarks>Integer</remarks>
-			public const ushort StatusColorKey = 2903;
-
-			/// <summary>Machine number</summary>
+			/// <summary>Line</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort MachineNumber = 4062;
+			public const ushort Line = 1008;
 
-			/// <summary>Machine name</summary>
+			/// <summary>Documented flag</summary>
+			/// <remarks>Catalog</remarks>
+			public const ushort ControlItem = 1010;
+
+			/// <summary>Model</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort MachineName = 4063;
+			public const ushort VariantOfLine = 1011;
 
-			/// <summary>Gage number</summary>
+			/// <summary>Drawing number</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort GageNumber = 4072;
+			public const ushort DrawingNumber = 1041;
 
-			/// <summary>Gage name</summary>
+			/// <summary>Drawing name</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort GageName = 4073;
+			public const ushort DrawingName = 1046;
 
-			/// <summary>Gage group</summary>
+			/// <summary>Operation</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort GageGroup = 4074;
+			public const ushort Operation = 1086;
 
-			/// <summary>Operator number</summary>
+			/// <summary>Organization</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort OperatorNumber = 4092;
+			public const ushort Organisation = 1100;
 
-			/// <summary>Operator name</summary>
+			/// <summary>Division of company</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort OperatorName = 4093;
+			public const ushort Division = 1101;
 
-			/// <summary>Result</summary>
+			/// <summary>Cost center</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort Result = 4230;
+			public const ushort CostCenter = 1103;
 
-			/// <summary>Cavity number</summary>
+			/// <summary>Inspection type</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort CavityNumber = 4252;
+			public const ushort InspectionType = 1209;
 
-			/// <summary>Cavity name</summary>
+			/// <summary>Company</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort CavityName = 4253;
+			public const ushort Company = 1301;
 
-			/// <summary>Group type</summary>
+			/// <summary>Production plant</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort GroupType = 4300;
+			public const ushort Plant = 1303;
 
-			/// <summary>Approval</summary>
+			/// <summary>Name of inspection plan</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort Approval = 4320;
+			public const ushort InspectionPlanName = 1342;
 
-			/// <summary>Reason for test</summary>
+			/// <summary>Date of creation</summary>
+			/// <remarks>Date</remarks>
+			public const ushort CreatedDate = 1343;
+
+			/// <summary>Creator</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort Reason = 4391;
+			public const ushort CreatedBy = 1344;
 
-			/// <summary>Key for the distribution type.</summary>
-			/// <remarks>Integer</remarks>
-			public const ushort DistributionTypeKey = 4403;
+			/// <summary>Date of changes</summary>
+			/// <remarks>Date</remarks>
+			public const ushort ChangedDate = 1508;
 
-			/// <summary>Distribution type.</summary>
+			/// <summary>Person that changed the part</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort DistributionType = 4404;
+			public const ushort ChangedBy = 1509;
 
-			/// <summary>Long-term measurement</summary>
+			/// <summary>Comment</summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort LongTermMeasurement = 4411;
+			public const ushort Comment = 1900;
 
-			/// <summary>Yes/No</summary>
+			/// <summary>
+			/// The uri that can be used to create an interactive hyperlink that calls another application. This is used by PiWeb Monitor 
+			/// for example to switch back to the measuring application (Calypso, Caligo etc.) when clicking on a characteristic or part.
+			/// </summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort YesNo = 4527;
+			public const ushort CallbackUri = 11098;
 
-			/// <summary>Characteristic type</summary>
+			/// <summary>
+			/// This is a descriptive text for the <see cref="CallbackUri"/>.
+			/// </summary>
 			/// <remarks>AlphaNumeric</remarks>
-			public const ushort CharacteristicType = 12013;
+			public const ushort CallbackUriText = 11097;
 
-			/// <summary>Limit type</summary>
-			/// <remarks>AlphaNumeric</remarks>
-			public const ushort LimitType = 12120;
-
-			/// <summary>The key for the measured quantity type.</summary>
-			/// <remarks>Integer</remarks>
-			public const ushort MeasuredQuantityTypeKey = 13267;
-
-			/// <summary>The description of the pda sample type.</summary>
-			/// <remarks>AlphaNumeric</remarks>
-			public const ushort PdaSampleTypeDescription = 13270;
-
-			/// <summary>The key for the pda sample type.</summary>
-			/// <remarks>Integer</remarks>
-			public const ushort PdaSampleTypeKey = 13271;
-
-			/// <summary>The description for the distribution analysis mode.</summary>
-			/// <remarks>AlphaNumeric</remarks>
-			public const ushort DistributionAnalysisModeDescription = 13280;
-
-			/// <summary>The key for the distribution analysis mode.</summary>
-			/// <remarks>Integer</remarks>
-			public const ushort DistributionAnalysisModeKey = 13281;
+			#endregion
 		}
 
 		#endregion
 
-		#region Value
+		#region class Value
 
 		/// <summary>Well known keys for accessing value attributes.</summary>
 		public static class Value
 		{
+			#region constants
+
 			/// <summary>Measured value</summary>
 			/// <remarks>Float</remarks>
 			public const ushort MeasuredValue = 1;
@@ -757,31 +764,31 @@ namespace Zeiss.PiWeb.Api.Definitions
 			/// <remarks>Integer</remarks>
 			public const ushort AggregatedRedRange = 21012;
 
+			#endregion
+
+			#region properties
+
 			/// <summary>
 			/// Collection of all measurement value attributes specific for aggregated measurements
 			/// </summary>
-			public static ushort[] AggregatedValueKeys
+			public static ushort[] AggregatedValueKeys => new[]
 			{
-				get
-				{
-					return new[]
-					{
-						AggregatedMinimum,
-						AggregatedMaximum,
-						AggregatedRange,
-						AggregatedMean,
-						AggregatedSigma,
-						AggregatedMedian,
-						AggregatedLowerQuartile,
-						AggregatedUpperQuartile,
-						AggregatedCp,
-						AggregatedCpk,
-						AggregatedValueCount,
-						AggregatedYellowRange,
-						AggregatedRedRange
-					};
-				}
-			}
+				AggregatedMinimum,
+				AggregatedMaximum,
+				AggregatedRange,
+				AggregatedMean,
+				AggregatedSigma,
+				AggregatedMedian,
+				AggregatedLowerQuartile,
+				AggregatedUpperQuartile,
+				AggregatedCp,
+				AggregatedCpk,
+				AggregatedValueCount,
+				AggregatedYellowRange,
+				AggregatedRedRange
+			};
+
+			#endregion
 		}
 
 		#endregion
