@@ -1,14 +1,16 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
-	#region using
+	#region usings
 
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Converters;
@@ -29,6 +31,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// The entity is a characteristic.
 		/// </summary>
-		Characteristic = 2,
+		Characteristic = 2
 	}
 }

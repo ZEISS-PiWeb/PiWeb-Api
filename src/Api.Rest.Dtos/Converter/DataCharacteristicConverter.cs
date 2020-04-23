@@ -1,19 +1,23 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 {
-	#region using
+	#region usings
 
 	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
 	using Newtonsoft.Json;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
-	using Attribute = Data.Attribute;
+	using Attribute = Zeiss.PiWeb.Api.Rest.Dtos.Data.Attribute;
 
 	#endregion
 
@@ -22,7 +26,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 	/// </summary>
 	public class DataCharacteristicConverter : JsonConverter
 	{
-		#region members
+		#region methods
 
 		/// <summary>
 		/// Determines whether this instance can convert the specified object type.
@@ -44,30 +48,31 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 				{
 					characteristic.Uuid = new Guid( (string)reader.Value );
 
-					var valueAttributes = new System.Collections.Generic.List<Attribute>();
+					var valueAttributes = new List<Attribute>();
 					if( reader.Read() && reader.TokenType == JsonToken.StartObject )
 					{
 						while( reader.Read() && reader.TokenType == JsonToken.PropertyName )
 						{
-							var key = ushort.Parse( reader.Value.ToString(), System.Globalization.CultureInfo.InvariantCulture );
+							var key = ushort.Parse( reader.Value.ToString(), CultureInfo.InvariantCulture );
 							var value = reader.ReadAsString();
 
 							valueAttributes.Add( new Attribute( key, value ) );
 						}
 					}
+
 					characteristic.Value = new DataValue( valueAttributes.ToArray() );
 				}
+
 				return characteristic;
 			}
 			else
 			{
-				var characteristics = new System.Collections.Generic.List<DataCharacteristic>();
+				var characteristics = new List<DataCharacteristic>();
 				while( reader.Read() && reader.TokenType == JsonToken.PropertyName )
 				{
-					var characteristic = new DataCharacteristic();
-					characteristic.Uuid = new Guid( (string) reader.Value );
+					var characteristic = new DataCharacteristic { Uuid = new Guid( (string)reader.Value ) };
 
-					var valueAttributes = new System.Collections.Generic.List<Attribute>();
+					var valueAttributes = new List<Attribute>();
 					if( reader.Read() && reader.TokenType == JsonToken.StartObject )
 					{
 						while( reader.Read() && reader.TokenType == JsonToken.PropertyName )
@@ -78,9 +83,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 							valueAttributes.Add( new Attribute( key, value ) );
 						}
 					}
+
 					characteristic.Value = new DataValue( valueAttributes.ToArray() );
 					characteristics.Add( characteristic );
 				}
+
 				return characteristics.ToArray();
 			}
 		}
@@ -97,7 +104,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 			{
 				foreach( var dataCharacteristic in dataCharacteristics )
 				{
-					if( dataCharacteristic.Value != null && dataCharacteristic.Value.Attributes != null && dataCharacteristic.Value.Attributes.Length > 0 )
+					if( dataCharacteristic.Value?.Attributes != null && dataCharacteristic.Value.Attributes.Length > 0 )
 					{
 						writer.WritePropertyName( dataCharacteristic.Uuid.ToString() );
 						writer.WriteStartObject();
@@ -106,10 +113,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 							writer.WritePropertyName( AttributeKeyCache.Cache.KeyToString( att.Key ) );
 							writer.WriteValue( att.RawValue ?? att.Value );
 						}
+
 						writer.WriteEndObject();
 					}
 				}
 			}
+
 			writer.WriteEndObject();
 		}
 

@@ -1,31 +1,38 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
+	#region usings
+
 	using Newtonsoft.Json;
+	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
+
+	#endregion
 
 	/// <summary>
 	/// Defines an entity's attribute.
 	/// </summary>
-	[JsonConverter( typeof( Converter.AttributeDefinitionConverter ) )]
+	[JsonConverter( typeof( AttributeDefinitionConverter ) )]
 	public class AttributeDefinition : AbstractAttributeDefinition
 	{
-		#region constructor
+		#region constructors
 
 		/// <summary>
-		/// Constructor.
+		/// Initializes a new instance of the <see cref="AttributeDefinition"/> class.
 		/// </summary>
 		public AttributeDefinition()
 		{ }
 
 		/// <summary>
-		/// Constructor.
+		/// Initializes a new instance of the <see cref="AttributeDefinition"/> class.
 		/// </summary>
 		/// <param name="key">The unique key for this attribute</param>
 		/// <param name="description">The attribute description</param>
@@ -36,7 +43,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			: base( key, description, queryEfficient )
 		{
 			Type = type;
-            Length = Type == AttributeType.AlphaNumeric ? length : null;
+			Length = Type == AttributeType.AlphaNumeric ? length : null;
 		}
 
 		#endregion

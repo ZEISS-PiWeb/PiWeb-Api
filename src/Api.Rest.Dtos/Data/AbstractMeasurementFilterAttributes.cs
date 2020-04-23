@@ -1,14 +1,22 @@
 ﻿#region copyright
-// /* * * * * * * * * * * * * * * * * * * * * * * * * */
-// /* Carl Zeiss IMT (IZfM Dresden)                   */
-// /* Softwaresystem PiWeb                            */
-// /* (c) Carl Zeiss 2017                             */
-// /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Carl Zeiss IMT (IZfM Dresden)                   */
+/* Softwaresystem PiWeb                            */
+/* (c) Carl Zeiss 2017                             */
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
+
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
+	#region usings
+
 	using System;
+	using System.Globalization;
 	using System.Linq;
+
+	#endregion
 
 	public abstract class AbstractMeasurementFilterAttributes
 	{
@@ -26,6 +34,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#endregion
 
+		#region constructors
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AbstractMeasurementFilterAttributes"/> class.
+		/// </summary>
 		protected AbstractMeasurementFilterAttributes()
 		{
 			Deep = false;
@@ -33,6 +46,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			OrderBy = new[] { new Order( 4, OrderDirection.Desc, Entity.Measurement ) };
 			AggregationMeasurements = AggregationMeasurementSelection.Default;
 		}
+
+		#endregion
 
 		#region properties
 
@@ -74,13 +89,13 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		/// <summary>
 		/// Specifies a date to select all measurements that where modified after that date. Please note that the system modification date 
-		/// (<see cref="SimpleMeasurement.LastModified"/>) is used and not the time attribute (<see cref="WellKnownKeys.Measurement.Time"/>).
+		/// (<see cref="SimpleMeasurement.LastModified"/>) is used and not the time attribute (<see cref="Definitions.WellKnownKeys.Measurement.Time"/>).
 		/// </summary>
 		public DateTime? FromModificationDate { get; set; }
 
 		/// <summary>
 		/// Specifies a date to select all measurements that where modified before that date. Please note that the system modification date 
-		/// (<see cref="SimpleMeasurement.LastModified"/>) is used and not the time attribute (<see cref="WellKnownKeys.Measurement.Time"/>).
+		/// (<see cref="SimpleMeasurement.LastModified"/>) is used and not the time attribute (<see cref="Definitions.WellKnownKeys.Measurement.Time"/>).
 		/// </summary>
 		public DateTime? ToModificationDate { get; set; }
 
@@ -96,9 +111,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		public abstract ParameterDefinition[] ToParameterDefinition();
 
-		/// <summary>
-		/// Overriden <see cref="System.Object.ToString"/> method.
-		/// </summary>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return string.Join( " & ", ToParameterDefinition().Select( p => p.ToString() ) );
@@ -113,7 +126,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		{
 			var items = value.Split( ' ' );
 
-			var key = ushort.Parse( items[ 0 ], System.Globalization.CultureInfo.InvariantCulture );
+			var key = ushort.Parse( items[ 0 ], CultureInfo.InvariantCulture );
 			var direction = string.Equals( "asc", items[ 1 ], StringComparison.OrdinalIgnoreCase ) ? OrderDirection.Asc : OrderDirection.Desc;
 
 			return new Order( key, direction, Entity.Measurement );

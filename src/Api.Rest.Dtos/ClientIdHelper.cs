@@ -1,16 +1,19 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos
 {
-	#region using
+	#region usings
 
 	using System;
+	using System.IO;
 	using System.Reflection;
 
 	#endregion
@@ -20,7 +23,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 	/// </summary>
 	internal static class ClientIdHelper
 	{
-		#region contants
+		#region members
 
 		/// <summary> Default-Wert für die Client-ID die den einzelnen Webservice-Methoden mitgegeben wird. </summary>
 		public static readonly string ClientId = "PiWeb";
@@ -33,31 +36,32 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 
 		#endregion
 
-		#region constructor
+		#region constructors
 
 		/// <summary>
-		/// Statischer Konstruktor.
+		/// Initializes the <see cref="ClientIdHelper"/> class.
 		/// </summary>
 		static ClientIdHelper()
 		{
 			var entryAssembly = Assembly.GetEntryAssembly() ?? typeof( ClientIdHelper ).Assembly;
 			try
 			{
-				object[] customAttributes = entryAssembly.GetCustomAttributes( typeof( AssemblyProductAttribute ), false );
+				var customAttributes = entryAssembly.GetCustomAttributes( typeof( AssemblyProductAttribute ), false );
 				if( customAttributes.Length > 0 )
 				{
-					ClientId = ( ( AssemblyProductAttribute )customAttributes[ 0 ] ).Product;
+					ClientId = ( (AssemblyProductAttribute)customAttributes[ 0 ] ).Product;
 				}
 
 				if( string.IsNullOrEmpty( ClientId ) )
 				{
-					ClientId = System.IO.Path.GetFileNameWithoutExtension( entryAssembly.Location );
+					ClientId = Path.GetFileNameWithoutExtension( entryAssembly.Location );
 				}
 			}
 			catch
 			{
 				ClientId = "PiWeb";
 			}
+
 			ClientProduct = String.Concat( ClientId, "_", entryAssembly.GetName().Name ).Replace( " ", "_" );
 			ClientVersion = entryAssembly.GetName().Version.ToString().Replace( " ", "_" );
 			ClientId += " " + entryAssembly.GetName().Name + " " + entryAssembly.GetName().Version;

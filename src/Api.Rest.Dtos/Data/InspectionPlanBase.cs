@@ -1,14 +1,16 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
-	#region using
+	#region usings
 
 	using System;
 	using System.Diagnostics;
@@ -22,20 +24,16 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// This is the base class for inspection plan entities (i.e. parts and characteristics). Each inspection plan entity is identified by an <see cref="Uuid"/> 
 	/// (constants, even when renamed) and a unique <see cref="Path"/>.
 	/// </summary>
-	[DebuggerDisplay( "{Path}" )]
+	[DebuggerDisplay( "{" + nameof( Path ) + "}" )]
 	public abstract class InspectionPlanBase : IAttributeItem
 	{
-		#region contants
-
-		private static readonly Attribute[] EmptyAttributeList = new Attribute[0];
-
-		#endregion
-
 		#region members
+
+		private static readonly Attribute[] EmptyAttributeList = new Attribute[ 0 ];
 
 		[JsonProperty( "attributes" ), JsonConverter( typeof( AttributeArrayConverter ) )]
 		private Attribute[] _Attributes;
-		
+
 		[JsonProperty( "path" ), JsonConverter( typeof( PathInformationConverter ) )]
 		private PathInformation _Path;
 
@@ -50,17 +48,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		{
 			get => this.GetAttributeValue( key );
 			set => this.SetAttribute( key, value );
-		}
-
-		/// <summary>
-		/// Gets or sets the attributes of this inspection plan entity.
-		/// </summary>
-		[JsonIgnore]
-		public Attribute[] Attributes
-		{
-			[NotNull]
-			get { return _Attributes ?? EmptyAttributeList; }
-			set { _Attributes = value; }
 		}
 
 		/// <summary>
@@ -79,12 +66,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets the path of this inspection plan entity.
 		/// </summary>
-		[JsonIgnore ]
+		[JsonIgnore]
 		public PathInformation Path
 		{
-			[NotNull]
-			get { return _Path ?? PathInformation.Root; }
-			set { _Path = value; }
+			[NotNull] get => _Path ?? PathInformation.Root;
+			set => _Path = value;
 		}
 
 		/// <summary>
@@ -105,12 +91,24 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#region methods
 
-		/// <summary>
-		/// Overriden <see cref="System.Object.ToString"/> method.
-		/// </summary>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return Version + " - " + Path;
+		}
+
+		#endregion
+
+		#region interface IAttributeItem
+
+		/// <summary>
+		/// Gets or sets the attributes of this inspection plan entity.
+		/// </summary>
+		[JsonIgnore]
+		public Attribute[] Attributes
+		{
+			[NotNull] get => _Attributes ?? EmptyAttributeList;
+			set => _Attributes = value;
 		}
 
 		#endregion

@@ -1,9 +1,11 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos
@@ -13,10 +15,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 	/// </summary>
 	public class ParameterDefinition
 	{
-		#region constructor
+		#region constructors
 
 		/// <summary>
-		/// Constructor.
+		/// Initializes a new instance of the <see cref="ParameterDefinition"/> class.
 		/// </summary>
 		private ParameterDefinition( string name, string value )
 		{
@@ -31,12 +33,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 		/// <summary>
 		/// Returns the name of the parameter.
 		/// </summary>
-		public string Name { get; private set; }
+		public string Name { get; }
 
 		/// <summary>
 		/// Returns the value of the parameter.
 		/// </summary>
-		public string Value { get; private set; }
+		public string Value { get; }
 
 		#endregion
 
@@ -50,12 +52,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 			return new ParameterDefinition( name, value );
 		}
 
-		/// <summary>
-		/// Overridden <see cref="object.ToString"/> method.
-		/// </summary>
+		/// <inheritdoc />
 		public override string ToString()
 		{
-			return string.Format( "{0}={1}", Name, Value );
+			return $"{Name}={Value}";
 		}
 
 		#endregion

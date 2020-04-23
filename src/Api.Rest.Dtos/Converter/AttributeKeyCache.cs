@@ -1,9 +1,11 @@
 ﻿#region copyright
-// /* * * * * * * * * * * * * * * * * * * * * * * * * */
-// /* Carl Zeiss IMT (IZM Dresden)                    */
-// /* Softwaresystem PiWeb                            */
-// /* (c) Carl Zeiss 2016                             */
-// /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Carl Zeiss IMT (IZM Dresden)                    */
+/* Softwaresystem PiWeb                            */
+/* (c) Carl Zeiss 2016                             */
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
@@ -12,6 +14,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Runtime.CompilerServices;
 
 	#endregion
@@ -19,9 +22,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 	public class AttributeKeyCache
 	{
 		#region members
-		
-		[ThreadStatic]
-		private static AttributeKeyCache _Cache;
+
+		[ThreadStatic] private static AttributeKeyCache _Cache;
 
 		private readonly Dictionary<string, ushort> _StringToKey = new Dictionary<string, ushort>();
 		private readonly Dictionary<ushort, string> _KeyToString = new Dictionary<ushort, string>();
@@ -39,21 +41,19 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public ushort StringToKey( string key )
 		{
-			ushort result;
-			if( _StringToKey.TryGetValue( key, out result ) )
+			if( _StringToKey.TryGetValue( key, out var result ) )
 				return result;
 
-			return _StringToKey[ key ] = ushort.Parse( key, System.Globalization.CultureInfo.InvariantCulture );
+			return _StringToKey[ key ] = ushort.Parse( key, CultureInfo.InvariantCulture );
 		}
 
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public string KeyToString( ushort key )
 		{
-			string result;
-			if( _KeyToString.TryGetValue( key, out result ) )
+			if( _KeyToString.TryGetValue( key, out var result ) )
 				return result;
 
-			return _KeyToString[ key ] = key.ToString( System.Globalization.NumberFormatInfo.InvariantInfo );
+			return _KeyToString[ key ] = key.ToString( NumberFormatInfo.InvariantInfo );
 		}
 
 		#endregion

@@ -10,20 +10,28 @@
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 {
-	#region using
+	#region usings
 
 	using System;
+	using JetBrains.Annotations;
 
 	#endregion
 
 	[Serializable]
 	public class RawData : RawDataInformation
 	{
-		#region Constructor
+		#region constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RawData"/> class.
+		/// </summary>
 		public RawData() { }
 
-		public RawData( RawDataInformation info, byte[] data )
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RawData"/> class.
+		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="info"/> is <see langword="null" />.</exception>
+		public RawData( [NotNull] RawDataInformation info, byte[] data )
 			: base( info )
 		{
 			Data = data;
@@ -31,7 +39,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 
 		#endregion
 
-		#region Properties
+		#region properties
 
 		public byte[] Data { get; set; }
 

@@ -1,14 +1,16 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 {
-	#region using
+	#region usings
 
 	using Newtonsoft.Json;
 
@@ -41,19 +43,16 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 
 		[JsonProperty( "requestHeaderSize" )]
 		public int RequestHeaderSize { get; set; }
-	
 
 		#endregion
 
 		#region methods
 
-		/// <summary>
-		/// Overridden <see cref="System.Object.ToString"/> method.
-		/// </summary>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			if( Version == null )
-				return "";
+				return string.Empty;
 
 			var result = "Version " + Version;
 			if( !string.IsNullOrEmpty( VersionWsdlMajor ) )

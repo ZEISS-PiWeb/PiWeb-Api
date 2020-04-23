@@ -1,14 +1,16 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
-	#region using
+	#region usings
 
 	using Newtonsoft.Json;
 
@@ -19,34 +21,37 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// </summary>
 	public class InspectionPlanPart : SimplePart
 	{
-        #region constructors
-
-        /// <summary>
-        /// This constructor is required for the JSON deserializer to be able
-        /// to identify concrete classes to use when deserializing <see cref="History"/> property.
-        /// </summary>
-        [ JsonConstructor ]
-	    public InspectionPlanPart( InspectionPlanPart[] history )
-	    {
-	        History = history;
-	    }
+		#region constructors
 
 		/// <summary>
-		/// Constructor.
+		/// Initializes a new instance of the <see cref="InspectionPlanPart"/> class.
+		/// </summary>
+		/// <remarks>
+		/// This constructor is required for the JSON deserializer to be able
+		/// to identify concrete classes to use when deserializing <see cref="History"/> property.
+		/// </remarks>
+		[JsonConstructor]
+		public InspectionPlanPart( InspectionPlanPart[] history )
+		{
+			History = history;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="InspectionPlanPart"/> class.
 		/// </summary>
 		public InspectionPlanPart() { }
 
-        #endregion
+		#endregion
 
-        #region properties
+		#region properties
 
-        /// <summary>
-        /// Gets or sets the version history for this inspection plan part. This property will be populated only 
-        /// when the inspection plan search is performed with the versioning flag set. When creating new parts,
-        /// this information will be ignored by the server.
-        /// </summary>
+		/// <summary>
+		/// Gets or sets the version history for this inspection plan part. This property will be populated only 
+		/// when the inspection plan search is performed with the versioning flag set. When creating new parts,
+		/// this information will be ignored by the server.
+		/// </summary>
 		[JsonProperty( "history" )]
-        public InspectionPlanBase[] History { get; set; }
+		public InspectionPlanBase[] History { get; set; }
 
 		#endregion
 	}

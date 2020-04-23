@@ -1,14 +1,16 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos
 {
-	#region using
+	#region usings
 
 	using System;
 	using System.Collections.Generic;
@@ -26,10 +28,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 		#region constants
 
 		/// <summary>Start identifier for a list inside a HTTP query.</summary>
-		public const string QueryListStart = "{";
+		private const string QueryListStart = "{";
 
 		/// <summary>End identifier for a list inside a HTTP query.</summary>
-		public const string QueryListStop = "}";
+		private const string QueryListStop = "}";
 
 		#endregion
 
@@ -42,9 +44,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 		{
 			if( value.StartsWith( QueryListStart ) && value.EndsWith( QueryListStop ) )
 				value = value.Substring( 1, value.Length - 2 );
-			
+
 			if( string.IsNullOrEmpty( value ) )
-				return new ushort[0];
+				return new ushort[ 0 ];
 			try
 			{
 				return value.Split( ',' ).Select( s => ushort.Parse( s, CultureInfo.InvariantCulture ) ).ToArray();
@@ -92,9 +94,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 
 			return ToListString( value.Select( v => v.ToString( format, formatProvider ) ) );
 		}
-		
+
 		/// <summary>Creates a list string from <paramref name="list"/>.</summary>
-		internal static string ToListString( IEnumerable<string> list )
+		private static string ToListString( IEnumerable<string> list )
 		{
 			var listString = string.Join( ",", list );
 			if( string.IsNullOrEmpty( listString ) )

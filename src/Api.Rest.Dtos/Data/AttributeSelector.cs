@@ -1,9 +1,11 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
@@ -16,7 +18,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		#region constructors
 
 		/// <summary>
-		/// Constructor.
+		/// Initializes a new instance of the <see cref="AttributeSelector"/> class.
 		/// </summary>
 		public AttributeSelector()
 		{
@@ -24,7 +26,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		}
 
 		/// <summary>
-		/// Constructor. Initializes a new attribute selector for a specific <see cref="AllAttributeSelection"/>.
+		/// Initializes a new instance of the <see cref="AttributeSelector"/> class.
 		/// </summary>
 		public AttributeSelector( AllAttributeSelection allAttributes )
 		{
@@ -32,7 +34,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		}
 
 		/// <summary>
-		/// Constructor. Initializes a new attribute selector for a specific set of attributes <code>attributes</code>.
+		/// Initializes a new instance of the <see cref="AttributeSelector"/> class.
 		/// </summary>
 		public AttributeSelector( ushort[] attributes )
 		{

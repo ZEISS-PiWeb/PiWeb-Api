@@ -1,39 +1,39 @@
 ﻿#region copyright
-// /* * * * * * * * * * * * * * * * * * * * * * * * * */
-// /* Carl Zeiss IMT (IZM Dresden)                    */
-// /* Softwaresystem PiWeb                            */
-// /* (c) Carl Zeiss 2016                             */
-// /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Carl Zeiss IMT (IZM Dresden)                    */
+/* Softwaresystem PiWeb                            */
+/* (c) Carl Zeiss 2016                             */
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
+
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 {
 	#region usings
 
 	using System;
+	using Newtonsoft.Json;
 	using Attribute = Zeiss.PiWeb.Api.Rest.Dtos.Data.Attribute;
 
 	#endregion
 
-	public class AttributeConverter : Newtonsoft.Json.JsonConverter
+	public class AttributeConverter : JsonConverter
 	{
 		#region methods
 
-		/// <summary>
-		/// Determines whether this instance can convert the specified object type.
-		/// </summary>
+		/// <inheritdoc />
 		public override bool CanConvert( Type objectType )
 		{
 			return typeof( Attribute ) == objectType;
 		}
 
-		/// <summary>
-		/// Reads the JSON representation of the object.
-		/// </summary>
-		public override object ReadJson( Newtonsoft.Json.JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer )
+		/// <inheritdoc />
+		public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer )
 		{
 			var result = new Attribute();
 
-			if( reader.Read() && reader.TokenType == Newtonsoft.Json.JsonToken.PropertyName )
+			if( reader.Read() && reader.TokenType == JsonToken.PropertyName )
 			{
 				var key = AttributeKeyCache.Cache.StringToKey( reader.Value.ToString() );
 				var value = reader.ReadAsString();
@@ -44,10 +44,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 			return result;
 		}
 
-		/// <summary>
-		/// Writes the JSON representation of the object.
-		/// </summary>
-		public override void WriteJson( Newtonsoft.Json.JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer )
+		/// <inheritdoc />
+		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer )
 		{
 			writer.WriteStartObject();
 

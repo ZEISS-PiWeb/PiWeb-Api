@@ -1,16 +1,19 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
-	#region using
+	#region usings
 
 	using System;
+	using System.Data.SqlTypes;
 	using System.Diagnostics;
 	using System.Xml;
 	using JetBrains.Annotations;
@@ -27,15 +30,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	[DebuggerDisplay( "Measurement (Uuid={Uuid} Time={Time})" )]
 	public class SimpleMeasurement : IAttributeItem
 	{
-		#region contants
+		#region members
 
 		private static readonly Attribute[] EmptyAttributeList = new Attribute[ 0 ];
 
-		#endregion
-		
-		#region members
-
-		private static readonly DateTime MinimumValidDatabaseDateTime = DateTime.SpecifyKind( System.Data.SqlTypes.SqlDateTime.MinValue.Value, DateTimeKind.Utc );
+		private static readonly DateTime MinimumValidDatabaseDateTime = DateTime.SpecifyKind( SqlDateTime.MinValue.Value, DateTimeKind.Utc );
 
 		private Attribute[] _Attributes = EmptyAttributeList;
 		private DateTime? _CachedTimeValue;
@@ -72,22 +71,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		public DateTime Created { get; set; }
 
 		/// <summary>
-		/// Gets or sets all attributes that belong to this measurement.
-		/// </summary>
-		[JsonProperty( "attributes" ), JsonConverter( typeof( AttributeArrayConverter ) )]
-		public Attribute[] Attributes
-		{
-			[NotNull]
-			get { return _Attributes; }
-			set
-			{
-				_Attributes = value ?? EmptyAttributeList;
-				_CachedTimeValue = null;
-				_HasCachedTime = false;
-			}
-		}
-
-		/// <summary>
 		/// Gets or sets the status information for this measurement. This status information can be requested when 
 		/// performing a measurement search using one of the values from <see cref="MeasurementStatistics"/>.
 		/// </summary>
@@ -104,7 +87,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			[DebuggerStepThrough]
 			get
 			{
-				if( _HasCachedTime ) 
+				if( _HasCachedTime )
 					return _CachedTimeValue;
 
 				try
@@ -152,12 +135,27 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#region methods
 
-		/// <summary>
-		/// Overridden <see cref="System.Object.ToString"/> method.
-		/// </summary>
+		/// <inheritdoc />
 		public override string ToString()
 		{
-			return string.Format( "'{0}' [{1}]", Time, Uuid );
+			return $"'{Time}' [{Uuid}]";
+		}
+
+		#endregion
+
+		#region interface IAttributeItem
+
+		/// <inheritdoc />
+		[JsonProperty( "attributes" ), JsonConverter( typeof( AttributeArrayConverter ) )]
+		public Attribute[] Attributes
+		{
+			[NotNull] get => _Attributes;
+			set
+			{
+				_Attributes = value ?? EmptyAttributeList;
+				_CachedTimeValue = null;
+				_HasCachedTime = false;
+			}
 		}
 
 		#endregion

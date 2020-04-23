@@ -10,7 +10,7 @@
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
-	#region using
+	#region usings
 
 	using System;
 	using System.Collections;
@@ -33,17 +33,17 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		#region constructors
 
 		/// <summary>
-		/// Constructor.
+		/// Initializes a new instance of the <see cref="CatalogCollection"/> class.
 		/// </summary>
 		public CatalogCollection()
 		{ }
 
 		/// <summary>
-		/// Constructor.
+		/// Initializes a new instance of the <see cref="CatalogCollection"/> class.
 		/// </summary>
 		public CatalogCollection( IEnumerable<Catalog> catalogs )
 		{
-			foreach( var cat in catalogs ?? new Catalog[0] )
+			foreach( var cat in catalogs ?? new Catalog[ 0 ] )
 			{
 				_Catalogs.Add( cat.Uuid, cat );
 			}
@@ -56,10 +56,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Returns the number of catalogs in this list.
 		/// </summary>
-		public int Count
-		{
-			get { return _Catalogs.Count; }
-		}
+		public int Count => _Catalogs.Count;
 
 		/// <summary>
 		/// Returns the catalog with uuid <code>catalogUuid</code>.
@@ -68,9 +65,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		{
 			get
 			{
-				Catalog result;
-				_Catalogs.TryGetValue( catalogUuid, out result );
-
+				_Catalogs.TryGetValue( catalogUuid, out var result );
 				return result;
 			}
 		}
@@ -83,7 +78,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			get
 			{
 				var catalog = this[ catalogUuid ];
-				return catalog == null ? null : catalog[ catalogEntryIndex ];
+				return catalog?[ catalogEntryIndex ];
 			}
 		}
 
@@ -97,10 +92,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		{
 			get
 			{
-				short index;
-				if( !short.TryParse( catalogEntryIndex, NumberStyles.Integer, CultureInfo.InvariantCulture, out index ) )
-					return null;
-				return this[ catalogUuid, index ];
+				return !short.TryParse( catalogEntryIndex, NumberStyles.Integer, CultureInfo.InvariantCulture, out var index ) ? null : this[ catalogUuid, index ];
 			}
 		}
 
@@ -108,14 +100,13 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#region interface IEnumerable<Catalog>
 
-		/// <summary>
-		/// Returns an enumerator for enumerating all catalogs in this collection.
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerator<Catalog> GetEnumerator()
 		{
 			return _Catalogs.Values.GetEnumerator();
 		}
 
+		/// <inheritdoc />
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();

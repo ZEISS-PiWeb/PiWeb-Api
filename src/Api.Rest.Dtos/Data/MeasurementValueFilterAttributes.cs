@@ -1,17 +1,20 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
-	#region using
+	#region usings
 
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Linq;
 	using System.Xml;
 	using JetBrains.Annotations;
@@ -38,7 +41,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		#region constructors
 
 		/// <summary>
-		/// Constructor
+		/// Initializes a new instance of the <see cref="MeasurementValueFilterAttributes"/> class.
 		/// </summary>
 		public MeasurementValueFilterAttributes()
 		{
@@ -134,11 +137,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			};
 
 			var result = new MeasurementValueFilterAttributes();
-			foreach( var item in items )
+			foreach( var (key, value) in items )
 			{
-				var key = item.Item1;
-				var value = item.Item2;
-
 				if( string.IsNullOrEmpty( value ) )
 					continue;
 
@@ -159,7 +159,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 							result.CharacteristicsUuidList = RestClientHelper.ConvertStringToGuidList( value );
 							break;
 						case LimitResultParamName:
-							result.LimitResult = short.Parse( value, System.Globalization.CultureInfo.InvariantCulture );
+							result.LimitResult = short.Parse( value, CultureInfo.InvariantCulture );
 							break;
 						case RequestedValueAttributesParamName:
 							result.RequestedValueAttributes = new AttributeSelector( RestClientHelper.ConvertStringToUInt16List( value ) );
@@ -168,7 +168,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 							result.RequestedMeasurementAttributes = new AttributeSelector( RestClientHelper.ConvertStringToUInt16List( value ) );
 							break;
 						case OrderByParamName:
-							result.OrderBy = value.Split( ',' ).Select( MeasurementFilterAttributes.ParseOrderBy ).ToArray();
+							result.OrderBy = value.Split( ',' ).Select( ParseOrderBy ).ToArray();
 							break;
 						case SearchConditionParamName:
 							result.SearchCondition = SearchConditionParser.Parse( value );
@@ -195,25 +195,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				}
 				catch( Exception ex )
 				{
-					throw new InvalidOperationException( string.Format( "Invalid filter value '{0}' for parameter '{1}'. The can be specified via url parameter in the form of 'key=value'. The following keys are valid: {2}",
-						value, key,
-						"partUuids = [list of part uuids]\r\n" +
-						"deep = [True|False]\r\n" +
-						"limitResult = [short]\r\n" +
-						"measurementUuids = [list of measurement uuids]\r\n" +
-						"characteristicUuids = [list of characteristic uuids]\r\n" +
-						"valueAttributes = [attribute keys csv|Empty for all attributes]\r\n" +
-						"measurementAttributes = [attribute keys csv|Empty for all attributes]\r\n" +
-						"orderBy:[ushort asc|desc, ushort asc|desc, ...]\r\n" +
-						"searchCondition:[search filter string]\r\n" +
-						"aggregation:[Measurements|AggregationMeasurements|Default|All]\r\n" +
-						"mergeAttributes:[list of measurement attributes]\r\n" +
-						"mergeCondition: [None|MeasurementsInAtLeastTwoParts|MeasurementsInAllParts]\r\n" +
-						"mergeMasterPart: [part uuid]\r\n" +
-						"fromModificationDate:[Date]\r\n" +
-						"toModificationDate:[Date]" ), ex );
+					throw new InvalidOperationException( $"Invalid filter value '{value}' for parameter '{key}'. The can be specified via url parameter in the form of 'key=value'. The following keys are valid: {"partUuids = [list of part uuids]\r\n" + "deep = [True|False]\r\n" + "limitResult = [short]\r\n" + "measurementUuids = [list of measurement uuids]\r\n" + "characteristicUuids = [list of characteristic uuids]\r\n" + "valueAttributes = [attribute keys csv|Empty for all attributes]\r\n" + "measurementAttributes = [attribute keys csv|Empty for all attributes]\r\n" + "orderBy:[ushort asc|desc, ushort asc|desc, ...]\r\n" + "searchCondition:[search filter string]\r\n" + "aggregation:[Measurements|AggregationMeasurements|Default|All]\r\n" + "mergeAttributes:[list of measurement attributes]\r\n" + "mergeCondition: [None|MeasurementsInAtLeastTwoParts|MeasurementsInAllParts]\r\n" + "mergeMasterPart: [part uuid]\r\n" + "fromModificationDate:[Date]\r\n" + "toModificationDate:[Date]"}", ex );
 				}
 			}
+
 			return result;
 		}
 
@@ -242,9 +227,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			};
 		}
 
-		/// <summary>
-		/// Creates a <see cref="ParameterDefinition"/> list that represents this filter.
-		/// </summary>
+		/// <inheritdoc />
 		public override ParameterDefinition[] ToParameterDefinition()
 		{
 			var result = new List<ParameterDefinition>();
@@ -271,7 +254,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				result.Add( ParameterDefinition.Create( RequestedMeasurementAttributesParamName, RestClientHelper.ConvertUshortArrayToString( RequestedMeasurementAttributes.Attributes ) ) );
 
 			if( OrderBy != null && OrderBy.Length > 0 )
-				result.Add( ParameterDefinition.Create( OrderByParamName, MeasurementFilterAttributes.OrderByToString( OrderBy ) ) );
+				result.Add( ParameterDefinition.Create( OrderByParamName, OrderByToString( OrderBy ) ) );
 
 			if( SearchCondition != null )
 				result.Add( ParameterDefinition.Create( SearchConditionParamName, SearchConditionParser.GenericConditionToString( SearchCondition ) ) );

@@ -1,9 +1,11 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
@@ -13,9 +15,13 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// </summary>
 	public interface IAttributeItem
 	{
+		#region properties
+
 		/// <summary>
 		/// Gibt alle Attribute als Feld zurück.
 		/// </summary>
 		Attribute[] Attributes { get; set; }
+
+		#endregion
 	}
 }

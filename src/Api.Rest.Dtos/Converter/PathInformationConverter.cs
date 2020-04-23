@@ -1,14 +1,16 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 {
-	#region using
+	#region usings
 
 	using System;
 	using Newtonsoft.Json;
@@ -21,7 +23,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 	/// </summary>
 	public class PathInformationConverter : JsonConverter
 	{
-		#region members
+		#region methods
 
 		/// <summary>
 		/// Determines whether this instance can convert the specified object type.
@@ -40,6 +42,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 			{
 				return PathHelper.RoundtripString2PathInformation( (string)reader.Value );
 			}
+
 			return null;
 		}
 

@@ -1,12 +1,10 @@
 ﻿#region copyright
 
-// 
-// /* * * * * * * * * * * * * * * * * * * * * * * * * */
-// /* Carl Zeiss IMT (IZfM Dresden)                   */
-// /* Softwaresystem PiWeb                            */
-// /* (c) Carl Zeiss 2018                             */
-// /* * * * * * * * * * * * * * * * * * * * * * * * * */
-// 
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Carl Zeiss IMT (IZfM Dresden)                   */
+/* Softwaresystem PiWeb                            */
+/* (c) Carl Zeiss 2018                             */
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #endregion
 

@@ -1,14 +1,16 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
-	#region using
+	#region usings
 
 	using Newtonsoft.Json;
 
@@ -19,22 +21,25 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// </summary>
 	public class InspectionPlanCharacteristic : InspectionPlanBase
 	{
-        #region constructors
-
-	    /// <summary>
-	    /// This constructor is required for the JSON deserializer to be able
-	    /// to identify concrete classes to use when deserializing <see cref="History"/> property.
-	    /// </summary>
-	    [ JsonConstructor ]
-	    public InspectionPlanCharacteristic( InspectionPlanCharacteristic[] history )
-	    {
-	        History = history;
-	    }
+		#region constructors
 
 		/// <summary>
-		/// Default-Constructor.
+		/// Initializes a new instance of the <see cref="InspectionPlanCharacteristic"/> class.
 		/// </summary>
-	    public InspectionPlanCharacteristic() { }
+		/// <remarks>
+		/// This constructor is required for the JSON deserializer to be able
+		/// to identify concrete classes to use when deserializing <see cref="History"/> property.
+		/// </remarks>
+		[JsonConstructor]
+		public InspectionPlanCharacteristic( InspectionPlanCharacteristic[] history )
+		{
+			History = history;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="InspectionPlanCharacteristic"/> class.
+		/// </summary>
+		public InspectionPlanCharacteristic() { }
 
 		#endregion
 

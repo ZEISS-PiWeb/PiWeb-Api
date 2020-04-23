@@ -10,25 +10,21 @@
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 {
-	#region using
+	#region usings
 
 	using System;
 	using System.Collections.Generic;
+	using JetBrains.Annotations;
 
 	#endregion
 
-	/// <remarks/>
 	[Serializable]
 	public class RawDataListParameters
 	{
-		#region Membervariablen
-
-		#endregion
-
-		#region Constructor
+		#region constructors
 
 		/// <summary>
-		/// Konstruktor
+		/// Initializes a new instance of the <see cref="RawDataListParameters"/> class.
 		/// </summary>
 		public RawDataListParameters()
 		{
@@ -36,26 +32,31 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		}
 
 		/// <summary>
-		/// Konstruktor
+		///  Initializes a new instance of the <see cref="RawDataListParameters"/> class.
 		/// </summary>
-		public RawDataListParameters( RawDataTargetEntity entity )
+		public RawDataListParameters( [NotNull] RawDataTargetEntity entity )
 		{
+			if( entity == null ) throw new ArgumentNullException( nameof( entity ) );
+
 			ClientId = ClientIdHelper.ClientId;
-			Targets = new [] { entity };
+			Targets = new[] { entity };
 		}
 
 		/// <summary>
-		/// Konstruktor
+		///  Initializes a new instance of the <see cref="RawDataListParameters"/> class.
 		/// </summary>
-		public RawDataListParameters( IEnumerable<RawDataTargetEntity> entities )
+		/// <exception cref="ArgumentNullException"><paramref name="entities"/> is <see langword="null" />.</exception>
+		public RawDataListParameters( [NotNull] IEnumerable<RawDataTargetEntity> entities )
 		{
+			if( entities == null ) throw new ArgumentNullException( nameof( entities ) );
+
 			ClientId = ClientIdHelper.ClientId;
 			Targets = new List<RawDataTargetEntity>( entities ).ToArray();
 		}
 
 		#endregion
 
-		#region Properties
+		#region properties
 
 		public RawDataTargetEntity[] Targets { get; set; }
 

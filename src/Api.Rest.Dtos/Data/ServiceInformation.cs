@@ -1,14 +1,16 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
-	#region using
+	#region usings
 
 	using System;
 	using Newtonsoft.Json;
@@ -21,6 +23,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	public class ServiceInformation
 	{
 		#region properties
+
+		/// <summary>
+		/// Gets or sets of the <see cref="Edition"/> contains a values.
+		/// </summary>
+		public bool EditionSpecified { get; set; }
 
 		/// <summary>
 		/// Gets or sets the server name.
@@ -45,11 +52,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		[JsonProperty( "edition" )]
 		public string Edition { get; set; }
-
-		/// <summary>
-		/// Gets or sets of the <see cref="Edition"/> contains a values.
-		/// </summary>
-		public bool EditionSpecified;
 
 		/// <summary>
 		/// Gets or sets the web service major interface version.
@@ -129,7 +131,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		[JsonIgnore]
 		public Version WsdlVersion
 		{
-			get 
+			get
 			{
 				if( !string.IsNullOrEmpty( VersionWsdlMajor ) && !string.IsNullOrEmpty( VersionWsdlMinor ) )
 					return new Version( VersionWsdlMajor + "." + VersionWsdlMinor );
@@ -145,9 +147,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#region methods
 
-		/// <summary>
-		/// Overridden <see cref="System.Object.ToString"/> method.
-		/// </summary>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			if( Version == null )
