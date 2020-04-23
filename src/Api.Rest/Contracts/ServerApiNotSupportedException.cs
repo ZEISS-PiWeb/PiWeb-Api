@@ -29,7 +29,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		{ }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ExportException" /> class.
+		/// Initializes a new instance of the <see cref="ServerApiNotSupportedException" /> class.
 		/// </summary>
 		/// <param name="innerException">
 		/// The exception that is the cause of the current exception, or a null reference (Nothing in Visual Basic) if no
