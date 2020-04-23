@@ -62,6 +62,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			{
 				return false;
 			}
+
 			return true;
 		}
 
@@ -95,6 +96,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				result.Append( field.FieldName ).Append( InverseOperations[ field.Operation ] );
 				result.Append( "[" ).Append( field.Value ).Append( "]" );
 			}
+
 			return result.ToString();
 		}
 
@@ -123,10 +125,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 						first = i;
 						result = item;
 					}
+
 					if( i == first )
 					{
-					    result = ( result?.Length ?? 0 ) > ( item?.Length ?? 0 ) ? result : item;
-                    }
+						result = ( result?.Length ?? 0 ) > ( item?.Length ?? 0 ) ? result : item;
+					}
 				}
 				else
 				{
@@ -134,6 +137,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 					result = item;
 				}
 			}
+
 			return result;
 		}
 
@@ -152,7 +156,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 				while( searchIndex < searchFilter.Length )
 				{
-					var condition = default ( GenericSearchValueCondition );
 					searchFilter = searchFilter.Substring( searchIndex ).Trim();
 
 					// --- AND ---
@@ -173,8 +176,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 					markerIndex = searchIndex + opStr.Length;
 					var token = searchFilter.Substring( 0, searchIndex );
 
-					ushort key;
-					if( !ushort.TryParse( token, out key ) )
+					GenericSearchValueCondition condition;
+					if( !ushort.TryParse( token, out var key ) )
 					{
 						var fieldCondition = new GenericSearchFieldCondition { FieldName = token };
 						condition = fieldCondition;
@@ -186,8 +189,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 					}
 
 					// --- Operation ---
-					Operation op;
-					if( !Operations.TryGetValue( opStr, out op ) )
+					if( !Operations.TryGetValue( opStr, out var op ) )
 						throw new InvalidOperationException( string.Format( ResourceManager.GetString( "ParsingError.InvalidOperator" ), token ) );
 					condition.Operation = op;
 
@@ -195,7 +197,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 					searchIndex = searchFilter.IndexOf( '[', markerIndex );
 					if( searchIndex == -1 )
 						throw new InvalidOperationException( string.Format( ResourceManager.GetString( "ParsingError.NoValues" ), searchFilter ) );
-					if( searchFilter.Substring( markerIndex, searchIndex - markerIndex ).Trim() != String.Empty )
+					if( searchFilter.Substring( markerIndex, searchIndex - markerIndex ).Trim() != string.Empty )
 						throw new InvalidOperationException( string.Format( ResourceManager.GetString( "ParsingError.Quotation" ), condition.Operation ) );
 
 					markerIndex = searchIndex + 1;
@@ -214,8 +216,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 					++searchIndex;
 				}
+
 				return conditions.Count == 1 ? conditions[ 0 ] : new GenericSearchAnd { Conditions = conditions.ToArray() };
 			}
+
 			return null;
 		}
 

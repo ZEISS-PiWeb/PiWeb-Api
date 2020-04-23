@@ -1,41 +1,40 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
-	#region using
+	#region usings
 
 	using System;
 
 	#endregion
 
 	/// <summary>
-	/// This class represents a single part of an inspection plan path. A path part has a <see cref="Value"/> and can either specify a characteristic or a part (<see cref="Type"/>).
+	/// This class represents a single part of an inspection plan path. A path part has a <see cref="Value"/> and can
+	/// either specify a characteristic or a part (<see cref="Type"/>).
 	/// Notice that comparision of path elements is case insensitiv per default.
 	/// </summary>
 	/// <remarks>This class is immutable!</remarks>
 	public sealed class PathElement
 	{
-		#region constants
+		#region members
 
 		/// <summary>
 		/// Constant value for an empty part.
 		/// </summary>
-		public static readonly PathElement EmptyPart = PathElement.Part( "" );
+		public static readonly PathElement EmptyPart = Part( "" );
 
 		/// <summary>
 		/// Constant value for an empty characteristic.
 		/// </summary>
-		public static readonly PathElement EmptyCharacteristic = PathElement.Char( "" );
-
-		#endregion
-
-		#region members
+		public static readonly PathElement EmptyCharacteristic = Char( "" );
 
 		private int _HashCode = -1;
 
@@ -44,7 +43,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		#region constructors
 
 		/// <summary>
-		/// Constructor.
+		/// Initializes a new instance of the <see cref="PathElement"/> class.
 		/// </summary>
 		public PathElement( InspectionPlanEntity type = InspectionPlanEntity.Part, string value = "" )
 		{
@@ -107,18 +106,14 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			return !Equals( p1, p2 );
 		}
 
-		/// <summary>
-		/// Overridden <see cref="System.Object.Equals(object)"/> method. Path element are compared case insensitive.
-		/// </summary>
+		/// <inheritdoc />
 		public override bool Equals( object obj )
 		{
 			var other = obj as PathElement;
 			return !ReferenceEquals( other, null ) && Type == other.Type && GetHashCode() == other.GetHashCode() && string.Equals( Value, other.Value, StringComparison.OrdinalIgnoreCase );
 		}
 
-		/// <summary>
-		/// Overrridden <see cref="System.Object.GetHashCode"/> method.
-		/// </summary>
+		/// <inheritdoc />
 		public override int GetHashCode()
 		{
 			// ReSharper disable NonReadonlyFieldInGetHashCode
@@ -128,9 +123,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			// ReSharper restore NonReadonlyFieldInGetHashCode
 		}
 
-		/// <summary>
-		/// Overrridden <see cref="System.Object.ToString"/> method.
-		/// </summary>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return Value;

@@ -31,6 +31,9 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter.Conditions
 
 		#region constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="IntegerListFilterCondition"/> class.
+		/// </summary>
 		/// <exception cref="ArgumentNullException"><paramref name="values"/> is <see langword="null" />.</exception>
 		public IntegerListFilterCondition( IntegerAttributes attribute, ListOperation operation, [NotNull] IEnumerable<int?> values )
 		{
@@ -46,6 +49,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter.Conditions
 
 		#region methods
 
+		/// <inheritdoc />
 		public override IFilterTree BuildFilterTree()
 		{
 			var attributeName = FilterHelper.GetAttributeName( _Attribute );

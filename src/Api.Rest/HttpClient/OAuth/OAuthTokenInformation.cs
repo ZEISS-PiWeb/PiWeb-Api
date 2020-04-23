@@ -1,14 +1,16 @@
 ﻿#region Copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 {
-	#region using
+	#region usings
 
 	using Newtonsoft.Json;
 

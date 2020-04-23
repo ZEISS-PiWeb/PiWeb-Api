@@ -30,6 +30,9 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter.Conditions
 
 		#region constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DateTimeCompareFilterCondition"/> class.
+		/// </summary>
 		public DateTimeCompareFilterCondition( DateTimeAttributes attribute, CompareOperation operation, DateTime? value )
 		{
 			_Attribute = attribute;
@@ -41,6 +44,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter.Conditions
 
 		#region methods
 
+		/// <inheritdoc />
 		public override IFilterTree BuildFilterTree()
 		{
 			string valueString = null;

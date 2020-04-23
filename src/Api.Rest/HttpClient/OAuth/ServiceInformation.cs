@@ -1,14 +1,16 @@
 ﻿#region Copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 {
-	#region using
+	#region usings
 
 	using System;
 	using Newtonsoft.Json;
@@ -38,10 +40,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 		/// Convenience property for <see cref="VersionWsdlMajor"/> and <see cref="VersionWsdlMinor"/>.
 		/// </summary>
 		[JsonIgnore]
-		public Version VersionWsdl
-		{
-			get { return new Version( string.Format( "{0}.{1}", string.IsNullOrEmpty( VersionWsdlMajor ) ? "0" : VersionWsdlMajor, string.IsNullOrEmpty( VersionWsdlMinor ) ? "0" : VersionWsdlMinor ) ); }
-		}
+		public Version VersionWsdl => new Version( $"{( string.IsNullOrEmpty( VersionWsdlMajor ) ? "0" : VersionWsdlMajor )}.{( string.IsNullOrEmpty( VersionWsdlMinor ) ? "0" : VersionWsdlMinor )}" );
 
 		#endregion
 	}

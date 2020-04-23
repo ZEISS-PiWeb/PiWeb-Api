@@ -1,40 +1,39 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 {
-	#region using
+	#region usings
 
 	using System;
 	using System.Globalization;
+	using Newtonsoft.Json;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 
 	#endregion
 
 	/// <summary>
-	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="AbstractAttributeDefinition"/>-objects.
+	/// Specialized <see cref="JsonConverter"/> for <see cref="AbstractAttributeDefinition"/>-objects.
 	/// </summary>
-	public class AttributeDefinitionConverter : Newtonsoft.Json.JsonConverter
+	public class AttributeDefinitionConverter : JsonConverter
 	{
-		#region members
+		#region methods
 
-		/// <summary>
-		/// Determines whether this instance can convert the specified object type.
-		/// </summary>
+		/// <inheritdoc />
 		public override bool CanConvert( Type objectType )
 		{
 			return typeof( AbstractAttributeDefinition ) == objectType || typeof( AttributeDefinition ) == objectType || typeof( CatalogAttributeDefinition ) == objectType;
 		}
 
-		/// <summary>
-		/// Reads the JSON representation of the object.
-		/// </summary>
-		public override object ReadJson( Newtonsoft.Json.JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer )
+		/// <inheritdoc />
+		public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer )
 		{
 			var key = default( ushort );
 			var length = default( ushort );
@@ -44,7 +43,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 			var type = default( AttributeType );
 			var catalogUuid = default( Guid );
 
-			while( reader.Read() && reader.TokenType == Newtonsoft.Json.JsonToken.PropertyName )
+			while( reader.Read() && reader.TokenType == JsonToken.PropertyName )
 			{
 				switch( reader.Value.ToString() )
 				{
@@ -74,20 +73,17 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 
 			if( attributeDefinitionType == "AttributeDefinition" )
 				return new AttributeDefinition { Description = description, Key = key, Length = length, QueryEfficient = queryEfficient, Type = type };
-	
+
 			if( attributeDefinitionType == "CatalogAttributeDefinition" )
 				return new CatalogAttributeDefinition { Description = description, Key = key, QueryEfficient = queryEfficient, Catalog = catalogUuid };
 
 			return null;
 		}
 
-		/// <summary>
-		/// Writes the JSON representation of the object.
-		/// </summary>
-		public override void WriteJson( Newtonsoft.Json.JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer )
+		/// <inheritdoc />
+		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer )
 		{
-			var definition = value as AbstractAttributeDefinition;
-			if( definition != null )
+			if( value is AbstractAttributeDefinition definition )
 			{
 				writer.WriteStartObject();
 				writer.WritePropertyName( "key" );
@@ -95,22 +91,21 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 				writer.WritePropertyName( "description" );
 				writer.WriteValue( definition.Description );
 
-				var attributeDef = definition as AttributeDefinition;
-				if( attributeDef != null )
+				if( definition is AttributeDefinition attributeDef )
 				{
 					if( attributeDef.Length.HasValue )
 					{
 						writer.WritePropertyName( "length" );
 						writer.WriteValue( attributeDef.Length.Value );
 					}
+
 					writer.WritePropertyName( "type" );
 					serializer.Serialize( writer, attributeDef.Type );
 					writer.WritePropertyName( "definitionType" );
 					writer.WriteValue( "AttributeDefinition" );
 				}
 
-				var catalogDef = definition as CatalogAttributeDefinition;
-				if( catalogDef != null )
+				if( definition is CatalogAttributeDefinition catalogDef )
 				{
 					writer.WritePropertyName( "catalog" );
 					writer.WriteValue( catalogDef.Catalog );

@@ -1,14 +1,16 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
-	#region using
+	#region usings
 
 	using System;
 	using System.Collections.Generic;
@@ -40,6 +42,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		private Dictionary<ushort, AbstractAttributeDefinition> _CatalogAttributesDict;
 		private Dictionary<ushort, AbstractAttributeDefinition> _AllAttributesDict;
 
+		#endregion
+
+		#region properties
+
 		private Dictionary<ushort, AbstractAttributeDefinition> PartAttributesDict
 			=> _PartAttributesDict ?? ( _PartAttributesDict = FillTable( PartAttributes ) );
 
@@ -55,31 +61,21 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		private Dictionary<ushort, AbstractAttributeDefinition> CatalogAttributesDict
 			=> _CatalogAttributesDict ?? ( _CatalogAttributesDict = FillTable( CatalogAttributes ) );
 
-		private Dictionary<ushort, AbstractAttributeDefinition> AllAttributesDict
-		{
-			get
-			{
-				return _AllAttributesDict ?? ( _AllAttributesDict = PartAttributesDict
-					.Concat( CharacteristicAttributesDict )
-					.Concat( MeasurementAttributesDict )
-					.Concat( ValueAttributesDict )
-					.Concat( CatalogAttributesDict )
-					.ToDictionary( kvp => kvp.Key, kvp => kvp.Value ) );
-			}
-		}
-
-		#endregion
-
-		#region properties
+		private Dictionary<ushort, AbstractAttributeDefinition> AllAttributesDict =>
+			_AllAttributesDict ?? ( _AllAttributesDict = PartAttributesDict
+				.Concat( CharacteristicAttributesDict )
+				.Concat( MeasurementAttributesDict )
+				.Concat( ValueAttributesDict )
+				.Concat( CatalogAttributesDict )
+				.ToDictionary( kvp => kvp.Key, kvp => kvp.Value ) );
 
 		/// <summary>
 		/// Returns a list of all attribute definitions in this configuration.
 		/// </summary>
 		[JsonIgnore]
-		public AbstractAttributeDefinition[] AllAttributes 
+		public AbstractAttributeDefinition[] AllAttributes
 		{
-			[NotNull]
-			get { return AllAttributesDict.Values.ToArray(); }
+			[NotNull] get => AllAttributesDict.Values.ToArray();
 		}
 
 		/// <summary>
@@ -88,8 +84,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		[JsonProperty( "partAttributes" )]
 		public AbstractAttributeDefinition[] PartAttributes
 		{
-			[NotNull]
-			get { return _PartAttributes; }
+			[NotNull] get => _PartAttributes;
 			set
 			{
 				_PartAttributes = value ?? new AbstractAttributeDefinition[ 0 ];
@@ -105,8 +100,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		[JsonProperty( "characteristicAttributes" )]
 		public AbstractAttributeDefinition[] CharacteristicAttributes
 		{
-			[NotNull]
-			get { return _CharacteristicAttributes; }
+			[NotNull] get => _CharacteristicAttributes;
 			set
 			{
 				_CharacteristicAttributes = value ?? new AbstractAttributeDefinition[ 0 ];
@@ -122,13 +116,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		[JsonProperty( "measurementAttributes" )]
 		public AbstractAttributeDefinition[] MeasurementAttributes
 		{
-			[NotNull]
-			get { return _MeasurementAttributes; }
+			[NotNull] get => _MeasurementAttributes;
 			set
 			{
 				_MeasurementAttributes = value ?? new AbstractAttributeDefinition[ 0 ];
 				_MeasurementAttributes = _MeasurementAttributes.OrderBy( a => a.Key ).ToArray();
-				
+
 				_MeasurementAttributesDict = null;
 			}
 		}
@@ -139,8 +132,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		[JsonProperty( "valueAttributes" )]
 		public AbstractAttributeDefinition[] ValueAttributes
 		{
-			[NotNull]
-			get { return _ValueAttributes; }
+			[NotNull] get => _ValueAttributes;
 			set
 			{
 				_ValueAttributes = value ?? new AbstractAttributeDefinition[ 0 ];
@@ -156,8 +148,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		[JsonProperty( "catalogAttributes" )]
 		public AttributeDefinition[] CatalogAttributes
 		{
-			[NotNull]
-			get { return _CatalogAttributes; }
+			[NotNull] get => _CatalogAttributes;
 			set
 			{
 				_CatalogAttributes = value ?? new AttributeDefinition[ 0 ];
@@ -184,8 +175,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <param name="key">The key of the attribute definition.</param>
 		public string GetName( ushort key )
 		{
-			AbstractAttributeDefinition def;
-			return AllAttributesDict.TryGetValue( key, out def ) ? def.Description : "";
+			return AllAttributesDict.TryGetValue( key, out var def ) ? def.Description : "";
 		}
 
 		/// <summary>
@@ -194,8 +184,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <param name="key">The key of the attribute definition.</param>
 		public AbstractAttributeDefinition GetDefinition( ushort key )
 		{
-			AbstractAttributeDefinition result;
-			return AllAttributesDict.TryGetValue( key, out result ) ? result : null;
+			return AllAttributesDict.TryGetValue( key, out var result ) ? result : null;
 		}
 
 		/// <summary>
@@ -219,7 +208,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 					return new AbstractAttributeDefinition[ 0 ];
 			}
 		}
-		
+
 		/// <summary>
 		/// Returns the attribute definition with <code>key</code> for entity type <code>entity</code>.
 		/// </summary>
@@ -247,6 +236,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 					CatalogAttributesDict.TryGetValue( key, out result );
 					break;
 			}
+
 			return result;
 		}
 
@@ -269,6 +259,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				case Entity.Catalog:
 					return CatalogAttributesDict.ContainsKey( key );
 			}
+
 			return false;
 		}
 
@@ -292,7 +283,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 			if( CatalogAttributesDict.ContainsKey( key ) )
 				return Entity.Catalog;
-		
+
 			return null;
 		}
 
@@ -307,14 +298,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				return null;
 
 			var def = GetDefinition( key );
-			if( def is CatalogAttributeDefinition )
+			if( def is CatalogAttributeDefinition catalogAttributeDefinition )
 			{
-				if( catalogs != null )
-				{
-					var entry = catalogs[ ( (CatalogAttributeDefinition)def ).Catalog, value ];
-					if( entry != null )
-						return entry.ToString( CultureInfo.InvariantCulture );
-				}
+				var entry = catalogs?[ catalogAttributeDefinition.Catalog, value ];
+				if( entry != null )
+					return entry.ToString( CultureInfo.InvariantCulture );
 			}
 			else if( value.Length > 0 )
 			{
@@ -336,6 +324,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 					// ignored
 				}
 			}
+
 			return value;
 		}
 
@@ -350,22 +339,27 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			if( attributeValue != null )
 			{
 				var def = GetDefinition( key );
-				var definition = def as CatalogAttributeDefinition;
-				if( definition != null )
+				if( def is CatalogAttributeDefinition definition )
 				{
 					if( catalogs != null )
-						result = catalogs[definition.Catalog, attributeValue];
+						result = catalogs[ definition.Catalog, attributeValue ];
 				}
 				else if( attributeValue.Length > 0 )
 				{
 					try
 					{
-						var attDef = ( AttributeDefinition )def;
+						var attDef = (AttributeDefinition)def;
 						switch( attDef.Type )
 						{
-							case AttributeType.Integer: result = int.Parse( attributeValue, CultureInfo.InvariantCulture ); break;
-							case AttributeType.Float: result = double.Parse( attributeValue, CultureInfo.InvariantCulture ); break;
-							case AttributeType.DateTime: result = XmlConvert.ToDateTime( attributeValue, XmlDateTimeSerializationMode.RoundtripKind ); break;
+							case AttributeType.Integer:
+								result = int.Parse( attributeValue, CultureInfo.InvariantCulture );
+								break;
+							case AttributeType.Float:
+								result = double.Parse( attributeValue, CultureInfo.InvariantCulture );
+								break;
+							case AttributeType.DateTime:
+								result = XmlConvert.ToDateTime( attributeValue, XmlDateTimeSerializationMode.RoundtripKind );
+								break;
 						}
 					}
 					catch
@@ -374,6 +368,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 					}
 				}
 			}
+
 			return result ?? attributeValue;
 		}
 

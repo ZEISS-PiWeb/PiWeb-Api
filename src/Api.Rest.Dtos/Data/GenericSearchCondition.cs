@@ -18,7 +18,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// Klasse zum Parsen einer Filterzeichenkette für Messdaten.
 	/// </summary>
 	public class GenericSearchCondition
-	{}
+	{ }
 
 	public class GenericSearchNot : GenericSearchCondition
 	{
@@ -34,13 +34,13 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		#region constructors
 
 		/// <summary>
-		/// Konstruktor
+		/// Initializes a new instance of the <see cref="GenericSearchAnd"/> class.
 		/// </summary>
 		public GenericSearchAnd()
-		{}
+		{ }
 
 		/// <summary>
-		/// Konstruktor
+		/// Initializes a new instance of the <see cref="GenericSearchAnd"/> class.
 		/// </summary>
 		public GenericSearchAnd( GenericSearchCondition[] filter )
 		{

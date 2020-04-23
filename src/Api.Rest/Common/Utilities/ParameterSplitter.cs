@@ -31,17 +31,22 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 		private readonly Uri _ServiceLocation;
 		private readonly int _MaxUriLength;
-		[NotNull] private readonly string _RequestPath;
+		private readonly string _RequestPath;
 
 		#endregion
 
 		#region constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ParameterSplitter"/> class.
+		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="client"/> is <see langword="null" />.</exception>
+		/// <exception cref="ArgumentException"><paramref name="requestPath"/> is <see langword="null" /> or whitespace.</exception>
 		public ParameterSplitter( CommonRestClientBase client, string requestPath )
 		{
-			if( client == null ) throw new ArgumentNullException( nameof(client) );
+			if( client == null ) throw new ArgumentNullException( nameof( client ) );
 			if( string.IsNullOrWhiteSpace( requestPath ) )
-				throw new ArgumentException( "Value cannot be null or whitespace.", nameof(requestPath) );
+				throw new ArgumentException( "Value cannot be null or whitespace.", nameof( requestPath ) );
 
 			_RequestPath = requestPath;
 			_ServiceLocation = client.ServiceLocation;
@@ -58,26 +63,28 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		/// <param name="collectionParameter">The collection parameter to split.</param>
 		/// <param name="otherParameters">All other parameters that are part of the request, e.g. 'filter'.</param>
 		/// <returns>A list of all parameter definitions for each chunk of the collection.</returns>
+		/// <exception cref="ArgumentNullException">
+		/// <paramref name="collectionParameter"/> or <paramref name="otherParameters"/> is <see langword="null" />.
+		/// </exception>
 		public IEnumerable<IEnumerable<ParameterDefinition>> SplitAndMerge<T>(
-			CollectionParameterDefinition<T> collectionParameter,
-			IEnumerable<ParameterDefinition> otherParameters )
+			[NotNull] CollectionParameterDefinition<T> collectionParameter,
+			[NotNull] IEnumerable<ParameterDefinition> otherParameters )
 		{
+			if( collectionParameter == null ) throw new ArgumentNullException( nameof( collectionParameter ) );
+			if( otherParameters == null ) throw new ArgumentNullException( nameof( otherParameters ) );
+
 			var otherParametersArray = otherParameters.ToArray();
 
 			var maxLength = DetermineMaxLength( collectionParameter, otherParametersArray );
 			var splitParameters = collectionParameter.Split( maxLength );
 
-			var result = MergeWithOtherParameters( splitParameters, otherParametersArray );
-
-			return result;
+			return MergeWithOtherParameters( splitParameters, otherParametersArray );
 		}
 
 		/// <summary>
 		/// Determine the maximum lenght per value string.
 		/// </summary>
-		private int DetermineMaxLength<T>( 
-			CollectionParameterDefinition<T> collectionParameter,
-			IEnumerable<ParameterDefinition> otherParameters )
+		private int DetermineMaxLength<T>( CollectionParameterDefinition<T> collectionParameter, IEnumerable<ParameterDefinition> otherParameters )
 		{
 			// Add the empty collection to the parameter collection
 			// to also count the characters of the parameter name and the collection delimiters.
@@ -101,10 +108,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			IEnumerable<ParameterDefinition> splitParameters,
 			IEnumerable<ParameterDefinition> otherParameters )
 		{
-			var setsOfAllParameters = splitParameters
-				.Select( splitParameter => new[] { splitParameter }.Concat( otherParameters ) );
-
-			return setsOfAllParameters;
+			return splitParameters.Select( splitParameter => new[] { splitParameter }.Concat( otherParameters ) );
 		}
 
 		#endregion

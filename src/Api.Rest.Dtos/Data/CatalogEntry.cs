@@ -1,17 +1,21 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
-	#region using
+	#region usings
 
 	using System;
+	using System.Globalization;
 	using System.Linq;
+	using System.Text;
 	using JetBrains.Annotations;
 	using Newtonsoft.Json;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
@@ -29,29 +33,19 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#endregion
 
+		#region constructors
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CatalogEntry"/> class.
+		/// </summary>
 		public CatalogEntry()
 		{
 			Key = -1;
 		}
 
+		#endregion
+
 		#region properties
-
-		/// <summary>
-		/// Gets or sets the attributes that belong to this catalog entry.
-		/// </summary>
-		[JsonProperty( "attributes" ), JsonConverter( typeof( AttributeArrayConverter ))]
-		public Attribute[] Attributes
-		{
-			[NotNull]
-			get { return _Attributes; }
-			set
-			{
-				value = value ?? new Attribute[0];
-
-				_Attributes = value.All( attr => attr.IsNull() ) ? new Attribute[0] : value;
-				_Attributes = _Attributes.OrderBy( a => a.Key ).ToArray();
-			}
-		}
 
 		/// <summary>
 		/// Gets or sets the unique key of this catalog entry.
@@ -63,12 +57,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#region methods
 
-		/// <summary>
-		/// Overridden <see cref="System.Object.ToString"/> method.
-		/// </summary>
+		/// <inheritdoc />
 		public override string ToString()
 		{
-			return ToString( System.Globalization.CultureInfo.CurrentUICulture );
+			return ToString( CultureInfo.CurrentUICulture );
 		}
 
 		/// <summary>
@@ -85,7 +77,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 			var allSameEntries = true;
 
-			var sb = new System.Text.StringBuilder();
+			var sb = new StringBuilder();
 			foreach( var att in Attributes )
 			{
 				if( sb.Length > 0 )
@@ -93,9 +85,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 				if( att.Value.Trim().Length > 0 )
 					sb.Append( Convert.ToString( GetTypedAttributeValue( att ), provider ) );
-	
+
 				allSameEntries &= att.Value == _Attributes[ 0 ].Value;
 			}
+
 			if( allSameEntries && _Attributes != null && _Attributes.Length > 0 )
 				return Convert.ToString( GetTypedAttributeValue( Attributes[ 0 ] ), provider );
 
@@ -105,9 +98,29 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		private object GetTypedAttributeValue( Attribute attribute )
 		{
 			if( attribute.RawValue != null )
-				return ( attribute.RawValue is DateTime ) ? ( (DateTime)attribute.RawValue ).ToLocalTime() : attribute.RawValue;
+				return ( attribute.RawValue is DateTime time ) ? time.ToLocalTime() : attribute.RawValue;
 
 			return attribute.Value;
+		}
+
+		#endregion
+
+		#region interface IAttributeItem
+
+		/// <summary>
+		/// Gets or sets the attributes that belong to this catalog entry.
+		/// </summary>
+		[JsonProperty( "attributes" ), JsonConverter( typeof( AttributeArrayConverter ) )]
+		public Attribute[] Attributes
+		{
+			[NotNull] get => _Attributes;
+			set
+			{
+				value = value ?? new Attribute[ 0 ];
+
+				_Attributes = value.All( attr => attr.IsNull() ) ? new Attribute[ 0 ] : value;
+				_Attributes = _Attributes.OrderBy( a => a.Key ).ToArray();
+			}
 		}
 
 		#endregion

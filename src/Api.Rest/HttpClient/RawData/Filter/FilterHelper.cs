@@ -20,12 +20,16 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter
 
 	public static class FilterHelper
 	{
+		#region constants
+
 		public const string AttrFilename = "filename";
 		public const string AttrMimeType = "mimetype";
 		public const string AttrLastModified = "lastModified";
 		public const string AttrCreated = "created";
 		public const string AttrLength = "length";
 		public const string AttrMd5 = "md5";
+
+		#endregion
 
 		#region methods
 

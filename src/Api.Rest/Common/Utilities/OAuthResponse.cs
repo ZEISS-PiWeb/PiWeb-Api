@@ -26,6 +26,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 		#region constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="OAuthResponse"/> class.
+		/// </summary>
 		public OAuthResponse( string resultUrl )
 		{
 			if( !string.IsNullOrEmpty( resultUrl ) )

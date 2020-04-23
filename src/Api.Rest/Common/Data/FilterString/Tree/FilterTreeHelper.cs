@@ -1,20 +1,33 @@
 ﻿#region Copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2016                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 {
+	#region usings
+
 	using System;
 	using System.Globalization;
+	using JetBrains.Annotations;
+
+	#endregion
 
 	public static class FilterTreeHelper
 	{
-		public static bool CompareTrees( IFilterTree expected, IFilterTree actual )
+		#region methods
+
+		/// <exception cref="ArgumentNullException"><paramref name="expected"/> or <paramref name="actual"/> is <see langword="null" />.</exception>
+		public static bool CompareTrees( [NotNull] IFilterTree expected, [NotNull] IFilterTree actual )
 		{
+			if( expected == null ) throw new ArgumentNullException( nameof( expected ) );
+			if( actual == null ) throw new ArgumentNullException( nameof( actual ) );
+
 			if( expected.Token.Type != actual.Token.Type )
 				return false;
 
@@ -76,5 +89,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 				tokenType == TokenType.Real ||
 				tokenType == TokenType.String;
 		}
+
+		#endregion
 	}
 }

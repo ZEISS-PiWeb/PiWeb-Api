@@ -11,6 +11,8 @@
 
 namespace Zeiss.PiWeb.Api.Rest.Common.Client
 {
+	#region usings
+
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
@@ -22,13 +24,17 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using Zeiss.PiWeb.Api.Rest.Common.Data;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 
+	#endregion
+
 	public static class RequestBuilder
 	{
+		#region methods
+
 		/// <summary>
 		/// Creates a new GET-<see cref="HttpRequestMessage"/> based on the <paramref name="relativeUri"/> 
 		/// and extended by possible additional query parameters represented by <paramref name="parameterDefinitions"/>
 		/// </summary>
-		public static Func<HttpRequestMessage> CreateGet( string relativeUri, params ParameterDefinition[] parameterDefinitions)
+		public static Func<HttpRequestMessage> CreateGet( string relativeUri, params ParameterDefinition[] parameterDefinitions )
 		{
 			return Create( HttpMethod.Get, relativeUri, Payload.Empty, null, parameterDefinitions );
 		}
@@ -37,7 +43,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// Creates a new DELETE-<see cref="HttpRequestMessage"/> based on the <paramref name="relativeUri"/> 
 		/// and extended by possible additional query parameters represented by <paramref name="parameterDefinitions"/>
 		/// </summary>
-		public static Func<HttpRequestMessage> CreateDelete( string relativeUri, params ParameterDefinition[] parameterDefinitions)
+		public static Func<HttpRequestMessage> CreateDelete( string relativeUri, params ParameterDefinition[] parameterDefinitions )
 		{
 			return Create( HttpMethod.Delete, relativeUri, Payload.Empty, null, parameterDefinitions );
 		}
@@ -47,7 +53,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// and extended by possible additional query parameters represented by <paramref name="parameterDefinitions"/>
 		/// The body of the HTTP message is provided by the <paramref name="payload"/> parameter.
 		/// </summary>
-		public static Func<HttpRequestMessage> CreatePost( string relativeUri, Payload payload, params ParameterDefinition[] parameterDefinitions )
+		public static Func<HttpRequestMessage> CreatePost( string relativeUri, [NotNull] Payload payload, params ParameterDefinition[] parameterDefinitions )
 		{
 			return Create( HttpMethod.Post, relativeUri, payload, null, parameterDefinitions );
 		}
@@ -57,7 +63,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// and extended by possible additional query parameters represented by <paramref name="parameterDefinitions"/>
 		/// The body of the HTTP message is provided by the <paramref name="payload"/> parameter.
 		/// </summary>
-		public static Func<HttpRequestMessage> CreatePut( string relativeUri, Payload payload, params ParameterDefinition[] parameterDefinitions )
+		public static Func<HttpRequestMessage> CreatePut( string relativeUri, [NotNull] Payload payload, params ParameterDefinition[] parameterDefinitions )
 		{
 			return Create( HttpMethod.Put, relativeUri, payload, null, parameterDefinitions );
 		}
@@ -67,7 +73,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// and extended by possible additional query parameters represented by <paramref name="parameterDefinitions"/>
 		/// The body of the HTTP message is provided by the <paramref name="payload"/> parameter.
 		/// </summary>
-		public static Func<HttpRequestMessage> Create( HttpMethod method, string relativeUri, Payload payload, KeyValuePair<string, string>[] additionalHttpRequestHeader, params ParameterDefinition[] parameterDefinitions )
+		/// <exception cref="ArgumentNullException"><paramref name="payload"/> is <see langword="null" />.</exception>
+		public static Func<HttpRequestMessage> Create( HttpMethod method, string relativeUri, [NotNull] Payload payload, KeyValuePair<string, string>[] additionalHttpRequestHeader, params ParameterDefinition[] parameterDefinitions )
 		{
 			if( payload == null ) throw new ArgumentNullException( nameof( payload ) );
 
@@ -90,8 +97,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 					{
 						RestClientHelper.CreateJsonSerializer().Serialize( sw, payload.Value );
 					}
-				}, new MediaTypeWithQualityHeaderValue( RestClient.MimeTypeJson ) );
+				}, new MediaTypeWithQualityHeaderValue( RestClientBase.MimeTypeJson ) );
 			}
+
 			return request;
 		}
 
@@ -100,9 +108,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// and extended by possible additional query parameters represented by <paramref name="parameterDefinitions"/>
 		/// The attachment is provided by the <paramref name="stream"/> parameter.
 		/// </summary>
-		public static Func<HttpRequestMessage> CreateWithAttachment( [NotNull]HttpMethod method, string relativeUri, Stream stream, string mimeType, long? contentLength, Guid? contentMD5, string contentDisposition, params ParameterDefinition[] parameterDefinitions )
+		/// <exception cref="ArgumentNullException"><paramref name="method"/> is <see langword="null" />.</exception>
+		public static Func<HttpRequestMessage> CreateWithAttachment( [NotNull] HttpMethod method, string relativeUri, Stream stream, string mimeType, long? contentLength, Guid? contentMD5, string contentDisposition, params ParameterDefinition[] parameterDefinitions )
 		{
-			if( method == null ) throw new ArgumentNullException( nameof(method) );
+			if( method == null ) throw new ArgumentNullException( nameof( method ) );
 
 			if( method != HttpMethod.Post && method != HttpMethod.Put )
 				throw new ArgumentOutOfRangeException( $"CreateWithAttachment is not allowed for {method}. Valid HttpMethods are {HttpMethod.Post} or {HttpMethod.Put}" );
@@ -115,7 +124,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// and extended by possible additional query parameters represented by <paramref name="parameterDefinitions"/>
 		/// The attachment is provided by the <paramref name="stream"/> parameter.
 		/// </summary>
-		private static HttpRequestMessage CreateWithAttachmentInternal( [NotNull]HttpMethod method, string relativeUri, Stream stream, string mimeType, long? contentLength, Guid? contentMD5, string contentDisposition, params ParameterDefinition[] parameterDefinitions )
+		private static HttpRequestMessage CreateWithAttachmentInternal( [NotNull] HttpMethod method, string relativeUri, Stream stream, string mimeType, long? contentLength, Guid? contentMD5, string contentDisposition, params ParameterDefinition[] parameterDefinitions )
 		{
 			var request = CreateInternal( method, relativeUri, Payload.Empty, null, parameterDefinitions );
 
@@ -172,7 +181,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			}
 
 			return relativeUri;
-
 		}
+
+		#endregion
 	}
 }

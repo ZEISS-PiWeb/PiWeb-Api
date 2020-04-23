@@ -1,14 +1,16 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
-	#region using
+	#region usings
 
 	using System;
 	using System.Globalization;
@@ -21,13 +23,14 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// </summary>
 	public static class AttributeItemExtensions
 	{
+		#region methods
+
 		/// <summary>
 		/// Returns the attribute with the key <code>key</code>.
 		/// </summary>
 		public static Attribute GetAttribute( this IAttributeItem item, ushort key )
 		{
-			int index;
-			return GetAttribute( item, key, out index );
+			return GetAttribute( item, key, out _ );
 		}
 
 		/// <summary>
@@ -35,7 +38,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		public static Attribute GetAttribute( this IAttributeItem item, ushort key, out int index )
 		{
-			if( item != null && item.Attributes != null )
+			if( item?.Attributes != null )
 			{
 				for( index = 0; index < item.Attributes.Length; index++ )
 				{
@@ -43,6 +46,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 						return item.Attributes[ index ];
 				}
 			}
+
 			index = -1;
 
 			return null;
@@ -54,7 +58,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		public static string GetAttributeValue( this IAttributeItem item, ushort key )
 		{
 			var value = GetAttribute( item, key );
-			return value != null ? value.Value : null;
+			return value?.Value;
 		}
 
 		/// <summary>
@@ -74,6 +78,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			// ReSharper disable once EmptyGeneralCatchClause
 			catch
 			{ }
+
 			return null;
 		}
 
@@ -94,6 +99,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			// ReSharper disable once EmptyGeneralCatchClause
 			catch
 			{ }
+
 			return null;
 		}
 
@@ -114,6 +120,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			// ReSharper disable once EmptyGeneralCatchClause
 			catch
 			{ }
+
 			return null;
 		}
 
@@ -177,8 +184,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		public static void RemoveAttribute( this IAttributeItem item, ushort key )
 		{
-			int index;
-			var att = GetAttribute( item, key, out index );
+			var att = GetAttribute( item, key, out var index );
 			if( att != null )
 			{
 				// Remove attribute
@@ -192,8 +198,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		private static void InternalSetAttribute( this IAttributeItem item, Attribute value )
 		{
-			int index;
-			var att = GetAttribute( item, value.Key, out index );
+			var att = GetAttribute( item, value.Key, out var index );
 			if( att == null )
 			{
 				// Add attribute
@@ -220,5 +225,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				item.Attributes = atts;
 			}
 		}
+
+		#endregion
 	}
 }

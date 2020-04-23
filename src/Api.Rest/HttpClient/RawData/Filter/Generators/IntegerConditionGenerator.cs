@@ -29,6 +29,9 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter.Generators
 
 		#region constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="IntegerConditionGenerator"/> class.
+		/// </summary>
 		public IntegerConditionGenerator( IntegerAttributes integerAttribute )
 		{
 			_IntegerAttribute = integerAttribute;

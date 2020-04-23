@@ -1,16 +1,19 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
-	#region using
+	#region usings
 
 	using System;
+	using System.Globalization;
 	using System.Xml;
 	using Newtonsoft.Json;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
@@ -22,7 +25,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// </summary>
 	/// <remarks>This class is immutable.</remarks>
 	[Serializable]
-	[JsonConverter(typeof(AttributeConverter))]
+	[JsonConverter( typeof( AttributeConverter ) )]
 	public class Attribute
 	{
 		#region members
@@ -31,16 +34,16 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#endregion
 
-		#region constructor
+		#region constructors
 
 		/// <summary>
-		/// Constructor.
+		/// Initializes a new instance of the <see cref="Attribute"/> class.
 		/// </summary>
 		public Attribute()
 		{ }
 
 		/// <summary>
-		/// Creates a new attribute with key <code>key</code> and value <code>value</code>.
+		/// Initializes a new instance of the <see cref="Attribute"/> class with key <code>key</code> and value <code>value</code>.
 		/// </summary>
 		/// <param name="key">The key of the newly created attribute.</param>
 		/// <param name="value">The value.</param>
@@ -52,7 +55,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		}
 
 		/// <summary>
-		/// Creates a new attribute with key <code>key</code> and value <code>rawValue</code>.
+		/// Initializes a new instance of the <see cref="Attribute"/> class with key <code>key</code> and value <code>rawValue</code>.
 		/// </summary>
 		/// <param name="key">The key of the newly created attribute.</param>
 		/// <param name="rawValue">The raw value.</param>
@@ -86,17 +89,22 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			{
 				if( _Value == null )
 				{
-					if( RawValue is double )
-						return ( (double)RawValue ).ToString( "G17", System.Globalization.CultureInfo.InvariantCulture );
-					if( RawValue is DateTime )
-						return XmlConvert.ToString( (DateTime)RawValue, XmlDateTimeSerializationMode.RoundtripKind );
-					if( RawValue is CatalogEntry )
-						return ( ( CatalogEntry ) RawValue ).Key.ToString();
-					return Convert.ToString( RawValue, System.Globalization.CultureInfo.InvariantCulture );
+					if( RawValue is double doubleValue )
+						return doubleValue.ToString( "G17", CultureInfo.InvariantCulture );
+					if( RawValue is DateTime dateTimeValue )
+						return XmlConvert.ToString( dateTimeValue, XmlDateTimeSerializationMode.RoundtripKind );
+					if( RawValue is CatalogEntry catalogEntryValue )
+						return catalogEntryValue.Key.ToString();
+					return Convert.ToString( RawValue, CultureInfo.InvariantCulture );
 				}
-				return _Value; 
+
+				return _Value;
 			}
 		}
+
+		#endregion
+
+		#region methods
 
 		/// <summary>
 		/// Determines whether this attribute has a value or not. This allows us to distinguish between attributes defining the empty string
@@ -109,10 +117,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		{
 			return RawValue == null && _Value == null;
 		}
-
-		#endregion
-
-		#region methods
 
 		/// <summary>
 		/// Returns the <see cref="RawValue"/> if not null. Otherwise parses the <see cref="Value"/> using the specified 
@@ -131,30 +135,28 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 					if( type == typeof( string ) )
 						return _Value;
 
-                    if( !string.IsNullOrEmpty( _Value ) )
-                    {
+					if( !string.IsNullOrEmpty( _Value ) )
+					{
+						if( type == typeof( DateTime ) )
+							return XmlConvert.ToDateTime( _Value, XmlDateTimeSerializationMode.RoundtripKind );
 
-                        if( type == typeof( DateTime ) )
-                            return XmlConvert.ToDateTime( _Value, XmlDateTimeSerializationMode.RoundtripKind );
+						if( type == typeof( float ) || type == typeof( double ) )
+							return XmlConvert.ToDouble( _Value );
 
-                        if( type == typeof( float ) || type == typeof( double ) )
-                            return XmlConvert.ToDouble( _Value );
-
-                        if( type == typeof( int ) )
-                            return XmlConvert.ToInt32( _Value );
-                    }
-                }
+						if( type == typeof( int ) )
+							return XmlConvert.ToInt32( _Value );
+					}
+				}
 				catch
 				{
 					// ignored
 				}
 			}
+
 			return null;
 		}
 
-		/// <summary>
-		/// Overridden <see cref="System.Object.ToString"/>-method.
-		/// </summary>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return $"K{Key}: {Value}";

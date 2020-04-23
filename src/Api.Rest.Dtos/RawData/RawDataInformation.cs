@@ -1,16 +1,19 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 {
-	#region using
+	#region usings
 
 	using System;
+	using JetBrains.Annotations;
 	using Newtonsoft.Json;
 
 	#endregion
@@ -21,10 +24,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 	[Serializable]
 	public class RawDataInformation
 	{
-		#region constructor
+		#region constructors
 
 		/// <summary>
-		/// Constructor.
+		/// Initializes a new instance of the <see cref="RawDataInformation"/> class.
 		/// </summary>
 		public RawDataInformation()
 		{
@@ -32,23 +35,25 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		}
 
 		/// <summary>
-		/// Constructor.
+		/// Initializes a new instance of the <see cref="RawDataInformation"/> class.
 		/// </summary>
 		/// <param name="entity">The entity this object belongs to.</param>
 		/// <param name="key">A unique key that identifies this information object.</param>
-		public RawDataInformation( RawDataTargetEntity entity, int key )
+		/// <exception cref="ArgumentNullException"><paramref name="entity"/> is <see langword="null" />.</exception>
+		public RawDataInformation( [NotNull] RawDataTargetEntity entity, int key )
 		{
-			Target = entity;
+			Target = entity ?? throw new ArgumentNullException( nameof( entity ) );
 			Key = key;
 		}
 
 		/// <summary>
-		/// Copy-Constructor.
+		/// Initializes a new instance of the <see cref="RawDataInformation"/> class.
 		/// </summary>
 		/// <param name="data">The raw data information object that should be copied.</param>
-		public RawDataInformation( RawDataInformation data )
+		/// <exception cref="ArgumentNullException"><paramref name="data"/> is <see langword="null" />.</exception>
+		public RawDataInformation( [NotNull] RawDataInformation data )
 		{
-			if( data == null ) throw new ArgumentNullException( "data" );
+			if( data == null ) throw new ArgumentNullException( nameof( data ) );
 
 			Target = data.Target;
 			Key = data.Key;
@@ -133,20 +138,18 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		[JsonIgnore]
 		public string MD5String
 		{
-			get { return MD5GuidToString( MD5 ); }
-			set { MD5 = MD5StringToGuid( value ); }
+			get => MD5GuidToString( MD5 );
+			set => MD5 = MD5StringToGuid( value );
 		}
 
 		#endregion
 
 		#region methods
 
-		/// <summary>
-		/// Overriden <see cref="Object.ToString"/>-method.
-		/// </summary>
+		/// <inheritdoc />
 		public override string ToString()
 		{
-			return string.Format( "{0}: {1} ({2})", Key, FileName, MimeType );
+			return $"{Key}: {FileName} ({MimeType})";
 		}
 
 		public static Guid MD5StringToGuid( string md5 )
@@ -156,22 +159,23 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 
 			md5 = md5.ToUpperInvariant();
 
-			var result = new byte[16];
-			bool upper = true;
-			int current = 0;
+			var result = new byte[ 16 ];
+			var upper = true;
+			var current = 0;
 
-			for( int i = 0; i < md5.Length; i += 1 )
+			for( var i = 0; i < md5.Length; i += 1 )
 			{
-				var num = (int)md5[i];
+				var num = (int)md5[ i ];
 				num -= 0x30;
 				if( num >= 10 ) num -= ( 0x41 - 0x30 - 10 );
 				if( num > 15 ) return Guid.Empty;
-				if( upper ) result[current] |= (byte)( num << 4 );
+				if( upper ) result[ current ] |= (byte)( num << 4 );
 				else
 				{
-					result[current] |= (byte)( num & 15 );
+					result[ current ] |= (byte)( num & 15 );
 					current += 1;
 				}
+
 				upper = !upper;
 			}
 
@@ -184,14 +188,15 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 				return null;
 
 			var data = md5.ToByteArray();
-			var chars = new char[2 * data.Length];
-			int counter = 0;
+			var chars = new char[ 2 * data.Length ];
+			var counter = 0;
 
 			foreach( var b in data )
 			{
-				chars[counter++] = "0123456789abcdef"[b >> 4];
-				chars[counter++] = "0123456789abcdef"[b & 15];
+				chars[ counter++ ] = "0123456789abcdef"[ b >> 4 ];
+				chars[ counter++ ] = "0123456789abcdef"[ b & 15 ];
 			}
+
 			return new string( chars );
 		}
 

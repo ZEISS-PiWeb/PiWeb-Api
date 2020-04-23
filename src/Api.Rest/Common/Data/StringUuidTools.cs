@@ -1,9 +1,11 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Common.Data
@@ -18,17 +20,18 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 
 	#endregion
 
-    /// <summary> 
-    /// Helper class to convert a pair of measurementUuid and characteristicUuid to a string in form measurementUuid|characteristicUuid and vice versa. 
-    /// </summary>
+	/// <summary> 
+	/// Helper class to convert a pair of measurementUuid and characteristicUuid to a string in form measurementUuid|characteristicUuid and vice versa. 
+	/// </summary>
 	public static class StringUuidTools
 	{
-	    /// <summary> Splits a string containig a measurementUuid and a characteristicUuid in form measurementUuid|characteristicUuid. </summary>
-	    /// <exception cref="InvalidOperationException">The syntax of <paramref name="uuidPair"/> is invalid.</exception>
-	    public static ValueRawDataIdentifier SplitStringUuidPair( string uuidPair )
+		#region methods
+
+		/// <summary> Splits a string containig a measurementUuid and a characteristicUuid in form measurementUuid|characteristicUuid. </summary>
+		/// <exception cref="InvalidOperationException">The syntax of <paramref name="uuidPair"/> is invalid.</exception>
+		public static ValueRawDataIdentifier SplitStringUuidPair( string uuidPair )
 		{
-			ValueRawDataIdentifier result;
-			if( !TrySplitStringUuidPair( uuidPair, out result ) )
+			if( !TrySplitStringUuidPair( uuidPair, out var result ) )
 			{
 				throw new InvalidOperationException(
 					$"Cannot parse {uuidPair} as pair of UUIDs." +
@@ -38,24 +41,24 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 			return result;
 		}
 
-	    public static bool TrySplitStringUuidPair( string uuidPair, out ValueRawDataIdentifier result )
+		public static bool TrySplitStringUuidPair( string uuidPair, out ValueRawDataIdentifier result )
 		{
 			uuidPair = uuidPair.Replace( "{", string.Empty ).Replace( "}", string.Empty );
 
 			result = null;
-			
+
 			var index = uuidPair.IndexOf( '|' );
 			if( index == -1 )
 				return false;
 
 			var measurementUuidString = uuidPair.Substring( 0, index );
-			Guid measurementUuid;
-			if( !Guid.TryParse( measurementUuidString, out measurementUuid ) )
+
+			if( !Guid.TryParse( measurementUuidString, out var measurementUuid ) )
 				return false;
 
 			var characteristicGuidString = uuidPair.Substring( index + 1 );
-			Guid characteristicUuid;
-			if( !Guid.TryParse( characteristicGuidString, out characteristicUuid ) )
+
+			if( !Guid.TryParse( characteristicGuidString, out var characteristicUuid ) )
 				return false;
 
 			result = new ValueRawDataIdentifier( measurementUuid, characteristicUuid );
@@ -65,7 +68,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		/// <summary> Creates a string containig a measurementUuid and a characteristicUuid in form measurementUuid|characteristicUuid. </summary>
 		public static string CreateStringUuidPair( Guid measGuid, Guid charGuid )
 		{
-			return string.Concat(measGuid, '|', charGuid);
+			return string.Concat( measGuid, '|', charGuid );
 		}
 
 		/// <summary> Creates a string containig a measurementUuid and a characteristicUuid in form measurementUuid|characteristicUuid. </summary>
@@ -74,16 +77,15 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 			return string.Concat( guidPair.MeasurementUuid, '|', guidPair.CharacteristicUuid );
 		}
 
-        /// <summary> Checks if a given string is a unique UUID pair (in form measurementUuid|characteristicUuid) </summary>
-        public static bool IsStringUuidPair( string uuidPair )
-        {
-	        ValueRawDataIdentifier unused;
-	        return TrySplitStringUuidPair( uuidPair, out unused );
-        }
+		/// <summary> Checks if a given string is a unique UUID pair (in form measurementUuid|characteristicUuid) </summary>
+		public static bool IsStringUuidPair( string uuidPair )
+		{
+			return TrySplitStringUuidPair( uuidPair, out _ );
+		}
 
-	    /// <exception cref="ArgumentOutOfRangeException">The syntax of any uuid in <paramref name="uuids"/> is invalid.</exception>
-	    /// <exception cref="ArgumentNullException"><paramref name="uuids"/> is <see langword="null" />.</exception>
-	    public static void CheckUuids( RawDataEntity entity, [NotNull] IEnumerable<string> uuids )
+		/// <exception cref="ArgumentOutOfRangeException">The syntax of any uuid in <paramref name="uuids"/> is invalid.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="uuids"/> is <see langword="null" />.</exception>
+		public static void CheckUuids(RawDataEntity entity, [NotNull] IEnumerable<string> uuids )
 		{
 			if( uuids == null )
 				throw new ArgumentNullException( nameof( uuids ) );
@@ -121,15 +123,17 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 
 		/// <exception cref="ArgumentOutOfRangeException">The syntax of <paramref name="uuid"/> is invalid.</exception>
 		public static Guid StringUuidToGuid( string uuid )
-	    {
-			Guid guid;
-			if(!Guid.TryParse( uuid, out guid ) )
+		{
+			if( !Guid.TryParse( uuid, out var guid ) )
 			{
 				throw new ArgumentException(
 					nameof( uuid ),
 					$"'{uuid}' is not a valid Uuid." );
 			}
-		    return guid;
-	    }
+
+			return guid;
+		}
+
+		#endregion
 	}
 }

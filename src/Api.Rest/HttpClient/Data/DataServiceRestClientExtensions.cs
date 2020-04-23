@@ -34,7 +34,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		/// <param name="entity">The entity the attribute definition should be added to.</param>
 		/// <param name="definition">The attribute definition to add.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public static Task CreateAttributeDefinition<T>( this IDataServiceRestClientBase<T> client, Entity entity, AbstractAttributeDefinition definition, CancellationToken cancellationToken = default( CancellationToken ) ) where T : DataServiceFeatureMatrix
+		public static Task CreateAttributeDefinition<T>( this IDataServiceRestClientBase<T> client, Entity entity, AbstractAttributeDefinition definition, CancellationToken cancellationToken = default ) where T : DataServiceFeatureMatrix
 		{
 			return client.CreateAttributeDefinitions( entity, new[] { definition }, cancellationToken );
 		}
@@ -47,7 +47,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		/// <param name="catalogUuid">The uuid of the catalog to add the entry to.</param>
 		/// <param name="entry">The catalog entry to add.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public static Task CreateCatalogEntry<T>( this IDataServiceRestClientBase<T> client, Guid catalogUuid, CatalogEntry entry, CancellationToken cancellationToken = default( CancellationToken ) ) where T : DataServiceFeatureMatrix
+		public static Task CreateCatalogEntry<T>( this IDataServiceRestClientBase<T> client, Guid catalogUuid, CatalogEntry entry, CancellationToken cancellationToken = default ) where T : DataServiceFeatureMatrix
 		{
 			return client.CreateCatalogEntries( catalogUuid, new[] { entry }, cancellationToken );
 		}
@@ -59,7 +59,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		/// <param name="catalogUuid">The uuid of the catalog to remove the entry from.</param>
 		/// <param name="key">The key of the catalog entry to delete.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public static Task DeleteCatalogEntry<T>( this IDataServiceRestClientBase<T> client, Guid catalogUuid, short key, CancellationToken cancellationToken = default( CancellationToken ) ) where T : DataServiceFeatureMatrix
+		public static Task DeleteCatalogEntry<T>( this IDataServiceRestClientBase<T> client, Guid catalogUuid, short key, CancellationToken cancellationToken = default ) where T : DataServiceFeatureMatrix
 		{
 			return client.DeleteCatalogEntries( catalogUuid, new[] { key }, cancellationToken );
 		}
@@ -70,7 +70,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		/// </summary>
 		/// <param name="client">The client class to use.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		public static Task DeleteAllParts<T>( this IDataServiceRestClientBase<T> client, CancellationToken cancellationToken = default( CancellationToken ) ) where T : DataServiceFeatureMatrix
+		public static Task DeleteAllParts<T>( this IDataServiceRestClientBase<T> client, CancellationToken cancellationToken = default ) where T : DataServiceFeatureMatrix
 		{
 			return client.DeleteParts( PathInformation.Root, cancellationToken );
 		}

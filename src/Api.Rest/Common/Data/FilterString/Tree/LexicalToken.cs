@@ -1,9 +1,11 @@
 ﻿#region Copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2016                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
@@ -12,11 +14,17 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 	{
 		#region constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LexicalToken"/> class.
+		/// </summary>
 		public LexicalToken( string value )
 		{
 			Value = value;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LexicalToken"/> class.
+		/// </summary>
 		public LexicalToken( int position, int line, int length, int linePosition, string value ) : this( value )
 		{
 			Position = position;
@@ -38,12 +46,14 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Tree
 
 		#endregion
 
-		/// <summary>
-		/// Überschriebene <see cref="System.Object.ToString"/>-Methode.
-		/// </summary>
+		#region methods
+
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return $"{Value}";
 		}
+
+		#endregion
 	}
 }

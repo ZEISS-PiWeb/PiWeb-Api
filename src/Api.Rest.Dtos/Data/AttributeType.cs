@@ -1,14 +1,16 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
-	#region using
+	#region usings
 
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Converters;
@@ -19,7 +21,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// Holds attributes' possible data types.
 	/// </summary>
 	[JsonConverter( typeof( StringEnumConverter ) )]
-	public enum AttributeType 
+	public enum AttributeType
 	{
 		/// <summary>
 		/// A string value.

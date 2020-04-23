@@ -1,14 +1,16 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
-	#region using
+	#region usings
 
 	using System;
 	using Newtonsoft.Json;
@@ -21,10 +23,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// </summary>
 	public class SimpleCatalog
 	{
-		#region constructor
+		#region constructors
 
 		/// <summary>
-		/// Constructor
+		/// Initializes a new instance of the <see cref="SimpleCatalog"/> class.
 		/// </summary>
 		public SimpleCatalog()
 		{
@@ -51,9 +53,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#region methods
 
-		/// <summary>
-		/// Overridden <see cref="System.Object.ToString"/> method.
-		/// </summary>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return Name;

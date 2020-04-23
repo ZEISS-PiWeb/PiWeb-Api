@@ -21,13 +21,14 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 	/// <summary>
 	/// Credential that contains username / Password information.
 	/// </summary>
-	public sealed class UsernamePasswordCredential : ICredential
+	public sealed class UsernamePasswordCredential : ICredential, IEquatable<UsernamePasswordCredential>
 	{
 		#region constructors
 
 		/// <summary>
-		/// Constructor.
+		/// Initializes a new instance of the <see cref="UsernamePasswordCredential"/> class.
 		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="username"/> or <paramref name="password"/> are <see langword="null"/> or empty.</exception>
 		public UsernamePasswordCredential( [NotNull] string username, [NotNull] string password )
 		{
 			Username = username ?? throw new ArgumentNullException( nameof( username ) );
@@ -56,24 +57,21 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 		public static UsernamePasswordCredential CreateFromNetworkCredential( NetworkCredential credential )
 		{
-			if( credential == null ) return null;
-
-			return new UsernamePasswordCredential( credential.UserName, credential.Password );
+			return credential == null ? null : new UsernamePasswordCredential( credential.UserName, credential.Password );
 		}
 
-		public NetworkCredential ToNetworkCredential() => new NetworkCredential( Username, Password );
-
-		public bool Equals( UsernamePasswordCredential other )
+		public NetworkCredential ToNetworkCredential()
 		{
-			if( ReferenceEquals( this, other ) ) return true;
-
-			return other != null
-			       && string.Equals( Username, other.Username )
-			       && string.Equals( Password, other.Password );
+			return new NetworkCredential( Username, Password );
 		}
 
-		public override bool Equals( object other ) => Equals( other as UsernamePasswordCredential );
+		/// <inheritdoc />
+		public override bool Equals( object obj )
+		{
+			return Equals( obj as UsernamePasswordCredential );
+		}
 
+		/// <inheritdoc />
 		public override int GetHashCode()
 		{
 			unchecked
@@ -86,12 +84,28 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 		#region interface ICredential
 
-		/// <summary>
-		/// Return a text that can be used for displaying.
-		/// </summary>
+		/// <inheritdoc />
 		public string DisplayId => Username;
 
-		public bool Equals( ICredential other ) => Equals( other as UsernamePasswordCredential );
+		/// <inheritdoc />
+		public bool Equals( ICredential other )
+		{
+			return Equals( other as UsernamePasswordCredential );
+		}
+
+		#endregion
+
+		#region interface IEquatable<UsernamePasswordCredential>
+
+		/// <inheritdoc />
+		public bool Equals( UsernamePasswordCredential other )
+		{
+			if( ReferenceEquals( this, other ) ) return true;
+
+			return other != null
+					&& string.Equals( Username, other.Username )
+					&& string.Equals( Password, other.Password );
+		}
 
 		#endregion
 	}

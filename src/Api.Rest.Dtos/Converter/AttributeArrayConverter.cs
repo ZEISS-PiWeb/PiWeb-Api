@@ -1,25 +1,28 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 {
-	#region using
+	#region usings
 
 	using System;
 	using System.Collections.Generic;
+	using Newtonsoft.Json;
 	using Attribute = Zeiss.PiWeb.Api.Rest.Dtos.Data.Attribute;
 
 	#endregion
 
 	/// <summary>
-	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="Attribute"/> arrays.
+	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="Data.Attribute"/> arrays.
 	/// </summary>
-	public class AttributeArrayConverter : Newtonsoft.Json.JsonConverter
+	public class AttributeArrayConverter : JsonConverter
 	{
 		#region methods
 
@@ -34,12 +37,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 		/// <summary>
 		/// Reads the JSON representation of the object.
 		/// </summary>
-		public override object ReadJson( Newtonsoft.Json.JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer )
+		public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer )
 		{
 			var result = new List<Attribute>();
-			if( reader.TokenType == Newtonsoft.Json.JsonToken.StartObject )
+			if( reader.TokenType == JsonToken.StartObject )
 			{
-				while( reader.Read() && reader.TokenType == Newtonsoft.Json.JsonToken.PropertyName )
+				while( reader.Read() && reader.TokenType == JsonToken.PropertyName )
 				{
 					var key = AttributeKeyCache.Cache.StringToKey( reader.Value.ToString() );
 					var value = reader.ReadAsString();
@@ -47,13 +50,14 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 					result.Add( new Attribute( key, value ) );
 				}
 			}
+
 			return result.ToArray();
 		}
 
 		/// <summary>
 		/// Writes the JSON representation of the object.
 		/// </summary>
-		public override void WriteJson( Newtonsoft.Json.JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer )
+		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer )
 		{
 			writer.WriteStartObject();
 
@@ -66,6 +70,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 					writer.WriteValue( att.RawValue ?? att.Value );
 				}
 			}
+
 			writer.WriteEndObject();
 		}
 

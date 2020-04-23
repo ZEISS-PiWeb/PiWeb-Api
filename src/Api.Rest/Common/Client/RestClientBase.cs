@@ -1,11 +1,11 @@
 ﻿#region copyright
-// 
-// /* * * * * * * * * * * * * * * * * * * * * * * * * */
-// /* Carl Zeiss IMT (IZfM Dresden)                   */
-// /* Softwaresystem PiWeb                            */
-// /* (c) Carl Zeiss 2019                             */
-// /* * * * * * * * * * * * * * * * * * * * * * * * * */
-// 
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Carl Zeiss IMT (IZfM Dresden)                   */
+/* Softwaresystem PiWeb                            */
+/* (c) Carl Zeiss 2019                             */
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 #if NETFRAMEWORK
@@ -14,6 +14,8 @@ using System.Net.Cache;
 
 namespace Zeiss.PiWeb.Api.Rest.Common.Client
 {
+	#region usings
+
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
@@ -30,9 +32,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using Zeiss.PiWeb.Api.Rest.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 
+	#endregion
+
 	public abstract class RestClientBase
-    {
-        #region constants
+	{
+		#region constants
 
 		/// <summary>Mimetype für JSON</summary>
 		public const string MimeTypeJson = "application/json";
@@ -66,71 +70,129 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// </summary>
 		public static readonly TimeSpan DefaultShortTimeout = TimeSpan.FromSeconds( 15 );
 
-		[CanBeNull]
-		private readonly bool _Chunked = true;
+		private readonly bool _Chunked;
 
 		private HttpClient _HttpClient;
 		private HttpClientHandler _WebRequestHandler;
 
 		private AuthenticationContainer _AuthenticationContainer = new AuthenticationContainer( AuthenticationMode.NoneOrBasic );
 
-        #endregion
+		#endregion
 
-        #region constructors
+		#region constructors
 
-        public RestClientBase( Uri serverUri, string endpointName, TimeSpan? timeout = null, int maxUriLength = DefaultMaxUriLength, bool chunked = true )
-        {
-            if( serverUri == null )
-                throw new ArgumentNullException( nameof(serverUri) );
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RestClientBase"/> class.
+		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="serverUri"/> is <see langword="null" />.</exception>
+		protected RestClientBase( [NotNull] Uri serverUri, string endpointName, TimeSpan? timeout = null, int maxUriLength = DefaultMaxUriLength, bool chunked = true )
+		{
+			if( serverUri == null )
+				throw new ArgumentNullException( nameof( serverUri ) );
 
-            ServiceLocation = new UriBuilder( serverUri )
-            {
-                Path = ( serverUri.AbsolutePath.Replace( "/DataServiceSoap", "" ) + "/" + endpointName ).Replace( "//", "/" )
-            }.Uri;
+			ServiceLocation = new UriBuilder( serverUri )
+			{
+				Path = ( serverUri.AbsolutePath.Replace( "/DataServiceSoap", "" ) + "/" + endpointName ).Replace( "//", "/" )
+			}.Uri;
 
-            _Chunked = chunked;
+			_Chunked = chunked;
 
-            MaxUriLength = maxUriLength;
+			MaxUriLength = maxUriLength;
 
-            BuildHttpClient( timeout );
-        }
+			BuildHttpClient( timeout );
+		}
 
-        #endregion
+		#endregion
+
+		#region events
+
+		public event EventHandler AuthenticationChanged;
+
+		#endregion
 
 		#region properties
 
 		public int MaxUriLength { get; }
 
-        #endregion
+		/// <summary>
+		/// Gets or sets the request timeout.
+		/// </summary>
+		public TimeSpan Timeout
+		{
+			get => _HttpClient.Timeout;
+			set
+			{
+				if( _HttpClient.Timeout != value )
+				{
+					_HttpClient.Timeout = value;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets if system default proxy should be used.
+		/// </summary>
+		public bool UseDefaultWebProxy
+		{
+			get => _WebRequestHandler.UseProxy;
+			set
+			{
+				if( _WebRequestHandler.UseProxy != value )
+				{
+					_WebRequestHandler.UseProxy = value;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Returns the endpoint address of the webservice.
+		/// </summary>
+		public Uri ServiceLocation { get; }
+
+		public AuthenticationContainer AuthenticationContainer
+		{
+			get => _AuthenticationContainer;
+			set
+			{
+				if( value == null ) throw new ArgumentNullException( nameof( value ) );
+
+				if( _AuthenticationContainer == value ) return;
+
+				_AuthenticationContainer = value;
+				UpdateAuthenticationInformation();
+			}
+		}
+
+		#endregion
 
 		#region methods
 
-		public Task Request( Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		public Task Request( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
 			return PerformRequestAsync<object>( requestCreationHandler, false, null, true, cancellationToken );
 		}
 
-		public Task<T> Request<T>( Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		public Task<T> Request<T>( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
 			return PerformRequestAsync( requestCreationHandler, false, ResponseToObjectAsync<T>, true, cancellationToken );
 		}
 
-		public Task<Stream> RequestStream( Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		public Task<Stream> RequestStream( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
 			return PerformRequestAsync( requestCreationHandler, true, ResponseToStreamAsync, false, cancellationToken );
 		}
 
-		public Task<IEnumerable<T>> RequestEnumerated<T>( Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		public Task<IEnumerable<T>> RequestEnumerated<T>( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
 			return PerformRequestAsync( requestCreationHandler, true, ResponseToEnumerationAsync<T>, false, cancellationToken );
 		}
 
-		public Task<byte[]> RequestBytes( Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		public Task<byte[]> RequestBytes( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
 			return PerformRequestAsync( requestCreationHandler, false, ResponseToBytesAsync, true, cancellationToken );
 		}
 
-		public Task<T> RequestBinary<T>( Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		public Task<T> RequestBinary<T>( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
 			return PerformRequestAsync( requestCreationHandler, false, BinaryResponseToObjectAsync<T>, true, cancellationToken );
 		}
@@ -169,7 +231,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			{
 				if( response.Content.Headers.ContentLength.HasValue )
 				{
-					using( var memStream = new MemoryStream( new byte[( int ) response.Content.Headers.ContentLength.Value], 0, ( int ) response.Content.Headers.ContentLength.Value, true, true ) )
+					using( var memStream = new MemoryStream( new byte[ (int)response.Content.Headers.ContentLength.Value ], 0, (int)response.Content.Headers.ContentLength.Value, true, true ) )
 					{
 						await responseStream.CopyToAsync( memStream ).ConfigureAwait( false );
 						return memStream.GetBuffer();
@@ -192,18 +254,18 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			}
 		}
 
-		private async Task<TResult> PerformRequestAsync<TResult>( 
-            Func<HttpRequestMessage> requestCreationHandler, 
-            bool streamed, Func<HttpResponseMessage, Task<TResult>> handler = null, 
-            bool autoDisposeResponse = true, 
-            CancellationToken cancellationToken = default( CancellationToken ) )
+		private async Task<TResult> PerformRequestAsync<TResult>(
+			Func<HttpRequestMessage> requestCreationHandler,
+			bool streamed, Func<HttpResponseMessage, Task<TResult>> handler = null,
+			bool autoDisposeResponse = true,
+			CancellationToken cancellationToken = default )
 		{
 			HttpRequestMessage request = null;
 			HttpResponseMessage response = null;
 
 			try
 			{
-                await CheckAuthenticationContainerAsync().ConfigureAwait( false );
+				await CheckAuthenticationContainerAsync().ConfigureAwait( false );
 
 				var completionOptions = streamed ? HttpCompletionOption.ResponseHeadersRead : HttpCompletionOption.ResponseContentRead;
 
@@ -220,14 +282,12 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 							return await handler( response ).ConfigureAwait( false );
 						}
 
-						return default( TResult );
+						return default;
 					}
 
-					AuthenticationContainer updatedAuthentication = null;
+					var updatedAuthentication = await UpdateAuthenticationInformationAsync( response ).ConfigureAwait( false );
 
-                    updatedAuthentication = await UpdateAuthenticationInformationAsync( response ).ConfigureAwait( false );
-					
-                    if( updatedAuthentication != null )
+					if( updatedAuthentication != null )
 					{
 						response.Dispose();
 
@@ -243,7 +303,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			{
 				throw new RestClientException( $"Error fetching web service response for request [{request?.RequestUri}]: {ex.Message}", ex );
 			}
-			catch( TaskCanceledException ex ) when ( !cancellationToken.IsCancellationRequested )
+			catch( TaskCanceledException ex ) when( !cancellationToken.IsCancellationRequested )
 			{
 				// we expect the TaskCanceledException to be a timeout if the passed token has not been canceled
 				throw new TimeoutException( "Timeout reached", ex );
@@ -257,17 +317,17 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			}
 		}
 
-        // ReSharper disable once VirtualMemberNeverOverridden.Global
-        protected virtual Task<bool> CheckAuthenticationContainerAsync()
-        {
-            return Task.FromResult( false );
-        }
+		// ReSharper disable once VirtualMemberNeverOverridden.Global
+		protected virtual Task<bool> CheckAuthenticationContainerAsync()
+		{
+			return Task.FromResult( false );
+		}
 
-        // ReSharper disable once VirtualMemberNeverOverridden.Global
-        protected virtual Task<AuthenticationContainer> UpdateAuthenticationInformationAsync( HttpResponseMessage response )
-        {
-            return Task.FromResult<AuthenticationContainer>( null );
-        }
+		// ReSharper disable once VirtualMemberNeverOverridden.Global
+		protected virtual Task<AuthenticationContainer> UpdateAuthenticationInformationAsync( HttpResponseMessage response )
+		{
+			return Task.FromResult<AuthenticationContainer>( null );
+		}
 
 		private void SetDefaultHttpHeaders( HttpRequestMessage request )
 		{
@@ -313,23 +373,21 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				Error error;
 				try
 				{
-					error = RestClientHelper.DeserializeObject<Error>( responseStream );
-
-					if( error == null )
-						error = new Error( $"Request {response.RequestMessage.Method} {response.RequestMessage.RequestUri} was not successful: {( int ) response.StatusCode} ({response.ReasonPhrase})" );
+					error = RestClientHelper.DeserializeObject<Error>( responseStream )
+							?? new Error( $"Request {response.RequestMessage.Method} {response.RequestMessage.RequestUri} was not successful: {(int)response.StatusCode} ({response.ReasonPhrase})" );
 				}
 				catch( JsonReaderException )
 				{
 					var buffer = ( responseStream as MemoryStream )?.ToArray();
 					var content = buffer != null ? Encoding.UTF8.GetString( buffer ) : null;
-					error = new Error( $"Request {response.RequestMessage.Method} {response.RequestMessage.RequestUri} was not successful: {( int ) response.StatusCode} ({response.ReasonPhrase})" )
+					error = new Error( $"Request {response.RequestMessage.Method} {response.RequestMessage.RequestUri} was not successful: {(int)response.StatusCode} ({response.ReasonPhrase})" )
 					{
-						ExceptionMessage = content,
+						ExceptionMessage = content
 					};
 				}
 				catch( Exception )
 				{
-					error = new Error( $"Request {response.RequestMessage.Method} {response.RequestMessage.RequestUri} was not successful: {( int ) response.StatusCode} ({response.ReasonPhrase})" );
+					error = new Error( $"Request {response.RequestMessage.Method} {response.RequestMessage.RequestUri} was not successful: {(int)response.StatusCode} ({response.ReasonPhrase})" );
 				}
 
 				throw new WrappedServerErrorException( error, response );
@@ -345,9 +403,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				return;
 
 			var error = new Error( response.ReasonPhrase );
-			string exceptionType;
 
-			if( WrappedServerErrorExceptionExtensions.ServerBasedExceptions.TryGetValue( response.StatusCode, out exceptionType ) )
+			if( WrappedServerErrorExceptionExtensions.ServerBasedExceptions.TryGetValue( response.StatusCode, out var exceptionType ) )
 				error.ExceptionType = exceptionType;
 
 			throw new WrappedServerErrorException( error, response );
@@ -463,61 +520,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			AuthenticationChanged?.Invoke( this, EventArgs.Empty );
 		}
 
-		#endregion
-
-		#region interface IRestClient
-
-		/// <summary>
-		/// Gets or sets the request timeout.
-		/// </summary>
-		public TimeSpan Timeout
-		{
-			get { return _HttpClient.Timeout; }
-			set
-			{
-				if( _HttpClient.Timeout != value )
-				{
-					_HttpClient.Timeout = value;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets if system default proxy should be used.
-		/// </summary>
-		public bool UseDefaultWebProxy
-		{
-			get { return _WebRequestHandler.UseProxy; }
-			set
-			{
-				if( _WebRequestHandler.UseProxy != value )
-				{
-					_WebRequestHandler.UseProxy = value;
-				}
-			}
-		}
-
-		public event EventHandler AuthenticationChanged;
-
-		/// <summary>
-		/// Returns the endpoint address of the webservice.
-		/// </summary>
-		public Uri ServiceLocation { get; }
-
-		public AuthenticationContainer AuthenticationContainer
-		{
-			get { return _AuthenticationContainer; }
-			set
-			{
-				if( value == null ) throw new ArgumentNullException( nameof(value) );
-
-				if( _AuthenticationContainer == value ) return;
-
-				_AuthenticationContainer = value;
-				UpdateAuthenticationInformation();
-			}
-		}
-
 		/// <summary>
 		/// Disposes this instance.
 		/// </summary>
@@ -528,5 +530,5 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		}
 
 		#endregion
-    }
+	}
 }

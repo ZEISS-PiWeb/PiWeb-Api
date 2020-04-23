@@ -1,14 +1,16 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Common.Data
 {
-	#region using
+	#region usings
 
 	using System;
 	using System.Collections.Generic;
@@ -16,6 +18,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 	using System.IO;
 	using System.Linq;
 	using System.Text;
+	using JetBrains.Annotations;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Bson;
 	using Newtonsoft.Json.Converters;
@@ -49,8 +52,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		/// <summary>
 		/// Deserializes the <paramref name="data"/>-stream into a new object of type <typeparamref name="T"/>. The data is expected to be in JSON format.
 		/// </summary>
-		public static T DeserializeObject<T>( Stream data )
+		/// <exception cref="ArgumentNullException"><paramref name="data"/> is <see langword="null" />.</exception>
+		public static T DeserializeObject<T>( [NotNull] Stream data )
 		{
+			if( data == null ) throw new ArgumentNullException( nameof( data ) );
+
 			using( var reader = new JsonTextReader( new StreamReader( data, Encoding.UTF8, true, 4096, true ) ) { CloseInput = false } )
 			{
 				return CreateJsonSerializer().Deserialize<T>( reader );
@@ -60,8 +66,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		/// <summary>
 		/// Deserializes the <paramref name="data"/>-stream into a new object of type <typeparamref name="T"/>. The data is expected to be in BSON format.
 		/// </summary>
-		public static T DeserializeBinaryObject<T>( Stream data )
+		/// <exception cref="ArgumentNullException"><paramref name="data"/> is <see langword="null" />.</exception>
+		public static T DeserializeBinaryObject<T>( [NotNull] Stream data )
 		{
+			if( data == null ) throw new ArgumentNullException( nameof( data ) );
+
 			using( var reader = new BsonDataReader( new BinaryReader( data, Encoding.UTF8, true ) ) { CloseInput = false } )
 			{
 				reader.ReadRootValueAsArray = true;
@@ -74,8 +83,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		/// <summary>
 		/// Deserializes the <paramref name="data"/>-stream into a new enumerable object of type <typeparamref name="T"/>. The data is expected to be in JSON format.
 		/// </summary>
-		internal static IEnumerable<T> DeserializeEnumeratedObject<T>( Stream data )
+		/// <exception cref="ArgumentNullException"><paramref name="data"/> is <see langword="null" />.</exception>
+		internal static IEnumerable<T> DeserializeEnumeratedObject<T>( [NotNull] Stream data )
 		{
+			if( data == null ) throw new ArgumentNullException( nameof( data ) );
+
 			using( var streamReader = new StreamReader( data, Encoding.UTF8, true, 4096, true ) )
 			using( var reader = new JsonTextReader( streamReader ) { CloseInput = false } )
 			{
@@ -126,6 +138,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 				else if( requestedPartAttributes.AllAttributes == AllAttributeSelection.False )
 					parameter.Add( ParameterDefinition.Create( "requestedPartAttributes", "None" ) );
 			}
+
 			if( requestedCharacteristicAttributes != null )
 			{
 				if( requestedCharacteristicAttributes.AllAttributes != AllAttributeSelection.True && requestedCharacteristicAttributes.Attributes != null )
@@ -133,6 +146,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 				else if( requestedCharacteristicAttributes.AllAttributes == AllAttributeSelection.False )
 					parameter.Add( ParameterDefinition.Create( "requestedCharacteristicAttributes", "None" ) );
 			}
+
 			return parameter;
 		}
 
@@ -143,9 +157,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		{
 			if( value.StartsWith( QueryListStart ) && value.EndsWith( QueryListStop ) )
 				value = value.Substring( 1, value.Length - 2 );
-			
+
 			if( string.IsNullOrEmpty( value ) )
-				return new ushort[0];
+				return new ushort[ 0 ];
 			try
 			{
 				return value.Split( ',' ).Select( s => ushort.Parse( s, CultureInfo.InvariantCulture ) ).ToArray();
@@ -199,7 +213,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 
 			return ToListString( value.Select( v => v.ToString( format, formatProvider ) ) );
 		}
-		
+
 		/// <summary>Creates a list string from <paramref name="list"/>.</summary>
 		internal static string ToListString( IEnumerable<string> list )
 		{
@@ -225,7 +239,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 
 			return length + LengthOfEscapedDelimiter;
 		}
-		
+
 		/// <summary>
 		/// Provides the remaining size for parameters calculated by difference of <paramref name="maxUriLength"/> and the combination <paramref name="serviceLocation"/>, <paramref name="requestPath"/> and <paramref name="parameterDefinitions"/>
 		/// <remarks><paramref name="requestPath"/> and <paramref name="parameterDefinitions"/> must not contain any values (except for lists: empty brackets) but only fix parameter name </remarks>

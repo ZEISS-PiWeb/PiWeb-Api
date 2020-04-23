@@ -28,6 +28,9 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter.Conditions
 
 		#region constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="IntegerCompareFilterCondition"/> class.
+		/// </summary>
 		public IntegerCompareFilterCondition( IntegerAttributes attribute, CompareOperation operation, int? value )
 		{
 			_Attribute = attribute;
@@ -39,6 +42,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter.Conditions
 
 		#region methods
 
+		/// <inheritdoc />
 		public override IFilterTree BuildFilterTree()
 		{
 			var attributeName = FilterHelper.GetAttributeName( _Attribute );

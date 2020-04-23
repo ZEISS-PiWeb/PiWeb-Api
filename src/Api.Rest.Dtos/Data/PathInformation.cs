@@ -1,19 +1,24 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                    */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
-	#region using
+	#region usings
 
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Text;
 	using Newtonsoft.Json;
+	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 
 	#endregion
 
@@ -26,17 +31,13 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// * A characteristic path element can have other characteristic elements as children
 	/// * A characteristic path element can not have part elements as children
 	/// </summary>
-	[JsonConverter( typeof( Converter.PathInformationConverter ) )]
+	[JsonConverter( typeof( PathInformationConverter ) )]
 	public sealed class PathInformation : IFormattable, IEnumerable<PathElement>
 	{
-		#region constants
+		#region members
 
 		/// <summary> Returns the root path. </summary>
 		public static readonly PathInformation Root = new PathInformation();
-
-		#endregion
-
-		#region members
 
 		private ArraySegment<PathElement> _PathElements;
 		private int? _HashCode;
@@ -46,25 +47,32 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		#region constructors
 
 		/// <summary>
-		/// Constructor.
+		/// Initializes a new instance of the <see cref="PathInformation"/> class.
 		/// </summary>
 		public PathInformation()
 		{
 			_PathElements = new ArraySegment<PathElement>( new PathElement[ 0 ] );
 		}
 
-		/// <summary>Constructor. Initialies the path with the given <paramref name="paths"/>.</summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PathInformation"/> class.
+		/// </summary>
 		public PathInformation( IEnumerable<PathElement> paths )
 		{
 			_PathElements = new ArraySegment<PathElement>( paths.ToArray() );
 		}
 
-		/// <summary>Constructor. Initialies the path with the given <paramref name="paths"/>.</summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PathInformation"/> class.
+		/// </summary>
 		public PathInformation( params PathElement[] paths )
 		{
 			_PathElements = new ArraySegment<PathElement>( paths );
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PathInformation"/> class.
+		/// </summary>
 		private PathInformation( ArraySegment<PathElement> path )
 		{
 			_PathElements = path;
@@ -72,7 +80,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#endregion
 
-		#region properties and indexer
+		#region properties
 
 		/// <summary>
 		/// Indexer to access the path elements by its index.
@@ -91,10 +99,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Returns the parent path.
 		/// </summary>
-		public PathInformation ParentPath
-		{
-			get { return Parent( 1 ); }
-		}
+		public PathInformation ParentPath => Parent( 1 );
 
 		/// <summary>
 		/// Returns the parent part path.
@@ -108,6 +113,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				{
 					upcount += 1;
 				}
+
 				return Parent( upcount );
 			}
 		}
@@ -115,50 +121,32 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary> 
 		/// Returns the root part of ths path.
 		/// </summary>
-		public PathInformation RootPartPath
-		{
-			get { return IsRoot ? Root : Parent( Count - 1 ); }
-		}
+		public PathInformation RootPartPath => IsRoot ? Root : Parent( Count - 1 );
 
 		/// <summary> 
 		/// Returns true if this path is the root part. 
 		/// </summary>
-		public bool IsRoot
-		{
-			get { return _PathElements.Count == 0; }
-		}
+		public bool IsRoot => _PathElements.Count == 0;
 
 		/// <summary> 
 		/// Returns the number of path elements. 
 		/// </summary>
-		public int Count
-		{
-			get { return _PathElements.Count; }
-		}
+		public int Count => _PathElements.Count;
 
 		/// <summary> 
 		/// Returns the name part of the path. 
 		/// </summary>
-		public string Name
-		{
-			get { return _PathElements.Count == 0 ? "" : _PathElements.Array[ _PathElements.Offset + _PathElements.Count - 1 ].Value; }
-		}
+		public string Name => _PathElements.Count == 0 ? "" : _PathElements.Array[ _PathElements.Offset + _PathElements.Count - 1 ].Value;
 
 		/// <summary> 
 		/// Returns the typed name of the path - a path element. As the root part does not have a name <code>null</code> is returned. 
 		/// </summary>
-		public PathElement TypedName
-		{
-			get { return _PathElements.Count == 0 ? PathElement.EmptyPart : this[ Count - 1 ]; }
-		}
+		public PathElement TypedName => _PathElements.Count == 0 ? PathElement.EmptyPart : this[ Count - 1 ];
 
 		/// <summary> 
 		/// Returns the type of the last path element. 
 		/// </summary>
-		public InspectionPlanEntity Type
-		{
-			get { return _PathElements.Count == 0 ? InspectionPlanEntity.Part : this[ Count - 1 ].Type; }
-		}
+		public InspectionPlanEntity Type => _PathElements.Count == 0 ? InspectionPlanEntity.Part : this[ Count - 1 ].Type;
 
 		#endregion
 
@@ -168,7 +156,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <returns>True, if the <paramref name="path"/> is <code>null</code> or the root part otherwise false.</returns>
 		public static bool IsNullOrRoot( PathInformation path )
 		{
-			return ( path == null || path.IsRoot );
+			return path == null || path.IsRoot;
 		}
 
 		/// <summary> Checks if this path is below <paramref name="path"/> or is equal to <paramref name="path"/>.
@@ -302,9 +290,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			return !Equals( p1, p2 );
 		}
 
-		/// <summary> 
-		/// Overridden <see cref="System.Object.Equals(object)"/> method. 
-		/// </summary>
+		/// <inheritdoc />
 		public override bool Equals( object obj )
 		{
 			var other = obj as PathInformation;
@@ -316,12 +302,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				if( !_PathElements.Array[ _PathElements.Offset + i ].Equals( other._PathElements.Array[ other._PathElements.Offset + i ] ) )
 					return false;
 			}
+
 			return true;
 		}
 
-		/// <summary> 
-		/// Overridden <see cref="System.Object.GetHashCode"/> method. 
-		/// </summary>
+		/// <inheritdoc />
 		public override int GetHashCode()
 		{
 			if( !_HashCode.HasValue )
@@ -331,17 +316,19 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				{
 					hash ^= elem.GetHashCode();
 				}
+
 				_HashCode = hash;
 			}
+
 			return _HashCode.Value;
 		}
 
 		/// <summary>
-		/// Overridden <see cref="System.Object.ToString"/> method.
 		/// Returns a string representation of this PathInformation object to be used for display only.
 		/// The path string will contain at least a leading delimiter for the root part.
 		/// (Attention: The string cannot be converted back into a PathInformation object!)
 		/// </summary>
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return ToString( true );
@@ -369,7 +356,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			if( IsRoot ) return withRoot ? PathHelper.DelimiterString : string.Empty;
 
 			var addDelimiter = withRoot;
-			var sb = new System.Text.StringBuilder();
+			var sb = new StringBuilder();
 			foreach( var elem in this )
 			{
 				if( addDelimiter ) sb.Append( PathHelper.DelimiterString );
@@ -383,17 +370,16 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#endregion
 
-		#region interface IEnumerable
+		#region interface IEnumerable<PathElement>
 
-		/// <summary>
-		/// Returns an enumerator which contains all <see cref="PathElement"/> objects which this <see cref="PathInformation"/> consists of. 
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerator<PathElement> GetEnumerator()
 		{
 			return ( (IEnumerable<PathElement>)_PathElements ).GetEnumerator();
 		}
 
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		/// <inheritdoc />
+		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return ( (IEnumerable<PathElement>)_PathElements ).GetEnumerator();
 		}
@@ -408,6 +394,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// * "Full": Returns the name and the full path in brackets.
 		/// * No or unknown format: Returns the whole path.
 		/// </summary>
+		/// <inheritdoc />
 		public string ToString( string format, IFormatProvider formatProvider )
 		{
 			switch( format )
@@ -416,7 +403,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				case "Name":
 					return Name;
 				case "Full":
-					return string.Format( "{0} ({1})", Name, ToString() );
+					return $"{Name} ({ToString()})";
 				default:
 					return ToString();
 			}

@@ -22,14 +22,14 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 	/// <summary>
 	/// Credential that contains certificate information.
 	/// </summary>
-	public sealed class CertificateCredential : ICredential
+	public sealed class CertificateCredential : ICredential, IEquatable<CertificateCredential>
 	{
 		#region constructors
 
 		/// <summary>
-		/// Constructor.
+		/// Initializes a new instance of the <see cref="CertificateCredential"/> class.
 		/// </summary>
-		/// <param name="certificate"></param>
+		/// <exception cref="ArgumentNullException"><paramref name="certificate"/> is <see langword="true" />.</exception>
 		public CertificateCredential( [NotNull] X509Certificate2 certificate )
 		{
 			Certificate = certificate ?? throw new ArgumentNullException( nameof( certificate ) );
@@ -52,21 +52,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 		public static CertificateCredential CreateFromCertificate( X509Certificate2 certificate )
 		{
-			if( certificate == null )
-				return null;
-
-			return new CertificateCredential( certificate );
+			return certificate == null ? null : new CertificateCredential( certificate );
 		}
 
-		public bool Equals( CertificateCredential other )
-		{
-			return other != null
-			       && Equals( Certificate, other.Certificate )
-			       && string.Equals( DisplayId, other.DisplayId );
-		}
 
-		public override bool Equals( object other ) => Equals( other as CertificateCredential );
-
+		/// <inheritdoc />
 		public override int GetHashCode()
 		{
 			unchecked
@@ -75,17 +65,37 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			}
 		}
 
+		/// <inheritdoc />
+		public override bool Equals( object obj )
+		{
+			return Equals( obj as CertificateCredential );
+		}
+
 		#endregion
 
 		#region interface ICredential
 
-		/// <summary>
-		/// Return a text that can be used for displaying.
-		/// </summary>
+		/// <inheritdoc />
 		[CanBeNull]
 		public string DisplayId { get; }
 
-		public bool Equals( ICredential other ) => Equals( other as CertificateCredential );
+		/// <inheritdoc />
+		public bool Equals( ICredential other )
+		{
+			return Equals( other as CertificateCredential );
+		}
+
+		#endregion
+
+		#region interface IEquatable<CertificateCredential>
+
+		/// <inheritdoc />
+		public bool Equals( CertificateCredential other )
+		{
+			return other != null
+					&& Equals( Certificate, other.Certificate )
+					&& string.Equals( DisplayId, other.DisplayId );
+		}
 
 		#endregion
 	}

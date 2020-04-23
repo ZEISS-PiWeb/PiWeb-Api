@@ -25,24 +25,23 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 	{
 		#region constructors
 
-		/// <summary> 
-		/// Constructor 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Error"/> class.
 		/// </summary>
 		public Error()
 		{
-			Message = "";
 		}
 
-		/// <summary> 
-		/// Constructor 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Error"/> class.
 		/// </summary>
 		public Error( string message )
 		{
 			Message = message;
 		}
 
-		/// <summary> 
-		/// Constructor 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Error"/> class.
 		/// </summary>
 		public Error( Exception ex )
 		{
@@ -89,14 +88,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 
 		#region methods
 
-		/// <summary>
-		/// Overridden <see cref="System.Object.ToString"/> method.
-		/// </summary>
+		/// <inheritdoc />
 		public override string ToString()
 		{
-			if( !string.IsNullOrEmpty( ExceptionMessage ) )
-				return Message + ": " + ExceptionMessage;
-			return Message;
+			return !string.IsNullOrEmpty( ExceptionMessage ) ? $"{Message}: {ExceptionMessage}" : Message;
 		}
 
 		#endregion

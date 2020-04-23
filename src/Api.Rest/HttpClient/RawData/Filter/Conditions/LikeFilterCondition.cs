@@ -27,6 +27,9 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter.Conditions
 
 		#region constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LikeFilterCondition"/> class.
+		/// </summary>
 		public LikeFilterCondition( StringAttributes attribute, string value )
 		{
 			_Attribute = attribute;
@@ -37,6 +40,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter.Conditions
 
 		#region methods
 
+		/// <inheritdoc />
 		public override IFilterTree BuildFilterTree()
 		{
 			var attributeName = FilterHelper.GetAttributeName( _Attribute );

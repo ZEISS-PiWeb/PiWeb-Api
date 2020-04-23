@@ -1,14 +1,16 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
-	#region using
+	#region usings
 
 	using System.Collections.Generic;
 	using JetBrains.Annotations;
@@ -17,8 +19,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	#endregion
 
 	/// <summary>
-	/// This class represents a concrete catalog with a description of possible catalog attributes (<see cref="ValidAttributes"/>) for each entry (i.e. the colums of a catalog) and
-	/// the catalog entries (<see cref="CatalogEntries"/>).
+	/// This class represents a concrete catalog with a description of possible catalog attributes (<see cref="ValidAttributes"/>)
+	/// for each entry (i.e. the colums of a catalog) and the catalog entries (<see cref="CatalogEntries"/>).
 	/// </summary>
 	public class Catalog : SimpleCatalog
 	{
@@ -39,9 +41,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		{
 			get
 			{
-				CatalogEntry result;
-				_Dictionary.TryGetValue( key, out result );
-
+				_Dictionary.TryGetValue( key, out var result );
 				return result;
 			}
 		}
@@ -52,9 +52,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		[JsonProperty( "validAttributes" )]
 		public ushort[] ValidAttributes
 		{
-			[NotNull]
-			get { return _ValidAttributes; }
-			set { _ValidAttributes = value ?? new ushort[ 0 ]; }
+			[NotNull] get => _ValidAttributes;
+			set => _ValidAttributes = value ?? new ushort[ 0 ];
 		}
 
 		/// <summary>
@@ -63,13 +62,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		[JsonProperty( "catalogEntries" )]
 		public CatalogEntry[] CatalogEntries
 		{
-			[NotNull]
-			get { return _CatalogEntries; }
+			[NotNull] get => _CatalogEntries;
 			set
 			{
 				_Dictionary.Clear();
 
-				_CatalogEntries = value ?? new CatalogEntry[0];
+				_CatalogEntries = value ?? new CatalogEntry[ 0 ];
 				foreach( var entry in _CatalogEntries )
 				{
 					_Dictionary[ entry.Key ] = entry;

@@ -29,6 +29,9 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter.Generators
 
 		#region constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DateTimeConditionGenerator"/> class.
+		/// </summary>
 		public DateTimeConditionGenerator( DateTimeAttributes dateTimeAttribute )
 		{
 			_DateTimeAttribute = dateTimeAttribute;

@@ -1,9 +1,11 @@
 ﻿#region copyright
-// /* * * * * * * * * * * * * * * * * * * * * * * * * */
-// /* Carl Zeiss IMT (IZfM Dresden)                   */
-// /* Softwaresystem PiWeb                            */
-// /* (c) Carl Zeiss 2017                             */
-// /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Carl Zeiss IMT (IZfM Dresden)                   */
+/* Softwaresystem PiWeb                            */
+/* (c) Carl Zeiss 2017                             */
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Contracts
@@ -18,10 +20,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 
 	public static class WrappedServerErrorExceptionExtensions
 	{
-		/// <summary>
-		/// Contains mappings of HTTP statuscodes to .NET based exceptions for server based exceptions (500 HTTP status codes)
-		/// </summary>
-		public static IReadOnlyDictionary<HttpStatusCode, string> ServerBasedExceptions => InternalServerBasedExceptions;
+		#region members
 
 		private static readonly Dictionary<HttpStatusCode, string> InternalServerBasedExceptions = new Dictionary<HttpStatusCode, string>
 		{
@@ -31,6 +30,19 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 			{ HttpStatusCode.ServiceUnavailable, "System.ServiceModel.ServiceActivationException" },
 			{ HttpStatusCode.GatewayTimeout, typeof( TimeoutException ).ToString() }
 		};
+
+		#endregion
+
+		#region properties
+
+		/// <summary>
+		/// Contains mappings of HTTP statuscodes to .NET based exceptions for server based exceptions (500 HTTP status codes)
+		/// </summary>
+		public static IReadOnlyDictionary<HttpStatusCode, string> ServerBasedExceptions => InternalServerBasedExceptions;
+
+		#endregion
+
+		#region methods
 
 		/// <summary>
 		/// Indicates if <paramref name="exception"/> includes an <c>System.ServiceModel.EndpointNotFoundException</c>
@@ -65,5 +77,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		{
 			return !exception.IsServerBasedFault();
 		}
+
+		#endregion
 	}
 }

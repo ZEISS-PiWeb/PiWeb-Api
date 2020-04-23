@@ -1,9 +1,11 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZM Dresden)                    */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos
@@ -14,11 +16,15 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 	using System.Collections.Generic;
 	using Newtonsoft.Json;
 
-	# endregion
+	#endregion
 
-    public class InterfaceVersionRange
-    {
-		[ JsonProperty( "supportedVersions" ) ]
+	public class InterfaceVersionRange
+	{
+		#region properties
+
+		[JsonProperty( "supportedVersions" )]
 		public IEnumerable<Version> SupportedVersions { get; set; }
-    }
+
+		#endregion
+	}
 }

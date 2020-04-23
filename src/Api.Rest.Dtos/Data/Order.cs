@@ -1,14 +1,16 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
-	#region using
+	#region usings
 
 	using Newtonsoft.Json;
 
@@ -19,10 +21,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// </summary>
 	public class Order
 	{
-		#region constructor
+		#region constructors
 
 		/// <summary>
-		/// Constructor.
+		/// Initializes a new instance of the <see cref="Order"/> class.
 		/// </summary>
 		public Order()
 		{
@@ -30,19 +32,19 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		}
 
 		/// <summary>
-        /// Constructor.
-        /// </summary>
+		/// Initializes a new instance of the <see cref="Order"/> class.
+		/// </summary>
 		/// <param name="attribute">The key of the attribute that is used for sorting</param>
 		/// <param name="direction">The sort direction</param>
 		/// <param name="entity">The entity that is used for sorting</param>
-        public Order( ushort attribute, OrderDirection direction, Entity entity )
-        {
-            Attribute = attribute;
-            Direction = direction;
-            Entity = entity;
-        }
-        
-        #endregion
+		public Order( ushort attribute, OrderDirection direction, Entity entity )
+		{
+			Attribute = attribute;
+			Direction = direction;
+			Entity = entity;
+		}
+
+		#endregion
 
 		#region properties
 
@@ -68,12 +70,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#region methods
 
-		/// <summary>
-		/// Overridden <see cref="System.Object.ToString()"/> method.
-		/// </summary>
+		/// <inheritdoc />
 		public override string ToString()
 		{
-			return string.Format( "{0} {1}", Attribute, Direction );
+			return $"{Attribute} {Direction}";
 		}
 
 		#endregion

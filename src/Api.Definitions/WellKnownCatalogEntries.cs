@@ -1,9 +1,11 @@
 ﻿#region copyright
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2015                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #endregion
 
 namespace Zeiss.PiWeb.Api.Definitions
@@ -13,13 +15,15 @@ namespace Zeiss.PiWeb.Api.Definitions
 	/// </summary>
 	public static class WellKnownCatalogEntries
 	{
-		#region Characteristic
+		#region class Characteristic
 
 		/// <summary>
 		/// Well known catalog entries for characteristics.
 		/// </summary>
 		public static class Characteristic
 		{
+			#region Type enum
+
 			/// <summary>
 			/// Catalog entries for the characteristic type.
 			/// </summary>
@@ -41,17 +45,21 @@ namespace Zeiss.PiWeb.Api.Definitions
 				/// </summary>
 				Counter = 2,
 			}
+
+			#endregion
 		}
 
 		#endregion
 
-		#region Measurement
+		#region class Measurement
 
 		/// <summary>
 		/// Well known catalog entries for measurements.
 		/// </summary>
 		public static class Measurement
 		{
+			#region AggregationInterval enum
+
 			/// <summary>
 			/// Catalog entries for the measurement aggregation interval.
 			/// </summary>
@@ -73,6 +81,10 @@ namespace Zeiss.PiWeb.Api.Definitions
 				Monthly = 4,
 			}
 
+			#endregion
+
+			#region Status enum
+
 			/// <summary>
 			/// Catalog entries for the measurement status.
 			/// </summary>
@@ -86,7 +98,9 @@ namespace Zeiss.PiWeb.Api.Definitions
 
 				/// <summary>Blocked</summary>
 				Blocked = 2
-			};
+			}
+
+			#endregion
 		}
 
 		#endregion
