@@ -30,9 +30,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using Zeiss.PiWeb.Api.Rest.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 
-	public abstract class RestClientBase
-    {
-        #region constants
+	#endregion
+
+	public abstract class RestClientBase : IDisposable
+	{
+		#region constants
 
 		/// <summary>Mimetype für JSON</summary>
 		public const string MimeTypeJson = "application/json";
@@ -71,7 +73,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		private HttpClient _HttpClient;
 		private HttpClientHandler _WebRequestHandler;
-
+		private bool _IsDisposed;
 		private AuthenticationContainer _AuthenticationContainer = new AuthenticationContainer( AuthenticationMode.NoneOrBasic );
 
         #endregion
@@ -519,12 +521,32 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		}
 
 		/// <summary>
-		/// Disposes this instance.
+		/// Releases unmanaged and - optionally - managed resources.
 		/// </summary>
+		/// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+		protected virtual void Dispose( bool disposing )
+		{
+			if( !_IsDisposed )
+			{
+				if( disposing )
+				{
+					_HttpClient?.Dispose();
+					_WebRequestHandler?.Dispose();
+				}
+
+				_IsDisposed = true;
+			}
+		}
+
+		#endregion
+
+		#region interface IDisposable
+
+		/// <inheritdoc />
 		public void Dispose()
 		{
-			_HttpClient?.Dispose();
-			_WebRequestHandler?.Dispose();
+			Dispose( true );
+			GC.SuppressFinalize( this );
 		}
 
 		#endregion

@@ -19,7 +19,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 	#endregion
 
-	public sealed class OAuthTokenCredential : ICredential
+	public sealed class OAuthTokenCredential : ICredential, IEquatable<OAuthTokenCredential>
 	{
 		#region constructors
 
@@ -60,18 +60,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			return new OAuthTokenCredential( identity, accessToken, accessTokenExpiration, refreshToken );
 		}
 
-		public bool Equals( OAuthTokenCredential other )
-		{
-			return other != null
-					&& string.Equals( DisplayId, other.DisplayId )
-					&& string.Equals( AccessToken, other.AccessToken )
-					&& AccessTokenExpiration.Equals( other.AccessTokenExpiration )
-					&& string.Equals( RefreshToken, other.RefreshToken )
-					&& string.Equals( MailAddress, other.MailAddress );
-		}
-
 		/// <inheritdoc />
-		public override bool Equals( object other ) => Equals( other as OAuthTokenCredential );
+		public override bool Equals( object obj )
+		{
+			return Equals( obj as OAuthTokenCredential );
+		}
 
 		/// <inheritdoc />
 		public override int GetHashCode()
@@ -96,6 +89,21 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 		/// <inheritdoc />
 		public bool Equals( ICredential other ) => Equals( other as OAuthTokenCredential );
+
+		#endregion
+
+		#region interface IEquatable<OAuthTokenCredential>
+
+		/// <inheritdoc />
+		public bool Equals( OAuthTokenCredential other )
+		{
+			return other != null
+					&& string.Equals( DisplayId, other.DisplayId )
+					&& string.Equals( AccessToken, other.AccessToken )
+					&& AccessTokenExpiration.Equals( other.AccessTokenExpiration )
+					&& string.Equals( RefreshToken, other.RefreshToken )
+					&& string.Equals( MailAddress, other.MailAddress );
+		}
 
 		#endregion
 	}

@@ -19,7 +19,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// Notice that comparision of path elements is case insensitiv per default.
 	/// </summary>
 	/// <remarks>This class is immutable!</remarks>
-	public sealed class PathElement
+	public sealed class PathElement : IEquatable<PathElement>
 	{
 		#region constants
 
@@ -112,8 +112,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		public override bool Equals( object obj )
 		{
-			var other = obj as PathElement;
-			return !ReferenceEquals( other, null ) && Type == other.Type && GetHashCode() == other.GetHashCode() && string.Equals( Value, other.Value, StringComparison.OrdinalIgnoreCase );
+			return Equals( obj as PathElement );
 		}
 
 		/// <summary>
@@ -134,6 +133,19 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		public override string ToString()
 		{
 			return Value;
+		}
+
+		#endregion
+
+		#region interface IEquatable<PathElement>
+
+		/// <inheritdoc />
+		public bool Equals( PathElement other )
+		{
+			return !ReferenceEquals( other, null ) &&
+					Type == other.Type &&
+					GetHashCode() == other.GetHashCode() &&
+					string.Equals( Value, other.Value, StringComparison.OrdinalIgnoreCase );
 		}
 
 		#endregion

@@ -12,13 +12,14 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 {
 	#region usings
 
+	using System;
 	using System.Net;
 	using System.Security.Cryptography.X509Certificates;
 	using Zeiss.PiWeb.Api.Rest.Common.Utilities;
 
 	#endregion
 
-	public class AuthenticationContainer
+	public sealed class AuthenticationContainer : IEquatable<AuthenticationContainer>
 	{
 		#region constructors
 
@@ -96,16 +97,14 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		public override bool Equals( object obj )
 		{
-			var other = obj as AuthenticationContainer;
-
-			return other != null
-			       && Equals( Mode, other.Mode )
-			       && CredentialEquals( Credentials, other.Credentials )
-			       && CertificateEquals( Certificate, other.Certificate )
-			       && Equals( OAuthAccessToken, other.OAuthAccessToken );
+			return Equals( obj as AuthenticationContainer );
 		}
 
-		public override int GetHashCode() => (int) Mode;
+		/// <inheritdoc />
+		public override int GetHashCode()
+		{
+			return (int)Mode;
+		}
 
 		public static bool operator ==( AuthenticationContainer a, AuthenticationContainer b )
 		{
@@ -132,6 +131,20 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			if( a == null || b == null ) return false;
 
 			return Equals( a.Thumbprint, b.Thumbprint );
+		}
+
+		#endregion
+
+		#region interface IEquatable<AuthenticationContainer>
+
+		/// <inheritdoc />
+		public bool Equals( AuthenticationContainer other )
+		{
+			return other != null
+					&& Equals( Mode, other.Mode )
+					&& CredentialEquals( Credentials, other.Credentials )
+					&& CertificateEquals( Certificate, other.Certificate )
+					&& Equals( OAuthAccessToken, other.OAuthAccessToken );
 		}
 
 		#endregion

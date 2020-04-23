@@ -51,10 +51,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		/// </summary>
 		public static T DeserializeObject<T>( Stream data )
 		{
-			using( var reader = new JsonTextReader( new StreamReader( data, Encoding.UTF8, true, 4096, true ) ) { CloseInput = false } )
-			{
-				return CreateJsonSerializer().Deserialize<T>( reader );
-			}
+			if( data == null ) throw new ArgumentNullException( nameof( data ) );
+
+			using var reader = new JsonTextReader( new StreamReader( data, Encoding.UTF8, true, 4096, true ) ) { CloseInput = false };
+			return CreateJsonSerializer().Deserialize<T>( reader );
 		}
 
 		/// <summary>
@@ -62,13 +62,12 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		/// </summary>
 		public static T DeserializeBinaryObject<T>( Stream data )
 		{
-			using( var reader = new BsonDataReader( new BinaryReader( data, Encoding.UTF8, true ) ) { CloseInput = false } )
-			{
-				reader.ReadRootValueAsArray = true;
+			if( data == null ) throw new ArgumentNullException( nameof( data ) );
 
-				var serializer = new JsonSerializer();
-				return serializer.Deserialize<T>( reader );
-			}
+			using var reader = new BsonDataReader( new BinaryReader( data, Encoding.UTF8, true ) ) { CloseInput = false, ReadRootValueAsArray = true };
+
+			var serializer = new JsonSerializer();
+			return serializer.Deserialize<T>( reader );
 		}
 
 		/// <summary>
@@ -76,9 +75,12 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		/// </summary>
 		internal static IEnumerable<T> DeserializeEnumeratedObject<T>( Stream data )
 		{
-			using( var streamReader = new StreamReader( data, Encoding.UTF8, true, 4096, true ) )
-			using( var reader = new JsonTextReader( streamReader ) { CloseInput = false } )
+			if( data == null ) throw new ArgumentNullException( nameof( data ) );
+
+			IEnumerable<T> DeserializeEnumeratedObject()
 			{
+				using var streamReader = new StreamReader( data, Encoding.UTF8, true, 4096, true );
+				using var reader = new JsonTextReader( streamReader ) { CloseInput = false };
 				var result = CreateJsonSerializer().Deserialize<IEnumerable<T>>( reader );
 
 				if( result == null ) yield break;
@@ -88,6 +90,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 					yield return entity;
 				}
 			}
+
+			return DeserializeEnumeratedObject();
 		}
 
 		/// <summary>
@@ -237,7 +241,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		}
 
 		/// <summary>
-		/// Creates and configures the <see cref="Newtonsoft.Json.JsonSerializer"/> that are needed by the services.
+		/// Creates and configures the <see cref="JsonSerializer"/> that are needed by the services.
 		/// </summary>
 		internal static JsonSerializer CreateJsonSerializer()
 		{
