@@ -9,7 +9,13 @@
  New Features
 ==========================================
 
+- Rework of API architecture
+    ○ API is split into three NuGets (Zeiss.IMT.PiWebApi.Client, Zeiss.IMT.PiWebApi.Dtos, Zeiss.IMT.PiWebApi.Definitions)
+    ○ Zeiss.IMT.PiWebApi.Client consumes the two remaining packages
+    ○ User only works with Zeiss.IMT.PiWebApi.Client like before
+
 - Removed deprecated properties
+
 - API project was switched to new csproj format:
     ○ app.config and packages.config were removed
     ○ csproj file consits of all neccesary assembly informationen, now. That prevents redundant information (version, company name). 
