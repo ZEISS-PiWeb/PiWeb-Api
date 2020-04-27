@@ -22,6 +22,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		#region members
 
 		protected readonly RestClientBase _RestClient;
+		private bool _IsDisposed;
 
 		#endregion
 
@@ -52,6 +53,23 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			AuthenticationChanged?.Invoke( this, EventArgs.Empty );
 		}
 
+		/// <summary>
+		/// Releases unmanaged and - optionally - managed resources.
+		/// </summary>
+		/// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+		protected virtual void Dispose( bool disposing )
+		{
+			if( !_IsDisposed )
+			{
+				if( disposing )
+				{
+					_RestClient.Dispose();
+				}
+
+				_IsDisposed = true;
+			}
+		}
+
 		#endregion
 
 		#region interface IRestClient
@@ -59,7 +77,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// <inheritdoc />
 		public void Dispose()
 		{
-			_RestClient.Dispose();
+			Dispose( true );
+			GC.SuppressFinalize( this );
 		}
 
 		/// <inheritdoc />
