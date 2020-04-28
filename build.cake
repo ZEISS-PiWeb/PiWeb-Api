@@ -188,7 +188,8 @@ Task("Pack_Dtos")
         },
         Dependencies             = new [] {
             new NuSpecDependency { Id = "Newtonsoft.Json", Version = "12.0.1" },
-            new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2018.2.1" }
+            new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2018.2.1" },
+            new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Rest.Dtos", Version = "6.0.0" }
         },
         BasePath                 = buildDir_Dtos,
         OutputDirectory          = artifactsDir
@@ -246,8 +247,8 @@ Task("Pack_Client")
             new NuSpecDependency { Id = "System.IdentityModel.Tokens.Jwt", Version = "5.2.1" },
             new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2018.2.1" },
             new NuSpecDependency { Id = "System.Security.Cryptography.ProtectedData", Version = "4.7.0" },
-            new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Definitions", Version = "1.0.0" },
-            new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Rest.Dtos", Version = "1.0.0" }
+            new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Definitions", Version = "6.0.0" },
+            new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Rest.Dtos", Version = "6.0.0" }
         },
         BasePath                 = buildDir_Client,
         OutputDirectory          = artifactsDir

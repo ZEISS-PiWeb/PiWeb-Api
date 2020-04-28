@@ -10,7 +10,7 @@
   <PropertyGroup Label="Assembly information">
     <AssemblyTitle>Contains the JSON-serializable DataTransferObjects (DTO) that will be exchanged between PiWeb server and client(s).</AssemblyTitle>
     <AssemblyName>Zeiss.PiWeb.Api.Rest.Dtos</AssemblyName>
-    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <AssemblyVersion>6.0.0</AssemblyVersion>
     <Company>Carl Zeiss Innovationszentrum für Messtechnik GmbH</Company>
     <Copyright>Copyright © 2020 $(Company)</Copyright>
     <Description>Contains the JSON-serializable DataTransferObjects (DTO) that will be exchanged between PiWeb server and client(s).
