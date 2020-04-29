@@ -8,13 +8,12 @@
 
 #endregion
 
-namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
+namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
 	#region usings
 
 	using System.Collections.Generic;
 	using System.Linq;
-	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 
 	#endregion
 
