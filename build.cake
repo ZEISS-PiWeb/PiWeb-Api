@@ -1,6 +1,5 @@
 ﻿#tool "nuget:?package=GitVersion.CommandLine"
 #addin "nuget:?package=Cake.FileHelpers"
-#addin nuget:?package=Cake.VersionReader
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -112,9 +111,6 @@ Task("Pack_Definitions")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    var nugetVersion_Definitions = GetAssemblyVersion(buildDir_Definitions, "Zeiss.PiWeb.Api.Definitions.dll");
-    Information("AssemblyVersion of Zeiss.PiWeb.Api.Definitions -> {0}", nugetVersion_Definitions);
-
     var releaseNotes = FileReadLines(File("src/Api.Definitions/WHATSNEW_Definitions.txt"));
     var licenseFile = new NuSpecLicense
     {
@@ -124,7 +120,7 @@ Task("Pack_Definitions")
 
     var nuGetPackSettings = new NuGetPackSettings {
         Id                       = "Zeiss.PiWeb.Api.Definitions",
-        Version                  = nugetVersion_Definitions,
+        Version                  = nugetVersion,
         Title                    = "Zeiss.PiWeb.Api.Definitions",
         Authors                  = new[] {"Carl Zeiss Innovationszentrum für Messtechnik GmbH"},
         Owners                   = new[] {"Carl Zeiss Innovationszentrum für Messtechnik GmbH"},
@@ -155,9 +151,6 @@ Task("Pack_Dtos")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    var nugetVersion_Dtos = GetAssemblyVersion(buildDir_Dtos, "Zeiss.PiWeb.Api.Rest.Dtos.dll");
-    Information("AssemblyVersion of Zeiss.PiWeb.Api.Rest.Dtos -> {0}", nugetVersion_Dtos);
-
     var releaseNotes = FileReadLines(File("src/Api.Rest.Dtos/WHATSNEW_Dtos.txt"));
     var licenseFile = new NuSpecLicense
     {
@@ -167,7 +160,7 @@ Task("Pack_Dtos")
 
     var nuGetPackSettings = new NuGetPackSettings {
         Id                       = "Zeiss.PiWeb.Api.Rest.Dtos",
-        Version                  = nugetVersion_Dtos,
+        Version                  = nugetVersion,
         Title                    = "Zeiss.PiWeb.Api.Rest.Dtos",
         Authors                  = new[] {"Carl Zeiss Innovationszentrum für Messtechnik GmbH"},
         Owners                   = new[] {"Carl Zeiss Innovationszentrum für Messtechnik GmbH"},
@@ -189,7 +182,7 @@ Task("Pack_Dtos")
         Dependencies             = new [] {
             new NuSpecDependency { Id = "Newtonsoft.Json", Version = "12.0.1" },
             new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2018.2.1" },
-            new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Definitions", Version = "6.0.0" }
+            new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Definitions", Version = nugetVersion }
         },
         BasePath                 = buildDir_Dtos,
         OutputDirectory          = artifactsDir
@@ -201,9 +194,6 @@ Task("Pack_Client")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    var nugetVersion_Client = GetAssemblyVersion(buildDir_Client, "Zeiss.PiWeb.Api.Rest.dll");
-    Information("AssemblyVersion of Zeiss.PiWeb.Api.Rest -> {0}", nugetVersion_Client);
-
     var releaseNotes = FileReadLines(File("WHATSNEW.txt"));
     var licenseFile = new NuSpecLicense
     {
@@ -247,8 +237,8 @@ Task("Pack_Client")
             new NuSpecDependency { Id = "System.IdentityModel.Tokens.Jwt", Version = "5.2.1" },
             new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2018.2.1" },
             new NuSpecDependency { Id = "System.Security.Cryptography.ProtectedData", Version = "4.7.0" },
-            new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Definitions", Version = "6.0.0" },
-            new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Rest.Dtos", Version = "6.0.0" }
+            new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Definitions", Version = nugetVersion },
+            new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Rest.Dtos", Version = nugetVersion }
         },
         BasePath                 = buildDir_Client,
         OutputDirectory          = artifactsDir
@@ -271,12 +261,3 @@ Task("Default")
 //////////////////////////////////////////////////////////////////////
 
 RunTarget(target);
-
-//////////////////////////////////////////////////////////////////////
-// CUSTOM METHODS
-//////////////////////////////////////////////////////////////////////
-
-string GetAssemblyVersion(DirectoryPath buildDir, string assemblyName)
-{
-    return GetVersionNumber(new FilePath(GetSubDirectories(buildDir).First() + "/" + assemblyName));
-}
