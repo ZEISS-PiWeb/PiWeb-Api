@@ -8,7 +8,7 @@
 
 #endregion
 
-namespace Zeiss.PiWeb.Api.Rest.Common.Data
+namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 {
 	#region usings
 
