@@ -189,7 +189,7 @@ Task("Pack_Dtos")
         Dependencies             = new [] {
             new NuSpecDependency { Id = "Newtonsoft.Json", Version = "12.0.1" },
             new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2018.2.1" },
-            new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Rest.Dtos", Version = "6.0.0" }
+            new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Definitions", Version = "6.0.0" }
         },
         BasePath                 = buildDir_Dtos,
         OutputDirectory          = artifactsDir
