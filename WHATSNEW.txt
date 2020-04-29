@@ -10,9 +10,9 @@
 ==========================================
 
 - Rework of API architecture
-    ○ API is split into three NuGets (Zeiss.IMT.PiWebApi.Client, Zeiss.IMT.PiWebApi.Dtos, Zeiss.IMT.PiWebApi.Definitions)
-    ○ Zeiss.IMT.PiWebApi.Client consumes the two remaining packages
-    ○ User only works with Zeiss.IMT.PiWebApi.Client like before
+    ○ API is split into three NuGets (Zeiss.PiWeb.Api.Rest, Zeiss.PiWeb.Api.Rest.Dtos, Zeiss.PiWeb.Api.Definitions)
+    ○ Zeiss.PiWeb.Api.Rest consumes the two remaining packages and is the successor of Zeiss.IMT.PiWebApi.Client
+    ○ DataServiceRestClient is now located in Zeiss.PiWeb.Api.Rest
 
 - Removed deprecated properties
 

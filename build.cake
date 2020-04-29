@@ -123,9 +123,9 @@ Task("Pack_Definitions")
     };
 
     var nuGetPackSettings = new NuGetPackSettings {
-        Id                       = "Zeiss.IMT.PiWebApi.Definitions",
+        Id                       = "Zeiss.PiWeb.Api.Definitions",
         Version                  = nugetVersion_Definitions,
-        Title                    = "Zeiss.IMT.PiWebApi.Definitions",
+        Title                    = "Zeiss.PiWeb.Api.Definitions",
         Authors                  = new[] {"Carl Zeiss Innovationszentrum für Messtechnik GmbH"},
         Owners                   = new[] {"Carl Zeiss Innovationszentrum für Messtechnik GmbH"},
         Description              = "Contains generic data used by the PiWeb API. The ZEISS PiWeb API nuget depends on this package.",
@@ -166,9 +166,9 @@ Task("Pack_Dtos")
     };
 
     var nuGetPackSettings = new NuGetPackSettings {
-        Id                       = "Zeiss.IMT.PiWebApi.Dtos",
+        Id                       = "Zeiss.PiWeb.Api.Rest.Dtos",
         Version                  = nugetVersion_Dtos,
-        Title                    = "Zeiss.IMT.PiWebApi.Dtos",
+        Title                    = "Zeiss.PiWeb.Api.Rest.Dtos",
         Authors                  = new[] {"Carl Zeiss Innovationszentrum für Messtechnik GmbH"},
         Owners                   = new[] {"Carl Zeiss Innovationszentrum für Messtechnik GmbH"},
         Description              = "Contains the JSON-serializable DataTransferObjects (DTO) that will be exchanged between PiWeb server and client(s). The ZEISS PiWeb API nuget depends on this package.",
@@ -188,7 +188,8 @@ Task("Pack_Dtos")
         },
         Dependencies             = new [] {
             new NuSpecDependency { Id = "Newtonsoft.Json", Version = "12.0.1" },
-            new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2018.2.1" }
+            new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2018.2.1" },
+            new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Definitions", Version = "6.0.0" }
         },
         BasePath                 = buildDir_Dtos,
         OutputDirectory          = artifactsDir
@@ -211,7 +212,7 @@ Task("Pack_Client")
     };
 
     var nuGetPackSettings = new NuGetPackSettings {
-        Id                       = "Zeiss.IMT.PiWebApi.Client",
+        Id                       = "Zeiss.PiWeb.Api.Rest",
         Version                  = nugetVersion,
         Title                    = "ZEISS PiWeb-API .NET Client",
         Authors                  = new[] {"Carl Zeiss Innovationszentrum für Messtechnik GmbH"},
@@ -246,8 +247,8 @@ Task("Pack_Client")
             new NuSpecDependency { Id = "System.IdentityModel.Tokens.Jwt", Version = "5.2.1" },
             new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2018.2.1" },
             new NuSpecDependency { Id = "System.Security.Cryptography.ProtectedData", Version = "4.7.0" },
-            new NuSpecDependency { Id = "Zeiss.IMT.PiWebApi.Definitions", Version = "1.0.0" },
-            new NuSpecDependency { Id = "Zeiss.IMT.PiWebApi.Dtos", Version = "1.0.0" }
+            new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Definitions", Version = "6.0.0" },
+            new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Rest.Dtos", Version = "6.0.0" }
         },
         BasePath                 = buildDir_Client,
         OutputDirectory          = artifactsDir
