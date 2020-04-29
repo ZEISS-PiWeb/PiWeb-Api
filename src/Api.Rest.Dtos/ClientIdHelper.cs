@@ -12,7 +12,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 {
 	#region usings
 
-	using System;
 	using System.IO;
 	using System.Reflection;
 
@@ -21,7 +20,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 	/// <summary>
 	/// Hilfsklasse zur Ermittlung der ClientId die an die diversen Services gesendet wird.
 	/// </summary>
-	internal static class ClientIdHelper
+	public static class ClientIdHelper
 	{
 		#region members
 
@@ -41,6 +40,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 		/// <summary>
 		/// Initializes the <see cref="ClientIdHelper"/> class.
 		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage( "Minor Code Smell", "S3963:\"static\" fields should be initialized inline", Justification = "<Pending>" )]
 		static ClientIdHelper()
 		{
 			var entryAssembly = Assembly.GetEntryAssembly() ?? typeof( ClientIdHelper ).Assembly;
@@ -62,7 +62,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 				ClientId = "PiWeb";
 			}
 
-			ClientProduct = String.Concat( ClientId, "_", entryAssembly.GetName().Name ).Replace( " ", "_" );
+			ClientProduct = string.Concat( ClientId, "_", entryAssembly.GetName().Name ).Replace( " ", "_" );
 			ClientVersion = entryAssembly.GetName().Version.ToString().Replace( " ", "_" );
 			ClientId += " " + entryAssembly.GetName().Name + " " + entryAssembly.GetName().Version;
 		}
