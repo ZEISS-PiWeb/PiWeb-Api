@@ -73,28 +73,75 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 	/// 
 	/// The roundtrip string for the root part is special and is represented as "/" (no structure information needed).
 	/// </remarks>
-	internal static class PathHelper
+	public static class PathHelper
 	{
 		#region constants
 
 		/// <summary> Delimiter character for the path components. </summary>
-		private const char Delimiter = '/';
+		public const char Delimiter = '/';
 
 		/// <summary> Escaped delimiter character for the path components </summary>
-		private const string EscapedDelimiter = @"\/";
+		public const string EscapedDelimiter = @"\/";
 
 		/// <summary> Delimiter string for the path components </summary>
 		public const string DelimiterString = "/";
 
 		/// <summary> Escape character for delimiter characters. </summary>
-		private const char Escape = '\\';
+		public const char Escape = '\\';
 
 		/// <summary> Escape character as string for delimiter characters. </summary>
-		private const string EscapeString = @"\";
+		public const string EscapeString = @"\";
 
 		#endregion
 
 		#region methods
+
+		/// <summary>
+		/// Creates from <paramref name="path"/> in colloquial format a part <see cref="PathInformation"/> object.
+		/// </summary>
+		[NotNull]
+		public static PathInformation String2PartPathInformation( [NotNull] string path )
+		{
+			return ColloquialString2PathInformationInternal( path, InspectionPlanEntity.Part );
+		}
+
+		/// <summary>
+		/// Creates from <paramref name="path"/> in colloquial format a characteristic <see cref="PathInformation"/> object.
+		/// </summary>
+		[NotNull]
+		public static PathInformation String2CharPathInformation( [NotNull] string path )
+		{
+			return ColloquialString2PathInformationInternal( path, InspectionPlanEntity.Characteristic );
+		}
+
+		/// <summary>
+		/// Creates from <paramref name="path"/> in colloquial format a <see cref="PathInformation"/> object.
+		/// All path elements will be of the type given in <paramref name="entity"/>.
+		/// </summary>
+		[NotNull]
+		private static PathInformation ColloquialString2PathInformationInternal( [NotNull] string path, InspectionPlanEntity entity )
+		{
+			if( string.IsNullOrEmpty( path ) )
+				throw new ArgumentException( "The path string must not be null or empty.", nameof( path ) );
+
+			// fast code path for root path
+			if( path == DelimiterString )
+			{
+				if( entity != InspectionPlanEntity.Part )
+					throw new ArgumentException( "The root path must always be of type part.", nameof( entity ) );
+
+				return PathInformation.Root;
+			}
+
+			// convert to database format by prepending a delimiter if it is not already present
+			if( !path.StartsWith( DelimiterString ) )
+				path = DelimiterString + path;
+			// convert to database format by appending a delimiter if it is not already present (beware of escaping)
+			if( !path.EndsWith( DelimiterString ) || path.EndsWith( EscapedDelimiter ) )
+				path += DelimiterString;
+
+			return String2PathInformationInternal( path, null, i => entity );
+		}
 
 		/// <summary>
 		/// Creates from <paramref name="path"/> in roundtrip format ("structure:database path") a <see cref="PathInformation"/> object.
@@ -120,7 +167,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 		/// Depending on <paramref name="structure"/> it will be a part or a characteristic.
 		/// </summary>
 		[NotNull]
-		private static PathInformation DatabaseString2PathInformation( [NotNull] string path, string structure )
+		public static PathInformation DatabaseString2PathInformation( [NotNull] string path, string structure )
 		{
 			if( string.IsNullOrEmpty( path ) )
 				throw new ArgumentException( "The path string must not be null or empty.", nameof( path ) );
@@ -242,8 +289,29 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 		}
 
 		/// <summary>
+		/// Converts <paramref name="path"/> to a string in colloquial format.
+		/// The result for a the root path is always "/".
+		/// For all other paths the result does NOT start with a delimiter.
+		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="path"/> is <see langword="null" />.</exception>
+		[NotNull]
+		public static string PathInformation2String( [NotNull] PathInformation path )
+		{
+			if( path == null ) throw new ArgumentNullException( nameof( path ) );
+
+			// fast code path for root path
+			if( path.IsRoot ) return DelimiterString;
+
+			var sb = new StringBuilder( 25 );
+			PathInformation2StringInternal( sb, path );
+
+			return sb.ToString();
+		}
+
+		/// <summary>
 		/// Converts <paramref name="path"/> to a string in roundtrip format ("structure:database path").
 		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="path"/> is <see langword="null" />.</exception>
 		[NotNull]
 		public static string PathInformation2RoundtripString( [NotNull] PathInformation path )
 		{
@@ -263,8 +331,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 		/// <summary>
 		/// Converts <paramref name="path"/> to a string in database format.
 		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="path"/> is <see langword="null" />.</exception>
 		[NotNull]
-		private static string PathInformation2DatabaseString( [NotNull] PathInformation path )
+		public static string PathInformation2DatabaseString( [NotNull] PathInformation path )
 		{
 			if( path == null ) throw new ArgumentNullException( nameof( path ) );
 
@@ -293,8 +362,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 		/// <summary>
 		/// Returns the structure of the <paramref name="path"/>.
 		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="path"/> is <see langword="null" />.</exception>
 		[NotNull]
-		private static string GetStructure( [NotNull] PathInformation path )
+		public static string GetStructure( [NotNull] PathInformation path )
 		{
 			if( path == null ) throw new ArgumentNullException( nameof( path ) );
 
@@ -305,6 +375,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 			}
 
 			return new string( result );
+		}
+
+		[Obsolete( "Use DatabaseString2PathInformation or RoundtripString2PathInformation instead" )]
+		public static PathInformation String2PathInformation( string path, string structure )
+		{
+			return DatabaseString2PathInformation( path, structure );
 		}
 
 		#endregion
