@@ -18,8 +18,8 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 	using System.Threading;
 	using System.Threading.Tasks;
 	using JetBrains.Annotations;
-	using Zeiss.PiWeb.Api.Rest.Common.Data;
 	using Zeiss.PiWeb.Api.Rest.Contracts;
+	using Zeiss.PiWeb.Api.Rest.Dtos;
 	using Zeiss.PiWeb.Api.Rest.Dtos.RawData;
 	using Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter.Conditions;
 
