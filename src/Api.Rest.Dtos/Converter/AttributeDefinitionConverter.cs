@@ -20,7 +20,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 	#endregion
 
 	/// <summary>
-	/// Specialized <see cref="JsonConverter"/> for <see cref="AbstractAttributeDefinition"/>-objects.
+	/// Specialized <see cref="JsonConverter"/> for <see cref="AbstractAttributeDefinitionDto"/>-objects.
 	/// </summary>
 	public class AttributeDefinitionConverter : JsonConverter
 	{
@@ -29,7 +29,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 		/// <inheritdoc />
 		public override bool CanConvert( Type objectType )
 		{
-			return typeof( AbstractAttributeDefinition ) == objectType || typeof( AttributeDefinition ) == objectType || typeof( CatalogAttributeDefinition ) == objectType;
+			return typeof( AbstractAttributeDefinitionDto ) == objectType || typeof( AttributeDefinitionDto ) == objectType || typeof( CatalogAttributeDefinitionDto ) == objectType;
 		}
 
 		/// <inheritdoc />
@@ -40,7 +40,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 			var queryEfficient = default( bool );
 			var description = default( string );
 			var attributeDefinitionType = default( string );
-			var type = default( AttributeType );
+			var type = default( AttributeTypeDto );
 			var catalogUuid = default( Guid );
 
 			while( reader.Read() && reader.TokenType == JsonToken.PropertyName )
@@ -60,7 +60,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 						length = ushort.Parse( reader.ReadAsString(), CultureInfo.InvariantCulture );
 						break;
 					case "type":
-						type = (AttributeType)Enum.Parse( typeof( AttributeType ), reader.ReadAsString() );
+						type = (AttributeTypeDto)Enum.Parse( typeof( AttributeTypeDto ), reader.ReadAsString() );
 						break;
 					case "catalog":
 						catalogUuid = Guid.Parse( reader.ReadAsString() );
@@ -72,10 +72,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 			}
 
 			if( attributeDefinitionType == "AttributeDefinition" )
-				return new AttributeDefinition { Description = description, Key = key, Length = length, QueryEfficient = queryEfficient, Type = type };
+				return new AttributeDefinitionDto { Description = description, Key = key, Length = length, QueryEfficient = queryEfficient, Type = type };
 
 			if( attributeDefinitionType == "CatalogAttributeDefinition" )
-				return new CatalogAttributeDefinition { Description = description, Key = key, QueryEfficient = queryEfficient, Catalog = catalogUuid };
+				return new CatalogAttributeDefinitionDto { Description = description, Key = key, QueryEfficient = queryEfficient, Catalog = catalogUuid };
 
 			return null;
 		}
@@ -83,7 +83,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 		/// <inheritdoc />
 		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer )
 		{
-			if( value is AbstractAttributeDefinition definition )
+			if( value is AbstractAttributeDefinitionDto definition )
 			{
 				writer.WriteStartObject();
 				writer.WritePropertyName( "key" );
@@ -91,7 +91,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 				writer.WritePropertyName( "description" );
 				writer.WriteValue( definition.Description );
 
-				if( definition is AttributeDefinition attributeDef )
+				if( definition is AttributeDefinitionDto attributeDef )
 				{
 					if( attributeDef.Length.HasValue )
 					{
@@ -105,7 +105,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 					writer.WriteValue( "AttributeDefinition" );
 				}
 
-				if( definition is CatalogAttributeDefinition catalogDef )
+				if( definition is CatalogAttributeDefinitionDto catalogDef )
 				{
 					writer.WritePropertyName( "catalog" );
 					writer.WriteValue( catalogDef.Catalog );

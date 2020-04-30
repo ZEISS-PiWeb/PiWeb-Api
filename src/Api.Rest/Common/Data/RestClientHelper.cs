@@ -41,7 +41,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		/// <summary>End identifier for a list inside a HTTP query.</summary>
 		public const string QueryListStop = "}";
 
-		/// <summary>Length of escaped delimiter for list values within <see cref="QueryListStart"/> 
+		/// <summary>Length of escaped delimiter for list values within <see cref="QueryListStart"/>
 		/// and <see cref="QueryListStop"/> inside a HTTP query ( , escaped => %2C)</summary>
 		private const int LengthOfEscapedDelimiter = 3;
 
@@ -111,7 +111,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		/// <param name="requestedCharacteristicAttributes">Restricts the characteristic attributes that are returned.</param>
 		/// <param name="withHistory">Determines if the history should be returned.</param>
 		/// <returns></returns>
-		public static List<ParameterDefinition> ParseToParameter( PathInformation partPath = null, Guid[] partUuids = null, Guid[] charUuids = null, ushort? depth = null, AttributeSelector requestedPartAttributes = null, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false )
+		public static List<ParameterDefinition> ParseToParameter( PathInformationDto partPath = null, Guid[] partUuids = null, Guid[] charUuids = null, ushort? depth = null, AttributeSelector requestedPartAttributes = null, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false )
 		{
 			var parameter = new List<ParameterDefinition>();
 			if( partPath != null )
@@ -131,17 +131,17 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 
 			if( requestedPartAttributes != null )
 			{
-				if( requestedPartAttributes.AllAttributes != AllAttributeSelection.True && requestedPartAttributes.Attributes != null )
+				if( requestedPartAttributes.AllAttributes != AllAttributeSelectionDto.True && requestedPartAttributes.Attributes != null )
 					parameter.Add( ParameterDefinition.Create( "requestedPartAttributes", ConvertUshortArrayToString( requestedPartAttributes.Attributes ) ) );
-				else if( requestedPartAttributes.AllAttributes == AllAttributeSelection.False )
+				else if( requestedPartAttributes.AllAttributes == AllAttributeSelectionDto.False )
 					parameter.Add( ParameterDefinition.Create( "requestedPartAttributes", "None" ) );
 			}
 
 			if( requestedCharacteristicAttributes != null )
 			{
-				if( requestedCharacteristicAttributes.AllAttributes != AllAttributeSelection.True && requestedCharacteristicAttributes.Attributes != null )
+				if( requestedCharacteristicAttributes.AllAttributes != AllAttributeSelectionDto.True && requestedCharacteristicAttributes.Attributes != null )
 					parameter.Add( ParameterDefinition.Create( "requestedCharacteristicAttributes", ConvertUshortArrayToString( requestedCharacteristicAttributes.Attributes ) ) );
-				else if( requestedCharacteristicAttributes.AllAttributes == AllAttributeSelection.False )
+				else if( requestedCharacteristicAttributes.AllAttributes == AllAttributeSelectionDto.False )
 					parameter.Add( ParameterDefinition.Create( "requestedCharacteristicAttributes", "None" ) );
 			}
 

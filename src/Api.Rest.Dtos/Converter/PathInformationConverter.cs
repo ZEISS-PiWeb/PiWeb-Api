@@ -19,7 +19,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 	#endregion
 
 	/// <summary>
-	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="PathInformation"/>-objects.
+	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="PathInformationDto"/>-objects.
 	/// </summary>
 	public class PathInformationConverter : JsonConverter
 	{
@@ -30,7 +30,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 		/// </summary>
 		public override bool CanConvert( Type objectType )
 		{
-			return typeof( PathInformation ) == objectType;
+			return typeof( PathInformationDto ) == objectType;
 		}
 
 		/// <summary>
@@ -51,7 +51,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 		/// </summary>
 		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer )
 		{
-			writer.WriteValue( PathHelper.PathInformation2RoundtripString( (PathInformation)value ) );
+			writer.WriteValue( PathHelper.PathInformation2RoundtripString( (PathInformationDto)value ) );
 		}
 
 		#endregion
