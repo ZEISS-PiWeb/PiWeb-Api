@@ -17,12 +17,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 	using System.Globalization;
 	using Newtonsoft.Json;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
-	using Attribute = Zeiss.PiWeb.Api.Rest.Dtos.Data.Attribute;
 
 	#endregion
 
 	/// <summary>
-	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="DataCharacteristic"/>-objects.
+	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="DataCharacteristicDto"/>-objects.
 	/// </summary>
 	public class DataCharacteristicConverter : JsonConverter
 	{
@@ -33,7 +32,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 		/// </summary>
 		public override bool CanConvert( Type objectType )
 		{
-			return objectType == typeof( DataCharacteristic[] );
+			return objectType == typeof( DataCharacteristicDto[] );
 		}
 
 		/// <summary>
@@ -41,14 +40,14 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 		/// </summary>
 		public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer )
 		{
-			if( typeof( DataCharacteristic ) == objectType )
+			if( typeof( DataCharacteristicDto ) == objectType )
 			{
-				var characteristic = new DataCharacteristic();
+				var characteristic = new DataCharacteristicDto();
 				if( reader.Read() && reader.TokenType == JsonToken.PropertyName )
 				{
 					characteristic.Uuid = new Guid( (string)reader.Value );
 
-					var valueAttributes = new List<Attribute>();
+					var valueAttributes = new List<AttributeDto>();
 					if( reader.Read() && reader.TokenType == JsonToken.StartObject )
 					{
 						while( reader.Read() && reader.TokenType == JsonToken.PropertyName )
@@ -56,23 +55,23 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 							var key = ushort.Parse( reader.Value.ToString(), CultureInfo.InvariantCulture );
 							var value = reader.ReadAsString();
 
-							valueAttributes.Add( new Attribute( key, value ) );
+							valueAttributes.Add( new AttributeDto( key, value ) );
 						}
 					}
 
-					characteristic.Value = new DataValue( valueAttributes.ToArray() );
+					characteristic.Value = new DataValueDto( valueAttributes.ToArray() );
 				}
 
 				return characteristic;
 			}
 			else
 			{
-				var characteristics = new List<DataCharacteristic>();
+				var characteristics = new List<DataCharacteristicDto>();
 				while( reader.Read() && reader.TokenType == JsonToken.PropertyName )
 				{
-					var characteristic = new DataCharacteristic { Uuid = new Guid( (string)reader.Value ) };
+					var characteristic = new DataCharacteristicDto { Uuid = new Guid( (string)reader.Value ) };
 
-					var valueAttributes = new List<Attribute>();
+					var valueAttributes = new List<AttributeDto>();
 					if( reader.Read() && reader.TokenType == JsonToken.StartObject )
 					{
 						while( reader.Read() && reader.TokenType == JsonToken.PropertyName )
@@ -80,11 +79,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 							var key = AttributeKeyCache.Cache.StringToKey( reader.Value.ToString() );
 							var value = reader.ReadAsString();
 
-							valueAttributes.Add( new Attribute( key, value ) );
+							valueAttributes.Add( new AttributeDto( key, value ) );
 						}
 					}
 
-					characteristic.Value = new DataValue( valueAttributes.ToArray() );
+					characteristic.Value = new DataValueDto( valueAttributes.ToArray() );
 					characteristics.Add( characteristic );
 				}
 
@@ -99,7 +98,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 		{
 			writer.WriteStartObject();
 
-			var dataCharacteristics = (DataCharacteristic[])value;
+			var dataCharacteristics = (DataCharacteristicDto[])value;
 			if( dataCharacteristics.Length > 0 )
 			{
 				foreach( var dataCharacteristic in dataCharacteristics )

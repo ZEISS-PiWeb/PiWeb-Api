@@ -41,7 +41,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 
 		#region members
 
-		private ServiceInformation _LastValidServiceInformation;
+		private ServiceInformationDto _LastValidServiceInformation;
 		private DataServiceFeatureMatrix _FeatureMatrix;
 
 		#endregion
@@ -87,18 +87,18 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			}
 		}
 
-		private async Task<DataMeasurement[]> GetMeasurementValuesSplitByMeasurement( PathInformation partPath, MeasurementValueFilterAttributes filter, CancellationToken cancellationToken )
+		private async Task<DataMeasurementDto[]> GetMeasurementValuesSplitByMeasurement( PathInformationDto partPath, MeasurementValueFilterAttributesDto filter, CancellationToken cancellationToken )
 		{
 			var newFilter = filter.Clone();
 			newFilter.MeasurementUuids = null;
 
 			var parameter = CreateParameterDefinitions( partPath, newFilter );
-			parameter.Add( ParameterDefinition.Create( AbstractMeasurementFilterAttributes.MeasurementUuidsParamName, "" ) );
+			parameter.Add( ParameterDefinition.Create( AbstractMeasurementFilterAttributesDto.MeasurementUuidsParamName, "" ) );
 
 			var requestRestriction = RequestBuilder.AppendParameters( "values", parameter );
 			var targetSize = RestClientHelper.GetUriTargetSize( ServiceLocation, requestRestriction, MaxUriLength );
 
-			var result = new List<DataMeasurement>( filter.MeasurementUuids.Length );
+			var result = new List<DataMeasurementDto>( filter.MeasurementUuids.Length );
 			foreach( var uuids in ArrayHelper.Split( filter.MeasurementUuids, targetSize, RestClientHelper.LengthOfListElementInUri ) )
 			{
 				newFilter.MeasurementUuids = uuids;
@@ -108,31 +108,31 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 				}
 				else
 				{
-					result.AddRange( await _RestClient.Request<DataMeasurement[]>( RequestBuilder.CreateGet( "values", CreateParameterDefinitions( partPath, newFilter ).ToArray() ), cancellationToken ).ConfigureAwait( false ) );
+					result.AddRange( await _RestClient.Request<DataMeasurementDto[]>( RequestBuilder.CreateGet( "values", CreateParameterDefinitions( partPath, newFilter ).ToArray() ), cancellationToken ).ConfigureAwait( false ) );
 				}
 			}
 
 			return result.ToArray();
 		}
 
-		private async Task<DataMeasurement[]> GetMeasurementValuesSplitByCharacteristics( PathInformation partPath, MeasurementValueFilterAttributes filter, CancellationToken cancellationToken )
+		private async Task<DataMeasurementDto[]> GetMeasurementValuesSplitByCharacteristics( PathInformationDto partPath, MeasurementValueFilterAttributesDto filter, CancellationToken cancellationToken )
 		{
 			var newFilter = filter.Clone();
 			newFilter.CharacteristicsUuidList = null;
 
 			var parameter = CreateParameterDefinitions( partPath, newFilter );
-			parameter.Add( ParameterDefinition.Create( MeasurementValueFilterAttributes.CharacteristicsUuidListParamName, "" ) );
+			parameter.Add( ParameterDefinition.Create( MeasurementValueFilterAttributesDto.CharacteristicsUuidListParamName, "" ) );
 
 			var requestRestriction = RequestBuilder.AppendParameters( "values", parameter );
 			var targetSize = RestClientHelper.GetUriTargetSize( ServiceLocation, requestRestriction, MaxUriLength );
 
-			var result = new List<DataMeasurement>( filter.MeasurementUuids?.Length ?? 0 );
-			var allMeasurements = new Dictionary<Guid, DataMeasurement>();
+			var result = new List<DataMeasurementDto>( filter.MeasurementUuids?.Length ?? 0 );
+			var allMeasurements = new Dictionary<Guid, DataMeasurementDto>();
 			foreach( var uuids in ArrayHelper.Split( filter.CharacteristicsUuidList, targetSize, RestClientHelper.LengthOfListElementInUri ) )
 			{
 				newFilter.CharacteristicsUuidList = uuids;
 
-				var measurements = await _RestClient.Request<DataMeasurement[]>( RequestBuilder.CreateGet( "values", CreateParameterDefinitions( partPath, newFilter ).ToArray() ), cancellationToken ).ConfigureAwait( false );
+				var measurements = await _RestClient.Request<DataMeasurementDto[]>( RequestBuilder.CreateGet( "values", CreateParameterDefinitions( partPath, newFilter ).ToArray() ), cancellationToken ).ConfigureAwait( false );
 				foreach( var measurement in measurements )
 				{
 					if( allMeasurements.TryGetValue( measurement.Uuid, out var existingMeasurement ) )
@@ -150,7 +150,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			return result.ToArray();
 		}
 
-		private static DataCharacteristic[] Combine( DataCharacteristic[] list1, DataCharacteristic[] list2 )
+		private static DataCharacteristicDto[] Combine( DataCharacteristicDto[] list1, DataCharacteristicDto[] list2 )
 		{
 			if( list1 == null )
 				return list2;
@@ -160,7 +160,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			return list1.Concat( list2 ).ToArray();
 		}
 
-		private static List<ParameterDefinition> CreateParameterDefinitions<T>( PathInformation partPath, T filter, int? key = null ) where T : AbstractMeasurementFilterAttributes
+		private static List<ParameterDefinition> CreateParameterDefinitions<T>( PathInformationDto partPath, T filter, int? key = null ) where T : AbstractMeasurementFilterAttributesDto
 		{
 			var parameter = new List<ParameterDefinition>();
 
@@ -176,14 +176,14 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			return parameter;
 		}
 
-		private async Task<ServiceInformation> GetServiceInformationInternal( FetchBehavior behavior, CancellationToken cancellationToken = default )
+		private async Task<ServiceInformationDto> GetServiceInformationInternal( FetchBehavior behavior, CancellationToken cancellationToken = default )
 		{
 			// This is an intentional race condition. Calling this method from multiple threads may lead to multiple calls to Get<ServiceInformation>().
 			// However, this would be rare and harmless, since it should always return the same result. It would be a lot more difficult to make this work without any races or blocking.
 			// It is important to never set _LastValidServiceInformation to null anywhere to avoid possible null returns here due to the race condition.
 			if( behavior == FetchBehavior.FetchAlways || _LastValidServiceInformation == null )
 			{
-				var serviceInformation = await _RestClient.Request<ServiceInformation>( RequestBuilder.CreateGet( "ServiceInformation" ), cancellationToken ).ConfigureAwait( false );
+				var serviceInformation = await _RestClient.Request<ServiceInformationDto>( RequestBuilder.CreateGet( "ServiceInformation" ), cancellationToken ).ConfigureAwait( false );
 				_LastValidServiceInformation = serviceInformation;
 			}
 
@@ -209,7 +209,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		#region interface IDataServiceRestClient
 
 		/// <inheritdoc />
-		public async Task<ServiceInformation> GetServiceInformation( CancellationToken cancellationToken = default )
+		public async Task<ServiceInformationDto> GetServiceInformation( CancellationToken cancellationToken = default )
 		{
 			var serviceInformation = await GetServiceInformationInternal( FetchBehavior.FetchAlways, cancellationToken ).ConfigureAwait( false );
 			_LastValidServiceInformation = serviceInformation;
@@ -240,14 +240,14 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		}
 
 		/// <inheritdoc />
-		public Task<Configuration> GetConfiguration( CancellationToken cancellationToken = default )
+		public Task<ConfigurationDto> GetConfiguration( CancellationToken cancellationToken = default )
 		{
-			return _RestClient.Request<Configuration>( RequestBuilder.CreateGet( "configuration" ), cancellationToken );
+			return _RestClient.Request<ConfigurationDto>( RequestBuilder.CreateGet( "configuration" ), cancellationToken );
 		}
 
 		/// <inheritdoc />
 		/// <exception cref="ArgumentNullException"><paramref name="definitions"/> is <see langword="null"/>.</exception>
-		public Task CreateAttributeDefinitions( Entity entity, AbstractAttributeDefinition[] definitions, CancellationToken cancellationToken = default )
+		public Task CreateAttributeDefinitions( EntityDto entity, AbstractAttributeDefinitionDto[] definitions, CancellationToken cancellationToken = default )
 		{
 			if( definitions == null ) throw new ArgumentNullException( nameof( definitions ) );
 			return _RestClient.Request( RequestBuilder.CreatePost( $"configuration/{entity}", Payload.Create( definitions ) ), cancellationToken );
@@ -255,14 +255,14 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 
 		/// <inheritdoc />
 		/// <exception cref="ArgumentNullException"><paramref name="definitions"/> is <see langword="null"/>.</exception>
-		public Task UpdateAttributeDefinitions( Entity entity, AbstractAttributeDefinition[] definitions, CancellationToken cancellationToken = default )
+		public Task UpdateAttributeDefinitions( EntityDto entity, AbstractAttributeDefinitionDto[] definitions, CancellationToken cancellationToken = default )
 		{
 			if( definitions == null ) throw new ArgumentNullException( nameof( definitions ) );
 			return _RestClient.Request( RequestBuilder.CreatePut( $"configuration/{entity}", Payload.Create( definitions ) ), cancellationToken );
 		}
 
 		/// <inheritdoc />
-		public async Task DeleteAttributeDefinitions( Entity entity, ushort[] keys = null, CancellationToken cancellationToken = default )
+		public async Task DeleteAttributeDefinitions( EntityDto entity, ushort[] keys = null, CancellationToken cancellationToken = default )
 		{
 			var requestBasePath = $"configuration/{entity}";
 
@@ -303,21 +303,21 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		}
 
 		/// <inheritdoc />
-		public Task<Catalog[]> GetAllCatalogs( CancellationToken cancellationToken = default )
+		public Task<CatalogDto[]> GetAllCatalogs( CancellationToken cancellationToken = default )
 		{
-			return _RestClient.Request<Catalog[]>( RequestBuilder.CreateGet( "catalogs" ), cancellationToken );
+			return _RestClient.Request<CatalogDto[]>( RequestBuilder.CreateGet( "catalogs" ), cancellationToken );
 		}
 
 		/// <inheritdoc />
-		public async Task<Catalog> GetCatalog( Guid catalogUuid, CancellationToken cancellationToken = default )
+		public async Task<CatalogDto> GetCatalog( Guid catalogUuid, CancellationToken cancellationToken = default )
 		{
-			var catalog = await _RestClient.Request<Catalog[]>( RequestBuilder.CreateGet( $"catalogs/{catalogUuid}" ), cancellationToken ).ConfigureAwait( false );
+			var catalog = await _RestClient.Request<CatalogDto[]>( RequestBuilder.CreateGet( $"catalogs/{catalogUuid}" ), cancellationToken ).ConfigureAwait( false );
 			return catalog.FirstOrDefault();
 		}
 
 		/// <inheritdoc />
 		/// <exception cref="ArgumentNullException"><paramref name="catalogs"/> is <see langword="null"/>.</exception>
-		public Task CreateCatalogs( Catalog[] catalogs, CancellationToken cancellationToken = default )
+		public Task CreateCatalogs( CatalogDto[] catalogs, CancellationToken cancellationToken = default )
 		{
 			if( catalogs == null ) throw new ArgumentNullException( nameof( catalogs ) );
 			return _RestClient.Request( RequestBuilder.CreatePost( "catalogs", Payload.Create( catalogs ) ), cancellationToken );
@@ -325,7 +325,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 
 		/// <inheritdoc />
 		/// <exception cref="ArgumentNullException"><paramref name="catalogs"/> is <see langword="null"/>.</exception>
-		public Task UpdateCatalogs( Catalog[] catalogs, CancellationToken cancellationToken = default )
+		public Task UpdateCatalogs( CatalogDto[] catalogs, CancellationToken cancellationToken = default )
 		{
 			if( catalogs == null ) throw new ArgumentNullException( nameof( catalogs ) );
 			return _RestClient.Request( RequestBuilder.CreatePut( "catalogs", Payload.Create( catalogs ) ), cancellationToken );
@@ -353,7 +353,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 
 		/// <inheritdoc />
 		/// <exception cref="ArgumentNullException"><paramref name="entries"/> is <see langword="null"/>.</exception>
-		public Task CreateCatalogEntries( Guid catalogUuid, CatalogEntry[] entries, CancellationToken cancellationToken = default )
+		public Task CreateCatalogEntries( Guid catalogUuid, CatalogEntryDto[] entries, CancellationToken cancellationToken = default )
 		{
 			if( entries == null ) throw new ArgumentNullException( nameof( entries ) );
 			return _RestClient.Request( RequestBuilder.CreatePost( $"catalogs/{catalogUuid}", Payload.Create( entries ) ), cancellationToken );
@@ -379,11 +379,11 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		}
 
 		/// <inheritdoc />
-		public async Task<IEnumerable<InspectionPlanPart>> GetParts( PathInformation partPath = null, Guid[] partUuids = null, ushort? depth = null, AttributeSelector requestedPartAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default )
+		public async Task<IEnumerable<InspectionPlanPartDto>> GetParts( PathInformationDto partPath = null, Guid[] partUuids = null, ushort? depth = null, AttributeSelector requestedPartAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default )
 		{
 			if( partUuids != null && partUuids.Length > 0 )
 			{
-				var result = new List<InspectionPlanPart>( partUuids.Length );
+				var result = new List<InspectionPlanPartDto>( partUuids.Length );
 				foreach( var uuid in partUuids )
 				{
 					var inspectionPlanPart = await GetPartByUuid( uuid, requestedPartAttributes, withHistory, cancellationToken ).ConfigureAwait( false );
@@ -395,19 +395,19 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			}
 
 			var parameter = RestClientHelper.ParseToParameter( partPath, partUuids, null, depth, requestedPartAttributes, withHistory: withHistory );
-			return await _RestClient.Request<InspectionPlanPart[]>( RequestBuilder.CreateGet( "parts", parameter.ToArray() ), cancellationToken ).ConfigureAwait( false );
+			return await _RestClient.Request<InspectionPlanPartDto[]>( RequestBuilder.CreateGet( "parts", parameter.ToArray() ), cancellationToken ).ConfigureAwait( false );
 		}
 
 		/// <inheritdoc />
-		public async Task<InspectionPlanPart> GetPartByUuid( Guid partUuid, AttributeSelector requestedPartAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default )
+		public async Task<InspectionPlanPartDto> GetPartByUuid( Guid partUuid, AttributeSelector requestedPartAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default )
 		{
 			var parameter = RestClientHelper.ParseToParameter( requestedPartAttributes: requestedPartAttributes, withHistory: withHistory );
-			return await _RestClient.Request<InspectionPlanPart>( RequestBuilder.CreateGet( $"parts/{partUuid}", parameter.ToArray() ), cancellationToken ).ConfigureAwait( false );
+			return await _RestClient.Request<InspectionPlanPartDto>( RequestBuilder.CreateGet( $"parts/{partUuid}", parameter.ToArray() ), cancellationToken ).ConfigureAwait( false );
 		}
 
 		/// <inheritdoc />
 		/// <exception cref="ArgumentNullException"><paramref name="parts"/> is <see langword="null"/>.</exception>
-		public Task CreateParts( InspectionPlanPart[] parts, bool versioningEnabled = false, CancellationToken cancellationToken = default )
+		public Task CreateParts( InspectionPlanPartDto[] parts, bool versioningEnabled = false, CancellationToken cancellationToken = default )
 		{
 			if( parts == null ) throw new ArgumentNullException( nameof( parts ) );
 
@@ -437,7 +437,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 
 		/// <inheritdoc />
 		/// <exception cref="ArgumentNullException"><paramref name="parts"/> is <see langword="null"/>.</exception>
-		public Task UpdateParts( InspectionPlanPart[] parts, bool versioningEnabled = false, CancellationToken cancellationToken = default )
+		public Task UpdateParts( InspectionPlanPartDto[] parts, bool versioningEnabled = false, CancellationToken cancellationToken = default )
 		{
 			if( parts == null ) throw new ArgumentNullException( nameof( parts ) );
 			var parameter = ParameterDefinition.Create( "versioningEnabled", versioningEnabled.ToString() );
@@ -446,7 +446,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 
 		/// <inheritdoc />
 		/// <exception cref="ArgumentNullException"><paramref name="partPath"/> is <see langword="null"/>.</exception>
-		public Task DeleteParts( PathInformation partPath, CancellationToken cancellationToken = default )
+		public Task DeleteParts( PathInformationDto partPath, CancellationToken cancellationToken = default )
 		{
 			if( partPath == null ) throw new ArgumentNullException( nameof( partPath ) );
 			var parameter = ParameterDefinition.Create( "partPath", PathHelper.PathInformation2DatabaseString( partPath ) );
@@ -467,7 +467,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		}
 
 		/// <inheritdoc/>
-		public async Task ClearPart( Guid partUuid, IEnumerable<ClearPartKeepEntities> clearPartKeepEntities = null, CancellationToken cancellationToken = default )
+		public async Task ClearPart( Guid partUuid, IEnumerable<ClearPartKeepEntitiesDto> clearPartKeepEntities = null, CancellationToken cancellationToken = default )
 		{
 			var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
 			if( !featureMatrix.SupportClearPart )
@@ -493,18 +493,18 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		}
 
 		/// <inheritdoc />
-		public async Task<IEnumerable<InspectionPlanCharacteristic>> GetCharacteristics( PathInformation partPath = null, ushort? depth = null, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default )
+		public async Task<IEnumerable<InspectionPlanCharacteristicDto>> GetCharacteristics( PathInformationDto partPath = null, ushort? depth = null, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default )
 		{
 			var parameter = RestClientHelper.ParseToParameter( partPath, null, null, depth, null, requestedCharacteristicAttributes, withHistory );
-			return await _RestClient.Request<InspectionPlanCharacteristic[]>( RequestBuilder.CreateGet( "characteristics", parameter.ToArray() ), cancellationToken ).ConfigureAwait( false );
+			return await _RestClient.Request<InspectionPlanCharacteristicDto[]>( RequestBuilder.CreateGet( "characteristics", parameter.ToArray() ), cancellationToken ).ConfigureAwait( false );
 		}
 
 		/// <inheritdoc />
-		public async Task<IEnumerable<InspectionPlanCharacteristic>> GetCharacteristicsByUuids( Guid[] charUuids, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default )
+		public async Task<IEnumerable<InspectionPlanCharacteristicDto>> GetCharacteristicsByUuids( Guid[] charUuids, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default )
 		{
-			if( charUuids == null || charUuids.Length == 0 ) return new InspectionPlanCharacteristic[ 0 ];
+			if( charUuids == null || charUuids.Length == 0 ) return new InspectionPlanCharacteristicDto[ 0 ];
 
-			var result = new List<InspectionPlanCharacteristic>( charUuids.Length );
+			var result = new List<InspectionPlanCharacteristicDto>( charUuids.Length );
 
 			var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
 			if( !featureMatrix.SupportsCharacteristicUuidRestrictionForCharacteristicFetch )
@@ -524,7 +524,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 				foreach( var uuidList in ArrayHelper.Split( charUuids, targetSize, RestClientHelper.LengthOfListElementInUri ) )
 				{
 					var parameter = RestClientHelper.ParseToParameter( null, null, uuidList, null, null, requestedCharacteristicAttributes, withHistory );
-					var characteristics = await _RestClient.Request<InspectionPlanCharacteristic[]>( RequestBuilder.CreateGet( "characteristics", parameter.ToArray() ), cancellationToken ).ConfigureAwait( false );
+					var characteristics = await _RestClient.Request<InspectionPlanCharacteristicDto[]>( RequestBuilder.CreateGet( "characteristics", parameter.ToArray() ), cancellationToken ).ConfigureAwait( false );
 					result.AddRange( characteristics );
 				}
 			}
@@ -533,15 +533,15 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		}
 
 		/// <inheritdoc />
-		public async Task<InspectionPlanCharacteristic> GetCharacteristicByUuid( Guid charUuid, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default )
+		public async Task<InspectionPlanCharacteristicDto> GetCharacteristicByUuid( Guid charUuid, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default )
 		{
 			var parameter = RestClientHelper.ParseToParameter( requestedCharacteristicAttributes: requestedCharacteristicAttributes, withHistory: withHistory );
-			return await _RestClient.Request<InspectionPlanCharacteristic>( RequestBuilder.CreateGet( $"characteristics/{charUuid}", parameter.ToArray() ), cancellationToken ).ConfigureAwait( false );
+			return await _RestClient.Request<InspectionPlanCharacteristicDto>( RequestBuilder.CreateGet( $"characteristics/{charUuid}", parameter.ToArray() ), cancellationToken ).ConfigureAwait( false );
 		}
 
 		/// <inheritdoc />
 		/// <exception cref="ArgumentNullException"><paramref name="characteristics"/> is <see langword="null"/>.</exception>
-		public Task CreateCharacteristics( InspectionPlanCharacteristic[] characteristics, bool versioningEnabled = false, CancellationToken cancellationToken = default )
+		public Task CreateCharacteristics( InspectionPlanCharacteristicDto[] characteristics, bool versioningEnabled = false, CancellationToken cancellationToken = default )
 		{
 			if( characteristics == null ) throw new ArgumentNullException( nameof( characteristics ) );
 
@@ -571,7 +571,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 
 		/// <inheritdoc />
 		/// <exception cref="ArgumentNullException"><paramref name="characteristics"/> is <see langword="null"/>.</exception>
-		public Task UpdateCharacteristics( InspectionPlanCharacteristic[] characteristics, bool versioningEnabled = false, CancellationToken cancellationToken = default )
+		public Task UpdateCharacteristics( InspectionPlanCharacteristicDto[] characteristics, bool versioningEnabled = false, CancellationToken cancellationToken = default )
 		{
 			if( characteristics == null ) throw new ArgumentNullException( nameof( characteristics ) );
 			var parameter = ParameterDefinition.Create( "versioningEnabled", versioningEnabled.ToString() );
@@ -580,7 +580,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 
 		/// <inheritdoc />
 		/// <exception cref="ArgumentNullException"><paramref name="charPath"/> is <see langword="null"/>.</exception>
-		public Task DeleteCharacteristics( PathInformation charPath, CancellationToken cancellationToken = default )
+		public Task DeleteCharacteristics( PathInformationDto charPath, CancellationToken cancellationToken = default )
 		{
 			if( charPath == null ) throw new ArgumentNullException( nameof( charPath ) );
 			var parameter = ParameterDefinition.Create( "charPath", PathHelper.PathInformation2DatabaseString( charPath ) );
@@ -601,7 +601,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		}
 
 		/// <inheritdoc />
-		public async Task<SimpleMeasurement[]> GetMeasurements( PathInformation partPath = null, MeasurementFilterAttributes filter = null, CancellationToken cancellationToken = default )
+		public async Task<SimpleMeasurementDto[]> GetMeasurements( PathInformationDto partPath = null, MeasurementFilterAttributesDto filter = null, CancellationToken cancellationToken = default )
 		{
 			if( filter?.MergeAttributes?.Length > 0 )
 			{
@@ -635,7 +635,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 				var newFilter = filter.Clone();
 				newFilter.MeasurementUuids = null;
 
-				var parameterName = AbstractMeasurementFilterAttributes.MeasurementUuidsParamName;
+				var parameterName = AbstractMeasurementFilterAttributesDto.MeasurementUuidsParamName;
 				var parameterDefinitions = CreateParameterDefinitions( partPath, newFilter );
 
 				//Split into multiple parameter sets to limit uuid parameter lenght
@@ -646,7 +646,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 				//Execute requests in parallel
 				var requests = parameterSets
 					.Select( set => RequestBuilder.CreateGet( requestPath, set.ToArray() ) )
-					.Select( request => _RestClient.Request<SimpleMeasurement[]>( request, cancellationToken ) );
+					.Select( request => _RestClient.Request<SimpleMeasurementDto[]>( request, cancellationToken ) );
 				var result = await Task.WhenAll( requests ).ConfigureAwait( false );
 
 				return result.SelectMany( r => r ).ToArray();
@@ -658,7 +658,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 				var newFilter = filter.Clone();
 				newFilter.PartUuids = null;
 
-				const string parameterName = AbstractMeasurementFilterAttributes.PartUuidsParamName;
+				const string parameterName = AbstractMeasurementFilterAttributesDto.PartUuidsParamName;
 				var parameterDefinitions = CreateParameterDefinitions( partPath, newFilter );
 
 				//Split into multiple parameter sets to limit uuid parameter lenght
@@ -669,7 +669,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 				//Execute requests in parallel
 				var requests = parameterSets
 					.Select( set => RequestBuilder.CreateGet( requestPath, set.ToArray() ) )
-					.Select( request => _RestClient.Request<SimpleMeasurement[]>( request, cancellationToken ) );
+					.Select( request => _RestClient.Request<SimpleMeasurementDto[]>( request, cancellationToken ) );
 				var result = await Task.WhenAll( requests ).ConfigureAwait( false );
 
 				return result.SelectMany( r => r ).ToArray();
@@ -678,12 +678,12 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			{
 				var parameterDefinitions = CreateParameterDefinitions( partPath, filter ).ToArray();
 				var requestUrl = RequestBuilder.CreateGet( requestPath, parameterDefinitions );
-				return await _RestClient.Request<SimpleMeasurement[]>( requestUrl, cancellationToken ).ConfigureAwait( false );
+				return await _RestClient.Request<SimpleMeasurementDto[]>( requestUrl, cancellationToken ).ConfigureAwait( false );
 			}
 		}
 
 		/// <inheritdoc />
-		public async Task<string[]> GetDistinctMeasurementAttributeValues( ushort key, PathInformation partPath = null, DistinctMeasurementFilterAttributes filter = null, CancellationToken cancellationToken = default )
+		public async Task<string[]> GetDistinctMeasurementAttributeValues( ushort key, PathInformationDto partPath = null, DistinctMeasurementFilterAttributesDto filter = null, CancellationToken cancellationToken = default )
 		{
 			var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
 			if( !featureMatrix.SupportsDistinctMeasurementAttributeValuesSearch )
@@ -700,7 +700,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 				newFilter.MeasurementUuids = null;
 
 				var parameter = CreateParameterDefinitions( partPath, newFilter, key );
-				parameter.Add( ParameterDefinition.Create( AbstractMeasurementFilterAttributes.MeasurementUuidsParamName, "" ) );
+				parameter.Add( ParameterDefinition.Create( AbstractMeasurementFilterAttributesDto.MeasurementUuidsParamName, "" ) );
 
 				var requestRestriction = RequestBuilder.AppendParameters( "values", parameter );
 				var targetSize = RestClientHelper.GetUriTargetSize( ServiceLocation, requestRestriction, MaxUriLength );
@@ -722,22 +722,22 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 
 		/// <inheritdoc />
 		/// <exception cref="ArgumentNullException"><paramref name="measurements"/> is <see langword="null"/>.</exception>
-		public Task CreateMeasurements( SimpleMeasurement[] measurements, CancellationToken cancellationToken = default )
+		public Task CreateMeasurements( SimpleMeasurementDto[] measurements, CancellationToken cancellationToken = default )
 		{
 			if( measurements == null ) throw new ArgumentNullException( nameof( measurements ) );
-			return _RestClient.Request<SimpleMeasurement[]>( RequestBuilder.CreatePost( "measurements", Payload.Create( measurements ) ), cancellationToken );
+			return _RestClient.Request<SimpleMeasurementDto[]>( RequestBuilder.CreatePost( "measurements", Payload.Create( measurements ) ), cancellationToken );
 		}
 
 		/// <inheritdoc />
 		/// <exception cref="ArgumentNullException"><paramref name="measurements"/> is <see langword="null"/>.</exception>
-		public Task UpdateMeasurements( SimpleMeasurement[] measurements, CancellationToken cancellationToken = default )
+		public Task UpdateMeasurements( SimpleMeasurementDto[] measurements, CancellationToken cancellationToken = default )
 		{
 			if( measurements == null ) throw new ArgumentNullException( nameof( measurements ) );
-			return _RestClient.Request<SimpleMeasurement[]>( RequestBuilder.CreatePut( "measurements", Payload.Create( measurements ) ), cancellationToken );
+			return _RestClient.Request<SimpleMeasurementDto[]>( RequestBuilder.CreatePut( "measurements", Payload.Create( measurements ) ), cancellationToken );
 		}
 
 		/// <inheritdoc />
-		public async Task DeleteMeasurementsByPartPath( PathInformation partPath = null, GenericSearchCondition filter = null, AggregationMeasurementSelection aggregation = AggregationMeasurementSelection.Default, MeasurementDeleteBehavior deep = MeasurementDeleteBehavior.DeleteForCurrentPartOnly, CancellationToken cancellationToken = default )
+		public async Task DeleteMeasurementsByPartPath( PathInformationDto partPath = null, GenericSearchConditionDto filter = null, AggregationMeasurementSelectionDto aggregation = AggregationMeasurementSelectionDto.Default, MeasurementDeleteBehaviorDto deep = MeasurementDeleteBehaviorDto.DeleteForCurrentPartOnly, CancellationToken cancellationToken = default )
 		{
 			var parameter = new List<ParameterDefinition>();
 
@@ -747,10 +747,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			if( filter != null )
 				parameter.Add( ParameterDefinition.Create( "searchCondition", SearchConditionParser.GenericConditionToString( filter ) ) );
 
-			if( aggregation != AggregationMeasurementSelection.Default )
+			if( aggregation != AggregationMeasurementSelectionDto.Default )
 				parameter.Add( ParameterDefinition.Create( "aggregation", aggregation.ToString() ) );
 
-			if( deep == MeasurementDeleteBehavior.DeleteDeep )
+			if( deep == MeasurementDeleteBehaviorDto.DeleteDeep )
 			{
 				var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
 				if( !featureMatrix.SupportsDeleteMeasurementsForSubParts )
@@ -768,7 +768,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		}
 
 		/// <inheritdoc />
-		public async Task DeleteMeasurementsByPartUuids( Guid[] partUuids, GenericSearchCondition filter = null, AggregationMeasurementSelection aggregation = AggregationMeasurementSelection.Default, CancellationToken cancellationToken = default )
+		public async Task DeleteMeasurementsByPartUuids( Guid[] partUuids, GenericSearchConditionDto filter = null, AggregationMeasurementSelectionDto aggregation = AggregationMeasurementSelectionDto.Default, CancellationToken cancellationToken = default )
 		{
 			if( partUuids == null )
 			{
@@ -777,7 +777,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 				if( filter != null )
 					parameter.Add( ParameterDefinition.Create( "searchCondition", SearchConditionParser.GenericConditionToString( filter ) ) );
 
-				if( aggregation != AggregationMeasurementSelection.Default )
+				if( aggregation != AggregationMeasurementSelectionDto.Default )
 					parameter.Add( ParameterDefinition.Create( "aggregation", aggregation.ToString() ) );
 
 				await _RestClient.Request( RequestBuilder.CreateDelete( "measurements", parameter.ToArray() ), cancellationToken ).ConfigureAwait( false );
@@ -791,7 +791,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 					if( filter != null )
 						parameter.Add( ParameterDefinition.Create( "searchCondition", SearchConditionParser.GenericConditionToString( filter ) ) );
 
-					if( aggregation != AggregationMeasurementSelection.Default )
+					if( aggregation != AggregationMeasurementSelectionDto.Default )
 						parameter.Add( ParameterDefinition.Create( "aggregation", aggregation.ToString() ) );
 
 					await _RestClient.Request( RequestBuilder.CreateDelete( "measurements", parameter.ToArray() ), cancellationToken ).ConfigureAwait( false );
@@ -818,7 +818,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		}
 
 		/// <inheritdoc />
-		public async Task<DataMeasurement[]> GetMeasurementValues( PathInformation partPath = null, MeasurementValueFilterAttributes filter = null, CancellationToken cancellationToken = default )
+		public async Task<DataMeasurementDto[]> GetMeasurementValues( PathInformationDto partPath = null, MeasurementValueFilterAttributesDto filter = null, CancellationToken cancellationToken = default )
 		{
 			if( filter?.MergeAttributes?.Length > 0 )
 			{
@@ -838,12 +838,12 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			if( filter?.CharacteristicsUuidList?.Length > 0 )
 				return await GetMeasurementValuesSplitByCharacteristics( partPath, filter, cancellationToken ).ConfigureAwait( false );
 
-			return await _RestClient.Request<DataMeasurement[]>( RequestBuilder.CreateGet( "values", CreateParameterDefinitions( partPath, filter ).ToArray() ), cancellationToken ).ConfigureAwait( false );
+			return await _RestClient.Request<DataMeasurementDto[]>( RequestBuilder.CreateGet( "values", CreateParameterDefinitions( partPath, filter ).ToArray() ), cancellationToken ).ConfigureAwait( false );
 		}
 
 		/// <inheritdoc />
 		/// <exception cref="ArgumentNullException"><paramref name="values"/> is <see langword="null"/>.</exception>
-		public Task CreateMeasurementValues( DataMeasurement[] values, CancellationToken cancellationToken = default )
+		public Task CreateMeasurementValues( DataMeasurementDto[] values, CancellationToken cancellationToken = default )
 		{
 			if( values == null ) throw new ArgumentNullException( nameof( values ) );
 			return _RestClient.Request( RequestBuilder.CreatePost( "values", Payload.Create( values ) ), cancellationToken );
@@ -851,7 +851,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 
 		/// <inheritdoc />
 		/// <exception cref="ArgumentNullException"><paramref name="values"/> is <see langword="null"/>.</exception>
-		public Task UpdateMeasurementValues( DataMeasurement[] values, CancellationToken cancellationToken = default )
+		public Task UpdateMeasurementValues( DataMeasurementDto[] values, CancellationToken cancellationToken = default )
 		{
 			if( values == null ) throw new ArgumentNullException( nameof( values ) );
 			return _RestClient.Request( RequestBuilder.CreatePut( "values", Payload.Create( values ) ), cancellationToken );

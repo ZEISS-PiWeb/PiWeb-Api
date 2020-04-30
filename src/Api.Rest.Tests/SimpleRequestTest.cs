@@ -42,7 +42,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests
 
 		static SimpleRequestTest()
 		{
-			Fixture.Register<AbstractAttributeDefinition>( () => Fixture.Create<AttributeDefinition>() );
+			Fixture.Register<AbstractAttributeDefinitionDto>( () => Fixture.Create<AttributeDefinitionDto>() );
 		}
 
 		#endregion
@@ -56,7 +56,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests
 			using var server = WebServer.StartNew( Port );
 			using var client = new DataServiceRestClient( Uri );
 
-			var config = Fixture.Create<Configuration>();
+			var config = Fixture.Create<ConfigurationDto>();
 
 			server.RegisterReponse( "/DataServiceRest/configuration", JsonConvert.SerializeObject( config ) );
 

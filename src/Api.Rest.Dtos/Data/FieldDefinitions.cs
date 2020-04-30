@@ -27,16 +27,16 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets the field definitions for measurements.
 		/// </summary>
-		public static FieldDefinition[] Measurement => new[]
+		public static FieldDefinitionDto[] Measurement => new[]
 		{
-			new FieldDefinition( "LastModified", FieldType.DateTime ),
-			new FieldDefinition( "Created", FieldType.DateTime )
+			new FieldDefinitionDto( "LastModified", FieldTypeDto.DateTime ),
+			new FieldDefinitionDto( "Created", FieldTypeDto.DateTime )
 		};
 
 		/// <summary>
 		/// Gets the field definitions for values.
 		/// </summary>
-		public static FieldDefinition[] Value => new FieldDefinition[] { };
+		public static FieldDefinitionDto[] Value => new FieldDefinitionDto[] { };
 
 		#endregion
 
@@ -46,14 +46,14 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Gets the field definitions.
 		/// </summary>
 		/// <param name="entity">The entity.</param>
-		public static Dictionary<FieldDefinition, Entity> GetAvailableDefinitions( Entity entity )
+		public static Dictionary<FieldDefinitionDto, EntityDto> GetAvailableDefinitions( EntityDto entity )
 		{
 			switch( entity )
 			{
-				case Entity.Measurement:
+				case EntityDto.Measurement:
 					return Measurement.ToDictionary( f => f, f => entity );
 				default:
-					return new Dictionary<FieldDefinition, Entity>();
+					return new Dictionary<FieldDefinitionDto, EntityDto>();
 			}
 		}
 

@@ -26,14 +26,14 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 	{
 		#region methods
 
-		/// <summary> 
-		/// Method for fetching the <see cref="ServiceInformation"/>. This method can be used for connection checking. The call returns quickly 
-		/// and does not produce any noticeable server load. 
+		/// <summary>
+		/// Method for fetching the <see cref="ServiceInformationDto"/>. This method can be used for connection checking. The call returns quickly
+		/// and does not produce any noticeable server load.
 		/// </summary>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task<ServiceInformation> GetServiceInformation( CancellationToken cancellationToken = default );
+		Task<ServiceInformationDto> GetServiceInformation( CancellationToken cancellationToken = default );
 
-		/// <summary> 
+		/// <summary>
 		/// Method for fetching the <see cref="InterfaceVersionRange"/>.
 		/// </summary>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
@@ -41,12 +41,12 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 
 		Task<T> GetFeatureMatrix( CancellationToken cancellationToken = default );
 
-		/// <summary> 
-		/// Method for fetching the <see cref="Configuration"/>. The <see cref="Configuration"/> contains the 
+		/// <summary>
+		/// Method for fetching the <see cref="ConfigurationDto"/>. The <see cref="ConfigurationDto"/> contains the
 		/// attribute definitions for parts, characteristics, measurements and values etc.
 		/// </summary>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task<Configuration> GetConfiguration( CancellationToken cancellationToken = default );
+		Task<ConfigurationDto> GetConfiguration( CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Adds new attribute definitions to the database configuration for the specified <paramref name="entity"/>.
@@ -54,16 +54,16 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="entity">The entity the attribute definitions should be added to.</param>
 		/// <param name="definitions">The attribute definitions to add.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task CreateAttributeDefinitions( Entity entity, [NotNull] AbstractAttributeDefinition[] definitions, CancellationToken cancellationToken = default );
+		Task CreateAttributeDefinitions( EntityDto entity, [NotNull] AbstractAttributeDefinitionDto[] definitions, CancellationToken cancellationToken = default );
 
-		/// <summary> 
+		/// <summary>
 		/// Updates / replaces the attribute definitions for the specified <paramref name="entity"/>. If the definition
 		/// does not exist yet, it will be replaced otherwise it will be updated.
 		/// </summary>
 		/// <param name="entity">The entity the attribute definitions should be replaced for.</param>
 		/// <param name="definitions">The attribute definitions to update.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task UpdateAttributeDefinitions( Entity entity, [NotNull] AbstractAttributeDefinition[] definitions, CancellationToken cancellationToken = default );
+		Task UpdateAttributeDefinitions( EntityDto entity, [NotNull] AbstractAttributeDefinitionDto[] definitions, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Deletes the attribute definitions from the database configuration for the specified <paramref name="entity"/>. If the key
@@ -72,7 +72,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="entity">The entity the attribute definitions should be deleted from.</param>
 		/// <param name="keys">The keys that specify the definitions.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task DeleteAttributeDefinitions( Entity entity, ushort[] keys = null, CancellationToken cancellationToken = default );
+		Task DeleteAttributeDefinitions( EntityDto entity, ushort[] keys = null, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Deletes all attribute definitions from the database configuration.
@@ -99,34 +99,34 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <returns></returns>
 		Task<bool> CheckCatalogEntryUsage( ushort attributeKey, int catalogEntryIndex, CancellationToken cancellationToken = default );
 
-		/// <summary> 
-		/// Method for fetching all <see cref="Catalog"/>s.  The catalogs contain the definition and the catalog entries.
+		/// <summary>
+		/// Method for fetching all <see cref="CatalogDto"/>s.  The catalogs contain the definition and the catalog entries.
 		/// </summary>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task<Catalog[]> GetAllCatalogs( CancellationToken cancellationToken = default );
+		Task<CatalogDto[]> GetAllCatalogs( CancellationToken cancellationToken = default );
 
-		/// <summary> 
-		/// Method for fetching the <see cref="Catalog"/>.  The catalogs contain the definition and the catalog entries.
+		/// <summary>
+		/// Method for fetching the <see cref="CatalogDto"/>.  The catalogs contain the definition and the catalog entries.
 		/// </summary>
 		/// <param name="catalogUuid">The uuid of the catalog to be rteurned.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task<Catalog> GetCatalog( Guid catalogUuid, CancellationToken cancellationToken = default );
+		Task<CatalogDto> GetCatalog( Guid catalogUuid, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Adds the specified catalogs to the database. If the catalog contains entries, the entries will be added too.
 		/// </summary>
 		/// <param name="catalogs">The catalogs to add.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task CreateCatalogs( [NotNull] Catalog[] catalogs, CancellationToken cancellationToken = default );
+		Task CreateCatalogs( [NotNull] CatalogDto[] catalogs, CancellationToken cancellationToken = default );
 
-		/// <summary> 
+		/// <summary>
 		/// Updates the specified catalogs. If the catalog contains entries, the entries will be updated too.
 		/// </summary>
 		/// <param name="catalogs">The catalogs to update.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task UpdateCatalogs( [NotNull] Catalog[] catalogs, CancellationToken cancellationToken = default );
+		Task UpdateCatalogs( [NotNull] CatalogDto[] catalogs, CancellationToken cancellationToken = default );
 
-		/// <summary> 
+		/// <summary>
 		/// Deletes the specified catalogs including their entries from the database. If the parameter <paramref name="catalogUuids"/>
 		/// is empty, all catalogs will be deleted.
 		/// </summary>
@@ -135,15 +135,15 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		Task DeleteCatalogs( Guid[] catalogUuids = null, CancellationToken cancellationToken = default );
 
 		/// <summary>
-		/// Adds the specified catalog entries to the catalog with uuid <paramref name="catalogUuid"/>. If the key <see cref="CatalogEntry.Key"/>
+		/// Adds the specified catalog entries to the catalog with uuid <paramref name="catalogUuid"/>. If the key <see cref="CatalogEntryDto.Key"/>
 		/// is <code>-1</code>, the server will generate a new unique key for that entry.
 		/// </summary>
 		/// <param name="catalogUuid">The uuid of the catalog to add the entries to.</param>
 		/// <param name="entries">The catalog entries to add.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task CreateCatalogEntries( Guid catalogUuid, [NotNull] CatalogEntry[] entries, CancellationToken cancellationToken = default );
+		Task CreateCatalogEntries( Guid catalogUuid, [NotNull] CatalogEntryDto[] entries, CancellationToken cancellationToken = default );
 
-		/// <summary> 
+		/// <summary>
 		/// Removes the catalog entries with the specified <paramref name="keys"/> from the catalog <paramref name="catalogUuid"/>. If the list of keys
 		/// is empty, all catalog entries will be removed.
 		/// </summary>
@@ -156,14 +156,14 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// Fetches a list of parts below <paramref name="partPath"/>. The result list always contains the specified parent part too. If the parent part
 		/// is <code>null</code>, a server wide search is performed. If the <see paramref="depth"/> is <code>0</code>, only the specified part will be returned.
 		/// </summary>
-		/// <param name="partPath">The parent part to fetch the children for.</param> 
+		/// <param name="partPath">The parent part to fetch the children for.</param>
 		/// <param name="withHistory">Determines whether to return the version history for each part.</param>
 		/// <param name="depth">The depth for the inspection plan search.</param>
 		/// <param name="partUuids">The list of part uuids to restrict the search to.</param>
 		/// <param name="requestedPartAttributes">The attribute selector to determine which attributes to return.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		[NotNull]
-		Task<IEnumerable<InspectionPlanPart>> GetParts( PathInformation partPath = null, Guid[] partUuids = null, ushort? depth = null, AttributeSelector requestedPartAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default );
+		Task<IEnumerable<InspectionPlanPartDto>> GetParts( PathInformationDto partPath = null, Guid[] partUuids = null, ushort? depth = null, AttributeSelector requestedPartAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Fetches a single part by its uuid.
@@ -173,7 +173,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="requestedPartAttributes">The attribute selector to determine which attributes to return.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		[NotNull]
-		Task<InspectionPlanPart> GetPartByUuid( Guid partUuid, AttributeSelector requestedPartAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default );
+		Task<InspectionPlanPartDto> GetPartByUuid( Guid partUuid, AttributeSelector requestedPartAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Adds the specified parts to the database.
@@ -181,7 +181,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="parts">The parts to add.</param>
 		/// <param name="versioningEnabled">Specifies whether to create a new inspection plan version entry. </param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task CreateParts( [NotNull] InspectionPlanPart[] parts, bool versioningEnabled = false, CancellationToken cancellationToken = default );
+		Task CreateParts( [NotNull] InspectionPlanPartDto[] parts, bool versioningEnabled = false, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Updates the specified parts in the database.
@@ -189,20 +189,20 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="parts">The parts to update.</param>
 		/// <param name="versioningEnabled">Specifies whether to create a new inspection plan version entry. </param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task UpdateParts( [NotNull] InspectionPlanPart[] parts, bool versioningEnabled = false, CancellationToken cancellationToken = default );
+		Task UpdateParts( [NotNull] InspectionPlanPartDto[] parts, bool versioningEnabled = false, CancellationToken cancellationToken = default );
 
-		/// <summary> 
-		/// Deletes all parts and child parts below <paramref name="partPath"/> from the database. Since parts act as the parent 
-		/// of characteristics and measurements, this call will delete all characteristics and measurements including the measurement 
+		/// <summary>
+		/// Deletes all parts and child parts below <paramref name="partPath"/> from the database. Since parts act as the parent
+		/// of characteristics and measurements, this call will delete all characteristics and measurements including the measurement
 		/// values that are a child of the specified parent part.
 		/// </summary>
 		/// <param name="partPath">The parent part for the delete operation.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task DeleteParts( [NotNull] PathInformation partPath, CancellationToken cancellationToken = default );
+		Task DeleteParts( [NotNull] PathInformationDto partPath, CancellationToken cancellationToken = default );
 
-		/// <summary> 
-		/// Deletes all parts and child parts below the parts specified by <paramref name="partUuids"/> from the database. Since parts act as the parent 
-		/// of characteristics and measurements, this call will delete all characteristics and measurements including the measurement 
+		/// <summary>
+		/// Deletes all parts and child parts below the parts specified by <paramref name="partUuids"/> from the database. Since parts act as the parent
+		/// of characteristics and measurements, this call will delete all characteristics and measurements including the measurement
 		/// values that are a child of the specified parent part.
 		/// </summary>
 		/// <param name="partUuids">The uuid list of the parent part for the delete operation.</param>
@@ -220,7 +220,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="partUuid">The uuid of the part to be cleared.</param>
 		/// <param name="clearPartKeepEntities">Contains entities which should not be affected on clearing part</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task ClearPart( Guid partUuid, IEnumerable<ClearPartKeepEntities> clearPartKeepEntities = null, CancellationToken cancellationToken = default );
+		Task ClearPart( Guid partUuid, IEnumerable<ClearPartKeepEntitiesDto> clearPartKeepEntities = null, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Fetches a list of characteristics below <paramref name="partPath"/>. Parts below <paramref name="partPath"/> are ignored.
@@ -234,7 +234,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="requestedCharacteristicAttributes">The attribute selector to determine which attributes to return.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		[NotNull]
-		Task<IEnumerable<InspectionPlanCharacteristic>> GetCharacteristics( PathInformation partPath = null, ushort? depth = null, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default );
+		Task<IEnumerable<InspectionPlanCharacteristicDto>> GetCharacteristics( PathInformationDto partPath = null, ushort? depth = null, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Fetches characteristics based on their <paramref name="charUuids"/>.
@@ -245,7 +245,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		/// <returns></returns>
 		[NotNull]
-		Task<IEnumerable<InspectionPlanCharacteristic>> GetCharacteristicsByUuids( Guid[] charUuids, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default );
+		Task<IEnumerable<InspectionPlanCharacteristicDto>> GetCharacteristicsByUuids( Guid[] charUuids, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Fetches a single characteristic by its uuid.
@@ -255,7 +255,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="requestedCharacteristicAttributes">The attribute selector to determine which attributes to return.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		[NotNull]
-		Task<InspectionPlanCharacteristic> GetCharacteristicByUuid( Guid charUuid, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default );
+		Task<InspectionPlanCharacteristicDto> GetCharacteristicByUuid( Guid charUuid, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Adds the specified characteristics to the database.
@@ -263,7 +263,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="characteristics">The characteristics to add.</param>
 		/// <param name="versioningEnabled">Specifies whether to create a new inspection plan version entry.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task CreateCharacteristics( [NotNull] InspectionPlanCharacteristic[] characteristics, bool versioningEnabled = false, CancellationToken cancellationToken = default );
+		Task CreateCharacteristics( [NotNull] InspectionPlanCharacteristicDto[] characteristics, bool versioningEnabled = false, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Updates the specified characteristics in the database.
@@ -271,31 +271,31 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="characteristics">characteristics parts to update.</param>
 		/// <param name="versioningEnabled">Specifies whether to create a new inspection plan version entry.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task UpdateCharacteristics( [NotNull] InspectionPlanCharacteristic[] characteristics, bool versioningEnabled = false, CancellationToken cancellationToken = default );
+		Task UpdateCharacteristics( [NotNull] InspectionPlanCharacteristicDto[] characteristics, bool versioningEnabled = false, CancellationToken cancellationToken = default );
 
-		/// <summary> 
-		/// Deletes the characteristic <paramref name="charPath"/> and its sub characteristics from the database. 
+		/// <summary>
+		/// Deletes the characteristic <paramref name="charPath"/> and its sub characteristics from the database.
 		/// </summary>
 		/// <param name="charPath">The characteristic path for the delete operation.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task DeleteCharacteristics( [NotNull] PathInformation charPath, CancellationToken cancellationToken = default );
+		Task DeleteCharacteristics( [NotNull] PathInformationDto charPath, CancellationToken cancellationToken = default );
 
 		/// <summary>
-		/// Deletes the characteristics <paramref name="charUuid"/> and their sub characteristics from the database. 
+		/// Deletes the characteristics <paramref name="charUuid"/> and their sub characteristics from the database.
 		/// </summary>
 		/// <param name="charUuid">The characteristic uuid list for the delete operation.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		Task DeleteCharacteristics( Guid[] charUuid, CancellationToken cancellationToken = default );
 
 		/// <summary>
-		/// Fetches a list of measurements for the <paramref name="partPath"/>. The search operation can be parameterized using the specified 
+		/// Fetches a list of measurements for the <paramref name="partPath"/>. The search operation can be parameterized using the specified
 		/// <paramref name="filter"/>. If the filter is empty, all measurements for the specified part will be fetched.
 		/// </summary>
 		/// <param name="partPath">The part path to fetch the measurements for.</param>
 		/// <param name="filter">A filter that can be used to further restrict the search operation.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		[NotNull]
-		Task<SimpleMeasurement[]> GetMeasurements( PathInformation partPath = null, MeasurementFilterAttributes filter = null, CancellationToken cancellationToken = default );
+		Task<SimpleMeasurementDto[]> GetMeasurements( PathInformationDto partPath = null, MeasurementFilterAttributesDto filter = null, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Fetches a list of measurement attribute values of the attribute <paramref name="key" /> for the <paramref name="partPath" />. The search operation can be parameterized using the specified
@@ -307,24 +307,24 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		/// <returns></returns>
 		[NotNull]
-		Task<string[]> GetDistinctMeasurementAttributeValues( ushort key, PathInformation partPath = null, DistinctMeasurementFilterAttributes filter = null, CancellationToken cancellationToken = default );
+		Task<string[]> GetDistinctMeasurementAttributeValues( ushort key, PathInformationDto partPath = null, DistinctMeasurementFilterAttributesDto filter = null, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Adds the measurements parts to the database.
 		/// </summary>
 		/// <param name="measurements">The measurements to add.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task CreateMeasurements( [NotNull] SimpleMeasurement[] measurements, CancellationToken cancellationToken = default );
+		Task CreateMeasurements( [NotNull] SimpleMeasurementDto[] measurements, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Updates the specified measurements in the database.
 		/// </summary>
 		/// <param name="measurements">The measurements to update.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task UpdateMeasurements( [NotNull] SimpleMeasurement[] measurements, CancellationToken cancellationToken = default );
+		Task UpdateMeasurements( [NotNull] SimpleMeasurementDto[] measurements, CancellationToken cancellationToken = default );
 
 		/// <summary>
-		/// Deletes the measurements including the measurement values for part <paramref name="partPath"/>. The <paramref name="filter"/> can be used 
+		/// Deletes the measurements including the measurement values for part <paramref name="partPath"/>. The <paramref name="filter"/> can be used
 		/// to restrict the measurements. If the filter is empty, all measurements for the specified part will be deleted. If the partPath is empty,
 		/// all measurements from the whole database will be deleted.
 		/// </summary>
@@ -333,18 +333,18 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="aggregation">Specifies what types of measurements will be deleted (normal/aggregated measurements or both).</param>
 		/// <param name="deep">Specifies if measurements of <paramref name="partPath"/> only or also measurements of sub parts will be deleted.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task DeleteMeasurementsByPartPath( PathInformation partPath = null, GenericSearchCondition filter = null, AggregationMeasurementSelection aggregation = AggregationMeasurementSelection.Default, MeasurementDeleteBehavior deep = MeasurementDeleteBehavior.DeleteForCurrentPartOnly, CancellationToken cancellationToken = default );
+		Task DeleteMeasurementsByPartPath( PathInformationDto partPath = null, GenericSearchConditionDto filter = null, AggregationMeasurementSelectionDto aggregation = AggregationMeasurementSelectionDto.Default, MeasurementDeleteBehaviorDto deep = MeasurementDeleteBehaviorDto.DeleteForCurrentPartOnly, CancellationToken cancellationToken = default );
 
 		/// <summary>
-		/// Deletes the measurements including the measurement values for parts that uuids are within <paramref name="partUuids"/> list. The <paramref name="filter"/> can be used 
+		/// Deletes the measurements including the measurement values for parts that uuids are within <paramref name="partUuids"/> list. The <paramref name="filter"/> can be used
 		/// to restrict the measurements. If the filter is empty, all measurements for the specified parts will be deleted. If the partPath is empty,
-		/// all measurements from the whole database will be deleted. 
+		/// all measurements from the whole database will be deleted.
 		/// </summary>
 		/// <param name="partUuids">The Uuids of the parts which measurements should be deleted.</param>
 		/// <param name="filter">A filter to restrict the delete operation.</param>
 		/// <param name="aggregation">Specifies what types of measurements will be deleted (normal/aggregated measurements or both).</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task DeleteMeasurementsByPartUuids( Guid[] partUuids, GenericSearchCondition filter = null, AggregationMeasurementSelection aggregation = AggregationMeasurementSelection.Default, CancellationToken cancellationToken = default );
+		Task DeleteMeasurementsByPartUuids( Guid[] partUuids, GenericSearchConditionDto filter = null, AggregationMeasurementSelectionDto aggregation = AggregationMeasurementSelectionDto.Default, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Deletes the measurements that are part of the <paramref name="measurementUuids"/> list.
@@ -354,16 +354,16 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		Task DeleteMeasurementsByUuid( Guid[] measurementUuids, CancellationToken cancellationToken = default );
 
 		/// <summary>
-		/// Fetches a list of measurements and measurement values for the <paramref name="partPath"/>. The search operation 
-		/// can be parameterized using the specified <paramref name="filter"/>. If the filter is empty, all measurements for 
+		/// Fetches a list of measurements and measurement values for the <paramref name="partPath"/>. The search operation
+		/// can be parameterized using the specified <paramref name="filter"/>. If the filter is empty, all measurements for
 		/// the specified part will be fetched.
-		/// <remarks>The <see cref="DataCharacteristic"/> objects within the returned measurements does not include the characteristics' paths due to perform issues.</remarks>
+		/// <remarks>The <see cref="DataCharacteristicDto"/> objects within the returned measurements does not include the characteristics' paths due to perform issues.</remarks>
 		/// </summary>
 		/// <param name="partPath">The part path to fetch the measurements and values for.</param>
 		/// <param name="filter">A filter that can be used to further restrict the search operation.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		[NotNull]
-		Task<DataMeasurement[]> GetMeasurementValues( PathInformation partPath = null, MeasurementValueFilterAttributes filter = null, CancellationToken cancellationToken = default );
+		Task<DataMeasurementDto[]> GetMeasurementValues( PathInformationDto partPath = null, MeasurementValueFilterAttributesDto filter = null, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Adds the measurements and measurement values parts to the database. Please note that no single values can be inserted or updated. Whole
@@ -371,7 +371,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// </summary>
 		/// <param name="values">The measurements and values to add.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task CreateMeasurementValues( [NotNull] DataMeasurement[] values, CancellationToken cancellationToken = default );
+		Task CreateMeasurementValues( [NotNull] DataMeasurementDto[] values, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Updates the measurements and measurement values parts to the database. Please note that no single values can be inserted or updated. Whole
@@ -379,7 +379,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// </summary>
 		/// <param name="values">The measurements and values to update.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task UpdateMeasurementValues( [NotNull] DataMeasurement[] values, CancellationToken cancellationToken = default );
+		Task UpdateMeasurementValues( [NotNull] DataMeasurementDto[] values, CancellationToken cancellationToken = default );
 
 		#endregion
 	}

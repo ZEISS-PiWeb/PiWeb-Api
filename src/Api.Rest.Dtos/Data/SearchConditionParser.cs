@@ -27,21 +27,21 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	{
 		#region members
 
-		private static readonly Dictionary<string, Operation> Operations = new Dictionary<string, Operation>
+		private static readonly Dictionary<string, OperationDto> Operations = new Dictionary<string, OperationDto>
 		{
-			{ "<>", Operation.NotEqual },
-			{ "=", Operation.Equal },
-			{ ">", Operation.GreaterThan },
-			{ "<", Operation.LessThan },
-			{ ">=", Operation.GreaterThanOrEqual },
-			{ "<=", Operation.LessThanOrEqual },
-			{ "In", Operation.In },
-			{ "NotIn", Operation.NotIn },
-			{ "Like", Operation.Like }
+			{ "<>", OperationDto.NotEqual },
+			{ "=", OperationDto.Equal },
+			{ ">", OperationDto.GreaterThan },
+			{ "<", OperationDto.LessThan },
+			{ ">=", OperationDto.GreaterThanOrEqual },
+			{ "<=", OperationDto.LessThanOrEqual },
+			{ "In", OperationDto.In },
+			{ "NotIn", OperationDto.NotIn },
+			{ "Like", OperationDto.Like }
 		};
 
 		private static readonly string[] AllOperationStrings = Operations.Keys.ToArray();
-		private static readonly Dictionary<Operation, string> InverseOperations = Operations.ToDictionary( k => k.Value, v => v.Key );
+		private static readonly Dictionary<OperationDto, string> InverseOperations = Operations.ToDictionary( k => k.Value, v => v.Key );
 
 		private static readonly ResourceManager ResourceManager = new ResourceManager( typeof( SearchConditionParser ) );
 
@@ -69,13 +69,13 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Converts the search filter into a string.
 		/// </summary>
-		public static string GenericConditionToString( GenericSearchCondition condition )
+		public static string GenericConditionToString( GenericSearchConditionDto condition )
 		{
 			var result = new StringBuilder();
 
-			var and = condition as GenericSearchAnd;
-			var attr = condition as GenericSearchAttributeCondition;
-			var field = condition as GenericSearchFieldCondition;
+			var and = condition as GenericSearchAndDto;
+			var attr = condition as GenericSearchAttributeConditionDto;
+			var field = condition as GenericSearchFieldConditionDto;
 			if( and != null )
 			{
 				var first = true;
@@ -145,11 +145,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Parses the search filter string.
 		/// </summary>
 		/// <param name="searchFilter">The search filter string.</param>
-		public static GenericSearchCondition Parse( string searchFilter )
+		public static GenericSearchConditionDto Parse( string searchFilter )
 		{
 			if( !string.IsNullOrEmpty( searchFilter ) )
 			{
-				var conditions = new List<GenericSearchCondition>();
+				var conditions = new List<GenericSearchConditionDto>();
 
 				var searchIndex = 0;
 				var markerIndex = -1;
@@ -176,15 +176,15 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 					markerIndex = searchIndex + opStr.Length;
 					var token = searchFilter.Substring( 0, searchIndex );
 
-					GenericSearchValueCondition condition;
+					GenericSearchValueConditionDto condition;
 					if( !ushort.TryParse( token, out var key ) )
 					{
-						var fieldCondition = new GenericSearchFieldCondition { FieldName = token };
+						var fieldCondition = new GenericSearchFieldConditionDto { FieldName = token };
 						condition = fieldCondition;
 					}
 					else
 					{
-						var attributeCondition = new GenericSearchAttributeCondition { Attribute = key };
+						var attributeCondition = new GenericSearchAttributeConditionDto { Attribute = key };
 						condition = attributeCondition;
 					}
 
@@ -217,16 +217,16 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 					++searchIndex;
 				}
 
-				return conditions.Count == 1 ? conditions[ 0 ] : new GenericSearchAnd { Conditions = conditions.ToArray() };
+				return conditions.Count == 1 ? conditions[ 0 ] : new GenericSearchAndDto { Conditions = conditions.ToArray() };
 			}
 
 			return null;
 		}
 
 		/// <summary>
-		/// Tries to parse the <code>searchFilter</code> and returns the filter as a <see cref="GenericSearchCondition"/> if successful.
+		/// Tries to parse the <code>searchFilter</code> and returns the filter as a <see cref="GenericSearchConditionDto"/> if successful.
 		/// </summary>
-		public static bool TryParse( string searchFilter, out GenericSearchCondition condition )
+		public static bool TryParse( string searchFilter, out GenericSearchConditionDto condition )
 		{
 			try
 			{
