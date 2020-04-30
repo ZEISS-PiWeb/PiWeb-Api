@@ -18,20 +18,20 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 	#endregion
 
 	[Serializable]
-	public class RawData : RawDataInformation
+	public class RawDataDto : RawDataInformationDto
 	{
 		#region constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="RawData"/> class.
+		/// Initializes a new instance of the <see cref="RawDataDto"/> class.
 		/// </summary>
-		public RawData() { }
+		public RawDataDto() { }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="RawData"/> class.
+		/// Initializes a new instance of the <see cref="RawDataDto"/> class.
 		/// </summary>
 		/// <exception cref="ArgumentNullException"><paramref name="info"/> is <see langword="null" />.</exception>
-		public RawData( [NotNull] RawDataInformation info, byte[] data )
+		public RawDataDto( [NotNull] RawDataInformationDto info, byte[] data )
 			: base( info )
 		{
 			Data = data;

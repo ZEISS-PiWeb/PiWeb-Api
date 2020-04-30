@@ -25,14 +25,14 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 	{
 		#region methods
 
-		/// <summary> 
-		/// Method for fetching the <see cref="ServiceInformation"/>. This method can be used for connection checking. The call returns quickly 
-		/// and does not produce any noticeable server load. 
+		/// <summary>
+		/// Method for fetching the <see cref="ServiceInformationDto"/>. This method can be used for connection checking. The call returns quickly
+		/// and does not produce any noticeable server load.
 		/// </summary>
 		/// <param name="cancellationToken">A token to cancel the hronous operation.</param>
-		Task<ServiceInformation> GetServiceInformation( CancellationToken cancellationToken = default );
+		Task<ServiceInformationDto> GetServiceInformation( CancellationToken cancellationToken = default );
 
-		/// <summary> 
+		/// <summary>
 		/// Method for fetching the <see cref="InterfaceVersionRange"/>.
 		/// </summary>
 		/// <param name="cancellationToken">A token to cancel the hronous operation.</param>
@@ -45,62 +45,62 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <returns></returns>
 		Task<T> GetFeatureMatrix( CancellationToken cancellationToken = default );
 
-		/// <summary> 
+		/// <summary>
 		/// Fetches a list of raw data information for the <paramref name="entity"/> identified by <paramref name="uuids"/> and filtered by <paramref name="filter"/>.
 		/// Either <paramref name="uuids" /> or <paramref name="filter"/> must have a value.
 		/// </summary>
-		/// <param name="entity">The <see cref="RawDataEntity"/> the raw data information should be fetched for.</param>
+		/// <param name="entity">The <see cref="RawDataEntityDto"/> the raw data information should be fetched for.</param>
 		/// <param name="uuids">The list of value uuids the data information should be fetched for.</param>
 		/// <param name="filter">A condition used to filter the result.</param>
 		/// <param name="cancellationToken">A token to cancel the hronous operation.</param>
 		/// <exception cref="InvalidOperationException">No uuids and no filter was specified.</exception>
 		/// <exception cref="OperationNotSupportedOnServerException">An attribute filter for raw data is not supported by this server.</exception>
-		Task<RawDataInformation[]> ListRawData( RawDataEntity entity, string[] uuids, IFilterCondition filter = null, CancellationToken cancellationToken = default );
+		Task<RawDataInformationDto[]> ListRawData( RawDataEntityDto entity, string[] uuids, IFilterCondition filter = null, CancellationToken cancellationToken = default );
 
 		/// <summary>
-		/// Fetches raw data as a byte array for the raw data item identified by <paramref name="target"/> and <paramref name="rawDataKey"/>. 
+		/// Fetches raw data as a byte array for the raw data item identified by <paramref name="target"/> and <paramref name="rawDataKey"/>.
 		/// </summary>
-		/// <param name="target">The <see cref="RawDataTargetEntity"/> that specifies the raw data object that should be fetched.</param>
+		/// <param name="target">The <see cref="RawDataTargetEntityDto"/> that specifies the raw data object that should be fetched.</param>
 		/// <param name="rawDataKey">The unique key that identifies the raw data object for the specified target.</param>
 		/// <param name="expectedMd5">The md5 check sum that is expected for the result object. If this value is set, performance is better because server side round trips are reduced.</param>
 		/// <param name="cancellationToken">A token to cancel the hronous operation.</param>
-		Task<byte[]> GetRawData( [NotNull] RawDataTargetEntity target, int rawDataKey, Guid? expectedMd5 = null, CancellationToken cancellationToken = default );
+		Task<byte[]> GetRawData( [NotNull] RawDataTargetEntityDto target, int rawDataKey, Guid? expectedMd5 = null, CancellationToken cancellationToken = default );
 
-		/// <summary> 
-		/// Fetches a preview image for the specified <code>info</code>. 
+		/// <summary>
+		/// Fetches a preview image for the specified <code>info</code>.
 		/// </summary>
-		/// <param name="target">The <see cref="RawDataTargetEntity"/> that specifies the raw data object that should be fetched.</param>
+		/// <param name="target">The <see cref="RawDataTargetEntityDto"/> that specifies the raw data object that should be fetched.</param>
 		/// <param name="rawDataKey">The unique key that identifies the raw data object for the specified target.</param>
 		/// <returns>The preview image as byte array.</returns>
 		/// <param name="cancellationToken">A token to cancel the hronous operation.</param>
-		Task<byte[]> GetRawDataThumbnail( [NotNull] RawDataTargetEntity target, int rawDataKey, CancellationToken cancellationToken = default );
+		Task<byte[]> GetRawDataThumbnail( [NotNull] RawDataTargetEntityDto target, int rawDataKey, CancellationToken cancellationToken = default );
 
-		/// <summary> 
-		/// Creates a new raw data object <paramref name="data"/> for the element specified by <paramref name="info"/>. 
+		/// <summary>
+		/// Creates a new raw data object <paramref name="data"/> for the element specified by <paramref name="info"/>.
 		/// </summary>
 		/// <param name="data">The raw data to upload.</param>
-		/// <param name="info">The <see cref="RawDataInformation"/> object containing the <see cref="RawDataEntity"/> type and the uuid of the raw data that should be uploaded.</param>
+		/// <param name="info">The <see cref="RawDataInformationDto"/> object containing the <see cref="RawDataEntityDto"/> type and the uuid of the raw data that should be uploaded.</param>
 		/// <param name="cancellationToken">A token to cancel the hronous operation.</param>
 		/// <remarks>
-		/// If key speciefied by <see cref="RawDataInformation.Key"/> is -1, a new key will be chosen by the server automatically. This is the preferred way.
+		/// If key speciefied by <see cref="RawDataInformationDto.Key"/> is -1, a new key will be chosen by the server automatically. This is the preferred way.
 		/// </remarks>
-		Task CreateRawData( [NotNull] RawDataInformation info, [NotNull] byte[] data, CancellationToken cancellationToken = default );
+		Task CreateRawData( [NotNull] RawDataInformationDto info, [NotNull] byte[] data, CancellationToken cancellationToken = default );
 
-		/// <summary> 
-		/// Updates the raw data object <paramref name="data"/> for the element identified by <paramref name="info"/>. 
+		/// <summary>
+		/// Updates the raw data object <paramref name="data"/> for the element identified by <paramref name="info"/>.
 		/// </summary>
 		/// <param name="data">The raw data to upload.</param>
-		/// <param name="info">The <see cref="RawDataInformation"/> object containing the <see cref="RawDataEntity"/> type, the uuid and the key of the raw data that should be updated.</param>
+		/// <param name="info">The <see cref="RawDataInformationDto"/> object containing the <see cref="RawDataEntityDto"/> type, the uuid and the key of the raw data that should be updated.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task UpdateRawData( [NotNull] RawDataInformation info, byte[] data, CancellationToken cancellationToken = default );
+		Task UpdateRawData( [NotNull] RawDataInformationDto info, byte[] data, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Deletes raw data for the element identified by <paramref name="target"/> and <paramref name="rawDataKey"/>.
 		/// </summary>
-		/// <param name="target">The <see cref="RawDataTargetEntity"/> object containing the <see cref="RawDataEntity"/> type and the uuid of the raw data that should be deleted.</param>
+		/// <param name="target">The <see cref="RawDataTargetEntityDto"/> object containing the <see cref="RawDataEntityDto"/> type and the uuid of the raw data that should be deleted.</param>
 		/// <param name="rawDataKey">The key of the raw data object which should be deleted.</param>
 		/// <param name="cancellationToken">A token to cancel the hronous operation.</param>
-		Task DeleteRawData( [NotNull] RawDataTargetEntity target, int? rawDataKey = null, CancellationToken cancellationToken = default );
+		Task DeleteRawData( [NotNull] RawDataTargetEntityDto target, int? rawDataKey = null, CancellationToken cancellationToken = default );
 
 		#endregion
 	}

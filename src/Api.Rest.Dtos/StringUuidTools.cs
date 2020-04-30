@@ -29,7 +29,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 
 		/// <summary> Splits a string containig a measurementUuid and a characteristicUuid in form measurementUuid|characteristicUuid. </summary>
 		/// <exception cref="InvalidOperationException">The syntax of <paramref name="uuidPair"/> is invalid.</exception>
-		public static ValueRawDataIdentifier SplitStringUuidPair( string uuidPair )
+		public static ValueRawDataIdentifierDto SplitStringUuidPair( string uuidPair )
 		{
 			if( !TrySplitStringUuidPair( uuidPair, out var result ) )
 			{
@@ -41,7 +41,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 			return result;
 		}
 
-		public static bool TrySplitStringUuidPair( string uuidPair, out ValueRawDataIdentifier result )
+		public static bool TrySplitStringUuidPair( string uuidPair, out ValueRawDataIdentifierDto result )
 		{
 			uuidPair = uuidPair.Replace( "{", string.Empty ).Replace( "}", string.Empty );
 
@@ -61,7 +61,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 			if( !Guid.TryParse( characteristicGuidString, out var characteristicUuid ) )
 				return false;
 
-			result = new ValueRawDataIdentifier( measurementUuid, characteristicUuid );
+			result = new ValueRawDataIdentifierDto( measurementUuid, characteristicUuid );
 			return true;
 		}
 
@@ -72,7 +72,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 		}
 
 		/// <summary> Creates a string containig a measurementUuid and a characteristicUuid in form measurementUuid|characteristicUuid. </summary>
-		public static string CreateStringUuidPair( ValueRawDataIdentifier guidPair )
+		public static string CreateStringUuidPair( ValueRawDataIdentifierDto guidPair )
 		{
 			return string.Concat( guidPair.MeasurementUuid, '|', guidPair.CharacteristicUuid );
 		}
@@ -85,7 +85,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 
 		/// <exception cref="ArgumentOutOfRangeException">The syntax of any uuid in <paramref name="uuids"/> is invalid.</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="uuids"/> is <see langword="null" />.</exception>
-		public static void CheckUuids(RawDataEntity entity, [NotNull] IEnumerable<string> uuids )
+		public static void CheckUuids(RawDataEntityDto entity, [NotNull] IEnumerable<string> uuids )
 		{
 			if( uuids == null )
 				throw new ArgumentNullException( nameof( uuids ) );
@@ -95,9 +95,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 		}
 
 		/// <exception cref="ArgumentOutOfRangeException">The syntax of <paramref name="uuid"/> is invalid.</exception>
-		public static void CheckUuid( RawDataEntity entity, string uuid )
+		public static void CheckUuid( RawDataEntityDto entity, string uuid )
 		{
-			var uuidMustBeComposed = entity == RawDataEntity.Value;
+			var uuidMustBeComposed = entity == RawDataEntityDto.Value;
 
 			if( uuidMustBeComposed && !IsStringUuidPair( uuid ) )
 			{

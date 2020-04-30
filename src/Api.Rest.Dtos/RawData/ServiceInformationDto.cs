@@ -19,7 +19,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 	/// <summary>
 	/// This class contains general information about the RawDataService, like its current version.
 	/// </summary>
-	public class ServiceInformation
+	public class ServiceInformationDto
 	{
 		#region properties
 
