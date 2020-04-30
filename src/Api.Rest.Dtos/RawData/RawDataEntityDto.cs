@@ -18,10 +18,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 	#endregion
 
 	/// <summary>
-	/// Enumeration that specifies the entity to which a raw data object is attached to. 
+	/// Enumeration that specifies the entity to which a raw data object is attached to.
 	/// </summary>
 	[JsonConverter( typeof( StringEnumConverter ) )]
-	public enum RawDataEntity
+	public enum RawDataEntityDto
 	{
 		/// <summary>
 		/// The raw data object belongs to a part.

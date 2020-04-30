@@ -17,23 +17,23 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 	#endregion
 
 	/// <summary>
-	/// <see cref="IEqualityComparer{T}"/> zum Vergleich zweier <see cref="RawDataTargetEntity"/>-Objekte.
+	/// <see cref="IEqualityComparer{T}"/> zum Vergleich zweier <see cref="RawDataTargetEntityDto"/>-Objekte.
 	/// </summary>
-	public class RawDataTargetEntityComparer : IEqualityComparer<RawDataTargetEntity>
+	public class RawDataTargetEntityDtoComparer : IEqualityComparer<RawDataTargetEntityDto>
 	{
 		#region members
 
 		/// <summary>
 		/// Eine Instanz dieses Objekts.
 		/// </summary>
-		public static readonly RawDataTargetEntityComparer Default = new RawDataTargetEntityComparer();
+		public static readonly RawDataTargetEntityDtoComparer Default = new RawDataTargetEntityDtoComparer();
 
 		#endregion
 
 		#region interface IEqualityComparer<RawDataTargetEntity>
 
 		/// <inheritdoc />
-		public bool Equals( RawDataTargetEntity x, RawDataTargetEntity y )
+		public bool Equals( RawDataTargetEntityDto x, RawDataTargetEntityDto y )
 		{
 			if( x == null && y == null || ReferenceEquals( x, y ) )
 				return true;
@@ -45,7 +45,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		}
 
 		/// <inheritdoc />
-		public int GetHashCode( RawDataTargetEntity obj )
+		public int GetHashCode( RawDataTargetEntityDto obj )
 		{
 			return obj.Entity.GetHashCode() ^ ( obj.Uuid ?? "" ).GetHashCode();
 		}

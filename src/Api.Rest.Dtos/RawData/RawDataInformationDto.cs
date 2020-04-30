@@ -22,36 +22,36 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 	/// This object holds information for a raw data object like its size, key, name etc.
 	/// </summary>
 	[Serializable]
-	public class RawDataInformation
+	public class RawDataInformationDto
 	{
 		#region constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="RawDataInformation"/> class.
+		/// Initializes a new instance of the <see cref="RawDataInformationDto"/> class.
 		/// </summary>
-		public RawDataInformation()
+		public RawDataInformationDto()
 		{
-			Target = new RawDataTargetEntity();
+			Target = new RawDataTargetEntityDto();
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="RawDataInformation"/> class.
+		/// Initializes a new instance of the <see cref="RawDataInformationDto"/> class.
 		/// </summary>
 		/// <param name="entity">The entity this object belongs to.</param>
 		/// <param name="key">A unique key that identifies this information object.</param>
 		/// <exception cref="ArgumentNullException"><paramref name="entity"/> is <see langword="null" />.</exception>
-		public RawDataInformation( [NotNull] RawDataTargetEntity entity, int key )
+		public RawDataInformationDto( [NotNull] RawDataTargetEntityDto entity, int key )
 		{
 			Target = entity ?? throw new ArgumentNullException( nameof( entity ) );
 			Key = key;
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="RawDataInformation"/> class.
+		/// Initializes a new instance of the <see cref="RawDataInformationDto"/> class.
 		/// </summary>
 		/// <param name="data">The raw data information object that should be copied.</param>
 		/// <exception cref="ArgumentNullException"><paramref name="data"/> is <see langword="null" />.</exception>
-		public RawDataInformation( [NotNull] RawDataInformation data )
+		public RawDataInformationDto( [NotNull] RawDataInformationDto data )
 		{
 			if( data == null ) throw new ArgumentNullException( nameof( data ) );
 
@@ -73,7 +73,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// Gets or sets the target object this raw data object belongs to.
 		/// </summary>
 		[JsonProperty( "target" )]
-		public RawDataTargetEntity Target { get; set; }
+		public RawDataTargetEntityDto Target { get; set; }
 
 		/// <summary>
 		/// This is a unique key that identifies this specific raw data object for a corresponding entity. An entity (Part, Characteristic, Measurement, Value)
@@ -102,7 +102,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// </summary>
 		/// <remarks>
 		/// The attribute <code>LastModified</code> will be set by the Rawdata-Service.
-		/// A user value will be ignored. 
+		/// A user value will be ignored.
 		/// </remarks>
 		[JsonProperty( "lastModified" )]
 		public DateTime LastModified { get; set; }
@@ -112,7 +112,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// </summary>
 		/// <remarks>
 		/// The attribute <code>Created</code> will be set by the Rawdata-Service.
-		/// A user value will be ignored. 
+		/// A user value will be ignored.
 		/// </remarks>
 		[JsonProperty( "created" )]
 		public DateTime Created { get; set; }
