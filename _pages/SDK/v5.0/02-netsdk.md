@@ -2,9 +2,9 @@
 area: sdk
 title: .NET SDK
 level: 0
-version: 2.0
+version: 5.0
 isCurrentVersion: true
-permalink: "/sdk/"
+permalink: "/sdk/v5.0/"
 sections:
   general:
     title: General Information
@@ -31,7 +31,10 @@ sections:
       security:
         title: Security
         anchor: ba-security
+
 ---
+{% include version_combobox.html %}
+
 {% include_relative 021-general.md %}
 
 {% include_relative 022-basics.md %}
