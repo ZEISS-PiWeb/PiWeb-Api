@@ -16,7 +16,7 @@
 	- Zeiss.PiWeb.Api.Rest contains the client implementations DataServiceRestClient/RawDataServiceRestClient
     ○ Zeiss.PiWeb.Api.Rest consumes the two remaining packages and is the successor of Zeiss.IMT.PiWebApi.Client
     ○ Data transfer objects (DTOs) now have the suffix "Dto"
-    ○ A migration guide can be found at http://zeiss-piweb.github.io/PiWeb-Api/sdk/migration
+    ○ A migration guide can be found at https://zeiss-piweb.github.io/PiWeb-Api/sdk/v6.0/#migration
 
 - Removed deprecated properties
 
