@@ -15,7 +15,7 @@ Measurements contain measured values for specific characteristics, and belong to
 
 >{{ site.images['info'] }} A `SimpleMeasurement` is a measurement without values, whilst a `DataMeasurement` describes a measurement with measured values.
 
-<img src="/PiWeb-Api/images/measurements_model.png" class="img-responsive center-block">
+<img src="/PiWeb-Api/images/v5/measurements_model.png" class="img-responsive center-block">
 
 #### SimpleMeasurement
 {% capture table %}
@@ -152,7 +152,7 @@ var FetchedMeasurements = await DataServiceClient.GetMeasurementValues( PartPath
 This is the simplest way to fetch measurements and the associated measured values as the unfiltered method returns all measurements of the specified part. Each measurement then contains a `DataCharacteristic` objects linking values to characteristics. Since this can result in a large collection of results you have the possibility to create a filter based on different criteria.
 This can be done by using `FilterAttributes` which is derived from `AbstractMeasurementFilterAttributes`:
 
-<img src="/PiWeb-Api/images/measurementFilterAttributes_model.png" class="img-responsive center-block">
+<img src="/PiWeb-Api/images/v5/measurementFilterAttributes_model.png" class="img-responsive center-block">
 
 #### AbstractMeasurementFilterAttributes
 {% capture table %}

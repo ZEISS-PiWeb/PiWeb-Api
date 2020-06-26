@@ -8,18 +8,18 @@ Examples in this section:
 + [Deleting “MetalPart”](#-example--deleting-metalpart)
 <hr>
 
-An inspection plan object contains entities of two different types - parts and characteristics. Parts are hold in class `SimplePart`, characteristics are hold in class `InspectionPlanCharacteristic`. Both are derived from the abstract base class `InspectionPlanBase` and consist of the following properties:
+An inspection plan object contains entities of two different types - parts and characteristics. Parts are hold in class `SimplePartDto`, characteristics are hold in class `InspectionPlanCharacteristicDto`. Both are derived from the abstract base class `InspectionPlanDtoBase` and consist of the following properties:
 
-<img src="/PiWeb-Api/images/inspection-plan-schema.png" class="img-responsive center-block">
+<img src="/PiWeb-Api/images/v6/inspection-plan-schema.png" class="img-responsive center-block">
 
-#### InspectionPlanBase
+#### InspectionPlanDtoBase
 
 {% capture table %}
 Property                                          | Description
 --------------------------------------------------|--------------------------------------------------------------------
-<nobr><code>Attribute[]</code> Attributes</nobr>  | A set of attributes which describes the entity.
+<nobr><code>AttributeDto[]</code> Attributes</nobr>  | A set of attributes which describes the entity.
 <nobr><code>string</code> Comment</nobr>          | A comment which describes the last inspection plan change. The comment is only returned if versioning is enabled in the server settings.
-<nobr><code>PathInformation</code> Path</nobr>    | The path of this entity which describes the entity's hierarchical structure.
+<nobr><code>PathInformationDto</code> Path</nobr>    | The path of this entity which describes the entity's hierarchical structure.
 <nobr><code>string</code> this[ushort key]</nobr> | Indexer for accessing entity's attribute value directly with the specified key
 <nobr><code>DateTime</code> TimeStamp</nobr>      | Contains the date and time of when the entity was last updated.
 <nobr><code>Guid</code> Uuid</nobr>               | Identifies this inspection plan entity uniquely.
@@ -31,7 +31,7 @@ Property                                          | Description
 
 >{{ site.images['info'] }} The version/revision of a part or characteristic is global. This means that the version counter is the same for every entity in the inspection plan. A part with a version of 34 did not necessarily change 34 times but the version indicates that the 34th change in the whole inspection plan was done to this entity.
 
-#### SimplePart
+#### SimplePartDto
 
 {% capture table %}
 Property                                          | Description
@@ -41,9 +41,9 @@ Property                                          | Description
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
-Parts as well as characteristic may contain a version history if versioning is enabled in server settings. If enabled, parts are represented by class `InspectionPlanPart` which is derived from `SimplePart`:
+Parts as well as characteristic may contain a version history if versioning is enabled in server settings. If enabled, parts are represented by class `InspectionPlanPartDto` which is derived from `SimplePartDto`:
 
-#### InspectionPlanCharacteristic, InspectionPlanPart
+#### InspectionPlanCharacteristicDto, InspectionPlanPartDto
 
 {% capture table %}
 Property                                               | Description
@@ -53,30 +53,30 @@ Property                                               | Description
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
-#### PathInformation
+#### PathInformationDto
 The inspection plan is organized in a tree structure but saved to the database in a flat representation. Path information helps to convert from flat to tree structure.
-A `PathInformation` object includes an array of entity's path elements. These path elements contains of the following properties:
+A `PathInformationDto` object includes an array of entity's path elements. These path elements contain the following properties:
 
-#### PathElement
+#### PathElementDto
 
 {% capture table %}
 Property                                               | Description
 -------------------------------------------------------|-----------------------------------------------------
-<nobr><code>InspectionPlanEntity</code> Type</nobr>    | Type of the path element (Part or Characteristic)
+<nobr><code>InspectionPlanEntityDto</code> Type</nobr> | Type of the path element (Part or Characteristic)
 <nobr><code>String</code> Value</nobr>                 | Path elments' name
 
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
->{{ site.headers['bestPractice'] }} To create a `PathInformation` object you might use the `PathHelper` class which includes several helper methods:
+>{{ site.headers['bestPractice'] }} To create a `PathInformationDto` object you might use the `PathHelper` class which includes several helper methods:
 
 {% capture table %}
 Method                                                                                                   | Description
 ---------------------------------------------------------------------------------------------------------|-----------------------------------------------------
-<nobr><code>PathInformation RoundtripString2PathInformation( string path )</code></nobr>                 | Creates a path information object based on `path` parameter in roundtrip format ("structure:database path")
-<nobr><code>PathInformation String2PartPathInformation( string path )</code></nobr>                      | Creates a path information object based on `path` parameter including plain part structure
-<nobr><code>PathInformation String2CharacteristicPathInformation( string path )</code></nobr>            | Creates a path information object based on `path` parameter including plain characteristic structure
-<nobr><code>PathInformation DatabaseString2PathInformation( string path, string structure)</code></nobr> | Creates a path information object based on `path` and `structure` parameter
+<nobr><code>PathInformationDto RoundtripString2PathInformation( string path )</code></nobr>              | Creates a path information object based on `path` parameter in roundtrip format ("structure:database path")
+<nobr><code>PathInformationDto String2PartPathInformation( string path )</code></nobr>                   | Creates a path information object based on `path` parameter including plain part structure
+<nobr><code>PathInformationDto String2CharacteristicPathInformation( string path )</code></nobr>         | Creates a path information object based on `path` parameter including plain characteristic structure
+<nobr><code>PathInformationDto DatabaseString2PathInformation( string path, string structure)</code></nobr>| Creates a path information object based on `path` and `structure` parameter
 
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
@@ -101,13 +101,13 @@ The structure is a list of the letters *P* and *C*, which are the short form of 
 
 {% highlight csharp %}
 //Create a new part
-InspectionPlanPart parentPart = new InspectionPlanPart
+var parentPart = new InspectionPlanPartDto
 {
 	Uuid = Guid.NewGuid(),
 	Path = PathHelper.RoundtripString2PathInformation("P:/MetalPart/"),
 };
 //Create a new part that represents a child of the parentPart
-InspectionPlanPart childPart = new InspectionPlanPart
+var childPart = new InspectionPlanPartDto
 {
 	Uuid = Guid.NewGuid(),
 	Path = PathHelper.RoundtripString2PathInformation("PP:/MetalPart/SubPart/"),
@@ -121,7 +121,7 @@ The name of the part is specified within its path. Nesting is easy as you just c
 {{ site.headers['example'] }} Fetching different entities
 
 {% highlight csharp %}
-//Create PathInformation of "MetalPart"
+//Create PathInformationDto of "MetalPart"
 var partPath = PathHelper.String2PartPathInformation( "/MetalPart/" );
 
 //Fetch all parts below "MetalPart"
@@ -147,10 +147,10 @@ var charPath2 = PathHelper.RoundtripString2PathInformation( "PC:/MetalPart/Char2
 //Create characteristic for SubPart
 var charPath3 = PathHelper.RoundtripString2PathInformation( "PPC:/MetalPart/SubPart/Char3/" );
 
-//Create InspectionPlanCharacteristic objects
-var char1 = new InspectionPlanCharacteristic { Path = char1Path, Uuid = Guid.NewGuid() };
-var char2 = new InspectionPlanCharacteristic { Path = char2Path, Uuid = Guid.NewGuid() };
-var char3 = new InspectionPlanCharacteristic { Path = char3Path, Uuid = Guid.NewGuid() };
+//Create InspectionPlanCharacteristicDto objects
+var char1 = new InspectionPlanCharacteristicDto { Path = char1Path, Uuid = Guid.NewGuid() };
+var char2 = new InspectionPlanCharacteristicDto { Path = char2Path, Uuid = Guid.NewGuid() };
+var char3 = new InspectionPlanCharacteristicDto { Path = char3Path, Uuid = Guid.NewGuid() };
 
 //Use Client to create characteristics on server
 await DataServiceClient.CreateCharacteristics( new[] {char1, char2, char3} );
@@ -160,7 +160,7 @@ await DataServiceClient.CreateCharacteristics( new[] {char1, char2, char3} );
 {{ site.headers['example'] }} Deleting "MetalPart"
 
 {% highlight csharp %}
-//Create PathInformation of "MetalPart"
+//Create PathInformationDto of "MetalPart"
 var partPath = PathHelper.String2PartPathInformation("/MetalPart/");
 
 //Get the part from server, depth 0 to only get the exact part and no children

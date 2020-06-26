@@ -21,7 +21,7 @@ var partDescriptionKey = WellKnownKeys.Part.Description;
 
 `Configuration` class includes all possible attributes for each entity in a particular property:
 
-<img src="/PiWeb-Api/images/configuration-schema.png" class="img-responsive center-block">
+<img src="/PiWeb-Api/images/v5/configuration-schema.png" class="img-responsive center-block">
 
 {% capture table %}
 Property                                          | Description
@@ -40,7 +40,7 @@ As you can see in above class diagram `Configuration` consists of several method
 
 `AbstractAttributeDefinition` has two implementations: `AttributeDefinition` and `CatalogAttributeDefinition`:
 
-<img src="/PiWeb-Api/images/attributedefinition-schema.png" class="img-responsive center-block">
+<img src="/PiWeb-Api/images/v5/attributedefinition-schema.png" class="img-responsive center-block">
 
 #### AbstractAttributeDefinition
 {% capture table %}

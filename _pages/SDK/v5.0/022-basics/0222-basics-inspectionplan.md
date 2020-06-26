@@ -10,7 +10,7 @@ Examples in this section:
 
 An inspection plan object contains entities of two different types - parts and characteristics. Parts are hold in class `SimplePart`, characteristics are hold in class `InspectionPlanCharacteristic`. Both are derived from the abstract base class `InspectionPlanBase` and consist of the following properties:
 
-<img src="/PiWeb-Api/images/inspection-plan-schema.png" class="img-responsive center-block">
+<img src="/PiWeb-Api/images/v5/inspection-plan-schema.png" class="img-responsive center-block">
 
 #### InspectionPlanBase
 

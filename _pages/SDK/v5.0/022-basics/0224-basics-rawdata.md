@@ -12,7 +12,7 @@ Examples in this section:
 Additional data are attachments that can be added to any entity in the inspection plan. This can be text, images, log files, CAD models or any binary file. There is no limit to the number of files and you can edit or remove additional data as desired.
 Every additional data is linked to a `RawDataInformation` object:
 
-<img src="/PiWeb-Api/images/rawDataInformation.png" class="img-responsive center-block">
+<img src="/PiWeb-Api/images/v5/rawDataInformation.png" class="img-responsive center-block">
 
 #### RawDataInformation
 {% capture table %}
