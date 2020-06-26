@@ -1,7 +1,7 @@
 body {
   font-family: "Segoe UI",Verdana,Helvetica,sans-serif;
   font-size: 14px;
-  background-color:#FDFDFD;
+  background-color:#FFFFFF;
   color: #232323;
   margin: 0;
   padding-top: 0;
@@ -247,7 +247,7 @@ background-color: #FDFDFD;
 }
 
 .page-main{
-  background-color: #FDFDFD;
+  background-color: #FFFFF;
 }
 
 a.bold{
