@@ -34,6 +34,16 @@ sections:
   migration:
     title: Migration Guide
     anchor: migration
+    secs:
+      nuget:
+        title: NuGet Version 6.0.0
+        anchor: mig-nuget
+      structure:
+        title: New structure
+        anchor: mig-structure
+      migrate:
+        title: Migration
+        anchor: mig-migration
 
 
 ---
