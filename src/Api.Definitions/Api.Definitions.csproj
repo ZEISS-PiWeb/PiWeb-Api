@@ -8,12 +8,12 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Assembly information">
-    <AssemblyTitle>Contains generic data used by the PiWeb API.</AssemblyTitle>
+    <AssemblyTitle>Contains generic data used by the ZEISS PiWeb API.</AssemblyTitle>
     <AssemblyName>Zeiss.PiWeb.Api.Definitions</AssemblyName>
     <AssemblyVersion>6.0.0</AssemblyVersion>
     <Company>Carl Zeiss Innovationszentrum für Messtechnik GmbH</Company>
     <Copyright>Copyright © 2020 $(Company)</Copyright>
-    <Description>Contains generic data used by the PiWeb API. The ZEISS PiWeb API nuget depends on this package.</Description>
+    <Description>Contains generic data used by the ZEISS PiWeb API. The ZEISS PiWeb API nuget depends on this package.</Description>
     <FileVersion>$(AssemblyVersion)</FileVersion>
     <InformationalVersion>$(AssemblyVersion)</InformationalVersion>
     <NeutralLanguage>en</NeutralLanguage>
@@ -25,7 +25,7 @@
     <Authors>$(Company)</Authors>
     <EmbedAllSources>true</EmbedAllSources>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageIconUrl>https://raw.githubusercontent.com/ZEISS-PiWeb/PiWeb-Api/master/logo6464.png</PackageIconUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/ZEISS-PiWeb/PiWeb-Api/develop/logo128px.png</PackageIconUrl>
     <PackageId>Zeiss.PiWeb.Api.Definitions</PackageId>
     <PackageLicenseFile>License.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/ZEISS-PiWeb/PiWeb-Api</PackageProjectUrl>

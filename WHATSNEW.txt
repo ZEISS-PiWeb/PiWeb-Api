@@ -1,8 +1,8 @@
-===========================================================================================
+======================================================
 -------------------------------------------------------------------------------------------
  Version 6.0.0                                                                   
 -------------------------------------------------------------------------------------------
-===========================================================================================
+======================================================
 
 
 ==========================================
@@ -11,13 +11,17 @@
 
 - Rework of API architecture
     ○ API is split into three NuGets (Zeiss.PiWeb.Api.Rest, Zeiss.PiWeb.Api.Rest.Dtos, Zeiss.PiWeb.Api.Definitions)
+	- Zeiss.PiWeb.Api.Definitions contains generic data and definitions used by ZEISS PiWeb API
+	- Zeiss.PiWeb.Api.Rest.Dtos contains the JSON-serializable DataTransferObjects (DTO) that will be exchanged between ZEISS PiWeb Server and client(s)
+	- Zeiss.PiWeb.Api.Rest contains the client implementations DataServiceRestClient/RawDataServiceRestClient
     ○ Zeiss.PiWeb.Api.Rest consumes the two remaining packages and is the successor of Zeiss.IMT.PiWebApi.Client
-    ○ DataServiceRestClient is now located in Zeiss.PiWeb.Api.Rest
+    ○ Data transfer objects (DTOs) now have the suffix "Dto"
+    ○ A migration guide can be found at https://zeiss-piweb.github.io/PiWeb-Api/sdk/v6.0/#migration
 
 - Removed deprecated properties
 
 - API project was switched to new csproj format:
     ○ app.config and packages.config were removed
-    ○ csproj file consits of all neccesary assembly informationen, now. That prevents redundant information (version, company name). 
+    ○ csproj file consists of all neccesary assembly informationen, now. That prevents redundant information (version, company name). 
     ○ Setting property <GeneratePackageOnBuild>true</GeneratePackageOnBuild> results on every build procress in a nuget package located in bin/Debug folder. Package version is taken from property <Version>. 
     ○ Created nuget package consits of .pdb file including source files. This enables debugging into API source code when adding nuget package to a project.
