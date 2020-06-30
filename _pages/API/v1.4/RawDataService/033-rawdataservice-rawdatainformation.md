@@ -13,7 +13,7 @@ You can can fetch information about raw data objects by using the following endp
 Returns a list of raw data file information entries for all entities with type :entity. You further have to and restrict the request to the entities' uuids by adding the following uri parameter:
 
 {% capture table %}
-Parameter name | Description  <br> *Example* 
+Parameter name | Description  <br> *Example*
 ---------------|---------------------------
 `uuids`        | Restricts the query to the entities identified by the given uuids. <br/> {{site.images['warning']}} Entites of type 'Value' are identified by a compound key, which consists of the uuid of the measurement, '&#124;' and the characteristics uuid <br/><br/> *uuids={652ae7a0-d1e1-4ee2-b3a5-d4526f6ba822&#124;78bd15c6-dc70-4ab4-bd3c-8ab2b5780b52}*
 `filter`       | Contains one or multiple attribute conditions to restrict the query. Details can be found below.
@@ -25,7 +25,7 @@ Parameter name | Description  <br> *Example*
 Basic module is expression `<attribute> <operator> <value>` or `<attribute> <list operator> (<value1>, <value2>, ...)`
 
 {% capture table %}
-Possible &lt;attribute&gt; values | Description 
+Possible &lt;attribute&gt; values | Description
 ----------------------------------|---------------------------
 `MimeType` | MimeType of raw data object
 `FileName` | File name of raw data object
@@ -37,7 +37,7 @@ Possible &lt;attribute&gt; values | Description
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 {% capture table %}
-Possible &lt;operator&gt; values | Description 
+Possible &lt;operator&gt; values | Description
 ---------------------------------|---------------------------
 `eq` | Checks if attribute equals &lt;value&gt;
 `ne` | Checks if attribute is not equal to &lt;value&gt;
@@ -50,7 +50,7 @@ Possible &lt;operator&gt; values | Description
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
 {% capture table %}
-Possible &lt;List operator&gt; values | Description 
+Possible &lt;List operator&gt; values | Description
 --------------------------------------|---------------------------
 `in` | Checks if attribute exists in a list of values
 `notin` | Checks if attribute does not exist in a list of values
@@ -87,7 +87,7 @@ Examples:
 
 {% capture jsonrequest %}
 {% highlight http %}
-GET /rawDataServiceRest/rawData/part?uuids={05040c4c-f0af-46b8-810e-30c0c00a379e,5441c003-b6db-4217-ac6a-45cdbb805bb3}&fileName%20like%20'*meshModel*' HTTP/1.1
+GET /rawDataServiceRest/rawData/part?uuids={05040c4c-f0af-46b8-810e-30c0c00a379e,5441c003-b6db-4217-ac6a-45cdbb805bb3}&filter=fileName%20like%20'*meshModel*' HTTP/1.1
 {% endhighlight %}
 {% endcapture %}
 
@@ -107,7 +107,7 @@ GET /rawDataServiceRest/rawData/part?uuids={05040c4c-f0af-46b8-810e-30c0c00a379e
       "lastModified": "2012-11-19T10:48:34.327Z",
       "created": "2012-11-19T10:48:34.327Z",
       "size": 147376,
-      "md5": "02f9c86143ea176c06e24524385b5907"
+      "md5": "02f9c861-43ea-176c-06e2-4524385b5907"
   },
   {
       "target":
@@ -121,7 +121,7 @@ GET /rawDataServiceRest/rawData/part?uuids={05040c4c-f0af-46b8-810e-30c0c00a379e
       "lastModified": "2015-03-20T14:37:02.943Z",
       "created": "2015-03-20T14:37:02.943Z",
       "size": 837245,
-      "md5": "cbde88e2ed754c70860b3e6d4313551a"
+      "md5": "cbde88e2-ed75-4c70-860b-3e6d4313551a"
  }
 ]
 {% endhighlight %}
@@ -144,7 +144,7 @@ GET /rawDataServiceRest/rawData/part/05040c4c-f0af-46b8-810e-30c0c00a379e HTTP/1
 
 {% capture jsonresponse %}
  {% highlight json %}
- 
+
 [
  {
       "target":
@@ -158,7 +158,7 @@ GET /rawDataServiceRest/rawData/part/05040c4c-f0af-46b8-810e-30c0c00a379e HTTP/1
       "lastModified": "2012-11-19T10:48:34.327Z",
       "created": "2012-11-19T10:48:34.327Z",
       "size": 147376,
-      "md5": "02f9c86143ea176c06e24524385b5907"
+      "md5": "02f9c861-43ea-176c-06e2-4524385b5907"
   }
  ]
 {% endhighlight %}    
@@ -176,7 +176,7 @@ Property                             | Description
 <nobr><code>TargetEntity</code> target</nobr>   | Specifies a concrete entity for a raw data object and consits of the entity's type (Part, Characteristic, Measurement, Value) and guid. If raw data is attached to an entity of type `Value`, the `uuid` contains a compound key in the following format: `{MeasurementUuid}|{CharacteristicUuid}`
 <nobr><code>int</code> key</nobr>               | This is a unique key that identifies this specific raw data object for a corresponding entity. An entity can have multiple raw data object that are distinct by this key.
 <nobr><code>string</code> fileName</nobr>       | The filename of the raw data object. Please note that this filename is not unique (unlike filenames in traditional file systems).
-<nobr><code>string</code> mimeType</nobr>       | The file's mime type. 
+<nobr><code>string</code> mimeType</nobr>       | The file's mime type.
 <nobr><code>DateTime</code> lastModified</nobr> | The timestamp of the last modification of the corresponding raw data object
 <nobr><code>DateTime</code> created</nobr>      | The timestamp of the creation of the corresponding raw data object
 <nobr><code>int</code> size</nobr>              | The size of the raw data object in bytes
