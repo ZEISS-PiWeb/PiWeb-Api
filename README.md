@@ -1,16 +1,32 @@
 PiWeb-Api
 =========
 
-![ZEISS PiWeb](https://github.com/ZEISS-PiWeb/PiWeb-Api/blob/master/Logo.png)
-
 [![Build status](https://ci.appveyor.com/api/projects/status/q48run5x0ge40h9p/branch/master?svg=true&passingText=master%20-%20OK&pendingText=master%20-%20PENDING&failingText=master%20-%20FAILED)](https://ci.appveyor.com/project/czjlorenz/piweb-api/branch/master)
 [![Build status](https://ci.appveyor.com/api/projects/status/q48run5x0ge40h9p/branch/develop?svg=true&passingText=develop%20-%20OK&pendingText=develop%20-%20PENDING&failingText=develop%20-%20FAILED)](https://ci.appveyor.com/project/czjlorenz/piweb-api/branch/develop)
+
+<p align="center">
+  <img src="https://github.com/ZEISS-PiWeb/PiWeb-Api/blob/master/Logo.png" />
+</p>
 
 The PiWeb-API is a communication interface for the quality data management system [ZEISS PiWeb](http://www.zeiss.com/industrial-metrology/en_de/products/software/piweb.html). The interface is based on an HTTP/S web service architecture.
 
 #### What's the PiWeb-API?
 
 The PiWeb-API provides an extensive set of web service endpoints for reading and writing measurement and quality data from and to the PiWeb server. With these HTTP/S endpoints it is very easy to read and write the inspection plan structure as well as measurements and measurement values.
+
+Additional to the HTTP/S based REST API there is also a .NET client library, which is available on NuGet.org: [Zeiss.PiWeb.Api.Rest](https://www.nuget.org/packages/Zeiss.PiWeb.Api.Rest/).
+>API .NET SDK v6.0.0 introduced major architectural changes. Updating to version 6.0.0? Please follow our **[migration guide](http://zeiss-piweb.github.io/PiWeb-Api/sdk/v6.0/#migration)** to adapt your application to recent changes!
+
+#### Learn more
+
+* Read the [API documentation](http://zeiss-piweb.github.io/PiWeb-Api)
+* Get the [.NET based API NuGet](https://www.nuget.org/packages/Zeiss.PiWeb.Api.Rest/)
+* Get the [C# sample project](https://github.com/ZEISS-PiWeb/PiWeb-Training)
+
+
+### Examples
+
+Detailed examples for both REST API and .NET SDK can be found in the [documentation](https://zeiss-piweb.github.io/PiWeb-Api).
 
 ##### Fetching the attribute configuration:
 
@@ -20,7 +36,7 @@ http://your-piweb-server/dataServiceRest/configuration
 
 ```json
 {
-    "partAttributes": 
+    "partAttributes":
     [
         {
             "key": 1001,
@@ -101,7 +117,7 @@ http://your-piweb-server/dataServiceRest/measurements?limitResult=10
         "uuid": "64a47361-9b5b-43e3-9774-45e2862e65ab",
         "partUuid": "4ce9ba9a-794f-4e57-beb2-c84612065179",
         "lastModified": "2015-03-26T08:51:29.343Z",
-        "attributes": 
+        "attributes":
         {
             "4": "2014-12-05T14:25:55Z"
         }
@@ -110,18 +126,10 @@ http://your-piweb-server/dataServiceRest/measurements?limitResult=10
         "uuid": "c0b784f1-d85b-4c46-8f39-7824567004aa",
         "partUuid": "4ce9ba9a-794f-4e57-beb2-c84612065179",
         "lastModified": "2015-03-26T08:48:35.14Z",
-        "attributes": 
+        "attributes":
         {
             "4": "2014-12-05T13:25:55Z"
         }
     }, "..."
 ]
 ```
-
-Additional to the HTTP/S based REST API there is also a .NET client library.
-
-#### Learn more
-
-* Read the [API documentation guide](http://zeiss-piweb.github.io/PiWeb-Api)
-* Get the [.NET based Api.dll on nuget](https://www.nuget.org/packages/Zeiss.IMT.PiWebApi.Client/)
-* Get the [C# sample project](https://github.com/ZEISS-PiWeb/PiWeb-Training)
