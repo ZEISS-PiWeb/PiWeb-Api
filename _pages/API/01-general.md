@@ -61,7 +61,7 @@ Furthermore, the API offers the possibility to query and retrieve measurement da
 {% capture table %}
 REST API        | .NET SDK (C# API)
 ------------- | -----------------------------------------------------------------------------------
-This is the interface provided directly by PiWeb Server. It consists of two main services, DataService and RawDataService, explained in the section [Services](#gi-services "Services"). Requests are made using HTTP(S), and data is transferred in [JSON format](#gi-formats "Formats"). | The .NET SDK offers C# client implementations for DataService and RawDataService. This way you can develop software using C# objects, methods and available properties instead of pure HTTP(S) and JSON. You can find further information in the [.NET SDK documentation](http://zeiss-piweb.github.io/PiWeb-Api/sdk/ ".NET SDK documentation").
+This is the interface provided directly by PiWeb Server. It consists of two main services, DataService and RawDataService, explained in the section [Services](#gi-services "Services"). Requests are made using HTTP(S), and data is transferred in [JSON format](#gi-formats "Formats"). | The .NET SDK offers C# client implementations for DataService and RawDataService. This way you can develop software using C# objects, methods and available properties instead of pure HTTP(S) and JSON. You can find further information in the [.NET SDK documentation](http://zeiss-piweb.github.io/PiWeb-Api/sdk/v6.0/ ".NET SDK documentation").
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
