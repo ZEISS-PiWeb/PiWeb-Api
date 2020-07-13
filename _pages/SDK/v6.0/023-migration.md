@@ -22,4 +22,23 @@ The new NuGets now can partly be used independent: You only need a key of our We
 
 <h2 id="{{page.sections['migration']['secs']['migrate'].anchor}}">{{page.sections['migration']['secs']['migrate'].title}}</h2>
 
-#### The migration guide is still under construction and will be published shortly after the release of .NET SDK v6.0.0. Thank you for your patience.
+The following steps have to be done to migrate from version 5.0 to version 6.0.
+
+<h4>Referencing the new packages</h4>
+
+The very first step is the replacement of the existing Nuget package with the current version. As described above, this step requires to remove the existing reference to [Zeiss.IMT.PiWebApi.Client](https://www.nuget.org/packages/Zeiss.IMT.PiWebApi.Client/) in your projects and add a new reference to the [Zeiss.PiWeb.Api.Rest](https://www.nuget.org/packages/Zeiss.PiWeb.Api.Rest/) package. The default steps of updating a Nuget package does not work since version 6.0 has a different package ID than version 5.0.
+
+If the package reference is only required for getting the data-transfer-objects, it can be useful to reference the Nuget package [Zeiss.PiWeb.Definitions](https://www.nuget.org/packages/Zeiss.PiWeb.Api.Definitions/) instead of [Zeiss.PiWeb.Api.Rest](https://www.nuget.org/packages/Zeiss.PiWeb.Api.Rest/). This might help reducing dependencies.
+
+<h4>Renaming of Data Transfer Object classes</h4>
+
+A well-designed application should have a domain model. In order to prevent naming collisions between the objects located in the domain model and those used for data transfer (DTO), we decided to add the *Dto*-suffix to our data-transfer-objects. After updating to version 6.0, the naming of the referenced data-transfer-objects in your code needs to be corrected.
+
+<h4>Adapting namespaces</h4>
+
+As part of the breakdown into three Nuget-packages, the namespaces has been changed. 
+- First of all, the root namespaces has been changed from `Zeiss.IMT.PiWeb.Api` to `Zeiss.PiWeb.Api`.
+- The namespace containing the interface of the REST clients (including supporting types) is `Zeiss.PiWeb.Api.Rest.Contracts`.
+- The REST client implementations are located in `Zeiss.PiWeb.Api.Rest.HttpClient` and sub-namespaces.
+- The namespace of the well-known-keys is `Zeiss.PiWeb.Api.Definitions`.
+- The data transfer objects are located in `Zeiss.PiWeb.Api.Rest.Dtos` and sub-namespaces.
