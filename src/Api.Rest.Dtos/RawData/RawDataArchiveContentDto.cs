@@ -43,8 +43,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// <summary>
 		/// Length of data.
 		/// </summary>
-		[JsonProperty( "length" )]
-		public long Length { get; set; }
+		[JsonProperty( "size" )]
+		public int Size { get; set; }
 
 		/// <summary>
 		/// Actual data representing the file.
@@ -53,22 +53,16 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		public byte[] Data { get; set; }
 
 		/// <summary>
-		/// MD% checksum of data.
+		/// MD5 checksum of data.
 		/// </summary>
 		[JsonProperty( "md5" )]
 		public Guid MD5 { get; set; }
 
 		/// <summary>
-		/// <see cref="RawDataTargetEntityDto"/> of raw data.
+		/// <see cref="RawDataInformationDto"/> of original archive.
 		/// </summary>
-		[JsonProperty( "target" )]
-		public RawDataTargetEntityDto Target { get; set; }
-
-		/// <summary>
-		/// Key to specify raw data of target entity.
-		/// </summary>
-		[JsonProperty( "key" )]
-		public int Key { get; set; }
+		[JsonProperty( "archiveInfo" )]
+		public RawDataInformationDto ArchiveInfo { get; set; }
 
 		#endregion
 	}

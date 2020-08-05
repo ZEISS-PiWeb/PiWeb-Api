@@ -12,13 +12,15 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 {
 	#region usings
 
+	using System;
 	using System.Collections.Generic;
+	using JetBrains.Annotations;
 	using Newtonsoft.Json;
 
 	#endregion
 
 	/// <summary>
-	/// Selects a specific raw data entry which is an archive, as well as requested files of this archive.
+	/// Selects a number of entries of an archive saved as raw data object.
 	/// </summary>
 	public class RawDataArchiveSelectorDto
 	{
@@ -32,11 +34,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		public RawDataArchiveSelectorDto( int key, RawDataTargetEntityDto target, IEnumerable<string> files )
+		public RawDataArchiveSelectorDto( int key, [NotNull] RawDataTargetEntityDto target, [NotNull] string[] entries )
 		{
-			Files = files;
+			Entries = entries ?? throw new ArgumentNullException( nameof(entries) );
 			Key = key;
-			Target = target;
+			Target = target ?? throw new ArgumentNullException( nameof(target) );
 		}
 
 		#endregion
@@ -58,8 +60,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// <summary>
 		/// List of requested files in specified archive.
 		/// </summary>
-		[JsonProperty( "files" )]
-		public IEnumerable<string> Files { get; set; }
+		[JsonProperty( "entries" )]
+		public string[] Entries { get; set; }
 
 		#endregion
 	}

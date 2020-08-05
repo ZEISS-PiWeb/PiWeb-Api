@@ -13,6 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 	#region usings
 
 	using System;
+	using JetBrains.Annotations;
 	using Newtonsoft.Json;
 
 	#endregion
@@ -35,9 +36,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// Constructor
 		/// </summary>
 		/// <param name="selectors"></param>
-		public RawDataBulkQueryDto( RawDataSelectorDto[] selectors )
+		public RawDataBulkQueryDto( [NotNull] RawDataSelectorDto[] selectors )
 		{
-			Selectors = selectors;
+			Selectors = selectors ?? throw new ArgumentNullException( nameof( selectors ) );
 		}
 
 		#endregion

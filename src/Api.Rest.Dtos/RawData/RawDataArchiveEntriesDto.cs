@@ -13,7 +13,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 	#region usings
 
 	using System;
-	using System.Collections.Generic;
 	using Newtonsoft.Json;
 
 	#endregion
@@ -23,36 +22,30 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 	/// as well as information about original archive (raw data).
 	/// </summary>
 	[Serializable]
-	public class RawDataArchiveIndexDto
+	public class RawDataArchiveEntriesDto
 	{
 		#region constructors
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		public RawDataArchiveIndexDto() { }
+		public RawDataArchiveEntriesDto() { }
 
 		#endregion
 
 		#region properties
 
 		/// <summary>
-		/// <see cref="RawDataTargetEntityDto"/> of raw data.
+		/// <see cref="RawDataInformationDto"/> of original archive.
 		/// </summary>
-		[JsonProperty( "target" )]
-		public RawDataTargetEntityDto Target { get; set; }
-
-		/// <summary>
-		/// Key to specify raw data of target entity.
-		/// </summary>
-		[JsonProperty( "key" )]
-		public int Key { get; set; }
+		[JsonProperty( "archiveInfo" )]
+		public RawDataInformationDto ArchiveInfo { get; set; }
 
 		/// <summary>
 		/// List of files in specified archive.
 		/// </summary>
-		[JsonProperty( "files" )]
-		public IEnumerable<string> Files { get; set; }
+		[JsonProperty( "entries" )]
+		public string[] Entries { get; set; }
 
 		#endregion
 	}

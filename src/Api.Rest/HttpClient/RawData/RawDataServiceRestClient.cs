@@ -285,7 +285,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		}
 
 		/// <inheritdoc />
-		public async Task<RawDataArchiveIndexDto> GetRawDataArchiveEntries( RawDataTargetEntityDto targetEntity, int targetKey, CancellationToken cancellationToken = default )
+		public async Task<RawDataArchiveEntriesDto> ListRawDataArchiveEntries( RawDataTargetEntityDto targetEntity, int targetKey, CancellationToken cancellationToken = default )
 		{
 			if( targetEntity == null ) throw new ArgumentNullException( nameof( targetEntity ) );
 
@@ -300,11 +300,11 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 
 			var requestPath = $"rawData/{targetEntity.Entity}/{targetEntity.Uuid}/{targetKey}/archiveEntries";
 
-			return ( await _RestClient.Request<IEnumerable<RawDataArchiveIndexDto>>( RequestBuilder.CreateGet( requestPath ), cancellationToken ) ).First();
+			return ( await _RestClient.Request<RawDataArchiveEntriesDto[]>( RequestBuilder.CreateGet( requestPath ), cancellationToken ) ).First();
 		}
 
 		/// <inheritdoc />
-		public async Task<byte[]> GetRawDataArchiveContent( RawDataTargetEntityDto targetEntity, int targetKey, string fileName, Guid? expectedMd5 = null, CancellationToken cancellationToken = default )
+		public async Task<byte[]> GetRawDataArchiveContent( RawDataTargetEntityDto targetEntity, int targetKey, string fileName, Guid? expectedArchiveMd5 = null, CancellationToken cancellationToken = default )
 		{
 			if( targetEntity == null ) throw new ArgumentNullException( nameof( targetEntity ) );
 			if( fileName == null ) throw new ArgumentNullException( nameof( fileName ) );
@@ -318,15 +318,15 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 					featureMatrix.CurrentInterfaceVersion );
 			}
 
-			var requestPath = expectedMd5.HasValue
-				? $"rawData/{targetEntity.Entity}/{targetEntity.Uuid}/{targetKey}/archiveContent/{fileName}?expectedMd5={expectedMd5}"
+			var requestPath = expectedArchiveMd5.HasValue
+				? $"rawData/{targetEntity.Entity}/{targetEntity.Uuid}/{targetKey}/archiveContent/{fileName}?expectedArchiveMd5={expectedArchiveMd5}"
 				: $"rawData/{targetEntity.Entity}/{targetEntity.Uuid}/{targetKey}/archiveContent/{fileName}";
 
 			return await _RestClient.RequestBytes( RequestBuilder.CreateGet( requestPath ), cancellationToken );
 		}
 
 		/// <inheritdoc />
-		public async Task<IEnumerable<RawDataArchiveIndexDto>> RawDataArchiveEntryQuery( RawDataBulkQueryDto query, CancellationToken cancellationToken = default )
+		public async Task<RawDataArchiveEntriesDto[]> RawDataArchiveEntryQuery( RawDataBulkQueryDto query, CancellationToken cancellationToken = default )
 		{
 			if( query == null ) throw new ArgumentNullException( nameof( query ) );
 
@@ -339,14 +339,14 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 					featureMatrix.CurrentInterfaceVersion );
 			}
 
-			return await _RestClient.Request<IEnumerable<RawDataArchiveIndexDto>>( RequestBuilder.CreatePost(
+			return await _RestClient.Request<RawDataArchiveEntriesDto[]>( RequestBuilder.CreatePost(
 					"rawData/archiveEntryQuery",
 					Payload.Create( query ) ),
 				cancellationToken );
 		}
 
 		/// <inheritdoc />
-		public async Task<IEnumerable<RawDataArchiveContentDto>> RawDataArchiveContentQuery( RawDataArchiveBulkQueryDto query, CancellationToken cancellationToken = default )
+		public async Task<RawDataArchiveContentDto[]> RawDataArchiveContentQuery( RawDataArchiveBulkQueryDto query, CancellationToken cancellationToken = default )
 		{
 			if( query == null ) throw new ArgumentNullException( nameof( query ) );
 
@@ -364,7 +364,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 					Payload.Create( query ) ),
 				cancellationToken );
 
-			return RestClientHelper.DeserializeBinaryObject<IEnumerable<RawDataArchiveContentDto>>( stream );
+			return RestClientHelper.DeserializeBinaryObject<RawDataArchiveContentDto[]>( stream );
 		}
 
 		/// <summary>
