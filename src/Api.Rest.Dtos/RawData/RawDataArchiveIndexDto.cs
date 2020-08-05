@@ -6,7 +6,7 @@
 /* (c) Carl Zeiss 2020                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#endregion﻿
+#endregion
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 {
