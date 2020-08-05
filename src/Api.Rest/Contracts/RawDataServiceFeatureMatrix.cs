@@ -39,7 +39,11 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		// If the server supports at least this minor version filtering is possible.
 		public static Version RawDataAttributeFilterMinVersion { get; } = new Version( SupportedMajorVersion, 2 );
 
+		public static Version RawDataArchiveLookupMinVersion { get; } = new Version( SupportedMajorVersion, 5 );
+
 		public bool SupportsRawDataAttributeFilter => CurrentInterfaceVersion >= RawDataAttributeFilterMinVersion;
+
+		public bool SupportsArchiveLookup => CurrentInterfaceVersion >= RawDataArchiveLookupMinVersion;
 
 		#endregion
 	}
