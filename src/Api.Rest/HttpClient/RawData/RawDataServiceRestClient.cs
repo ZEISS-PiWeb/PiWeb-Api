@@ -22,6 +22,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 	using System.Threading.Tasks;
 	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Common.Client;
+	using Zeiss.PiWeb.Api.Rest.Common.Data;
 	using Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Formatter;
 	using Zeiss.PiWeb.Api.Rest.Common.Utilities;
 	using Zeiss.PiWeb.Api.Rest.Contracts;
@@ -281,6 +282,89 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 			}
 
 			return GetRawDataThumbnail();
+		}
+
+		/// <inheritdoc />
+		public async Task<RawDataArchiveEntriesDto> ListRawDataArchiveEntries( RawDataTargetEntityDto targetEntity, int targetKey, CancellationToken cancellationToken = default )
+		{
+			if( targetEntity == null ) throw new ArgumentNullException( nameof( targetEntity ) );
+
+			var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+			if( !featureMatrix.SupportsArchiveLookup )
+			{
+				throw new OperationNotSupportedOnServerException(
+					"Archive lookup is not supported by this server.",
+					RawDataServiceFeatureMatrix.RawDataArchiveLookupMinVersion,
+					featureMatrix.CurrentInterfaceVersion );
+			}
+
+			var requestPath = $"rawData/{targetEntity.Entity}/{targetEntity.Uuid}/{targetKey}/archiveEntries";
+
+			return ( await _RestClient.Request<RawDataArchiveEntriesDto[]>( RequestBuilder.CreateGet( requestPath ), cancellationToken ) ).First();
+		}
+
+		/// <inheritdoc />
+		public async Task<byte[]> GetRawDataArchiveContent( RawDataTargetEntityDto targetEntity, int targetKey, string fileName, Guid? expectedArchiveMd5 = null, CancellationToken cancellationToken = default )
+		{
+			if( targetEntity == null ) throw new ArgumentNullException( nameof( targetEntity ) );
+			if( fileName == null ) throw new ArgumentNullException( nameof( fileName ) );
+
+			var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+			if( !featureMatrix.SupportsArchiveLookup )
+			{
+				throw new OperationNotSupportedOnServerException(
+					"Archive lookup is not supported by this server.",
+					RawDataServiceFeatureMatrix.RawDataArchiveLookupMinVersion,
+					featureMatrix.CurrentInterfaceVersion );
+			}
+
+			var requestPath = expectedArchiveMd5.HasValue
+				? $"rawData/{targetEntity.Entity}/{targetEntity.Uuid}/{targetKey}/archiveContent/{fileName}?expectedArchiveMd5={expectedArchiveMd5}"
+				: $"rawData/{targetEntity.Entity}/{targetEntity.Uuid}/{targetKey}/archiveContent/{fileName}";
+
+			return await _RestClient.RequestBytes( RequestBuilder.CreateGet( requestPath ), cancellationToken );
+		}
+
+		/// <inheritdoc />
+		public async Task<RawDataArchiveEntriesDto[]> RawDataArchiveEntryQuery( RawDataBulkQueryDto query, CancellationToken cancellationToken = default )
+		{
+			if( query == null ) throw new ArgumentNullException( nameof( query ) );
+
+			var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+			if( !featureMatrix.SupportsArchiveLookup )
+			{
+				throw new OperationNotSupportedOnServerException(
+					"Archive lookup is not supported by this server.",
+					RawDataServiceFeatureMatrix.RawDataArchiveLookupMinVersion,
+					featureMatrix.CurrentInterfaceVersion );
+			}
+
+			return await _RestClient.Request<RawDataArchiveEntriesDto[]>( RequestBuilder.CreatePost(
+					"rawData/archiveEntryQuery",
+					Payload.Create( query ) ),
+				cancellationToken );
+		}
+
+		/// <inheritdoc />
+		public async Task<RawDataArchiveContentDto[]> RawDataArchiveContentQuery( RawDataArchiveBulkQueryDto query, CancellationToken cancellationToken = default )
+		{
+			if( query == null ) throw new ArgumentNullException( nameof( query ) );
+
+			var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+			if( !featureMatrix.SupportsArchiveLookup )
+			{
+				throw new OperationNotSupportedOnServerException(
+					"Archive lookup is not supported by this server.",
+					RawDataServiceFeatureMatrix.RawDataArchiveLookupMinVersion,
+					featureMatrix.CurrentInterfaceVersion );
+			}
+
+			using var stream = await _RestClient.RequestStream( RequestBuilder.CreatePost(
+					"rawData/archiveContentQuery",
+					Payload.Create( query ) ),
+				cancellationToken );
+
+			return RestClientHelper.DeserializeBinaryObject<RawDataArchiveContentDto[]>( stream );
 		}
 
 		/// <summary>

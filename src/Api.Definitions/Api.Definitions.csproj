@@ -5,6 +5,7 @@
     <RootNamespace>Zeiss.PiWeb.Api.Definitions</RootNamespace>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageVersion>6.1.0-alpha0001</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Assembly information">

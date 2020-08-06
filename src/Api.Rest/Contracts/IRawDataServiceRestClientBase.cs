@@ -13,6 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 	#region usings
 
 	using System;
+	using System.Collections.Generic;
 	using System.Threading;
 	using System.Threading.Tasks;
 	using JetBrains.Annotations;
@@ -74,6 +75,39 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <returns>The preview image as byte array.</returns>
 		/// <param name="cancellationToken">A token to cancel the hronous operation.</param>
 		Task<byte[]> GetRawDataThumbnail( [NotNull] RawDataTargetEntityDto target, int rawDataKey, CancellationToken cancellationToken = default );
+
+		/// <summary>
+		/// Fetches a list of entries if specified raw data is an archive of known format.
+		/// </summary>
+		/// <param name="targetEntity">The <see cref="RawDataTargetEntityDto"/> that specifies the archive</param>
+		/// <param name="targetKey">The unique key that identifies the raw data object for the specified target.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+		Task<RawDataArchiveEntriesDto> ListRawDataArchiveEntries( RawDataTargetEntityDto targetEntity, int targetKey, CancellationToken cancellationToken = default );
+
+		/// <summary>
+		/// Fetches multiple lists of entries for queried raw data objects if they are archives of known format.
+		/// </summary>
+		/// <param name="query"><see cref="RawDataBulkQueryDto"/> with selectors containing targets of requested archives.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+		/// <returns></returns>
+		Task<RawDataArchiveEntriesDto[]> RawDataArchiveEntryQuery( RawDataBulkQueryDto query, CancellationToken cancellationToken = default );
+
+		/// <summary>
+		/// Fetches file as byte array of specified raw data if it is part of an archive of known format.
+		/// </summary>
+		/// <param name="targetEntity">The <see cref="RawDataTargetEntityDto"/> that specifies the archive</param>
+		/// <param name="targetKey">The unique key that identifies the raw data object for the specified target.</param>
+		/// <param name="fileName">The requested file.</param>
+		/// <param name="expectedArchiveMd5">The md5 check sum that is expected for the targeted archive. NOT the returned entry. Used for caching.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+		Task<byte[]> GetRawDataArchiveContent( RawDataTargetEntityDto targetEntity, int targetKey, string fileName, Guid? expectedArchiveMd5 = null, CancellationToken cancellationToken = default );
+
+		/// <summary>
+		/// Fetches multiple files of queried raw data objects if they are part of selected archives of known format.
+		/// </summary>
+		/// <param name="query"><see cref="RawDataArchiveBulkQueryDto"/> with selectors containing targets of requested archives as well as requested files.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+		Task<RawDataArchiveContentDto[]> RawDataArchiveContentQuery( RawDataArchiveBulkQueryDto query, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Creates a new raw data object <paramref name="data"/> for the element specified by <paramref name="info"/>.
