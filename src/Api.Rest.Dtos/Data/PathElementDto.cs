@@ -130,7 +130,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#endregion
 
-		#region interface IEquatable<PathElement>
+		#region interface IEquatable<PathElementDto>
 
 		/// <inheritdoc />
 		public bool Equals( PathElementDto other )

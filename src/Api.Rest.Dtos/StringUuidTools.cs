@@ -85,7 +85,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 
 		/// <exception cref="ArgumentOutOfRangeException">The syntax of any uuid in <paramref name="uuids"/> is invalid.</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="uuids"/> is <see langword="null" />.</exception>
-		public static void CheckUuids(RawDataEntityDto entity, [NotNull] IEnumerable<string> uuids )
+		public static void CheckUuids( RawDataEntityDto entity, [NotNull] IEnumerable<string> uuids )
 		{
 			if( uuids == null )
 				throw new ArgumentNullException( nameof( uuids ) );

@@ -75,7 +75,6 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			return client.DeleteParts( PathInformationDto.Root, cancellationToken );
 		}
 
-
 		#endregion
 	}
 }

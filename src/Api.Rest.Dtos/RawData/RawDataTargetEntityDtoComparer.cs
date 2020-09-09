@@ -30,7 +30,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 
 		#endregion
 
-		#region interface IEqualityComparer<RawDataTargetEntity>
+		#region interface IEqualityComparer<RawDataTargetEntityDto>
 
 		/// <inheritdoc />
 		public bool Equals( RawDataTargetEntityDto x, RawDataTargetEntityDto y )

@@ -29,8 +29,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 		/// Initializes a new instance of the <see cref="Error"/> class.
 		/// </summary>
 		public Error()
-		{
-		}
+		{ }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Error"/> class.

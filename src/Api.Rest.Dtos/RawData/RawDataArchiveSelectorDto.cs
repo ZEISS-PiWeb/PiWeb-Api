@@ -13,7 +13,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 	#region usings
 
 	using System;
-	using System.Collections.Generic;
 	using JetBrains.Annotations;
 	using Newtonsoft.Json;
 
@@ -36,9 +35,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// </summary>
 		public RawDataArchiveSelectorDto( int key, [NotNull] RawDataTargetEntityDto target, [NotNull] string[] entries )
 		{
-			Entries = entries ?? throw new ArgumentNullException( nameof(entries) );
+			Entries = entries ?? throw new ArgumentNullException( nameof( entries ) );
 			Key = key;
-			Target = target ?? throw new ArgumentNullException( nameof(target) );
+			Target = target ?? throw new ArgumentNullException( nameof( target ) );
 		}
 
 		#endregion

@@ -370,7 +370,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#endregion
 
-		#region interface IEnumerable<PathElement>
+		#region interface IEnumerable<PathElementDto>
 
 		/// <inheritdoc />
 		public IEnumerator<PathElementDto> GetEnumerator()

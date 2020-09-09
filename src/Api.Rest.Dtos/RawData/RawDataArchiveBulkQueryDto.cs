@@ -32,7 +32,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// <param name="selectors"></param>
 		public RawDataArchiveBulkQueryDto( [NotNull] RawDataArchiveSelectorDto[] selectors )
 		{
-			Selectors = selectors ?? throw new ArgumentNullException( nameof(selectors) );
+			Selectors = selectors ?? throw new ArgumentNullException( nameof( selectors ) );
 		}
 
 		/// <summary>

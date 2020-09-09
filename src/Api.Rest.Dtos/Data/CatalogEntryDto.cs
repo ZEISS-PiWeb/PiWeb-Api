@@ -105,7 +105,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#endregion
 
-		#region interface IAttributeItem
+		#region interface IAttributeItemDto
 
 		/// <summary>
 		/// Gets or sets the attributes that belong to this catalog entry.
