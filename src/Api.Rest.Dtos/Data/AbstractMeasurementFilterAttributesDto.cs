@@ -13,7 +13,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	#region usings
 
 	using System;
-	using System.Globalization;
 	using System.Linq;
 
 	#endregion
@@ -120,16 +119,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		internal static string OrderByToString( OrderDto[] order )
 		{
 			return string.Join( ",", order.Select( o => $"{o.Attribute} {o.Direction}" ) );
-		}
-
-		internal static OrderDto ParseOrderBy( string value )
-		{
-			var items = value.Split( ' ' );
-
-			var key = ushort.Parse( items[ 0 ], CultureInfo.InvariantCulture );
-			var direction = string.Equals( "asc", items[ 1 ], StringComparison.OrdinalIgnoreCase ) ? OrderDirectionDto.Asc : OrderDirectionDto.Desc;
-
-			return new OrderDto( key, direction, EntityDto.Measurement );
 		}
 
 		#endregion

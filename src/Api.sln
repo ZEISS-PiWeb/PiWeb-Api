@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Definitions", "Api.Defi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Rest.Dtos", "Api.Rest.Dtos\Api.Rest.Dtos.csproj", "{008EE7B0-8795-4C7B-A3DE-46C02A571127}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Rest.Dtos.Tests", "Api.Rest.Dtos.Tests\Api.Rest.Dtos.Tests.csproj", "{3A6AFFB6-94AE-432D-968B-CC469587496F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{008EE7B0-8795-4C7B-A3DE-46C02A571127}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{008EE7B0-8795-4C7B-A3DE-46C02A571127}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{008EE7B0-8795-4C7B-A3DE-46C02A571127}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A6AFFB6-94AE-432D-968B-CC469587496F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A6AFFB6-94AE-432D-968B-CC469587496F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A6AFFB6-94AE-432D-968B-CC469587496F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A6AFFB6-94AE-432D-968B-CC469587496F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
