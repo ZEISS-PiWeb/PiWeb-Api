@@ -1,4 +1,4 @@
-﻿#region Copyright
+﻿#region copyright
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
