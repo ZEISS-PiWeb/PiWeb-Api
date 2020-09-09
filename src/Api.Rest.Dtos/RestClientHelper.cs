@@ -42,9 +42,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 		/// </summary>
 		public static ushort[] ConvertStringToUInt16List( string value )
 		{
+			if( value == null )
+				return new ushort[ 0 ];
 			if( value.StartsWith( QueryListStart ) && value.EndsWith( QueryListStop ) )
 				value = value.Substring( 1, value.Length - 2 );
-
 			if( string.IsNullOrEmpty( value ) )
 				return new ushort[ 0 ];
 			try

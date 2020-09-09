@@ -13,7 +13,6 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 	#region usings
 
 	using System;
-	using System.Collections.Generic;
 	using System.Threading;
 	using System.Threading.Tasks;
 	using JetBrains.Annotations;

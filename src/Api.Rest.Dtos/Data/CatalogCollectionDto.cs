@@ -98,7 +98,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#endregion
 
-		#region interface IEnumerable<Catalog>
+		#region interface IEnumerable<CatalogDto>
 
 		/// <inheritdoc />
 		public IEnumerator<CatalogDto> GetEnumerator()

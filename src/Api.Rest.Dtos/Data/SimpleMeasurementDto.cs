@@ -143,7 +143,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#endregion
 
-		#region interface IAttributeItem
+		#region interface IAttributeItemDto
 
 		/// <inheritdoc />
 		[JsonProperty( "attributes" ), JsonConverter( typeof( AttributeArrayConverter ) )]
