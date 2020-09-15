@@ -35,7 +35,7 @@ namespace Zeiss.PiWeb.Api.Definitions
 				Variable = 0,
 
 				/// <summary>
-				/// The characteristic is a attributive characteristic (measurement values are integers that 
+				/// The characteristic is a attributive characteristic (measurement values are integers that
 				/// specify the index of the corresponding measurement value catalog).
 				/// </summary>
 				Attributive = 1,
