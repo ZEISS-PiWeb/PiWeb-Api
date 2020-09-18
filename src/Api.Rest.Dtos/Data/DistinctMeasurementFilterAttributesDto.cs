@@ -88,7 +88,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 							result.LimitResult = int.Parse( value, CultureInfo.InvariantCulture );
 							break;
 						case OrderByParamName:
-							result.OrderBy = value.Split( ',' ).Select( ParseOrderBy ).ToArray();
+							result.OrderBy = value.Split( ',' ).Select( element => OrderDtoParser.Parse( element, EntityDto.Measurement ) ).ToArray();
 							break;
 						case SearchConditionParamName:
 							result.SearchCondition = SearchConditionParser.Parse( value );
