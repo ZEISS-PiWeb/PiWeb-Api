@@ -346,6 +346,22 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		}
 
 		/// <inheritdoc />
+		public async Task<RawDataArchiveEntriesDto[]> RawDataArchiveEntryQuery( RawDataInformationDto[] rawDataInfo, CancellationToken cancellationToken = default )
+		{
+			if( rawDataInfo == null ) throw new ArgumentNullException( nameof( rawDataInfo ) );
+
+			var selectors = new List<RawDataSelectorDto>();
+			foreach( var info in rawDataInfo )
+			{
+				if( !info.Key.HasValue ) throw new ArgumentNullException( nameof( info.Key ) );
+				selectors.Add( new RawDataSelectorDto( info.Key.Value, info.Target ) );
+			}
+			var query = new RawDataBulkQueryDto( selectors.ToArray() );
+
+			return await RawDataArchiveEntryQuery( query, cancellationToken );
+		}
+
+		/// <inheritdoc />
 		public async Task<RawDataArchiveContentDto[]> RawDataArchiveContentQuery( RawDataArchiveBulkQueryDto query, CancellationToken cancellationToken = default )
 		{
 			if( query == null ) throw new ArgumentNullException( nameof( query ) );
