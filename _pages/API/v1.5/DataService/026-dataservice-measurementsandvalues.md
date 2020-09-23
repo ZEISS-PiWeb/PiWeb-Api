@@ -27,7 +27,7 @@ You can fetch all measurements or certain measurements only. Possible filter uri
 <nobr><code>DateTime</code> fromModificationDate </nobr> | Specifies a date to select all measurements that where modified after that date. Please note that the system modification date (lastModified property) is used and not the time attribute (creation date).
 <nobr><code>DateTime</code> toModificationDate </nobr> | Specifies a date to select all measurements that where modified before that date. Please note that the system modification date (lastModified property) is used and not the time attribute (creation date).
 <nobr><code>int</code> limitResult </nobr>| Restricts the number of result items. <br> `limitResult=100`
-<nobr><code>All, None, Id list</code> requestedMeasurementAttributes </nobr><br><i>default:</i> <code>All</code> | Restricts the query to the attributes that should be returned for measurements. <br> `requestedMeasurementAttributes={4,8}`
+<nobr><code>Id list</code> requestedMeasurementAttributes </nobr> | Restricts the query to the attributes that should be returned for measurements. <br> `requestedMeasurementAttributes={4,8}`
 <nobr><code>None, Simple, Detailed</code> statistics </nobr><br><i>default:</i> <code>None</code> | Indicates how statistical informtaion should be returned: <br><code>None</code> = Return no information<br><code>Simple</code> = Return statistical information including number of characteristics out of warning limit, number of characteristics out of tolerance and number of characteristics in warning limit and tolerance<br><code>Detailed</code> = Return statistical information the same way as <code>Simple</code> plus the guid for each characteristic <br> `statistics=Simple`
 <nobr><code>Measurements, AggregationMeasurements, All</code> aggregation </nobr><br><i>default:</i> <code>Measurements</code> | Specifies which types of measurements will be fetched. <br> `aggregation=All`
 <nobr><code>int List</code> mergeAttributes</nobr> | Specifies the list of primary measurement keys to be used for joining measurements accross multiple parts on the server side. (Please find more detailed information below.) <br> `mergeAttributes=4,6`
@@ -83,7 +83,7 @@ The request can be restricted by the following filter uri parameters:
 {% capture table %}
 <code>Type</code> Parameter      |  Description <br> <code>Example</code>
 --------------------|-----------------------------------------------------------------------------------
-<nobr><code>All, None, Id list</code> requestedMeasurementAttributes </nobr><br><i>default:</i> <code>All</code> | Restricts the query to the attributes that should be returned for measurements. <br> `requestedMeasurementAttributes={4,8}`
+<nobr><code>Id list</code> requestedMeasurementAttributes </nobr> | Restricts the query to the attributes that should be returned for measurements. <br> `requestedMeasurementAttributes={4,8}`
 <nobr><code>None, Simple, Detailed</code> statistics </nobr><br><i>default:</i> <code>None</code> | Indicates how statistical informtaion should be returned: <br><code>None</code> = Return no information<br><code>Simple</code> = Return statistical information including number of characteristics out of warning limit, number of characteristics out of tolerance and number of characteristics in warning limit and tolerance<br><code>Detailed</code> = Return statistical information the same way as <code>Simple</code> plus the guid for each characteristic <br> `statistics=Simple`
 <nobr><code>Measurements, AggregationMeasurements, All</code> aggregation </nobr><br><i>default:</i> <code>Measurements</code> | Specifies which types of measurements will be fetched. <br> `aggregation=All`
 {% endcapture %}
@@ -226,7 +226,7 @@ Delete condition for deleting measurements from a single or multiple parts may b
 <nobr><code>Path</code> partPath </nobr> | Restricts the query to this part <br> `partPath=/metal%20part`
 <nobr><code>Condition</code> searchCondition </nobr>| The query will only return items matching all conditions. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ]. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`
 <nobr><code>Measurements, AggregationMeasurements, All</code> aggregation </nobr><br><i>default:</i> <code>Measurements</code> | Specifies which types of measurements will be deleted. <br> `aggregation=All`
-<nobr><code>bool</code> deep </nobr><br><i>default:</i> <code>false</code> | Determines whether the query should delete only measurements for the given part(s) specified by either <i>partPath</i> or <i>partUuids.</i><br> `deep=true`
+<nobr><code>DeleteForCurrentPartOnly</code> or <code>DeleteDeep</code> deep </nobr><br><i>default:</i> <code>DeleteForCurrentPartOnly</code> | Determines whether the query should delete only measurements for the given part(s) specified by either <i>partPath</i> or <i>partUuids.</i><br> `deep=DeleteForCurrentPartOnly`
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
 
