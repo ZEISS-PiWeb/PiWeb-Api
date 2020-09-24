@@ -27,7 +27,7 @@ You can fetch all measurements or certain measurements only. Possible filter uri
 <nobr><code>DateTime</code> fromModificationDate </nobr> | Specifies a date to select all measurements that where modified after that date. Please note that the system modification date (lastModified property) is used and not the time attribute (creation date).
 <nobr><code>DateTime</code> toModificationDate </nobr> | Specifies a date to select all measurements that where modified before that date. Please note that the system modification date (lastModified property) is used and not the time attribute (creation date).
 <nobr><code>int</code> limitResult </nobr>| Restricts the number of result items. <br> `limitResult=100`
-<nobr><code>Id list</code> requestedMeasurementAttributes </nobr> | Restricts the query to the attributes that should be returned for measurements. <br> `requestedMeasurementAttributes={4,8}`
+<nobr><code>UShort list</code> requestedMeasurementAttributes </nobr><br><i>default:</i> <code>All attributes</code> | Restricts the query to the attributes that should be returned for measurements. Use an empty list `{}` to return no attributes. <br> `requestedMeasurementAttributes={4,8}`
 <nobr><code>None, Simple, Detailed</code> statistics </nobr><br><i>default:</i> <code>None</code> | Indicates how statistical informtaion should be returned: <br><code>None</code> = Return no information<br><code>Simple</code> = Return statistical information including number of characteristics out of warning limit, number of characteristics out of tolerance and number of characteristics in warning limit and tolerance<br><code>Detailed</code> = Return statistical information the same way as <code>Simple</code> plus the guid for each characteristic <br> `statistics=Simple`
 <nobr><code>Measurements, AggregationMeasurements, All</code> aggregation </nobr><br><i>default:</i> <code>Measurements</code> | Specifies which types of measurements will be fetched. <br> `aggregation=All`
 <nobr><code>int List</code> mergeAttributes</nobr> | Specifies the list of primary measurement keys to be used for joining measurements accross multiple parts on the server side. (Please find more detailed information below.) <br> `mergeAttributes=4,6`
@@ -83,7 +83,7 @@ The request can be restricted by the following filter uri parameters:
 {% capture table %}
 <code>Type</code> Parameter      |  Description <br> <code>Example</code>
 --------------------|-----------------------------------------------------------------------------------
-<nobr><code>Id list</code> requestedMeasurementAttributes </nobr> | Restricts the query to the attributes that should be returned for measurements. <br> `requestedMeasurementAttributes={4,8}`
+<nobr><code>UShort list</code> requestedMeasurementAttributes </nobr><br><i>default:</i> <code>All attributes</code> | Restricts the query to the attributes that should be returned for measurements. Use an empty list `{}` to return no attributes. <br> `requestedMeasurementAttributes={4,8}`
 <nobr><code>None, Simple, Detailed</code> statistics </nobr><br><i>default:</i> <code>None</code> | Indicates how statistical informtaion should be returned: <br><code>None</code> = Return no information<br><code>Simple</code> = Return statistical information including number of characteristics out of warning limit, number of characteristics out of tolerance and number of characteristics in warning limit and tolerance<br><code>Detailed</code> = Return statistical information the same way as <code>Simple</code> plus the guid for each characteristic <br> `statistics=Simple`
 <nobr><code>Measurements, AggregationMeasurements, All</code> aggregation </nobr><br><i>default:</i> <code>Measurements</code> | Specifies which types of measurements will be fetched. <br> `aggregation=All`
 {% endcapture %}
@@ -340,8 +340,8 @@ You can fetch all measurements with values or only certain measurements with val
 <nobr><code>DateTime</code> fromModificationDate </nobr> | Specifies a date to select all measurements that where modified after that date. Please note that the system modification date (lastModified property) is used and not the time attribute (creation date).
 <nobr><code>DateTime</code> toModificationDate </nobr> | Specifies a date to select all measurements that where modified before that date. Please note that the system modification date (lastModified property) is used and not the time attribute (creation date).
 <nobr><code>int</code> limitResult </nobr>| Restricts the number of result items. <br> `limitResult=100`
-<nobr><code>All, None, Id list</code> requestedMeasurementAttributes </nobr><br><i>default:</i> <code>All</code> | Restricts the query to the attributes that should be returned for measurements. <br> `requestedMeasurementAttributes={4,8}`
-<nobr><code>All, None, Id list</code> requestedValueAttributes </nobr><br><i>default:</i> <code>All</code> |List of attributes that should be returned for values. <br><br> `requestedValueAttributes={1,8}`
+<nobr><code>UShort list</code> requestedMeasurementAttributes </nobr><br><i>default:</i> <code>All attributes</code> | Restricts the query to the attributes that should be returned for measurements. Use an empty list `{}` to return no attributes. <br> `requestedMeasurementAttributes={4,8}`
+<nobr><code>UShort list</code> requestedValueAttributes </nobr><br><i>default:</i> <code>All attributes</code> |List of attributes that should be returned for values. Use an empty list `{}` to return no attributes. <br><br> `requestedValueAttributes={1,8}`
 <nobr><code>Guid list</code> characteristicUuids </nobr> | Restricts the query to the characteristics for which values should be returned. <br> `characteristicsUuids={525d15c6-dc70-4ab4-bd3c-8ab2b5780e6b, 8faae7a0-d1e1-4ee2-b3a5-d4526f6ba822}`
 <nobr><code>Measurements, AggregationMeasurements, All</code> aggregation </nobr><br><i>default:</i> <code>Measurements</code> | Specifies which types of measurements will be fetched. <br> `aggregation=All`
 {% endcapture %}
@@ -399,8 +399,8 @@ The request can be restricted by the following uri filter parameters: Possible f
 {% capture table %}
 <code>Type</code> Parameter      |  Description <br> <code>Example</code>
 --------------------|-----------------------------------------------------------------------------------
-<nobr><code>All, None, Id list</code> requestedMeasurementAttributes </nobr><br><i>default:</i> <code>All</code> | Restricts the query to the attributes that should be returned for measurements. <br> `requestedMeasurementAttributes={4,8}`
-<nobr><code>All, None, Id list</code> requestedValueAttributes </nobr><br><i>default:</i> <code>All</code> |List of attributes that should be returned for values. <br><br> `requestedValueAttributes={1,8}`
+<nobr><code>UShort list</code> requestedMeasurementAttributes </nobr><br><i>default:</i> <code>All attributes</code> | Restricts the query to the attributes that should be returned for measurements.Use an empty list `{}` to return no attributes. <br> `requestedMeasurementAttributes={4,8}`
+<nobr><code>UShort list</code> requestedValueAttributes </nobr><br><i>default:</i> <code>All attributes</code> |List of attributes that should be returned for values. Use an empty list `{}` to return no attributes. <br> `requestedValueAttributes={1,8}`
 <nobr><code>Guid list</code> characteristicUuids </nobr> | Restricts the query to the characteristics for which values should be returned. <br> `characteristicsUuidList={525d15c6-dc70-4ab4-bd3c-8ab2b5780e6b, 8faae7a0-d1e1-4ee2-b3a5-d4526f6ba822}`
 <nobr><code>Measurements, AggregationMeasurements, All</code> aggregation </nobr><br><i>default:</i> <code>Measurements</code> | Specifies which types of measurements will be fetched. <br> `aggregation=All`
 {% endcapture %}
