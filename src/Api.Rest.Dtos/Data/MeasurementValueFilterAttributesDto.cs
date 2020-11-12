@@ -28,13 +28,13 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	{
 		#region constants
 
-		private const string RequestedValueAttributesParamName = "requestedvalueattributes";
-		private const string RequestedMeasurementAttributesParamName = "requestedmeasurementattributes";
-		public const string CharacteristicsUuidListParamName = "characteristicuuids";
+		private const string RequestedValueAttributesParamName = "requestedValueAttributes";
+		private const string RequestedMeasurementAttributesParamName = "requestedMeasurementAttributes";
+		public const string CharacteristicsUuidListParamName = "characteristicUuids";
 
-		private const string MergeAttributesParamName = "mergeattributes";
-		private const string MergeConditionParamName = "mergecondition";
-		private const string MergeMasterPartParamName = "mergemasterpart";
+		private const string MergeAttributesParamName = "mergeAttributes";
+		private const string MergeConditionParamName = "mergeCondition";
+		private const string MergeMasterPartParamName = "mergeMasterPart";
 
 		#endregion
 
