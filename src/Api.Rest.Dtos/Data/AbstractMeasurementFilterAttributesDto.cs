@@ -21,15 +21,15 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	{
 		#region constants
 
-		public const string PartUuidsParamName = "partuuids";
+		public const string PartUuidsParamName = "partUuids";
 		protected const string DeepParamName = "deep";
-		protected const string LimitResultParamName = "limitresult";
+		protected const string LimitResultParamName = "limitResult";
 		protected const string OrderByParamName = "order";
-		public const string MeasurementUuidsParamName = "measurementuuids";
-		protected const string SearchConditionParamName = "searchcondition";
+		public const string MeasurementUuidsParamName = "measurementUuids";
+		protected const string SearchConditionParamName = "searchCondition";
 		protected const string AggregationParamName = "aggregation";
-		protected const string FromModificationDateParamName = "frommodificationdate";
-		protected const string ToModificationDateParamName = "tomodificationdate";
+		protected const string FromModificationDateParamName = "fromModificationDate";
+		protected const string ToModificationDateParamName = "toModificationDate";
 
 		#endregion
 
