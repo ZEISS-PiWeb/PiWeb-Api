@@ -99,6 +99,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Formatter
 				case TokenType.Real:
 					return text;
 
+				case TokenType.Null:
+					return "null";
+
 				default:
 					throw new UnsupportedTokenException( tree.Token );
 			}
