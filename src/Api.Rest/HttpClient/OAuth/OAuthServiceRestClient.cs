@@ -43,21 +43,9 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 		#region interface IOAuthServiceRestClient
 
 		/// <summary>
-		/// Method to query the <see cref="ServiceInformation"/>. 
-		/// <remarks>
-		/// This method can also be used for quick connection check to test if the service is alive. It is 
-		/// quaranteed that this method returns quickly and does perform a lot of work server side.
-		/// </remarks>
-		/// </summary>
-		public Task<ServiceInformation> GetServiceInformation()
-		{
-			return _RestClient.Request<ServiceInformation>( RequestBuilder.CreateGet( "serviceInformation" ), default );
-		}
-
-		/// <summary>
 		/// Get information about valid OAuth issues authorities and resource ids.
 		/// </summary>
-		/// <param name="cancellationToken">A cancelation token to cancel the web service call.</param>
+		/// <param name="cancellationToken">A cancellation token to cancel the web service call.</param>
 		public Task<OAuthTokenInformation> GetOAuthTokenInformation( CancellationToken cancellationToken = default )
 		{
 			return _RestClient.Request<OAuthTokenInformation>( RequestBuilder.CreateGet( "oauthTokenInformation" ), default );

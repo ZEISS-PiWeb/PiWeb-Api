@@ -26,18 +26,13 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 		#region methods
 
 		/// <summary>
-		/// Method to query the <see cref="ServiceInformation"/>. 
+		/// Method to query the <see cref="OAuthTokenInformation"/>.
 		/// <remarks>
-		/// This method can also be used for quick connection check to test if the service is alive. It is 
+		/// This method can also be used for quick connection check to test if the service is alive. It is
 		/// quaranteed that this method returns quickly and does perform a lot of work server side.
 		/// </remarks>
 		/// </summary>
 		Task<OAuthTokenInformation> GetOAuthTokenInformation( CancellationToken cancellationToken = default );
-
-		/// <summary>
-		/// Get information about valid OAuth issues authorities and resource ids.
-		/// </summary>
-		Task<ServiceInformation> GetServiceInformation();
 
 		#endregion
 	}
