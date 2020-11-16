@@ -54,18 +54,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		public string Edition { get; set; }
 
 		/// <summary>
-		/// Gets or sets the web service major interface version.
-		/// </summary>
-		[JsonProperty( "versionWsdlMajor" )]
-		public string VersionWsdlMajor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the minor web service interface version.
-		/// </summary>
-		[JsonProperty( "versionWsdlMinor" )]
-		public string VersionWsdlMinor { get; set; }
-
-		/// <summary>
 		/// Gets or sets the number of parts that currently exist in the server. This number is just an approximation.
 		/// </summary>
 		[JsonProperty( "partCount" )]
@@ -125,21 +113,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		[JsonProperty( "catalogTimestamp" )]
 		public DateTime? CatalogTimestamp { get; set; }
 
-		/// <summary>
-		/// Convenience property that combines <see cref="VersionWsdlMajor"/> and <see cref="VersionWsdlMinor"/>.
-		/// </summary>
-		[JsonIgnore]
-		public Version WsdlVersion
-		{
-			get
-			{
-				if( !string.IsNullOrEmpty( VersionWsdlMajor ) && !string.IsNullOrEmpty( VersionWsdlMinor ) )
-					return new Version( VersionWsdlMajor + "." + VersionWsdlMinor );
-
-				return new Version( 0, 0 );
-			}
-		}
-
 		[JsonProperty( "requestHeaderSize" )]
 		public int RequestHeaderSize { get; set; }
 
@@ -151,13 +124,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		public override string ToString()
 		{
 			if( Version == null )
-				return "";
+				return string.Empty;
 
-			var result = EditionSpecified ? Edition + " Edition" : "QDB" + ", Version " + Version;
-			if( !string.IsNullOrEmpty( VersionWsdlMajor ) )
-				result += " (WSDL: " + VersionWsdlMajor + "." + VersionWsdlMinor + ")";
-
-			return result;
+			return EditionSpecified ? $"{Edition} Edition" : $"QDB, Version {Version}";
 		}
 
 		#endregion

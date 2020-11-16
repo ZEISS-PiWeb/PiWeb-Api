@@ -24,18 +24,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		#region properties
 
 		/// <summary>
-		/// Gets or sets the major interface version.
-		/// </summary>
-		[JsonProperty( "versionWsdlMajor" )]
-		public string VersionWsdlMajor { get; set; }
-
-		/// <summary>
-		/// Gets or sets the minor interface version.
-		/// </summary>
-		[JsonProperty( "versionWsdlMinor" )]
-		public string VersionWsdlMinor { get; set; }
-
-		/// <summary>
 		/// Gets or sets the version of the server backend.
 		/// </summary>
 		[JsonProperty( "version" )]
@@ -51,14 +39,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// <inheritdoc />
 		public override string ToString()
 		{
-			if( Version == null )
-				return string.Empty;
-
-			var result = "Version " + Version;
-			if( !string.IsNullOrEmpty( VersionWsdlMajor ) )
-				result += " (WSDL: " + VersionWsdlMajor + "." + VersionWsdlMinor + ")";
-
-			return result;
+			return Version == null ? string.Empty : $"Version {Version}";
 		}
 
 		#endregion
