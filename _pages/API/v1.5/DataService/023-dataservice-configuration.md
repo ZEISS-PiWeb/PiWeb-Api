@@ -23,42 +23,42 @@ GET /dataServiceRest/configuration HTTP/1.1
 {
        "partAttributes":
        [
-        [
+        {
             "key":1001,
             "description":"partNumber",
             "length":30,
             "type":"AlphaNumeric",
             "definitionType":"AttributeDefinition"
-        ],
+        },
         ...
        ],
        "characteristicAttributes":
        [
-        [
+        {
             "key":2001,
             "description":"characteristicNumber",
             "length":20,
             "type":"AlphaNumeric",
             "definitionType":"AttributeDefinition"
-        ],
+        },
         ...
        ],
        "measurementAttributes":
-       [
+       {
              "key": 8,
              "description": "inspector",
              "catalog": "8c376bee-ffe3-4ee4-abb9-a55b492e69ad",
              "definitionType": "CatalogAttributeDefinition"
        ...
-       ],
+       },
        "valueAttributes":
-       [
+       {
        ...
-       ],
+       },
        "catalogAttributes":
-       [
+       {
        ...
-       ]
+       }
 }
 
 {% endhighlight %}

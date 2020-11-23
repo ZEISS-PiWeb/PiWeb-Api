@@ -82,16 +82,14 @@ GET /dataServiceRest/parts/05040c4c-f0af-46b8-810e-30c0c00a379e HTTP/1.1
 {% capture jsonresponse %}
 {% highlight json %}
 
-[
-   {
-        "path": "P:/metal part/",
-        "charChangeDate": "2014-11-19T10:48:32.917Z",
-        "attributes": {},
-        "uuid": "05040c4c-f0af-46b8-810e-30c0c00a379e",
-        "version": 0,
-        "timestamp": "2012-11-19T10:48:32.887Z"
-    }
-]
+{
+    "path": "P:/metal part/",
+    "charChangeDate": "2014-11-19T10:48:32.917Z",
+    "attributes": {},
+    "uuid": "05040c4c-f0af-46b8-810e-30c0c00a379e",
+    "version": 0,
+    "timestamp": "2012-11-19T10:48:32.887Z"
+}
 
 {% endhighlight %}
 {% endcapture %}
@@ -255,7 +253,7 @@ HTTP/1.1 200 Ok
 {% assign summary="Clears a part" %}
 {% capture description %}
 
-To clear a part, you need to specify it by its uuid via uri segment. Clearing a part results in keeping the given part as well as its raw data and deleting all subParts, measurements, values and all other raw data. If optional `keep` parameter is set to value `subParts` subPart (including child items, measurements, values and raw data) are not deleted as well. 
+To clear a part, you need to specify it by its uuid via uri segment. Clearing a part results in keeping the given part as well as its raw data and deleting all subParts, measurements, values and all other raw data. If optional `keep` parameter is set to value `subParts` subPart (including child items, measurements, values and raw data) are not deleted as well.
 
 {% endcapture %}
 
@@ -380,15 +378,13 @@ GET /dataServiceRest/characteristics/27e23a7c-dbe7-4863-8461-6abf7b03ddd7 HTTP/1
 {% capture jsonresponse %}
 {% highlight json %}
 
-[
-   {
-        "path": "PC:/metal part/deviation_3/",
-        "attributes": { ... },
-        "uuid": "27e23a7c-dbe7-4863-8461-6abf7b03ddd7",
-        "version": 0,
-        "timestamp": "2012-11-19T10:48:32.887Z"
-    }
-]
+{
+    "path": "PC:/metal part/deviation_3/",
+    "attributes": { ... },
+    "uuid": "27e23a7c-dbe7-4863-8461-6abf7b03ddd7",
+    "version": 0,
+    "timestamp": "2012-11-19T10:48:32.887Z"
+}
 
 {% endhighlight %}
 {% endcapture %}
