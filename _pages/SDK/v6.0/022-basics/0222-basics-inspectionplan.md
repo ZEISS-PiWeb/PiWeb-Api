@@ -118,6 +118,27 @@ await DataServiceClient.CreateParts( new[] { parentPart, childPart } );
 {% endhighlight %}
 The name of the part is specified within its path. Nesting is easy as you just create the path and structure according to your desired hierarchy. Remember again that characteristics cannot contain parts.
 
+>{{ site.headers['bestPractice'] }} Create or update multiple entities in a single call
+To achieve a good performance, it is highly recommended to create or update items in a single call. That is why all create and update methods expect an array parameter.
+
+{{ site.headers['example'] }} Creating characteristics for the part "MetalPart"
+
+{% highlight csharp %}
+//Create characteristics for MetalPart
+var char1Path = PathHelper.RoundtripString2PathInformation( "PC:/MetalPart/Char1/" );
+var char2Path = PathHelper.RoundtripString2PathInformation( "PC:/MetalPart/Char2/" );
+//Create characteristic for SubPart
+var char3Path = PathHelper.RoundtripString2PathInformation( "PPC:/MetalPart/SubPart/Char3/" );
+
+//Create InspectionPlanCharacteristicDto objects
+var char1 = new InspectionPlanCharacteristicDto { Path = char1Path, Uuid = Guid.NewGuid() };
+var char2 = new InspectionPlanCharacteristicDto { Path = char2Path, Uuid = Guid.NewGuid() };
+var char3 = new InspectionPlanCharacteristicDto { Path = char3Path, Uuid = Guid.NewGuid() };
+
+//Use Client to create characteristics on server
+await DataServiceClient.CreateCharacteristics( new[] {char1, char2, char3} );
+{% endhighlight %}
+
 {{ site.headers['example'] }} Fetching different entities
 
 {% highlight csharp %}
@@ -135,28 +156,6 @@ You can fetch different entities with the corresponding method. The path specifi
 >{{ site.headers['knownLimitation'] }} Missing filter possibilities
 Not all endpoints provide extensive filter possibilities, as it is much more performant to filter on client side. This reduces additional workload for the server.
 
->{{ site.headers['bestPractice'] }} Create or update multiple entities in a single call
-To achieve a good performance, it is highly recommended to create or update items in a single call. That is why all create and update methods expect an array parameter.
-
-{{ site.headers['example'] }} Creating characteristics for the part "MetalPart"
-
-{% highlight csharp %}
-//Create characteristics for MetalPart
-var charPath1 = PathHelper.RoundtripString2PathInformation( "PC:/MetalPart/Char1/" );
-var charPath2 = PathHelper.RoundtripString2PathInformation( "PC:/MetalPart/Char2/" );
-//Create characteristic for SubPart
-var charPath3 = PathHelper.RoundtripString2PathInformation( "PPC:/MetalPart/SubPart/Char3/" );
-
-//Create InspectionPlanCharacteristicDto objects
-var char1 = new InspectionPlanCharacteristicDto { Path = char1Path, Uuid = Guid.NewGuid() };
-var char2 = new InspectionPlanCharacteristicDto { Path = char2Path, Uuid = Guid.NewGuid() };
-var char3 = new InspectionPlanCharacteristicDto { Path = char3Path, Uuid = Guid.NewGuid() };
-
-//Use Client to create characteristics on server
-await DataServiceClient.CreateCharacteristics( new[] {char1, char2, char3} );
-{% endhighlight %}
-
-<br>
 {{ site.headers['example'] }} Deleting "MetalPart"
 
 {% highlight csharp %}
@@ -164,12 +163,12 @@ await DataServiceClient.CreateCharacteristics( new[] {char1, char2, char3} );
 var partPath = PathHelper.String2PartPathInformation("/MetalPart/");
 
 //Get the part from server, depth 0 to only get the exact part and no children
-var parts = await dataServiceClient.GetParts(partPath, depth:0);
+var parts = await DataServiceClient.GetParts(partPath, depth:0);
 //Get the part from the returned array (first entry in our case)
 var metalPart = parts.First();
 
 //Delete the part by its Uuid
-await dataServiceClient.DeleteParts(new[] {parts.Uuid});
+await DataServiceClient.DeleteParts(new[] { metalPart.Uuid });
 {% endhighlight %}
 
 >{{ site.images['info'] }} Deleting a part also deletes its subparts, characteristics and measurements. This is only possible if the server setting *"Parts with measurement data can be deleted"* is activated.

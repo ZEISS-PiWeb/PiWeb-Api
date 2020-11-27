@@ -83,7 +83,7 @@ Here we create an attribute *Description*, which can be used in parts, catalogs 
 
 {% highlight csharp %}
 //Create a catalog using recently created attributeDef as catalog's valid attribute
-Catalog testCatalog = new CatalogDto
+var testCatalog = new CatalogDto
 {
   Name = "TestCatalog",
   Uuid = Guid.NewGuid(),
@@ -109,8 +109,7 @@ Keys are unique, so creating an attribute with the same key will result in an ex
 
 {% highlight csharp %}
 //Create the client and fetch the configuration
-var client = new DataServiceRestClient( new Uri("https://piwebserver:8080") );
-var configuration = await client.GetConfiguration();
+var configuration = await DataServiceClient.GetConfiguration();
 
 //Create a new AttributeDefinitionDto with key 11001
 var attributeDefinition = new AttributeDefinitionDto( 11001, "Description", AttributeTypeDto.AlphaNumeric, 255 );
@@ -119,8 +118,8 @@ var attributeDefinition = new AttributeDefinitionDto( 11001, "Description", Attr
 var attributeDoesAlreadyExist = configuration.GetDefinition( 11001 );
 
 //Create new attribute if not existing
-if(attributeDoesAlreadyExist != null)
+if(attributeDoesAlreadyExist == null)
 {
-  await client.CreateAttributeDefinition( EntityDto.Part, attributeDefinition );
+  await DataServiceClient.CreateAttributeDefinition( EntityDto.Part, attributeDefinition );
 }
 {% endhighlight %}
