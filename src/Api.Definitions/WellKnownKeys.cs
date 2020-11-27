@@ -17,7 +17,7 @@ namespace Zeiss.PiWeb.Api.Definitions
 	{
 		#region class Catalog
 
-		/// <summary>Well known keys for accessing value attributes.</summary>
+		/// <summary>Well known keys for accessing catalog attributes.</summary>
 		public static class Catalog
 		{
 			#region constants
@@ -157,7 +157,7 @@ namespace Zeiss.PiWeb.Api.Definitions
 
 		#region class Characteristic
 
-		/// <summary>Well known keys for accessing part characteristic.</summary>
+		/// <summary>Well known keys for accessing characteristic attributes.</summary>
 		public static class Characteristic
 		{
 			#region constants

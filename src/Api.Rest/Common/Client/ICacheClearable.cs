@@ -18,7 +18,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	#endregion
 
 	/// <summary>
-	/// Interface for a cache that defines a method for clearing a cache entry for a specfific <see cref="Uri" />.
+	/// Interface for a cache that defines a method for clearing a cache entry for a specific <see cref="Uri" />.
 	/// </summary>
 	public interface ICacheClearable
 	{
