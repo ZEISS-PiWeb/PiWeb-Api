@@ -110,7 +110,7 @@ In this example we fill the `Attributes` property of our `DataValueDto` object d
 //Create the attribute (remember to check if it already exists)
 var measurementAttributeDefinition = new AttributeDefinitionDto( WellKnownKeys.Measurement.InspectorName,
 "Inspector", AttributeTypeDto.AlphaNumeric, 30 );
-await client.CreateAttributeDefinition( EntityDto.Measurement, measurementAttributeDefinition );
+await DataServiceClient.CreateAttributeDefinition( EntityDto.Measurement, measurementAttributeDefinition );
 
 //Create the measurement
 var measurement = new DataMeasurementDto
@@ -127,7 +127,7 @@ var measurement = new DataMeasurementDto
 };
 
 //Create measurement on the server
-await DataServiceClient.CreateMeasurementValues( new[] { Measurement } );
+await DataServiceClient.CreateMeasurementValues( new[] { measurement } );
 {% endhighlight %}
 
 >{{ site.headers['bestPractice'] }} Use the property `Time`
@@ -143,13 +143,13 @@ Next to creating or updating measurements, another important functionality is fe
 {{ site.headers['example'] }} Fetching measurements of a part
 {% highlight csharp %}
 //Create PathInformation of the desired part that contains measurements
-var partPath = PathHelper.RoundtripString2PathInformation("P:/Measured part/"))
+var partPath = PathHelper.RoundtripString2PathInformation( "P:/Measured part/" );
 
 //Fetch all measurements of this part without measured values
-var fetchedMeasurements = await DataServiceClient.GetMeasurements( partPath )
+var fetchedMeasurements = await DataServiceClient.GetMeasurements( partPath );
 
 //Or fetch all measurements of this part with measured values
-var fetchedMeasurementsWithValues = await DataServiceClient.GetMeasurementValues( partPath )
+var fetchedMeasurementsWithValues = await DataServiceClient.GetMeasurementValues( partPath );
 {% endhighlight %}
 This is the simplest way to fetch measurements and the associated measured values as the unfiltered method returns all measurements of the specified part. Each measurement then contains a `DataCharacteristicDto` objects linking values to characteristics. Since this can result in a large collection of results you have the possibility to create a filter based on different criteria.
 This can be done by using `MeasurementFilterAttributesDto` which is derived from `AbstractMeasurementFilterAttributesDto`:
@@ -200,7 +200,7 @@ var fetchedMeasurements = await DataServiceClient.GetMeasurementValues(
     Deep = true,
     FromModificationDate = DateTime.Now - TimeSpan.FromDays(2),
     ToModificationDate = DateTime.Now
-  })
+  });
 {% endhighlight %}
 This returns the measurements of the last 48 hours. You can also use actual dates instead of a time range. It is not required to specify both dates, you could use `FromModificationDate` and `ToModificationDate` independently.
 
@@ -214,11 +214,11 @@ var fetchedMeasurements = await DataServiceClient.GetMeasurementValues(
     AggregationMeasurements = AggregationMeasurementSelectionDto.All,
     Deep = true,
     FromModificationDate = DateTime.Now - TimeSpan.FromDays(2),
-    ToModificationDate = DateTime.Now
-    RequestedMeasurementAttributes = new AttributeSelector(){ Attributes = new ushort[]{ WellKnownKeys.Measurement.Time, WellKnownKeys.Measurement.OperatorName, WellKnownKeys.Measurement.Conctract } }  
-  })
+    ToModificationDate = DateTime.Now,
+    RequestedMeasurementAttributes = new AttributeSelector(){ Attributes = new ushort[]{ WellKnownKeys.Measurement.Time, WellKnownKeys.Measurement.InspectorName, WellKnownKeys.Measurement.Contract } }
+  });
 {% endhighlight %}
-To retrieve only a subset of measurement attributes we set `RequestedMeasurementAttributes`, which requires an `AttributeSelector`. Simply add the keys of the desired attributes to the `Attributes` property, so in this case *time*, *operator name* and *contract* attributes. The property `RequestedValueAttributes` works the same way for measured value attributes.
+To retrieve only a subset of measurement attributes we set `RequestedMeasurementAttributes`, which requires an `AttributeSelector`. Simply add the keys of the desired attributes to the `Attributes` property, so in this case *time*, *inspector name* and *contract* attributes. The property `RequestedValueAttributes` works the same way for measured value attributes.
 
 >{{ site.images['info'] }} The measured value attribute `K1` is always returned in the `Value` property of a `DataCharacteristicDto`, even when not explicitly requested in `AttributeSelector`.
 
@@ -235,7 +235,7 @@ var fetchedMeasurements = await DataServiceClient.GetMeasurementValues(
       Operation = OperationDto.GreaterThan,
       Value = XmlConvert.ToString(DateTime.UtcNow - TimeSpan.FromDays(2), XmlDateTimeSerializationMode.Utc)
     }
-  })
+  });
 {% endhighlight %}
 In this case we use a `GenericSearchAttributeConditionDto`, a search condition for attributes. You specify the attribute key with the value of interest, an operation and the value you want to check against. This example again returns the measurements of the last 48 hours.
 To create more complex filters please use  `GenericSearchAndDto`, `GenericSearchOrDto` and/or `GenericSearchNotDto`. <br>

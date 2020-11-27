@@ -108,7 +108,7 @@ sampleFile = Encoding.UTF8.GetBytes( "Important information changed!" );
 
 //Update RawDataInformation
 informationAboutSampleFile.MD5 = new Guid(MD5.Create().ComputeHash(sampleFile)); //recompute hash
-informationAboutSampleFile.length = sampleFile.length;
+informationAboutSampleFile.Size = sampleFile.Length;
 
 //Update file on server
 await RawDataServiceClient.UpdateRawData(informationAboutSampleFile, sampleFile);

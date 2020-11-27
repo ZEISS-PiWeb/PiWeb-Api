@@ -2,7 +2,7 @@
 
 The .NET SDK is suitable for all .NET languages. You can include it to your project either by
 
-- including the dll by using our [nuget package](https://www.nuget.org/packages/Zeiss.IMT.PiWebApi.Client/) (recommended)
+- including the dll by using our [nuget package](https://www.nuget.org/packages/Zeiss.PiWeb.Api.Rest/) (recommended)
 - using the source files from our [GitHub repository](https://github.com/ZEISS-PiWeb/PiWeb-Api).
 
 >{{ site.headers['bestPractice'] }} Use our sample application for better understanding
