@@ -194,7 +194,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		{
 			// This is an intentional race condition. Calling this method from multiple threads may lead to multiple calls to Get<InterfaceInformation>().
 			// However, this would be rare and harmless, since it should always return the same result. It would be a lot more difficult to make this work without any races or blocking.
-			// It is important to never set _LastValidServiceInformation to null anywhere to avoid possible null returns here due to the race condition.
+			// It is important to never set _FeatureMatrix to null anywhere to avoid possible null returns here due to the race condition.
 			if( behavior == FetchBehavior.FetchAlways || _FeatureMatrix == null )
 			{
 				var interfaceVersionRange = await GetInterfaceInformation( cancellationToken ).ConfigureAwait( false );
