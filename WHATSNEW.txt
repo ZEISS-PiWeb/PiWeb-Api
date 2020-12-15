@@ -1,5 +1,32 @@
 ======================================================
 -------------------------------------------------------------------------------------------
+ Version 6.1.0                                                                   
+-------------------------------------------------------------------------------------------
+======================================================
+
+
+==========================================
+ New Features
+==========================================
+
+- Added archive lookup to RawDataService
+○ The RawDataService can now list the contents of .zip archives
+○ You can now request specific contents instead of the whole archive which can reduce data if only a small portion of the archive is needed
+○ Documentation will soon be available at http://zeiss-piweb.github.io/PiWeb-Api/sdk/v6.0/#ba-rawData
+
+- Upgraded dependency IdentityModel to version 4.4.0
+
+- Performance improvements for OAuth
+
+- Removed WSDL information from ServiceInformation since this was a remnant of SOAP
+
+- Small improvements and bugfixes
+
+
+
+
+======================================================
+-------------------------------------------------------------------------------------------
  Version 6.0.0                                                                   
 -------------------------------------------------------------------------------------------
 ======================================================
