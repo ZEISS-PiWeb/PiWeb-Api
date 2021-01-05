@@ -13,4 +13,6 @@ Each section contains a table of content, where the performed examples in this s
 
 {% include_relative 022-basics/0224-basics-rawdata.md %}
 
+{% include_relative 022-basics/0226-basics-archivelookup.md %}
+
 {% include_relative 022-basics/0225-basics-security.md %}
