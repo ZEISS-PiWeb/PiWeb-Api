@@ -7,20 +7,20 @@
     <RootNamespace>Zeiss.PiWeb.Api.Rest</RootNamespace>
     <TargetFrameworks>netstandard2.0;netcoreapp3.1;net48</TargetFrameworks>
     <LangVersion>latest</LangVersion>
-    <PackageVersion>6.1.0-alpha0001</PackageVersion>
+    <PackageVersion>6.1.0</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Assembly information">
     <AssemblyTitle>A .NET client for HTTP(S)/REST based communication with the quality data managament system ZEISS PiWeb</AssemblyTitle>
     <AssemblyName>Zeiss.PiWeb.Api.Rest</AssemblyName>
-    <AssemblyVersion>6.0.0</AssemblyVersion>
+    <AssemblyVersion>6.1.0</AssemblyVersion>
     <Company>Carl Zeiss Innovationszentrum für Messtechnik GmbH</Company>
     <Copyright>Copyright © 2020 $(Company)</Copyright>
     <Description>ZEISS PiWeb-API .NET Client provides an extensive set of methods for reading and writing  inspection plan structure as well
     as measurements and measurement values to and from ZEISS PiWeb server via HTTP(S)/REST based web service endpoints.
     </Description>
     <FileVersion>$(AssemblyVersion)</FileVersion>
-    <InformationalVersion>$(AssemblyVersion)-alpha0002</InformationalVersion>
+    <InformationalVersion>$(AssemblyVersion)</InformationalVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <Product>ZEISS PiWeb API</Product>
   </PropertyGroup>
