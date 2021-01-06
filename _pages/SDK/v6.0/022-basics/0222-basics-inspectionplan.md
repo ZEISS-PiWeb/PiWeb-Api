@@ -27,7 +27,8 @@ Property                                          | Description
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
->{{ site.images['info'] }} The version is only updated if versioning is enabled in server settings.
+>{{ site.images['info'] }} The version is only updated if versioning is enabled in server settings. Every update creates a new version entry. You should add a value for `Comment` to explain why it was changed and by whom.
+The optimal format is "[Username]:Reason of change", e.g. "[John Doe]: Renamed 'Part1' to 'Part2'". This way it will be correctly displayed in PiWeb Planner.
 
 >{{ site.images['info'] }} The version/revision of a part or characteristic is global. This means that the version counter is the same for every entity in the inspection plan. A part with a version of 34 did not necessarily change 34 times but the version indicates that the 34th change in the whole inspection plan was done to this entity.
 
@@ -152,6 +153,10 @@ var parts = await DataServiceClient.GetParts( partPath );
 var characteristics = await DataServiceClient.GetCharacteristics( partPath );
 {% endhighlight %}
 You can fetch different entities with the corresponding method. The path specifies the entry point from where you want to fetch data. Setting the search depth is also possible, the default value is null, which is equal to an unlimited search and returns all characteristics of the part with their child characteristics. Please note that this does not include characteristics of subparts, to fetch these you have to use the according subpart-path.
+
+If versioning is enabled on server side, you can specify the parameter `withHistory` when fetching entities.
+If set to `true` each fetched entity will contain a history, where all previous changes of this entity are stored. Each entry of the history contains the old values of the entity at this time, and a comment with information about
+why and by whom the change was made.
 
 >{{ site.headers['knownLimitation'] }} Missing filter possibilities
 Not all endpoints provide extensive filter possibilities, as it is much more performant to filter on client side. This reduces additional workload for the server.
