@@ -1,9 +1,10 @@
 ---
 area: rawDataService
 level: 0
-version: 1.4
+version: 1.5
 title: Rawdata Service
-permalink: /rawdataservice/v1.4/
+isCurrentVersion: true
+permalink: /rawdataservice/v1.5/
 sections:
   rawdataservice:
     title: Raw Data Service
@@ -40,3 +41,5 @@ sections:
 {% include_relative 033-rawdataservice-rawdatainformation.md %}
 
 {% include_relative 034-rawdataservice-rawdataobjects.md %}
+
+{% include_relative 035-rawdataservice-archivelookup.md %}

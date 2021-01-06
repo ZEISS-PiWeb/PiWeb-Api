@@ -72,4 +72,4 @@ Property                                                   | Description
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
-{{ site.images['info'] }} A `partCount`, `characteristicCount`, `measurementCount` or `valueCount` of -1 means that no statistics have been calculated yet.
+> {{ site.images['info'] }} A `partCount`, `characteristicCount`, `measurementCount` or `valueCount` of -1 means that no statistics have been calculated yet.
