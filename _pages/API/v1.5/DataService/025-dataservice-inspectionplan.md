@@ -48,10 +48,54 @@ GET /dataServiceRest/parts?partPath=/metal%20part&depth=0&requestedPartAttribute
 ]
 
 {% endhighlight %}
+
+#### Versioning
+<hr>
+
+If versioning is enabled, you can fetch the parts history using the parameter `withHistory=true`:
+
+##### Request
+{% highlight http %}
+GET /dataServiceRest/parts?partPath=/PartWithVersioning&withHistory=true HTTP/1.1
+{% endhighlight %}
+
+##### Response
+{% highlight json %}
+
+[
+    {
+        "attributes": {
+            "1001": "1758_e3"
+        },
+        "path": "P:/PartWithVersioning_edit/",
+        "history": [
+            {
+                "attributes": {},
+                "path": "P:/PartWithVersioning/",
+                "charChangeDate": "2021-01-06T09:18:02.12Z",
+                "uuid": "0c2c5bd1-4372-439c-9cdb-726841981daa",
+                "comment": "[John Doe]: Part 'PartWithVersioning' created",
+                "version": 415,
+                "timestamp": "2021-01-06T09:18:02.12Z"
+            }
+        ],
+        "charChangeDate": "2021-01-06T09:18:02.12Z",
+        "uuid": "0c2c5bd1-4372-439c-9cdb-726841981daa",
+        "comment": "[John Doe]: Part number Changed",
+        "version": 421,
+        "timestamp": "2021-01-06T09:54:31.583Z"
+    }
+]
+
+{% endhighlight %}
+
+When using this parameter each part will contain a history, where all previous changes of this part are stored. Each entry of the history contains the old values of the part at this time, and a comment with information about
+why and by whom the change was made. In above example we have one history entry, stating that the part 'PartWithVersioning' was created by user John Doe. Attributes where still empty. The current state contains the attribute
+1001, and the comment further down tells us that someone changed it (1001 equals attribute 'Part number'). If we add another attribute the history will extend with the current values, the set of history entries will now contain two entries. Please note that the version number is global for the PiWeb Server, so gaps simply mean that another part was edited in the meantime, and this is not the 415th version of the part.
+
 {% endcapture %}
 
 {% include endpointTab.html %}
-
 
 {% assign linkId="inspectionPlanEndpointGetPart" %}
 {% assign method="GET" %}
@@ -95,8 +139,6 @@ GET /dataServiceRest/parts/05040c4c-f0af-46b8-810e-30c0c00a379e HTTP/1.1
 {% endcapture %}
 
 {% include endpointTab.html %}
-
-
 
 {% assign linkId="inspectionPlanEndpointAddParts" %}
 {% assign method="POST" %}
@@ -147,7 +189,10 @@ If you update a part you might want to:
 * Rename/move parts or
 * change attributes of parts.
 
-{{site.images['info']}} If versioning is activated on the server side, every update creates a new version entry. If versioning is set to 'Controlled by the client' on server side it can be contolled by the following parameter:
+If versioning is activated on the server side, every update creates a new version entry. You should add a value for `comment` to explain why it was changed and by whom.
+The optimal format is "[Username]:Reason of change", e.g. "[John Doe]: Renamed 'Part1' to 'Part2'". This way it will be correctly displayed in PiWeb Planner.
+
+{{site.images['info']}} If versioning is set to 'Controlled by the client' on server side it can be controlled by the following parameter:
 
 {% capture table %}
 Parameter name                                                                 | Description
@@ -346,6 +391,9 @@ GET /dataServiceRest/characteristics?partPath=/metal%20part&depth=2 HTTP/1.1
 ]
 
 {% endhighlight %}
+
+Versioning works the same way as with parts, described in the first endpoint [GET /parts](#ds-inspection-plan).
+
 {% endcapture %}
 
 {% include endpointTab.html %}
@@ -447,7 +495,10 @@ If you update characteristics you want to:
 * Rename/move characteristics or
 * change attributes of characteristics.
 
-{{site.images['info']}} If versioning is activated on server side, every update of one or more characteristics creates a new version entry. If versioning is set to 'Controlled by the client' on server side it can be contolled by the following parameter:
+If versioning is activated on the server side, every update creates a new version entry. You should add a value for `comment` to explain why it was changed and by whom.
+The optimal format is "[Username]:Reason of change", e.g. "[John Doe]: Renamed 'Characteristic1' to 'Characteristic2'". This way it will be correctly displayed in PiWeb Planner.
+
+{{site.images['info']}} If versioning is set to 'Controlled by the client' on server side it can be controlled by the following parameter:
 
 {% capture table %}
 Parameter name                                                                 | Description
