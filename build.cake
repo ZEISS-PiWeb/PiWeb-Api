@@ -1,4 +1,4 @@
-﻿#tool "nuget:?package=GitVersion.CommandLine"
+﻿#tool "nuget:?package=GitVersion.CommandLine&version=5.5.0"
 #addin "nuget:?package=Cake.FileHelpers"
 
 //////////////////////////////////////////////////////////////////////
@@ -228,10 +228,10 @@ Task("Pack_Client")
         Dependencies             = new [] {
             new NuSpecDependency { Id = "Newtonsoft.Json", Version = "12.0.1" },
             new NuSpecDependency { Id = "Newtonsoft.Json.Bson", Version = "1.0.2" },
-            new NuSpecDependency { Id = "IdentityModel", Version = "2.0.0" },
-            new NuSpecDependency { Id = "Microsoft.IdentityModel.Logging", Version = "5.2.1" },
-            new NuSpecDependency { Id = "Microsoft.IdentityModel.Tokens", Version = "5.2.1" },
-            new NuSpecDependency { Id = "System.IdentityModel.Tokens.Jwt", Version = "5.2.1" },
+            new NuSpecDependency { Id = "IdentityModel", Version = "4.4.0" },
+            new NuSpecDependency { Id = "Microsoft.IdentityModel.Logging", Version = "5.6.0" },
+            new NuSpecDependency { Id = "Microsoft.IdentityModel.Tokens", Version = "5.6.0" },
+            new NuSpecDependency { Id = "System.IdentityModel.Tokens.Jwt", Version = "5.6.0" },
             new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2018.2.1" },
             new NuSpecDependency { Id = "System.Security.Cryptography.ProtectedData", Version = "4.7.0" },
             new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Definitions", Version = nugetVersion },
