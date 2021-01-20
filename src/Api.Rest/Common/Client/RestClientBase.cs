@@ -265,7 +265,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 			try
 			{
-				await CheckAuthenticationContainerAsync().ConfigureAwait( false );
+				await CheckAuthenticationInformationAsync( cancellationToken ).ConfigureAwait( false );
 
 				var completionOptions = streamed ? HttpCompletionOption.ResponseHeadersRead : HttpCompletionOption.ResponseContentRead;
 
@@ -285,18 +285,13 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 						return default;
 					}
 
-					var updatedAuthentication = await UpdateAuthenticationInformationAsync( response ).ConfigureAwait( false );
-
-					if( updatedAuthentication != null )
+					if( await UpdateAuthenticationInformationAsync( response, cancellationToken ).ConfigureAwait( false ) )
 					{
 						response.Dispose();
+						continue;
+					}
 
-						AuthenticationContainer = updatedAuthentication;
-					}
-					else
-					{
-						await HandleFaultedResponse( response ).ConfigureAwait( false );
-					}
+					await HandleFaultedResponse( response ).ConfigureAwait( false );
 				}
 			}
 			catch( HttpRequestException ex )
@@ -317,16 +312,27 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			}
 		}
 
-		// ReSharper disable once VirtualMemberNeverOverridden.Global
-		protected virtual Task<bool> CheckAuthenticationContainerAsync()
+		/// <summary>
+		/// Checks for complete authentication information before doing the request.
+		/// </summary>
+		/// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+		/// <returns>True if the authentication information was updated; otherwise, false.</returns>
+		/// <remarks>This callback can be used to show a login screen to the user for authentication.</remarks>
+		protected virtual Task<bool> CheckAuthenticationInformationAsync( CancellationToken cancellationToken = default )
 		{
 			return Task.FromResult( false );
 		}
 
-		// ReSharper disable once VirtualMemberNeverOverridden.Global
-		protected virtual Task<AuthenticationContainer> UpdateAuthenticationInformationAsync( HttpResponseMessage response )
+		/// <summary>
+		/// Updates the authentication information based on the given <paramref name="response"/>.
+		/// </summary>
+		/// <param name="response">For checking the reasons for the unsuccessful request.</param>
+		/// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+		/// <returns>True if the authentication information was updated; otherwise, false.</returns>
+		/// <remarks>This callback can be used to show a login screen to the user for authentication.</remarks>
+		protected virtual Task<bool> UpdateAuthenticationInformationAsync( HttpResponseMessage response, CancellationToken cancellationToken = default )
 		{
-			return Task.FromResult<AuthenticationContainer>( null );
+			return Task.FromResult( false );
 		}
 
 		private void SetDefaultHttpHeaders( HttpRequestMessage request )
