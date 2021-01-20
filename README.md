@@ -24,7 +24,7 @@ Additional to the HTTP/S based REST API there is also a .NET client library, whi
 * Get the [C# sample project](https://github.com/ZEISS-PiWeb/PiWeb-Training)
 
 #### Questions, bugs or improvement ideas?
-Feel free to create an [issue](https://github.com/ZEISS-PiWeb/PiWeb-Api/issues) in this repositroy and we will try to help you as fast as possible.
+Feel free to create an [issue](https://github.com/ZEISS-PiWeb/PiWeb-Api/issues) in this repository and we will try to help you as fast as possible.
 
 ### Examples
 
