@@ -26,6 +26,20 @@ Additional to the HTTP/S based REST API there is also a .NET client library, whi
 #### Questions, bugs or improvement ideas?
 Feel free to create an [issue](https://github.com/ZEISS-PiWeb/PiWeb-Api/issues) in this repository and we will try to help you as fast as possible.
 
+### Release Notes
+
+As described [here](http://zeiss-piweb.github.io/PiWeb-Api/general#gi-versioning) the REST API and our .NET SDK NuGet are versioned independently.
+Release Notes for our REST API can be found on their particular documentation page:
+
+- [DataService](http://zeiss-piweb.github.io/PiWeb-Api/dataservice/v1.5/)
+- [RawDataService](http://zeiss-piweb.github.io/PiWeb-Api/rawdataservice/v1.5/)
+
+You can select the right version with the dropdown in the upper right corner. Release notes are displayed directly at the top of the page.
+
+Release Notes for our .NET SDK NuGet are available on [NuGet.org](https://www.nuget.org/packages/Zeiss.PiWeb.Api.Rest/).
+
+<hr>
+
 ### Examples
 
 Detailed examples for both REST API and .NET SDK can be found in the [documentation](https://zeiss-piweb.github.io/PiWeb-Api).
