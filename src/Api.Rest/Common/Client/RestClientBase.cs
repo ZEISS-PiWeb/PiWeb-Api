@@ -197,12 +197,32 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			return PerformRequestAsync( requestCreationHandler, false, BinaryResponseToObjectAsync<T>, true, cancellationToken );
 		}
 
+		/// <summary>
+		/// Start an async operation. Returns an URL to poll for status updates if the operation is accepted, otherwise the operation is done synchronously.
+		/// </summary>
+		/// <returns>Returns a Task that represents the duration of the initial REST request. The result of the task contains
+		/// the URI for polling the operation result or null in case the server already finished the request synchronously.</returns>
+		/// <exception cref="RestClientException">The response indicated status Accepted, but did not contain polling information.</exception>
+		public Task<Uri> RequestAsyncOperation( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		{
+			return PerformRequestAsync( requestCreationHandler, false, LocationHeaderToUrl, true, cancellationToken );
+		}
+
 		private static async Task<T> ResponseToObjectAsync<T>( HttpResponseMessage response )
 		{
 			using( var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false ) )
 			{
 				return RestClientHelper.DeserializeObject<T>( responseStream );
 			}
+		}
+
+		private static Task<Uri> LocationHeaderToUrl( HttpResponseMessage response )
+		{
+			var result = response.Headers.Location;
+			if( result == null && response.StatusCode == HttpStatusCode.Accepted )
+				throw new RestClientException( $"Error fetching status URL: The response indicated status Accepted, but did not contain polling information." );
+
+			return Task.FromResult( result );
 		}
 
 		private static async Task<IEnumerable<T>> ResponseToEnumerationAsync<T>( HttpResponseMessage response )

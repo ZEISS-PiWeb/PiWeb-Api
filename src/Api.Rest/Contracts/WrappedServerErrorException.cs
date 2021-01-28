@@ -80,6 +80,16 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 			}
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="WrappedServerErrorException" /> class.
+		/// </summary>
+		/// <param name="error">The server side error.</param>
+		public WrappedServerErrorException( Error error ) :
+			base( error?.Message ?? "Server error while processing the request." )
+		{
+			Error = error;
+		}
+
 		#endregion
 
 		#region properties
