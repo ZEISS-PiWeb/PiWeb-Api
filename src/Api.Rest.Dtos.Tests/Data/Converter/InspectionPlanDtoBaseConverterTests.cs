@@ -1,13 +1,30 @@
-﻿namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data.Converter
+﻿#region copyright
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Carl Zeiss IMT (IZfM Dresden)                   */
+/* Softwaresystem PiWeb                            */
+/* (c) Carl Zeiss 2021                             */
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
+
+#endregion
+
+
+namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data.Converter
 {
+	#region usings
+
 	using Newtonsoft.Json;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 
+	#endregion
+
 	[TestFixture]
 	public class InspectionPlanDtoBaseConverterTests
 	{
+		#region methods
+
 		[Test]
 		public void Parse_HappyPath_ReturnsInspectionPlanPartDto()
 		{
@@ -22,9 +39,9 @@
 
 			var deserialized = JsonConvert.DeserializeObject<InspectionPlanDtoBase>(
 				json,
-				new InspectionPlanDtoBaseConverter());
+				new InspectionPlanDtoBaseConverter() );
 
-			Assert.AreEqual(typeof(InspectionPlanPartDto), deserialized.GetType());
+			Assert.AreEqual( typeof( InspectionPlanPartDto ), deserialized.GetType() );
 		}
 
 		[Test]
@@ -38,9 +55,9 @@
 
 			var deserialized = JsonConvert.DeserializeObject<InspectionPlanDtoBase>(
 				json,
-				new InspectionPlanDtoBaseConverter());
+				new InspectionPlanDtoBaseConverter() );
 
-			Assert.AreEqual(typeof(SimplePartDto), deserialized.GetType());
+			Assert.AreEqual( typeof( SimplePartDto ), deserialized.GetType() );
 		}
 
 		[Test]
@@ -55,17 +72,19 @@
 
 			var deserialized = JsonConvert.DeserializeObject<InspectionPlanDtoBase>(
 				json,
-				new InspectionPlanDtoBaseConverter());
+				new InspectionPlanDtoBaseConverter() );
 
-			Assert.AreEqual(typeof(InspectionPlanCharacteristicDto), deserialized.GetType());
+			Assert.AreEqual( typeof( InspectionPlanCharacteristicDto ), deserialized.GetType() );
 		}
 
 		[Test]
 		public void Parse_EmptyJson_ReturnsNull()
 		{
-			var deserialized = JsonConvert.DeserializeObject<InspectionPlanDtoBase>( string.Empty, new InspectionPlanDtoBaseConverter());
+			var deserialized = JsonConvert.DeserializeObject<InspectionPlanDtoBase>( string.Empty, new InspectionPlanDtoBaseConverter() );
 
 			Assert.AreEqual( null, deserialized );
 		}
+
+		#endregion
 	}
 }
