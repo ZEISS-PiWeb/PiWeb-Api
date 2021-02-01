@@ -1,4 +1,14 @@
-﻿namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
+﻿#region copyright
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Carl Zeiss IMT (IZfM Dresden)                   */
+/* Softwaresystem PiWeb                            */
+/* (c) Carl Zeiss 2021                             */
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
+
+#endregion
+
+namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 {
 	#region usings
 
@@ -16,8 +26,12 @@
 	/// </summary>
 	public class InspectionPlanDtoBaseConverter : JsonConverter
 	{
+		#region constants
+
 		private const string HistoryFieldName = "history";
 		private const string CharChangeDateFieldName = "charChangeDate";
+
+		#endregion
 
 		#region methods
 
@@ -63,7 +77,7 @@
 			var jToken = JToken.Load( reader );
 
 			if( jToken == null )
-				throw new ArgumentNullException( nameof(jToken) );
+				throw new ArgumentNullException( nameof( jToken ) );
 
 			var target = existingValue ?? Create( jToken, serializer );
 
@@ -75,7 +89,7 @@
 
 		private static object Create( JToken jObject, JsonSerializer serializer )
 		{
-			using(var jsonReader = new JTokenReader( jObject ))
+			using( var jsonReader = new JTokenReader( jObject ) )
 			{
 				var type = GetType( jObject );
 
@@ -94,10 +108,9 @@
 						throw new InvalidOperationException( "No object created." );
 				}
 			}
-
 		}
 
-		private static InspectionPlanItemType GetType( JToken jToken)
+		private static InspectionPlanItemType GetType( JToken jToken )
 		{
 			var fields = CollectFields( jToken );
 
@@ -111,7 +124,7 @@
 			return InspectionPlanItemType.InspectionPlanCharacteristicDto;
 		}
 
-		private static List<string> CollectFields(JToken jToken )
+		private static List<string> CollectFields( JToken jToken )
 		{
 			return jToken.Children<JProperty>().Select( i => i.Path ).ToList();
 		}
@@ -123,6 +136,10 @@
 		{
 			return objectType == typeof( InspectionPlanDtoBase );
 		}
+
+		#endregion
+
+		#region class InspectionPlanItemType
 
 		private enum InspectionPlanItemType
 		{
