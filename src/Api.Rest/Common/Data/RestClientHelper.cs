@@ -23,7 +23,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 	using Newtonsoft.Json.Bson;
 	using Newtonsoft.Json.Converters;
 	using Zeiss.PiWeb.Api.Rest.Common.Client;
+	using Zeiss.PiWeb.Api.Rest.Common.Data.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
+	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 
 	#endregion
@@ -259,7 +261,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 				Formatting = Formatting.None,
 				DateFormatHandling = DateFormatHandling.IsoDateFormat,
 				NullValueHandling = NullValueHandling.Ignore,
-				Converters = { new VersionConverter() }
+				Converters = { new VersionConverter(), new InspectionPlanDtoBaseConverter() }
 			};
 		}
 
