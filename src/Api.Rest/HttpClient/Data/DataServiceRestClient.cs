@@ -204,6 +204,39 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			return _FeatureMatrix;
 		}
 
+		private async Task PollOperationStatus( string statusId, CancellationToken cancellationToken = default )
+		{
+			while( !cancellationToken.IsCancellationRequested )
+			{
+				var operationStatus = await _RestClient.Request<OperationStatusDto>( RequestBuilder.CreateGet( $"PendingOperations/{statusId}" ), cancellationToken ).ConfigureAwait( false );
+				if( operationStatus.ExecutionStatus == OperationExecutionStatusDto.Finished )
+					break;
+				if( operationStatus.ExecutionStatus == OperationExecutionStatusDto.Exception )
+					throw new WrappedServerErrorException( operationStatus.Exception );
+			}
+		}
+
+		private async Task DeleteMeasurementsInternal( List<ParameterDefinition> parameter, CancellationToken cancellationToken )
+		{
+			var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+
+			if( featureMatrix.SupportsAsyncMeasurementDeletion )
+			{
+				parameter.Add( ParameterDefinition.Create( "runAsync", "true" ) );
+				var pollingUri = await _RestClient.RequestAsyncOperation( RequestBuilder.CreateDelete( "measurements", parameter.ToArray() ), cancellationToken ).ConfigureAwait( false );
+
+				if( pollingUri != null )
+				{
+					var statusId = pollingUri.Segments.Last();
+					await PollOperationStatus( statusId, cancellationToken ).ConfigureAwait( false );
+				}
+			}
+			else
+			{
+				await _RestClient.Request( RequestBuilder.CreateDelete( "measurements", parameter.ToArray() ), cancellationToken ).ConfigureAwait( false );
+			}
+		}
+
 		#endregion
 
 		#region interface IDataServiceRestClient
@@ -764,7 +797,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 				parameter.Add( ParameterDefinition.Create( "deep", deep.ToString() ) );
 			}
 
-			await _RestClient.Request( RequestBuilder.CreateDelete( "measurements", parameter.ToArray() ), cancellationToken ).ConfigureAwait( false );
+			await DeleteMeasurementsInternal( parameter, cancellationToken ).ConfigureAwait( false );
 		}
 
 		/// <inheritdoc />
@@ -780,7 +813,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 				if( aggregation != AggregationMeasurementSelectionDto.Default )
 					parameter.Add( ParameterDefinition.Create( "aggregation", aggregation.ToString() ) );
 
-				await _RestClient.Request( RequestBuilder.CreateDelete( "measurements", parameter.ToArray() ), cancellationToken ).ConfigureAwait( false );
+				await DeleteMeasurementsInternal( parameter, cancellationToken ).ConfigureAwait( false );
 			}
 			else
 			{
@@ -794,7 +827,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 					if( aggregation != AggregationMeasurementSelectionDto.Default )
 						parameter.Add( ParameterDefinition.Create( "aggregation", aggregation.ToString() ) );
 
-					await _RestClient.Request( RequestBuilder.CreateDelete( "measurements", parameter.ToArray() ), cancellationToken ).ConfigureAwait( false );
+					await DeleteMeasurementsInternal( parameter, cancellationToken ).ConfigureAwait( false );
 				}
 			}
 		}
@@ -811,8 +844,8 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 
 				foreach( var uuids in ArrayHelper.Split( measurementUuids, targetSize, RestClientHelper.LengthOfListElementInUri ) )
 				{
-					var parameter = ParameterDefinition.Create( "measurementUuids", RestClientHelper.ConvertGuidListToString( uuids ) );
-					await _RestClient.Request( RequestBuilder.CreateDelete( "measurements", parameter ), cancellationToken ).ConfigureAwait( false );
+					var parameter = new List<ParameterDefinition>{ ParameterDefinition.Create( "measurementUuids", RestClientHelper.ConvertGuidListToString( uuids ) ) };
+					await DeleteMeasurementsInternal( parameter, cancellationToken ).ConfigureAwait( false );
 				}
 			}
 		}
