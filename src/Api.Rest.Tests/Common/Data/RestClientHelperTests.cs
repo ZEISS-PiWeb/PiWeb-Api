@@ -13,8 +13,10 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.Common.Data
 	#region usings
 
 	using System;
+	using System.Linq;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Rest.Common.Data;
+	using Zeiss.PiWeb.Api.Rest.Dtos;
 
 	#endregion
 
@@ -80,6 +82,96 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.Common.Data
 		public void ConvertStringToUInt16List_InvalidString_ExceptionThrown()
 		{
 			Assert.Throws<FormatException>( () => RestClientHelper.ConvertStringToUInt16List( "Invalid" ) );
+		}
+
+		[Test]
+		public void SplitAndMergePathsParameters_ServiceLocationIsNull_ExceptionThrown()
+		{
+			Assert.Throws<ArgumentNullException>( () => RestClientHelper.SplitAndMergeParameters( null, "test", 200, "paramName", new string[]{}, new ParameterDefinition[]{} ) );
+		}
+
+		[Test]
+		public void SplitAndMergePathsParameters_EmptyParameterName_ExceptionThrown()
+		{
+			Assert.Throws<ArgumentException>( () => RestClientHelper.SplitAndMergeParameters( new Uri( "http://localhost" ), "", 200, "paramName", new string[]{}, new ParameterDefinition[]{} ) );
+		}
+
+		[Test]
+		public void SplitAndMergePathsParameters_PathsToSplitIsNull_ExceptionThrown()
+		{
+			Assert.Throws<ArgumentNullException>( () => RestClientHelper.SplitAndMergeParameters( new Uri( "http://localhost" ), "test", 200, "paramName", pathsToSplit: null, new ParameterDefinition[]{} ) );
+		}
+
+		[Test]
+		public void SplitAndMergePathsParameters_OtherParametersArrayIsNull_ExceptionThrown()
+		{
+			Assert.Throws<ArgumentNullException>( () => RestClientHelper.SplitAndMergeParameters( new Uri( "http://localhost" ), "test", 200, "paramName", new string[]{}, null ) );
+		}
+
+		[Test]
+		public void SplitAndMergePathsParameters_HappyPath()
+		{
+			var pathsToSplits = new []
+			{
+				"Test_Part_1",
+				"Test_Part_2",
+				"Test_Part_3",
+				"Test_Part_4",
+				"Test_Part_5",
+				"Test_Part_6"
+			};
+			var otherParams = new []
+			{
+				ParameterDefinition.Create( "param", "foo" )
+			};
+
+			var paramSets = RestClientHelper.SplitAndMergeParameters( new Uri( "http://localhost" ), "testEndpoint", 90, "testParam", pathsToSplits, otherParams );
+
+			Assert.AreEqual( 3, paramSets.Count() );
+		}
+
+		[Test]
+		public void SplitAndMergeUuidParameters_ServiceLocationIsNull_ExceptionThrown()
+		{
+			Assert.Throws<ArgumentNullException>( () => RestClientHelper.SplitAndMergeParameters( null, "test", 200, "paramName", new string[]{}, new ParameterDefinition[]{} ) );
+		}
+
+		[Test]
+		public void SplitAndMergeUuidParameters_EmptyParameterName_ExceptionThrown()
+		{
+			Assert.Throws<ArgumentException>( () => RestClientHelper.SplitAndMergeParameters( new Uri( "http://localhost" ), "", 200, "paramName", new Guid[]{}, new ParameterDefinition[]{} ) );
+		}
+
+		[Test]
+		public void SplitAndMergeUuidParameters_PathsToSplitIsNull_ExceptionThrown()
+		{
+			Assert.Throws<ArgumentNullException>( () => RestClientHelper.SplitAndMergeParameters( new Uri( "http://localhost" ), "test", 200, "paramName", uuidsToSplit: null, new ParameterDefinition[]{} ) );
+		}
+
+		[Test]
+		public void SplitAndMergeUuidParameters_OtherParametersArrayIsNull_ExceptionThrown()
+		{
+			Assert.Throws<ArgumentNullException>( () => RestClientHelper.SplitAndMergeParameters( new Uri( "http://localhost" ), "test", 200, "paramName", new Guid[]{}, null ) );
+		}
+
+		[Test]
+		public void SplitAndMergeUuidParameters_HappyPath()
+		{
+			var uuidsToSplits = new []
+			{
+				Guid.NewGuid(),
+				Guid.NewGuid(),
+				Guid.NewGuid(),
+				Guid.NewGuid()
+			};
+			var otherParams = new []
+			{
+				ParameterDefinition.Create( "param", "foo" )
+			};
+
+			var paramSets = RestClientHelper.SplitAndMergeParameters( new Uri( "http://localhost" ), "testEndpoint", 70, "testParam", uuidsToSplits, otherParams );
+
+			Assert.AreEqual( 4, paramSets.Count() );
 		}
 
 		#endregion
