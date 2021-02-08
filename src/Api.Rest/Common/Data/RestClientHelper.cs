@@ -24,6 +24,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 	using Newtonsoft.Json.Converters;
 	using Zeiss.PiWeb.Api.Rest.Common.Client;
 	using Zeiss.PiWeb.Api.Rest.Common.Data.Converter;
+	using Zeiss.PiWeb.Api.Rest.Common.Utilities;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
@@ -249,6 +250,78 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		{
 			var endpointUriString = RequestUriHelper.MakeRequestUri( serviceLocation, requestPath, parameterDefinitions ).ToString();
 			return Math.Max( maxUriLength - endpointUriString.Length, 0 );
+		}
+
+		/// <summary>
+		/// Split the passed parameter collection into smaller chunks and merge each chunk with the rest of the parameters.
+		/// </summary>
+		/// <param name="serviceLocation">Server Uri</param>
+		/// <param name="requestPath">Endpoint name</param>
+		/// <param name="maxUriLength">Maximum length of the full URL inclusive any query string</param>
+		/// <param name="parameterName">Name of the parameter needed to be splitted</param>
+		/// <param name="uuidsToSplit">The uuid list to split.</param>
+		/// <param name="otherParameters">All other parameters that are part of the request, e.g. 'filter'.</param>
+		public static IEnumerable<IEnumerable<ParameterDefinition>> SplitAndMergeParameters(
+			Uri serviceLocation,
+			string requestPath,
+			int maxUriLength,
+			string parameterName,
+			Guid[] uuidsToSplit,
+			ParameterDefinition[] otherParameters )
+		{
+			if( serviceLocation == null ) throw new ArgumentNullException( nameof( serviceLocation ) );
+
+			if( string.IsNullOrWhiteSpace( requestPath ) )
+				throw new ArgumentException( "Value cannot be null or whitespace.", nameof( requestPath ) );
+
+			if( string.IsNullOrWhiteSpace( parameterName ) )
+				throw new ArgumentException( "Value cannot be null or whitespace.", nameof( parameterName ) );
+
+			if( otherParameters == null ) throw new ArgumentNullException( nameof( otherParameters ) );
+
+			if( uuidsToSplit == null ) throw new ArgumentNullException( nameof( uuidsToSplit ) );
+
+			//Split into multiple parameter sets to limit uuid parameter lenght
+			var splitter = new ParameterSplitter( serviceLocation, maxUriLength, requestPath );
+			var collectionParameter = CollectionParameterFactory.Create( parameterName, uuidsToSplit );
+
+			return splitter.SplitAndMerge( collectionParameter, otherParameters );
+		}
+
+		/// <summary>
+		/// Split the passed parameter collection into smaller chunks and merge each chunk with the rest of the parameters.
+		/// </summary>
+		/// <param name="serviceLocation">Server Uri</param>
+		/// <param name="requestPath">Endpoint name</param>
+		/// <param name="maxUriLength">Maximum length of the full URL inclusive any query string</param>
+		/// <param name="parameterName">Name of the parameter needed to be splitted</param>
+		/// <param name="pathsToSplit">The path list to split.</param>
+		/// <param name="otherParameters">All other parameters that are part of the request, e.g. 'filter'.</param>
+		public static IEnumerable<IEnumerable<ParameterDefinition>> SplitAndMergeParameters(
+			Uri serviceLocation,
+			string requestPath,
+			int maxUriLength,
+			string parameterName,
+			string[] pathsToSplit,
+			ParameterDefinition[] otherParameters )
+		{
+			if( serviceLocation == null ) throw new ArgumentNullException( nameof( serviceLocation ) );
+
+			if( string.IsNullOrWhiteSpace( requestPath ) )
+				throw new ArgumentException( "Value cannot be null or whitespace.", nameof( requestPath ) );
+
+			if( string.IsNullOrWhiteSpace( parameterName ) )
+				throw new ArgumentException( "Value cannot be null or whitespace.", nameof( parameterName ) );
+
+			if( pathsToSplit == null ) throw new ArgumentNullException( nameof( pathsToSplit ) );
+
+			if( otherParameters == null ) throw new ArgumentNullException( nameof( otherParameters ) );
+
+			//Split into multiple parameter sets to limit uuid parameter lenght
+			var splitter = new ParameterSplitter( serviceLocation, maxUriLength, requestPath );
+			var collectionParameter = CollectionParameterFactory.Create( parameterName, pathsToSplit );
+
+			return splitter.SplitAndMerge( collectionParameter, otherParameters );
 		}
 
 		/// <summary>

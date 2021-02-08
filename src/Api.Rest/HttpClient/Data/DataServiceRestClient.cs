@@ -669,12 +669,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 				newFilter.MeasurementUuids = null;
 
 				var parameterName = AbstractMeasurementFilterAttributesDto.MeasurementUuidsParamName;
-				var parameterDefinitions = CreateParameterDefinitions( partPath, newFilter );
+				var parameterDefinitions = CreateParameterDefinitions( partPath, newFilter ).ToArray();
 
 				//Split into multiple parameter sets to limit uuid parameter lenght
-				var splitter = new ParameterSplitter( this, requestPath );
-				var collectionParameter = CollectionParameterFactory.Create( parameterName, filter.MeasurementUuids );
-				var parameterSets = splitter.SplitAndMerge( collectionParameter, parameterDefinitions );
+				var parameterSets = RestClientHelper.SplitAndMergeParameters( ServiceLocation, requestPath, MaxUriLength, parameterName, filter.MeasurementUuids, parameterDefinitions );
 
 				//Execute requests in parallel
 				var requests = parameterSets
@@ -692,12 +690,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 				newFilter.PartUuids = null;
 
 				const string parameterName = AbstractMeasurementFilterAttributesDto.PartUuidsParamName;
-				var parameterDefinitions = CreateParameterDefinitions( partPath, newFilter );
+				var parameterDefinitions = CreateParameterDefinitions( partPath, newFilter ).ToArray();
 
 				//Split into multiple parameter sets to limit uuid parameter lenght
-				var splitter = new ParameterSplitter( this, requestPath );
-				var collectionParameter = CollectionParameterFactory.Create( parameterName, filter.PartUuids );
-				var parameterSets = splitter.SplitAndMerge( collectionParameter, parameterDefinitions );
+				var parameterSets = RestClientHelper.SplitAndMergeParameters( ServiceLocation, requestPath, MaxUriLength, parameterName, filter.PartUuids, parameterDefinitions );
 
 				//Execute requests in parallel
 				var requests = parameterSets
