@@ -40,17 +40,17 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ParameterSplitter"/> class.
 		/// </summary>
-		/// <exception cref="ArgumentNullException"><paramref name="client"/> is <see langword="null" />.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="serviceLocation"/> is <see langword="null" />.</exception>
 		/// <exception cref="ArgumentException"><paramref name="requestPath"/> is <see langword="null" /> or whitespace.</exception>
-		public ParameterSplitter( CommonRestClientBase client, string requestPath )
+		public ParameterSplitter( Uri serviceLocation, int maxUriLength, string requestPath )
 		{
-			if( client == null ) throw new ArgumentNullException( nameof( client ) );
+			if( serviceLocation == null ) throw new ArgumentNullException( nameof( serviceLocation ) );
 			if( string.IsNullOrWhiteSpace( requestPath ) )
 				throw new ArgumentException( "Value cannot be null or whitespace.", nameof( requestPath ) );
 
 			_RequestPath = requestPath;
-			_ServiceLocation = client.ServiceLocation;
-			_MaxUriLength = client.MaxUriLength;
+			_ServiceLocation = serviceLocation;
+			_MaxUriLength = maxUriLength;
 		}
 
 		#endregion

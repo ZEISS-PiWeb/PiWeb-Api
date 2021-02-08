@@ -98,9 +98,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 			}
 
 			//Split into multiple parameter sets to limit uuid parameter lenght
-			var splitter = new ParameterSplitter( this, requestPath );
-			var collectionParameter = CollectionParameterFactory.Create( "uuids", uuids );
-			var parameterSets = splitter.SplitAndMerge( collectionParameter, parameterDefinitions );
+			var parameterSets = RestClientHelper.SplitAndMergeParameters( ServiceLocation, requestPath, MaxUriLength, "uuids", uuids, parameterDefinitions.ToArray() );
 
 			//Execute requests in parallel
 			var requests = parameterSets
