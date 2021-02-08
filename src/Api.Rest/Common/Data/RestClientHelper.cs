@@ -23,7 +23,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 	using Newtonsoft.Json.Bson;
 	using Newtonsoft.Json.Converters;
 	using Zeiss.PiWeb.Api.Rest.Common.Client;
-	using Zeiss.PiWeb.Api.Rest.Common.Data.Converter;
 	using Zeiss.PiWeb.Api.Rest.Common.Utilities;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
@@ -281,7 +280,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 
 			if( uuidsToSplit == null ) throw new ArgumentNullException( nameof( uuidsToSplit ) );
 
-			//Split into multiple parameter sets to limit uuid parameter lenght
+			//Split into multiple parameter sets to limit uuid parameter length
 			var splitter = new ParameterSplitter( serviceLocation, maxUriLength, requestPath );
 			var collectionParameter = CollectionParameterFactory.Create( parameterName, uuidsToSplit );
 
@@ -317,7 +316,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 
 			if( otherParameters == null ) throw new ArgumentNullException( nameof( otherParameters ) );
 
-			//Split into multiple parameter sets to limit uuid parameter lenght
+			//Split into multiple parameter sets to limit path parameter length
 			var splitter = new ParameterSplitter( serviceLocation, maxUriLength, requestPath );
 			var collectionParameter = CollectionParameterFactory.Create( parameterName, pathsToSplit );
 
