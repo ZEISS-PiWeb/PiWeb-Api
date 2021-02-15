@@ -162,7 +162,7 @@ POST /dataServiceRest/parts HTTP/1.1
 [
   {
     "uuid": "05040c4c-f0af-46b8-810e-30c0c00a379e",
-    "path": "/metal part",
+    "path": "P:/metal part/",
     "attributes": { "1001": "4466", "1003": "mp" }       
   }
 ]
@@ -213,7 +213,7 @@ PUT /dataServiceRest/parts HTTP/1.1
 {% highlight json %}
 [
   {
-     "path": "/metal part",
+     "path": "P:/metal part/",
      "attributes": { "1001": "4469", "1003": "metalpart" }       
      "uuid": "05040c4c-f0af-46b8-810e-30c0c00a379e",
   }
@@ -519,7 +519,7 @@ PUT /dataServiceRest/characteristics HTTP/1.1
 {% highlight json %}
 [
   {
-     "path": "/metal part/deviation_3",
+     "path": "PC:/metal part/deviation_3/",
      "attributes": { "2110": "-1.0", "2111": "1.0"  }       
      "uuid": "05040c4c-f0af-46b8-810e-30c0c00a379e",
   }
@@ -602,7 +602,7 @@ Both parts and characteristics are PiWeb inspection plan entities. They have the
 Property                                          | Description
 --------------------------------------------------|-----------------------
 <nobr><code>Guid</code> uuid</nobr>               | Identifies this inspection plan entity uniquely.
-<nobr><code>string</code> path</nobr>             | The path of this entity. It consists of the path's hierarchical structure followed by the path itself, e.g. `PCC:/metal part/deviation_3/.X/`. `P` stands for part and `C` for characteristic.
+<nobr><code>string</code> path</nobr>             | The path of this entity. It consists of the path's hierarchical structure followed by the path itself, e.g. `PCC:/metal part/deviation_3/.X/`. `P` stands for part and `C` for characteristic. The path always ends with `/`.
 <nobr><code>Attribute</code> attributes</nobr>    | A set of attributes which describe the entity.
 <nobr><code>string</code> comment</nobr>          | A comment which describes the last inspection plan change. The comment is only returned in case versioning is enabled in the server settings.
 <nobr><code>int</code> version</nobr>             | Contains the entity´s revision number. The revision number starts with `0` and is incremented by `1` each time changes are applied to the inspection plan.
