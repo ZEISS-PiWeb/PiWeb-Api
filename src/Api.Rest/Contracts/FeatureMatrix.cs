@@ -14,6 +14,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 
@@ -37,7 +38,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		{
 			if( interfaceVersionRange == null ) throw new ArgumentNullException( nameof( interfaceVersionRange ) );
 
-			CurrentInterfaceVersion = GetBestKnownVersion( interfaceVersionRange.SupportedVersions );
+			CurrentInterfaceVersion = GetBestKnownVersion( interfaceVersionRange );
 		}
 
 		#endregion
@@ -50,22 +51,23 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 
 		#region methods
 
-		protected static Version GetBestKnownVersion( [NotNull] IEnumerable<Version> supportedVersions )
+		protected static Version GetBestKnownVersion( [NotNull] InterfaceVersionRange interfaceVersionRange )
 		{
-			if( supportedVersions == null ) throw new ArgumentNullException( nameof( supportedVersions ) );
+			if( interfaceVersionRange.SupportedVersions is null )
+				throw new ArgumentException( "There must at least one supported version defined", nameof( interfaceVersionRange ) );
 
 			Version bestKnownVersion = null;
-			foreach( var versionCanditate in supportedVersions )
+			foreach( var versionCandidate in interfaceVersionRange.SupportedVersions )
 			{
-				var isKnownVersion = versionCanditate >= new Version( SupportedMajorVersion, 0 ) && versionCanditate < new Version( SupportedMajorVersion + 1, 0 );
-				var isSuperiorToBestKnownVersion = bestKnownVersion == null || versionCanditate > bestKnownVersion;
+				var isKnownVersion = versionCandidate >= new Version( SupportedMajorVersion, 0 ) && versionCandidate < new Version( SupportedMajorVersion + 1, 0 );
+				var isSuperiorToBestKnownVersion = bestKnownVersion == null || versionCandidate > bestKnownVersion;
 
 				if( isKnownVersion && isSuperiorToBestKnownVersion )
-					bestKnownVersion = versionCanditate;
+					bestKnownVersion = versionCandidate;
 			}
 
 			if( bestKnownVersion == null )
-				throw new ServerApiNotSupportedException();
+				throw new ServerApiNotSupportedException( interfaceVersionRange );
 
 			return bestKnownVersion;
 		}
