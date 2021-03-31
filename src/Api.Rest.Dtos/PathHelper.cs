@@ -134,10 +134,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 			}
 
 			// convert to database format by prepending a delimiter if it is not already present
-			if( !path.StartsWith( DelimiterString ) )
+			if( !path.StartsWith( DelimiterString, StringComparison.Ordinal ) )
 				path = DelimiterString + path;
 			// convert to database format by appending a delimiter if it is not already present (beware of escaping)
-			if( !path.EndsWith( DelimiterString ) || path.EndsWith( EscapedDelimiter ) )
+			if( !path.EndsWith( DelimiterString, StringComparison.Ordinal ) || path.EndsWith( EscapedDelimiter, StringComparison.Ordinal ) )
 				path += DelimiterString;
 
 			return String2PathInformationInternal( path, null, i => entity );
