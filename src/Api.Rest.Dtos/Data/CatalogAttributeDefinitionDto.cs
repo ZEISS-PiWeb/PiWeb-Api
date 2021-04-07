@@ -24,6 +24,29 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	[JsonConverter( typeof( AttributeDefinitionConverter ) )]
 	public class CatalogAttributeDefinitionDto : AbstractAttributeDefinitionDto
 	{
+		#region constructors
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CatalogAttributeDefinitionDto"/> class.
+		/// </summary>
+		public CatalogAttributeDefinitionDto()
+		{ }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CatalogAttributeDefinitionDto"/> class.
+		/// </summary>
+		/// <param name="key">The unique key for this attribute</param>
+		/// <param name="description">The attribute description</param>
+		/// <param name="catalogUuid">The uuid of the catalog this attribute definition points to.</param>
+		/// <param name="queryEfficient"><code>true</code> if this attribute is efficient for filtering operations</param>
+		public CatalogAttributeDefinitionDto( ushort key, string description, Guid catalogUuid, bool queryEfficient = false )
+			: base( key, description, queryEfficient )
+		{
+			Catalog = catalogUuid;
+		}
+
+		#endregion
+
 		#region properties
 
 		/// <summary>
