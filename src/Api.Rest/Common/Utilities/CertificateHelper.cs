@@ -57,7 +57,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 			var storeCerts = GetCertificatesFromStoreInternal( storeName, storeLocation ).Find( X509FindType.FindByThumbprint, thumbprint, onlyValidCertificates );
 
-			return storeCerts.Count == 1 ? storeCerts[ 0 ] : null;
+			return storeCerts.Count >= 1 ? storeCerts[ 0 ] : null;
 		}
 
 		private static X509Certificate2Collection GetCertificatesFromStoreInternal( StoreName storeName = StoreName.My, StoreLocation storeLocation = StoreLocation.CurrentUser )
