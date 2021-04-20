@@ -12,7 +12,7 @@
     <AssemblyTitle>Contains generic data used by the ZEISS PiWeb API.</AssemblyTitle>
     <AssemblyName>Zeiss.PiWeb.Api.Definitions</AssemblyName>
     <AssemblyVersion>7.0.0</AssemblyVersion>
-    <Company>Carl Zeiss Innovationszentrum für Messtechnik GmbH</Company>
+    <Company>Carl Zeiss Industrielle Messtechnik GmbH</Company>
     <Copyright>Copyright © 2020 $(Company)</Copyright>
     <Description>Contains generic data used by the ZEISS PiWeb API. The ZEISS PiWeb API nuget depends on this package.</Description>
     <FileVersion>$(AssemblyVersion)</FileVersion>
