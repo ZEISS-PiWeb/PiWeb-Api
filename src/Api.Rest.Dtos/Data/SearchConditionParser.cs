@@ -17,11 +17,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	using System.Linq;
 	using System.Resources;
 	using System.Text;
+	using System.Text.RegularExpressions;
 
 	#endregion
 
 	/// <summary>
-	/// Parser class for search condition strings. 
+	/// Parser class for search condition strings.
 	/// </summary>
 	public static class SearchConditionParser
 	{
@@ -42,6 +43,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		private static readonly string[] AllOperationStrings = Operations.Keys.ToArray();
 		private static readonly Dictionary<OperationDto, string> InverseOperations = Operations.ToDictionary( k => k.Value, v => v.Key );
+		private const string ClosingBracketPattern = "\\]\\+|\\]$";
 
 		private static readonly ResourceManager ResourceManager = new ResourceManager( typeof( SearchConditionParser ) );
 
@@ -201,7 +203,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 						throw new InvalidOperationException( string.Format( ResourceManager.GetString( "ParsingError.Quotation" ), condition.Operation ) );
 
 					markerIndex = searchIndex + 1;
-					searchIndex = searchFilter.IndexOf( ']', markerIndex );
+					searchIndex = FindNextClosingBracket( searchFilter, markerIndex );
 
 					if( searchIndex == -1 )
 					{
@@ -221,6 +223,17 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			}
 
 			return null;
+		}
+
+		private static int FindNextClosingBracket( string searchFilter, int startIndex )
+		{
+			//A closing bracket ] is either followed by + or the end of string, so we match this using regex.
+			//This enables usage of ] as a value inside the condition.
+			var substring = searchFilter.Substring( startIndex );
+			var match = Regex.Match( substring, ClosingBracketPattern );
+			if( match.Success )
+				return match.Index + startIndex;
+			return -1;
 		}
 
 		/// <summary>
