@@ -52,8 +52,8 @@ Task("UpdateAssemblyInfo")
         OutputType = GitVersionOutput.Json
     });
 
-    nugetVersion = isDeveloperBuild ? "0.0.0" : gitVersionInfo.NuGetVersion;
-
+    nugetVersion = isDeveloperBuild ? "0.0.0" : "6.1.2";
+    Information("NuGet version overridden for release branch -> {0}", nugetVersion);
     Information("AssemblyVersion -> {0}", gitVersionInfo.AssemblySemVer);
     Information("AssemblyFileVersion -> {0}", $"{gitVersionInfo.MajorMinorPatch}.0");
     Information("AssemblyInformationalVersion -> {0}", gitVersionInfo.InformationalVersion);
