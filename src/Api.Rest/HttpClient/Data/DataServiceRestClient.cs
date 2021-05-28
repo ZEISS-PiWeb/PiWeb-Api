@@ -19,6 +19,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 	using System.Threading;
 	using System.Threading.Tasks;
 	using JetBrains.Annotations;
+	using Zeiss.PiWeb.Api.Definitions;
 	using Zeiss.PiWeb.Api.Rest.Common.Client;
 	using Zeiss.PiWeb.Api.Rest.Common.Data;
 	using Zeiss.PiWeb.Api.Rest.Common.Utilities;
@@ -99,6 +100,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			var targetSize = RestClientHelper.GetUriTargetSize( ServiceLocation, requestRestriction, MaxUriLength );
 
 			var result = new List<DataMeasurementDto>( filter.MeasurementUuids.Length );
+			var resultSets = 0;
 			foreach( var uuids in ArrayHelper.Split( filter.MeasurementUuids, targetSize, RestClientHelper.LengthOfListElementInUri ) )
 			{
 				newFilter.MeasurementUuids = uuids;
@@ -110,9 +112,11 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 				{
 					result.AddRange( await _RestClient.Request<DataMeasurementDto[]>( RequestBuilder.CreateGet( "values", CreateParameterDefinitions( partPath, newFilter ).ToArray() ), cancellationToken ).ConfigureAwait( false ) );
 				}
+
+				resultSets++;
 			}
 
-			return result.ToArray();
+			return resultSets > 1 ? LimitAndSortResult( result, filter, resultSets ).Cast<DataMeasurementDto>().ToArray() : result.ToArray();
 		}
 
 		private async Task<DataMeasurementDto[]> GetMeasurementValuesSplitByCharacteristics( PathInformationDto partPath, MeasurementValueFilterAttributesDto filter, CancellationToken cancellationToken )
@@ -202,6 +206,70 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			}
 
 			return _FeatureMatrix;
+		}
+
+		/// <summary>
+		/// Limit and sort received measurements if the initial request was split into multiple requests due to uri length.
+		/// </summary>
+		/// <param name="source">Fetched measurements</param>
+		/// <param name="filter">Set filter to check for LimitResult and OrderBy</param>
+		/// <param name="resultSets">Number of requests after splitting the initial request</param>
+		/// <returns>Array of measurements in correct order and size.</returns>
+		private static IEnumerable<SimpleMeasurementDto> LimitAndSortResult( IEnumerable<SimpleMeasurementDto> source, AbstractMeasurementFilterAttributesDto filter, int resultSets )
+		{
+			if( resultSets <= 1 ) return source;
+
+			if( filter.OrderBy == null || !filter.OrderBy.Any() )
+				return filter.LimitResult < 0 ? source : source.Take( filter.LimitResult );
+
+			var orderedResult = StartAttributeOrderChain( filter.OrderBy.First(), source );
+
+			//Evaluate each OrderBy
+			foreach( var orderDto in filter.OrderBy.Skip( 1 ) )
+			{
+				orderedResult = AppendAttributeOrderChain( orderDto, orderedResult );
+			}
+
+			if( orderedResult == null )
+				return Array.Empty<SimpleMeasurementDto>();
+
+			return filter.LimitResult < 0 ? orderedResult : orderedResult.Take( filter.LimitResult );
+		}
+
+		/// <summary>
+		/// Sort the measurements according to the order criteria. Start a new OrderBy-chain.
+		/// </summary>
+		private static IOrderedEnumerable<SimpleMeasurementDto> StartAttributeOrderChain( OrderDto order, IEnumerable<SimpleMeasurementDto> source )
+		{
+			return order.Direction switch
+			{
+				OrderDirectionDto.Asc => source.OrderBy( SelectAttributeValues( order ) ),
+				OrderDirectionDto.Desc => source.OrderByDescending( SelectAttributeValues( order ) ),
+				_ => throw new ArgumentOutOfRangeException( nameof( order.Direction ) )
+			};
+		}
+
+		/// <summary>
+		/// Sort the measurements according to the order criteria. Chain it to a previous result.
+		/// </summary>
+		private static IOrderedEnumerable<SimpleMeasurementDto> AppendAttributeOrderChain( OrderDto order, IOrderedEnumerable<SimpleMeasurementDto> orderedSource )
+		{
+			return order.Direction switch
+			{
+				OrderDirectionDto.Asc => orderedSource.ThenBy( SelectAttributeValues( order ) ),
+				OrderDirectionDto.Desc => orderedSource.ThenByDescending( SelectAttributeValues( order ) ),
+				_ => throw new ArgumentOutOfRangeException( nameof( order.Direction ) )
+			};
+		}
+
+		private static Func<SimpleMeasurementDto, object> SelectAttributeValues( OrderDto order )
+		{
+			if( order.Attribute == WellKnownKeys.Measurement.Time )
+			{
+				return m => m.Time;
+			}
+
+			return m => m.Attributes.FirstOrDefault( a => a.Key == order.Attribute )?.Value;
 		}
 
 		#endregion
@@ -649,7 +717,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 					.Select( request => _RestClient.Request<SimpleMeasurementDto[]>( request, cancellationToken ) );
 				var result = await Task.WhenAll( requests ).ConfigureAwait( false );
 
-				return result.SelectMany( r => r ).ToArray();
+				return LimitAndSortResult( result.SelectMany( r => r ), filter, result.Length ).ToArray();
 			}
 
 			// split multiple part uuids into chunks of uuids using multiple requests to avoid "Request-URI Too Long" exception
@@ -672,7 +740,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 					.Select( request => _RestClient.Request<SimpleMeasurementDto[]>( request, cancellationToken ) );
 				var result = await Task.WhenAll( requests ).ConfigureAwait( false );
 
-				return result.SelectMany( r => r ).ToArray();
+				return LimitAndSortResult( result.SelectMany( r => r ), filter, result.Length ).ToArray();
 			}
 
 			{
