@@ -1,4 +1,4 @@
-﻿#tool "nuget:?package=GitVersion.CommandLine"
+#tool "nuget:?package=GitVersion.CommandLine&version=5.5.0"
 #addin "nuget:?package=Cake.FileHelpers"
 
 //////////////////////////////////////////////////////////////////////
@@ -52,7 +52,8 @@ Task("UpdateAssemblyInfo")
         OutputType = GitVersionOutput.Json
     });
 
-    nugetVersion = isDeveloperBuild ? "0.0.0" : gitVersionInfo.NuGetVersion;
+    nugetVersion = isDeveloperBuild ? "0.0.0" : "6.0.1";
+    Information("NuGet version overridden for release branch -> {0}", nugetVersion);
 
     Information("AssemblyVersion -> {0}", gitVersionInfo.AssemblySemVer);
     Information("AssemblyFileVersion -> {0}", $"{gitVersionInfo.MajorMinorPatch}.0");
