@@ -102,6 +102,8 @@ Content-Type         | Includes file's MIME type    | "application/x-zeiss-piweb
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
+>{{site.images['info']}} The allowed raw data file names (see `Content-Disposition`) can be restricted on the server.
+
 >{{site.images['info']}} When adding a file, you can pass the desired file key as part of the uri. If you pass -1 or no key, the next available key will automatically assigned by the server. (recommended)
 
 >{{site.images['warning']}} If you pass a key which is already assigned to another file, this file will be replaced.
@@ -150,6 +152,8 @@ Content-MD5          | Includes file's MD5 hash sum in Base64 format | "vfawarMB
 Content-Type         | Includes file's MIME type    | "application/x-zeiss-piweb-meshmodel"
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
+
+>{{site.images['info']}} The allowed raw data file names (see `Content-Disposition`) can be restricted on the server.
 
 {% endcapture %}
 
