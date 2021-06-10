@@ -14,7 +14,7 @@
     <AssemblyTitle>A .NET client for HTTP(S)/REST based communication with the quality data managament system ZEISS PiWeb</AssemblyTitle>
     <AssemblyName>Zeiss.PiWeb.Api.Rest</AssemblyName>
     <AssemblyVersion>7.0.0</AssemblyVersion>
-    <Company>Carl Zeiss Innovationszentrum für Messtechnik GmbH</Company>
+    <Company>Carl Zeiss Industrielle Messtechnik GmbH</Company>
     <Copyright>Copyright © 2020 $(Company)</Copyright>
     <Description>ZEISS PiWeb-API .NET Client provides an extensive set of methods for reading and writing  inspection plan structure as well
     as measurements and measurement values to and from ZEISS PiWeb server via HTTP(S)/REST based web service endpoints.

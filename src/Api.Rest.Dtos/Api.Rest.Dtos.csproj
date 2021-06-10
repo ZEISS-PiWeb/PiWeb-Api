@@ -12,7 +12,7 @@
     <AssemblyTitle>Contains the JSON-serializable DataTransferObjects (DTO) that will be exchanged between ZEISS PiWeb Server and client(s).</AssemblyTitle>
     <AssemblyName>Zeiss.PiWeb.Api.Rest.Dtos</AssemblyName>
     <AssemblyVersion>7.0.0</AssemblyVersion>
-    <Company>Carl Zeiss Innovationszentrum für Messtechnik GmbH</Company>
+    <Company>Carl Zeiss Industrielle Messtechnik GmbH</Company>
     <Copyright>Copyright © 2020 $(Company)</Copyright>
     <Description>Contains the JSON-serializable DataTransferObjects (DTO) that will be exchanged between ZEISS PiWeb Server and client(s).
     The ZEISS PiWeb API nuget depends on this package.</Description>
