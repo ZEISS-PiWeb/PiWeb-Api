@@ -139,7 +139,7 @@ Task("Pack_Definitions")
             new NuSpecContent { Source = "netstandard2.0/Zeiss.PiWeb.Api.Definitions.xml", Target = "lib/netstandard2.0" },
         },
         Dependencies             = new [] {
-            new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2018.2.1" }
+            new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2020.3.0" }
         },
         BasePath                 = buildDir_Definitions,
         OutputDirectory          = artifactsDir
@@ -180,8 +180,8 @@ Task("Pack_Dtos")
             new NuSpecContent { Source = "netstandard2.0/Zeiss.PiWeb.Api.Rest.Dtos.xml", Target = "lib/netstandard2.0" },
         },
         Dependencies             = new [] {
-            new NuSpecDependency { Id = "Newtonsoft.Json", Version = "12.0.1" },
-            new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2018.2.1" },
+            new NuSpecDependency { Id = "Newtonsoft.Json", Version = "12.0.3" },
+            new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2020.3.0" },
             new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Definitions", Version = nugetVersion }
         },
         BasePath                 = buildDir_Dtos,
@@ -226,14 +226,14 @@ Task("Pack_Client")
             new NuSpecContent { Source = "netcoreapp3.1/Zeiss.PiWeb.Api.Rest.xml", Target = "lib/netcoreapp3.1" },
         },
         Dependencies             = new [] {
-            new NuSpecDependency { Id = "Newtonsoft.Json", Version = "12.0.1" },
+            new NuSpecDependency { Id = "Newtonsoft.Json", Version = "12.0.3" },
             new NuSpecDependency { Id = "Newtonsoft.Json.Bson", Version = "1.0.2" },
-            new NuSpecDependency { Id = "IdentityModel", Version = "4.4.0" },
-            new NuSpecDependency { Id = "Microsoft.IdentityModel.Logging", Version = "5.6.0" },
-            new NuSpecDependency { Id = "Microsoft.IdentityModel.Tokens", Version = "5.6.0" },
-            new NuSpecDependency { Id = "System.IdentityModel.Tokens.Jwt", Version = "5.6.0" },
-            new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2018.2.1" },
-            new NuSpecDependency { Id = "System.Security.Cryptography.ProtectedData", Version = "4.7.0" },
+            new NuSpecDependency { Id = "IdentityModel", Version = "5.1.0" },
+            new NuSpecDependency { Id = "Microsoft.IdentityModel.Logging", Version = "6.11.1" },
+            new NuSpecDependency { Id = "Microsoft.IdentityModel.Tokens", Version = "6.11.1" },
+            new NuSpecDependency { Id = "System.IdentityModel.Tokens.Jwt", Version = "6.11.1" },
+            new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2020.3.0" },
+            new NuSpecDependency { Id = "System.Security.Cryptography.ProtectedData", Version = "5.0.0" },
             new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Definitions", Version = nugetVersion },
             new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Rest.Dtos", Version = nugetVersion }
         },
