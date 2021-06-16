@@ -37,7 +37,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			var nameCn = certificate.Subject
 				.Split( ',' )
 				.Select( s => s.Trim() )
-				.SingleOrDefault( s => s.StartsWith( "CN", StringComparison.OrdinalIgnoreCase ) );
+				.FirstOrDefault( s => s.StartsWith( "CN", StringComparison.OrdinalIgnoreCase ) );
 
 			var issuerCn = certificate.Issuer
 				.Split( ',' )
