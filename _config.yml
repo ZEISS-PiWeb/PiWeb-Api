@@ -12,6 +12,7 @@ images:
   ok: "![Ok](/PiWeb-Api/images/ok.png)"
   warning: "![Warning](/PiWeb-Api/images/warning.png)"
   info: "![Info](/PiWeb-Api/images/info.png)"
+  document-info: "![Document-Info](/PiWeb-Api/images/document-info.png)"
   generalInformation16: "![DatabaseInfo](/PiWeb-Api/images/database-info.png)"
   generalInformation40: "![DatabaseInfo](/PiWeb-Api/images/database-info40.png)"
   dataservice40: "![DatabaseTable](/PiWeb-Api/images/database-table40.png)"
