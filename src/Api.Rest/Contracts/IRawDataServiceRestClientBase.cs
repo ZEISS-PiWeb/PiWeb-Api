@@ -135,6 +135,15 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		Task UpdateRawData( [NotNull] RawDataInformationDto info, byte[] data, CancellationToken cancellationToken = default );
 
 		/// <summary>
+		/// Updates the raw data information (filename, Mime type) for the element identified by <paramref name="target"/> and <paramref name="rawDataKey"/>.
+		/// </summary>
+		/// <param name="target">The <see cref="RawDataTargetEntityDto"/> object containing the <see cref="RawDataEntityDto"/> type and the uuid of the entity for which the raw data should be updated.</param>
+		/// <param name="rawDataKey">The unique key that identifies the raw data object for the specified target.</param>
+		/// <param name="info">The <see cref="RawDataInformationDto"/> object containing information of filename and Mime type that should be updated.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+		Task UpdateRawDataInformation( [NotNull] RawDataTargetEntityDto target, int rawDataKey, RawDataInformationDto info, CancellationToken cancellationToken = default );
+
+		/// <summary>
 		/// Deletes raw data for the element identified by <paramref name="target"/> and <paramref name="rawDataKey"/>.
 		/// </summary>
 		/// <param name="target">The <see cref="RawDataTargetEntityDto"/> object containing the <see cref="RawDataEntityDto"/> type and the uuid of the raw data that should be deleted.</param>

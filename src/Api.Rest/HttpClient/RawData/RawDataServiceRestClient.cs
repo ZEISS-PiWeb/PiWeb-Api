@@ -24,7 +24,6 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 	using Zeiss.PiWeb.Api.Rest.Common.Client;
 	using Zeiss.PiWeb.Api.Rest.Common.Data;
 	using Zeiss.PiWeb.Api.Rest.Common.Data.FilterString.Formatter;
-	using Zeiss.PiWeb.Api.Rest.Common.Utilities;
 	using Zeiss.PiWeb.Api.Rest.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 	using Zeiss.PiWeb.Api.Rest.Dtos.RawData;
@@ -415,6 +414,41 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 				throw new ArgumentNullException( nameof( data ), "Unable to update raw data object: Data object is null." );
 
 			return UploadRawData( info, data, HttpMethod.Put, cancellationToken );
+		}
+
+		/// <summary>
+		/// Updates the raw data information (filename, Mime type) for the element identified by the <see cref="RawDataTargetEntityDto"/> and the key in <paramref name="info"/>.
+		/// </summary>
+		/// <param name="target">The <see cref="RawDataTargetEntityDto"/> object containing the <see cref="RawDataEntityDto"/> type and the uuid of the entity for which the raw data should be updated.</param>
+		/// <param name="rawDataKey">The unique key that identifies the raw data object for the specified target.</param>
+		/// <param name="info">The <see cref="RawDataInformationDto"/> object containing information of filename and Mime type that should be updated.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+		public async Task UpdateRawDataInformation( RawDataTargetEntityDto target, int rawDataKey, RawDataInformationDto info, CancellationToken cancellationToken = default )
+		{
+			if( target == null ) throw new ArgumentNullException( nameof( target ) );
+
+			if( info == null ) throw new ArgumentNullException( nameof( info ) );
+
+			if( rawDataKey < 0 )
+				throw new InvalidOperationException( "Unable to update raw data object: A key must be specified." );
+
+			if( string.IsNullOrEmpty( info.FileName ) )
+				throw new ArgumentException( "FileName needs to be set.", nameof( info ) );
+
+			StringUuidTools.CheckUuid( target.Entity, target.Uuid );
+
+			var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+			if( !featureMatrix.SupportsUpdateRawDataInformation )
+			{
+				throw new OperationNotSupportedOnServerException(
+					"UpdateRawDataInformation is not supported by this server.",
+					RawDataServiceFeatureMatrix.UpdateRawDataInformationMinVersion,
+					featureMatrix.CurrentInterfaceVersion );
+			}
+
+			var requestPath = $"rawDataInformation/{target.Entity}/{target.Uuid}/{rawDataKey}";
+
+			await _RestClient.Request( RequestBuilder.CreatePut( requestPath, Payload.Create( info ) ), cancellationToken ).ConfigureAwait( false );
 		}
 
 		/// <summary>
