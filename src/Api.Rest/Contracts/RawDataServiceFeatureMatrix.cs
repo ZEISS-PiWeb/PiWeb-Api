@@ -41,9 +41,17 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 
 		public static Version RawDataArchiveLookupMinVersion { get; } = new Version( SupportedMajorVersion, 5 );
 
+		public static Version UpdateRawDataInformationMinVersion { get; } = new Version( SupportedMajorVersion, 7 );
+
+		public static Version GetRawDataInformationRequestPathMinVersion { get; } = new Version( SupportedMajorVersion, 7 );
+
 		public bool SupportsRawDataAttributeFilter => CurrentInterfaceVersion >= RawDataAttributeFilterMinVersion;
 
 		public bool SupportsArchiveLookup => CurrentInterfaceVersion >= RawDataArchiveLookupMinVersion;
+
+		public bool SupportsUpdateRawDataInformation => CurrentInterfaceVersion >= UpdateRawDataInformationMinVersion;
+
+		public bool SupportsGetRawDataInformationRequestPath => CurrentInterfaceVersion >= GetRawDataInformationRequestPathMinVersion;
 
 		#endregion
 	}
