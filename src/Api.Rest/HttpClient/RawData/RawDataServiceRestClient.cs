@@ -65,12 +65,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 
 		#region methods
 
-		private Task<RawDataInformationDto[]> ListRawDataForAllEntities( RawDataEntityDto entity, [NotNull] IFilterCondition filter, CancellationToken cancellationToken = default )
+		private Task<RawDataInformationDto[]> ListRawDataForAllEntities( [NotNull] IFilterCondition filter, string requestPath, CancellationToken cancellationToken = default )
 		{
 			if( filter == null )
 				throw new ArgumentNullException( nameof( filter ) );
-
-			var requestPath = $"rawData/{entity}";
 
 			var parameterDefinitionList = new List<ParameterDefinition>();
 			var filterTree = ( (FilterCondition)filter ).BuildFilterTree();
@@ -81,11 +79,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 			return _RestClient.Request<RawDataInformationDto[]>( RequestBuilder.CreateGet( requestPath, parameterDefinitionList.ToArray() ), cancellationToken );
 		}
 
-		private async Task<RawDataInformationDto[]> ListRawDataByUuidList( RawDataEntityDto entity, string[] uuids, IFilterCondition filter, CancellationToken cancellationToken = default )
+		private async Task<RawDataInformationDto[]> ListRawDataByUuidList( RawDataEntityDto entity, string[] uuids, IFilterCondition filter, string requestPath, CancellationToken cancellationToken = default )
 		{
 			StringUuidTools.CheckUuids( entity, uuids );
 
-			var requestPath = $"rawData/{entity}";
 			var parameterDefinitions = new List<ParameterDefinition>();
 
 			if( filter != null )
@@ -212,9 +209,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 			if( uuids == null && filter == null )
 				throw new InvalidOperationException( "Either a filter or at least one uuid must be specified." );
 
+			var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+
 			if( filter != null )
 			{
-				var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
 				if( !featureMatrix.SupportsRawDataAttributeFilter )
 				{
 					throw new OperationNotSupportedOnServerException(
@@ -224,9 +222,11 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 				}
 			}
 
+			var requestPath = featureMatrix.SupportsGetRawDataInformationRequestPath? $"rawDataInformation/{entity}" : $"rawData/{entity}";
+
 			return uuids != null
-				? await ListRawDataByUuidList( entity, uuids, filter, cancellationToken ).ConfigureAwait( false )
-				: await ListRawDataForAllEntities( entity, filter, cancellationToken ).ConfigureAwait( false );
+				? await ListRawDataByUuidList( entity, uuids, filter, requestPath, cancellationToken ).ConfigureAwait( false )
+				: await ListRawDataForAllEntities( filter, requestPath, cancellationToken ).ConfigureAwait( false );
 		}
 
 		/// <summary>
