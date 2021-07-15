@@ -124,7 +124,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <remarks>
 		/// If key speciefied by <see cref="RawDataInformationDto.Key"/> is -1, a new key will be chosen by the server automatically. This is the preferred way.
 		/// </remarks>
-		Task CreateRawData( [NotNull] RawDataInformationDto info, [NotNull] byte[] data, CancellationToken cancellationToken = default );
+		Task<RawDataInformationDto> CreateRawData( [NotNull] RawDataInformationDto info, [NotNull] byte[] data, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Updates the raw data object <paramref name="data"/> for the element identified by <paramref name="info"/>.

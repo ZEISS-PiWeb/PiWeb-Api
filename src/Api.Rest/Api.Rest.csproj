@@ -7,7 +7,7 @@
     <RootNamespace>Zeiss.PiWeb.Api.Rest</RootNamespace>
     <TargetFrameworks>netstandard2.0;netcoreapp3.1;net48</TargetFrameworks>
     <LangVersion>latest</LangVersion>
-    <PackageVersion>7.0.0</PackageVersion>
+    <PackageVersion>7.42.0</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Assembly information">
