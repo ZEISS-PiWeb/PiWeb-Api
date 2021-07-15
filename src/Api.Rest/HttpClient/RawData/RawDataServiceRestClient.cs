@@ -105,7 +105,33 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 			return result.SelectMany( r => r ).ToArray();
 		}
 
-		private Task UploadRawData( RawDataInformationDto info, byte[] data, HttpMethod method, CancellationToken cancellationToken )
+		private async Task<RawDataInformationDto> CreateRawDataInternal( RawDataInformationDto info, byte[] data, HttpMethod method, CancellationToken cancellationToken )
+		{
+			StringUuidTools.CheckUuid( info.Target.Entity, info.Target.Uuid );
+
+			if( string.IsNullOrEmpty( info.FileName ) )
+				throw new ArgumentException( "FileName needs to be set.", nameof( info ) );
+
+			var requestString = info.Key is >= 0
+				? $"rawData/{info.Target.Entity}/{info.Target.Uuid}/{info.Key}"
+				: $"rawData/{info.Target.Entity}/{info.Target.Uuid}";
+
+			var stream = new MemoryStream( data, 0, data.Length, false, true );
+
+			var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+			var request = RequestBuilder.CreateWithAttachment( method, requestString, stream, info.MimeType, info.Size, info.MD5, info.FileName );
+
+			if ( featureMatrix.SupportsCreateRawDataResult )
+				return await _RestClient.Request<RawDataInformationDto>( request , cancellationToken );
+
+			await _RestClient.Request( request, cancellationToken );
+
+			var entity = info.Target.Entity;
+			var rawDataList = await ListRawData( entity, new[] { info.Target.Uuid }, null, cancellationToken );
+			return rawDataList.OrderByDescending( rawData => rawData.Key ?? 0 ).First();
+		}
+
+		private Task UpdateRawDataInternal( RawDataInformationDto info, byte[] data, HttpMethod method, CancellationToken cancellationToken )
 		{
 			StringUuidTools.CheckUuid( info.Target.Entity, info.Target.Uuid );
 
@@ -390,11 +416,11 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// If key speciefied by <see cref="RawDataInformationDto.Key"/> is -1, a new key will be chosen by the server automatically. This is the preferred way.
 		/// </remarks>
 		/// <exception cref="ArgumentNullException"><paramref name="info"/> or <paramref name="data"/> is <see langword="null" />.</exception>
-		public Task CreateRawData( RawDataInformationDto info, byte[] data, CancellationToken cancellationToken = default )
+		public async Task<RawDataInformationDto> CreateRawData( RawDataInformationDto info, byte[] data, CancellationToken cancellationToken = default )
 		{
 			if( info == null ) throw new ArgumentNullException( nameof( info ) );
 			if( data == null ) throw new ArgumentNullException( nameof( data ) );
-			return UploadRawData( info, data, HttpMethod.Post, cancellationToken );
+			return await CreateRawDataInternal( info, data, HttpMethod.Post, cancellationToken );
 		}
 
 		/// <summary>
@@ -413,7 +439,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 			if( data == null )
 				throw new ArgumentNullException( nameof( data ), "Unable to update raw data object: Data object is null." );
 
-			return UploadRawData( info, data, HttpMethod.Put, cancellationToken );
+			return UpdateRawDataInternal( info, data, HttpMethod.Put, cancellationToken );
 		}
 
 		/// <summary>
