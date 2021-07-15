@@ -116,10 +116,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			[NotNull] get => _Attributes;
 			set
 			{
-				value = value ?? new AttributeDto[ 0 ];
-
-				_Attributes = value.All( attr => attr.IsNull() ) ? new AttributeDto[ 0 ] : value;
-				_Attributes = _Attributes.OrderBy( a => a.Key ).ToArray();
+				value = value ?? Array.Empty<AttributeDto>();
+				_Attributes = value.All( attr => attr.IsNull() ) ? Array.Empty<AttributeDto>() : value;
 			}
 		}
 
