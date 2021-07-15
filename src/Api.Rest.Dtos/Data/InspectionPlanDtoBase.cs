@@ -29,8 +29,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	{
 		#region members
 
-		private static readonly AttributeDto[] EmptyAttributeList = new AttributeDto[ 0 ];
-
 		[JsonProperty( "attributes" ), JsonConverter( typeof( AttributeArrayConverter ) )]
 		private AttributeDto[] _Attributes;
 
@@ -107,7 +105,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		[JsonIgnore]
 		public AttributeDto[] Attributes
 		{
-			[NotNull] get => _Attributes ?? EmptyAttributeList;
+			[NotNull] get => _Attributes ?? Array.Empty<AttributeDto>();
 			set => _Attributes = value;
 		}
 

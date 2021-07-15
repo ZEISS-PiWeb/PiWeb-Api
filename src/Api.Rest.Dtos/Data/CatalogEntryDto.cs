@@ -29,7 +29,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	{
 		#region members
 
-		private AttributeDto[] _Attributes = new AttributeDto[ 0 ];
+		private AttributeDto[] _Attributes = Array.Empty<AttributeDto>();
 
 		#endregion
 
