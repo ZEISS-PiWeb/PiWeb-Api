@@ -12,6 +12,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
 	#region usings
 
+	using System;
 	using System.Collections.Generic;
 	using JetBrains.Annotations;
 	using Newtonsoft.Json;
@@ -27,8 +28,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		#region members
 
 		private readonly Dictionary<short, CatalogEntryDto> _Dictionary = new Dictionary<short, CatalogEntryDto>();
-		private CatalogEntryDto[] _CatalogEntries = new CatalogEntryDto[ 0 ];
-		private ushort[] _ValidAttributes = new ushort[ 0 ];
+		private CatalogEntryDto[] _CatalogEntries = Array.Empty<CatalogEntryDto>();
+		private ushort[] _ValidAttributes = Array.Empty<ushort>();
 
 		#endregion
 
@@ -53,7 +54,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		public ushort[] ValidAttributes
 		{
 			[NotNull] get => _ValidAttributes;
-			set => _ValidAttributes = value ?? new ushort[ 0 ];
+			set => _ValidAttributes = value ?? Array.Empty<ushort>();
 		}
 
 		/// <summary>
@@ -67,7 +68,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			{
 				_Dictionary.Clear();
 
-				_CatalogEntries = value ?? new CatalogEntryDto[ 0 ];
+				_CatalogEntries = value ?? Array.Empty<CatalogEntryDto>();
 				foreach( var entry in _CatalogEntries )
 				{
 					_Dictionary[ entry.Key ] = entry;

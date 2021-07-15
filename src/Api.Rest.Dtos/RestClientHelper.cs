@@ -43,11 +43,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 		public static ushort[] ConvertStringToUInt16List( string value )
 		{
 			if( value == null )
-				return new ushort[ 0 ];
+				return Array.Empty<ushort>();
 			if( value.StartsWith( QueryListStart ) && value.EndsWith( QueryListStop ) )
 				value = value.Substring( 1, value.Length - 2 );
 			if( string.IsNullOrEmpty( value ) )
-				return new ushort[ 0 ];
+				return Array.Empty<ushort>();
 			try
 			{
 				return value.Split( ',' ).Select( s => ushort.Parse( s, CultureInfo.InvariantCulture ) ).ToArray();

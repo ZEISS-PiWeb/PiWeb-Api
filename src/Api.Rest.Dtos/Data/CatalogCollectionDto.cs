@@ -43,7 +43,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		public CatalogCollectionDto( IEnumerable<CatalogDto> catalogs )
 		{
-			foreach( var cat in catalogs ?? new CatalogDto[ 0 ] )
+			foreach( var cat in catalogs ?? Array.Empty<CatalogDto>() )
 			{
 				_Catalogs.Add( cat.Uuid, cat );
 			}
