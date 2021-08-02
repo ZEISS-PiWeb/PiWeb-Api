@@ -29,11 +29,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	{
 		#region members
 
-		private AbstractAttributeDefinitionDto[] _PartAttributes = new AbstractAttributeDefinitionDto[ 0 ];
-		private AbstractAttributeDefinitionDto[] _CharacteristicAttributes = new AbstractAttributeDefinitionDto[ 0 ];
-		private AbstractAttributeDefinitionDto[] _MeasurementAttributes = new AbstractAttributeDefinitionDto[ 0 ];
-		private AbstractAttributeDefinitionDto[] _ValueAttributes = new AbstractAttributeDefinitionDto[ 0 ];
-		private AttributeDefinitionDto[] _CatalogAttributes = new AttributeDefinitionDto[ 0 ];
+		private AbstractAttributeDefinitionDto[] _PartAttributes = Array.Empty<AbstractAttributeDefinitionDto>();
+		private AbstractAttributeDefinitionDto[] _CharacteristicAttributes = Array.Empty<AbstractAttributeDefinitionDto>();
+		private AbstractAttributeDefinitionDto[] _MeasurementAttributes = Array.Empty<AbstractAttributeDefinitionDto>();
+		private AbstractAttributeDefinitionDto[] _ValueAttributes = Array.Empty<AbstractAttributeDefinitionDto>();
+		private AttributeDefinitionDto[] _CatalogAttributes = Array.Empty<AttributeDefinitionDto>();
 
 		private Dictionary<ushort, AbstractAttributeDefinitionDto> _PartAttributesDict;
 		private Dictionary<ushort, AbstractAttributeDefinitionDto> _CharacteristicAttributesDict;
@@ -87,9 +87,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			[NotNull] get => _PartAttributes;
 			set
 			{
-				_PartAttributes = value ?? new AbstractAttributeDefinitionDto[ 0 ];
-				_PartAttributes = _PartAttributes.OrderBy( a => a.Key ).ToArray();
-
+				_PartAttributes = value ?? Array.Empty<AbstractAttributeDefinitionDto>();
 				_PartAttributesDict = null;
 			}
 		}
@@ -103,9 +101,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			[NotNull] get => _CharacteristicAttributes;
 			set
 			{
-				_CharacteristicAttributes = value ?? new AbstractAttributeDefinitionDto[ 0 ];
-				_CharacteristicAttributes = _CharacteristicAttributes.OrderBy( a => a.Key ).ToArray();
-
+				_CharacteristicAttributes = value ?? Array.Empty<AbstractAttributeDefinitionDto>();
 				_CharacteristicAttributesDict = null;
 			}
 		}
@@ -119,9 +115,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			[NotNull] get => _MeasurementAttributes;
 			set
 			{
-				_MeasurementAttributes = value ?? new AbstractAttributeDefinitionDto[ 0 ];
-				_MeasurementAttributes = _MeasurementAttributes.OrderBy( a => a.Key ).ToArray();
-
+				_MeasurementAttributes = value ?? Array.Empty<AbstractAttributeDefinitionDto>();
 				_MeasurementAttributesDict = null;
 			}
 		}
@@ -135,9 +129,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			[NotNull] get => _ValueAttributes;
 			set
 			{
-				_ValueAttributes = value ?? new AbstractAttributeDefinitionDto[ 0 ];
-				_ValueAttributes = _ValueAttributes.OrderBy( a => a.Key ).ToArray();
-
+				_ValueAttributes = value ?? Array.Empty<AbstractAttributeDefinitionDto>();
 				_ValueAttributesDict = null;
 			}
 		}
@@ -151,9 +143,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			[NotNull] get => _CatalogAttributes;
 			set
 			{
-				_CatalogAttributes = value ?? new AttributeDefinitionDto[ 0 ];
-				_CatalogAttributes = _CatalogAttributes.OrderBy( a => a.Key ).ToArray();
-
+				_CatalogAttributes = value ?? Array.Empty<AttributeDefinitionDto>();
 				_CatalogAttributesDict = null;
 			}
 		}
@@ -205,7 +195,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				case EntityDto.Catalog:
 					return _CatalogAttributes;
 				default:
-					return new AbstractAttributeDefinitionDto[ 0 ];
+					return Array.Empty<AbstractAttributeDefinitionDto>();
 			}
 		}
 

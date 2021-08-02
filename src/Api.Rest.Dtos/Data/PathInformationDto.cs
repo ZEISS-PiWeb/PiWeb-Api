@@ -51,7 +51,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		public PathInformationDto()
 		{
-			_PathElements = new ArraySegment<PathElementDto>( new PathElementDto[ 0 ] );
+			_PathElements = new ArraySegment<PathElementDto>( Array.Empty<PathElementDto>() );
 		}
 
 		/// <summary>

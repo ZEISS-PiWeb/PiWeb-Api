@@ -32,11 +32,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	{
 		#region members
 
-		private static readonly AttributeDto[] EmptyAttributeList = new AttributeDto[ 0 ];
-
 		private static readonly DateTime MinimumValidDatabaseDateTime = DateTime.SpecifyKind( SqlDateTime.MinValue.Value, DateTimeKind.Utc );
 
-		private AttributeDto[] _Attributes = EmptyAttributeList;
+		private AttributeDto[] _Attributes = Array.Empty<AttributeDto>();
 		private DateTime? _CachedTimeValue;
 		private bool _HasCachedTime;
 
@@ -152,7 +150,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			[NotNull] get => _Attributes;
 			set
 			{
-				_Attributes = value ?? EmptyAttributeList;
+				_Attributes = value ?? Array.Empty<AttributeDto>();
 				_CachedTimeValue = null;
 				_HasCachedTime = false;
 			}

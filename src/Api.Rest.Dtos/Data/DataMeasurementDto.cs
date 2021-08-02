@@ -12,6 +12,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
 	#region usings
 
+	using System;
 	using JetBrains.Annotations;
 	using Newtonsoft.Json;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
@@ -25,8 +26,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	{
 		#region members
 
-		private static readonly DataCharacteristicDto[] EmptyCharacteristicList = new DataCharacteristicDto[ 0 ];
-		private DataCharacteristicDto[] _Characteristics = EmptyCharacteristicList;
+		private DataCharacteristicDto[] _Characteristics = Array.Empty<DataCharacteristicDto>();
 
 		#endregion
 
@@ -39,7 +39,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		public DataCharacteristicDto[] Characteristics
 		{
 			[NotNull] get => _Characteristics;
-			set => _Characteristics = value ?? EmptyCharacteristicList;
+			set => _Characteristics = value ?? Array.Empty<DataCharacteristicDto>();
 		}
 
 		#endregion
