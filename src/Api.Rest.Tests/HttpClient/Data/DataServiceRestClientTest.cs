@@ -68,8 +68,8 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Data
 					{ Attributes = new[] { new AttributeDto( 5, 3 ), new AttributeDto( 55, 20 ), new AttributeDto( 999, 3 ) } }
 			};
 
-			server.RegisterReponse( "/DataServiceRest/measurements?partUuids=%7B11111111-1111-1111-1111-111111111111%7D&order=5%20Asc%2C55%20Asc", JsonConvert.SerializeObject( firstMeasurementSet ) );
-			server.RegisterReponse( "/DataServiceRest/measurements?partUuids=%7B22222222-2222-2222-2222-222222222222%7D&order=5%20Asc%2C55%20Asc", JsonConvert.SerializeObject( secondMeasurementSet ) );
+			server.RegisterResponse( "/DataServiceRest/measurements?partUuids=%7B11111111-1111-1111-1111-111111111111%7D&order=5%20Asc%2C55%20Asc", JsonConvert.SerializeObject( firstMeasurementSet ) );
+			server.RegisterResponse( "/DataServiceRest/measurements?partUuids=%7B22222222-2222-2222-2222-222222222222%7D&order=5%20Asc%2C55%20Asc", JsonConvert.SerializeObject( secondMeasurementSet ) );
 
 			var result = await client.GetMeasurements( filter: new MeasurementFilterAttributesDto
 			{
@@ -97,8 +97,8 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Data
 
 			var secondMeasurementSet = new[] { new SimpleMeasurementDto(), new SimpleMeasurementDto(), new SimpleMeasurementDto() };
 
-			server.RegisterReponse( "/DataServiceRest/measurements?partUuids=%7B11111111-1111-1111-1111-111111111111%7D&limitResult=5&order=4%20Desc", JsonConvert.SerializeObject( firstMeasurementSet ) );
-			server.RegisterReponse( "/DataServiceRest/measurements?partUuids=%7B22222222-2222-2222-2222-222222222222%7D&limitResult=5&order=4%20Desc", JsonConvert.SerializeObject( secondMeasurementSet ) );
+			server.RegisterResponse( "/DataServiceRest/measurements?partUuids=%7B11111111-1111-1111-1111-111111111111%7D&limitResult=5&order=4%20Desc", JsonConvert.SerializeObject( firstMeasurementSet ) );
+			server.RegisterResponse( "/DataServiceRest/measurements?partUuids=%7B22222222-2222-2222-2222-222222222222%7D&limitResult=5&order=4%20Desc", JsonConvert.SerializeObject( secondMeasurementSet ) );
 
 			var result = await client.GetMeasurements( filter: new MeasurementFilterAttributesDto
 			{
