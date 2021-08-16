@@ -29,19 +29,19 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// Method for fetching the <see cref="ServiceInformationDto"/>. This method can be used for connection checking. The call returns quickly
 		/// and does not produce any noticeable server load.
 		/// </summary>
-		/// <param name="cancellationToken">A token to cancel the hronous operation.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		Task<ServiceInformationDto> GetServiceInformation( CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Method for fetching the <see cref="InterfaceVersionRange"/>.
 		/// </summary>
-		/// <param name="cancellationToken">A token to cancel the hronous operation.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		Task<InterfaceVersionRange> GetInterfaceInformation( CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Method for fetching the <see cref="RawDataServiceFeatureMatrix"/>
 		/// </summary>
-		/// <param name="cancellationToken">A token to cancel the hronous operation.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		/// <returns></returns>
 		Task<T> GetFeatureMatrix( CancellationToken cancellationToken = default );
 
@@ -52,7 +52,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="entity">The <see cref="RawDataEntityDto"/> the raw data information should be fetched for.</param>
 		/// <param name="uuids">The list of value uuids the data information should be fetched for.</param>
 		/// <param name="filter">A condition used to filter the result.</param>
-		/// <param name="cancellationToken">A token to cancel the hronous operation.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		/// <exception cref="InvalidOperationException">No uuids and no filter was specified.</exception>
 		/// <exception cref="OperationNotSupportedOnServerException">An attribute filter for raw data is not supported by this server.</exception>
 		Task<RawDataInformationDto[]> ListRawData( RawDataEntityDto entity, string[] uuids, IFilterCondition filter = null, CancellationToken cancellationToken = default );
@@ -63,7 +63,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="target">The <see cref="RawDataTargetEntityDto"/> that specifies the raw data object that should be fetched.</param>
 		/// <param name="rawDataKey">The unique key that identifies the raw data object for the specified target.</param>
 		/// <param name="expectedMd5">The md5 check sum that is expected for the result object. If this value is set, performance is better because server side round trips are reduced.</param>
-		/// <param name="cancellationToken">A token to cancel the hronous operation.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		Task<byte[]> GetRawData( [NotNull] RawDataTargetEntityDto target, int rawDataKey, Guid? expectedMd5 = null, CancellationToken cancellationToken = default );
 
 		/// <summary>
@@ -72,7 +72,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="target">The <see cref="RawDataTargetEntityDto"/> that specifies the raw data object that should be fetched.</param>
 		/// <param name="rawDataKey">The unique key that identifies the raw data object for the specified target.</param>
 		/// <returns>The preview image as byte array.</returns>
-		/// <param name="cancellationToken">A token to cancel the hronous operation.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		Task<byte[]> GetRawDataThumbnail( [NotNull] RawDataTargetEntityDto target, int rawDataKey, CancellationToken cancellationToken = default );
 
 		/// <summary>
@@ -119,9 +119,9 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// </summary>
 		/// <param name="data">The raw data to upload.</param>
 		/// <param name="info">The <see cref="RawDataInformationDto"/> object containing the <see cref="RawDataEntityDto"/> type and the uuid of the raw data that should be uploaded.</param>
-		/// <param name="cancellationToken">A token to cancel the hronous operation.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		/// <remarks>
-		/// If key speciefied by <see cref="RawDataInformationDto.Key"/> is -1, a new key will be chosen by the server automatically. This is the preferred way.
+		/// If key specified by <see cref="RawDataInformationDto.Key"/> is -1, a new key will be chosen by the server automatically. This is the preferred way.
 		/// </remarks>
 		Task<RawDataInformationDto> CreateRawData( [NotNull] RawDataInformationDto info, [NotNull] byte[] data, CancellationToken cancellationToken = default );
 
@@ -147,7 +147,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// </summary>
 		/// <param name="target">The <see cref="RawDataTargetEntityDto"/> object containing the <see cref="RawDataEntityDto"/> type and the uuid of the raw data that should be deleted.</param>
 		/// <param name="rawDataKey">The key of the raw data object which should be deleted.</param>
-		/// <param name="cancellationToken">A token to cancel the hronous operation.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		Task DeleteRawData( [NotNull] RawDataTargetEntityDto target, int? rawDataKey = null, CancellationToken cancellationToken = default );
 
 		#endregion
