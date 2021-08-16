@@ -75,14 +75,14 @@ namespace Zeiss.PiWeb.Api.Rest.Tests
 			} );
 		}
 
-		public void RegisterReponse( string uri, Func<string> response )
+		public void RegisterResponse( string uri, Func<string> response )
 		{
 			_Responses[ uri ] = response;
 		}
 
-		public void RegisterReponse( string uri, string response )
+		public void RegisterResponse( string uri, string response )
 		{
-			RegisterReponse( uri, () => response );
+			RegisterResponse( uri, () => response );
 		}
 
 		private string CreateResponse( HttpListenerRequest request )

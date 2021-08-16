@@ -58,7 +58,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests
 
 			var config = Fixture.Create<ConfigurationDto>();
 
-			server.RegisterReponse( "/DataServiceRest/configuration", JsonConvert.SerializeObject( config ) );
+			server.RegisterResponse( "/DataServiceRest/configuration", JsonConvert.SerializeObject( config ) );
 
 			// when
 			var result = await client.GetConfiguration();
