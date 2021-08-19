@@ -104,7 +104,7 @@ Content-Type         | Includes file's MIME type    | "application/x-zeiss-piweb
 
 >{{site.images['info']}} The allowed raw data file names (see `Content-Disposition`) can be restricted on the server.
 
->{{site.images['info']}} When adding a file, you can pass the desired file key as part of the uri. If you pass -1 or no key, the next available key will automatically assigned by the server. (recommended)
+>{{site.images['info']}} When adding a file, you can pass the desired file key as part of the uri. If you pass -1 or no key, the next available key will automatically be assigned by the server (recommended) and can be read from the result.
 
 >{{site.images['warning']}} If you pass a key which is already assigned to another file, this file will be replaced.
 
@@ -122,8 +122,27 @@ Content-Type: "application/x-zeiss-piweb-meshmodel"
 {% endcapture %}
 
 {% capture jsonresponse %}
+
 {% highlight http %}
 HTTP/1.1 201 Created
+{% endhighlight %}
+
+{% highlight json %}
+
+{
+    "target":
+    {
+        "entity": "Part",
+        "uuid": "b8f5d3fe-5bd5-406b-8053-67f647f09dc7"
+    },
+    "key": 0,
+    "fileName": "MetalPart.meshModel",
+    "mimeType": "application/x-zip-compressed",
+    "lastModified": "2012-11-19T10:48:34.327Z",
+    "created": "2012-11-19T10:48:34.327Z",
+    "size": 2090682,
+    "md5": "6ab0f6bd-01b3-0aa8-e550-21085b820393"
+}
 {% endhighlight %}
 {% endcapture %}
 
