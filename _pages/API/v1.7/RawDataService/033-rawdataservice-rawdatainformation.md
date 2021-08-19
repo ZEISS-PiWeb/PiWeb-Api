@@ -99,7 +99,7 @@ GET /rawDataServiceRest/rawDataInformation/part?uuids={05040c4c-f0af-46b8-810e-3
       "target":
       {
           "entity": "Part",
-          "uuid": " 05040c4c-f0af-46b8-810e-30c0c00a379e"
+          "uuid": "05040c4c-f0af-46b8-810e-30c0c00a379e"
       },
       "key": 0,
       "fileName": "section view.meshModel",
@@ -150,7 +150,7 @@ GET /rawDataServiceRest/rawDataInformation/part/05040c4c-f0af-46b8-810e-30c0c00a
       "target":
       {
           "entity": "Part",
-          "uuid": " 05040c4c-f0af-46b8-810e-30c0c00a379e"
+          "uuid": "05040c4c-f0af-46b8-810e-30c0c00a379e"
       },
       "key": 0,
       "fileName": "section view.meshModel",
