@@ -2,10 +2,10 @@
 
 <p></p>
 
-{% assign version="1.7.0" %}
+{% assign version="1.8.0" %}
 {% capture features %}
     <ul>
-        <li>Endpoint for deleting measurements was extended by parameter <i>runAsync</i></li>
+        <li>Endpoint for fetching measurements and values was extended by parameter <i>limitResultPerPart</i></li>
     </ul>
 {% endcapture %}
 
