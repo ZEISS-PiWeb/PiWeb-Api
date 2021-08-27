@@ -165,6 +165,7 @@ Property                                                                        
 <nobr><code>DateTime?</code> FromModificationDate</nobr>                              | Specifies a date to select all measurements that where modified after that date.
 <nobr><code>DateTime?</code> ToModificationDate</nobr>                                | Specifies a date to select all measurements that where modified before that date.
 <nobr><code>int</code> LimitResult</nobr>                                             | The maximum number of measurements that should be returned, unlimited if set to -1 (default).
+<nobr><code>int</code> LimitResultPerPart </nobr>                                     | Restricts the number of result items per part. This parameter only takes effect in combination with either PartPath & Deep or PartUuids:<br> PartPath & Deep: trigger a deep search returning at max LimitResultPerPart measurements for each child part.<br> PartUuids: return at max LimitResultPerPart measurements for each specified part. Unlimited if set to -1 (default).
 <nobr><code>Guid[]</code> MeasurementUuids</nobr>                                     | List of uuids of measurements that should be returned.
 <nobr><code>OrderDto[]</code> OrderBy</nobr>                                          | The sort order of the resulting measurements.
 <nobr><code>Guid[]</code> PartUuids</nobr>                                            | The list of parts that should be used to restrict the measurement search.

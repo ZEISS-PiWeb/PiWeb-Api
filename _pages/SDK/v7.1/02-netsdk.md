@@ -49,7 +49,7 @@ sections:
 
 <div class="alert alert-info fade in">
   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  Updating to version 6.0.0? Please follow our <a href="#migration" class="alert-link">migration guide</a> to adapt your application to recent changes!
+  Updating from a version prior to version 6.0.0? Please follow our <a href="#migration" class="alert-link">migration guide</a> to adapt your application to recent changes!
 </div>
 
 {% include version_combobox.html %}
