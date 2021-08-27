@@ -304,6 +304,21 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			}
 		}
 
+		private async Task CheckLimitResultPerPartFeatureSupport( AbstractMeasurementFilterAttributesDto filter, CancellationToken cancellationToken )
+		{
+			if( filter?.LimitResultPerPart > -1 )
+			{
+				var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+				if( !featureMatrix.SupportsLimitResultPerPart )
+				{
+					throw new OperationNotSupportedOnServerException(
+						"Restricting measurement search with a limit per part is not supported by this server.",
+						DataServiceFeatureMatrix.LimitResultPerPartMinVersion,
+						featureMatrix.CurrentInterfaceVersion );
+				}
+			}
+		}
+
 		#endregion
 
 		#region interface IDataServiceRestClient
@@ -727,6 +742,8 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 				}
 			}
 
+			await CheckLimitResultPerPartFeatureSupport( filter, cancellationToken );
+
 			const string requestPath = "measurements";
 
 			// split multiple measurement uuids into chunks of uuids using multiple requests to avoid "Request-URI Too Long" exception
@@ -789,6 +806,8 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 					DataServiceFeatureMatrix.DistinctMeasurementAttributsValuesSearchMinVersion,
 					featureMatrix.CurrentInterfaceVersion );
 			}
+
+			await CheckLimitResultPerPartFeatureSupport( filter, cancellationToken );
 
 			if( filter?.MeasurementUuids?.Length > 0 )
 			{
@@ -927,6 +946,8 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 						featureMatrix.CurrentInterfaceVersion );
 				}
 			}
+
+			await CheckLimitResultPerPartFeatureSupport( filter, cancellationToken );
 
 			if( filter?.MeasurementUuids?.Length > 0 )
 				return await GetMeasurementValuesSplitByMeasurement( partPath, filter, cancellationToken ).ConfigureAwait( false );

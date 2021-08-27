@@ -24,6 +24,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		public const string PartUuidsParamName = "partUuids";
 		protected const string DeepParamName = "deep";
 		protected const string LimitResultParamName = "limitResult";
+		protected const string LimitResultPerPartParamName = "limitResultPerPart";
 		protected const string OrderByParamName = "order";
 		public const string MeasurementUuidsParamName = "measurementUuids";
 		protected const string SearchConditionParamName = "searchCondition";
@@ -42,6 +43,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		{
 			Deep = false;
 			LimitResult = -1;
+			LimitResultPerPart = -1;
 			OrderBy = new[] { new OrderDto( 4, OrderDirectionDto.Desc, EntityDto.Measurement ) };
 			AggregationMeasurements = AggregationMeasurementSelectionDto.Default;
 		}
@@ -65,6 +67,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Gets or sets the maximum number of measurements that should be returned. If this value is -1, no limit is used.
 		/// </summary>
 		public int LimitResult { get; set; }
+
+		/// <summary>
+		/// Restricts the number of sub-items for each found part of the result (Default: -1).
+		/// </summary>
+		public int LimitResultPerPart { get; set; }
 
 		/// <summary>
 		/// Gets or sets the sort order of the resulting measurements.

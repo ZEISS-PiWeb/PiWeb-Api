@@ -50,7 +50,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			string searchCondition,
 			string aggregation,
 			string fromModificationDate,
-			string toModificationDate )
+			string toModificationDate,
+			string limitResultPerPart = "-1" )
 		{
 			var items = new[]
 			{
@@ -58,6 +59,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				Tuple.Create( MeasurementUuidsParamName, measurementUuids ),
 				Tuple.Create( DeepParamName, deep ),
 				Tuple.Create( LimitResultParamName, limitResult ),
+				Tuple.Create( LimitResultPerPartParamName, limitResultPerPart ),
 				Tuple.Create( OrderByParamName, order ),
 				Tuple.Create( SearchConditionParamName, searchCondition ),
 				Tuple.Create( AggregationParamName, aggregation ),
@@ -86,6 +88,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 							break;
 						case LimitResultParamName:
 							result.LimitResult = int.Parse( value, CultureInfo.InvariantCulture );
+							break;
+						case LimitResultPerPartParamName:
+							result.LimitResultPerPart = int.Parse( value, CultureInfo.InvariantCulture );
 							break;
 						case OrderByParamName:
 							result.OrderBy = value.Split( ',' ).Select( element => OrderDtoParser.Parse( element, EntityDto.Measurement ) ).ToArray();
@@ -128,6 +133,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			if( LimitResult >= 0 )
 				result.Add( ParameterDefinition.Create( LimitResultParamName, LimitResult.ToString() ) );
 
+			if( LimitResultPerPart >= 0 )
+				result.Add( ParameterDefinition.Create( LimitResultPerPartParamName, LimitResultPerPart.ToString() ) );
+
 			if( MeasurementUuids != null && MeasurementUuids.Length > 0 )
 				result.Add( ParameterDefinition.Create( MeasurementUuidsParamName, RestClientHelper.ConvertGuidListToString( MeasurementUuids ) ) );
 
@@ -158,6 +166,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				PartUuids = PartUuids,
 				Deep = Deep,
 				LimitResult = LimitResult,
+				LimitResultPerPart = LimitResultPerPart,
 				OrderBy = OrderBy,
 				SearchCondition = SearchCondition,
 				MeasurementUuids = MeasurementUuids,

@@ -107,7 +107,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			string toModificationDate,
 			string mergeAttributes,
 			string mergeCondition,
-			string mergeMasterPart )
+			string mergeMasterPart,
+			string limitResultPerPart = "-1")
 		{
 			var items = new[]
 			{
@@ -115,6 +116,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				Tuple.Create( MeasurementUuidsParamName, measurementUuids ),
 				Tuple.Create( DeepParamName, deep ),
 				Tuple.Create( LimitResultParamName, limitResult ),
+				Tuple.Create( LimitResultPerPartParamName, limitResultPerPart ),
 				Tuple.Create( OrderByParamName, order ),
 				Tuple.Create( RequestedMeasurementAttributesParamName, requestedMeasurementAttributes ),
 				Tuple.Create( SearchConditionParamName, searchCondition ),
@@ -148,6 +150,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 							break;
 						case LimitResultParamName:
 							result.LimitResult = int.Parse( value, CultureInfo.InvariantCulture );
+							break;
+						case LimitResultPerPartParamName:
+							result.LimitResultPerPart = int.Parse( value, CultureInfo.InvariantCulture );
 							break;
 						case RequestedMeasurementAttributesParamName:
 							result.RequestedMeasurementAttributes = new AttributeSelector( RestClientHelper.ConvertStringToUInt16List( value ) );
@@ -203,6 +208,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				PartUuids = PartUuids,
 				Deep = Deep,
 				LimitResult = LimitResult,
+				LimitResultPerPart = LimitResultPerPart,
 				OrderBy = OrderBy,
 				RequestedMeasurementAttributes = RequestedMeasurementAttributes,
 				SearchCondition = SearchCondition,
@@ -226,6 +232,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				PartUuids = PartUuids,
 				Deep = Deep,
 				LimitResult = LimitResult,
+				LimitResultPerPart = LimitResultPerPart,
 				OrderBy = OrderBy,
 				RequestedMeasurementAttributes = RequestedMeasurementAttributes,
 				SearchCondition = SearchCondition,
@@ -252,6 +259,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 			if( LimitResult >= 0 )
 				result.Add( ParameterDefinition.Create( LimitResultParamName, LimitResult.ToString() ) );
+
+			if( LimitResultPerPart >= 0 )
+				result.Add( ParameterDefinition.Create( LimitResultPerPartParamName, LimitResultPerPart.ToString() ) );
 
 			if( MeasurementUuids != null && MeasurementUuids.Length > 0 )
 				result.Add( ParameterDefinition.Create( MeasurementUuidsParamName, RestClientHelper.ConvertGuidListToString( MeasurementUuids ) ) );
