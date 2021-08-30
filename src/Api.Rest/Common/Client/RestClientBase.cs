@@ -318,11 +318,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			{
 				throw new RestClientException( $"Error fetching web service response for request [{request?.RequestUri}]: {ex.Message}", ex );
 			}
-			catch( TaskCanceledException ex ) when( !cancellationToken.IsCancellationRequested )
-			{
-				// we expect the TaskCanceledException to be a timeout if the passed token has not been canceled
-				throw new TimeoutException( "Timeout reached", ex );
-			}
 			finally
 			{
 				if( autoDisposeResponse )
@@ -478,9 +473,14 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			};
 #endif
 
-			_HttpClient = new HttpClient( _WebRequestHandler )
+			var timeoutHandler = new TimeoutHandler
 			{
 				Timeout = timeout ?? DefaultTimeout,
+				InnerHandler = _WebRequestHandler
+			};
+			
+			_HttpClient = new HttpClient( timeoutHandler )
+			{
 				BaseAddress = ServiceLocation
 			};
 		}
