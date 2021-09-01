@@ -336,7 +336,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 
 		private async Task ThrowOnUnsupportedMergeMasterPart( MeasurementFilterAttributesDto filter, CancellationToken cancellationToken )
 		{
-			if( filter.MergeMasterPart != null )
+			if( filter?.MergeMasterPart != null )
 			{
 				var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
 				if( !featureMatrix.SupportRestrictMeasurementSearchByMergeMasterPart )
