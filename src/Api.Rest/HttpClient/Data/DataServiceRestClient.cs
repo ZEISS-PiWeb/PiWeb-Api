@@ -304,7 +304,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			}
 		}
 
-		private async Task CheckLimitResultPerPartFeatureSupport( AbstractMeasurementFilterAttributesDto filter, CancellationToken cancellationToken )
+		private async Task ThrowOnUnsupportedLimitResultPerPart( AbstractMeasurementFilterAttributesDto filter, CancellationToken cancellationToken )
 		{
 			if( filter?.LimitResultPerPart > -1 )
 			{
@@ -316,6 +316,84 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 						DataServiceFeatureMatrix.LimitResultPerPartMinVersion,
 						featureMatrix.CurrentInterfaceVersion );
 				}
+			}
+		}
+
+		private async Task ThrowOnUnsupportedMergeAttributes( IReadOnlyCollection<ushort> mergeAttributes, CancellationToken cancellationToken )
+		{
+			if( mergeAttributes?.Count > 0 )
+			{
+				var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+				if( !featureMatrix.SupportsRestrictMeasurementSearchByMergeAttributes )
+				{
+					throw new OperationNotSupportedOnServerException(
+						"Restricting measurement search by merge attributes is not supported by this server.",
+						DataServiceFeatureMatrix.RestrictMeasurementSearchByMergeAttributesMinVersion,
+						featureMatrix.CurrentInterfaceVersion );
+				}
+			}
+		}
+
+		private async Task ThrowOnUnsupportedMergeMasterPart( MeasurementFilterAttributesDto filter, CancellationToken cancellationToken )
+		{
+			if( filter.MergeMasterPart != null )
+			{
+				var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+				if( !featureMatrix.SupportRestrictMeasurementSearchByMergeMasterPart )
+				{
+					throw new OperationNotSupportedOnServerException(
+						"Restricting measurement search by merge master part is not supported by this server.",
+						DataServiceFeatureMatrix.RestrictMeasurementSearchByMergeAttributesMinVersion,
+						featureMatrix.CurrentInterfaceVersion );
+				}
+			}
+		}
+
+		private async Task ThrowOnUnsupportedDeleteMeasurementsForSubParts( CancellationToken cancellationToken )
+		{
+			var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+			if( !featureMatrix.SupportsDeleteMeasurementsForSubParts )
+			{
+				throw new OperationNotSupportedOnServerException(
+					"Deleting measurements for sub parts is not supported by this server.",
+					DataServiceFeatureMatrix.DeleteMeasurementsForSubPartsMinVersion,
+					featureMatrix.CurrentInterfaceVersion );
+			}
+		}
+
+		private async Task ThrowOnUnsupportedDistinctMeasurementValueSearch( CancellationToken cancellationToken )
+		{
+			var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+			if( !featureMatrix.SupportsDistinctMeasurementAttributeValuesSearch )
+			{
+				throw new OperationNotSupportedOnServerException(
+					"Fetching distinct measurement values is not supported by this server.",
+					DataServiceFeatureMatrix.DistinctMeasurementAttributsValuesSearchMinVersion,
+					featureMatrix.CurrentInterfaceVersion );
+			}
+		}
+
+		private async Task ThrowOnUnsupportedCreateVersionEntries( CancellationToken cancellationToken )
+		{
+			var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+			if( !featureMatrix.SupportsCreateVersionEntriesOnCreatinPartsOrCharacteristics )
+			{
+				throw new OperationNotSupportedOnServerException(
+					"Creating a new inspection plan version entry is not supported by this server.",
+					DataServiceFeatureMatrix.CreateVersionEntriesOnCreatinPartsOrCharacteristicsMinVersion,
+					featureMatrix.CurrentInterfaceVersion );
+			}
+		}
+
+		private async Task ThrowOnUnsupportedClearPart( CancellationToken cancellationToken )
+		{
+			var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+			if( !featureMatrix.SupportClearPart )
+			{
+				throw new OperationNotSupportedOnServerException(
+					"Clearing a part is not supported by this server.",
+					DataServiceFeatureMatrix.ClearPartMinVersion,
+					featureMatrix.CurrentInterfaceVersion );
 			}
 		}
 
@@ -530,14 +608,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			{
 				if( versioningEnabled )
 				{
-					var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
-					if( !featureMatrix.SupportsCreateVersionEntriesOnCreatinPartsOrCharacteristics )
-					{
-						throw new OperationNotSupportedOnServerException(
-							"Creating a new inspection plan version entry is not supported by this server.",
-							DataServiceFeatureMatrix.DeleteMeasurementsForSubPartsMinVersion,
-							featureMatrix.CurrentInterfaceVersion );
-					}
+					await ThrowOnUnsupportedCreateVersionEntries( cancellationToken );
 
 					await _RestClient.Request( RequestBuilder.CreatePost( "parts", Payload.Create( parts ), ParameterDefinition.Create( "versioningEnabled", bool.TrueString ) ), cancellationToken ).ConfigureAwait( false );
 				}
@@ -584,14 +655,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		/// <inheritdoc/>
 		public async Task ClearPart( Guid partUuid, IEnumerable<ClearPartKeepEntitiesDto> clearPartKeepEntities = null, CancellationToken cancellationToken = default )
 		{
-			var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
-			if( !featureMatrix.SupportClearPart )
-			{
-				throw new OperationNotSupportedOnServerException(
-					"Clearing a part is not supported by this server.",
-					DataServiceFeatureMatrix.ClearPartMinVersion,
-					featureMatrix.CurrentInterfaceVersion );
-			}
+			await ThrowOnUnsupportedClearPart( cancellationToken );
 
 			if( clearPartKeepEntities != null )
 			{
@@ -664,14 +728,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			{
 				if( versioningEnabled )
 				{
-					var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
-					if( !featureMatrix.SupportsCreateVersionEntriesOnCreatinPartsOrCharacteristics )
-					{
-						throw new OperationNotSupportedOnServerException(
-							"Creating a new inspection plan version entry is not supported by this server.",
-							DataServiceFeatureMatrix.DeleteMeasurementsForSubPartsMinVersion,
-							featureMatrix.CurrentInterfaceVersion );
-					}
+					await ThrowOnUnsupportedCreateVersionEntries( cancellationToken );
 
 					await _RestClient.Request( RequestBuilder.CreatePost( "characteristics", Payload.Create( characteristics ), ParameterDefinition.Create( "versioningEnabled", bool.TrueString ) ), cancellationToken ).ConfigureAwait( false );
 				}
@@ -718,31 +775,9 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		/// <inheritdoc />
 		public async Task<SimpleMeasurementDto[]> GetMeasurements( PathInformationDto partPath = null, MeasurementFilterAttributesDto filter = null, CancellationToken cancellationToken = default )
 		{
-			if( filter?.MergeAttributes?.Length > 0 )
-			{
-				var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
-				if( !featureMatrix.SupportsRestrictMeasurementSearchByMergeAttributes )
-				{
-					throw new OperationNotSupportedOnServerException(
-						"Restricting measurement search by merge attributes is not supported by this server.",
-						DataServiceFeatureMatrix.RestrictMeasurementSearchByMergeAttributesMinVersion,
-						featureMatrix.CurrentInterfaceVersion );
-				}
-			}
-
-			if( filter?.MergeMasterPart != null )
-			{
-				var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
-				if( !featureMatrix.SupportRestrictMeasurementSearchByMergeMasterPart )
-				{
-					throw new OperationNotSupportedOnServerException(
-						"Restricting measurement search by merge master part is not supported by this server.",
-						DataServiceFeatureMatrix.RestrictMeasurementSearchByMergeAttributesMinVersion,
-						featureMatrix.CurrentInterfaceVersion );
-				}
-			}
-
-			await CheckLimitResultPerPartFeatureSupport( filter, cancellationToken );
+			await ThrowOnUnsupportedMergeAttributes( filter?.MergeAttributes, cancellationToken );
+			await ThrowOnUnsupportedMergeMasterPart( filter, cancellationToken );
+			await ThrowOnUnsupportedLimitResultPerPart( filter, cancellationToken );
 
 			const string requestPath = "measurements";
 
@@ -798,16 +833,8 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		/// <inheritdoc />
 		public async Task<string[]> GetDistinctMeasurementAttributeValues( ushort key, PathInformationDto partPath = null, DistinctMeasurementFilterAttributesDto filter = null, CancellationToken cancellationToken = default )
 		{
-			var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
-			if( !featureMatrix.SupportsDistinctMeasurementAttributeValuesSearch )
-			{
-				throw new OperationNotSupportedOnServerException(
-					"Fetching distinct measurement values is not supported by this server.",
-					DataServiceFeatureMatrix.DistinctMeasurementAttributsValuesSearchMinVersion,
-					featureMatrix.CurrentInterfaceVersion );
-			}
-
-			await CheckLimitResultPerPartFeatureSupport( filter, cancellationToken );
+			await ThrowOnUnsupportedDistinctMeasurementValueSearch( cancellationToken );
+			await ThrowOnUnsupportedLimitResultPerPart( filter, cancellationToken );
 
 			if( filter?.MeasurementUuids?.Length > 0 )
 			{
@@ -867,14 +894,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 
 			if( deep == MeasurementDeleteBehaviorDto.DeleteDeep )
 			{
-				var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
-				if( !featureMatrix.SupportsDeleteMeasurementsForSubParts )
-				{
-					throw new OperationNotSupportedOnServerException(
-						"Deleting measurements for sub parts is not supported by this server.",
-						DataServiceFeatureMatrix.DeleteMeasurementsForSubPartsMinVersion,
-						featureMatrix.CurrentInterfaceVersion );
-				}
+				await ThrowOnUnsupportedDeleteMeasurementsForSubParts( cancellationToken );
 
 				parameter.Add( ParameterDefinition.Create( "deep", deep.ToString() ) );
 			}
@@ -935,19 +955,8 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		/// <inheritdoc />
 		public async Task<DataMeasurementDto[]> GetMeasurementValues( PathInformationDto partPath = null, MeasurementValueFilterAttributesDto filter = null, CancellationToken cancellationToken = default )
 		{
-			if( filter?.MergeAttributes?.Length > 0 )
-			{
-				var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
-				if( !featureMatrix.SupportsRestrictMeasurementSearchByMergeAttributes )
-				{
-					throw new OperationNotSupportedOnServerException(
-						"Restricting measurement search by merge attributes is not supported by this server.",
-						DataServiceFeatureMatrix.RestrictMeasurementSearchByMergeAttributesMinVersion,
-						featureMatrix.CurrentInterfaceVersion );
-				}
-			}
-
-			await CheckLimitResultPerPartFeatureSupport( filter, cancellationToken );
+			await ThrowOnUnsupportedMergeAttributes( filter?.MergeAttributes, cancellationToken );
+			await ThrowOnUnsupportedLimitResultPerPart( filter, cancellationToken );
 
 			if( filter?.MeasurementUuids?.Length > 0 )
 				return await GetMeasurementValuesSplitByMeasurement( partPath, filter, cancellationToken ).ConfigureAwait( false );
