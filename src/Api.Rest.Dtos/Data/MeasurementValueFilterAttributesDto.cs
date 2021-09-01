@@ -115,7 +115,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			string toModificationDate,
 			string mergeAttributes,
 			string mergeCondition,
-			string mergeMasterPart )
+			string mergeMasterPart,
+			string limitResultPerPart = "-1" )
 		{
 			var items = new[]
 			{
@@ -124,6 +125,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				Tuple.Create( CharacteristicsUuidListParamName, characteristicUuids ),
 				Tuple.Create( DeepParamName, deep ),
 				Tuple.Create( LimitResultParamName, limitResult ),
+				Tuple.Create( LimitResultPerPartParamName, limitResultPerPart ),
 				Tuple.Create( OrderByParamName, order ),
 				Tuple.Create( RequestedValueAttributesParamName, requestedValueAttributes ),
 				Tuple.Create( RequestedMeasurementAttributesParamName, requestedMeasurementAttributes ),
@@ -160,6 +162,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 							break;
 						case LimitResultParamName:
 							result.LimitResult = short.Parse( value, CultureInfo.InvariantCulture );
+							break;
+						case LimitResultPerPartParamName:
+							result.LimitResultPerPart = int.Parse( value, CultureInfo.InvariantCulture );
 							break;
 						case RequestedValueAttributesParamName:
 							result.RequestedValueAttributes = new AttributeSelector( RestClientHelper.ConvertStringToUInt16List( value ) );
@@ -212,6 +217,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				PartUuids = PartUuids,
 				Deep = Deep,
 				LimitResult = LimitResult,
+				LimitResultPerPart = LimitResultPerPart,
 				CharacteristicsUuidList = CharacteristicsUuidList,
 				OrderBy = OrderBy,
 				RequestedValueAttributes = RequestedValueAttributes,
@@ -240,6 +246,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 			if( LimitResult >= 0 )
 				result.Add( ParameterDefinition.Create( LimitResultParamName, LimitResult.ToString() ) );
+
+			if( LimitResultPerPart >= 0 )
+				result.Add( ParameterDefinition.Create( LimitResultPerPartParamName, LimitResultPerPart.ToString() ) );
 
 			if( MeasurementUuids != null && MeasurementUuids.Length > 0 )
 				result.Add( ParameterDefinition.Create( MeasurementUuidsParamName, RestClientHelper.ConvertGuidListToString( MeasurementUuids ) ) );

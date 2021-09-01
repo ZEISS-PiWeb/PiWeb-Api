@@ -52,6 +52,9 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		//Request asynchronous deletion of measurements and check status with long polling.
 		public static readonly Version AsyncMeasurementDeletionMinVersion = new Version( SupportedMajorVersion, 7 );
 
+		//Request using a limit per part when fetching measurements.
+		public static readonly Version LimitResultPerPartMinVersion = new Version( SupportedMajorVersion, 8 );
+
 		#endregion
 
 		#region constructors
@@ -84,6 +87,8 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		public bool SupportClearPart => CurrentInterfaceVersion >= ClearPartMinVersion;
 
 		public bool SupportsAsyncMeasurementDeletion => CurrentInterfaceVersion >= AsyncMeasurementDeletionMinVersion;
+
+		public bool SupportsLimitResultPerPart => CurrentInterfaceVersion >= LimitResultPerPartMinVersion;
 
 		#endregion
 	}
