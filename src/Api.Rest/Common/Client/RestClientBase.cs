@@ -73,6 +73,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		private readonly bool _Chunked;
 
 		private HttpClient _HttpClient;
+		private TimeoutHandler _TimeoutHandler;
 		private HttpClientHandler _WebRequestHandler;
 		private bool _IsDisposed;
 		private AuthenticationContainer _AuthenticationContainer = new AuthenticationContainer( AuthenticationMode.NoneOrBasic );
@@ -119,12 +120,12 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// </summary>
 		public TimeSpan Timeout
 		{
-			get => _HttpClient.Timeout;
+			get => _TimeoutHandler.Timeout;
 			set
 			{
-				if( _HttpClient.Timeout != value )
+				if( _TimeoutHandler.Timeout != value )
 				{
-					_HttpClient.Timeout = value;
+					_TimeoutHandler.Timeout = value;
 				}
 			}
 		}
@@ -433,7 +434,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		private void RebuildHttpClient()
 		{
-			var timeout = _HttpClient.Timeout;
+			var timeout = _TimeoutHandler.Timeout;
 
 			_HttpClient?.Dispose();
 			_WebRequestHandler?.Dispose();
@@ -473,14 +474,15 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			};
 #endif
 
-			var timeoutHandler = new TimeoutHandler
+			_TimeoutHandler = new TimeoutHandler
 			{
 				Timeout = timeout ?? DefaultTimeout,
 				InnerHandler = _WebRequestHandler
 			};
-			
-			_HttpClient = new HttpClient( timeoutHandler )
+
+			 _HttpClient = new HttpClient( _TimeoutHandler )
 			{
+				Timeout = System.Threading.Timeout.InfiniteTimeSpan,
 				BaseAddress = ServiceLocation
 			};
 		}
