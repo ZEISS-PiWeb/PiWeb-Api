@@ -56,7 +56,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 				try
 				{
-					return await base.SendAsync( request, cts?.Token ?? cancellationToken );
+					return await base.SendAsync( request, cts?.Token ?? cancellationToken )
+						.ConfigureAwait( false );
 				}
 				catch( OperationCanceledException ex ) when( !cancellationToken.IsCancellationRequested && Environment.TickCount >= timeoutTime )
 				{
