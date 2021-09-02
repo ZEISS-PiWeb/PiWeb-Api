@@ -242,8 +242,9 @@ Response:
 
 <h2 id="{{page.sections['general']['secs']['formats'].anchor}}">{{page.sections['general']['secs']['formats'].title}}</h2>
 
-The input and output format is [JSON](https://www.json.org/ "JSON definition").
+**Input and output format**
 
+The input and output format is [JSON](https://www.json.org/ "JSON definition").
 A sample JSON representation of a part in PiWeb:
 ```json
 {
@@ -255,6 +256,18 @@ A sample JSON representation of a part in PiWeb:
     "timestamp": "2012-11-19T10:48:32.887Z"
 }
 ```
+<br/>
+**Encoding**
+
+Since PiWeb 7.8 the default encoding for strings like the part path is `UTF-8`.
+The Content-Type header of incoming messages indicates this as well:
+
+```http
+Content-Type: application/json; charset=utf-8
+```
+
+>{{ site.images['info'] }} For PiWeb versions before 7.8 the default encoding depends on the machine where the PiWeb Server is running, so it is necessary to use the correct encoding conversion according to your environment,
+if your chosen tool or script language does not work directly with present encoding.
 
 <h2 id="{{page.sections['general']['secs']['security'].anchor}}">{{page.sections['general']['secs']['security'].title}}</h2>
 Access to PiWeb Server service might require authentication. Authentication can be either *basic authentication*, based on username and password, or *Windows authentication* based on Active Directory integration.
