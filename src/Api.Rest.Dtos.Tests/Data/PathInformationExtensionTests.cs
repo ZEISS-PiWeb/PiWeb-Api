@@ -34,7 +34,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 		#region methods
 
 		[Test]
-		[TestCase( "P:Part1:P:Part11;C:Char1", "P:Part1;P:Part11;C:Char1", StringComparison.CurrentCulture, true )]
+		[TestCase( "P:Part1;P:Part11;C:Char1", "P:Part1;P:Part11;C:Char1", StringComparison.CurrentCulture, true )]
 		[TestCase( "P:Part1;P:Part11;C:Char1", "P:Part1;P:Part11;P:Char1", StringComparison.CurrentCulture, false )]
 		[TestCase( "P:Part1;P:Part11;C:Char1", "P:Part1;P:Part21;C:Char1", StringComparison.CurrentCulture, false )]
 		[TestCase( "P:Part1;P:Part11;C:Char1", "P:part1;P:part11;C:char1", StringComparison.CurrentCulture, false )]
