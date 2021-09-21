@@ -137,6 +137,8 @@ Task("Pack_Definitions")
             new NuSpecContent { Source = "netstandard2.0/License.txt", Target = "" },
             new NuSpecContent { Source = "netstandard2.0/Zeiss.PiWeb.Api.Definitions.dll", Target = "lib/netstandard2.0" },
             new NuSpecContent { Source = "netstandard2.0/Zeiss.PiWeb.Api.Definitions.xml", Target = "lib/netstandard2.0" },
+            new NuSpecContent { Source = "net5.0/Zeiss.PiWeb.Api.Definitions.dll", Target = "lib/net5.0" },
+            new NuSpecContent { Source = "net5.0/Zeiss.PiWeb.Api.Definitions.xml", Target = "lib/net5.0" },
         },
         Dependencies             = new [] {
             new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2020.3.0" }
@@ -178,6 +180,9 @@ Task("Pack_Dtos")
             new NuSpecContent { Source = "netstandard2.0/de/Zeiss.PiWeb.Api.Rest.Dtos.resources.dll", Target = "lib/netstandard2.0/de" },
             new NuSpecContent { Source = "netstandard2.0/Zeiss.PiWeb.Api.Rest.Dtos.dll", Target = "lib/netstandard2.0" },
             new NuSpecContent { Source = "netstandard2.0/Zeiss.PiWeb.Api.Rest.Dtos.xml", Target = "lib/netstandard2.0" },
+            new NuSpecContent { Source = "net5.0/de/Zeiss.PiWeb.Api.Rest.Dtos.resources.dll", Target = "lib/net5.0/de" },
+            new NuSpecContent { Source = "net5.0/Zeiss.PiWeb.Api.Rest.Dtos.dll", Target = "lib/net5.0" },
+            new NuSpecContent { Source = "net5.0/Zeiss.PiWeb.Api.Rest.Dtos.xml", Target = "lib/net5.0" },
         },
         Dependencies             = new [] {
             new NuSpecDependency { Id = "Newtonsoft.Json", Version = "12.0.3" },
@@ -224,6 +229,8 @@ Task("Pack_Client")
             new NuSpecContent { Source = "netstandard2.0/Zeiss.PiWeb.Api.Rest.xml", Target = "lib/netstandard2.0" },
             new NuSpecContent { Source = "netcoreapp3.1/Zeiss.PiWeb.Api.Rest.dll", Target = "lib/netcoreapp3.1" },
             new NuSpecContent { Source = "netcoreapp3.1/Zeiss.PiWeb.Api.Rest.xml", Target = "lib/netcoreapp3.1" },
+            new NuSpecContent { Source = "net5.0/Zeiss.PiWeb.Api.Rest.dll", Target = "lib/net5.0" },
+            new NuSpecContent { Source = "net5.0/Zeiss.PiWeb.Api.Rest.xml", Target = "lib/net5.0" },
         },
         Dependencies             = new [] {
             new NuSpecDependency { Id = "Newtonsoft.Json", Version = "12.0.3" },
