@@ -22,23 +22,24 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 
 	public abstract class FeatureMatrix
 	{
-		#region constants
-
-		protected const int SupportedMajorVersion = 1;
-
-		#endregion
-
 		#region constructors
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FeatureMatrix"/> class.
 		/// </summary>
 		/// <exception cref="ArgumentNullException"><paramref name="interfaceVersionRange"/> is <see langword="null" />.</exception>
-		protected FeatureMatrix( [NotNull] InterfaceVersionRange interfaceVersionRange )
+		protected FeatureMatrix(
+			[NotNull] InterfaceVersionRange interfaceVersionRange,
+			params int[] supportedMajorVersions )
 		{
 			if( interfaceVersionRange == null ) throw new ArgumentNullException( nameof( interfaceVersionRange ) );
 
-			CurrentInterfaceVersion = GetBestKnownVersion( interfaceVersionRange );
+			if ( supportedMajorVersions.Length == 0 )
+				supportedMajorVersions = new[] { 1 };
+
+			SupportedMajorVersions = supportedMajorVersions;
+
+			CurrentInterfaceVersion = GetBestKnownVersion( interfaceVersionRange, SupportedMajorVersions );
 		}
 
 		#endregion
@@ -47,24 +48,22 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 
 		public Version CurrentInterfaceVersion { get; }
 
+		public IEnumerable<int> SupportedMajorVersions { get; }
+
 		#endregion
 
 		#region methods
 
-		protected static Version GetBestKnownVersion( [NotNull] InterfaceVersionRange interfaceVersionRange )
+		internal static Version GetBestKnownVersion(
+			[NotNull] InterfaceVersionRange interfaceVersionRange,
+			[NotNull] IEnumerable<int> supportedMajorVersions )
 		{
 			if( interfaceVersionRange.SupportedVersions is null )
-				throw new ArgumentException( "There must at least one supported version defined", nameof( interfaceVersionRange ) );
+				throw new ArgumentException( "There must at least one supported version defined.", nameof( interfaceVersionRange ) );
 
-			Version bestKnownVersion = null;
-			foreach( var versionCandidate in interfaceVersionRange.SupportedVersions )
-			{
-				var isKnownVersion = versionCandidate >= new Version( SupportedMajorVersion, 0 ) && versionCandidate < new Version( SupportedMajorVersion + 1, 0 );
-				var isSuperiorToBestKnownVersion = bestKnownVersion == null || versionCandidate > bestKnownVersion;
-
-				if( isKnownVersion && isSuperiorToBestKnownVersion )
-					bestKnownVersion = versionCandidate;
-			}
+			var bestKnownVersion = interfaceVersionRange.SupportedVersions
+				.Where( version => supportedMajorVersions.Contains( version.Major ) )
+				.Max();
 
 			if( bestKnownVersion == null )
 				throw new ServerApiNotSupportedException( interfaceVersionRange );

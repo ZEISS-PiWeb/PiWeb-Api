@@ -36,16 +36,16 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 
 		#region properties
 
-		// If the server supports at least this minor version filtering is possible.
-		public static Version RawDataAttributeFilterMinVersion { get; } = new Version( SupportedMajorVersion, 2 );
+		// If the server supports at least this version filtering is possible.
+		public static Version RawDataAttributeFilterMinVersion { get; } = new Version( 1, 2 );
 
-		public static Version RawDataArchiveLookupMinVersion { get; } = new Version( SupportedMajorVersion, 5 );
+		public static Version RawDataArchiveLookupMinVersion { get; } = new Version( 1, 5 );
 
-		public static Version UpdateRawDataInformationMinVersion { get; } = new Version( SupportedMajorVersion, 7 );
+		public static Version UpdateRawDataInformationMinVersion { get; } = new Version( 1, 7 );
 
-		public static Version GetRawDataInformationRequestPathMinVersion { get; } = new Version( SupportedMajorVersion, 7 );
+		public static Version GetRawDataInformationRequestPathMinVersion { get; } = new Version( 1, 7 );
 
-		public static Version CreateRawDataResultMinVersion { get; } = new Version( SupportedMajorVersion, 7 );
+		public static Version CreateRawDataResultMinVersion { get; } = new Version( 1, 7 );
 
 		public bool SupportsRawDataAttributeFilter => CurrentInterfaceVersion >= RawDataAttributeFilterMinVersion;
 

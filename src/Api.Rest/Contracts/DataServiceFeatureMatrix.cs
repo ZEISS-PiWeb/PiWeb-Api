@@ -25,35 +25,35 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 	{
 		#region members
 
-		// Deleting of measuremnts for sub parts is possible if server supports at least this minor version
-		public static readonly Version DeleteMeasurementsForSubPartsMinVersion = new Version( SupportedMajorVersion, 2 );
+		// Deleting of measurements for sub parts is possible if server supports at least this version
+		public static readonly Version DeleteMeasurementsForSubPartsMinVersion = new Version( 1, 2 );
 
-		// Creating version entries on creating parts or characteristics is possible if server supports at least this minor version
-		public static readonly Version CreateVersionEntriesOnCreatinPartsOrCharacteristicsMinVersion = new Version( SupportedMajorVersion, 2 );
+		// Creating version entries on creating parts or characteristics is possible if server supports at least this version
+		public static readonly Version CreateVersionEntriesOnCreatinPartsOrCharacteristicsMinVersion = new Version( 1, 2 );
 
-		// Checking if an attribute with a given value exists is possible if server supports at least this minor version
-		public static readonly Version CheckAttributeUsageMinVersion = new Version( SupportedMajorVersion, 2 );
+		// Checking if an attribute with a given value exists is possible if server supports at least this version
+		public static readonly Version CheckAttributeUsageMinVersion = new Version( 1, 2 );
 
-		// Fetching a list of characteristics via uuid restriction is possible if server supports at least this minor version
-		public static readonly Version CharacteristicUuidRestrictionForCharacteristicFetchMinVersion = new Version( SupportedMajorVersion, 3 );
+		// Fetching a list of characteristics via uuid restriction is possible if server supports at least this version
+		public static readonly Version CharacteristicUuidRestrictionForCharacteristicFetchMinVersion = new Version( 1, 3 );
 
-		// Restrict a measurement search by merge attributes is possible if server supports at least this minor version
-		public static readonly Version RestrictMeasurementSearchByMergeAttributesMinVersion = new Version( SupportedMajorVersion, 2 );
+		// Restrict a measurement search by merge attributes is possible if server supports at least this version
+		public static readonly Version RestrictMeasurementSearchByMergeAttributesMinVersion = new Version( 1, 2 );
 
-		// Restrict a measurement search by distinct attributes is possible if server supports at least this minor version
-		public static readonly Version DistinctMeasurementAttributsValuesSearchMinVersion = new Version( SupportedMajorVersion, 2 );
+		// Restrict a measurement search by distinct attributes is possible if server supports at least this version
+		public static readonly Version DistinctMeasurementAttributsValuesSearchMinVersion = new Version( 1, 2 );
 
-		//Restrict a measurement search by merge master part if server supports at least this minor version
-		public static readonly Version RestrictMeasurementSearchByMergeMasterPartMinVersion = new Version( SupportedMajorVersion, 4 );
+		// Restrict a measurement search by merge master part if server supports at least this version
+		public static readonly Version RestrictMeasurementSearchByMergeMasterPartMinVersion = new Version( 1, 4 );
 
-		//Clearing a part
-		public static readonly Version ClearPartMinVersion = new Version( SupportedMajorVersion, 5 );
+		// Clearing a part
+		public static readonly Version ClearPartMinVersion = new Version( 1, 5 );
 
-		//Request asynchronous deletion of measurements and check status with long polling.
-		public static readonly Version AsyncMeasurementDeletionMinVersion = new Version( SupportedMajorVersion, 7 );
+		// Request asynchronous deletion of measurements and check status with long polling.
+		public static readonly Version AsyncMeasurementDeletionMinVersion = new Version( 1, 7 );
 
-		//Request using a limit per part when fetching measurements.
-		public static readonly Version LimitResultPerPartMinVersion = new Version( SupportedMajorVersion, 8 );
+		// Request using a limit per part when fetching measurements.
+		public static readonly Version LimitResultPerPartMinVersion = new Version( 1, 8 );
 
 		#endregion
 
