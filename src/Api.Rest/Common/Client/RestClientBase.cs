@@ -20,9 +20,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.IO;
+	using System.Linq;
 	using System.Net;
 	using System.Net.Http;
 	using System.Net.Http.Headers;
+	using System.Runtime.Versioning;
 	using System.Text;
 	using System.Threading;
 	using System.Threading.Tasks;
@@ -466,11 +468,19 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				//     i.e. the Server is already authenticating every single request
 				UnsafeAuthenticatedConnectionSharing = true
 			};
+#elif NET
+			_WebRequestHandler = new HttpClientHandler();
+
+			if( IsSupported( typeof( HttpClientHandler ), nameof( HttpClientHandler.PreAuthenticate ) ) )
+				_WebRequestHandler.PreAuthenticate = true;
+
+			if( IsSupported( typeof( HttpClientHandler ), nameof( HttpClientHandler.AutomaticDecompression ) ) )
+				_WebRequestHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 #else
 			_WebRequestHandler = new HttpClientHandler
 			{
 				PreAuthenticate = true,
-				AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+				AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
 			};
 #endif
 
@@ -486,6 +496,21 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				BaseAddress = ServiceLocation
 			};
 		}
+
+#if NET
+		private static bool IsSupported( [NotNull] Type type, [NotNull] string propertyName )
+		{
+			var propertyInfo = type.GetProperty( propertyName );
+			if( propertyInfo is null )
+				return false;
+
+			return propertyInfo
+				.GetCustomAttributes( typeof( UnsupportedOSPlatformAttribute ), false )
+				.OfType<UnsupportedOSPlatformAttribute>()
+				.All( attribute => !OperatingSystem.IsOSPlatform( attribute.PlatformName ) );
+		}
+
+#endif
 
 		private void UpdateAuthenticationInformation()
 		{
