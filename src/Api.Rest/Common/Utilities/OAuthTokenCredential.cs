@@ -26,13 +26,14 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OAuthTokenCredential"/> class.
 		/// </summary>
-		public OAuthTokenCredential( string displayId, string accessToken, DateTime accessTokenExpiration, string refreshToken )
+		public OAuthTokenCredential( string displayId, string accessToken, DateTime accessTokenExpiration, string refreshToken, string username = null, string email = null )
 		{
 			DisplayId = displayId;
 			AccessToken = accessToken;
 			AccessTokenExpiration = accessTokenExpiration;
 			RefreshToken = refreshToken;
-			MailAddress = OAuthHelper.TokenToMailAddress( AccessToken );
+			Username = username ?? OAuthHelper.TokenToUsername( AccessToken );
+			MailAddress = email ?? OAuthHelper.TokenToMailAddress( AccessToken );
 		}
 
 		#endregion
@@ -45,6 +46,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 		public string RefreshToken { get; }
 
+		public string Username { get; }
+
 		public string MailAddress { get; }
 
 		#endregion
@@ -53,14 +56,20 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 		public static OAuthTokenCredential CreateWithIdentityToken( string identityToken, string accessToken, DateTime accessTokenExpiration, string refreshToken )
 		{
-			var identity = OAuthHelper.TokenToFriendlyText( identityToken );
-			return new OAuthTokenCredential( identity, accessToken, accessTokenExpiration, refreshToken );
+			var claims = OAuthHelper.GetClaimsFromSecurityToken( identityToken );
+
+			return CreateWithClaims( claims, accessToken, accessTokenExpiration, refreshToken );
 		}
 
 		public static OAuthTokenCredential CreateWithClaims( IEnumerable<Claim> claims, string accessToken, DateTime accessTokenExpiration, string refreshToken )
 		{
-			var identity = OAuthHelper.IdentityClaimsToFriendlyText( claims.ToList() );
-			return new OAuthTokenCredential( identity, accessToken, accessTokenExpiration, refreshToken );
+			var claimList = claims.ToList();
+
+			var identity = OAuthHelper.IdentityClaimsToFriendlyText( claimList );
+			var username = OAuthHelper.IdentityClaimsToUsername( claimList );
+			var email = OAuthHelper.IdentityClaimsToEmail( claimList );
+
+			return new OAuthTokenCredential( identity, accessToken, accessTokenExpiration, refreshToken, username, email );
 		}
 
 		/// <inheritdoc />
@@ -78,6 +87,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 				hashCode = ( hashCode * 397 ) ^ ( AccessToken != null ? AccessToken.GetHashCode() : 0 );
 				hashCode = ( hashCode * 397 ) ^ AccessTokenExpiration.GetHashCode();
 				hashCode = ( hashCode * 397 ) ^ ( RefreshToken != null ? RefreshToken.GetHashCode() : 0 );
+				hashCode = ( hashCode * 397 ) ^ ( Username != null ? Username.GetHashCode() : 0 );
 				hashCode = ( hashCode * 397 ) ^ ( MailAddress != null ? MailAddress.GetHashCode() : 0 );
 				return hashCode;
 			}
@@ -108,6 +118,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 					&& string.Equals( AccessToken, other.AccessToken )
 					&& AccessTokenExpiration.Equals( other.AccessTokenExpiration )
 					&& string.Equals( RefreshToken, other.RefreshToken )
+					&& string.Equals( Username, other.Username )
 					&& string.Equals( MailAddress, other.MailAddress );
 		}
 

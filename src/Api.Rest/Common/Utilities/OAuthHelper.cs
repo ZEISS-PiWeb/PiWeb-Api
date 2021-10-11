@@ -55,12 +55,27 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			return new JwtSecurityToken( jwtEncodedString );
 		}
 
+		public static IEnumerable<Claim> GetClaimsFromSecurityToken( string jwtEncodedString )
+		{
+			return DecodeSecurityToken( jwtEncodedString ).Claims;
+		}
+
 		public static string IdentityClaimsToFriendlyText( IList<Claim> claims )
 		{
-			var name = claims.SingleOrDefault( claim => claim.Type == "name" )?.Value;
-			var email = claims.SingleOrDefault( claim => claim.Type == "email" )?.Value;
+			var name = IdentityClaimsToUsername( claims );
+			var email = IdentityClaimsToEmail( claims );
 
 			return $"{name} ({email})";
+		}
+
+		public static string IdentityClaimsToEmail( IList<Claim> claims )
+		{
+			return claims.SingleOrDefault( claim => claim.Type == "email" )?.Value;
+		}
+
+		public static string IdentityClaimsToUsername( IList<Claim> claims )
+		{
+			return claims.SingleOrDefault( claim => claim.Type == "name" )?.Value;
 		}
 
 		public static string TokenToFriendlyText( string jwtEncodedString )
@@ -70,11 +85,28 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 			try
 			{
-				var decodedToken = DecodeSecurityToken( jwtEncodedString );
-				if( decodedToken != null )
-				{
-					return IdentityClaimsToFriendlyText( decodedToken.Claims.ToList() );
-				}
+				var claims = GetClaimsFromSecurityToken( jwtEncodedString ).ToList();
+
+				return IdentityClaimsToFriendlyText( claims );
+			}
+			catch
+			{
+				// ignored
+			}
+
+			return "";
+		}
+
+		public static string TokenToUsername( string jwtEncodedString )
+		{
+			if( string.IsNullOrEmpty( jwtEncodedString ) )
+				return "";
+
+			try
+			{
+				var claims = GetClaimsFromSecurityToken( jwtEncodedString ).ToList();
+
+				return IdentityClaimsToUsername( claims );
 			}
 			catch
 			{
@@ -91,11 +123,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 			try
 			{
-				var decodedToken = DecodeSecurityToken( jwtEncodedString );
-				if( decodedToken != null )
-				{
-					return decodedToken.Claims.SingleOrDefault( c => string.Equals( c.Type, "email" ) )?.Value;
-				}
+				var claims = GetClaimsFromSecurityToken( jwtEncodedString ).ToList();
+
+				return IdentityClaimsToEmail( claims );
 			}
 			catch
 			{
