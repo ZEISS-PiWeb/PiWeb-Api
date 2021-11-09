@@ -46,18 +46,29 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.Contracts
 		}
 
 		[Test]
-		[TestCase( "1.3", new[] { 2 } )]
-		[TestCase( "2.0, 2.2", new[] { 1 } )]
-		public void Test_GetBestKnownVersion_ThrowsServerApiNotSupportedException( string interfaceVersions, int[] supportedMajorVersions )
+		[TestCase( "1.3", new[] { 2 }, ServerApiNotSupportedReason.VersionsTooHigh )]
+		[TestCase( "2.0, 2.2", new[] { 1 }, ServerApiNotSupportedReason.VersionsTooLow )]
+		[TestCase( "1.3, 3.2", new[] { 2 }, ServerApiNotSupportedReason.VersionsNotSupported )]
+		[TestCase( "", new[] { 1, 2 }, ServerApiNotSupportedReason.VersionsNotSupported )]
+		[TestCase( "1.3, 3.2", new int[ 0 ], ServerApiNotSupportedReason.VersionsNotSupported )]
+		public void Test_GetBestKnownVersion_ThrowsServerApiNotSupportedException(
+			string interfaceVersions,
+			int[] supportedMajorVersions,
+			ServerApiNotSupportedReason reason )
 		{
 			// Given
 			var interfaceVersionRange = new InterfaceVersionRange { SupportedVersions = ParseVersions( interfaceVersions ) };
+			var expectedException = new ServerApiNotSupportedException( interfaceVersionRange, supportedMajorVersions, reason );
 
 			// When
 			Action getBestKnownVersion = () => FeatureMatrix.GetBestKnownVersion( interfaceVersionRange, supportedMajorVersions );
 
 			// Then
-			getBestKnownVersion.Should().Throw<ServerApiNotSupportedException>();
+			getBestKnownVersion.Should().Throw<ServerApiNotSupportedException>()
+				.Which.Should().BeEquivalentTo( expectedException, options => options
+					.Including( ex => ex.Versions )
+					.Including( ex => ex.SupportedMajorVersions )
+					.Including( ex => ex.Reason ) );
 		}
 
 		private static IEnumerable<Version> ParseVersions( string versionsString )
