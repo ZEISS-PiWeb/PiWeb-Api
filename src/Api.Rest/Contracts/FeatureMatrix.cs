@@ -70,15 +70,15 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 			if ( bestKnownVersion != null )
 				return bestKnownVersion;
 
-			var versionsTooNew = interfaceVersionRange.SupportedVersions.All( version =>
-				supportedMajorVersions.All( supportedMajorVersion => version.Major > supportedMajorVersion ) );
+			var versionsTooNew = interfaceVersionRange.SupportedVersions.All( interfaceVersion =>
+				supportedMajorVersions.All( supportedMajorVersion => interfaceVersion.Major > supportedMajorVersion ) );
 			if ( versionsTooNew )
-				throw new ServerApiNotSupportedException( interfaceVersionRange, supportedMajorVersions, ServerApiNotSupportedReason.VersionsTooLow );
-
-			var versionsTooOld = interfaceVersionRange.SupportedVersions.All( version =>
-				supportedMajorVersions.All( supportedMajorVersion => version.Major < supportedMajorVersion ) );
-			if ( versionsTooOld )
 				throw new ServerApiNotSupportedException( interfaceVersionRange, supportedMajorVersions, ServerApiNotSupportedReason.VersionsTooHigh );
+
+			var versionsTooOld = interfaceVersionRange.SupportedVersions.All( interfaceVersion =>
+				supportedMajorVersions.All( supportedMajorVersion => interfaceVersion.Major < supportedMajorVersion ) );
+			if ( versionsTooOld )
+				throw new ServerApiNotSupportedException( interfaceVersionRange, supportedMajorVersions, ServerApiNotSupportedReason.VersionsTooLow );
 
 			throw new ServerApiNotSupportedException( interfaceVersionRange, supportedMajorVersions );
 		}

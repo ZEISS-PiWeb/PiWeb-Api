@@ -46,8 +46,8 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.Contracts
 		}
 
 		[Test]
-		[TestCase( "1.3", new[] { 2 }, ServerApiNotSupportedReason.VersionsTooHigh )]
-		[TestCase( "2.0, 2.2", new[] { 1 }, ServerApiNotSupportedReason.VersionsTooLow )]
+		[TestCase( "1.3", new[] { 2 }, ServerApiNotSupportedReason.VersionsTooLow )]
+		[TestCase( "2.0, 2.2", new[] { 1 }, ServerApiNotSupportedReason.VersionsTooHigh )]
 		[TestCase( "1.3, 3.2", new[] { 2 }, ServerApiNotSupportedReason.VersionsNotSupported )]
 		[TestCase( "", new[] { 1, 2 }, ServerApiNotSupportedReason.VersionsNotSupported )]
 		[TestCase( "1.3, 3.2", new int[ 0 ], ServerApiNotSupportedReason.VersionsNotSupported )]
