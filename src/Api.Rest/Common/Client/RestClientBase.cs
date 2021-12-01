@@ -26,6 +26,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using System.Text;
 	using System.Threading;
 	using System.Threading.Tasks;
+	using CacheCow.Client;
+	using CacheCow.Common;
 	using JetBrains.Annotations;
 	using Newtonsoft.Json;
 	using Zeiss.PiWeb.Api.Rest.Common.Data;
@@ -74,7 +76,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		private HttpClient _HttpClient;
 		private TimeoutHandler _TimeoutHandler;
-		private HttpClientHandler _WebRequestHandler;
+		private HttpClientHandler _HttpClientHandler;
+		private CachingHandler _CachingHandler;
+		private ICacheStore _CacheStore;
 		private bool _IsDisposed;
 		private AuthenticationContainer _AuthenticationContainer = new AuthenticationContainer( AuthenticationMode.NoneOrBasic );
 
@@ -135,12 +139,12 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// </summary>
 		public bool UseDefaultWebProxy
 		{
-			get => _WebRequestHandler.UseProxy;
+			get => _HttpClientHandler.UseProxy;
 			set
 			{
-				if( _WebRequestHandler.UseProxy != value )
+				if( _HttpClientHandler.UseProxy != value )
 				{
-					_WebRequestHandler.UseProxy = value;
+					_HttpClientHandler.UseProxy = value;
 				}
 			}
 		}
@@ -161,6 +165,28 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 				_AuthenticationContainer = value;
 				UpdateAuthenticationInformation();
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the client-side cache store to cache requests (triggered by HTTP headers, like Cache-Control and Etag).
+		/// If the value is <see langword="null" />, built-in caching is used (.Net Framework) or caching is disabled (.Net Standard, .Net Core).
+		/// </summary>
+		/// <remarks>
+		/// For example use <see cref="InMemoryCacheStore"/> or <see cref="FilesystemCacheStore"/>.
+		/// </remarks>
+		public ICacheStore CacheStore
+		{
+			get => _CacheStore;
+
+			set
+			{
+				if( value == _CacheStore )
+					return;
+
+				_CacheStore = value;
+
+				RebuildHttpClient();
 			}
 		}
 
@@ -437,7 +463,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			var timeout = _TimeoutHandler.Timeout;
 
 			_HttpClient?.Dispose();
-			_WebRequestHandler?.Dispose();
+			_HttpClientHandler?.Dispose();
+			_CachingHandler?.Dispose();
 
 			BuildHttpClient( timeout );
 		}
@@ -445,9 +472,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		private void BuildHttpClient( TimeSpan? timeout )
 		{
 #if NETFRAMEWORK
-			_WebRequestHandler = new WebRequestHandler
+			var webRequestHandler = new WebRequestHandler
 			{
-				CachePolicy = new HttpRequestCachePolicy( HttpCacheAgeControl.MaxAge, TimeSpan.FromDays( 0 ) ),
 				AllowPipelining = true,
 				PreAuthenticate = true,
 				AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
@@ -466,21 +492,34 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				//     i.e. the Server is already authenticating every single request
 				UnsafeAuthenticatedConnectionSharing = true
 			};
+
+			if( _CacheStore == null )
+				webRequestHandler.CachePolicy = new HttpRequestCachePolicy( HttpCacheAgeControl.MaxAge, TimeSpan.FromDays( 0 ) );
+
+			_HttpClientHandler = webRequestHandler;
 #else
-			_WebRequestHandler = new HttpClientHandler
+			_HttpClientHandler = new HttpClientHandler
 			{
 				PreAuthenticate = true,
 				AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
 			};
 #endif
 
+			_CachingHandler = _CacheStore == null
+				? null
+				: new CachingHandler( _CacheStore )
+				{
+					InnerHandler = _HttpClientHandler,
+					DoNotEmitCacheCowHeader = true
+				};
+
 			_TimeoutHandler = new TimeoutHandler
 			{
 				Timeout = timeout ?? DefaultTimeout,
-				InnerHandler = _WebRequestHandler
+				InnerHandler = (HttpMessageHandler)_CachingHandler ?? _HttpClientHandler
 			};
 
-			 _HttpClient = new HttpClient( _TimeoutHandler )
+			_HttpClient = new HttpClient( _TimeoutHandler )
 			{
 				Timeout = System.Threading.Timeout.InfiniteTimeSpan,
 				BaseAddress = ServiceLocation
@@ -489,7 +528,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		private void UpdateAuthenticationInformation()
 		{
-			_WebRequestHandler.ClientCertificates.Clear();
+			_HttpClientHandler.ClientCertificates.Clear();
 			_HttpClient.DefaultRequestHeaders.Authorization = null;
 
 			switch( _AuthenticationContainer.Mode )
@@ -513,7 +552,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 					UpdateUseWindowsCredentials( false );
 					if( _AuthenticationContainer.Certificate != null )
 					{
-						_WebRequestHandler.ClientCertificates.Add( _AuthenticationContainer.Certificate );
+						_HttpClientHandler.ClientCertificates.Add( _AuthenticationContainer.Certificate );
 					}
 
 					break;
@@ -536,11 +575,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		private void UpdateUseWindowsCredentials( bool useDefaultCredentials, ICredentials credentials = null )
 		{
 			// if one of those properties changes we unfortunately need to rebuild the request handler and therefore the http client
-			if( _WebRequestHandler.UseDefaultCredentials == useDefaultCredentials && _WebRequestHandler.Credentials == null && credentials == null ) return;
+			if( _HttpClientHandler.UseDefaultCredentials == useDefaultCredentials && _HttpClientHandler.Credentials == null && credentials == null ) return;
 
 			RebuildHttpClient();
-			_WebRequestHandler.Credentials = credentials;
-			_WebRequestHandler.UseDefaultCredentials = useDefaultCredentials;
+			_HttpClientHandler.Credentials = credentials;
+			_HttpClientHandler.UseDefaultCredentials = useDefaultCredentials;
 		}
 
 		private void RaiseAuthenticationChanged()
@@ -559,7 +598,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				if( disposing )
 				{
 					_HttpClient?.Dispose();
-					_WebRequestHandler?.Dispose();
+					_HttpClientHandler?.Dispose();
+					_CachingHandler?.Dispose();
 				}
 
 				_IsDisposed = true;
