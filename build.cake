@@ -233,6 +233,7 @@ Task("Pack_Client")
             new NuSpecContent { Source = "net5.0/Zeiss.PiWeb.Api.Rest.xml", Target = "lib/net5.0" },
         },
         Dependencies             = new [] {
+            new NuSpecDependency { Id = "CacheCow.Client", Version = "2.8.3" },
             new NuSpecDependency { Id = "Newtonsoft.Json", Version = "12.0.3" },
             new NuSpecDependency { Id = "Newtonsoft.Json.Bson", Version = "1.0.2" },
             new NuSpecDependency { Id = "IdentityModel", Version = "5.1.0" },
