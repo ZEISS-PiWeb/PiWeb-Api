@@ -3,7 +3,6 @@ area: dataService
 level: 0
 version: 1.7
 title: Data Service
-isCurrentVersion: true
 permalink: /dataservice/v1.7/
 sections:
   dataservice:
