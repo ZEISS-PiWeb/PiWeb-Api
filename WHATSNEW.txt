@@ -1,5 +1,33 @@
 ======================================================
 -------------------------------------------------------------------------------------------
+ Version 7.1.0                                                                   
+-------------------------------------------------------------------------------------------
+======================================================
+
+
+==========================================
+ New Features
+==========================================
+
+- Added method to update RawDataInformation (e.g. filename, MIME-type)
+- CreateRawData now returns RawDataInformation containing newly created key if not specified by user
+- Added LimitResultPerPart to MeasurementFilterDtos to limit the result size per part instead of per request
+- Added PathInformationExtensions with useful methods to extract information from PathInformation objects
+- ServerApiNotSupportedException now contains exception reason (VersionTooLow/High) and checked version
+- FeatureMatrix now supports multiple major versions and is ready for future API updates
+- Added new property Username to OAuthTokenCredential containing friendly username without mail
+
+
+==========================================
+ Bugfixes
+==========================================
+
+- Correctly throw TimeoutException only on timeouts
+- Fixed potential deadlock when using API methods in synchronous code
+
+
+======================================================
+-------------------------------------------------------------------------------------------
  Version 7.0.0                                                                   
 -------------------------------------------------------------------------------------------
 ======================================================
