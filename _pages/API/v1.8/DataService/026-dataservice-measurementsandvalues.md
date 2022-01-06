@@ -210,7 +210,7 @@ HTTP/1.1 200 OK
 {% assign endpoint="/measurements" %}
 {% assign summary="Deletes measurements" %}
 {% capture description %}
-You have multiple options for deleting measurements measurements:
+You have multiple options for deleting measurements:
 
 * Delete all measurements
 * Delete measurements by their uuids

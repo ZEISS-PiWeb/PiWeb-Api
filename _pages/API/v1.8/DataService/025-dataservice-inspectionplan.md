@@ -556,7 +556,7 @@ In both cases the request deletes the characteristic itself as well as all its c
 {% assign exampleCaption="Delete the characteristic 'metal part/deviation_3' and all entities beneath it" %}
 {% capture jsonrequest %}
 {% highlight http %}
-DELETE /dataServiceRest/parts?charPath=/metal%20part/deviation_3 HTTP/1.1
+DELETE /dataServiceRest/characteristics?charPath=/metal%20part/deviation_3 HTTP/1.1
 {% endhighlight %}
 {% endcapture %}
 
