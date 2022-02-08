@@ -3,7 +3,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss Industrielle Messtechnik GmbH        */
 /* Softwaresystem PiWeb                            */
-/* (c) Carl Zeiss 2021                             */
+/* (c) Carl Zeiss 2022                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #endregion
@@ -47,7 +47,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// </summary>
 		public FilesystemCacheStore()
 		{
-			StoragePath = Path.Combine( Path.GetTempPath(), "Cache" );
+			StoragePath = Path.Combine( Path.GetTempPath(), "PiWeb_Cache" );
 		}
 
 		/// <summary>
@@ -110,7 +110,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			}
 			catch
 			{
-				// no matter what happened, pretend it is not cached
+				// no matter what happened, pretend it is not stored
 				return null;
 			}
 		}
@@ -125,7 +125,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			}
 			catch
 			{
-				// nothing to do, don't cache if not possible
+				// nothing to do, don't store if not possible
 			}
 		}
 

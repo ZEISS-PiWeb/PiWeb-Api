@@ -79,6 +79,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		private HttpClientHandler _HttpClientHandler;
 		private CachingHandler _CachingHandler;
 		private ICacheStore _CacheStore;
+		private IVaryHeaderStore _VaryHeaderStore;
 		private bool _IsDisposed;
 		private AuthenticationContainer _AuthenticationContainer = new AuthenticationContainer( AuthenticationMode.NoneOrBasic );
 
@@ -185,6 +186,28 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 					return;
 
 				_CacheStore = value;
+
+				RebuildHttpClient();
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the header store to build header-dependent keys for the cache (see "Vary" HTTP header).
+		/// If the value is <see langword="null" />, the default VaryHeaderStore is used.
+		/// </summary>
+		/// <remarks>
+		/// For example use <see cref="InMemoryVaryHeaderStore"/> or <see cref="FilesystemVaryHeaderStore"/>.
+		/// </remarks>
+		public IVaryHeaderStore VaryHeaderStore
+		{
+			get => _VaryHeaderStore;
+
+			set
+			{
+				if( value == _VaryHeaderStore )
+					return;
+
+				_VaryHeaderStore = value;
 
 				RebuildHttpClient();
 			}
@@ -505,13 +528,18 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			};
 #endif
 
-			_CachingHandler = _CacheStore == null
-				? null
-				: new CachingHandler( _CacheStore )
+			if( _CacheStore == null )
+				_CachingHandler = null;
+			else
+			{
+				_CachingHandler = new CachingHandler( _CacheStore )
 				{
 					InnerHandler = _HttpClientHandler,
 					DoNotEmitCacheCowHeader = true
 				};
+				if( _VaryHeaderStore != null )
+					_CachingHandler.VaryHeaderStore = _VaryHeaderStore;
+			}
 
 			_TimeoutHandler = new TimeoutHandler
 			{
