@@ -5,7 +5,7 @@
 You can fetch, create, update and delete measurements and values using the following endpoints:
 <br/>
 
->{{ site.images['info'] }} Endpoint `Measurements` creates measurements **without** measured values. Values sent to this endpoint are ignored and won't get saved! Always use the `Values` enpoint when creating or updating measurements **with** values!
+>{{ site.images['info'] }} Endpoint `Measurements` creates measurements **without** measured values. Values sent to this endpoint are ignored and won't get saved! Always use the `Values` endpoint when creating or updating measurements **with** values!
 
 #### Measurements
 {% assign linkId="measurementsGetAll" %}
@@ -23,7 +23,7 @@ You can fetch all measurements or certain measurements only. Possible filter uri
 <nobr><code>Path</code> partPath </nobr> | Restricts the query to this part <br> `partPath=/metal%20part`
 <nobr><code>bool</code> deep </nobr><br><i>default:</i> <code>false</code> | Determines whether the query should affect all levels of the inspection plan. <br> `deep=true`
 <nobr><code>OrderCriteria</code> order </nobr><br><i>default:</i> <code>4 desc</code>   | Determines which attribute keys and which direction the keys should be ordered by <br> `order:4 asc, 10 desc`
-<nobr><code>Condition</code> searchCondition </nobr>| The query will only return items matching all conditions. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. It can be necessary to encode '+' as '%2B'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ]. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`
+<nobr><code>Condition</code> searchCondition </nobr>| The query will only return items matching all conditions. A simple condition consists of the attribute key, followed by an operator and the value to match enclosed in brackets. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. It can be necessary to encode '+' as '%2B'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ], multiple values are separated by a comma. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`<br>`searchCondition=4>[2012-11-13T00:00:00Z]+852=[1]`<br>`searchCondition=10In[3,21,50]`
 <nobr><code>DateTime</code> fromModificationDate </nobr> | Specifies a date to select all measurements that where modified after that date. Please note that the system modification date (lastModified property) is used and not the time attribute (creation date).
 <nobr><code>DateTime</code> toModificationDate </nobr> | Specifies a date to select all measurements that where modified before that date. Please note that the system modification date (lastModified property) is used and not the time attribute (creation date).
 <nobr><code>int</code> limitResult </nobr>| Restricts the number of result items. <br> `limitResult=100`
@@ -225,7 +225,7 @@ Delete condition for deleting measurements from a single or multiple parts may b
 <nobr><code>Guid list</code> measurementUuids </nobr>         | Restricts the query to these measurements <br> `measurementUuids={5b59cac7-9ecd-403c-aa26-56dd25892421}`
 <nobr><code>Guid list</code> partUuids </nobr> | Restricts the query to these parts <br> `partUuids={e42c5327-6258-4c4c-b3e9-6d22c30938b2}`
 <nobr><code>Path</code> partPath </nobr> | Restricts the query to this part <br> `partPath=/metal%20part`
-<nobr><code>Condition</code> searchCondition </nobr>| The query will only return items matching all conditions. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ]. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`
+<nobr><code>Condition</code> searchCondition </nobr>| The query will only return items matching all conditions. A simple condition consists of the attribute key, followed by an operator and the value to match enclosed in brackets. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. It can be necessary to encode '+' as '%2B'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ], multiple values are separated by a comma. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`<br>`searchCondition=4>[2012-11-13T00:00:00Z]+852=[1]`<br>`searchCondition=10In[3,21,50]`
 <nobr><code>Measurements, AggregationMeasurements, All</code> aggregation </nobr><br><i>default:</i> <code>Measurements</code> | Specifies which types of measurements will be deleted. <br> `aggregation=All`
 <nobr><code>DeleteForCurrentPartOnly</code> or <code>DeleteDeep</code> deep </nobr><br><i>default:</i> <code>DeleteForCurrentPartOnly</code> | Determines whether the query should delete only measurements for the given part(s) specified by either <i>partPath</i> or <i>partUuids.</i><br> `deep=DeleteForCurrentPartOnly`
 <nobr><code>bool</code> runAsync </nobr> <br> <i>default:</i> <code>false</code> | Instructs the deletion to run asynchronously. <br> `runAsync=true`
@@ -317,9 +317,9 @@ HTTP/1.1 200 OK
 {% assign linkId="measurementAttributeValues" %}
 {% assign method="GET" %}
 {% assign endpoint="/distinctMeasurementAttributeValues" %}
-{% assign summary="Fetches distincted values for a certain measurement attribute" %}
+{% assign summary="Fetches distinct values for a certain measurement attribute" %}
 {% capture description %}
-You can fetch all given attribute values for a measurement attribute. Measurements to be considered are definded by the following parameters:
+You can fetch all given attribute values for a measurement attribute. Measurements to be considered are defined by the following parameters:
 
 {% capture table %}
 <code>Type</code> Parameter      |  Description <br> <code>Example</code>
@@ -330,7 +330,7 @@ You can fetch all given attribute values for a measurement attribute. Measuremen
 <nobr><code>Path</code> partPath </nobr> | Restricts the query to this part <br><br> `partPath=/metal%20part`
 <nobr><code>bool</code> deep </nobr><br><i>default:</i> <code>false</code> | Determines whether the query should affect all levels of the inspection plan. <br> `deep=true`
 <nobr><code>OrderCriteria</code> order </nobr><br><i>default:</i> <code>4 desc</code>   | Determines which attribute keys and which direction the keys should be ordered by <br> `order:4 asc, 10 desc`
-<nobr><code>Condition</code> searchCondition </nobr>| The query will only return items matching all conditions. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ]. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`
+<nobr><code>Condition</code> searchCondition </nobr>| The query will only return items matching all conditions. A simple condition consists of the attribute key, followed by an operator and the value to match enclosed in brackets. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. It can be necessary to encode '+' as '%2B'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ], multiple values are separated by a comma. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`<br>`searchCondition=4>[2012-11-13T00:00:00Z]+852=[1]`<br>`searchCondition=10In[3,21,50]`
 <nobr><code>DateTime</code> fromModificationDate </nobr> | Specifies a date to select all measurements that where modified after that date. Please note that the system modification date (lastModified property) is used and not the time attribute (creation date).
 <nobr><code>DateTime</code> toModificationDate </nobr> | Specifies a date to select all measurements that where modified before that date. Please note that the system modification date (lastModified property) is used and not the time attribute (creation date).
 <nobr><code>int</code> limitResult </nobr>| Restricts the number of result items. <br> `limitResult=100`
@@ -341,7 +341,7 @@ You can fetch all given attribute values for a measurement attribute. Measuremen
 {{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
 
 {% endcapture %}
-{% assign exampleCaption="Fetch distinced attribute values for attribute key 6 of the last 100 measurements" %}
+{% assign exampleCaption="Fetch distinct attribute values for attribute key 6 of the last 100 measurements" %}
 
 {% capture jsonrequest %}
 {% highlight http %}
@@ -378,7 +378,7 @@ You can fetch all measurements with values or only certain measurements with val
 <nobr><code>Path</code> partPath </nobr> | Restricts the query to this part <br><br> `partPath=/metal%20part`
 <nobr><code>bool</code> deep </nobr><br><i>default:</i> <code>false</code> | Determines whether the query should affect all levels of the inspection plan. <br> `deep=true`
 <nobr><code>OrderCriteria</code> order </nobr><br><i>default:</i> <code>4 desc</code>   | Determines which attribute keys and which direction the keys should be ordered by <br> `order:4 asc, 10 desc`
-<nobr><code>Condition</code> searchCondition </nobr>| The query will only return items matching all conditions. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. It can be necessary to encode '+' as '%2B'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ]. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`
+<nobr><code>Condition</code> searchCondition </nobr>| The query will only return items matching all conditions. A simple condition consists of the attribute key, followed by an operator and the value to match enclosed in brackets. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. It can be necessary to encode '+' as '%2B'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ], multiple values are separated by a comma. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`<br>`searchCondition=4>[2012-11-13T00:00:00Z]+852=[1]`<br>`searchCondition=10In[3,21,50]`
 <nobr><code>DateTime</code> fromModificationDate </nobr> | Specifies a date to select all measurements that where modified after that date. Please note that the system modification date (lastModified property) is used and not the time attribute (creation date).
 <nobr><code>DateTime</code> toModificationDate </nobr> | Specifies a date to select all measurements that where modified before that date. Please note that the system modification date (lastModified property) is used and not the time attribute (creation date).
 <nobr><code>int</code> limitResult </nobr>| Restricts the number of result items. <br> `limitResult=100`
