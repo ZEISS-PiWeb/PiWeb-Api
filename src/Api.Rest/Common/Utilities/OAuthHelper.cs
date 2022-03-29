@@ -417,6 +417,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			// https://identityserver.github.io/Documentation/docsv2/endpoints/endSession.html
 		}
 
+		public static void ClearAllAuthenticationInformation()
+		{
+			AccessTokenCache.Clear();
+		}
+
 		#endregion
 
 		#region class CryptoNumbers

@@ -86,6 +86,15 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			}
 		}
 
+		public void Clear()
+		{
+			if( _CredentialCache.Count > 0 )
+			{
+				_CredentialCache.Clear();
+				SaveToFile();
+			}
+		}
+
 		public void SaveToFile()
 		{
 			if( !Environment.UserInteractive )
