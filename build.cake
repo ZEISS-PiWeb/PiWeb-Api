@@ -185,7 +185,7 @@ Task("Pack_Dtos")
             new NuSpecContent { Source = "net5.0/Zeiss.PiWeb.Api.Rest.Dtos.xml", Target = "lib/net5.0" },
         },
         Dependencies             = new [] {
-            new NuSpecDependency { Id = "Newtonsoft.Json", Version = "12.0.3" },
+            new NuSpecDependency { Id = "Newtonsoft.Json", Version = "13.0.1" },
             new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2020.3.0" },
             new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Definitions", Version = nugetVersion }
         },
@@ -234,7 +234,7 @@ Task("Pack_Client")
         },
         Dependencies             = new [] {
             new NuSpecDependency { Id = "CacheCow.Client", Version = "2.8.3" },
-            new NuSpecDependency { Id = "Newtonsoft.Json", Version = "12.0.3" },
+            new NuSpecDependency { Id = "Newtonsoft.Json", Version = "13.0.1" },
             new NuSpecDependency { Id = "Newtonsoft.Json.Bson", Version = "1.0.2" },
             new NuSpecDependency { Id = "IdentityModel", Version = "5.1.0" },
             new NuSpecDependency { Id = "Microsoft.IdentityModel.Logging", Version = "6.11.1" },
