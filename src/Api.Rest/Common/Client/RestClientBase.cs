@@ -58,9 +58,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		#region members
 
 		/// <summary>
-		/// Default-Timeout of 5 minutes, which is used by RestClient if no timeout is given explicitly.
+		/// Default-Timeout of 220 seconds, which is used by RestClient if no timeout is given explicitly.
+		/// This value was chosen because the timeout of an REST request within the azure cloud is 230s.
 		/// </summary>
-		public static readonly TimeSpan DefaultTimeout = TimeSpan.FromMinutes( 5 );
+		public static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds( 220 );
 
 		/// <summary>
 		/// Default-Timeout which should be used for connection checks or other simple operations
