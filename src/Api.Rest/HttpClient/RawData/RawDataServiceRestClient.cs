@@ -122,12 +122,12 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 			var request = RequestBuilder.CreateWithAttachment( method, requestString, stream, info.MimeType, info.Size, info.MD5, info.FileName );
 
 			if ( featureMatrix.SupportsCreateRawDataResult )
-				return await _RestClient.Request<RawDataInformationDto>( request , cancellationToken );
+				return await _RestClient.Request<RawDataInformationDto>( request , cancellationToken ).ConfigureAwait( false );
 
-			await _RestClient.Request( request, cancellationToken );
+			await _RestClient.Request( request, cancellationToken ).ConfigureAwait( false );
 
 			var entity = info.Target.Entity;
-			var rawDataList = await ListRawData( entity, new[] { info.Target.Uuid }, null, cancellationToken );
+			var rawDataList = await ListRawData( entity, new[] { info.Target.Uuid }, null, cancellationToken ).ConfigureAwait( false );
 			return rawDataList.OrderByDescending( rawData => rawData.Key ?? 0 ).First();
 		}
 
@@ -323,7 +323,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 
 			var requestPath = $"rawData/{targetEntity.Entity}/{targetEntity.Uuid}/{targetKey}/archiveEntries";
 
-			return ( await _RestClient.Request<RawDataArchiveEntriesDto[]>( RequestBuilder.CreateGet( requestPath ), cancellationToken ) ).First();
+			return ( await _RestClient.Request<RawDataArchiveEntriesDto[]>( RequestBuilder.CreateGet( requestPath ), cancellationToken ).ConfigureAwait( false ) ).First();
 		}
 
 		/// <inheritdoc />
@@ -345,7 +345,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 				? $"rawData/{targetEntity.Entity}/{targetEntity.Uuid}/{targetKey}/archiveContent/{fileName}?expectedArchiveMd5={expectedArchiveMd5}"
 				: $"rawData/{targetEntity.Entity}/{targetEntity.Uuid}/{targetKey}/archiveContent/{fileName}";
 
-			return await _RestClient.RequestBytes( RequestBuilder.CreateGet( requestPath ), cancellationToken );
+			return await _RestClient.RequestBytes( RequestBuilder.CreateGet( requestPath ), cancellationToken ).ConfigureAwait( false );
 		}
 
 		/// <inheritdoc />
@@ -365,7 +365,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 			return await _RestClient.Request<RawDataArchiveEntriesDto[]>( RequestBuilder.CreatePost(
 					"rawData/archiveEntryQuery",
 					Payload.Create( query ) ),
-				cancellationToken );
+				cancellationToken ).ConfigureAwait( false );
 		}
 
 		/// <inheritdoc />
@@ -381,7 +381,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 			}
 			var query = new RawDataBulkQueryDto( selectors.ToArray() );
 
-			return await RawDataArchiveEntryQuery( query, cancellationToken );
+			return await RawDataArchiveEntryQuery( query, cancellationToken ).ConfigureAwait( false );
 		}
 
 		/// <inheritdoc />
@@ -401,7 +401,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 			using var stream = await _RestClient.RequestStream( RequestBuilder.CreatePost(
 					"rawData/archiveContentQuery",
 					Payload.Create( query ) ),
-				cancellationToken );
+				cancellationToken ).ConfigureAwait( false );
 
 			return RestClientHelper.DeserializeBinaryObject<RawDataArchiveContentDto[]>( stream );
 		}
@@ -420,7 +420,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		{
 			if( info == null ) throw new ArgumentNullException( nameof( info ) );
 			if( data == null ) throw new ArgumentNullException( nameof( data ) );
-			return await CreateRawDataInternal( info, data, HttpMethod.Post, cancellationToken );
+			return await CreateRawDataInternal( info, data, HttpMethod.Post, cancellationToken ).ConfigureAwait( false );
 		}
 
 		/// <summary>
