@@ -13,6 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 	#region usings
 
 	using System;
+	using System.IO;
 	using System.Threading;
 	using System.Threading.Tasks;
 	using JetBrains.Annotations;
@@ -65,6 +66,15 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="expectedMd5">The md5 check sum that is expected for the result object. If this value is set, performance is better because server side round trips are reduced.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		Task<byte[]> GetRawData( [NotNull] RawDataTargetEntityDto target, int rawDataKey, Guid? expectedMd5 = null, CancellationToken cancellationToken = default );
+
+		/// <summary>
+		/// Fetches raw data as stream for the raw data item identified by <paramref name="target"/> and <paramref name="rawDataKey"/>.
+		/// </summary>
+		/// <param name="target">The <see cref="RawDataTargetEntityDto"/> that specifies the raw data object that should be fetched.</param>
+		/// <param name="rawDataKey">The unique key that identifies the raw data object for the specified target.</param>
+		/// <param name="expectedMd5">The md5 check sum that is expected for the result object. If this value is set, performance is better because server side round trips are reduced.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+		Task<Stream> GetRawDataStream( [NotNull] RawDataTargetEntityDto target, int rawDataKey, Guid? expectedMd5 = null, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Fetches a preview image for the specified <code>info</code>.
@@ -126,12 +136,31 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		Task<RawDataInformationDto> CreateRawData( [NotNull] RawDataInformationDto info, [NotNull] byte[] data, CancellationToken cancellationToken = default );
 
 		/// <summary>
+		/// Creates a new raw data object <paramref name="data"/> for the element specified by <paramref name="info"/>.
+		/// </summary>
+		/// <param name="data">The raw data to upload.</param>
+		/// <param name="info">The <see cref="RawDataInformationDto"/> object containing the <see cref="RawDataEntityDto"/> type and the uuid of the raw data that should be uploaded.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+		/// <remarks>
+		/// If key specified by <see cref="RawDataInformationDto.Key"/> is -1, a new key will be chosen by the server automatically. This is the preferred way.
+		/// </remarks>
+		Task<RawDataInformationDto> CreateRawData( [NotNull] RawDataInformationDto info, [NotNull] Stream data, CancellationToken cancellationToken = default );
+
+		/// <summary>
 		/// Updates the raw data object <paramref name="data"/> for the element identified by <paramref name="info"/>.
 		/// </summary>
 		/// <param name="data">The raw data to upload.</param>
 		/// <param name="info">The <see cref="RawDataInformationDto"/> object containing the <see cref="RawDataEntityDto"/> type, the uuid and the key of the raw data that should be updated.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		Task UpdateRawData( [NotNull] RawDataInformationDto info, byte[] data, CancellationToken cancellationToken = default );
+
+		/// <summary>
+		/// Updates the raw data object <paramref name="data"/> for the element identified by <paramref name="info"/>.
+		/// </summary>
+		/// <param name="data">The raw data to upload.</param>
+		/// <param name="info">The <see cref="RawDataInformationDto"/> object containing the <see cref="RawDataEntityDto"/> type, the uuid and the key of the raw data that should be updated.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+		Task UpdateRawData( [NotNull] RawDataInformationDto info, Stream data, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Updates the raw data information (filename, Mime type) for the element identified by <paramref name="target"/> and <paramref name="rawDataKey"/>.
