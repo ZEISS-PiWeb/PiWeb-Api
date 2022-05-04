@@ -52,7 +52,7 @@ Task("UpdateAssemblyInfo")
         OutputType = GitVersionOutput.Json
     });
 
-    nugetVersion = isDeveloperBuild ? "0.0.0" : "7.1.1";
+    nugetVersion = isDeveloperBuild ? "0.0.0" : "7.1.2";
     Information("NuGet version overridden for release branch -> {0}", nugetVersion);
 
     Information("AssemblyVersion -> {0}", gitVersionInfo.AssemblySemVer);

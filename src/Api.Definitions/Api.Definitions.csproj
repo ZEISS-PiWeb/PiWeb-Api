@@ -5,13 +5,13 @@
     <RootNamespace>Zeiss.PiWeb.Api.Definitions</RootNamespace>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageVersion>7.1.1</PackageVersion>
+    <PackageVersion>7.1.2</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Assembly information">
     <AssemblyTitle>Contains generic data used by the ZEISS PiWeb API.</AssemblyTitle>
     <AssemblyName>Zeiss.PiWeb.Api.Definitions</AssemblyName>
-    <AssemblyVersion>7.1.1</AssemblyVersion>
+    <AssemblyVersion>7.1.2</AssemblyVersion>
     <Company>Carl Zeiss Industrielle Messtechnik GmbH</Company>
     <Copyright>Copyright © 2020 $(Company)</Copyright>
     <Description>Contains generic data used by the ZEISS PiWeb API. The ZEISS PiWeb API nuget depends on this package.</Description>
