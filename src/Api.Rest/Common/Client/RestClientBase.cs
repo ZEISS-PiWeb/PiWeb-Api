@@ -532,13 +532,12 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				_CachingHandler = null;
 			else
 			{
-				_CachingHandler = new CachingHandler( _CacheStore )
-				{
-					InnerHandler = _HttpClientHandler,
-					DoNotEmitCacheCowHeader = true
-				};
-				if( _VaryHeaderStore != null )
-					_CachingHandler.VaryHeaderStore = _VaryHeaderStore;
+				_CachingHandler = _VaryHeaderStore == null
+					? new CachingHandler( _CacheStore )
+					: new CachingHandler( _CacheStore, _VaryHeaderStore );
+				
+				_CachingHandler.InnerHandler = _HttpClientHandler;
+				_CachingHandler.DoNotEmitCacheCowHeader = true;
 			}
 
 			_TimeoutHandler = new TimeoutHandler
