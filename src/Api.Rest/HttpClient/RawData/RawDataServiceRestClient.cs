@@ -431,6 +431,8 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <exception cref="ArgumentNullException"><paramref name="info"/> or <paramref name="data"/> is <see langword="null" />.</exception>
 		public async Task<RawDataInformationDto> CreateRawData( RawDataInformationDto info, byte[] data, CancellationToken cancellationToken = default )
 		{
+			if( data == null ) throw new ArgumentNullException( nameof( data ) );
+
 			using var stream = new MemoryStream( data, 0, data.Length, false, true );
 
 			return await CreateRawData( info, stream, cancellationToken ).ConfigureAwait( false );
@@ -463,6 +465,8 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <exception cref="ArgumentNullException"><paramref name="info"/> is <see langword="null" />.</exception>
 		public async Task UpdateRawData( RawDataInformationDto info, byte[] data, CancellationToken cancellationToken = default )
 		{
+			if( data == null ) throw new ArgumentNullException( nameof( data ) );
+
 			using var stream = new MemoryStream( data, 0, data.Length, false, true );
 
 			await UpdateRawData( info, stream, cancellationToken ).ConfigureAwait( false );
