@@ -23,6 +23,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using System.Net;
 	using System.Net.Http;
 	using System.Net.Http.Headers;
+	using System.Runtime.Versioning;
 	using System.Text;
 	using System.Threading;
 	using System.Threading.Tasks;
@@ -53,6 +54,13 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// </summary>
 		public const int MaximumPathSegmentLength = 255;
 
+		private readonly bool _IsBrowser
+#if NET5_0_OR_GREATER
+			= OperatingSystem.IsBrowser();
+#else
+			= false;
+#endif
+
 		#endregion
 
 		#region members
@@ -73,6 +81,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		public static readonly TimeSpan DefaultShortTimeout = TimeSpan.FromSeconds( 15 );
 
 		private readonly bool _Chunked;
+		[CanBeNull] private readonly DelegatingHandler _CustomHttpMessageHandler;
 
 		private HttpClient _HttpClient;
 		private TimeoutHandler _TimeoutHandler;
@@ -91,7 +100,13 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// Initializes a new instance of the <see cref="RestClientBase"/> class.
 		/// </summary>
 		/// <exception cref="ArgumentNullException"><paramref name="serverUri"/> is <see langword="null" />.</exception>
-		protected RestClientBase( [NotNull] Uri serverUri, string endpointName, TimeSpan? timeout = null, int maxUriLength = DefaultMaxUriLength, bool chunked = true )
+		protected RestClientBase(
+			[NotNull] Uri serverUri,
+			string endpointName,
+			TimeSpan? timeout = null,
+			int maxUriLength = DefaultMaxUriLength,
+			bool chunked = true,
+			[CanBeNull] DelegatingHandler customHttpMessageHandler = null )
 		{
 			if( serverUri == null )
 				throw new ArgumentNullException( nameof( serverUri ) );
@@ -102,6 +117,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			}.Uri;
 
 			_Chunked = chunked;
+			_CustomHttpMessageHandler = customHttpMessageHandler;
 
 			MaxUriLength = maxUriLength;
 
@@ -138,23 +154,33 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// <summary>
 		/// Gets or sets if system default proxy should be used.
 		/// </summary>
+		/// <remarks>
+		/// For executing within a browser this property is ignored and the browser's default is used.
+		/// </remarks>
+#pragma warning disable CA1416
 		public bool UseDefaultWebProxy
 		{
-			get => _HttpClientHandler.UseProxy;
+			get => _IsBrowser || _HttpClientHandler.UseProxy;
 			set
 			{
-				if( _HttpClientHandler.UseProxy != value )
-				{
+				if( !_IsBrowser && _HttpClientHandler.UseProxy != value )
 					_HttpClientHandler.UseProxy = value;
-				}
 			}
 		}
+#pragma warning restore CA1416
 
 		/// <summary>
 		/// Returns the endpoint address of the webservice.
 		/// </summary>
 		public Uri ServiceLocation { get; }
 
+		/// <summary>
+		/// Gets or sets the information for authenticating requests.
+		/// </summary>
+		/// <remarks>
+		/// For executing within a browser this property is ignored.
+		/// Instead inject a custom <see cref="DelegatingHandler"/> to appropriately modify the request.
+		/// </remarks>
 		public AuthenticationContainer AuthenticationContainer
 		{
 			get => _AuthenticationContainer;
@@ -165,6 +191,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				if( _AuthenticationContainer == value ) return;
 
 				_AuthenticationContainer = value;
+
+				// Use the custom HTTP message handler for passing authentication relevant information in browser instead.
+				if( _IsBrowser )
+					return;
+
 				UpdateAuthenticationInformation();
 			}
 		}
@@ -521,11 +552,17 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 			_HttpClientHandler = webRequestHandler;
 #else
-			_HttpClientHandler = new HttpClientHandler
+			_HttpClientHandler = new HttpClientHandler();
+
+			// Almost all options are not available when running in browser
+			// and need to be done either manually or are not possible at all.
+			if ( !_IsBrowser )
 			{
-				PreAuthenticate = true,
-				AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-			};
+#pragma warning disable CA1416
+				_HttpClientHandler.PreAuthenticate = true;
+				_HttpClientHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+#pragma warning restore CA1416
+			}
 #endif
 
 			if( _CacheStore == null )
@@ -535,7 +572,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				_CachingHandler = _VaryHeaderStore == null
 					? new CachingHandler( _CacheStore )
 					: new CachingHandler( _CacheStore, _VaryHeaderStore );
-				
+
 				_CachingHandler.InnerHandler = _HttpClientHandler;
 				_CachingHandler.DoNotEmitCacheCowHeader = true;
 			}
@@ -546,13 +583,19 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				InnerHandler = (HttpMessageHandler)_CachingHandler ?? _HttpClientHandler
 			};
 
-			_HttpClient = new HttpClient( _TimeoutHandler )
+			if( _CustomHttpMessageHandler != null )
+				_CustomHttpMessageHandler.InnerHandler = _TimeoutHandler;
+
+			_HttpClient = new HttpClient( _CustomHttpMessageHandler ?? _TimeoutHandler )
 			{
 				Timeout = System.Threading.Timeout.InfiniteTimeSpan,
 				BaseAddress = ServiceLocation
 			};
 		}
 
+#if NET5_0_OR_GREATER
+		[UnsupportedOSPlatform( "browser" )]
+#endif
 		private void UpdateAuthenticationInformation()
 		{
 			_HttpClientHandler.ClientCertificates.Clear();
@@ -599,6 +642,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			RaiseAuthenticationChanged();
 		}
 
+#if NET5_0_OR_GREATER
+		[UnsupportedOSPlatform( "browser" )]
+#endif
 		private void UpdateUseWindowsCredentials( bool useDefaultCredentials, ICredentials credentials = null )
 		{
 			// if one of those properties changes we unfortunately need to rebuild the request handler and therefore the http client

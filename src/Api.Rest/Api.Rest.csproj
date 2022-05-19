@@ -43,6 +43,10 @@
     <DebugType>Full</DebugType>
   </PropertyGroup>
 
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
   <ItemGroup Label=".NET references" Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
     <Reference Include="System.Net.Http.WebRequest" />
   </ItemGroup>
