@@ -27,21 +27,15 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// <remarks>This class is immutable.</remarks>
 	[Serializable]
 	[JsonConverter( typeof( AttributeConverter ) )]
-	public class AttributeDto : IEquatable<AttributeDto>
+	public readonly struct AttributeDto : IEquatable<AttributeDto>
 	{
 		#region members
 
-		private string _Value;
+		private readonly string _Value;
 
 		#endregion
 
 		#region constructors
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AttributeDto"/> class.
-		/// </summary>
-		public AttributeDto()
-		{ }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AttributeDto"/> class with key <code>key</code> and value <code>value</code>.
@@ -74,12 +68,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Returns the key of this attribute.
 		/// </summary>
-		public ushort Key { get; set; }
+		public ushort Key { get; }
 
 		/// <summary>
 		/// Returns the unparsed attribute value of this attribute.
 		/// </summary>
-		public object RawValue { get; set; }
+		public object RawValue { get; }
 
 		/// <summary>
 		/// Returns the string parsed attribute value of this attribute.
@@ -109,6 +103,27 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		#region methods
 
 		/// <summary>
+		/// Validate the raw value and only allows null, int, double, DateTime
+		/// and CatalogEntry as a RawValue
+		/// </summary>
+		private void ValidateRawValue()
+		{
+			switch( RawValue )
+			{
+				case null:
+				case string:
+				case double:
+				case int:
+				case short:
+				case DateTime:
+				case CatalogEntryDto:
+					return;
+				default:
+					throw new ArgumentException( $"Unable to initialize the attribute. Invalid value '{RawValue}' with type '{RawValue.GetType()}'" );
+			}
+		}
+
+		/// <summary>
 		/// Determines whether this attribute has a value or not. This allows us to distinguish between attributes defining the empty string
 		/// and attributes defining a null value (which could be interpreted as deletion during a merge).
 		/// </summary>
@@ -118,6 +133,91 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		public bool IsNull()
 		{
 			return RawValue == null && _Value == null;
+		}
+
+		/// <summary>
+		/// Returns the encapsulated value as a <see cref="int"/>. If the value is not a int or is not
+		/// convertible to a int, an exception is thrown.
+		/// </summary>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// Thrown, if the <see cref="Value"/> is not convertible to a <see cref="int"/>.
+		/// </exception>
+		[CanBeNull]
+		public int? GetIntegerValue()
+		{
+			switch( RawValue )
+			{
+				case int value:
+					return value;
+				case short value:
+					return value;
+				case CatalogEntryDto entry:
+					return entry.Key;
+			}
+
+			if( !string.IsNullOrEmpty( Value ) )
+				return XmlConvert.ToInt32( Value );
+
+			return null;
+		}
+
+		/// <summary>
+		/// Returns the encapsulated value as a <see cref="double"/>. If the value is not a double or is not
+		/// convertible to a double, an exception is thrown.
+		/// </summary>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// Thrown, if the <see cref="Value"/> is not convertible to a <see cref="double"/>.
+		/// </exception>
+		[CanBeNull]
+		public double? GetFloatValue()
+		{
+			if( RawValue is double doubleValue )
+				return doubleValue;
+
+			if( !string.IsNullOrEmpty( Value ) )
+				return XmlConvert.ToDouble( Value );
+
+			return null;
+		}
+
+		/// <summary>
+		/// Returns the encapsulated value as a <see cref="string"/>. If the value is not a string <code>null</code> is returned.
+		/// </summary>
+		[CanBeNull]
+		public string GetStringValue()
+		{
+			if( RawValue is string valueString )
+				return valueString;
+
+			if( !string.IsNullOrEmpty( Value ) )
+				return Value;
+
+			return null;
+		}
+
+		/// <summary>
+		/// Returns the encapsulated value as a <see cref="DateTime"/>. If the value is not a date or is not
+		/// convertible to a date, an exception is thrown.
+		/// </summary>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// Thrown, if the <see cref="Value"/> is not convertible to a <see cref="DateTime"/>.
+		/// </exception>
+		[CanBeNull]
+		public DateTime? GetDateValue()
+		{
+			DateTime date;
+
+			if( RawValue is DateTime rawDateTime )
+				date = rawDateTime;
+			else if( !string.IsNullOrEmpty( Value ) )
+				date = XmlConvert.ToDateTime( Value, XmlDateTimeSerializationMode.RoundtripKind );
+			else
+				return null;
+
+			if( date.Kind != DateTimeKind.Unspecified )
+				return date.ToUniversalTime();
+
+			return new DateTime( date.Ticks, DateTimeKind.Local );
 		}
 
 		/// <summary>
@@ -267,7 +367,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <inheritdoc />
 		public bool Equals( AttributeDto other )
 		{
-			if( Key != other?.Key )
+			if( Key != other.Key )
 				return false;
 
 			if( RawValue is null || other.RawValue is null )

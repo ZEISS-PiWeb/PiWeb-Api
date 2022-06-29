@@ -281,9 +281,9 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		private static Func<T, object> SelectAttributeValues<T>( OrderDto order ) where  T: SimpleMeasurementDto
 		{
 			if( order.Attribute == WellKnownKeys.Measurement.Time )
-				return m => m.Time;
+				return measurement => measurement.Time;
 
-			return m => m.Attributes.FirstOrDefault( a => a.Key == order.Attribute )?.Value;
+			return measurement => measurement.GetAttributeValue( order.Attribute );
 		}
 
 		private async Task PollOperationStatus( string statusId, CancellationToken cancellationToken = default )

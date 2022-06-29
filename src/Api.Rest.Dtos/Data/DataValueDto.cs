@@ -62,14 +62,14 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		{
 			get
 			{
-				var att = this.GetAttribute( WellKnownKeys.Value.MeasuredValue );
-				if( att != null )
-				{
-					if( att.RawValue != null )
-						return (double)att.RawValue;
-					if( !string.IsNullOrEmpty( att.Value ) )
-						return double.Parse( att.Value, CultureInfo.InvariantCulture );
-				}
+				var attribute = this.GetAttribute( WellKnownKeys.Value.MeasuredValue );
+				if( attribute == null )
+					return null;
+
+				if( attribute.Value.RawValue != null )
+					return (double)attribute.Value.RawValue;
+				if( !string.IsNullOrEmpty( attribute.Value.Value ) )
+					return double.Parse( attribute.Value.Value, CultureInfo.InvariantCulture );
 
 				return null;
 			}
