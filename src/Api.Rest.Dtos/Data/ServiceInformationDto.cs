@@ -13,6 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	#region usings
 
 	using System;
+	using System.Collections.Generic;
 	using Newtonsoft.Json;
 
 	#endregion
@@ -81,7 +82,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Gets or sets a list of features that are supported by the server.
 		/// </summary>
 		[JsonProperty( "featureList" )]
-		public string[] FeatureList { get; set; }
+		public IReadOnlyCollection<string> FeatureList { get; set; }
 
 		/// <summary>
 		/// Gets or sets the timestamp of the last inspection plan modification accross the whole server.

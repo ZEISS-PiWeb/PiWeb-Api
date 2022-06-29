@@ -190,26 +190,26 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		}
 
 		/// <summary>Creates a list string from the ushorts <code>value</code>.</summary>
-		public static string ConvertUshortArrayToString( ushort[] value )
+		public static string ConvertUshortArrayToString( IReadOnlyCollection<ushort> value )
 		{
 			return ConvertFormattableArrayToString( value, formatProvider: CultureInfo.InvariantCulture );
 		}
 
 		/// <summary>Creates a list string from the shorts <code>value</code>.</summary>
-		internal static string ConvertShortArrayToString( short[] value )
+		internal static string ConvertShortArrayToString( IReadOnlyCollection<short> value )
 		{
 			return ConvertFormattableArrayToString( value, formatProvider: CultureInfo.InvariantCulture );
 		}
 
 		/// <summary>Creates a list string from the uuids <code>value</code>.</summary>
-		public static string ConvertGuidListToString( Guid[] value )
+		public static string ConvertGuidListToString( IReadOnlyCollection<Guid> value )
 		{
 			return ConvertFormattableArrayToString( value, "D" );
 		}
 
-		private static string ConvertFormattableArrayToString<T>( T[] value, string format = null, IFormatProvider formatProvider = null ) where T : IFormattable
+		private static string ConvertFormattableArrayToString<T>( IReadOnlyCollection<T> value, string format = null, IFormatProvider formatProvider = null ) where T : IFormattable
 		{
-			if( value == null || value.Length == 0 )
+			if( value == null || value.Count == 0 )
 				return "";
 
 			return ToListString( value.Select( v => v.ToString( format, formatProvider ) ) );
@@ -265,7 +265,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 			string requestPath,
 			int maxUriLength,
 			string parameterName,
-			Guid[] uuidsToSplit,
+			IReadOnlyCollection<Guid> uuidsToSplit,
 			ParameterDefinition[] otherParameters )
 		{
 			if( serviceLocation == null ) throw new ArgumentNullException( nameof( serviceLocation ) );
@@ -301,7 +301,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 			string requestPath,
 			int maxUriLength,
 			string parameterName,
-			string[] pathsToSplit,
+			IReadOnlyCollection<string> pathsToSplit,
 			ParameterDefinition[] otherParameters )
 		{
 			if( serviceLocation == null ) throw new ArgumentNullException( nameof( serviceLocation ) );

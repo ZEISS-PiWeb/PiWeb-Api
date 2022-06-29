@@ -12,6 +12,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
 	#region usings
 
+	using System.Collections.Generic;
 	using System.Globalization;
 	using Newtonsoft.Json;
 	using Zeiss.PiWeb.Api.Definitions;
@@ -44,7 +45,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DataValueDto"/> class.
 		/// </summary>
-		public DataValueDto( AttributeDto[] attributes )
+		public DataValueDto( IReadOnlyList<AttributeDto> attributes )
 		{
 			Attributes = attributes;
 		}
@@ -78,12 +79,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#region interface IAttributeItemDto
 
-		/// <summary>
-		/// Gets or sets the attributes that belong to the measurement value. By default, every measurement
-		/// value has the attribute with key <code>1</code> which is the measurent value as a double value.
-		/// </summary>
+		/// <inheritdoc />
 		[JsonProperty( "attributes" ), JsonConverter( typeof( AttributeArrayConverter ) )]
-		public AttributeDto[] Attributes { get; set; }
+		public IReadOnlyList<AttributeDto> Attributes { get; set; }
 
 		#endregion
 	}

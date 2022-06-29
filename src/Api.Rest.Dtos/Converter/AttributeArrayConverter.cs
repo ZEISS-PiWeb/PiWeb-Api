@@ -20,9 +20,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 	#endregion
 
 	/// <summary>
-	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="AttributeDto"/> arrays.
+	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="AttributeDto"/> collections.
 	/// </summary>
-	public class AttributeArrayConverter : JsonConverter
+	public sealed class AttributeArrayConverter : JsonConverter
 	{
 		#region methods
 
@@ -31,7 +31,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 		/// </summary>
 		public override bool CanConvert( Type objectType )
 		{
-			return typeof( AttributeDto[] ) == objectType;
+			return typeof( IReadOnlyList<AttributeDto> ) == objectType;
 		}
 
 		/// <summary>
@@ -39,19 +39,19 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 		/// </summary>
 		public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer )
 		{
+			if( reader.TokenType != JsonToken.StartObject )
+				return Array.Empty<AttributeDto>();
+
 			var result = new List<AttributeDto>();
-			if( reader.TokenType == JsonToken.StartObject )
+			while( reader.Read() && reader.TokenType == JsonToken.PropertyName )
 			{
-				while( reader.Read() && reader.TokenType == JsonToken.PropertyName )
-				{
-					var key = AttributeKeyCache.Cache.StringToKey( reader.Value.ToString() );
-					var value = reader.ReadAsString();
+				var key = AttributeKeyCache.Cache.StringToKey( reader.Value.ToString() );
+				var value = reader.ReadAsString();
 
-					result.Add( new AttributeDto( key, value ) );
-				}
+				result.Add( new AttributeDto( key, value ) );
 			}
+			return result;
 
-			return result.ToArray();
 		}
 
 		/// <summary>
@@ -61,8 +61,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 		{
 			writer.WriteStartObject();
 
-			var attributes = (AttributeDto[])value;
-			if( attributes != null && attributes.Length > 0 )
+			var attributes = (IReadOnlyList<AttributeDto>)value;
+			if( attributes != null && attributes.Count > 0 )
 			{
 				foreach( var att in attributes )
 				{

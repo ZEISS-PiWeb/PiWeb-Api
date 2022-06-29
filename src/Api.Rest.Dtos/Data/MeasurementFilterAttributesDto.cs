@@ -68,7 +68,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Specifies the list of primary measurement keys to be used for joining measurements accross multiple parts on the server side.
 		/// </summary>
-		public ushort[] MergeAttributes { get; set; }
+		public IReadOnlyCollection<ushort> MergeAttributes { get; set; }
 
 		/// <summary>
 		/// Specifies the condition that must be adhered to
@@ -247,11 +247,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		}
 
 		/// <inheritdoc />
-		public override ParameterDefinition[] ToParameterDefinition()
+		public override IReadOnlyCollection<ParameterDefinition> ToParameterDefinition()
 		{
 			var result = new List<ParameterDefinition>();
 
-			if( PartUuids != null && PartUuids.Length > 0 )
+			if( PartUuids != null && PartUuids.Count > 0 )
 				result.Add( ParameterDefinition.Create( PartUuidsParamName, RestClientHelper.ConvertGuidListToString( PartUuids ) ) );
 
 			if( Deep )
@@ -263,13 +263,13 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			if( LimitResultPerPart >= 0 )
 				result.Add( ParameterDefinition.Create( LimitResultPerPartParamName, LimitResultPerPart.ToString() ) );
 
-			if( MeasurementUuids != null && MeasurementUuids.Length > 0 )
+			if( MeasurementUuids != null && MeasurementUuids.Count > 0 )
 				result.Add( ParameterDefinition.Create( MeasurementUuidsParamName, RestClientHelper.ConvertGuidListToString( MeasurementUuids ) ) );
 
 			if( RequestedMeasurementAttributes != null && RequestedMeasurementAttributes.AllAttributes != AllAttributeSelectionDto.True && RequestedMeasurementAttributes.Attributes != null )
 				result.Add( ParameterDefinition.Create( RequestedMeasurementAttributesParamName, RestClientHelper.ConvertUshortArrayToString( RequestedMeasurementAttributes.Attributes ) ) );
 
-			if( OrderBy != null && OrderBy.Length > 0 )
+			if( OrderBy != null && OrderBy.Count > 0 )
 				result.Add( ParameterDefinition.Create( OrderByParamName, OrderByToString( OrderBy ) ) );
 
 			if( SearchCondition != null )
@@ -287,7 +287,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			if( ToModificationDate.HasValue )
 				result.Add( ParameterDefinition.Create( ToModificationDateParamName, XmlConvert.ToString( ToModificationDate.Value, XmlDateTimeSerializationMode.RoundtripKind ) ) );
 
-			if( MergeAttributes != null && MergeAttributes.Length > 0 )
+			if( MergeAttributes != null && MergeAttributes.Count > 0 )
 				result.Add( ParameterDefinition.Create( MergeAttributesParamName, RestClientHelper.ConvertUshortArrayToString( MergeAttributes ) ) );
 
 			if( MergeCondition != MeasurementMergeConditionDto.MeasurementsInAllParts )
@@ -296,7 +296,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			if( MergeMasterPart != null )
 				result.Add( ParameterDefinition.Create( MergeMasterPartParamName, MergeMasterPart.ToString() ) );
 
-			return result.ToArray();
+			return result;
 		}
 
 		#endregion

@@ -98,12 +98,12 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			var requestRestriction = RequestBuilder.AppendParameters( "values", parameter );
 			var targetSize = RestClientHelper.GetUriTargetSize( ServiceLocation, requestRestriction, MaxUriLength );
 
-			var result = new List<DataMeasurementDto>( filter.MeasurementUuids.Length );
+			var result = new List<DataMeasurementDto>( filter.MeasurementUuids.Count );
 			var resultSets = 0;
 			foreach( var uuids in ArrayHelper.Split( filter.MeasurementUuids, targetSize, RestClientHelper.LengthOfListElementInUri ) )
 			{
 				newFilter.MeasurementUuids = uuids;
-				if( newFilter.CharacteristicsUuidList?.Length > 0 )
+				if( newFilter.CharacteristicsUuidList?.Count > 0 )
 				{
 					result.AddRange( await GetMeasurementValuesSplitByCharacteristics( partPath, newFilter, cancellationToken ).ConfigureAwait( false ) );
 				}
@@ -129,7 +129,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			var requestRestriction = RequestBuilder.AppendParameters( "values", parameter );
 			var targetSize = RestClientHelper.GetUriTargetSize( ServiceLocation, requestRestriction, MaxUriLength );
 
-			var result = new List<DataMeasurementDto>( filter.MeasurementUuids?.Length ?? 0 );
+			var result = new List<DataMeasurementDto>( filter.MeasurementUuids?.Count ?? 0 );
 			var allMeasurements = new Dictionary<Guid, DataMeasurementDto>();
 			foreach( var uuids in ArrayHelper.Split( filter.CharacteristicsUuidList, targetSize, RestClientHelper.LengthOfListElementInUri ) )
 			{
@@ -153,14 +153,19 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			return result.ToArray();
 		}
 
-		private static DataCharacteristicDto[] Combine( DataCharacteristicDto[] list1, DataCharacteristicDto[] list2 )
+		private static IReadOnlyCollection<DataCharacteristicDto> Combine( IReadOnlyCollection<DataCharacteristicDto> list1, IReadOnlyCollection<DataCharacteristicDto> list2 )
 		{
 			if( list1 == null )
 				return list2;
 			if( list2 == null )
 				return list1;
 
-			return list1.Concat( list2 ).ToArray();
+			var result = new List<DataCharacteristicDto>( list1.Count + list2.Count );
+
+			result.AddRange( list1 );
+			result.AddRange( list2 );
+
+			return result;
 		}
 
 		private static List<ParameterDefinition> CreateParameterDefinitions<T>( PathInformationDto partPath, T filter, int? key = null ) where T : AbstractMeasurementFilterAttributesDto
@@ -782,7 +787,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			const string requestPath = "measurements";
 
 			// split multiple measurement uuids into chunks of uuids using multiple requests to avoid "Request-URI Too Long" exception
-			if( filter?.MeasurementUuids?.Length > 0 )
+			if( filter?.MeasurementUuids?.Count > 0 )
 			{
 				var newFilter = filter.Clone();
 				newFilter.MeasurementUuids = null;
@@ -803,7 +808,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			}
 
 			// split multiple part uuids into chunks of uuids using multiple requests to avoid "Request-URI Too Long" exception
-			if( filter?.PartUuids?.Length > 0 )
+			if( filter?.PartUuids?.Count > 0 )
 			{
 				var newFilter = filter.Clone();
 				newFilter.PartUuids = null;
@@ -836,7 +841,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			await ThrowOnUnsupportedDistinctMeasurementValueSearch( cancellationToken );
 			await ThrowOnUnsupportedLimitResultPerPart( filter, cancellationToken );
 
-			if( filter?.MeasurementUuids?.Length > 0 )
+			if( filter?.MeasurementUuids?.Count > 0 )
 			{
 				var newFilter = filter.Clone();
 				newFilter.MeasurementUuids = null;
@@ -847,7 +852,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 				var requestRestriction = RequestBuilder.AppendParameters( "values", parameter );
 				var targetSize = RestClientHelper.GetUriTargetSize( ServiceLocation, requestRestriction, MaxUriLength );
 
-				var result = new List<string>( filter.MeasurementUuids.Length );
+				var result = new List<string>( filter.MeasurementUuids.Count );
 				foreach( var uuids in ArrayHelper.Split( filter.MeasurementUuids, targetSize, RestClientHelper.LengthOfListElementInUri ) )
 				{
 					newFilter.MeasurementUuids = uuids;
@@ -958,10 +963,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			await ThrowOnUnsupportedMergeAttributes( filter?.MergeAttributes, cancellationToken );
 			await ThrowOnUnsupportedLimitResultPerPart( filter, cancellationToken );
 
-			if( filter?.MeasurementUuids?.Length > 0 )
+			if( filter?.MeasurementUuids?.Count > 0 )
 				return await GetMeasurementValuesSplitByMeasurement( partPath, filter, cancellationToken ).ConfigureAwait( false );
 
-			if( filter?.CharacteristicsUuidList?.Length > 0 )
+			if( filter?.CharacteristicsUuidList?.Count > 0 )
 				return await GetMeasurementValuesSplitByCharacteristics( partPath, filter, cancellationToken ).ConfigureAwait( false );
 
 			return await _RestClient.Request<DataMeasurementDto[]>( RequestBuilder.CreateGet( "values", CreateParameterDefinitions( partPath, filter ).ToArray() ), cancellationToken ).ConfigureAwait( false );

@@ -10,6 +10,8 @@
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
+	using System.Collections.Generic;
+
 	#region usings
 
 	#endregion
@@ -42,7 +44,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GenericSearchAndDto"/> class.
 		/// </summary>
-		public GenericSearchAndDto( GenericSearchConditionDto[] filter )
+		public GenericSearchAndDto( IReadOnlyCollection<GenericSearchConditionDto> filter )
 		{
 			Conditions = filter;
 		}
@@ -51,7 +53,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#region properties
 
-		public GenericSearchConditionDto[] Conditions { get; set; }
+		public IReadOnlyCollection<GenericSearchConditionDto> Conditions { get; set; }
 
 		#endregion
 	}

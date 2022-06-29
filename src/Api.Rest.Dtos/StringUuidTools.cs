@@ -20,8 +20,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 
 	#endregion
 
-	/// <summary> 
-	/// Helper class to convert a pair of measurementUuid and characteristicUuid to a string in form measurementUuid|characteristicUuid and vice versa. 
+	/// <summary>
+	/// Helper class to convert a pair of measurementUuid and characteristicUuid to a string in form measurementUuid|characteristicUuid and vice versa.
 	/// </summary>
 	public static class StringUuidTools
 	{
@@ -113,7 +113,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 
 		/// <exception cref="ArgumentOutOfRangeException">The syntax of any uuid in <paramref name="uuids"/> is invalid.</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="uuids"/> is <see langword="null" />.</exception>
-		public static List<Guid> StringUuidListToGuidList( [NotNull] IEnumerable<string> uuids )
+		public static IReadOnlyList<Guid> StringUuidListToGuidList( [NotNull] IEnumerable<string> uuids )
 		{
 			if( uuids == null )
 				throw new ArgumentNullException( nameof( uuids ) );

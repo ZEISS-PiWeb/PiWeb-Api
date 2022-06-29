@@ -13,6 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	#region usings
 
 	using System;
+	using System.Collections.Generic;
 	using System.Data.SqlTypes;
 	using System.Diagnostics;
 	using System.Xml;
@@ -34,7 +35,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		private static readonly DateTime MinimumValidDatabaseDateTime = DateTime.SpecifyKind( SqlDateTime.MinValue.Value, DateTimeKind.Utc );
 
-		private AttributeDto[] _Attributes = Array.Empty<AttributeDto>();
+		private IReadOnlyList<AttributeDto> _Attributes = Array.Empty<AttributeDto>();
 		private DateTime? _CachedTimeValue;
 		private bool _HasCachedTime;
 
@@ -73,7 +74,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// performing a measurement search using one of the values from <see cref="MeasurementStatisticsDto"/>.
 		/// </summary>
 		[JsonProperty( "status" )]
-		public SimpleMeasurementStatusDto[] Status { get; set; }
+		public IReadOnlyList<SimpleMeasurementStatusDto> Status { get; set; }
 
 		/// <summary>
 		/// Gets or sets the time of this measurement. If this measurement has no time attribute, then <see cref="MinimumValidDatabaseDateTime"/> will
@@ -94,26 +95,14 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 					if( att != null && !string.IsNullOrEmpty( att.Value ) )
 						_CachedTimeValue = XmlConvert.ToDateTime( att.Value, XmlDateTimeSerializationMode.RoundtripKind );
 				}
-				catch { }
+				catch
+				{
+					// ignored
+				}
 
 				_HasCachedTime = true;
 
 				return _CachedTimeValue;
-			}
-			set
-			{
-				if( value == null )
-				{
-					this.RemoveAttribute( WellKnownKeys.Measurement.Time );
-					_CachedTimeValue = null;
-					_HasCachedTime = true;
-				}
-				else
-				{
-					this.SetAttribute( new AttributeDto( WellKnownKeys.Measurement.Time, XmlConvert.ToString( value.Value, XmlDateTimeSerializationMode.RoundtripKind ) ) );
-					_CachedTimeValue = value;
-					_HasCachedTime = true;
-				}
 			}
 		}
 
@@ -145,7 +134,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		/// <inheritdoc />
 		[JsonProperty( "attributes" ), JsonConverter( typeof( AttributeArrayConverter ) )]
-		public AttributeDto[] Attributes
+		public IReadOnlyList<AttributeDto> Attributes
 		{
 			[NotNull] get => _Attributes;
 			set

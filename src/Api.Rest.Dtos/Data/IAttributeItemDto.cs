@@ -10,17 +10,19 @@
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
+	using System.Collections.Generic;
+
 	/// <summary>
-	/// Interface für Objekte, die eine Liste von Attributen zur Verfügung stellen.
+	/// This interface represents entities that contain a list of <see cref="AttributeDto"/>.
 	/// </summary>
 	public interface IAttributeItemDto
 	{
 		#region properties
 
 		/// <summary>
-		/// Gibt alle Attribute als Feld zurück.
+		/// Returns all attributes for this item.
 		/// </summary>
-		AttributeDto[] Attributes { get; set; }
+		IReadOnlyList<AttributeDto> Attributes { get; set; }
 
 		#endregion
 	}

@@ -88,18 +88,19 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		{
 			get
 			{
-				if( _Value == null )
-				{
-					if( RawValue is double doubleValue )
-						return doubleValue.ToString( "G17", CultureInfo.InvariantCulture );
-					if( RawValue is DateTime dateTimeValue )
-						return XmlConvert.ToString( dateTimeValue, XmlDateTimeSerializationMode.RoundtripKind );
-					if( RawValue is CatalogEntryDto catalogEntryValue )
-						return catalogEntryValue.Key.ToString();
-					return Convert.ToString( RawValue, CultureInfo.InvariantCulture );
-				}
+				if( _Value != null )
+					return _Value;
 
-				return _Value;
+				if( RawValue is double doubleValue )
+					return doubleValue.ToString( "G17", CultureInfo.InvariantCulture );
+
+				if( RawValue is DateTime dateTimeValue )
+					return XmlConvert.ToString( dateTimeValue, XmlDateTimeSerializationMode.RoundtripKind );
+
+				if( RawValue is CatalogEntryDto catalogEntryValue )
+					return catalogEntryValue.Key.ToString();
+
+				return Convert.ToString( RawValue, CultureInfo.InvariantCulture );
 			}
 		}
 
@@ -129,32 +130,78 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			if( RawValue != null )
 				return RawValue;
 
-			if( _Value == null )
+			if( string.IsNullOrEmpty( _Value ) )
 				return null;
 
+			if( type == typeof( string ) )
+				return _Value;
+
+			if( type == typeof( DateTime ) )
+				return GetDateValue();
+
+			if( type == typeof( float ) || type ==  typeof( double ) )
+				return GetDoubleValue();
+
+			if( type == typeof( int ) )
+				return GetIntValue();
+
+			return null;
+		}
+
+		/// <summary>
+		/// Returns the value for key <code>key</code> as a <see cref="double"/>.
+		/// </summary>
+		/// <remarks>
+		/// If the parsing fails, <code>null</code> is returned.
+		/// </remarks>
+		public double? GetDoubleValue()
+		{
+#if NETSTANDARD
+			if( double.TryParse( _Value, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var result ) )
+				return result;
+#else
+			if( double.TryParse( _Value.AsSpan(), NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var result ) )
+				return result;
+#endif
+			return null;
+		}
+
+		/// <summary>
+		/// Returns the value for key <code>key</code> as a <see cref="int"/>.
+		/// </summary>
+		/// <remarks>
+		/// If the parsing fails, <code>null</code> is returned.
+		/// </remarks>
+		public int? GetIntValue()
+		{
+#if NETSTANDARD
+			if( int.TryParse( _Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var result ) )
+				return result;
+#else
+			if( int.TryParse( _Value.AsSpan(), NumberStyles.Integer, CultureInfo.InvariantCulture, out var result ) )
+				return result;
+#endif
+
+			return null;
+		}
+
+		/// <summary>
+		/// Returns the value as a <see cref="DateTime"/>.
+		/// </summary>
+		/// <remarks>
+		/// If the parsing fails, <code>null</code> is returned.
+		/// </remarks>
+		public DateTime? GetDateValue()
+		{
 			try
 			{
-				if( type == typeof( string ) )
-					return _Value;
-
-				if( !string.IsNullOrEmpty( _Value ) )
-				{
-					if( type == typeof( DateTime ) )
-						return XmlConvert.ToDateTime( _Value, XmlDateTimeSerializationMode.RoundtripKind );
-
-					if( type == typeof( float ) || type == typeof( double ) )
-						return XmlConvert.ToDouble( _Value );
-
-					if( type == typeof( int ) )
-						return XmlConvert.ToInt32( _Value );
-				}
+				return XmlConvert.ToDateTime( _Value, XmlDateTimeSerializationMode.RoundtripKind );
 			}
 			catch
 			{
-				// ignored
+				// return null in case of a parse error
+				return null;
 			}
-
-			return null;
 		}
 
 		private static bool RawValueEquals( [NotNull] object valueX, [NotNull] object valueY )

@@ -10,6 +10,8 @@
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
+	using System.Collections.Generic;
+
 	/// <summary>
 	/// Holds information about the attributes which should be returned on a search operation.
 	/// </summary>
@@ -36,7 +38,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AttributeSelector"/> class.
 		/// </summary>
-		public AttributeSelector( ushort[] attributes )
+		public AttributeSelector( IReadOnlyList<ushort> attributes )
 		{
 			AllAttributes = AllAttributeSelectionDto.False;
 			Attributes = attributes;
@@ -49,7 +51,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets the list of attributes that should be fetched.
 		/// </summary>
-		public ushort[] Attributes { get; set; }
+		public IReadOnlyList<ushort> Attributes { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value that determines whether to fetch all, no or just the query efficient attributes.
