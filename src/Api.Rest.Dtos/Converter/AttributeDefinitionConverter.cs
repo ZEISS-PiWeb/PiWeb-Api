@@ -22,7 +22,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 	/// <summary>
 	/// Specialized <see cref="JsonConverter"/> for <see cref="AbstractAttributeDefinitionDto"/>-objects.
 	/// </summary>
-	public class AttributeDefinitionConverter : JsonConverter
+	public sealed class AttributeDefinitionConverter : JsonConverter
 	{
 		#region methods
 

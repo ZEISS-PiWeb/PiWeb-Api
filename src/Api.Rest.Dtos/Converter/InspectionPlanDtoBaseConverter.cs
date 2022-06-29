@@ -24,7 +24,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 	/// <summary>
 	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="InspectionPlanDtoBase"/>-objects.
 	/// </summary>
-	public class InspectionPlanDtoBaseConverter : JsonConverter
+	public sealed class InspectionPlanDtoBaseConverter : JsonConverter
 	{
 		#region constants
 

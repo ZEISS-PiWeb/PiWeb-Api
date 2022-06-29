@@ -23,7 +23,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 	/// <summary>
 	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="DataCharacteristicDto"/>-objects.
 	/// </summary>
-	public class DataCharacteristicConverter : JsonConverter
+	public sealed class DataCharacteristicConverter : JsonConverter
 	{
 		#region methods
 

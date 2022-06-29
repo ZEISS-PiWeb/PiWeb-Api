@@ -21,7 +21,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// Defines an entity's attribute.
 	/// </summary>
 	[JsonConverter( typeof( AttributeDefinitionConverter ) )]
-	public class AttributeDefinitionDto : AbstractAttributeDefinitionDto
+	public sealed class AttributeDefinitionDto : AbstractAttributeDefinitionDto
 	{
 		#region constructors
 
