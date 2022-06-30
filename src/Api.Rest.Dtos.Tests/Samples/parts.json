@@ -1,0 +1,29 @@
+﻿[
+  {
+    "attributes": {},
+    "path": "/",
+    "charChangeDate": "2022-06-30T06:25:35.56Z",
+    "uuid": "00000000-0000-0000-0000-000000000000",
+    "version": 0,
+    "timestamp": "2022-01-31T19:00:37.15Z"
+  },
+  {
+    "attributes": {
+      "1001": "122345",
+      "1003": "Blechteil",
+      "1004": "0815",
+      "1008": "BR 1",
+      "1011": "Modell 123",
+      "1041": "123213 123145 ADHSA",
+      "1086": "A7",
+      "1100": "Presswerk",
+      "1103": "1",
+      "1900": "Kommentar"
+    },
+    "path": "P:/Blechteil/",
+    "charChangeDate": "2022-01-31T19:02:58.767Z",
+    "uuid": "fe85eefe-f08d-4e78-9f06-0e3b3cc9275e",
+    "version": 0,
+    "timestamp": "2022-06-30T06:25:35.46Z"
+  }
+]

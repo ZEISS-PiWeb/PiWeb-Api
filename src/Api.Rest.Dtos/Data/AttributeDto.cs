@@ -15,6 +15,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	using System;
 	using System.Globalization;
 	using System.Xml;
+	using JetBrains.Annotations;
 	using Newtonsoft.Json;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 
@@ -26,7 +27,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// <remarks>This class is immutable.</remarks>
 	[Serializable]
 	[JsonConverter( typeof( AttributeConverter ) )]
-	public class AttributeDto
+	public class AttributeDto : IEquatable<AttributeDto>
 	{
 		#region members
 
@@ -156,10 +157,76 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			return null;
 		}
 
+		private static bool RawValueEquals( [NotNull] object valueX, [NotNull] object valueY )
+		{
+			if( ReferenceEquals( valueX, valueY ) )
+				return true;
+
+			if( valueX.GetType() != valueY.GetType() )
+				return false;
+
+			if( valueX is int intX && valueY is int intY )
+				return intX == intY;
+
+			if( valueX is short shortX && valueY is short shortY )
+				return shortX == shortY;
+
+			if( valueX is double doubleX && valueY is double doubleY )
+				return doubleX == doubleY;
+
+			if( valueX is DateTime dateTimeValueX && valueY is DateTime dateTimeValueY )
+				return DateTime.Equals( dateTimeValueX.ToUniversalTime(), dateTimeValueY.ToUniversalTime() );
+
+			if( valueX is CatalogEntryDto catalogEntryX && valueY is CatalogEntryDto catalogEntryY )
+				return catalogEntryX.Key == catalogEntryY.Key;
+
+			return valueX.Equals( valueY );
+		}
+
+		/// <inheritdoc />
+		public override bool Equals( object obj )
+		{
+			return obj is Attribute other && Equals( other );
+		}
+
+		/// <inheritdoc />
+		public override int GetHashCode()
+		{
+			// Always use string representation to compute hash code to avoid different hashes of the same attribute created
+			// using different constructors.
+			return HashCode.Combine( Key, Value );
+		}
+
+		public static bool operator ==( AttributeDto left, AttributeDto right )
+		{
+			return left.Equals( right );
+		}
+
+		public static bool operator !=( AttributeDto left, AttributeDto right )
+		{
+			return !left.Equals( right );
+		}
+
 		/// <inheritdoc />
 		public override string ToString()
 		{
 			return $"K{Key}: {Value}";
+		}
+
+		#endregion
+
+		#region interface IEquatable<Attribute>
+
+		/// <inheritdoc />
+		public bool Equals( AttributeDto other )
+		{
+			if( Key != other?.Key )
+				return false;
+
+			if( RawValue is null || other.RawValue is null )
+				return Value == other.Value;
+
+			return RawValueEquals( RawValue, other.RawValue );
 		}
 
 		#endregion
