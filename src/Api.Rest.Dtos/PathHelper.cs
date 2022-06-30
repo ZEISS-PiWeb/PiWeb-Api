@@ -13,8 +13,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 	#region usings
 
 	using System;
+	using System.Buffers;
 	using System.Collections.Generic;
-	using System.Runtime.CompilerServices;
 	using System.Text;
 	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
@@ -80,17 +80,26 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 		/// <summary> Delimiter character for the path components. </summary>
 		public const char Delimiter = '/';
 
-		/// <summary> Escaped delimiter character for the path components </summary>
-		public const string EscapedDelimiter = @"\/";
-
 		/// <summary> Delimiter string for the path components </summary>
 		public const string DelimiterString = "/";
 
-		/// <summary> Escape character for delimiter characters. </summary>
-		public const char Escape = '\\';
+		/// <summary> Escaped delimiter character for the path components </summary>
+		private const string EscapedDelimiter = @"\/";
 
-		/// <summary> Escape character as string for delimiter characters. </summary>
-		public const string EscapeString = @"\";
+		/// <summary> Escape character for delimiter characters. </summary>
+		private const char Escape = '\\';
+
+		#endregion
+
+		#region members
+
+		[ThreadStatic] private static StringBuilder _StringBuilder;
+
+		#endregion
+
+		#region properties
+
+		private static StringBuilder StringBuilder => _StringBuilder ??= new StringBuilder();
 
 		#endregion
 
@@ -136,11 +145,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 			// convert to database format by prepending a delimiter if it is not already present
 			if( !path.StartsWith( DelimiterString, StringComparison.Ordinal ) )
 				path = DelimiterString + path;
+
 			// convert to database format by appending a delimiter if it is not already present (beware of escaping)
 			if( !path.EndsWith( DelimiterString, StringComparison.Ordinal ) || path.EndsWith( EscapedDelimiter, StringComparison.Ordinal ) )
 				path += DelimiterString;
 
-			return String2PathInformationInternal( path, null, i => entity );
+			return String2PathInformationInternal( path.AsSpan(), "".AsSpan(), entity );
 		}
 
 		/// <summary>
@@ -153,13 +163,17 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 				throw new ArgumentException( "The path string must not be null or empty.", nameof( path ) );
 
 			// fast code path for root path
-			if( path == DelimiterString ) return PathInformationDto.Root;
+			if( DelimiterString.Equals( path  ) )
+				return PathInformationDto.Root;
 
 			var index = path.IndexOf( ':' );
 			if( index < 1 )
 				throw new ArgumentException( "The path must have the following structure:\"structure:path\", e.g.: \"PC:/part/characteristic/\"." );
 
-			return DatabaseString2PathInformation( path.Substring( index + 1 ), path.Substring( 0, index ) );
+			var pathString = path.AsSpan( index + 1 );
+			var structureString = path.AsSpan( 0, index );
+
+			return DatabaseString2PathInformation( pathString, structureString );
 		}
 
 		/// <summary>
@@ -167,56 +181,68 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 		/// Depending on <paramref name="structure"/> it will be a part or a characteristic.
 		/// </summary>
 		[NotNull]
-		public static PathInformationDto DatabaseString2PathInformation( [NotNull] string path, string structure )
+		public static PathInformationDto DatabaseString2PathInformation( ReadOnlySpan<char> path, ReadOnlySpan<char> structure )
 		{
-			if( string.IsNullOrEmpty( path ) )
-				throw new ArgumentException( "The path string must not be null or empty.", nameof( path ) );
-
 			// fast code path for root path
-			if( path == DelimiterString && string.IsNullOrEmpty( structure ) )
+			if( path[ 0 ] == Delimiter && structure.Length == 0 )
 				return PathInformationDto.Root;
 
-			return String2PathInformationInternal( path, structure, i => StructureIdentifierToEntity( structure, i ) );
+			return String2PathInformationInternal( path, structure, null );
 		}
 
-		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		private static InspectionPlanEntityDto StructureIdentifierToEntity( string structure, int index )
+		private static InspectionPlanEntityDto StructureIdentifierToEntity( ReadOnlySpan<char> structure, int index )
 		{
 			return structure[ index ] == 'P' ? InspectionPlanEntityDto.Part : InspectionPlanEntityDto.Characteristic;
 		}
 
 		[NotNull]
-		private static PathInformationDto String2PathInformationInternal( [NotNull] string path, string maybeStructure, Func<int, InspectionPlanEntityDto> entitySelector )
+		private static PathInformationDto String2PathInformationInternal( ReadOnlySpan<char> path, ReadOnlySpan<char> structure, InspectionPlanEntityDto? explicitEntity )
 		{
-			// tests for path invariants
-			// 1) start with delimiter
-			if( path[ 0 ] != Delimiter )
-				throw new ArgumentException( $"The database path string must start with a delimiter '{DelimiterString}'. Actual value is '{path}'." );
-			// 2) end with delimiter - not tested easily as it might be escaped
+			if( structure.Length > 0 && !explicitEntity.HasValue )
+			{
+				var result = new PathElementDto[ structure.Length ];
+				if( path.IndexOf( Escape ) > 0 )
+				{
+					// difficult code with quoting
+					GetPathElementsFromQuotedString( path, structure, null, result );
+				}
+				else
+				{
+					// easy code without quoting
+					GetPathElementsFromUnquotedString( path, structure, null, result );
+				}
 
-			var initialCount = maybeStructure?.Length ?? 2;
-			var result = path.Contains( EscapeString )
-				?
-				// difficult code with quoting
-				GetPathElementsFromQuotedString( path, entitySelector, initialCount, maybeStructure )
-				:
-				// easy code without quoting
-				GetPathElementsFromUnquotedString( path, entitySelector, initialCount );
-
-			if( maybeStructure != null && result.Count != maybeStructure.Length )
-				throw new InvalidOperationException( $"Mismatch in number of path components between pathstring ('{path}') and structure ('{maybeStructure}')." );
-
-			return new PathInformationDto( result );
+				return new PathInformationDto( result );
+			}
+			else
+			{
+				var result = new List<PathElementDto>();
+				if( path.IndexOf( Escape ) > 0 )
+				{
+					// difficult code with quoting
+					GetPathElementsFromQuotedString( path, structure, explicitEntity, result );
+				}
+				else
+				{
+					// easy code without quoting
+					GetPathElementsFromUnquotedString( path, structure, explicitEntity, result );
+				}
+				return new PathInformationDto( result.ToArray() );
+			}
 		}
 
-		private static List<PathElementDto> GetPathElementsFromQuotedString( [NotNull] string path, Func<int, InspectionPlanEntityDto> entitySelector, int initialCount, string maybeStructure )
+		// correctly unescape quotes by evaluating all characters left to right, might be slow but gives correct results
+		private static void GetPathElementsFromQuotedString( ReadOnlySpan<char> path, ReadOnlySpan<char> structure, InspectionPlanEntityDto? explicitEntity, IList<PathElementDto> result )
 		{
-			var result = new List<PathElementDto>( initialCount );
+			VerifyQuotedPath( path );
 
-			// correctly unescape quotes by evaluating all characters left to right, might be slow but gives correct results
-			var sb = new StringBuilder( 25 );
+			var sb = StringBuilder;
+			sb.Clear();
+
 			var pathIndex = 0;
 			var escaped = false;
+			var resultIndex = 0;
+
 			// start at first character as the first character is always the delimiter
 			for( var i = 1; i < path.Length; i += 1 )
 			{
@@ -232,14 +258,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 					// Unmaskiertes Pfadtrennzeichen gefunden => Ende des Namens des aktuellen Pfadelements erreicht
 					var value = sb.ToString();
 					if( value.Length == 0 )
-						throw new InvalidOperationException( $"The path string '{path}' must not contain any empty path element." );
+						throw new InvalidOperationException( $"The path string '{path.ToString()}' must not contain any empty path element." );
 
 					// Bei Bauteilen den Pfadbestandteil internen, um Speicherplatz zu sparen
-					var type = entitySelector( pathIndex );
-					if( type == InspectionPlanEntityDto.Part )
-						value = string.Intern( value );
+					var type = explicitEntity ?? StructureIdentifierToEntity( structure, pathIndex );
 
-					result.Add( new PathElementDto( type, value ) );
+					result[ resultIndex++ ] = new PathElementDto( type, value );
 
 					sb.Clear();
 					pathIndex += 1;
@@ -251,41 +275,60 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 			}
 
 			if( escaped )
-				throw new InvalidOperationException( $"The path string '{path}' contains invalid quoting. every quote character must be followed by another quote character. single quote characters at the end ar not allowed." );
+				throw new InvalidOperationException( $"The path string '{path.ToString()}' contains invalid quoting. every quote character must be followed by another quote character. single quote characters at the end ar not allowed." );
 			if( sb.Length > 0 )
-				throw new InvalidOperationException( $"The path string '{path}' does not end with an unquoted delimiter character." );
-			if( maybeStructure != null && pathIndex != maybeStructure.Length )
-				throw new InvalidOperationException( $"The number of components in path string '{path}' and structure '{maybeStructure}' must be equal." );
-
-			return result;
+				throw new InvalidOperationException( $"The path string '{path.ToString()}' does not end with an unquoted delimiter character." );
 		}
 
-		private static List<PathElementDto> GetPathElementsFromUnquotedString( [NotNull] string path, Func<int, InspectionPlanEntityDto> entitySelector, int initialCount )
+		private static void GetPathElementsFromUnquotedString( ReadOnlySpan<char> path, ReadOnlySpan<char> structure, InspectionPlanEntityDto? explicitEntity, IList<PathElementDto> result )
 		{
-			var components = path.Split( Delimiter );
-			if( components.Length < 3 )
-				throw new InvalidOperationException( $"The path string '{path}' must have at least 3 components after splitting because it has to start and end with a delimiter character." );
-			if( components[ 0 ].Length != 0 )
-				throw new InvalidOperationException( $"The first component of path string '{path}' has to be an empty string after splitting because it has to start with a delimiter character." );
-			if( components[ components.Length - 1 ].Length != 0 )
-				throw new InvalidOperationException( $"The last component of path string '{path}' has to be an empty string after splitting because it has to end with a delimiter character." );
+			VerifyUnquotedPath( path );
 
-			var pathElements = new List<PathElementDto>( initialCount );
-			for( var i = 1; i < components.Length - 1; i += 1 )
+			var slice = path.Slice( 1, path.Length - 1 );
+
+			var i = 0;
+			var resultIndex = 0;
+
+			while( !slice.IsEmpty )
 			{
-				var value = components[ i ];
+				var substringLength = slice.IndexOf( Delimiter );
+				substringLength = substringLength < 0 ? slice.Length : substringLength;
+
+				var type = explicitEntity ?? StructureIdentifierToEntity( structure, i );
+				var value = slice.Slice( 0, substringLength ).ToString();
+
 				if( value.Length == 0 )
-					throw new InvalidOperationException( $"The path string '{path}' must not contain any empty path element." );
-				var type = entitySelector( i - 1 );
+					throw new InvalidOperationException( $"The path string '{path.ToString()}' must not contain any empty path element." );
 
-				// Bei Bauteilen den Pfadbestandteil internen, um Speicherplatz zu sparen
-				if( type == InspectionPlanEntityDto.Part )
-					value = string.Intern( value );
+				result[ resultIndex++ ] = new PathElementDto( type, value );
 
-				pathElements.Add( new PathElementDto( type, value ) );
+				slice = slice.Slice( substringLength + 1 );
+				i++;
 			}
+		}
 
-			return pathElements;
+		private static void VerifyQuotedPath( ReadOnlySpan<char> path )
+		{
+			// tests for path invariants
+			// 1) start with delimiter
+			// 2) end with delimiter - not tested easily as it might be escaped
+
+			if( path[ 0 ] != Delimiter )
+				throw new InvalidOperationException( $"The first character of path string '{path.ToString()}' has to a delimiter character." );
+		}
+
+		private static void VerifyUnquotedPath( ReadOnlySpan<char> path )
+		{
+			// tests for path invariants
+			// 1) start with delimiter
+			// 2) end with delimiter
+
+			if( path.Length < 3 )
+				throw new InvalidOperationException( $"The path string '{path.ToString()}' must have at least 3 components after splitting because it has to start and end with a delimiter character." );
+			if( path[ 0 ] != Delimiter )
+				throw new InvalidOperationException( $"The first character of path string '{path.ToString()}' has to a delimiter character." );
+			if( path[ path.Length - 1 ] != Delimiter )
+				throw new InvalidOperationException( $"The last character of path string '{path.ToString()}' has to a delimiter character." );
 		}
 
 		/// <summary>
@@ -302,7 +345,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 			// fast code path for root path
 			if( path.IsRoot ) return DelimiterString;
 
-			var sb = new StringBuilder( 25 );
+			var sb = StringBuilder;
+			sb.Clear();
+
 			PathInformation2StringInternal( sb, path );
 
 			return sb.ToString();
@@ -318,14 +363,26 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 			if( path == null ) throw new ArgumentNullException( nameof( path ) );
 
 			// fast code path for root path
-			if( path.IsRoot ) return DelimiterString;
+			if( path.IsRoot )
+				return DelimiterString;
 
-			var sb = new StringBuilder( 25 );
-			sb.Append( GetStructure( path ) );
-			sb.Append( ":" );
+			var sb = StringBuilder;
+			sb.Clear();
+
+			AppendStructure( sb, path );
+			sb.Append( ':' );
 			sb.Append( PathInformation2DatabaseString( path ) );
 
 			return sb.ToString();
+		}
+
+		private static void AppendStructure( StringBuilder sb, PathInformationDto path )
+		{
+			// ReSharper disable once ForCanBeConvertedToForeach
+			for( var i = 0; i < path.Count; i++ )
+			{
+				sb.Append( path[ i ].Type == InspectionPlanEntityDto.Part ? 'P' : 'C' );
+			}
 		}
 
 		/// <summary>
@@ -338,9 +395,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 			if( path == null ) throw new ArgumentNullException( nameof( path ) );
 
 			// fast code path for root path
-			if( path.IsRoot ) return DelimiterString;
+			if( path.IsRoot )
+				return DelimiterString;
 
-			var sb = new StringBuilder( 25 );
+			var sb = StringBuilder;
+			sb.Clear();
 			sb.Append( Delimiter );
 			PathInformation2StringInternal( sb, path );
 			sb.Append( Delimiter );
@@ -368,19 +427,25 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 		{
 			if( path == null ) throw new ArgumentNullException( nameof( path ) );
 
-			var result = new char[ path.Count ];
-			for( var i = 0; i < path.Count; i++ )
+			var result = ArrayPool<char>.Shared.Rent( path.Count );
+			try
 			{
-				result[ i ] = path[ i ].Type == InspectionPlanEntityDto.Part ? 'P' : 'C';
+				for( var i = 0; i < path.Count; i++ )
+				{
+					result[ i ] = path[ i ].Type == InspectionPlanEntityDto.Part ? 'P' : 'C';
+				}
+				return new string( result, 0, path.Count );
 			}
-
-			return new string( result );
+			finally
+			{
+				ArrayPool<char>.Shared.Return( result );
+			}
 		}
 
 		[Obsolete( "Use DatabaseString2PathInformation or RoundtripString2PathInformation instead" )]
 		public static PathInformationDto String2PathInformation( string path, string structure )
 		{
-			return DatabaseString2PathInformation( path, structure );
+			return DatabaseString2PathInformation( path.AsSpan(), structure.AsSpan() );
 		}
 
 		#endregion
