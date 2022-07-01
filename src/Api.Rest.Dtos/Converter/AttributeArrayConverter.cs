@@ -38,6 +38,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 			if( reader.TokenType != JsonToken.StartObject )
 				return Array.Empty<AttributeDto>();
 
+			return ReadAttributes( reader );
+		}
+
+		internal static IReadOnlyList<AttributeDto> ReadAttributes( JsonReader reader )
+		{
 			var result = new List<AttributeDto>();
 			while( reader.Read() && reader.TokenType == JsonToken.PropertyName )
 			{
@@ -46,6 +51,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 
 				result.Add( new AttributeDto( key, value ) );
 			}
+
 			return result;
 		}
 
@@ -53,18 +59,20 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer )
 		{
 			writer.WriteStartObject();
-
-			var attributes = (IReadOnlyList<AttributeDto>)value;
-			if( attributes != null && attributes.Count > 0 )
-			{
-				foreach( var attribute in attributes )
-				{
-					writer.WritePropertyName( AttributeKeyCache.StringForKey( attribute.Key ) );
-					writer.WriteValue( attribute.RawValue ?? attribute.Value );
-				}
-			}
-
+			WriteAttributes( writer, (IReadOnlyList<AttributeDto>)value );
 			writer.WriteEndObject();
+		}
+
+		internal static void WriteAttributes( JsonWriter writer, IReadOnlyList<AttributeDto> attributes )
+		{
+			if( attributes == null || attributes.Count == 0 )
+				return;
+
+			foreach( var attribute in attributes )
+			{
+				writer.WritePropertyName( AttributeKeyCache.StringForKey( attribute.Key ) );
+				writer.WriteValue( attribute.RawValue ?? attribute.Value );
+			}
 		}
 
 		#endregion
