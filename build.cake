@@ -185,6 +185,7 @@ Task("Pack_Dtos")
             new NuSpecContent { Source = "net5.0/Zeiss.PiWeb.Api.Rest.Dtos.xml", Target = "lib/net5.0" },
         },
         Dependencies             = new [] {
+            new NuSpecDependency { Id = "Microsoft.Extensions.ObjectPool", Version = "6.0.6" },
             new NuSpecDependency { Id = "Newtonsoft.Json", Version = "13.0.1" },
             new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2020.3.0" },
             new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Definitions", Version = nugetVersion }

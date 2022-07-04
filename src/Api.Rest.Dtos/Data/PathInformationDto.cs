@@ -73,7 +73,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PathInformationDto"/> class.
 		/// </summary>
-		private PathInformationDto( ArraySegment<PathElementDto> path )
+		internal PathInformationDto( ArraySegment<PathElementDto> path )
 		{
 			_PathElements = path;
 		}

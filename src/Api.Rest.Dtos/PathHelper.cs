@@ -17,6 +17,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 	using System.Collections.Generic;
 	using System.Text;
 	using JetBrains.Annotations;
+	using Microsoft.Extensions.ObjectPool;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 
 	#endregion
@@ -91,15 +92,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 
 		#endregion
 
-		#region members
-
-		[ThreadStatic] private static StringBuilder _StringBuilder;
-
-		#endregion
-
 		#region properties
 
-		private static StringBuilder StringBuilder => _StringBuilder ??= new StringBuilder();
+		private static readonly ObjectPool<StringBuilder> ObjectPool = Microsoft.Extensions.ObjectPool.ObjectPool.Create( new StringBuilderPooledObjectPolicy() );
 
 		#endregion
 
@@ -183,6 +178,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 		[NotNull]
 		public static PathInformationDto DatabaseString2PathInformation( ReadOnlySpan<char> path, ReadOnlySpan<char> structure )
 		{
+			if( path.Length == 0 )
+				throw new ArgumentException( "The path string must not be null or empty.", nameof( path ) );
+
 			// fast code path for root path
 			if( path[ 0 ] == Delimiter && structure.Length == 0 )
 				return PathInformationDto.Root;
@@ -192,6 +190,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 
 		private static InspectionPlanEntityDto StructureIdentifierToEntity( ReadOnlySpan<char> structure, int index )
 		{
+			if( structure.Length <= index )
+				throw new ArgumentException( $"Invalid structure '{structure.ToString()}'. Expected a structure that has at least a length of {index}." );
 			return structure[ index ] == 'P' ? InspectionPlanEntityDto.Part : InspectionPlanEntityDto.Characteristic;
 		}
 
@@ -216,78 +216,100 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 			}
 			else
 			{
-				var result = new List<PathElementDto>();
+				var result = new PathElementDto[ CountDelimiter( path ) ];
+				var elementCount = 0;
 				if( path.IndexOf( Escape ) > 0 )
 				{
 					// difficult code with quoting
-					GetPathElementsFromQuotedString( path, structure, explicitEntity, result );
+					elementCount = GetPathElementsFromQuotedString( path, structure, explicitEntity, result );
 				}
 				else
 				{
 					// easy code without quoting
-					GetPathElementsFromUnquotedString( path, structure, explicitEntity, result );
+					elementCount = GetPathElementsFromUnquotedString( path, structure, explicitEntity, result );
 				}
-				return new PathInformationDto( result.ToArray() );
+				return new PathInformationDto( new ArraySegment<PathElementDto>( result, 0, elementCount ) );
 			}
+		}
+
+		private static int CountDelimiter( ReadOnlySpan<char> path )
+		{
+			var result = 0;
+			foreach( var ch in path )
+			{
+				if( ch == Delimiter )
+					result++;
+			}
+			return result;
 		}
 
 		// correctly unescape quotes by evaluating all characters left to right, might be slow but gives correct results
-		private static void GetPathElementsFromQuotedString( ReadOnlySpan<char> path, ReadOnlySpan<char> structure, InspectionPlanEntityDto? explicitEntity, IList<PathElementDto> result )
+		private static int GetPathElementsFromQuotedString( ReadOnlySpan<char> path, ReadOnlySpan<char> structure, InspectionPlanEntityDto? explicitEntity, IList<PathElementDto> result )
 		{
 			VerifyQuotedPath( path );
 
-			var sb = StringBuilder;
+			var sb = ObjectPool.Get();
 			sb.Clear();
 
-			var pathIndex = 0;
-			var escaped = false;
-			var resultIndex = 0;
-
-			// start at first character as the first character is always the delimiter
-			for( var i = 1; i < path.Length; i += 1 )
+			try
 			{
-				if( !escaped && path[ i ] == Escape )
+				var pathIndex = 0;
+				var escaped = false;
+				var count = 0;
+
+				// start at first character as the first character is always the delimiter
+				for( var i = 1; i < path.Length; i += 1 )
 				{
-					// Unmaskiertes Maskierungszeichen gefunden => nächstes Zeichen ist maskiert
-					escaped = true;
-					continue;
+					if( !escaped && path[ i ] == Escape )
+					{
+						// Unmaskiertes Maskierungszeichen gefunden => nächstes Zeichen ist maskiert
+						escaped = true;
+						continue;
+					}
+
+					if( !escaped && path[ i ] == Delimiter )
+					{
+						// Unmaskiertes Pfadtrennzeichen gefunden => Ende des Namens des aktuellen Pfadelements erreicht
+						var value = sb.ToString();
+						if( value.Length == 0 )
+							throw new InvalidOperationException( $"The path string '{path.ToString()}' must not contain any empty path element." );
+
+						// Bei Bauteilen den Pfadbestandteil internen, um Speicherplatz zu sparen
+						var type = explicitEntity ?? StructureIdentifierToEntity( structure, pathIndex );
+
+						result[ count++ ] = new PathElementDto( type, value );
+
+						sb.Clear();
+						pathIndex += 1;
+						continue;
+					}
+
+					sb.Append( path[ i ] );
+					escaped = false;
 				}
 
-				if( !escaped && path[ i ] == Delimiter )
-				{
-					// Unmaskiertes Pfadtrennzeichen gefunden => Ende des Namens des aktuellen Pfadelements erreicht
-					var value = sb.ToString();
-					if( value.Length == 0 )
-						throw new InvalidOperationException( $"The path string '{path.ToString()}' must not contain any empty path element." );
+				if( escaped )
+					throw new InvalidOperationException( $"The path string '{path.ToString()}' contains invalid quoting. every quote character must be followed by another quote character. single quote characters at the end ar not allowed." );
+				if( sb.Length > 0 )
+					throw new InvalidOperationException( $"The path string '{path.ToString()}' does not end with an unquoted delimiter character." );
 
-					// Bei Bauteilen den Pfadbestandteil internen, um Speicherplatz zu sparen
-					var type = explicitEntity ?? StructureIdentifierToEntity( structure, pathIndex );
-
-					result[ resultIndex++ ] = new PathElementDto( type, value );
-
-					sb.Clear();
-					pathIndex += 1;
-					continue;
-				}
-
-				sb.Append( path[ i ] );
-				escaped = false;
+				return count;
 			}
-
-			if( escaped )
-				throw new InvalidOperationException( $"The path string '{path.ToString()}' contains invalid quoting. every quote character must be followed by another quote character. single quote characters at the end ar not allowed." );
-			if( sb.Length > 0 )
-				throw new InvalidOperationException( $"The path string '{path.ToString()}' does not end with an unquoted delimiter character." );
+			finally
+			{
+				ObjectPool.Return( sb );
+			}
 		}
 
-		private static void GetPathElementsFromUnquotedString( ReadOnlySpan<char> path, ReadOnlySpan<char> structure, InspectionPlanEntityDto? explicitEntity, IList<PathElementDto> result )
+		private static int GetPathElementsFromUnquotedString( ReadOnlySpan<char> path, ReadOnlySpan<char> structure, InspectionPlanEntityDto? explicitEntity, IList<PathElementDto> result )
 		{
 			VerifyUnquotedPath( path );
 
+			// Remove leading and trailing slashes
 			var slice = path.Slice( 1, path.Length - 1 );
 
 			var i = 0;
-			var resultIndex = 0;
+			var count = 0;
 
 			while( !slice.IsEmpty )
 			{
@@ -300,11 +322,13 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 				if( value.Length == 0 )
 					throw new InvalidOperationException( $"The path string '{path.ToString()}' must not contain any empty path element." );
 
-				result[ resultIndex++ ] = new PathElementDto( type, value );
+				result[ count++ ] = new PathElementDto( type, value );
 
 				slice = slice.Slice( substringLength + 1 );
 				i++;
 			}
+
+			return count;
 		}
 
 		private static void VerifyQuotedPath( ReadOnlySpan<char> path )
@@ -343,14 +367,21 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 			if( path == null ) throw new ArgumentNullException( nameof( path ) );
 
 			// fast code path for root path
-			if( path.IsRoot ) return DelimiterString;
+			if( path.IsRoot )
+				return DelimiterString;
 
-			var sb = StringBuilder;
+			var sb = ObjectPool.Get();
 			sb.Clear();
 
-			PathInformation2StringInternal( sb, path );
-
-			return sb.ToString();
+			try
+			{
+				PathInformation2StringInternal( sb, path );
+				return sb.ToString();
+			}
+			finally
+			{
+				ObjectPool.Return( sb );
+			}
 		}
 
 		/// <summary>
@@ -366,14 +397,21 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 			if( path.IsRoot )
 				return DelimiterString;
 
-			var sb = StringBuilder;
+			var sb = ObjectPool.Get();
 			sb.Clear();
 
-			AppendStructure( sb, path );
-			sb.Append( ':' );
-			sb.Append( PathInformation2DatabaseString( path ) );
+			try
+			{
+				AppendStructure( sb, path );
+				sb.Append( ':' );
+				sb.Append( PathInformation2DatabaseString( path ) );
 
-			return sb.ToString();
+				return sb.ToString();
+			}
+			finally
+			{
+				ObjectPool.Return( sb );
+			}
 		}
 
 		private static void AppendStructure( StringBuilder sb, PathInformationDto path )
@@ -398,13 +436,20 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 			if( path.IsRoot )
 				return DelimiterString;
 
-			var sb = StringBuilder;
-			sb.Clear();
-			sb.Append( Delimiter );
-			PathInformation2StringInternal( sb, path );
-			sb.Append( Delimiter );
+			var sb = ObjectPool.Get();
+			try
+			{
+				sb.Clear();
+				sb.Append( Delimiter );
+				PathInformation2StringInternal( sb, path );
+				sb.Append( Delimiter );
 
-			return sb.ToString();
+				return sb.ToString();
+			}
+			finally
+			{
+				ObjectPool.Return( sb );
+			}
 		}
 
 		private static void PathInformation2StringInternal( [NotNull] StringBuilder sb, [NotNull] PathInformationDto path )
