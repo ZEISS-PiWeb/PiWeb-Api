@@ -18,7 +18,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 
 	#endregion
 
-	public class AttributeConverter : JsonConverter
+	public sealed class AttributeConverter : JsonConverter
 	{
 		#region methods
 
