@@ -30,7 +30,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	{
 		#region members
 
-		private AttributeDto[] _Attributes;
+		private IReadOnlyList<AttributeDto> _Attributes;
 
 		[JsonProperty( "path" ), JsonConverter( typeof( PathInformationConverter ) )]
 		private PathInformationDto _Path;
@@ -99,11 +99,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#region interface IAttributeItemDto
 
-		/// <summary>
-		/// Gets or sets the attributes of this inspection plan entity.
-		/// </summary>
+		/// <inheritdoc />
 		[JsonProperty( "attributes" ), JsonConverter( typeof( AttributeArrayConverter ) )]
-		public AttributeDto[] Attributes
+		public IReadOnlyList<AttributeDto> Attributes
 		{
 			[NotNull] get => _Attributes ?? Array.Empty<AttributeDto>();
 			set => _Attributes = value;

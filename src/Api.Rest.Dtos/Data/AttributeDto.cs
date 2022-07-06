@@ -59,6 +59,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			Key = key;
 			_Value = null;
 			RawValue = rawValue;
+			ValidateRawValue();
 		}
 
 		#endregion
@@ -136,51 +137,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		}
 
 		/// <summary>
-		/// Returns the encapsulated value as a <see cref="int"/>. If the value is not a int or is not
-		/// convertible to a int, an exception is thrown.
-		/// </summary>
-		/// <exception cref="ArgumentOutOfRangeException">
-		/// Thrown, if the <see cref="Value"/> is not convertible to a <see cref="int"/>.
-		/// </exception>
-		[CanBeNull]
-		public int? GetIntegerValue()
-		{
-			switch( RawValue )
-			{
-				case int value:
-					return value;
-				case short value:
-					return value;
-				case CatalogEntryDto entry:
-					return entry.Key;
-			}
-
-			if( !string.IsNullOrEmpty( Value ) )
-				return XmlConvert.ToInt32( Value );
-
-			return null;
-		}
-
-		/// <summary>
-		/// Returns the encapsulated value as a <see cref="double"/>. If the value is not a double or is not
-		/// convertible to a double, an exception is thrown.
-		/// </summary>
-		/// <exception cref="ArgumentOutOfRangeException">
-		/// Thrown, if the <see cref="Value"/> is not convertible to a <see cref="double"/>.
-		/// </exception>
-		[CanBeNull]
-		public double? GetFloatValue()
-		{
-			if( RawValue is double doubleValue )
-				return doubleValue;
-
-			if( !string.IsNullOrEmpty( Value ) )
-				return XmlConvert.ToDouble( Value );
-
-			return null;
-		}
-
-		/// <summary>
 		/// Returns the encapsulated value as a <see cref="string"/>. If the value is not a string <code>null</code> is returned.
 		/// </summary>
 		[CanBeNull]
@@ -193,31 +149,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				return Value;
 
 			return null;
-		}
-
-		/// <summary>
-		/// Returns the encapsulated value as a <see cref="DateTime"/>. If the value is not a date or is not
-		/// convertible to a date, an exception is thrown.
-		/// </summary>
-		/// <exception cref="ArgumentOutOfRangeException">
-		/// Thrown, if the <see cref="Value"/> is not convertible to a <see cref="DateTime"/>.
-		/// </exception>
-		[CanBeNull]
-		public DateTime? GetDateValue()
-		{
-			DateTime date;
-
-			if( RawValue is DateTime rawDateTime )
-				date = rawDateTime;
-			else if( !string.IsNullOrEmpty( Value ) )
-				date = XmlConvert.ToDateTime( Value, XmlDateTimeSerializationMode.RoundtripKind );
-			else
-				return null;
-
-			if( date.Kind != DateTimeKind.Unspecified )
-				return date.ToUniversalTime();
-
-			return new DateTime( date.Ticks, DateTimeKind.Local );
 		}
 
 		/// <summary>
@@ -256,6 +187,16 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </remarks>
 		public double? GetDoubleValue()
 		{
+			switch( RawValue )
+			{
+				case int value:
+					return value;
+				case short value:
+					return value;
+				case CatalogEntryDto entry:
+					return entry.Key;
+			}
+
 #if NETSTANDARD
 			if( double.TryParse( _Value, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var result ) )
 				return result;
@@ -274,6 +215,16 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </remarks>
 		public int? GetIntValue()
 		{
+			switch( RawValue )
+			{
+				case int value:
+					return value;
+				case short value:
+					return value;
+				case CatalogEntryDto entry:
+					return entry.Key;
+			}
+
 #if NETSTANDARD
 			if( int.TryParse( _Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var result ) )
 				return result;
@@ -295,7 +246,18 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		{
 			try
 			{
-				return XmlConvert.ToDateTime( _Value, XmlDateTimeSerializationMode.RoundtripKind );
+				DateTime date;
+				if( RawValue is DateTime rawDateTime )
+					date = rawDateTime;
+				else if( !string.IsNullOrEmpty( _Value ) )
+					date = XmlConvert.ToDateTime( _Value, XmlDateTimeSerializationMode.RoundtripKind );
+				else
+					return null;
+
+				if( date.Kind != DateTimeKind.Unspecified )
+					return date.ToUniversalTime();
+
+				return new DateTime( date.Ticks, DateTimeKind.Local );
 			}
 			catch
 			{
