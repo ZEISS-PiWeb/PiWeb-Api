@@ -5,24 +5,34 @@
     <RootNamespace>Zeiss.PiWeb.Api.Rest.Dtos.Tests</RootNamespace>
     <TargetFrameworks>net48;netcoreapp3.0</TargetFrameworks>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>latest</LangVersion>
     <AssemblyName>Zeiss.PiWeb.Api.Rest.Dtos.Tests</AssemblyName>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoFixture" Version="4.17.0" />
-    <PackageReference Include="FluentAssertions" Version="5.10.3" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="NUnit" Version="3.13.2" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="AutoFixture" Version="4.17.0" />
+        <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
+        <PackageReference Include="FluentAssertions" Version="5.10.3" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+        <PackageReference Include="NUnit" Version="3.13.2" />
+        <PackageReference Include="NUnit3TestAdapter" Version="4.0.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Api.Rest.Dtos\Api.Rest.Dtos.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Api.Rest.Dtos\Api.Rest.Dtos.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Samples\characteristics.json" />
+        <EmbeddedResource Include="Samples\configuration.json" />
+        <EmbeddedResource Include="Samples\values.json" />
+        <EmbeddedResource Include="Samples\measurements.json" />
+        <EmbeddedResource Include="Samples\parts.json" />
+    </ItemGroup>
 
 </Project>
