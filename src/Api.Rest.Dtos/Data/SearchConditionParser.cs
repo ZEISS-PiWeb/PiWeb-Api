@@ -219,7 +219,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 					++searchIndex;
 				}
 
-				return conditions.Count == 1 ? conditions[ 0 ] : new GenericSearchAndDto { Conditions = conditions.ToArray() };
+				return conditions.Count == 1 ? conditions[ 0 ] : new GenericSearchAndDto { Conditions = conditions };
 			}
 
 			return null;

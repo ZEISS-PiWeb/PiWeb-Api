@@ -13,7 +13,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	#region usings
 
 	using System;
+	using System.Collections.Generic;
 	using System.Globalization;
+	using System.Linq;
 	using System.Xml;
 
 	#endregion
@@ -38,12 +40,13 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		public static AttributeDto GetAttribute( this IAttributeItemDto item, ushort key, out int index )
 		{
-			if( item?.Attributes != null )
+			var attributes = item?.Attributes;
+			if( attributes != null )
 			{
-				for( index = 0; index < item.Attributes.Length; index++ )
+				for( index = 0; index < attributes.Count; index++ )
 				{
-					if( item.Attributes[ index ].Key == key )
-						return item.Attributes[ index ];
+					if( attributes[ index ].Key == key )
+						return attributes[ index ];
 				}
 			}
 
@@ -53,75 +56,44 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		}
 
 		/// <summary>
-		/// Returns the attribute's value of the attribute with the key <code>key</code>.
+		/// Returns the value for key <code>key</code>.
 		/// </summary>
 		public static string GetAttributeValue( this IAttributeItemDto item, ushort key )
 		{
-			var value = GetAttribute( item, key );
-			return value?.Value;
+			return GetAttribute( item, key )?.Value;
 		}
 
 		/// <summary>
-		/// Returns the attribute's value of the attribute with the key <see cref="double"/> as <code>double</code>.
+		/// Returns the value for key <code>key</code> as a <see cref="double"/>.
 		/// </summary>
 		/// <remarks>
 		/// If the attribute is either empty, does not exist or parsing fails <code>null</code> is returned.
 		/// </remarks>
 		public static double? GetDoubleAttributeValue( this IAttributeItemDto item, ushort key )
 		{
-			try
-			{
-				var value = GetAttributeValue( item, key );
-				if( !string.IsNullOrEmpty( value ) )
-					return double.Parse( value, CultureInfo.InvariantCulture );
-			}
-			// ReSharper disable once EmptyGeneralCatchClause
-			catch
-			{ }
-
-			return null;
+			return GetAttribute( item, key )?.GetDoubleValue();
 		}
 
 		/// <summary>
-		/// Returns the attribute's value of the attribute with the key <see cref="int"/> as <code>double</code>.
+		/// Returns the value for key <code>key</code> as a <see cref="int"/>.
 		/// </summary>
 		/// <remarks>
 		/// If the attribute is either empty, does not exist or parsing fails <code>null</code> is returned.
 		/// </remarks>
 		public static int? GetIntAttributeValue( this IAttributeItemDto item, ushort key )
 		{
-			try
-			{
-				var value = GetAttributeValue( item, key );
-				if( !string.IsNullOrEmpty( value ) )
-					return int.Parse( value, CultureInfo.InvariantCulture );
-			}
-			// ReSharper disable once EmptyGeneralCatchClause
-			catch
-			{ }
-
-			return null;
+			return GetAttribute( item, key )?.GetIntValue();
 		}
 
 		/// <summary>
-		/// Returns the attribute's value of the attribute with the key <see cref="DateTime"/> as <code>double</code>.
+		/// Returns the value for key <code>key</code> as a <see cref="DateTime"/>.
 		/// </summary>
 		/// <remarks>
 		/// If the attribute is either empty, does not exist or parsing fails <code>null</code> is returned.
 		/// </remarks>
 		public static DateTime? GetDateAttributeValue( this IAttributeItemDto item, ushort key )
 		{
-			try
-			{
-				var value = GetAttributeValue( item, key );
-				if( !string.IsNullOrEmpty( value ) )
-					return XmlConvert.ToDateTime( value, XmlDateTimeSerializationMode.RoundtripKind );
-			}
-			// ReSharper disable once EmptyGeneralCatchClause
-			catch
-			{ }
-
-			return null;
+			return GetAttribute( item, key )?.GetDateValue();
 		}
 
 		/// <summary>
@@ -156,7 +128,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Sets the <code>value</code> for the attribute with the key <code>key</code>.
 		/// </summary>
-		public static void SetAttribute( this IAttributeItemDto item, ushort key, string value )
+		public static void SetAttributeValue( this IAttributeItemDto item, ushort key, string value )
 		{
 			item.SetAttribute( new AttributeDto( key, value ) );
 		}
@@ -166,16 +138,16 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		public static void SetAttribute( this IAttributeItemDto item, AttributeDto value )
 		{
-			if( value != null )
+			if( value == null )
+				return;
+
+			if( string.IsNullOrEmpty( value.Value ) )
 			{
-				if( string.IsNullOrEmpty( value.Value ) )
-				{
-					RemoveAttribute( item, value.Key );
-				}
-				else
-				{
-					InternalSetAttribute( item, value );
-				}
+				RemoveAttribute( item, value.Key );
+			}
+			else
+			{
+				InternalSetAttribute( item, value );
 			}
 		}
 
@@ -184,30 +156,46 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		public static void RemoveAttribute( this IAttributeItemDto item, ushort key )
 		{
-			var att = GetAttribute( item, key, out var index );
-			if( att != null )
-			{
-				// Remove attribute
-				var atts = new AttributeDto[ item.Attributes.Length - 1 ];
-				Array.Copy( item.Attributes, 0, atts, 0, index );
-				Array.Copy( item.Attributes, index + 1, atts, index, item.Attributes.Length - index - 1 );
+			var attribute = GetAttribute( item, key, out var index );
+			if( attribute == null )
+				return;
 
-				item.Attributes = atts;
+			// Remove attribute
+			var sourceAttributes = item.Attributes;
+			var attributes = new AttributeDto[ sourceAttributes.Count - 1 ];
+
+			for( var i = 0; i < index; i++ )
+			{
+				attributes[ i ] = sourceAttributes[ i ];
 			}
+
+			var count = sourceAttributes.Count - index - 1;
+			for( var i = index + 1; i < count; i++ )
+			{
+				attributes[ i ] = sourceAttributes[ i ];
+			}
+
+			item.Attributes = attributes;
 		}
 
 		private static void InternalSetAttribute( this IAttributeItemDto item, AttributeDto value )
 		{
-			var att = GetAttribute( item, value.Key, out var index );
-			if( att == null )
+			var sourceAttributes = item.Attributes;
+
+			var attribute = GetAttribute( item, value.Key, out var index );
+			if( attribute == null )
 			{
 				// Add attribute
-				if( item.Attributes != null && item.Attributes.Length > 0 )
+				if( sourceAttributes != null && sourceAttributes.Count > 0 )
 				{
-					var atts = new AttributeDto[ item.Attributes.Length + 1 ];
-					Array.Copy( item.Attributes, atts, item.Attributes.Length );
-					atts[ atts.Length - 1 ] = value;
-					item.Attributes = atts;
+					var attributes = new AttributeDto[ sourceAttributes.Count + 1 ];
+					for( var i = 0; i < sourceAttributes.Count; i++ )
+					{
+						attributes[ i ] = sourceAttributes[ i ];
+					}
+					attributes[ attributes.Length - 1 ] = value;
+
+					item.Attributes = attributes;
 				}
 				else
 				{
@@ -217,12 +205,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			else
 			{
 				// Replace attribute
-				var atts = item.Attributes;
-				atts[ index ] = value;
+				var attributes = sourceAttributes.ToArray();
+				attributes[ index ] = value;
 
-				// Hack, damit das Objekt (z.B. SimpleMeasurement) die Änderungen mitbekommt und
-				// evtl. gecachte Daten wieder wegwirft (z.B. SimpleMeasurement._CachedTime)
-				item.Attributes = atts;
+				item.Attributes = attributes;
 			}
 		}
 

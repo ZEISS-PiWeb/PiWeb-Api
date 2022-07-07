@@ -13,6 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	#region usings
 
 	using System;
+	using System.Collections.Generic;
 	using System.Diagnostics;
 	using Newtonsoft.Json;
 
@@ -45,7 +46,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// when the detailed status is requested with <see cref="MeasurementStatisticsDto.Detailed"/>.
 		/// </summary>
 		[JsonProperty( "uuid" )]
-		public Guid[] Uuid { get; set; }
+		public IReadOnlyCollection<Guid> Uuid { get; set; }
 
 		#endregion
 	}

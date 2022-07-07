@@ -32,7 +32,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 		/// </summary>
 		public override bool CanConvert( Type objectType )
 		{
-			return objectType == typeof( DataCharacteristicDto[] );
+			return objectType == typeof( IReadOnlyCollection<DataCharacteristicDto> ) || objectType == typeof( DataCharacteristicDto );
 		}
 
 		/// <summary>
@@ -87,7 +87,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 					characteristics.Add( characteristic );
 				}
 
-				return characteristics.ToArray();
+				return characteristics;
 			}
 		}
 
@@ -98,12 +98,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 		{
 			writer.WriteStartObject();
 
-			var dataCharacteristics = (DataCharacteristicDto[])value;
-			if( dataCharacteristics.Length > 0 )
+			var dataCharacteristics = (IReadOnlyCollection<DataCharacteristicDto>)value;
+			if( dataCharacteristics.Count > 0 )
 			{
 				foreach( var dataCharacteristic in dataCharacteristics )
 				{
-					if( dataCharacteristic.Value?.Attributes != null && dataCharacteristic.Value.Attributes.Length > 0 )
+					if( dataCharacteristic.Value?.Attributes != null && dataCharacteristic.Value.Attributes.Count > 0 )
 					{
 						writer.WritePropertyName( dataCharacteristic.Uuid.ToString() );
 						writer.WriteStartObject();

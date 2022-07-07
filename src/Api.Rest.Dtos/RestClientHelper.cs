@@ -40,7 +40,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 		/// <summary>
 		/// Parses a string to a list of ushorts.
 		/// </summary>
-		public static ushort[] ConvertStringToUInt16List( string value )
+		public static IReadOnlyList<ushort> ConvertStringToUInt16List( string value )
 		{
 			if( value == null )
 				return Array.Empty<ushort>();
@@ -61,10 +61,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 		/// <summary>
 		/// Parses a string to a list of Guids.
 		/// </summary>
-		public static Guid[] ConvertStringToGuidList( string value )
+		public static IReadOnlyList<Guid> ConvertStringToGuidList( string value )
 		{
-			var stringArray = ParseListToStringArray( value );
-			return StringUuidTools.StringUuidListToGuidList( stringArray ).ToArray();
+			return StringUuidTools.StringUuidListToGuidList( ParseListToStringArray( value ) );
 		}
 
 		/// <summary>Parses a list of strings.</summary>
@@ -77,20 +76,20 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 		}
 
 		/// <summary>Creates a list string from the ushorts <code>value</code>.</summary>
-		public static string ConvertUshortArrayToString( ushort[] value )
+		public static string ConvertUshortArrayToString( IReadOnlyCollection<ushort> value )
 		{
 			return ConvertFormattableArrayToString( value, formatProvider: CultureInfo.InvariantCulture );
 		}
 
 		/// <summary>Creates a list string from the uuids <code>value</code>.</summary>
-		public static string ConvertGuidListToString( Guid[] value )
+		public static string ConvertGuidListToString( IReadOnlyCollection<Guid> value )
 		{
 			return ConvertFormattableArrayToString( value, "D" );
 		}
 
-		private static string ConvertFormattableArrayToString<T>( T[] value, string format = null, IFormatProvider formatProvider = null ) where T : IFormattable
+		private static string ConvertFormattableArrayToString<T>( IReadOnlyCollection<T> value, string format = null, IFormatProvider formatProvider = null ) where T : IFormattable
 		{
-			if( value == null || value.Length == 0 )
+			if( value == null || value.Count == 0 )
 				return "";
 
 			return ToListString( value.Select( v => v.ToString( format, formatProvider ) ) );

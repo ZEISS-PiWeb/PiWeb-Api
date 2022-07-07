@@ -12,8 +12,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
 	#region usings
 
+	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 
 	#endregion
 
@@ -22,12 +22,24 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// </summary>
 	public static class FieldDefinitions
 	{
+		#region members
+
+		private static readonly IReadOnlyDictionary<FieldDefinitionDto, EntityDto> MeasurementFieldDefinitions = new Dictionary<FieldDefinitionDto, EntityDto>
+		{
+			{ new FieldDefinitionDto( "LastModified", FieldTypeDto.DateTime ), EntityDto.Measurement },
+			{ new FieldDefinitionDto( "Created", FieldTypeDto.DateTime ), EntityDto.Measurement }
+		};
+
+		private static readonly IReadOnlyDictionary<FieldDefinitionDto, EntityDto> EmptyFieldDefinitions = new Dictionary<FieldDefinitionDto, EntityDto>();
+
+		#endregion
+
 		#region properties
 
 		/// <summary>
 		/// Gets the field definitions for measurements.
 		/// </summary>
-		public static FieldDefinitionDto[] Measurement => new[]
+		public static IReadOnlyCollection<FieldDefinitionDto> Measurement => new[]
 		{
 			new FieldDefinitionDto( "LastModified", FieldTypeDto.DateTime ),
 			new FieldDefinitionDto( "Created", FieldTypeDto.DateTime )
@@ -36,7 +48,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets the field definitions for values.
 		/// </summary>
-		public static FieldDefinitionDto[] Value => new FieldDefinitionDto[] { };
+		public static IReadOnlyCollection<FieldDefinitionDto> Value => Array.Empty<FieldDefinitionDto>();
 
 		#endregion
 
@@ -46,15 +58,13 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Gets the field definitions.
 		/// </summary>
 		/// <param name="entity">The entity.</param>
-		public static Dictionary<FieldDefinitionDto, EntityDto> GetAvailableDefinitions( EntityDto entity )
+		public static IReadOnlyDictionary<FieldDefinitionDto, EntityDto> GetAvailableDefinitions( EntityDto entity )
 		{
-			switch( entity )
+			return entity switch
 			{
-				case EntityDto.Measurement:
-					return Measurement.ToDictionary( f => f, f => entity );
-				default:
-					return new Dictionary<FieldDefinitionDto, EntityDto>();
-			}
+				EntityDto.Measurement => MeasurementFieldDefinitions,
+				_ => EmptyFieldDefinitions
+			};
 		}
 
 		#endregion

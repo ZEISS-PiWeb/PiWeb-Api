@@ -13,6 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	#region usings
 
 	using System;
+	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
 	using System.Text;
@@ -25,11 +26,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// <summary>
 	/// Holds information of a <see cref="CatalogDto"/>'s entry
 	/// </summary>
-	public class CatalogEntryDto : IAttributeItemDto
+	public class CatalogEntryDto : IAttributeItemDto, IFormattable
 	{
 		#region members
 
-		private AttributeDto[] _Attributes = Array.Empty<AttributeDto>();
+		private IReadOnlyList<AttributeDto> _Attributes = Array.Empty<AttributeDto>();
 
 		#endregion
 
@@ -72,30 +73,30 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			if( Attributes == null )
 				return "";
 
-			if( Attributes.Length == 1 )
+			if( Attributes.Count == 1 )
 				return Convert.ToString( GetTypedAttributeValue( Attributes[ 0 ] ), provider );
 
 			var allSameEntries = true;
 
 			var sb = new StringBuilder();
-			foreach( var att in Attributes )
+			foreach( var attribute in Attributes )
 			{
 				if( sb.Length > 0 )
 					sb.Append( " - " );
 
-				if( att.Value.Trim().Length > 0 )
-					sb.Append( Convert.ToString( GetTypedAttributeValue( att ), provider ) );
+				if( attribute.Value.Trim().Length > 0 )
+					sb.Append( Convert.ToString( GetTypedAttributeValue( attribute ), provider ) );
 
-				allSameEntries &= att.Value == _Attributes[ 0 ].Value;
+				allSameEntries &= attribute.Value == _Attributes[ 0 ].Value;
 			}
 
-			if( allSameEntries && _Attributes != null && _Attributes.Length > 0 )
+			if( allSameEntries && _Attributes != null && _Attributes.Count > 0 )
 				return Convert.ToString( GetTypedAttributeValue( Attributes[ 0 ] ), provider );
 
 			return sb.ToString();
 		}
 
-		private object GetTypedAttributeValue( AttributeDto attribute )
+		private static object GetTypedAttributeValue( AttributeDto attribute )
 		{
 			if( attribute.RawValue != null )
 				return ( attribute.RawValue is DateTime time ) ? time.ToLocalTime() : attribute.RawValue;
@@ -107,18 +108,26 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#region interface IAttributeItemDto
 
-		/// <summary>
-		/// Gets or sets the attributes that belong to this catalog entry.
-		/// </summary>
+		/// <inheritdoc />
 		[JsonProperty( "attributes" ), JsonConverter( typeof( AttributeArrayConverter ) )]
-		public AttributeDto[] Attributes
+		public IReadOnlyList<AttributeDto> Attributes
 		{
 			[NotNull] get => _Attributes;
 			set
 			{
-				value = value ?? Array.Empty<AttributeDto>();
+				value ??= Array.Empty<AttributeDto>();
 				_Attributes = value.All( attr => attr.IsNull() ) ? Array.Empty<AttributeDto>() : value;
 			}
+		}
+
+		#endregion
+
+		#region interface IFormattable
+
+		/// <inheritdoc />
+		public string ToString( string format, IFormatProvider formatProvider )
+		{
+			return ToString( formatProvider );
 		}
 
 		#endregion

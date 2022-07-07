@@ -31,7 +31,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		/// <param name="paths">Given paths</param>
 		/// <returns>Parts</returns>
-		public static PathInformationDto[] GetParts( this IEnumerable<PathInformationDto> paths )
+		public static IReadOnlyList<PathInformationDto> GetParts( this IEnumerable<PathInformationDto> paths )
 		{
 			var selectedPaths = paths ?? Enumerable.Empty<PathInformationDto>();
 			return selectedPaths.Where( p => p.Type == InspectionPlanEntityDto.Part ).ToArray();
@@ -42,7 +42,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		/// <param name="paths">Given paths</param>
 		/// <returns>Characteristics</returns>
-		public static PathInformationDto[] GetCharacteristics( this IEnumerable<PathInformationDto> paths )
+		public static IReadOnlyList<PathInformationDto> GetCharacteristics( this IEnumerable<PathInformationDto> paths )
 		{
 			var selectedPaths = paths ?? Enumerable.Empty<PathInformationDto>();
 			return selectedPaths.Where( p => p.Type == InspectionPlanEntityDto.Characteristic ).ToArray();

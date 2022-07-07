@@ -120,11 +120,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 
 		/// <inheritdoc />
-		public override ParameterDefinition[] ToParameterDefinition()
+		public override IReadOnlyCollection<ParameterDefinition> ToParameterDefinition()
 		{
 			var result = new List<ParameterDefinition>();
 
-			if( PartUuids != null && PartUuids.Length > 0 )
+			if( PartUuids != null && PartUuids.Count > 0 )
 				result.Add( ParameterDefinition.Create( PartUuidsParamName, RestClientHelper.ConvertGuidListToString( PartUuids ) ) );
 
 			if( Deep )
@@ -136,10 +136,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			if( LimitResultPerPart >= 0 )
 				result.Add( ParameterDefinition.Create( LimitResultPerPartParamName, LimitResultPerPart.ToString() ) );
 
-			if( MeasurementUuids != null && MeasurementUuids.Length > 0 )
+			if( MeasurementUuids != null && MeasurementUuids.Count > 0 )
 				result.Add( ParameterDefinition.Create( MeasurementUuidsParamName, RestClientHelper.ConvertGuidListToString( MeasurementUuids ) ) );
 
-			if( OrderBy != null && OrderBy.Length > 0 )
+			if( OrderBy != null && OrderBy.Count > 0 )
 				result.Add( ParameterDefinition.Create( OrderByParamName, OrderByToString( OrderBy ) ) );
 
 			if( SearchCondition != null )
@@ -153,7 +153,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			if( ToModificationDate.HasValue )
 				result.Add( ParameterDefinition.Create( ToModificationDateParamName, XmlConvert.ToString( ToModificationDate.Value, XmlDateTimeSerializationMode.RoundtripKind ) ) );
 
-			return result.ToArray();
+			return result;
 		}
 
 		/// <summary>
