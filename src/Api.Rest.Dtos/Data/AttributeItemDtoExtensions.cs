@@ -30,7 +30,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Returns the attribute with the key <code>key</code>.
 		/// </summary>
-		public static AttributeDto GetAttribute( this IAttributeItemDto item, ushort key )
+		public static AttributeDto? GetAttribute( this IAttributeItemDto item, ushort key )
 		{
 			return GetAttribute( item, key, out _ );
 		}
@@ -38,7 +38,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Returns the attribute with the key <code>key</code>.
 		/// </summary>
-		public static AttributeDto GetAttribute( this IAttributeItemDto item, ushort key, out int index )
+		public static AttributeDto? GetAttribute( this IAttributeItemDto item, ushort key, out int index )
 		{
 			var attributes = item?.Attributes;
 			if( attributes != null )
@@ -106,14 +106,14 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			ConfigurationDto configuration,
 			CatalogCollectionDto catalogs )
 		{
-			var value = item.GetAttribute( key );
-			if( value == null )
+			var attribute = item.GetAttribute( key );
+			if( attribute == null )
 				return null;
 
-			if( value.RawValue != null )
-				return value.RawValue;
+			if( attribute.Value.RawValue != null )
+				return attribute.Value.RawValue;
 
-			return configuration.ParseValue( key, value.Value, catalogs );
+			return configuration.ParseValue( key, attribute.Value.Value, catalogs );
 		}
 
 		/// <summary>

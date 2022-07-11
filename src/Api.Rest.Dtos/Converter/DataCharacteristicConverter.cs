@@ -27,17 +27,13 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 	{
 		#region methods
 
-		/// <summary>
-		/// Determines whether this instance can convert the specified object type.
-		/// </summary>
+		/// <inheritdoc />
 		public override bool CanConvert( Type objectType )
 		{
 			return objectType == typeof( IReadOnlyCollection<DataCharacteristicDto> ) || objectType == typeof( DataCharacteristicDto );
 		}
 
-		/// <summary>
-		/// Reads the JSON representation of the object.
-		/// </summary>
+		/// <inheritdoc />
 		public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer )
 		{
 			if( typeof( DataCharacteristicDto ) == objectType )
@@ -76,7 +72,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 					{
 						while( reader.Read() && reader.TokenType == JsonToken.PropertyName )
 						{
-							var key = AttributeKeyCache.Cache.StringToKey( reader.Value.ToString() );
+							var key = ushort.Parse( reader.Value.ToString() );
 							var value = reader.ReadAsString();
 
 							valueAttributes.Add( new AttributeDto( key, value ) );
@@ -91,9 +87,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 			}
 		}
 
-		/// <summary>
-		/// Writes the JSON representation of the object.
-		/// </summary>
+		/// <inheritdoc />
 		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer )
 		{
 			writer.WriteStartObject();
@@ -109,7 +103,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 						writer.WriteStartObject();
 						foreach( var att in dataCharacteristic.Value.Attributes )
 						{
-							writer.WritePropertyName( AttributeKeyCache.Cache.KeyToString( att.Key ) );
+							writer.WritePropertyName( AttributeKeyCache.StringForKey( att.Key ) );
 							writer.WriteValue( att.RawValue ?? att.Value );
 						}
 

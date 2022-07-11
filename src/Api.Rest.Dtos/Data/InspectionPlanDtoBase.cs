@@ -30,7 +30,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	{
 		#region members
 
-		[JsonProperty( "attributes" ), JsonConverter( typeof( AttributeArrayConverter ) )]
 		private IReadOnlyList<AttributeDto> _Attributes;
 
 		[JsonProperty( "path" ), JsonConverter( typeof( PathInformationConverter ) )]
@@ -101,7 +100,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		#region interface IAttributeItemDto
 
 		/// <inheritdoc />
-		[JsonIgnore]
+		[JsonProperty( "attributes" ), JsonConverter( typeof( AttributeArrayConverter ) )]
 		public IReadOnlyList<AttributeDto> Attributes
 		{
 			[NotNull] get => _Attributes ?? Array.Empty<AttributeDto>();

@@ -31,17 +31,15 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 		/// <inheritdoc />
 		public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer )
 		{
-			var result = new AttributeDto();
-
 			if( reader.Read() && reader.TokenType == JsonToken.PropertyName )
 			{
-				var key = AttributeKeyCache.Cache.StringToKey( reader.Value.ToString() );
+				var key = ushort.Parse( (string)reader.Value );
 				var value = reader.ReadAsString();
 
-				result = new AttributeDto( key, value );
+				return new AttributeDto( key, value );
 			}
 
-			return result;
+			return new AttributeDto();
 		}
 
 		/// <inheritdoc />
@@ -50,7 +48,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 			writer.WriteStartObject();
 
 			var att = (AttributeDto)value;
-			writer.WritePropertyName( AttributeKeyCache.Cache.KeyToString( att.Key ) );
+			writer.WritePropertyName( AttributeKeyCache.StringForKey( att.Key ) );
 			writer.WriteValue( att.RawValue ?? att.Value );
 
 			writer.WriteEndObject();

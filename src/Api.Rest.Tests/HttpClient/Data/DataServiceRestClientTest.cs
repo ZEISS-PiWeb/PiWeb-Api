@@ -81,7 +81,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Data
 			var index = 0;
 			foreach( var measurement in result )
 			{
-				measurement.Attributes.FirstOrDefault( a => a.Key == 999 )?.Value.Should().Be( index.ToString() );
+				measurement.GetAttributeValue( 999 ).Should().Be( index.ToString() );
 				index++;
 			}
 		}

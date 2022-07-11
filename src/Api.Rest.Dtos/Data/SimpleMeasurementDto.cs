@@ -91,9 +91,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 				try
 				{
-					var att = this.GetAttribute( WellKnownKeys.Measurement.Time );
-					if( att != null && !string.IsNullOrEmpty( att.Value ) )
-						_CachedTimeValue = XmlConvert.ToDateTime( att.Value, XmlDateTimeSerializationMode.RoundtripKind );
+					var attribute = this.GetAttribute( WellKnownKeys.Measurement.Time );
+					if( attribute != null && !string.IsNullOrEmpty( attribute.Value.Value ) )
+						_CachedTimeValue = XmlConvert.ToDateTime( attribute.Value.Value, XmlDateTimeSerializationMode.RoundtripKind );
 				}
 				catch
 				{
