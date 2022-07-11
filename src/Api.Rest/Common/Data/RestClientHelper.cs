@@ -113,7 +113,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		/// <param name="requestedCharacteristicAttributes">Restricts the characteristic attributes that are returned.</param>
 		/// <param name="withHistory">Determines if the history should be returned.</param>
 		/// <returns></returns>
-		public static List<ParameterDefinition> ParseToParameter( PathInformationDto partPath = null, Guid[] partUuids = null, Guid[] charUuids = null, ushort? depth = null, AttributeSelector requestedPartAttributes = null, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false )
+		public static List<ParameterDefinition> ParseToParameter( PathInformationDto partPath = null, IReadOnlyCollection<Guid> partUuids = null, IReadOnlyCollection<Guid> charUuids = null, ushort? depth = null, AttributeSelector requestedPartAttributes = null, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false )
 		{
 			var parameter = new List<ParameterDefinition>();
 			if( partPath != null )
@@ -125,10 +125,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 			if( withHistory )
 				parameter.Add( ParameterDefinition.Create( "withHistory", true.ToString() ) );
 
-			if( partUuids != null && partUuids.Length > 0 )
+			if( partUuids != null && partUuids.Count > 0 )
 				parameter.Add( ParameterDefinition.Create( "partUuids", ConvertGuidListToString( partUuids ) ) );
 
-			if( charUuids != null && charUuids.Length > 0 )
+			if( charUuids != null && charUuids.Count > 0 )
 				parameter.Add( ParameterDefinition.Create( "charUuids", ConvertGuidListToString( charUuids ) ) );
 
 			if( requestedPartAttributes != null )
@@ -156,11 +156,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		public static ushort[] ConvertStringToUInt16List( string value )
 		{
 			if( value == null )
-				return new ushort[ 0 ];
+				return Array.Empty<ushort>();
 			if( value.StartsWith( QueryListStart ) && value.EndsWith( QueryListStop ) )
 				value = value.Substring( 1, value.Length - 2 );
 			if( string.IsNullOrEmpty( value ) )
-				return new ushort[ 0 ];
+				return Array.Empty<ushort>();
 			try
 			{
 				return value.Split( ',' ).Select( s => ushort.Parse( s, CultureInfo.InvariantCulture ) ).ToArray();
@@ -266,7 +266,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 			int maxUriLength,
 			string parameterName,
 			IReadOnlyCollection<Guid> uuidsToSplit,
-			ParameterDefinition[] otherParameters )
+			IReadOnlyCollection<ParameterDefinition> otherParameters )
 		{
 			if( serviceLocation == null ) throw new ArgumentNullException( nameof( serviceLocation ) );
 

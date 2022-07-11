@@ -106,7 +106,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Data
 				LimitResult = 5
 			} );
 
-			result.Length.Should().Be( 5 );
+			result.Count.Should().Be( 5 );
 		}
 
 		#endregion
