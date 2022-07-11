@@ -104,6 +104,21 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 				return _CachedTimeValue;
 			}
+			set
+			{
+				if( value == null )
+				{
+					this.RemoveAttribute( WellKnownKeys.Measurement.Time );
+					_CachedTimeValue = null;
+					_HasCachedTime = true;
+				}
+				else
+				{
+					this.SetAttribute( new AttributeDto( WellKnownKeys.Measurement.Time, XmlConvert.ToString( value.Value, XmlDateTimeSerializationMode.RoundtripKind ) ) );
+					_CachedTimeValue = value;
+					_HasCachedTime = true;
+				}
+			}
 		}
 
 		/// <summary>
