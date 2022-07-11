@@ -226,6 +226,190 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 			Assert.AreEqual( new PathInformationDto( PathElementDto.Char( "foo" ) ), actualResult );
 		}
 
+		[Test]
+		public void String2CharPathInformation_PathNotEndingWithUnquotedDelimiter_ThrowsCorrectException()
+		{
+			const string path = "\\foo\\";
+
+			FluentActions.Invoking( () => PathHelper.String2CharPathInformation( path ) ).Should().Throw<InvalidOperationException>()
+				.Where( e => e.Message.Contains( "does not end with an unquoted delimiter character" ) );
+		}
+
+		[Test]
+		public void RoundtripString2PathInformation_PathIsNull_ThrowsCorrectException()
+		{
+			Assert.Throws<ArgumentException>( () => PathHelper.RoundtripString2PathInformation( null! ) );
+		}
+
+		[Test]
+		public void RoundtripString2PathInformation_PathIsEmpty_ThrowsCorrectException()
+		{
+			Assert.Throws<ArgumentException>( () => PathHelper.RoundtripString2PathInformation( null! ) );
+		}
+
+		[Test]
+		public void RoundtripString2PathInformation_HappyPath_ReturnsPathInformationDto()
+		{
+			const string path = "PP:/foo/bar/";
+			var actualResult = PathHelper.RoundtripString2PathInformation( path );
+
+			actualResult.Should().BeOfType<PathInformationDto>();
+			Assert.AreEqual( new PathInformationDto( PathElementDto.Part( "foo" ), PathElementDto.Part( "bar" ) ), actualResult );
+		}
+
+		[Test]
+		public void RoundtripString2PathInformation_PartsAndCharacteristic_ReturnsPathInformationDto()
+		{
+			const string path = "PPC:/foo/bar/char1/";
+			var actualResult = PathHelper.RoundtripString2PathInformation( path );
+
+			actualResult.Should().BeOfType<PathInformationDto>();
+			Assert.AreEqual( new PathInformationDto( PathElementDto.Part( "foo" ), PathElementDto.Part( "bar" ), PathElementDto.Char( "char1" ) ), actualResult );
+		}
+
+		[Test]
+		public void RoundtripString2PathInformation_MissingStructure_ThrowsCorrectException()
+		{
+			const string path = "/foo/bar/char1/";
+
+			FluentActions.Invoking( () => PathHelper.RoundtripString2PathInformation( path ) ).Should().Throw<ArgumentException>()
+				.WithMessage( "The path must have the following structure:\"structure:path\", e.g.: \"PC:/part/characteristic/\"." );
+		}
+
+		[Test]
+		public void RoundtripString2PathInformation_WrongStructure_ThrowsCorrectException()
+		{
+			const string path = "PP:/foo/bar/char1/";
+
+			FluentActions.Invoking( () => PathHelper.RoundtripString2PathInformation( path ) ).Should().Throw<IndexOutOfRangeException>();
+		}
+
+		[Test]
+		public void RoundtripString2PathInformation_FastPathRoot_ReturnsPathInformationDto()
+		{
+			const string path = "/";
+			var actualResult = PathHelper.RoundtripString2PathInformation( path );
+
+			actualResult.Should().BeOfType<PathInformationDto>();
+			Assert.AreEqual( PathInformationDto.Root, actualResult );
+		}
+
+		[Test]
+		public void RoundtripString2PathInformation_MissingFirstDelimiter_ThrowsException()
+		{
+			const string path = "P:NoDelimiter/";
+
+			FluentActions.Invoking( () => PathHelper.RoundtripString2PathInformation( path ) ).Should().Throw<ArgumentException>()
+				.Where( e => e.Message.Contains( "The database path string must start with a delimiter" ) );
+		}
+
+		[Test]
+		public void DatabaseString2PathInformation_PathIsNull_ThrowsCorrectException()
+		{
+			Assert.Throws<ArgumentException>( () => PathHelper.DatabaseString2PathInformation( null!, string.Empty ) );
+		}
+
+		[Test]
+		public void DatabaseString2PathInformation_FastPathRoot_ReturnsPathInformationDto()
+		{
+			const string path = "/";
+			var actualResult = PathHelper.DatabaseString2PathInformation( path, string.Empty );
+
+			actualResult.Should().BeOfType<PathInformationDto>();
+			Assert.AreEqual( PathInformationDto.Root, actualResult );
+		}
+
+		[Test]
+		public void DatabaseString2PathInformation_MissingLastDelimiter_ThrowsCorrectException()
+		{
+			const string path = "/foo/bar";
+
+			FluentActions.Invoking( () => PathHelper.DatabaseString2PathInformation( path, "PP" ) ).Should().Throw<InvalidOperationException>()
+				.Where( e => e.Message.Contains( "The last component of path string" ) );
+		}
+
+		[Test]
+		public void PathInformation2String_PathIsNull_ThrowsCorrectException()
+		{
+			Assert.Throws<ArgumentNullException>( () => PathHelper.PathInformation2String( null! ) );
+		}
+
+		[Test]
+		public void PathInformation2String_HappyPath_ReturnsCorrectString()
+		{
+			var pathInformation = new PathInformationDto( PathElementDto.Part( "foo" ), PathElementDto.Part( "bar" ) );
+			var actualResult = PathHelper.PathInformation2String( pathInformation );
+
+			const string expected = "foo/bar";
+
+			Assert.AreEqual( expected, actualResult );
+		}
+
+		[Test]
+		public void PathInformation2String_FastPathRoot_ReturnsDelimiter()
+		{
+			var actualResult = PathHelper.PathInformation2String( PathInformationDto.Root );
+
+			Assert.AreEqual( PathHelper.DelimiterString, actualResult );
+		}
+
+		[Test]
+		public void PathInformation2RoundtripString_PathIsNull_ThrowsCorrectException()
+		{
+			Assert.Throws<ArgumentNullException>( () => PathHelper.PathInformation2RoundtripString( null! ) );
+		}
+
+		[Test]
+		public void PathInformation2RoundtripString_HappyPath_ReturnsCorrectString()
+		{
+			var pathInformation = new PathInformationDto( PathElementDto.Part( "foo" ), PathElementDto.Part( "bar" ), PathElementDto.Char( "char1" ) );
+			var actualResult = PathHelper.PathInformation2RoundtripString( pathInformation );
+
+			const string expected = "PPC:/foo/bar/char1/";
+
+			Assert.AreEqual( expected, actualResult );
+		}
+
+		[Test]
+		public void PathInformation2RoundtripString_FastPathRoot_ReturnsDelimiter()
+		{
+			var actualResult = PathHelper.PathInformation2RoundtripString( PathInformationDto.Root );
+
+			Assert.AreEqual( PathHelper.DelimiterString, actualResult );
+		}
+
+		[Test]
+		public void PathInformation2DatabaseString_PathIsNull_ThrowsCorrectException()
+		{
+			Assert.Throws<ArgumentNullException>( () => PathHelper.PathInformation2DatabaseString( null! ) );
+		}
+
+
+		[Test]
+		public void PathInformation2DatabaseString_FastPathRoot_ReturnsDelimiter()
+		{
+			var actualResult = PathHelper.PathInformation2DatabaseString( PathInformationDto.Root );
+
+			Assert.AreEqual( PathHelper.DelimiterString, actualResult );
+		}
+
+		[Test]
+		public void GetStructure_PathIsNull_ThrowsCorrectException()
+		{
+			Assert.Throws<ArgumentNullException>( () => PathHelper.GetStructure( null! ) );
+		}
+
+		[Test]
+		public void GetStructure_HappyPath_ReturnsCorrectString()
+		{
+			var pathInformation = new PathInformationDto( PathElementDto.Part( "foo" ), PathElementDto.Part( "bar" ), PathElementDto.Char( "char1" ) );
+			var actualResult = PathHelper.GetStructure( pathInformation );
+
+			const string expected = "PPC";
+
+			Assert.AreEqual( expected, actualResult );
+		}
+
 		#endregion
 	}
 }
