@@ -12,8 +12,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
 	#region usings
 
-	using Newtonsoft.Json;
+	using System.Text.Json.Serialization;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
+	using Zeiss.PiWeb.Api.Rest.Dtos.Converters;
 
 	#endregion
 
@@ -21,7 +22,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// Abstract base class of <see cref="CatalogAttributeDefinitionDto"/> ans <see cref="AttributeDefinitionDto"/>.
 	/// It holds attribute's base properties key and description.
 	/// </summary>
-	[JsonConverter( typeof( AttributeDefinitionConverter ) )]
+	[Newtonsoft.Json.JsonConverter( typeof( AttributeDefinitionConverter ) )]
+	[JsonConverter( typeof( AttributeDefinitionJsonConverter ) )]
 	public abstract class AbstractAttributeDefinitionDto
 	{
 		#region constructors
