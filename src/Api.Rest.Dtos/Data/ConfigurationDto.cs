@@ -29,11 +29,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	{
 		#region members
 
-		private IReadOnlyCollection<AbstractAttributeDefinitionDto> _PartAttributes = Array.Empty<AbstractAttributeDefinitionDto>();
-		private IReadOnlyCollection<AbstractAttributeDefinitionDto> _CharacteristicAttributes = Array.Empty<AbstractAttributeDefinitionDto>();
-		private IReadOnlyCollection<AbstractAttributeDefinitionDto> _MeasurementAttributes = Array.Empty<AbstractAttributeDefinitionDto>();
-		private IReadOnlyCollection<AbstractAttributeDefinitionDto> _ValueAttributes = Array.Empty<AbstractAttributeDefinitionDto>();
-		private IReadOnlyCollection<AttributeDefinitionDto> _CatalogAttributes = Array.Empty<AttributeDefinitionDto>();
+		private IReadOnlyList<AbstractAttributeDefinitionDto> _PartAttributes = Array.Empty<AbstractAttributeDefinitionDto>();
+		private IReadOnlyList<AbstractAttributeDefinitionDto> _CharacteristicAttributes = Array.Empty<AbstractAttributeDefinitionDto>();
+		private IReadOnlyList<AbstractAttributeDefinitionDto> _MeasurementAttributes = Array.Empty<AbstractAttributeDefinitionDto>();
+		private IReadOnlyList<AbstractAttributeDefinitionDto> _ValueAttributes = Array.Empty<AbstractAttributeDefinitionDto>();
+		private IReadOnlyList<AttributeDefinitionDto> _CatalogAttributes = Array.Empty<AttributeDefinitionDto>();
 
 		private Dictionary<ushort, AbstractAttributeDefinitionDto> _PartAttributesDict;
 		private Dictionary<ushort, AbstractAttributeDefinitionDto> _CharacteristicAttributesDict;
@@ -82,7 +82,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Gets or sets a list of all part attribute definitions.
 		/// </summary>
 		[JsonProperty( "partAttributes" )]
-		public IReadOnlyCollection<AbstractAttributeDefinitionDto> PartAttributes
+		public IReadOnlyList<AbstractAttributeDefinitionDto> PartAttributes
 		{
 			[NotNull] get => _PartAttributes;
 			set
@@ -96,7 +96,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Gets or sets a list of all characteristic attribute definitions.
 		/// </summary>
 		[JsonProperty( "characteristicAttributes" )]
-		public IReadOnlyCollection<AbstractAttributeDefinitionDto> CharacteristicAttributes
+		public IReadOnlyList<AbstractAttributeDefinitionDto> CharacteristicAttributes
 		{
 			[NotNull] get => _CharacteristicAttributes;
 			set
@@ -110,7 +110,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Gets or sets a list of all measurement attribute definitions.
 		/// </summary>
 		[JsonProperty( "measurementAttributes" )]
-		public IReadOnlyCollection<AbstractAttributeDefinitionDto> MeasurementAttributes
+		public IReadOnlyList<AbstractAttributeDefinitionDto> MeasurementAttributes
 		{
 			[NotNull] get => _MeasurementAttributes;
 			set
@@ -124,7 +124,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Gets or sets a list of all value attribute definitions.
 		/// </summary>
 		[JsonProperty( "valueAttributes" )]
-		public IReadOnlyCollection<AbstractAttributeDefinitionDto> ValueAttributes
+		public IReadOnlyList<AbstractAttributeDefinitionDto> ValueAttributes
 		{
 			[NotNull] get => _ValueAttributes;
 			set
@@ -138,7 +138,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Gets or sets a list of all catalog attribute definitions.
 		/// </summary>
 		[JsonProperty( "catalogAttributes" )]
-		public IReadOnlyCollection<AttributeDefinitionDto> CatalogAttributes
+		public IReadOnlyList<AttributeDefinitionDto> CatalogAttributes
 		{
 			[NotNull] get => _CatalogAttributes;
 			set
