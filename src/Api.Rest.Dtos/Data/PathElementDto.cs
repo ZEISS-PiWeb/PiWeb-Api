@@ -17,12 +17,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	#endregion
 
 	/// <summary>
-	/// This class represents a single part of an inspection plan path. A path part has a <see cref="Value"/> and can
+	/// This structure represents a single part of an inspection plan path. A path part has a <see cref="Value"/> and can
 	/// either specify a characteristic or a part (<see cref="Type"/>).
 	/// Notice that comparision of path elements is case insensitiv per default.
 	/// </summary>
 	/// <remarks>This class is immutable!</remarks>
-	public sealed class PathElementDto : IEquatable<PathElementDto>
+	public readonly struct PathElementDto : IEquatable<PathElementDto>
 	{
 		#region members
 
@@ -35,8 +35,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Constant value for an empty characteristic.
 		/// </summary>
 		public static readonly PathElementDto EmptyCharacteristic = Char( "" );
-
-		private int _HashCode = -1;
 
 		#endregion
 
@@ -95,7 +93,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		public static bool operator ==( PathElementDto p1, PathElementDto p2 )
 		{
-			return Equals( p1, p2 );
+			return p1.Equals( p2 );
 		}
 
 		/// <summary>
@@ -103,23 +101,19 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		public static bool operator !=( PathElementDto p1, PathElementDto p2 )
 		{
-			return !Equals( p1, p2 );
+			return !p1.Equals( p2 );
 		}
 
 		/// <inheritdoc />
 		public override bool Equals( object obj )
 		{
-			return Equals( obj as PathElementDto );
+			return obj is PathElementDto other && Equals( other );
 		}
 
 		/// <inheritdoc />
 		public override int GetHashCode()
 		{
-			// ReSharper disable NonReadonlyFieldInGetHashCode
-			if( _HashCode == -1 )
-				_HashCode = StringComparer.OrdinalIgnoreCase.GetHashCode( Value );
-			return _HashCode;
-			// ReSharper restore NonReadonlyFieldInGetHashCode
+			return StringComparer.OrdinalIgnoreCase.GetHashCode( Value );
 		}
 
 		/// <inheritdoc />
@@ -135,10 +129,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <inheritdoc />
 		public bool Equals( PathElementDto other )
 		{
-			return !ReferenceEquals( other, null ) &&
-					Type == other.Type &&
-					GetHashCode() == other.GetHashCode() &&
-					string.Equals( Value, other.Value, StringComparison.OrdinalIgnoreCase );
+			return Type == other.Type && string.Equals( Value, other.Value, StringComparison.OrdinalIgnoreCase );
 		}
 
 		#endregion

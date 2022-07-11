@@ -39,8 +39,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary> Returns the root path. </summary>
 		public static readonly PathInformationDto Root = new PathInformationDto();
 
-		private ArraySegment<PathElementDto> _PathElements;
-		private int? _HashCode;
+		private readonly ArraySegment<PathElementDto> _PathElements;
+		private int _HashCode = -1;
 
 		#endregion
 
@@ -73,7 +73,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PathInformationDto"/> class.
 		/// </summary>
-		private PathInformationDto( ArraySegment<PathElementDto> path )
+		internal PathInformationDto( ArraySegment<PathElementDto> path )
 		{
 			_PathElements = path;
 		}
@@ -167,7 +167,14 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			if( path == null || path.Count > Count )
 				return false;
 
-			return !path.Where( ( t, i ) => !this[ i ].Equals( t ) ).Any();
+			var i = 0;
+			foreach( var pathElement in path )
+			{
+				if( !this[ i++ ].Equals( pathElement ) )
+					return false;
+			}
+
+			return true;
 		}
 
 		/// <summary>
@@ -228,7 +235,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		public static PathInformationDto Combine( PathInformationDto path, PathElementDto elem )
 		{
-			if( elem == null || elem.IsEmpty )
+			if( elem.IsEmpty )
 				return path;
 
 			if( path == null )
@@ -293,13 +300,24 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <inheritdoc />
 		public override bool Equals( object obj )
 		{
-			var other = obj as PathInformationDto;
-			if( ReferenceEquals( other, null ) || other._PathElements.Count != _PathElements.Count || GetHashCode() != other.GetHashCode() )
+			if( obj is not PathInformationDto other )
 				return false;
+
+			if( other._PathElements.Count != _PathElements.Count )
+				return false;
+
+			if( GetHashCode() != other.GetHashCode() )
+				return false;
+
+			var offset = _PathElements.Offset;
+			var otherOffset = other._PathElements.Offset;
+
+			var array = _PathElements.Array;
+			var otherArray = other._PathElements.Array;
 
 			for( var i = _PathElements.Count - 1; i >= 0; i-- )
 			{
-				if( !_PathElements.Array[ _PathElements.Offset + i ].Equals( other._PathElements.Array[ other._PathElements.Offset + i ] ) )
+				if( !array[ offset + i ].Equals( otherArray[ otherOffset + i ] ) )
 					return false;
 			}
 
@@ -309,18 +327,17 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <inheritdoc />
 		public override int GetHashCode()
 		{
-			if( !_HashCode.HasValue )
+			if( _HashCode != -1 )
+				return _HashCode;
+
+			var hash = new HashCode();
+			for( var i = _PathElements.Offset; i < _PathElements.Count; i++ )
 			{
-				var hash = 1;
-				foreach( var elem in this )
-				{
-					hash ^= elem.GetHashCode();
-				}
-
-				_HashCode = hash;
+				hash.Add( _PathElements.Array[ i ] );
 			}
+			_HashCode = hash.ToHashCode();
 
-			return _HashCode.Value;
+			return _HashCode;
 		}
 
 		/// <summary>

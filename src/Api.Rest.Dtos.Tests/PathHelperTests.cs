@@ -281,7 +281,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 		{
 			const string path = "PP:/foo/bar/char1/";
 
-			FluentActions.Invoking( () => PathHelper.RoundtripString2PathInformation( path ) ).Should().Throw<IndexOutOfRangeException>();
+			FluentActions.Invoking( () => PathHelper.RoundtripString2PathInformation( path ) ).Should().Throw<ArgumentException>();
 		}
 
 		[Test]
@@ -299,21 +299,21 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 		{
 			const string path = "P:NoDelimiter/";
 
-			FluentActions.Invoking( () => PathHelper.RoundtripString2PathInformation( path ) ).Should().Throw<ArgumentException>()
-				.Where( e => e.Message.Contains( "The database path string must start with a delimiter" ) );
+			FluentActions.Invoking( () => PathHelper.RoundtripString2PathInformation( path ) ).Should().Throw<InvalidOperationException>()
+				.Where( e => e.Message.Contains( "The first character of path string" ) );
 		}
 
 		[Test]
 		public void DatabaseString2PathInformation_PathIsNull_ThrowsCorrectException()
 		{
-			Assert.Throws<ArgumentException>( () => PathHelper.DatabaseString2PathInformation( null!, string.Empty ) );
+			Assert.Throws<ArgumentException>( () => PathHelper.DatabaseString2PathInformation( null!, "".AsSpan() ) );
 		}
 
 		[Test]
 		public void DatabaseString2PathInformation_FastPathRoot_ReturnsPathInformationDto()
 		{
 			const string path = "/";
-			var actualResult = PathHelper.DatabaseString2PathInformation( path, string.Empty );
+			var actualResult = PathHelper.DatabaseString2PathInformation( path.AsSpan(), "".AsSpan() );
 
 			actualResult.Should().BeOfType<PathInformationDto>();
 			Assert.AreEqual( PathInformationDto.Root, actualResult );
@@ -324,8 +324,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 		{
 			const string path = "/foo/bar";
 
-			FluentActions.Invoking( () => PathHelper.DatabaseString2PathInformation( path, "PP" ) ).Should().Throw<InvalidOperationException>()
-				.Where( e => e.Message.Contains( "The last component of path string" ) );
+			FluentActions.Invoking( () => PathHelper.DatabaseString2PathInformation( path.AsSpan(), "PP".AsSpan() ) ).Should().Throw<InvalidOperationException>()
+				.Where( e => e.Message.Contains( "The last character of path string" ) );
 		}
 
 		[Test]
