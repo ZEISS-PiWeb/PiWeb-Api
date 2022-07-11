@@ -23,7 +23,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// <summary>
 	/// This is the concrete class of a measurement that contains measurement values as well.
 	/// </summary>
-	public sealed class DataMeasurementDto : SimpleMeasurementDto
+	public class DataMeasurementDto : SimpleMeasurementDto
 	{
 		#region members
 
