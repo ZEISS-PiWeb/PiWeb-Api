@@ -14,10 +14,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 	using System;
 	using System.Globalization;
+	using System.Text.Json.Serialization;
 	using System.Xml;
 	using JetBrains.Annotations;
-	using Newtonsoft.Json;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
+	using Zeiss.PiWeb.Api.Rest.Dtos.Converters;
 
 	#endregion
 
@@ -26,7 +27,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// </summary>
 	/// <remarks>This class is immutable.</remarks>
 	[Serializable]
-	[JsonConverter( typeof( AttributeConverter ) )]
+	[Newtonsoft.Json.JsonConverter( typeof( AttributeConverter ) )]
+	[JsonConverter( typeof( AttributeJsonConverter ) )]
 	public readonly struct AttributeDto : IEquatable<AttributeDto>
 	{
 		#region members
