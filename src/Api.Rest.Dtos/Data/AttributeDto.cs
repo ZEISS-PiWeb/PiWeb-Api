@@ -295,7 +295,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <inheritdoc />
 		public override bool Equals( object obj )
 		{
-			return obj is Attribute other && Equals( other );
+			return obj is AttributeDto other && Equals( other );
 		}
 
 		/// <inheritdoc />

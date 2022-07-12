@@ -21,7 +21,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	#endregion
 
 	/// <summary>
-	/// Class that encapsulates the url parameter for a measurement value search via PiWeb-REST web service.
+	/// This class contains a measurement search criteria for a measurement search.
 	/// </summary>
 	public class MeasurementFilterAttributesDto : AbstractMeasurementFilterAttributesDto
 	{
@@ -68,7 +68,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Specifies the list of primary measurement keys to be used for joining measurements accross multiple parts on the server side.
 		/// </summary>
-		public IReadOnlyCollection<ushort> MergeAttributes { get; set; }
+		public IReadOnlyList<ushort> MergeAttributes { get; set; }
 
 		/// <summary>
 		/// Specifies the condition that must be adhered to
@@ -112,21 +112,21 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		{
 			var items = new[]
 			{
-				Tuple.Create( PartUuidsParamName, partUuids ),
-				Tuple.Create( MeasurementUuidsParamName, measurementUuids ),
-				Tuple.Create( DeepParamName, deep ),
-				Tuple.Create( LimitResultParamName, limitResult ),
-				Tuple.Create( LimitResultPerPartParamName, limitResultPerPart ),
-				Tuple.Create( OrderByParamName, order ),
-				Tuple.Create( RequestedMeasurementAttributesParamName, requestedMeasurementAttributes ),
-				Tuple.Create( SearchConditionParamName, searchCondition ),
-				Tuple.Create( StatisticsParamName, statistics ),
-				Tuple.Create( AggregationParamName, aggregation ),
-				Tuple.Create( FromModificationDateParamName, fromModificationDate ),
-				Tuple.Create( ToModificationDateParamName, toModificationDate ),
-				Tuple.Create( MergeAttributesParamName, mergeAttributes ),
-				Tuple.Create( MergeConditionParamName, mergeCondition ),
-				Tuple.Create( MergeMasterPartParamName, mergeMasterPart )
+				ValueTuple.Create( PartUuidsParamName, partUuids ),
+				ValueTuple.Create( MeasurementUuidsParamName, measurementUuids ),
+				ValueTuple.Create( DeepParamName, deep ),
+				ValueTuple.Create( LimitResultParamName, limitResult ),
+				ValueTuple.Create( LimitResultPerPartParamName, limitResultPerPart ),
+				ValueTuple.Create( OrderByParamName, order ),
+				ValueTuple.Create( RequestedMeasurementAttributesParamName, requestedMeasurementAttributes ),
+				ValueTuple.Create( SearchConditionParamName, searchCondition ),
+				ValueTuple.Create( StatisticsParamName, statistics ),
+				ValueTuple.Create( AggregationParamName, aggregation ),
+				ValueTuple.Create( FromModificationDateParamName, fromModificationDate ),
+				ValueTuple.Create( ToModificationDateParamName, toModificationDate ),
+				ValueTuple.Create( MergeAttributesParamName, mergeAttributes ),
+				ValueTuple.Create( MergeConditionParamName, mergeCondition ),
+				ValueTuple.Create( MergeMasterPartParamName, mergeMasterPart )
 			};
 
 			var result = new MeasurementFilterAttributesDto();

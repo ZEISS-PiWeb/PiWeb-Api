@@ -22,7 +22,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	#endregion
 
 	/// <summary>
-	/// Class that encapsulates the url parameter for a measurement search via PiWeb-REST web service.
+	/// This class contains a measurement value search criteria.
 	/// </summary>
 	public class MeasurementValueFilterAttributesDto : AbstractMeasurementFilterAttributesDto
 	{
