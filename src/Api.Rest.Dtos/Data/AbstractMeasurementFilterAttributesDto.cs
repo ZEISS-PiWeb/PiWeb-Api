@@ -18,6 +18,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 	#endregion
 
+	/// <summary>
+	/// This class is the base class for a measurement or measurement value search criteria.
+	/// </summary>
 	public abstract class AbstractMeasurementFilterAttributesDto
 	{
 		#region constants
@@ -35,7 +38,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		protected const string FromModificationDateParamName = "fromModificationDate";
 		protected const string ToModificationDateParamName = "toModificationDate";
 
-		private static readonly IReadOnlyCollection<OrderDto> DefaultOrder = new[] { new OrderDto( 4, OrderDirectionDto.Desc, EntityDto.Measurement ) };
+		private static readonly IReadOnlyList<OrderDto> DefaultOrder = new[] { new OrderDto( 4, OrderDirectionDto.Desc, EntityDto.Measurement ) };
 
 		#endregion
 
@@ -60,7 +63,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets the list of part uuids that should be usded to restrict the measurement search.
 		/// </summary>
-		public IReadOnlyCollection<Guid> PartUuids { get; set; }
+		public IReadOnlyList<Guid> PartUuids { get; set; }
 
 		/// <summary>
 		/// Gets or sets a flag if the search should only be performed for the specified part (<code>false</code>) or
@@ -81,7 +84,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets the sort order of the resulting measurements.
 		/// </summary>
-		public IReadOnlyCollection<OrderDto> OrderBy { get; set; }
+		public IReadOnlyList<OrderDto> OrderBy { get; set; }
 
 		/// <summary>
 		/// Gets or sets the search condition that should be used.
@@ -91,7 +94,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets the list of measurement uuids that should be returned.
 		/// </summary>
-		public IReadOnlyCollection<Guid> MeasurementUuids { get; set; }
+		public IReadOnlyList<Guid> MeasurementUuids { get; set; }
 
 		/// <summary>
 		/// Specifies what types of measurements will be returned (normal/aggregated measurements or both).
