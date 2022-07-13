@@ -193,6 +193,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 					return value;
 				case short value:
 					return value;
+				case double value:
+					return value;
 				case CatalogEntryDto entry:
 					return entry.Key;
 			}

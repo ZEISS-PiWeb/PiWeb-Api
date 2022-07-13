@@ -136,18 +136,18 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Sets the <code>value</code> for the attribute with the key <code>key</code>.
 		/// </summary>
-		public static void SetAttribute( this IAttributeItemDto item, AttributeDto value )
+		public static void SetAttribute( this IAttributeItemDto item, AttributeDto? value )
 		{
 			if( value == null )
 				return;
 
-			if( string.IsNullOrEmpty( value.Value ) )
+			if( string.IsNullOrEmpty( value.Value.Value ) )
 			{
-				RemoveAttribute( item, value.Key );
+				RemoveAttribute( item, value.Value.Key );
 			}
 			else
 			{
-				InternalSetAttribute( item, value );
+				InternalSetAttribute( item, value.Value );
 			}
 		}
 
