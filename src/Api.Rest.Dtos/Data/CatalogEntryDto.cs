@@ -17,9 +17,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	using System.Globalization;
 	using System.Linq;
 	using System.Text;
+	using System.Text.Json.Serialization;
 	using JetBrains.Annotations;
-	using Newtonsoft.Json;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
+	using Zeiss.PiWeb.Api.Rest.Dtos.Converters;
 
 	#endregion
 
@@ -51,7 +52,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets the unique key of this catalog entry.
 		/// </summary>
-		[JsonProperty( "key" )]
+		[Newtonsoft.Json.JsonProperty( "key" )]
+		[JsonPropertyName( "key" )]
 		public short Key { get; set; }
 
 		#endregion
@@ -109,7 +111,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		#region interface IAttributeItemDto
 
 		/// <inheritdoc />
-		[JsonProperty( "attributes" ), JsonConverter( typeof( AttributeArrayConverter ) )]
+		[Newtonsoft.Json.JsonProperty( "attributes" ), Newtonsoft.Json.JsonConverter( typeof( AttributeArrayConverter ) )]
+		[JsonPropertyName( "attributes" ), JsonConverter( typeof( AttributeArrayJsonConverter ) )]
 		public IReadOnlyList<AttributeDto> Attributes
 		{
 			[NotNull] get => _Attributes;

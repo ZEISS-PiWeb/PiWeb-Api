@@ -52,15 +52,56 @@ public class CompatibilityTests
 		new AttributeDto( Characteristic.AlignmentType, 0 ),
 		new AttributeDto( Measurement.Time, new DateTime( 2010, 11, 04, 19, 44, 52, 8, DateTimeKind.Utc ) ),
 		new AttributeDto( Measurement.Time, (object)null ),
+
+		new CatalogDto
+		{
+			Name = "TestCatalog",
+			Uuid = new Guid( "8B23C6BB-EE2A-4BB3-A627-512C911F6FE8" ),
+			ValidAttributes = new [] { Catalog.OperatorNumber, Catalog.OperatorName },
+			CatalogEntries = new []
+			{
+				new CatalogEntryDto
+				{
+					Key = 1,
+					Attributes = new[]
+					{
+						new AttributeDto( Catalog.OperatorNumber, 13 ),
+						new AttributeDto( Catalog.OperatorName, "Müller" ),
+					}
+				},
+				new CatalogEntryDto
+				{
+					Key = 2,
+					Attributes = new[]
+					{
+						new AttributeDto( Catalog.OperatorNumber, 42 ),
+						new AttributeDto( Catalog.OperatorName, "Meier" ),
+					}
+				},
+				new CatalogEntryDto
+				{
+					Key = 3,
+					Attributes = new[]
+					{
+						new AttributeDto( Catalog.OperatorNumber, 73 ),
+						new AttributeDto( Catalog.OperatorName, "Schulze" ),
+					}
+				}
+			}
+		}
 	};
 
-	private static readonly IReadOnlyDictionary<Type, Func<object, IStructuralEquatable>> Equatables = new[]
+	private static readonly IReadOnlyDictionary<Type, Func<object, IStructuralEquatable>> EquatableFromType = new[]
 	{
-		CreateEquatable<AttributeDefinitionDto>(value => Tuple.Create( value.Key, value.Description, value.Length, value.QueryEfficient, value.Type )),
+		EquatableFrom<AttributeDefinitionDto>(value => Tuple.Create( value.Key, value.Description, value.Length, value.QueryEfficient, value.Type )),
 
-		CreateEquatable<CatalogAttributeDefinitionDto>(value => Tuple.Create( value.Key, value.Description, value.QueryEfficient, value.Catalog )),
+		EquatableFrom<CatalogAttributeDefinitionDto>(value => Tuple.Create( value.Key, value.Description, value.QueryEfficient, value.Catalog )),
 
-		CreateEquatable<AttributeDto>(value => Tuple.Create( value.Key, value.Value ))
+		EquatableFrom<AttributeDto>(value => Tuple.Create( value.Key, value.Value )),
+
+		EquatableFrom<CatalogDto>(value => Tuple.Create( value.Name, value.Uuid, value.ValidAttributes.ToArray(), EquatableFromMany( value.CatalogEntries ) ) ),
+
+		EquatableFrom<CatalogEntryDto>(value => Tuple.Create( value.Key, EquatableFromMany( value.Attributes ) ) ),
 	}
 	.ToDictionary( pair => pair.Key, pair => pair.Value );
 
@@ -75,7 +116,7 @@ public class CompatibilityTests
 
 		var deserializedValue = System.Text.Json.JsonSerializer.Deserialize<T>( json );
 
-		var equatable = Equatables[typeof( T )];
+		var equatable = EquatableFromType[typeof( T )];
 
 		var expected = equatable( value );
 		var actual = equatable( deserializedValue );
@@ -90,7 +131,7 @@ public class CompatibilityTests
 
 		var deserializedValue = Newtonsoft.Json.JsonConvert.DeserializeObject<T>( json );
 
-		var equatable = Equatables[typeof( T )];
+		var equatable = EquatableFromType[typeof( T )];
 
 		var expected = equatable( value );
 		var actual = equatable( deserializedValue );
@@ -98,9 +139,14 @@ public class CompatibilityTests
 		Assert.AreEqual( expected, actual, $"{typeof( T ).Name}" );
 	}
 
-	private static KeyValuePair<Type, Func<object, IStructuralEquatable>> CreateEquatable<T>( Func<T, IStructuralEquatable> func )
+	private static KeyValuePair<Type, Func<object, IStructuralEquatable>> EquatableFrom<T>( Func<T, IStructuralEquatable> func )
 	{
 		return new( typeof( T ), value => func( (T)value ) );
+	}
+
+	private static IStructuralEquatable EquatableFromMany<T>( IEnumerable<T> values )
+	{
+		return values.Select( value => EquatableFromType[typeof( T )]( value ) ).ToArray();
 	}
 
 	#endregion
