@@ -23,7 +23,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// It holds attribute's base properties key and description.
 	/// </summary>
 	[Newtonsoft.Json.JsonConverter( typeof( AttributeDefinitionConverter ) )]
-	[JsonConverter( typeof( AttributeDefinitionJsonConverter ) )]
+	[JsonConverter( typeof( AbstractAttributeDefinitionJsonConverter ) )]
 	public abstract class AbstractAttributeDefinitionDto
 	{
 		#region constructors

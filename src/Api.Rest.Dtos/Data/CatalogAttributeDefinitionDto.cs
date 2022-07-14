@@ -23,7 +23,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// Defines an entity's attribute which is based on a <see cref="Catalog"/>.
 	/// </summary>
 	[Newtonsoft.Json.JsonConverter( typeof( AttributeDefinitionConverter ) )]
-	[JsonConverter( typeof( AttributeDefinitionJsonConverter ) )]
+	[JsonConverter( typeof( CatalogAttributeDefinitionJsonConverter ) )]
 	public sealed class CatalogAttributeDefinitionDto : AbstractAttributeDefinitionDto
 	{
 		#region constructors

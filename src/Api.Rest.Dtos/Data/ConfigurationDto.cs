@@ -16,9 +16,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
+	using System.Text.Json.Serialization;
 	using System.Xml;
 	using JetBrains.Annotations;
-	using Newtonsoft.Json;
 
 	#endregion
 
@@ -72,6 +72,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Returns a list of all attribute definitions in this configuration.
 		/// </summary>
+		[Newtonsoft.Json.JsonIgnore]
 		[JsonIgnore]
 		public IReadOnlyCollection<AbstractAttributeDefinitionDto> AllAttributes
 		{
@@ -81,7 +82,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets a list of all part attribute definitions.
 		/// </summary>
-		[JsonProperty( "partAttributes" )]
+		[Newtonsoft.Json.JsonProperty( "partAttributes" )]
+		[JsonPropertyName( "partAttributes" )]
 		public IReadOnlyList<AbstractAttributeDefinitionDto> PartAttributes
 		{
 			[NotNull] get => _PartAttributes;
@@ -95,7 +97,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets a list of all characteristic attribute definitions.
 		/// </summary>
-		[JsonProperty( "characteristicAttributes" )]
+		[Newtonsoft.Json.JsonProperty( "characteristicAttributes" )]
+		[JsonPropertyName( "characteristicAttributes" )]
 		public IReadOnlyList<AbstractAttributeDefinitionDto> CharacteristicAttributes
 		{
 			[NotNull] get => _CharacteristicAttributes;
@@ -109,7 +112,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets a list of all measurement attribute definitions.
 		/// </summary>
-		[JsonProperty( "measurementAttributes" )]
+		[Newtonsoft.Json.JsonProperty( "measurementAttributes" )]
+		[JsonPropertyName( "measurementAttributes" )]
 		public IReadOnlyList<AbstractAttributeDefinitionDto> MeasurementAttributes
 		{
 			[NotNull] get => _MeasurementAttributes;
@@ -123,7 +127,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets a list of all value attribute definitions.
 		/// </summary>
-		[JsonProperty( "valueAttributes" )]
+		[Newtonsoft.Json.JsonProperty( "valueAttributes" )]
+		[JsonPropertyName( "valueAttributes" )]
 		public IReadOnlyList<AbstractAttributeDefinitionDto> ValueAttributes
 		{
 			[NotNull] get => _ValueAttributes;
@@ -137,7 +142,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets a list of all catalog attribute definitions.
 		/// </summary>
-		[JsonProperty( "catalogAttributes" )]
+		[Newtonsoft.Json.JsonProperty( "catalogAttributes" )]
+		[JsonPropertyName( "catalogAttributes" )]
 		public IReadOnlyList<AttributeDefinitionDto> CatalogAttributes
 		{
 			[NotNull] get => _CatalogAttributes;
@@ -152,7 +158,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// The attribute <code>versioningType</code> defines, whether updates to parts or characteristics
 		/// overwrite existing values, or whether they create a new version of the entity.
 		/// </summary>
-		[JsonProperty( "versioningType" )]
+		[Newtonsoft.Json.JsonProperty( "versioningType" )]
+		[JsonPropertyName( "versioningType" )]
 		public VersioningTypeDto VersioningType { get; set; }
 
 		#endregion

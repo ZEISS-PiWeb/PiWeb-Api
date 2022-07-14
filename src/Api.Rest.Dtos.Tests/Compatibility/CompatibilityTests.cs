@@ -30,22 +30,9 @@ public class CompatibilityTests
 
 	private static readonly object[] TestCases =
 	{
-		new AttributeDefinitionDto
-		{
-			Key = 13,
-			Description = "Test",
-			Length = 43,
-			QueryEfficient = false,
-			Type = AttributeTypeDto.AlphaNumeric
-		},
+		new AttributeDefinitionDto { Key = 13, Description = "Test", Length = 43, QueryEfficient = false, Type = AttributeTypeDto.AlphaNumeric },
 
-		new CatalogAttributeDefinitionDto()
-		{
-			Key = 13,
-			Description = "Test",
-			QueryEfficient = false,
-			Catalog = new Guid( "11D4115C-41A7-4D47-A353-AF5DF61503EA" )
-		},
+		new CatalogAttributeDefinitionDto() { Key = 13, Description = "Test", QueryEfficient = false, Catalog = new Guid( "11D4115C-41A7-4D47-A353-AF5DF61503EA" ) },
 
 		new AttributeDto( Characteristic.MeasurementModule, "Abweichungen" ),
 		new AttributeDto( Characteristic.X, 2919.041 ),
@@ -88,6 +75,39 @@ public class CompatibilityTests
 					}
 				}
 			}
+		},
+
+		new ConfigurationDto()
+		{
+			PartAttributes = new []
+			{
+				new AttributeDefinitionDto { Key = Part.Number, Description = "Teilenummer", Length = 30, Type = AttributeTypeDto.AlphaNumeric },
+				new AttributeDefinitionDto { Key = Part.VariantOfLine, Description = "Modell/Variante", Length = 40, Type = AttributeTypeDto.AlphaNumeric }
+			},
+
+			CharacteristicAttributes = new AbstractAttributeDefinitionDto[]
+			{
+				new AttributeDefinitionDto { Key = Characteristic.Number, Description = "Merkmalsnummer", Length = 20, Type = AttributeTypeDto.AlphaNumeric },
+				new AttributeDefinitionDto { Key = Characteristic.ControlItem, Description = "Dokumentationspflicht", Type = AttributeTypeDto.Integer },
+				new CatalogAttributeDefinitionDto { Key = 2004, Description = "Richtung", Catalog = new Guid( "d7291afb-0a67-4c1e-8bcc-6fc455bcc0e5" ) },
+			},
+
+			MeasurementAttributes = new []
+			{
+				new AttributeDefinitionDto { Key = Measurement.Time, Description = "Zeit", Type = AttributeTypeDto.DateTime },
+				new AttributeDefinitionDto { Key = 1, Description = "Messwert", Type = AttributeTypeDto.Float }
+			},
+
+			ValueAttributes = new AbstractAttributeDefinitionDto[]
+			{
+			},
+
+			CatalogAttributes = new []
+			{
+				new AttributeDefinitionDto { Key = 2009, Description = "Richtung", Length = 10, Type = AttributeTypeDto.AlphaNumeric }
+			},
+
+			VersioningType = VersioningTypeDto.Off
 		}
 	};
 
@@ -97,11 +117,20 @@ public class CompatibilityTests
 
 		EquatableFrom<CatalogAttributeDefinitionDto>(value => Tuple.Create( value.Key, value.Description, value.QueryEfficient, value.Catalog )),
 
+		EquatableFrom<AbstractAttributeDefinitionDto>(value => EquatableFromType[value is AttributeDefinitionDto ? typeof( AttributeDefinitionDto ) : typeof( CatalogAttributeDefinitionDto )]( value ) ),
+
 		EquatableFrom<AttributeDto>(value => Tuple.Create( value.Key, value.Value )),
 
 		EquatableFrom<CatalogDto>(value => Tuple.Create( value.Name, value.Uuid, value.ValidAttributes.ToArray(), EquatableFromMany( value.CatalogEntries ) ) ),
 
 		EquatableFrom<CatalogEntryDto>(value => Tuple.Create( value.Key, EquatableFromMany( value.Attributes ) ) ),
+
+		EquatableFrom<ConfigurationDto>(value => Tuple.Create( EquatableFromMany( value.PartAttributes ),
+															   EquatableFromMany( value.CharacteristicAttributes ),
+															   EquatableFromMany( value.MeasurementAttributes ),
+															   EquatableFromMany( value.ValueAttributes ),
+															   EquatableFromMany( value.CatalogAttributes ),
+															   value.VersioningType ) ),
 	}
 	.ToDictionary( pair => pair.Key, pair => pair.Value );
 

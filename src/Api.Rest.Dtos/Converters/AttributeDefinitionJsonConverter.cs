@@ -23,7 +23,7 @@ using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 /// <summary>
 /// Specialized <see cref="JsonConverter"/> for <see cref="AbstractAttributeDefinitionDto"/>-objects.
 /// </summary>
-public sealed class AttributeDefinitionJsonConverter : JsonConverter<AbstractAttributeDefinitionDto>
+public sealed class AbstractAttributeDefinitionJsonConverter : JsonConverter<AbstractAttributeDefinitionDto>
 {
 	#region members
 
@@ -51,8 +51,13 @@ public sealed class AttributeDefinitionJsonConverter : JsonConverter<AbstractAtt
 	/// <inheritdoc />
 	public override AbstractAttributeDefinitionDto Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
 	{
+		return ReadFromObject( ref reader, options );
+	}
+
+	internal static AbstractAttributeDefinitionDto ReadFromObject( ref Utf8JsonReader reader, JsonSerializerOptions options )
+	{
 		var key = default( ushort );
-		var length = default( ushort );
+		var length = default( ushort? );
 		var queryEfficient = default( bool );
 		var description = default( string );
 		var attributeDefinitionType = default( ReadOnlySpan<byte> );
@@ -113,6 +118,11 @@ public sealed class AttributeDefinitionJsonConverter : JsonConverter<AbstractAtt
 	/// <inheritdoc />
 	public override void Write( Utf8JsonWriter writer, AbstractAttributeDefinitionDto value, JsonSerializerOptions options )
 	{
+		WriteAsObject( writer, value, options );
+	}
+
+	internal static void WriteAsObject( Utf8JsonWriter writer, AbstractAttributeDefinitionDto value, JsonSerializerOptions options )
+	{
 		writer.WriteStartObject();
 
 		writer.WriteNumber( KeyPropertyName, value.Key );
@@ -141,4 +151,40 @@ public sealed class AttributeDefinitionJsonConverter : JsonConverter<AbstractAtt
 	}
 
 	#endregion
+}
+
+/// <summary>
+/// Specialized <see cref="JsonConverter"/> for <see cref="AttributeDefinitionDto"/>-objects.
+/// </summary>
+public sealed class AttributeDefinitionJsonConverter : JsonConverter<AttributeDefinitionDto>
+{
+	/// <inheritdoc />
+	public override AttributeDefinitionDto Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
+	{
+		return (AttributeDefinitionDto)AbstractAttributeDefinitionJsonConverter.ReadFromObject( ref reader, options );
+	}
+
+	/// <inheritdoc />
+	public override void Write( Utf8JsonWriter writer, AttributeDefinitionDto value, JsonSerializerOptions options )
+	{
+		AbstractAttributeDefinitionJsonConverter.WriteAsObject( writer, value, options );
+	}
+}
+
+/// <summary>
+/// Specialized <see cref="JsonConverter"/> for <see cref="CatalogAttributeDefinitionDto"/>-objects.
+/// </summary>
+public sealed class CatalogAttributeDefinitionJsonConverter : JsonConverter<CatalogAttributeDefinitionDto>
+{
+	/// <inheritdoc />
+	public override CatalogAttributeDefinitionDto Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
+	{
+		return (CatalogAttributeDefinitionDto)AbstractAttributeDefinitionJsonConverter.ReadFromObject( ref reader, options );
+	}
+
+	/// <inheritdoc />
+	public override void Write( Utf8JsonWriter writer, CatalogAttributeDefinitionDto value, JsonSerializerOptions options )
+	{
+		AbstractAttributeDefinitionJsonConverter.WriteAsObject( writer, value, options );
+	}
 }
