@@ -12,15 +12,15 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
 	#region usings
 
-	using Newtonsoft.Json;
-	using Newtonsoft.Json.Converters;
+	using System.Text.Json.Serialization;
 
 	#endregion
 
 	/// <summary>
 	/// Enumeration of possible entities.
 	/// </summary>
-	[JsonConverter( typeof( StringEnumConverter ) )]
+	[Newtonsoft.Json.JsonConverter( typeof( Newtonsoft.Json.Converters.StringEnumConverter ) )]
+	[JsonConverter( typeof(JsonStringEnumConverter) )]
 	public enum EntityDto
 	{
 		/// <summary>
