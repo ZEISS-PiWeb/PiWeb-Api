@@ -8,28 +8,28 @@
 
 #endregion
 
-namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility;
-
-#region usings
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using NUnit.Framework;
-using Zeiss.PiWeb.Api.Rest.Dtos.Data;
-
-using static PiWeb.Api.Definitions.WellKnownKeys;
-
-#endregion
-
-[TestFixture]
-public class CompatibilityTests
+namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 {
-	#region members
+	#region usings
 
-	private static readonly object[] TestCases =
+	using System;
+	using System.Collections;
+	using System.Collections.Generic;
+	using System.Linq;
+	using NUnit.Framework;
+	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
+
+	using static PiWeb.Api.Definitions.WellKnownKeys;
+
+	#endregion
+
+	[TestFixture]
+	public class CompatibilityTests
 	{
+		#region members
+
+		private static readonly object[] TestCases =
+		{
 		new AttributeDefinitionDto { Key = 13, Description = "Test", Length = 43, QueryEfficient = false, Type = AttributeTypeDto.AlphaNumeric },
 
 		new CatalogAttributeDefinitionDto { Key = 13, Description = "Test", QueryEfficient = false, Catalog = new Guid( "11D4115C-41A7-4D47-A353-AF5DF61503EA" ) },
@@ -131,8 +131,8 @@ public class CompatibilityTests
 		}
 	};
 
-	private static readonly IReadOnlyDictionary<Type, Func<object, IStructuralEquatable>> EquatableFromType = new[]
-	{
+		private static readonly IReadOnlyDictionary<Type, Func<object, IStructuralEquatable>> EquatableFromType = new[]
+		{
 		EquatableFrom<AttributeDefinitionDto>( value => Tuple.Create( value.Key, value.Description, value.Length, value.QueryEfficient, value.Type ) ),
 
 		EquatableFrom<CatalogAttributeDefinitionDto>( value => Tuple.Create( value.Key, value.Description, value.QueryEfficient, value.Catalog ) ),
@@ -156,51 +156,52 @@ public class CompatibilityTests
 
 		EquatableFrom<DataMeasurementDto>( value => Tuple.Create( value.Uuid, value.PartUuid, value.LastModified, value.Created, EquatableFromMany( value.Attributes ), EquatableFromMany( value.Characteristics ) ) ),
 	}
-	.ToDictionary( pair => pair.Key, pair => pair.Value );
+		.ToDictionary( pair => pair.Key, pair => pair.Value );
 
-	#endregion
+		#endregion
 
-	#region methods
+		#region methods
 
-	[TestCaseSource( nameof( TestCases ) )]
-	public void Backward_Compatible<T>( T value )
-	{
-		var json = Newtonsoft.Json.JsonConvert.SerializeObject( value );
+		[TestCaseSource( nameof( TestCases ) )]
+		public void Backward_Compatible<T>( T value )
+		{
+			var json = Newtonsoft.Json.JsonConvert.SerializeObject( value );
 
-		var deserializedValue = System.Text.Json.JsonSerializer.Deserialize<T>( json );
+			var deserializedValue = System.Text.Json.JsonSerializer.Deserialize<T>( json );
 
-		var equatable = EquatableFromType[typeof( T )];
+			var equatable = EquatableFromType[typeof( T )];
 
-		var expected = equatable( value );
-		var actual = equatable( deserializedValue );
+			var expected = equatable( value );
+			var actual = equatable( deserializedValue );
 
-		Assert.AreEqual( expected, actual, $"{typeof( T ).Name}" );
+			Assert.AreEqual( expected, actual, $"{typeof( T ).Name}" );
+		}
+
+		[TestCaseSource( nameof( TestCases ) )]
+		public void Forward_Compatible<T>( T value )
+		{
+			var json = System.Text.Json.JsonSerializer.Serialize( value );
+
+			var deserializedValue = Newtonsoft.Json.JsonConvert.DeserializeObject<T>( json );
+
+			var equatable = EquatableFromType[typeof( T )];
+
+			var expected = equatable( value );
+			var actual = equatable( deserializedValue );
+
+			Assert.AreEqual( expected, actual, $"{typeof( T ).Name}" );
+		}
+
+		private static KeyValuePair<Type, Func<object, IStructuralEquatable>> EquatableFrom<T>( Func<T, IStructuralEquatable> func )
+		{
+			return new( typeof( T ), value => func( (T)value ) );
+		}
+
+		private static IStructuralEquatable EquatableFromMany<T>( IEnumerable<T> values )
+		{
+			return values.Select( value => EquatableFromType[typeof( T )]( value ) ).ToArray();
+		}
+
+		#endregion
 	}
-
-	[TestCaseSource( nameof( TestCases ) )]
-	public void Forward_Compatible<T>( T value )
-	{
-		var json = System.Text.Json.JsonSerializer.Serialize( value );
-
-		var deserializedValue = Newtonsoft.Json.JsonConvert.DeserializeObject<T>( json );
-
-		var equatable = EquatableFromType[typeof( T )];
-
-		var expected = equatable( value );
-		var actual = equatable( deserializedValue );
-
-		Assert.AreEqual( expected, actual, $"{typeof( T ).Name}" );
-	}
-
-	private static KeyValuePair<Type, Func<object, IStructuralEquatable>> EquatableFrom<T>( Func<T, IStructuralEquatable> func )
-	{
-		return new( typeof( T ), value => func( (T)value ) );
-	}
-
-	private static IStructuralEquatable EquatableFromMany<T>( IEnumerable<T> values )
-	{
-		return values.Select( value => EquatableFromType[typeof( T )]( value ) ).ToArray();
-	}
-
-	#endregion
 }
