@@ -15,9 +15,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
+	using System.Text.Json.Serialization;
 	using JetBrains.Annotations;
-	using Newtonsoft.Json;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
+	using Zeiss.PiWeb.Api.Rest.Dtos.Converters;
 
 	#endregion
 
@@ -32,7 +33,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		private IReadOnlyList<AttributeDto> _Attributes;
 
-		[JsonProperty( "path" ), JsonConverter( typeof( PathInformationConverter ) )]
+		[Newtonsoft.Json.JsonProperty( "path" ), Newtonsoft.Json.JsonConverter( typeof( PathInformationConverter ) )]
+		[JsonPropertyName( "path" )]
 		private PathInformationDto _Path;
 
 		#endregion
@@ -52,18 +54,21 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Gets or sets the uuid of this inspection plan entity. The uuid is always constant, even if
 		/// this entity is renamed.
 		/// </summary>
-		[JsonProperty( "uuid" )]
+		[Newtonsoft.Json.JsonProperty( "uuid" )]
+		[JsonPropertyName( "uuid" )]
 		public Guid Uuid { get; set; }
 
 		/// <summary>
 		/// Gets or sets the comment of this inspection plan entity.
 		/// </summary>
-		[JsonProperty( "comment" )]
+		[Newtonsoft.Json.JsonProperty( "comment" )]
+		[JsonPropertyName( "comment" )]
 		public string Comment { get; set; }
 
 		/// <summary>
 		/// Gets or sets the path of this inspection plan entity.
 		/// </summary>
+		[Newtonsoft.Json.JsonIgnore]
 		[JsonIgnore]
 		public PathInformationDto Path
 		{
@@ -76,13 +81,15 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// version changes of the whole inspection plan. This means, that single instances of a part or characteristic can
 		/// have non consecutive version numbers.
 		/// </summary>
-		[JsonProperty( "version" )]
+		[Newtonsoft.Json.JsonProperty( "version" )]
+		[JsonPropertyName( "version" )]
 		public uint Version { get; set; }
 
 		/// <summary>
 		/// Contains the date and time of the last change applied to this instance.
 		/// </summary>
-		[JsonProperty( "timestamp" )]
+		[Newtonsoft.Json.JsonProperty( "timestamp" )]
+		[JsonPropertyName( "timestamp" )]
 		public DateTime Timestamp { get; set; }
 
 		#endregion
@@ -100,7 +107,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		#region interface IAttributeItemDto
 
 		/// <inheritdoc />
-		[JsonProperty( "attributes" ), JsonConverter( typeof( AttributeArrayConverter ) )]
+		[Newtonsoft.Json.JsonProperty( "attributes" ), Newtonsoft.Json.JsonConverter( typeof( AttributeArrayConverter ) )]
+		[JsonPropertyName( "attributes" ), JsonConverter( typeof( AttributeArrayJsonConverter ) )]
 		public IReadOnlyList<AttributeDto> Attributes
 		{
 			[NotNull] get => _Attributes ?? Array.Empty<AttributeDto>();

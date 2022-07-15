@@ -32,7 +32,7 @@ public class CompatibilityTests
 	{
 		new AttributeDefinitionDto { Key = 13, Description = "Test", Length = 43, QueryEfficient = false, Type = AttributeTypeDto.AlphaNumeric },
 
-		new CatalogAttributeDefinitionDto() { Key = 13, Description = "Test", QueryEfficient = false, Catalog = new Guid( "11D4115C-41A7-4D47-A353-AF5DF61503EA" ) },
+		new CatalogAttributeDefinitionDto { Key = 13, Description = "Test", QueryEfficient = false, Catalog = new Guid( "11D4115C-41A7-4D47-A353-AF5DF61503EA" ) },
 
 		new AttributeDto( Characteristic.MeasurementModule, "Abweichungen" ),
 		new AttributeDto( Characteristic.X, 2919.041 ),
@@ -77,7 +77,7 @@ public class CompatibilityTests
 			}
 		},
 
-		new ConfigurationDto()
+		new ConfigurationDto
 		{
 			PartAttributes = new []
 			{
@@ -108,29 +108,53 @@ public class CompatibilityTests
 			},
 
 			VersioningType = VersioningTypeDto.Off
+		},
+
+		new DataMeasurementDto
+		{
+			Uuid = new Guid( "82DA1300-CC13-4920-A272-0AA33C4001A3" ),
+			PartUuid = new Guid( "CF1938E5-C8D6-468D-9BC9-640A60A54105" ),
+			LastModified = new DateTime( 2010, 11, 04, 19, 44, 52, 8, DateTimeKind.Utc ),
+			Created = new DateTime( 2010, 12, 05, 22, 37, 49, 12, DateTimeKind.Utc ),
+			Attributes = new AttributeDto[]
+			{
+				new AttributeDto( Measurement.Time, new DateTime( 2022, 01, 31, 19, 02, 59, 71, DateTimeKind.Utc) ),
+				new AttributeDto( Measurement.BatchNumber, "5" ),
+				new AttributeDto( Measurement.InspectorName, 2 ),
+			},
+			Characteristics = new DataCharacteristicDto[]
+			{
+				new DataCharacteristicDto { Uuid = new Guid("b71a5bd7-5406-46a3-a5b7-458ba1c0248d"), Value = new DataValueDto( 0.15108030390438515 ) },
+				new DataCharacteristicDto { Uuid = new Guid("8c72afa6-fc67-4fbd-8606-e3727d79c8ff"), Value = new DataValueDto( -0.06273457511599848 ) },
+				new DataCharacteristicDto { Uuid = new Guid("a5d13d7f-4029-4fb5-a7b5-3f40718df85a"), Value = new DataValueDto( 0.03185869918795966 ) }
+			}
 		}
 	};
 
 	private static readonly IReadOnlyDictionary<Type, Func<object, IStructuralEquatable>> EquatableFromType = new[]
 	{
-		EquatableFrom<AttributeDefinitionDto>(value => Tuple.Create( value.Key, value.Description, value.Length, value.QueryEfficient, value.Type )),
+		EquatableFrom<AttributeDefinitionDto>( value => Tuple.Create( value.Key, value.Description, value.Length, value.QueryEfficient, value.Type ) ),
 
-		EquatableFrom<CatalogAttributeDefinitionDto>(value => Tuple.Create( value.Key, value.Description, value.QueryEfficient, value.Catalog )),
+		EquatableFrom<CatalogAttributeDefinitionDto>( value => Tuple.Create( value.Key, value.Description, value.QueryEfficient, value.Catalog ) ),
 
-		EquatableFrom<AbstractAttributeDefinitionDto>(value => EquatableFromType[value is AttributeDefinitionDto ? typeof( AttributeDefinitionDto ) : typeof( CatalogAttributeDefinitionDto )]( value ) ),
+		EquatableFrom<AbstractAttributeDefinitionDto>( value => EquatableFromType[ value is AttributeDefinitionDto ? typeof( AttributeDefinitionDto ) : typeof( CatalogAttributeDefinitionDto ) ]( value ) ),
 
-		EquatableFrom<AttributeDto>(value => Tuple.Create( value.Key, value.Value )),
+		EquatableFrom<AttributeDto> (value => Tuple.Create( value.Key, value.Value ) ),
 
-		EquatableFrom<CatalogDto>(value => Tuple.Create( value.Name, value.Uuid, value.ValidAttributes.ToArray(), EquatableFromMany( value.CatalogEntries ) ) ),
+		EquatableFrom<CatalogDto>( value => Tuple.Create( value.Name, value.Uuid, value.ValidAttributes.ToArray(), EquatableFromMany( value.CatalogEntries ) ) ),
 
-		EquatableFrom<CatalogEntryDto>(value => Tuple.Create( value.Key, EquatableFromMany( value.Attributes ) ) ),
+		EquatableFrom<CatalogEntryDto>( value => Tuple.Create( value.Key, EquatableFromMany( value.Attributes ) ) ),
 
-		EquatableFrom<ConfigurationDto>(value => Tuple.Create( EquatableFromMany( value.PartAttributes ),
+		EquatableFrom<ConfigurationDto>( value => Tuple.Create( EquatableFromMany( value.PartAttributes ),
 															   EquatableFromMany( value.CharacteristicAttributes ),
 															   EquatableFromMany( value.MeasurementAttributes ),
 															   EquatableFromMany( value.ValueAttributes ),
 															   EquatableFromMany( value.CatalogAttributes ),
 															   value.VersioningType ) ),
+
+		EquatableFrom<DataCharacteristicDto>( value => Tuple.Create( value.Uuid, value.Value.MeasuredValue ) ),
+
+		EquatableFrom<DataMeasurementDto>( value => Tuple.Create( value.Uuid, value.PartUuid, value.LastModified, value.Created, EquatableFromMany( value.Attributes ), EquatableFromMany( value.Characteristics ) ) ),
 	}
 	.ToDictionary( pair => pair.Key, pair => pair.Value );
 
