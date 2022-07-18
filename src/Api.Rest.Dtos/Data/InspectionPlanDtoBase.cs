@@ -33,10 +33,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		private IReadOnlyList<AttributeDto> _Attributes;
 
-		[Newtonsoft.Json.JsonProperty( "path" ), Newtonsoft.Json.JsonConverter( typeof( PathInformationConverter ) )]
-		[JsonPropertyName( "path" )]
+		[Newtonsoft.Json.JsonProperty( "path" ), Newtonsoft.Json.JsonConverter( typeof( PathInformationConverter ) )]		
 		private PathInformationDto _Path;
-
+		
 		#endregion
 
 		#region properties
@@ -73,6 +72,16 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		public PathInformationDto Path
 		{
 			[NotNull] get => _Path ?? PathInformationDto.Root;
+			set => _Path = value;
+		}
+
+		/// <summary>
+		/// Gets or sets the path of this inspection plan entity.
+		/// </summary>
+		[JsonInclude, JsonPropertyName( "path" ), JsonConverter( typeof( PathInformationJsonConverter ) )]
+		public PathInformationDto PathCore
+		{
+			private get => _Path;
 			set => _Path = value;
 		}
 
