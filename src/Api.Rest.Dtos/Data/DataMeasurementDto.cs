@@ -17,7 +17,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	using System.Text.Json.Serialization;
 	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
-	using Zeiss.PiWeb.Api.Rest.Dtos.Converters;
+	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
 
 	#endregion
 
@@ -38,7 +38,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Gets or sets the measurement values.
 		/// </summary>
 		[Newtonsoft.Json.JsonProperty( "characteristics" ), Newtonsoft.Json.JsonConverter( typeof( DataCharacteristicConverter ) )]
-		[JsonPropertyName( "characteristics" ), JsonConverter( typeof( DataCharacteristicArrayJsonConverter ) )]
+		[JsonPropertyName( "characteristics" ), JsonConverter( typeof( JsonDataCharacteristicArrayConverter ) )]
 		public IReadOnlyCollection<DataCharacteristicDto> Characteristics
 		{
 			[NotNull] get => _Characteristics;

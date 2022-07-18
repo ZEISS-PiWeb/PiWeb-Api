@@ -18,7 +18,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	using System.Text.Json.Serialization;
 	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
-	using Zeiss.PiWeb.Api.Rest.Dtos.Converters;
+	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
 
 	#endregion
 
@@ -78,7 +78,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets the path of this inspection plan entity.
 		/// </summary>
-		[JsonInclude, JsonPropertyName( "path" ), JsonConverter( typeof( PathInformationJsonConverter ) )]
+		[JsonInclude, JsonPropertyName( "path" ), JsonConverter( typeof( JsonPathInformationConverter ) )]
 		public PathInformationDto PathCore
 		{
 			private get => _Path;
@@ -117,7 +117,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		/// <inheritdoc />
 		[Newtonsoft.Json.JsonProperty( "attributes" ), Newtonsoft.Json.JsonConverter( typeof( AttributeArrayConverter ) )]
-		[JsonPropertyName( "attributes" ), JsonConverter( typeof( AttributeArrayJsonConverter ) )]
+		[JsonPropertyName( "attributes" ), JsonConverter( typeof( JsonAttributeArrayConverter ) )]
 		public IReadOnlyList<AttributeDto> Attributes
 		{
 			[NotNull] get => _Attributes ?? Array.Empty<AttributeDto>();

@@ -8,7 +8,7 @@
 
 #endregion
 
-namespace Zeiss.PiWeb.Api.Rest.Dtos.Converters
+namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 {
 	#region usings
 
@@ -22,7 +22,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converters
 	/// <summary>
 	/// Specialized <see cref="JsonConverter"/> for <see cref="PathInformationDto"/>-objects.
 	/// </summary>
-	public sealed class PathInformationJsonConverter : JsonConverter<PathInformationDto>
+	public sealed class JsonPathInformationConverter : JsonConverter<PathInformationDto>
 	{
 		#region methods
 

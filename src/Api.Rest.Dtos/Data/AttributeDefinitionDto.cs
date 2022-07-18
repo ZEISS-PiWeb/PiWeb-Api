@@ -14,7 +14,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 	using System.Text.Json.Serialization;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
-	using Zeiss.PiWeb.Api.Rest.Dtos.Converters;
+	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
 
 	#endregion
 
@@ -22,7 +22,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// Defines an entity's attribute.
 	/// </summary>
 	[Newtonsoft.Json.JsonConverter( typeof( AttributeDefinitionConverter ) )]
-	[JsonConverter( typeof( AttributeDefinitionJsonConverter ) )]
+	[JsonConverter( typeof( JsonAttributeDefinitionConverter ) )]
 	public sealed class AttributeDefinitionDto : AbstractAttributeDefinitionDto
 	{
 		#region constructors

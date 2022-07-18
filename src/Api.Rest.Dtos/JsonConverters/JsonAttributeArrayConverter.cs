@@ -8,7 +8,7 @@
 
 #endregion
 
-namespace Zeiss.PiWeb.Api.Rest.Dtos.Converters
+namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 {
 	#region usings
 
@@ -23,7 +23,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converters
 	/// <summary>
 	/// Specialized <see cref="JsonConverter"/> for <see cref="AttributeDto"/> collections.
 	/// </summary>
-	public sealed class AttributeArrayJsonConverter : JsonConverter<IReadOnlyList<AttributeDto>>
+	public sealed class JsonAttributeArrayConverter : JsonConverter<IReadOnlyList<AttributeDto>>
 	{
 		#region methods
 
@@ -39,7 +39,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converters
 
 			while( reader.Read() && reader.TokenType == JsonTokenType.PropertyName )
 			{
-				if( AttributeJsonConverter.TryReadFromProperty( ref reader, out var attribute ) )
+				if( JsonAttributeConverter.TryReadFromProperty( ref reader, out var attribute ) )
 				{
 					result.Add( attribute );
 				}
@@ -55,7 +55,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converters
 
 			foreach( var attribute in value )
 			{
-				AttributeJsonConverter.WriteAsProperty( writer, attribute, options );
+				JsonAttributeConverter.WriteAsProperty( writer, attribute, options );
 			}
 
 			writer.WriteEndObject();

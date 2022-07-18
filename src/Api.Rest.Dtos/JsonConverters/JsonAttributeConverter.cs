@@ -8,7 +8,7 @@
 
 #endregion
 
-namespace Zeiss.PiWeb.Api.Rest.Dtos.Converters
+namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 {
 	#region usings
 
@@ -24,7 +24,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converters
 	/// <summary>
 	/// Specialized <see cref="JsonConverter"/> for <see cref="AttributeDto"/>-objects.
 	/// </summary>
-	public sealed class AttributeJsonConverter : JsonConverter<AttributeDto>
+	public sealed class JsonAttributeConverter : JsonConverter<AttributeDto>
 	{
 		#region methods
 
