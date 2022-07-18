@@ -157,7 +157,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 					new AttributeDto( Part.Abbreviation, "Blechteil" ),
 					new AttributeDto( Part.Organisation, "Presswerk" )
 				}
-			}
+			},
+
+			new OperationStatusDto { OperationUuid = new Guid( "7825FE38-1486-45CC-AA95-70658B83C7ED" ), ExecutionStatus = OperationExecutionStatusDto.Running },
+			new OperationStatusDto { OperationUuid = new Guid( "7AE4BD0A-5EA4-4665-AB60-9D517E23BE6D" ), ExecutionStatus = OperationExecutionStatusDto.Exception, Exception = new Error("ErrorMessage") },
 		};
 
 		private static readonly IReadOnlyDictionary<Type, Func<object, IStructuralEquatable>> EquatableFromType = new[]
@@ -188,8 +191,20 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 			EquatableFrom<InspectionPlanCharacteristicDto>( value => Tuple.Create( value.Path, value.Uuid, value.Version, value.Timestamp, EquatableFromMany( value.Attributes ) ) ),
 
 			EquatableFrom<InspectionPlanPartDto>( value => Tuple.Create( value.Path, value.Uuid, value.Version, value.Timestamp, value.CharChangeDate, EquatableFromMany( value.Attributes ) ) ),
+
+			EquatableFrom<OperationStatusDto>( value => Tuple.Create( value.OperationUuid, value.ExecutionStatus, value.Exception?.ExceptionMessage ?? String.Empty ) ),
 		}
 		.ToDictionary( pair => pair.Key, pair => pair.Value );
+
+		private static readonly Newtonsoft.Json.JsonSerializerSettings Settings = new()
+		{
+			NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+		};
+
+		private static readonly System.Text.Json.JsonSerializerOptions Options = new()
+		{
+			DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+		};
 
 		#endregion
 
@@ -198,9 +213,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 		[TestCaseSource( nameof( TestCases ) )]
 		public void Backward_Compatible<T>( T value )
 		{
-			var json = Newtonsoft.Json.JsonConvert.SerializeObject( value );
-
-			var deserializedValue = System.Text.Json.JsonSerializer.Deserialize<T>( json );
+			var json = Newtonsoft.Json.JsonConvert.SerializeObject( value, Settings );
+			
+			var deserializedValue = System.Text.Json.JsonSerializer.Deserialize<T>( json, Options );
 
 			var equatable = EquatableFromType[typeof( T )];
 
@@ -213,9 +228,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 		[TestCaseSource( nameof( TestCases ) )]
 		public void Forward_Compatible<T>( T value )
 		{
-			var json = System.Text.Json.JsonSerializer.Serialize( value );
+			var json = System.Text.Json.JsonSerializer.Serialize( value, Options );
 
-			var deserializedValue = Newtonsoft.Json.JsonConvert.DeserializeObject<T>( json );
+			var deserializedValue = Newtonsoft.Json.JsonConvert.DeserializeObject<T>( json, Settings );
 
 			var equatable = EquatableFromType[typeof( T )];
 
