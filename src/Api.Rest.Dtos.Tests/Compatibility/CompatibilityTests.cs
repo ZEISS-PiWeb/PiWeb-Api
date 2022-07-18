@@ -17,8 +17,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 	using System.Collections.Generic;
 	using System.Linq;
 	using NUnit.Framework;
+	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
-
+	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
 	using static PiWeb.Api.Definitions.WellKnownKeys;
 
 	#endregion
@@ -176,6 +177,72 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 										RequestHeaderSize = 0 },
 
 			new InterfaceVersionRange { SupportedVersions = new[] { new Version(7, 8, 2), new Version(8, 0), new Version(8, 2, 8) } },
+
+			new InspectionPlanDtoBase[]
+			{
+				new InspectionPlanCharacteristicDto
+				{
+					Path = PathHelper.RoundtripString2PathInformation( "PC:/Blechteil/Abweichung_3/" ),
+					Uuid = new Guid( "b71a5bd7-5406-46a3-a5b7-458ba1c0248d" ),
+					Version = 0,
+					Timestamp = new DateTime( 2022, 01, 31, 19, 02, 58, 683, DateTimeKind.Utc ),
+					Attributes = new[]
+					{
+						new AttributeDto( Characteristic.NominalValue, 0.0 ),
+						new AttributeDto( Characteristic.LowerSpecificationLimit, -0.5 ),
+						new AttributeDto( Characteristic.UpperSpecificationLimit, 0.5 )
+					}
+				},
+
+				new InspectionPlanPartDto
+				{
+					Path = PathHelper.RoundtripString2PathInformation( "P:/Blechteil/" ),
+					CharChangeDate = new DateTime( 2022, 01, 31, 19, 2, 58, 767, DateTimeKind.Utc ),
+					Uuid = new Guid( "fe85eefe-f08d-4e78-9f06-0e3b3cc9275e" ),
+					Version = 1,
+					Timestamp = new DateTime( 2022, 06, 30, 6, 25, 35, 46, DateTimeKind.Utc ),
+					Attributes = new[]
+					{
+						new AttributeDto( Part.Number, 122345 ),
+						new AttributeDto( Part.Abbreviation, "Blechteil" ),
+						new AttributeDto( Part.Organisation, "Presswerk" )
+					},
+					History = new[]
+					{
+						new InspectionPlanPartDto
+						{
+							Path = PathHelper.RoundtripString2PathInformation( "P:/Blechteil/" ),
+							CharChangeDate = new DateTime( 2022, 01, 30, 18, 5, 46, 124, DateTimeKind.Utc ),
+							Uuid = new Guid( "fe85eefe-f08d-4e78-9f06-0e3b3cc9275e" ),
+							Version = 0,
+							Timestamp = new DateTime( 2022, 06, 29, 7, 26, 12, 863, DateTimeKind.Utc ),
+							Attributes = new[]
+							{
+								new AttributeDto( Part.Number, 122344 ),
+								new AttributeDto( Part.Abbreviation, "Blechteil" ),
+								new AttributeDto( Part.Organisation, "Presswerk" )
+							}
+						},
+					},
+				},
+
+				new SimplePartDto
+				{
+					Path = PathHelper.RoundtripString2PathInformation( "P:/Blechteil/" ),
+					CharChangeDate = new DateTime( 2022, 01, 31, 19, 2, 58, 767, DateTimeKind.Utc ),
+					Uuid = new Guid( "fe85eefe-f08d-4e78-9f06-0e3b3cc9275e" ),
+					Version = 0,
+					Timestamp = new DateTime( 2022, 06, 30, 6, 25, 35, 46, DateTimeKind.Utc ),
+					Attributes = new[]
+					{
+						new AttributeDto( Part.Number, 122345 ),
+						new AttributeDto( Part.Abbreviation, "Blechteil" ),
+						new AttributeDto( Part.Organisation, "Presswerk" )
+					}
+				},
+
+				null
+			},
 		};
 
 		private static readonly IReadOnlyDictionary<Type, Func<object, IStructuralEquatable>> EquatableFromType = new[]
@@ -205,7 +272,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 
 			EquatableFrom<InspectionPlanCharacteristicDto>( value => Tuple.Create( value.Path, value.Uuid, value.Version, value.Timestamp, EquatableFromMany( value.Attributes ) ) ),
 
-			EquatableFrom<InspectionPlanPartDto>( value => Tuple.Create( value.Path, value.Uuid, value.Version, value.Timestamp, value.CharChangeDate, EquatableFromMany( value.Attributes ) ) ),
+			EquatableFrom<InspectionPlanPartDto>( value => Tuple.Create( value.Path, value.Uuid, value.Version, value.Timestamp, value.CharChangeDate,
+															EquatableFromMany( value.Attributes ), value.History is not null ?  EquatableFromMany( value.History ) : null  ) ),
+
+			EquatableFrom<SimplePartDto>( value => Tuple.Create( value.Path, value.Uuid, value.Version, value.Timestamp, value.CharChangeDate, EquatableFromMany( value.Attributes ) ) ),
 
 			EquatableFrom<OperationStatusDto>( value => Tuple.Create( value.OperationUuid, value.ExecutionStatus, value.Exception?.ExceptionMessage ?? string.Empty ) ),
 
@@ -216,18 +286,21 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 															Tuple.Create( value.InspectionPlanTimestamp, value.MeasurementTimestamp, value.ConfigurationTimestamp, value.CatalogTimestamp, value.StructureTimestamp )) ),
 
 			EquatableFrom<InterfaceVersionRange>( value => value.SupportedVersions.ToArray() ),
+
+			EquatableFrom<InspectionPlanDtoBase[]>( value => EquatableFromMany( value ) ),
 		}
 		.ToDictionary( pair => pair.Key, pair => pair.Value );
 
 		private static readonly Newtonsoft.Json.JsonSerializerSettings Settings = new()
 		{
 			NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
-			Converters = { new Newtonsoft.Json.Converters.VersionConverter() }
+			Converters = { new Newtonsoft.Json.Converters.VersionConverter(), new InspectionPlanDtoBaseConverter() }
 		};
 
 		private static readonly System.Text.Json.JsonSerializerOptions Options = new()
 		{
-			DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+			DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
+			Converters = { new JsonInspectionPlanDtoBaseConverter() }
 		};
 
 		#endregion
@@ -238,7 +311,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 		public void Backward_Compatible<T>( T value )
 		{
 			var json = Newtonsoft.Json.JsonConvert.SerializeObject( value, Settings );
-			
+
 			var deserializedValue = System.Text.Json.JsonSerializer.Deserialize<T>( json, Options );
 
 			var equatable = EquatableFromType[typeof( T )];
@@ -271,7 +344,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 
 		private static IStructuralEquatable EquatableFromMany<T>( IEnumerable<T> values )
 		{
-			return values.Select( value => EquatableFromType[typeof( T )]( value ) ).ToArray();
+			return values.Where( value => value != null ).Select( value => EquatableFromType[value.GetType()]( value ) ).ToArray();
 		}
 
 		#endregion
