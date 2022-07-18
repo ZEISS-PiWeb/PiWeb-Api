@@ -164,6 +164,18 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 
 			new OrderDto { Entity = EntityDto.Characteristic, Attribute = Characteristic.LowerTolerance, Direction = OrderDirectionDto.Asc },
 			new OrderDto { Entity = EntityDto.Measurement, Attribute = Measurement.MeasurementStatus, Direction = OrderDirectionDto.Desc },
+
+			new ServiceInformationDto { EditionSpecified = true, ServerName = "TestServer", Version = "8.4.1.0", SecurityEnabled = true, Edition = "PiWebDB",
+										FeatureList = new[] { "MeasurementAggregation", "JobEngineSupported" },
+										PartCount = 1, CharacteristicCount = 13, MeasurementCount = 42, ValueCount = 73,
+										InspectionPlanTimestamp = new DateTime( 2022, 06, 23, 10, 42, 0, 931, DateTimeKind.Utc ),
+										MeasurementTimestamp = new DateTime( 2022, 03, 30, 15, 29, 43, 324, DateTimeKind.Utc ),
+										ConfigurationTimestamp = new DateTime( 2022, 07, 13, 9, 35, 28, 858, DateTimeKind.Utc ),
+										CatalogTimestamp = new DateTime( 2022, 03, 30, 15, 29, 42, 816, DateTimeKind.Utc ),
+										StructureTimestamp = new DateTime( 2022, 03, 30, 15, 29, 41, 254, DateTimeKind.Utc ),
+										RequestHeaderSize = 0 },
+
+			new InterfaceVersionRange { SupportedVersions = new[] { new Version(7, 8, 2), new Version(8, 0), new Version(8, 2, 8) } },
 		};
 
 		private static readonly IReadOnlyDictionary<Type, Func<object, IStructuralEquatable>> EquatableFromType = new[]
@@ -198,12 +210,19 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 			EquatableFrom<OperationStatusDto>( value => Tuple.Create( value.OperationUuid, value.ExecutionStatus, value.Exception?.ExceptionMessage ?? string.Empty ) ),
 
 			EquatableFrom<OrderDto>( value => Tuple.Create( value.Entity, value.Attribute, value.Direction ) ),
+
+			EquatableFrom<ServiceInformationDto>( value => Tuple.Create( value.EditionSpecified, value.Edition, value.ServerName, value.SecurityEnabled, value.FeatureList.ToArray(), value.RequestHeaderSize,
+															Tuple.Create( value.PartCount, value.CharacteristicCount, value.MeasurementCount, value.ValueCount ),
+															Tuple.Create( value.InspectionPlanTimestamp, value.MeasurementTimestamp, value.ConfigurationTimestamp, value.CatalogTimestamp, value.StructureTimestamp )) ),
+
+			EquatableFrom<InterfaceVersionRange>( value => value.SupportedVersions.ToArray() ),
 		}
 		.ToDictionary( pair => pair.Key, pair => pair.Value );
 
 		private static readonly Newtonsoft.Json.JsonSerializerSettings Settings = new()
 		{
-			NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+			NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
+			Converters = { new Newtonsoft.Json.Converters.VersionConverter() }
 		};
 
 		private static readonly System.Text.Json.JsonSerializerOptions Options = new()
