@@ -143,6 +143,21 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 					new AttributeDto( Characteristic.UpperSpecificationLimit, 0.5 )
 				}
 			},
+
+			new InspectionPlanPartDto
+			{
+				Path = PathHelper.RoundtripString2PathInformation( "P:/Blechteil/" ),
+				CharChangeDate = new DateTime( 2022, 01, 31, 19, 2, 58, 767, DateTimeKind.Utc ),
+				Uuid = new Guid( "fe85eefe-f08d-4e78-9f06-0e3b3cc9275e" ),
+				Version = 0,
+				Timestamp = new DateTime( 2022, 06, 30, 6, 25, 35, 46, DateTimeKind.Utc ),
+				Attributes = new[]
+				{
+					new AttributeDto( Part.Number, 122345 ),
+					new AttributeDto( Part.Abbreviation, "Blechteil" ),
+					new AttributeDto( Part.Organisation, "Presswerk" )
+				}
+			}
 		};
 
 		private static readonly IReadOnlyDictionary<Type, Func<object, IStructuralEquatable>> EquatableFromType = new[]
@@ -171,6 +186,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 			EquatableFrom<DataMeasurementDto>( value => Tuple.Create( value.Uuid, value.PartUuid, value.LastModified, value.Created, EquatableFromMany( value.Attributes ), EquatableFromMany( value.Characteristics ) ) ),
 
 			EquatableFrom<InspectionPlanCharacteristicDto>( value => Tuple.Create( value.Path, value.Uuid, value.Version, value.Timestamp, EquatableFromMany( value.Attributes ) ) ),
+
+			EquatableFrom<InspectionPlanPartDto>( value => Tuple.Create( value.Path, value.Uuid, value.Version, value.Timestamp, value.CharChangeDate, EquatableFromMany( value.Attributes ) ) ),
 		}
 		.ToDictionary( pair => pair.Key, pair => pair.Value );
 
