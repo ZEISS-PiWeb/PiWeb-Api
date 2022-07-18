@@ -159,8 +159,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 				}
 			},
 
-			new OperationStatusDto { OperationUuid = new Guid( "7825FE38-1486-45CC-AA95-70658B83C7ED" ), ExecutionStatus = OperationExecutionStatusDto.Running },
+			new OperationStatusDto { OperationUuid = new Guid( "7825FE38-1486-45CC-AA95-70658B83C7ED" ), ExecutionStatus = OperationExecutionStatusDto.Running, Exception = default },
 			new OperationStatusDto { OperationUuid = new Guid( "7AE4BD0A-5EA4-4665-AB60-9D517E23BE6D" ), ExecutionStatus = OperationExecutionStatusDto.Exception, Exception = new Error("ErrorMessage") },
+
+			new OrderDto { Entity = EntityDto.Characteristic, Attribute = Characteristic.LowerTolerance, Direction = OrderDirectionDto.Asc },
+			new OrderDto { Entity = EntityDto.Measurement, Attribute = Measurement.MeasurementStatus, Direction = OrderDirectionDto.Desc },
 		};
 
 		private static readonly IReadOnlyDictionary<Type, Func<object, IStructuralEquatable>> EquatableFromType = new[]
@@ -192,7 +195,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 
 			EquatableFrom<InspectionPlanPartDto>( value => Tuple.Create( value.Path, value.Uuid, value.Version, value.Timestamp, value.CharChangeDate, EquatableFromMany( value.Attributes ) ) ),
 
-			EquatableFrom<OperationStatusDto>( value => Tuple.Create( value.OperationUuid, value.ExecutionStatus, value.Exception?.ExceptionMessage ?? String.Empty ) ),
+			EquatableFrom<OperationStatusDto>( value => Tuple.Create( value.OperationUuid, value.ExecutionStatus, value.Exception?.ExceptionMessage ?? string.Empty ) ),
+
+			EquatableFrom<OrderDto>( value => Tuple.Create( value.Entity, value.Attribute, value.Direction ) ),
 		}
 		.ToDictionary( pair => pair.Key, pair => pair.Value );
 

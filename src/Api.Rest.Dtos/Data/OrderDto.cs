@@ -12,7 +12,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
 	#region usings
 
-	using Newtonsoft.Json;
+	using System.Text.Json.Serialization;
 
 	#endregion
 
@@ -51,19 +51,22 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets the entity that is used for sorting.
 		/// </summary>
-		[JsonProperty( "entity" )]
+		[Newtonsoft.Json.JsonProperty( "entity" )]
+		[JsonPropertyName( "entity" )]
 		public EntityDto Entity { get; set; }
 
 		/// <summary>
 		/// Gets or sets the key of the attribute that is used for sorting.
 		/// </summary>
-		[JsonProperty( "attribute" )]
+		[Newtonsoft.Json.JsonProperty( "attribute" )]
+		[JsonPropertyName( "attribute" )]
 		public ushort Attribute { get; set; }
 
 		/// <summary>
 		/// Gets or sets the sort direction.
 		/// </summary>
-		[JsonProperty( "direction" )]
+		[Newtonsoft.Json.JsonProperty( "direction" )]
+		[JsonPropertyName( "direction" )]
 		public OrderDirectionDto Direction { get; set; }
 
 		#endregion

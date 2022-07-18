@@ -12,15 +12,15 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
 	#region usings
 
-	using Newtonsoft.Json;
-	using Newtonsoft.Json.Converters;
+	using System.Text.Json.Serialization;
 
 	#endregion
 
 	/// <summary>
 	/// This enumeration specifies the order direction when searching for measurement .
 	/// </summary>
-	[JsonConverter( typeof( StringEnumConverter ) )]
+	[Newtonsoft.Json.JsonConverter( typeof( Newtonsoft.Json.Converters.StringEnumConverter ) )]
+	[JsonConverter( typeof( JsonStringEnumConverter ) )]
 	public enum OrderDirectionDto
 	{
 		/// <summary>
