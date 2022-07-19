@@ -13,7 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 	#region usings
 
 	using System;
-	using Newtonsoft.Json;
+	using System.Text.Json.Serialization;
 
 	#endregion
 
@@ -58,13 +58,15 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// <summary>
 		/// Gets or sets the entity to which this raw data object belongs to.
 		/// </summary>
-		[JsonProperty( "entity" )]
+		[Newtonsoft.Json.JsonProperty( "entity" )]
+		[JsonPropertyName( "entity" )]
 		public RawDataEntityDto Entity { get; set; }
 
 		/// <summary>
 		/// Gets or sets the uuid of the entity.
 		/// </summary>
-		[JsonProperty( "uuid" )]
+		[Newtonsoft.Json.JsonProperty( "uuid" )]
+		[JsonPropertyName( "uuid" )]
 		public string Uuid { get; set; }
 
 		#endregion

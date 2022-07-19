@@ -16,10 +16,13 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Net.Mime;
+	using System.Text;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
+	using Zeiss.PiWeb.Api.Rest.Dtos.RawData;
 	using static PiWeb.Api.Definitions.WellKnownKeys;
 
 	#endregion
@@ -166,15 +169,25 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 			new OrderDto { Entity = EntityDto.Characteristic, Attribute = Characteristic.LowerTolerance, Direction = OrderDirectionDto.Asc },
 			new OrderDto { Entity = EntityDto.Measurement, Attribute = Measurement.MeasurementStatus, Direction = OrderDirectionDto.Desc },
 
-			new ServiceInformationDto { EditionSpecified = true, ServerName = "TestServer", Version = "8.4.1.0", SecurityEnabled = true, Edition = "PiWebDB",
-										FeatureList = new[] { "MeasurementAggregation", "JobEngineSupported" },
-										PartCount = 1, CharacteristicCount = 13, MeasurementCount = 42, ValueCount = 73,
-										InspectionPlanTimestamp = new DateTime( 2022, 06, 23, 10, 42, 0, 931, DateTimeKind.Utc ),
-										MeasurementTimestamp = new DateTime( 2022, 03, 30, 15, 29, 43, 324, DateTimeKind.Utc ),
-										ConfigurationTimestamp = new DateTime( 2022, 07, 13, 9, 35, 28, 858, DateTimeKind.Utc ),
-										CatalogTimestamp = new DateTime( 2022, 03, 30, 15, 29, 42, 816, DateTimeKind.Utc ),
-										StructureTimestamp = new DateTime( 2022, 03, 30, 15, 29, 41, 254, DateTimeKind.Utc ),
-										RequestHeaderSize = 0 },
+			new Dtos.Data.ServiceInformationDto
+			{
+				EditionSpecified = true,
+				ServerName = "TestServer",
+				Version = "8.4.1.0",
+				SecurityEnabled = true,
+				Edition = "PiWebDB",
+				FeatureList = new[] { "MeasurementAggregation", "JobEngineSupported" },
+				PartCount = 1,
+				CharacteristicCount = 13,
+				MeasurementCount = 42,
+				ValueCount = 73,
+				InspectionPlanTimestamp = new DateTime( 2022, 06, 23, 10, 42, 0, 931, DateTimeKind.Utc ),
+				MeasurementTimestamp = new DateTime( 2022, 03, 30, 15, 29, 43, 324, DateTimeKind.Utc ),
+				ConfigurationTimestamp = new DateTime( 2022, 07, 13, 9, 35, 28, 858, DateTimeKind.Utc ),
+				CatalogTimestamp = new DateTime( 2022, 03, 30, 15, 29, 42, 816, DateTimeKind.Utc ),
+				StructureTimestamp = new DateTime( 2022, 03, 30, 15, 29, 41, 254, DateTimeKind.Utc ),
+				RequestHeaderSize = 0
+			},
 
 			new InterfaceVersionRange { SupportedVersions = new[] { new Version(7, 8, 2), new Version(8, 0), new Version(8, 2, 8) } },
 
@@ -243,6 +256,37 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 
 				null
 			},
+
+			new RawDataInformationDto
+			{
+				Target = new RawDataTargetEntityDto { Entity = RawDataEntityDto.Part, Uuid = "15D4BFB5-563D-45CB-B6C2-26720E89582A" },
+				Key = 7,
+				FileName = "Text.txt",
+				MimeType = MediaTypeNames.Text.Plain,
+				LastModified = new DateTime( 2022, 07, 19, 16, 9, 40, 0, DateTimeKind.Utc ),
+				Created = new DateTime( 2022, 07, 19, 16, 10, 5, 0, DateTimeKind.Utc ),
+				Size = 13,
+				MD5 = new Guid("c35a0b60-ee3f-2524-e89f-e2ea9fd6cb50")
+			},
+
+			new RawDataDto
+			{
+				Target = new RawDataTargetEntityDto { Entity = RawDataEntityDto.Part, Uuid = "15D4BFB5-563D-45CB-B6C2-26720E89582A" },
+				Key = 7,
+				FileName = "Text.txt",
+				MimeType = MediaTypeNames.Text.Plain,
+				LastModified = new DateTime( 2022, 07, 19, 16, 9, 40, 0, DateTimeKind.Utc ),
+				Created = new DateTime( 2022, 07, 19, 16, 10, 5, 0, DateTimeKind.Utc ),
+				Size = 13,
+				MD5 = new Guid("c35a0b60-ee3f-2524-e89f-e2ea9fd6cb50"),
+				Data = Encoding.ASCII.GetBytes("Hello, PiWeb!"),
+			},
+
+			new RawData.ServiceInformationDto
+			{
+				Version = "8.4.1.0",
+				RequestHeaderSize = 0
+			},
 		};
 
 		private static readonly IReadOnlyDictionary<Type, Func<object, IStructuralEquatable>> EquatableFromType = new[]
@@ -251,7 +295,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 
 			EquatableFrom<CatalogAttributeDefinitionDto>( value => Tuple.Create( value.Key, value.Description, value.QueryEfficient, value.Catalog ) ),
 
-			EquatableFrom<AbstractAttributeDefinitionDto>( value => EquatableFromType[ value is AttributeDefinitionDto ? typeof( AttributeDefinitionDto ) : typeof( CatalogAttributeDefinitionDto ) ]( value ) ),
+			EquatableFrom<AbstractAttributeDefinitionDto>( value => EquatableFromType[value is AttributeDefinitionDto ? typeof( AttributeDefinitionDto ) : typeof( CatalogAttributeDefinitionDto )]( value ) ),
 
 			EquatableFrom<AttributeDto> (value => Tuple.Create( value.Key, value.Value ) ),
 
@@ -260,11 +304,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 			EquatableFrom<CatalogEntryDto>( value => Tuple.Create( value.Key, EquatableFromMany( value.Attributes ) ) ),
 
 			EquatableFrom<ConfigurationDto>( value => Tuple.Create( EquatableFromMany( value.PartAttributes ),
-																   EquatableFromMany( value.CharacteristicAttributes ),
-																   EquatableFromMany( value.MeasurementAttributes ),
-																   EquatableFromMany( value.ValueAttributes ),
-																   EquatableFromMany( value.CatalogAttributes ),
-																   value.VersioningType ) ),
+																	EquatableFromMany( value.CharacteristicAttributes ),
+																    EquatableFromMany( value.MeasurementAttributes ),
+																    EquatableFromMany( value.ValueAttributes ),
+																    EquatableFromMany( value.CatalogAttributes ),
+																    value.VersioningType ) ),
 
 			EquatableFrom<DataCharacteristicDto>( value => Tuple.Create( value.Uuid, value.Value.MeasuredValue ) ),
 
@@ -281,13 +325,21 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 
 			EquatableFrom<OrderDto>( value => Tuple.Create( value.Entity, value.Attribute, value.Direction ) ),
 
-			EquatableFrom<ServiceInformationDto>( value => Tuple.Create( value.EditionSpecified, value.Edition, value.ServerName, value.SecurityEnabled, value.FeatureList.ToArray(), value.RequestHeaderSize,
+			EquatableFrom<Dtos.Data.ServiceInformationDto>( value => Tuple.Create( value.EditionSpecified, value.Edition, value.ServerName, value.SecurityEnabled, value.FeatureList.ToArray(), value.RequestHeaderSize,
 															Tuple.Create( value.PartCount, value.CharacteristicCount, value.MeasurementCount, value.ValueCount ),
 															Tuple.Create( value.InspectionPlanTimestamp, value.MeasurementTimestamp, value.ConfigurationTimestamp, value.CatalogTimestamp, value.StructureTimestamp )) ),
 
 			EquatableFrom<InterfaceVersionRange>( value => value.SupportedVersions.ToArray() ),
 
 			EquatableFrom<InspectionPlanDtoBase[]>( value => EquatableFromMany( value ) ),
+
+			EquatableFrom<RawDataTargetEntityDto>( value => Tuple.Create( value.Entity, value.Uuid ) ),
+
+			EquatableFrom<RawDataInformationDto>( value => Tuple.Create( EquatableFromType[typeof( RawDataTargetEntityDto )]( value.Target ), value.Key, value.FileName, value.MimeType, value.LastModified, value.Created, value.Size, value.MD5 ) ),
+
+			EquatableFrom<RawDataDto>( value => Tuple.Create( EquatableFromType[typeof( RawDataInformationDto )]( value ), value.Data ) ),
+
+			EquatableFrom<RawData.ServiceInformationDto>( value => Tuple.Create( value.Version, value.RequestHeaderSize ) ),
 		}
 		.ToDictionary( pair => pair.Key, pair => pair.Value );
 

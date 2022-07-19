@@ -12,15 +12,15 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 {
 	#region usings
 
-	using Newtonsoft.Json;
-	using Newtonsoft.Json.Converters;
+	using System.Text.Json.Serialization;
 
 	#endregion
 
 	/// <summary>
 	/// Enumeration that specifies the entity to which a raw data object is attached to.
 	/// </summary>
-	[JsonConverter( typeof( StringEnumConverter ) )]
+	[Newtonsoft.Json.JsonConverter( typeof( Newtonsoft.Json.Converters.StringEnumConverter ) )]
+	[JsonConverter( typeof( JsonStringEnumConverter ) )]
 	public enum RawDataEntityDto
 	{
 		/// <summary>
