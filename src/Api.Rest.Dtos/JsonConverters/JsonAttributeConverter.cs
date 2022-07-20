@@ -13,7 +13,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 	#region usings
 
 	using System;
-	using System.Globalization;
+	using System.Buffers;
+	using System.Buffers.Text;
 	using System.Text.Json;
 	using System.Text.Json.Serialization;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
@@ -43,7 +44,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 
 		internal static bool TryReadFromProperty( ref Utf8JsonReader reader, out AttributeDto attribute )
 		{
-			var key = ushort.Parse( reader.GetString() );
+			var keySpan = reader.HasValueSequence ? reader.ValueSequence.ToArray() : reader.ValueSpan;
+
+			if( !Utf8Parser.TryParse( keySpan, out ushort key, out var bytesConsumed ) || keySpan.Length != bytesConsumed )
+			{
+				throw new FormatException( $"Input span was not in a correct format, on converting to '{typeof( ushort ).Name}'" );
+			}
 
 			reader.Read();
 
@@ -56,12 +62,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 				case JsonTokenType.Number:
 					if( reader.TryGetInt32( out var intValue ) )
 					{
-						attribute = new AttributeDto( key, intValue.ToString( CultureInfo.InvariantCulture ) );
+						attribute = new AttributeDto( key, intValue );
 						return true;
 					}
 					else if( reader.TryGetDouble( out var doubleValue ) )
 					{
-						attribute = new AttributeDto( key, doubleValue.ToString( "G17", CultureInfo.InvariantCulture ) );
+						attribute = new AttributeDto( key, doubleValue );
 						return true;
 					}
 					break;

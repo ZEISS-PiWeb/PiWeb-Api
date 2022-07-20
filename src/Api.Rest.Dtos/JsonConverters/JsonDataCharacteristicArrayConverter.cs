@@ -13,6 +13,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 	#region usings
 
 	using System;
+	using System.Buffers;
+	using System.Buffers.Text;
 	using System.Collections.Generic;
 	using System.Text.Json;
 	using System.Text.Json.Serialization;
@@ -34,9 +36,16 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 
 			while( reader.Read() && reader.TokenType == JsonTokenType.PropertyName )
 			{
-				var characteristic = new DataCharacteristicDto { Uuid = Guid.Parse( reader.GetString() ) };
+				var uuidSpan = reader.HasValueSequence ? reader.ValueSequence.ToArray() : reader.ValueSpan;
 
-				var valueAttributes = new List<AttributeDto>();
+				if( !Utf8Parser.TryParse( uuidSpan, out Guid uuid, out var bytesConsumed ) || uuidSpan.Length != bytesConsumed )
+				{
+					throw new FormatException( $"Input span was not in a correct format, on converting to '{typeof( Guid ).Name}'" );
+				}
+
+				var characteristic = new DataCharacteristicDto { Uuid = uuid };
+
+				var valueAttributes = new List<AttributeDto>( capacity: 1 );
 
 				if( reader.Read() && reader.TokenType == JsonTokenType.StartObject )
 				{
