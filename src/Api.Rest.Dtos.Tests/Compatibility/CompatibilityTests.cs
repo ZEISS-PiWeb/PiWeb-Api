@@ -39,7 +39,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 			new CatalogAttributeDefinitionDto { Key = 13, Description = "Test", QueryEfficient = false, Catalog = new Guid( "11D4115C-41A7-4D47-A353-AF5DF61503EA" ) },
 
 			new AttributeDto( Characteristic.MeasurementModule, "Abweichungen" ),
-			new AttributeDto( Characteristic.X, 2919.041 ),
+			new AttributeDto( Characteristic.X, 2919.0 ),
 			new AttributeDto( Characteristic.AlignmentType, 0 ),
 			new AttributeDto( Measurement.Time, new DateTime( 2010, 11, 04, 19, 44, 52, 8, DateTimeKind.Utc ) ),
 			new AttributeDto( Measurement.Time, (object)null ),
