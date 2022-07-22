@@ -30,7 +30,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using CacheCow.Client;
 	using CacheCow.Common;
 	using JetBrains.Annotations;
-	using Newtonsoft.Json;
 	using Zeiss.PiWeb.Api.Rest.Common.Data;
 	using Zeiss.PiWeb.Api.Rest.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos;

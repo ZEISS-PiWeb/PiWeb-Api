@@ -21,11 +21,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 	using JetBrains.Annotations;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Bson;
-	using Newtonsoft.Json.Converters;
 	using Zeiss.PiWeb.Api.Rest.Common.Client;
 	using Zeiss.PiWeb.Api.Rest.Common.Utilities;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
-	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 
 	#endregion
@@ -52,18 +50,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		#region methods
 
 		/// <summary>
-		/// Deserializes the <paramref name="data"/>-stream into a new object of type <typeparamref name="T"/>. The data is expected to be in JSON format.
-		/// </summary>
-		/// <exception cref="ArgumentNullException"><paramref name="data"/> is <see langword="null" />.</exception>
-		public static T DeserializeObject<T>( [NotNull] Stream data )
-		{
-			if( data == null ) throw new ArgumentNullException( nameof( data ) );
-
-			using var reader = new JsonTextReader( new StreamReader( data, Encoding.UTF8, true, 4096, true ) ) { CloseInput = false };
-			return CreateJsonSerializer().Deserialize<T>( reader );
-		}
-
-		/// <summary>
 		/// Deserializes the <paramref name="data"/>-stream into a new object of type <typeparamref name="T"/>. The data is expected to be in BSON format.
 		/// </summary>
 		/// <exception cref="ArgumentNullException"><paramref name="data"/> is <see langword="null" />.</exception>
@@ -75,31 +61,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 
 			var serializer = new JsonSerializer();
 			return serializer.Deserialize<T>( reader );
-		}
-
-		/// <summary>
-		/// Deserializes the <paramref name="data"/>-stream into a new enumerable object of type <typeparamref name="T"/>. The data is expected to be in JSON format.
-		/// </summary>
-		/// <exception cref="ArgumentNullException"><paramref name="data"/> is <see langword="null" />.</exception>
-		internal static IEnumerable<T> DeserializeEnumeratedObject<T>( [NotNull] Stream data )
-		{
-			if( data == null ) throw new ArgumentNullException( nameof( data ) );
-
-			IEnumerable<T> DeserializeEnumeratedObject()
-			{
-				using var streamReader = new StreamReader( data, Encoding.UTF8, true, 4096, true );
-				using var reader = new JsonTextReader( streamReader ) { CloseInput = false };
-				var result = CreateJsonSerializer().Deserialize<IEnumerable<T>>( reader );
-
-				if( result == null ) yield break;
-
-				foreach( var entity in result )
-				{
-					yield return entity;
-				}
-			}
-
-			return DeserializeEnumeratedObject();
 		}
 
 		/// <summary>
@@ -321,20 +282,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 			var collectionParameter = CollectionParameterFactory.Create( parameterName, pathsToSplit );
 
 			return splitter.SplitAndMerge( collectionParameter, otherParameters );
-		}
-
-		/// <summary>
-		/// Creates and configures the <see cref="JsonSerializer"/> that are needed by the services.
-		/// </summary>
-		internal static JsonSerializer CreateJsonSerializer()
-		{
-			return new JsonSerializer
-			{
-				Formatting = Formatting.None,
-				DateFormatHandling = DateFormatHandling.IsoDateFormat,
-				NullValueHandling = NullValueHandling.Ignore,
-				Converters = { new VersionConverter(), new InspectionPlanDtoBaseConverter() }
-			};
 		}
 
 		#endregion

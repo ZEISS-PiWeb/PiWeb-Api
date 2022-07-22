@@ -15,7 +15,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 	using System;
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
-	using Newtonsoft.Json;
+	using System.Text.Json;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 
 	#endregion
@@ -85,9 +85,9 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		protected ServerApiNotSupportedException( SerializationInfo info, StreamingContext context )
 			: base( info, context )
 		{
-			Versions = JsonConvert.DeserializeObject<InterfaceVersionRange>( info.GetString( nameof( Versions ) ) );
-			SupportedMajorVersions = JsonConvert.DeserializeObject<IReadOnlyCollection<int>>( info.GetString( nameof( SupportedMajorVersions ) ) );
-			Reason = JsonConvert.DeserializeObject<ServerApiNotSupportedReason>( info.GetString( nameof( Reason ) ) );
+			Versions = JsonSerializer.Deserialize<InterfaceVersionRange>( info.GetString( nameof( Versions ) ) );
+			SupportedMajorVersions = JsonSerializer.Deserialize<IReadOnlyCollection<int>>( info.GetString( nameof( SupportedMajorVersions ) ) );
+			Reason = JsonSerializer.Deserialize<ServerApiNotSupportedReason>( info.GetString( nameof( Reason ) ) );
 		}
 
 		#endregion
@@ -119,9 +119,9 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		{
 			base.GetObjectData( info, context );
 
-			info.AddValue( nameof( Versions ), JsonConvert.SerializeObject( Versions ) );
-			info.AddValue( nameof( SupportedMajorVersions ), JsonConvert.SerializeObject( SupportedMajorVersions ) );
-			info.AddValue( nameof( Reason ), JsonConvert.SerializeObject( Reason ) );
+			info.AddValue( nameof( Versions ), JsonSerializer.Serialize( Versions ) );
+			info.AddValue( nameof( SupportedMajorVersions ), JsonSerializer.Serialize( SupportedMajorVersions ) );
+			info.AddValue( nameof( Reason ), JsonSerializer.Serialize( Reason ) );
 		}
 
 		private static string CreateExceptionMessage( ServerApiNotSupportedReason reason )
