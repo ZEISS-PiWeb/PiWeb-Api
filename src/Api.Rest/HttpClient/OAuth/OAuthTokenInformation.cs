@@ -12,7 +12,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 {
 	#region usings
 
-	using Newtonsoft.Json;
+	using System.Text.Json.Serialization;
 
 	#endregion
 
@@ -26,7 +26,8 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 		/// <summary>
 		/// The URL of the trusted OpenID Connect authority for this service.
 		/// </summary>
-		[JsonProperty( "openIdAuthority" )]
+		[Newtonsoft.Json.JsonProperty( "openIdAuthority" )]
+		[JsonPropertyName( "openIdAuthority" )]
 		public string OpenIdAuthority { get; set; }
 
 		#endregion

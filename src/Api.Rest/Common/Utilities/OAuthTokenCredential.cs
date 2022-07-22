@@ -26,14 +26,14 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OAuthTokenCredential"/> class.
 		/// </summary>
-		public OAuthTokenCredential( string displayId, string accessToken, DateTime accessTokenExpiration, string refreshToken, string username = null, string email = null )
+		public OAuthTokenCredential( string displayId, string accessToken, DateTime accessTokenExpiration, string refreshToken, string username = null, string mailAddress = null )
 		{
 			DisplayId = displayId;
 			AccessToken = accessToken;
 			AccessTokenExpiration = accessTokenExpiration;
 			RefreshToken = refreshToken;
 			Username = username ?? OAuthHelper.TokenToUsername( AccessToken );
-			MailAddress = email ?? OAuthHelper.TokenToMailAddress( AccessToken );
+			MailAddress = mailAddress ?? OAuthHelper.TokenToMailAddress( AccessToken );
 		}
 
 		#endregion

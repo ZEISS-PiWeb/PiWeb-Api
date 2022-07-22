@@ -35,7 +35,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 		/// </param>
 		/// <exception cref="ArgumentNullException"><paramref name="serverUri"/> is <see langword="null" />.</exception>
 		public OAuthServiceRestClient( [NotNull] Uri serverUri )
-			: base( new RestClient( serverUri, "OAuthServiceRest/" ) )
+			: base( new RestClient( serverUri, "OAuthServiceRest/", serializer: ObjectSerializer.SystemTextJson ) )
 		{ }
 
 		#endregion
