@@ -293,6 +293,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				return attributeValue;
 
 			var definition = GetDefinition( key );
+			if( definition is null )
+				throw new ArgumentException( $"Unable to parse attribute value - key '{key}' does not exist." );
+
 			if( definition is CatalogAttributeDefinitionDto catalogAttributeDefinition )
 			{
 				if( catalogs != null )
