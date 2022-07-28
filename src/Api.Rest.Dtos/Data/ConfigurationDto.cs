@@ -290,9 +290,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		public object ParseValue( ushort key, string attributeValue, CatalogCollectionDto catalogs )
 		{
 			if( string.IsNullOrEmpty( attributeValue ) )
-				return null;
+				return attributeValue;
 
 			var definition = GetDefinition( key );
+			if( definition is null )
+				throw new ArgumentException( $"Unable to parse attribute value - key '{key}' does not exist." );
+
 			if( definition is CatalogAttributeDefinitionDto catalogAttributeDefinition )
 			{
 				if( catalogs != null )
