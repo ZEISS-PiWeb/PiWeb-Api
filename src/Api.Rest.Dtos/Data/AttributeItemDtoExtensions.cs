@@ -169,10 +169,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				attributes[ i ] = sourceAttributes[ i ];
 			}
 
-			var count = sourceAttributes.Count - index - 1;
-			for( var i = index + 1; i < count; i++ )
+			for( var i = index; i < attributes.Length; i++ )
 			{
-				attributes[ i ] = sourceAttributes[ i ];
+				attributes[ i ] = sourceAttributes[ i + 1 ];
 			}
 
 			item.Attributes = attributes;
