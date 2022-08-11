@@ -114,6 +114,36 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 				VersioningType = VersioningTypeDto.Off
 			},
 
+			new DataValueDto
+			{
+				Attributes = new[]
+				{
+					new AttributeDto( Value.MeasuredValue, 0.15108030390438515 ),
+					new AttributeDto( Value.AggregatedCp, 0.25108030390438873 ),
+					new AttributeDto( Value.AggregatedMaximum, 0.551080303904385 )
+				}
+			},
+
+			new SimpleMeasurementDto
+			{
+				Uuid = new Guid( "82DA1300-CC13-4920-A272-0AA33C4001A3" ),
+				PartUuid = new Guid( "CF1938E5-C8D6-468D-9BC9-640A60A54105" ),
+				LastModified = new DateTime( 2010, 11, 04, 19, 44, 52, 8, DateTimeKind.Utc ),
+				Created = new DateTime( 2010, 12, 05, 22, 37, 49, 12, DateTimeKind.Utc ),
+				Status = new[]
+				{
+					new SimpleMeasurementStatusDto { Id = "InTol", Count = 1, Uuid = new [] { new Guid( "575E6026-29EB-49D9-92D8-9E534BC04BD5" ) } },
+					new SimpleMeasurementStatusDto { Id = "OutTol", Count = 2, Uuid = new [] { new Guid( "F45098BF-0C3B-42AC-BF20-E19907A9350C" ), new Guid( "D6DFBC39-D398-4311-BB3E-22BAD360F77E" ) } },
+					new SimpleMeasurementStatusDto { Id = "OutWarn", Count = 0 },
+				},
+				Attributes = new[]
+				{
+					new AttributeDto( Measurement.Time, new DateTime( 2022, 01, 31, 19, 02, 59, 71, DateTimeKind.Utc) ),
+					new AttributeDto( Measurement.BatchNumber, "5" ),
+					new AttributeDto( Measurement.InspectorName, 2 ),
+				}
+			},
+
 			new DataMeasurementDto
 			{
 				Uuid = new Guid( "82DA1300-CC13-4920-A272-0AA33C4001A3" ),
@@ -128,9 +158,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 				},
 				Characteristics = new[]
 				{
-					new DataCharacteristicDto { Uuid = new Guid("b71a5bd7-5406-46a3-a5b7-458ba1c0248d"), Value = new DataValueDto( 0.15108030390438515 ) },
-					new DataCharacteristicDto { Uuid = new Guid("8c72afa6-fc67-4fbd-8606-e3727d79c8ff"), Value = new DataValueDto( -0.06273457511599848 ) },
-					new DataCharacteristicDto { Uuid = new Guid("a5d13d7f-4029-4fb5-a7b5-3f40718df85a"), Value = new DataValueDto( 0.03185869918795966 ) }
+					new DataCharacteristicDto { Uuid = new Guid( "b71a5bd7-5406-46a3-a5b7-458ba1c0248d" ), Value = new DataValueDto( 0.15108030390438515 ) },
+					new DataCharacteristicDto { Uuid = new Guid( "8c72afa6-fc67-4fbd-8606-e3727d79c8ff" ), Value = new DataValueDto( -0.06273457511599848 ) },
+					new DataCharacteristicDto { Uuid = new Guid( "a5d13d7f-4029-4fb5-a7b5-3f40718df85a" ), Value = new DataValueDto( 0.03185869918795966 ) }
 				}
 			},
 
@@ -305,12 +335,18 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 
 			EquatableFrom<ConfigurationDto>( value => Tuple.Create( EquatableFromMany( value.PartAttributes ),
 																	EquatableFromMany( value.CharacteristicAttributes ),
-																    EquatableFromMany( value.MeasurementAttributes ),
-																    EquatableFromMany( value.ValueAttributes ),
-																    EquatableFromMany( value.CatalogAttributes ),
-																    value.VersioningType ) ),
+																	EquatableFromMany( value.MeasurementAttributes ),
+																	EquatableFromMany( value.ValueAttributes ),
+																	EquatableFromMany( value.CatalogAttributes ),
+																	value.VersioningType ) ),
 
 			EquatableFrom<DataCharacteristicDto>( value => Tuple.Create( value.Uuid, value.Value.MeasuredValue ) ),
+
+			EquatableFrom<DataValueDto>( value => EquatableFromMany(value.Attributes) ),
+
+			EquatableFrom<SimpleMeasurementStatusDto>( value => Tuple.Create( value.Id, value.Count, value.Uuid?.ToArray() ) ),
+
+			EquatableFrom<SimpleMeasurementDto>( value => Tuple.Create( value.Uuid, value.PartUuid, value.LastModified, value.Created, EquatableFromMany( value.Status ), EquatableFromMany( value.Attributes ) ) ),
 
 			EquatableFrom<DataMeasurementDto>( value => Tuple.Create( value.Uuid, value.PartUuid, value.LastModified, value.Created, EquatableFromMany( value.Attributes ), EquatableFromMany( value.Characteristics ) ) ),
 
