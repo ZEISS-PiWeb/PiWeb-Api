@@ -104,13 +104,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 			}
 
 			if( attributeDefinitionType.SequenceEqual( AttributeDefinitionTypeId ) )
-			{
 				return new AttributeDefinitionDto { Description = description, Key = key, Length = length, QueryEfficient = queryEfficient, Type = type };
-			}
 			else if( attributeDefinitionType.SequenceEqual( CatalogAttributeDefinitionTypeId ) )
-			{
 				return new CatalogAttributeDefinitionDto { Description = description, Key = key, QueryEfficient = queryEfficient, Catalog = catalogUuid };
-			}
 
 			return null;
 		}
@@ -131,9 +127,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 			if( value is AttributeDefinitionDto attributeDef )
 			{
 				if( attributeDef.Length.HasValue )
-				{
 					writer.WriteNumber( LengthPropertyName, attributeDef.Length.Value );
-				}
 
 				writer.WritePropertyName( TypePropertyName );
 				JsonSerializer.Serialize( writer, attributeDef.Type, options );

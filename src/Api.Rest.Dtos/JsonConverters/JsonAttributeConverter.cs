@@ -35,9 +35,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 			AttributeDto result = default;
 
 			while( reader.Read() && reader.TokenType == JsonTokenType.PropertyName )
-			{
 				TryReadFromProperty( ref reader, out result );
-			}
 
 			return result;
 		}
@@ -47,9 +45,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 			var keySpan = reader.HasValueSequence ? reader.ValueSequence.ToArray() : reader.ValueSpan;
 
 			if( !Utf8Parser.TryParse( keySpan, out ushort key, out var bytesConsumed ) || keySpan.Length != bytesConsumed )
-			{
 				throw new FormatException( $"Input span was not in a correct format, on converting to '{nameof( UInt16 )}'" );
-			}
 
 			reader.Read();
 
@@ -98,9 +94,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 				JsonSerializer.Serialize( writer, value.RawValue, options );
 			}
 			else
-			{
 				writer.WriteString( key, value.Value );
-			}
 		}
 
 		#endregion

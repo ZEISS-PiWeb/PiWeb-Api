@@ -77,14 +77,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 
 			if( propertyNames.Any( propertyName => propertyName.Equals( nameof( InspectionPlanPartDto.History ), StringComparison.OrdinalIgnoreCase ) ) &&
 				propertyNames.Any( propertyName => propertyName.Equals( nameof( InspectionPlanPartDto.CharChangeDate ), StringComparison.OrdinalIgnoreCase ) ) )
-			{
 				return InspectionPlanItemType.InspectionPlanPartDto;
-			}
 
 			if( propertyNames.Any( propertyName => propertyName.Equals( nameof( SimplePartDto.CharChangeDate ), StringComparison.OrdinalIgnoreCase ) ) )
-			{
 				return InspectionPlanItemType.SimplePartDto;
-			}
 
 			return InspectionPlanItemType.InspectionPlanCharacteristicDto;
 		}
@@ -96,13 +92,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 			while( reader.Read() && reader.TokenType != JsonTokenType.EndObject )
 			{
 				if( reader.TokenType == JsonTokenType.PropertyName )
-				{
 					propertyNames.Add( reader.GetString() );
-				}
 				else
-				{
 					reader.Skip();
-				}
 			}
 
 			return propertyNames;

@@ -39,9 +39,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 				var uuidSpan = reader.HasValueSequence ? reader.ValueSequence.ToArray() : reader.ValueSpan;
 
 				if( !Utf8Parser.TryParse( uuidSpan, out Guid uuid, out var bytesConsumed ) || uuidSpan.Length != bytesConsumed )
-				{
 					throw new FormatException( $"Input span was not in a correct format, on converting to '{nameof( Guid )}'" );
-				}
 
 				var characteristic = new DataCharacteristicDto { Uuid = uuid };
 
@@ -52,9 +50,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 					while( reader.Read() && reader.TokenType == JsonTokenType.PropertyName )
 					{
 						if( JsonAttributeConverter.TryReadFromProperty( ref reader, out var attribute ) )
-						{
 							valueAttributes.Add( attribute );
-						}
 					}
 				}
 
@@ -80,9 +76,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 					writer.WriteStartObject();
 
 					foreach( var attribute in dataCharacteristic.Value.Attributes )
-					{
 						JsonAttributeConverter.WriteAsProperty( writer, attribute, options );
-					}
 
 					writer.WriteEndObject();
 				}
