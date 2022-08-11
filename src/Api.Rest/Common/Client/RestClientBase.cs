@@ -108,7 +108,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			int maxUriLength = DefaultMaxUriLength,
 			bool chunked = true,
 			[CanBeNull] DelegatingHandler customHttpMessageHandler = null,
-			[CanBeNull] IObjectSerializer serializer = null)
+			[CanBeNull] IObjectSerializer serializer = null )
 		{
 			if( serverUri == null )
 				throw new ArgumentNullException( nameof( serverUri ) );
@@ -258,17 +258,17 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		public Task Request( [NotNull] Func<IObjectSerializer, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync<object>( () => requestCreationHandler(_Serializer), false, null, true, cancellationToken );
+			return PerformRequestAsync<object>( () => requestCreationHandler( _Serializer ), false, null, true, cancellationToken );
 		}
 
 		public Task<T> Request<T>( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync( requestCreationHandler, false, response => ResponseToObjectAsync<T>(response, _Serializer), true, cancellationToken );
+			return PerformRequestAsync( requestCreationHandler, false, response => ResponseToObjectAsync<T>( response, _Serializer ), true, cancellationToken );
 		}
 
 		public Task<T> Request<T>( [NotNull] Func<IObjectSerializer, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync( () => requestCreationHandler(_Serializer), false, response => ResponseToObjectAsync<T>(response, _Serializer), true, cancellationToken );
+			return PerformRequestAsync( () => requestCreationHandler( _Serializer ), false, response => ResponseToObjectAsync<T>( response, _Serializer ), true, cancellationToken );
 		}
 
 		public Task<Stream> RequestStream( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
@@ -278,17 +278,17 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		public Task<Stream> RequestStream( [NotNull] Func<IObjectSerializer, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync( () => requestCreationHandler(_Serializer), true, ResponseToStreamAsync, false, cancellationToken );
+			return PerformRequestAsync( () => requestCreationHandler( _Serializer ), true, ResponseToStreamAsync, false, cancellationToken );
 		}
 
 		public Task<IEnumerable<T>> RequestEnumerated<T>( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync( requestCreationHandler, true, response => ResponseToEnumerationAsync<T>(response, _Serializer), false, cancellationToken );
+			return PerformRequestAsync( requestCreationHandler, true, response => ResponseToEnumerationAsync<T>( response, _Serializer ), false, cancellationToken );
 		}
 
 		public Task<IEnumerable<T>> RequestEnumerated<T>( [NotNull] Func<IObjectSerializer, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync( () => requestCreationHandler(_Serializer), true, response => ResponseToEnumerationAsync<T>(response, _Serializer), false, cancellationToken );
+			return PerformRequestAsync( () => requestCreationHandler( _Serializer ), true, response => ResponseToEnumerationAsync<T>( response, _Serializer ), false, cancellationToken );
 		}
 
 		public Task<byte[]> RequestBytes( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
@@ -579,7 +579,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 			// Almost all options are not available when running in browser
 			// and need to be done either manually or are not possible at all.
-			if ( !_IsBrowser )
+			if( !_IsBrowser )
 			{
 #pragma warning disable CA1416
 				_HttpClientHandler.PreAuthenticate = true;
