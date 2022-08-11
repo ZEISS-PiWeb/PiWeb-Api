@@ -48,7 +48,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 
 			if( !Utf8Parser.TryParse( keySpan, out ushort key, out var bytesConsumed ) || keySpan.Length != bytesConsumed )
 			{
-				throw new FormatException( $"Input span was not in a correct format, on converting to '{typeof( ushort ).Name}'" );
+				throw new FormatException( $"Input span was not in a correct format, on converting to '{nameof( UInt16 )}'" );
 			}
 
 			reader.Read();

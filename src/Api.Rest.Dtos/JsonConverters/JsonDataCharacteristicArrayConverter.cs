@@ -40,7 +40,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 
 				if( !Utf8Parser.TryParse( uuidSpan, out Guid uuid, out var bytesConsumed ) || uuidSpan.Length != bytesConsumed )
 				{
-					throw new FormatException( $"Input span was not in a correct format, on converting to '{typeof( Guid ).Name}'" );
+					throw new FormatException( $"Input span was not in a correct format, on converting to '{nameof( Guid )}'" );
 				}
 
 				var characteristic = new DataCharacteristicDto { Uuid = uuid };
