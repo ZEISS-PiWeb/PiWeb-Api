@@ -33,9 +33,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		private IReadOnlyList<AttributeDto> _Attributes;
 
-		[Newtonsoft.Json.JsonProperty( "path" ), Newtonsoft.Json.JsonConverter( typeof( PathInformationConverter ) )]		
+		[Newtonsoft.Json.JsonProperty( "path" ), Newtonsoft.Json.JsonConverter( typeof( PathInformationConverter ) )]
 		private PathInformationDto _Path;
-		
+
 		#endregion
 
 		#region properties
