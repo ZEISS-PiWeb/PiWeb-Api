@@ -94,13 +94,13 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		Task<bool> CheckAttributeUsage( ushort attributeKey, string value, CancellationToken cancellationToken = default );
 
 		/// <summary>
-		/// Method checks if there is any entry for attribute <paramref name="attributeKey"/> and catalog entry with index <paramref name="catalogEntryIndex"/>
+		/// Method checks if there is any entry for attribute <paramref name="attributeKey"/> and catalog entry with key (index) <paramref name="catalogEntryKey"/>
 		/// </summary>
 		/// <param name="attributeKey">The attribute key which should be checked.</param>
-		/// <param name="catalogEntryIndex">The index of the catalog entry which should be checked.</param>
+		/// <param name="catalogEntryKey">The key (index) of the catalog entry which should be checked.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		/// <returns></returns>
-		Task<bool> CheckCatalogEntryUsage( ushort attributeKey, int catalogEntryIndex, CancellationToken cancellationToken = default );
+		Task<bool> CheckCatalogEntryUsage( ushort attributeKey, short catalogEntryKey, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Method for fetching all <see cref="CatalogDto"/>s.  The catalogs contain the definition and the catalog entries.

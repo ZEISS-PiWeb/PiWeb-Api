@@ -502,12 +502,12 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		}
 
 		/// <inheritdoc />
-		public Task<bool> CheckCatalogEntryUsage( ushort attributeKey, int catalogEntryIndex, CancellationToken cancellationToken = default )
+		public Task<bool> CheckCatalogEntryUsage( ushort attributeKey, short catalogEntryKey, CancellationToken cancellationToken = default )
 		{
-			if( catalogEntryIndex < 0 )
-				throw new InvalidOperationException( $"Unable to check catalogue entry usage. {nameof( catalogEntryIndex )} must be equal or greater than 0." );
+			if( catalogEntryKey < 0 )
+				throw new InvalidOperationException( $"Unable to check catalogue entry usage. {nameof( catalogEntryKey )} must be equal or greater than 0." );
 
-			return CheckAttributeUsageInternal( attributeKey, catalogEntryIndex.ToString(), cancellationToken );
+			return CheckAttributeUsageInternal( attributeKey, catalogEntryKey.ToString(), cancellationToken );
 		}
 
 		/// <inheritdoc />
