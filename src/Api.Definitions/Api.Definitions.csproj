@@ -29,7 +29,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIconUrl>https://raw.githubusercontent.com/ZEISS-PiWeb/PiWeb-Api/develop/logo128px.png</PackageIconUrl>
     <PackageId>Zeiss.PiWeb.Api.Definitions</PackageId>
-    <PackageLicenseFile>License.txt</PackageLicenseFile>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/ZEISS-PiWeb/PiWeb-Api</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageTags>ZEISS PiWeb API</PackageTags>
@@ -46,10 +46,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\License.txt">
-      <Link>License.txt</Link>
+    <Content Include="..\..\LICENSE.txt">
+      <Link>LICENSE.txt</Link>
       <Pack>true</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>/</PackagePath>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
