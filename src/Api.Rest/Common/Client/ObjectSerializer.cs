@@ -161,6 +161,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				try
 				{
 					System.Text.Json.JsonSerializer.Serialize( stream, value, Options );
+
+					stream.Close();
 				}
 				catch( System.Text.Json.JsonException exception )
 				{
