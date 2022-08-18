@@ -885,7 +885,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		public Task CreateMeasurements( IReadOnlyCollection<SimpleMeasurementDto> measurements, CancellationToken cancellationToken = default )
 		{
 			if( measurements == null ) throw new ArgumentNullException( nameof( measurements ) );
-			return _RestClient.Request<IReadOnlyCollection<SimpleMeasurementDto>>( RequestBuilder.CreatePost( "measurements", Payload.Create( measurements ) ), cancellationToken );
+			return _RestClient.Request( RequestBuilder.CreatePost( "measurements", Payload.Create( measurements ) ), cancellationToken );
 		}
 
 		/// <inheritdoc />
@@ -893,7 +893,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		public Task UpdateMeasurements( IReadOnlyCollection<SimpleMeasurementDto> measurements, CancellationToken cancellationToken = default )
 		{
 			if( measurements == null ) throw new ArgumentNullException( nameof( measurements ) );
-			return _RestClient.Request<IReadOnlyCollection<SimpleMeasurementDto>>( RequestBuilder.CreatePut( "measurements", Payload.Create( measurements ) ), cancellationToken );
+			return _RestClient.Request( RequestBuilder.CreatePut( "measurements", Payload.Create( measurements ) ), cancellationToken );
 		}
 
 		/// <inheritdoc />
