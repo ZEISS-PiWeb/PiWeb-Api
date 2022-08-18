@@ -23,6 +23,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using System.Net;
 	using System.Net.Http;
 	using System.Net.Http.Headers;
+	using System.Runtime.CompilerServices;
 	using System.Runtime.Versioning;
 	using System.Text;
 	using System.Threading;
@@ -281,14 +282,24 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			return PerformRequestAsync( () => requestCreationHandler( _Serializer ), true, ResponseToStreamAsync, false, cancellationToken );
 		}
 
-		public Task<IEnumerable<T>> RequestEnumerated<T>( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		public async IAsyncEnumerable<T> RequestEnumerated<T>( [NotNull] Func<HttpRequestMessage> requestCreationHandler, [EnumeratorCancellation] CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync( requestCreationHandler, true, response => ResponseToEnumerationAsync<T>( response, _Serializer ), false, cancellationToken );
+			var items = await PerformRequestAsync( requestCreationHandler, true, response => Task.FromResult( ResponseToAsyncEnumerable<T>( response, _Serializer ) ), false, cancellationToken );
+
+			await foreach( var item in items.ConfigureAwait( false ).WithCancellation( cancellationToken ) )
+			{
+				yield return item;
+			}
 		}
 
-		public Task<IEnumerable<T>> RequestEnumerated<T>( [NotNull] Func<IObjectSerializer, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		public async IAsyncEnumerable<T> RequestEnumerated<T>( [NotNull] Func<IObjectSerializer, HttpRequestMessage> requestCreationHandler, [EnumeratorCancellation] CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync( () => requestCreationHandler( _Serializer ), true, response => ResponseToEnumerationAsync<T>( response, _Serializer ), false, cancellationToken );
+			var items = await PerformRequestAsync( () => requestCreationHandler( _Serializer ), true, response => Task.FromResult( ResponseToAsyncEnumerable<T>( response, _Serializer ) ), false, cancellationToken );
+
+			await foreach (var item in items.ConfigureAwait( false ).WithCancellation( cancellationToken ) )
+			{
+				yield return item;
+			}
 		}
 
 		public Task<byte[]> RequestBytes( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
@@ -337,7 +348,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		{
 			using( var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false ) )
 			{
-				return serializer.Deserialize<T>( responseStream );
+				return await serializer.DeserializeAsync<T>( responseStream ).ConfigureAwait( false );
 			}
 		}
 
@@ -350,19 +361,13 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			return Task.FromResult( result );
 		}
 
-		private static async Task<IEnumerable<T>> ResponseToEnumerationAsync<T>( HttpResponseMessage response, IObjectSerializer serializer )
-		{
-			var stream = await ResponseToStreamAsync( response ).ConfigureAwait( false );
-			return GetEnumeratedResponse<T>( response, stream, serializer );
-		}
-
-		private static IEnumerable<T> GetEnumeratedResponse<T>( IDisposable response, Stream responseStream, IObjectSerializer serializer )
+		private static async IAsyncEnumerable<T> ResponseToAsyncEnumerable<T>( HttpResponseMessage response, IObjectSerializer serializer )
 		{
 			using( response )
 			{
-				using( responseStream )
+				using( var responseStream = await ResponseToStreamAsync( response ).ConfigureAwait( false ) )
 				{
-					foreach( var item in serializer.DeserializeEnumeratedObject<T>( responseStream ) )
+					await foreach( var item in serializer.DeserializeAsyncEnumerable<T>( responseStream ).ConfigureAwait( false ) )
 					{
 						yield return item;
 					}
@@ -519,7 +524,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				Error error;
 				try
 				{
-					error = serializer.Deserialize<Error>( responseStream )
+					error = await serializer.DeserializeAsync<Error>( responseStream ).ConfigureAwait( false )
 							?? new Error( $"Request {response.RequestMessage.Method} {response.RequestMessage.RequestUri} was not successful: {(int)response.StatusCode} ({response.ReasonPhrase})" );
 				}
 				catch( ObjectSerializerException )

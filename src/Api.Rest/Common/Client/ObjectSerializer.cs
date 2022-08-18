@@ -14,6 +14,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Text;
+	using System.Threading.Tasks;
 	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
@@ -42,28 +43,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		#endregion
 
-		#region methods
-
-		internal static IEnumerable<T> DeserializeEnumeratedObject<T>( [NotNull] this IObjectSerializer serializer, [NotNull] Stream data )
-		{
-			if( serializer == null ) throw new ArgumentNullException( nameof( serializer ) );
-			if( data == null ) throw new ArgumentNullException( nameof( data ) );
-
-			IEnumerable<T> DeserializeEnumeratedObject()
-			{
-				var result = serializer.Deserialize<IEnumerable<T>>( data );
-
-				if( result == null ) yield break;
-
-				foreach( var entity in result )
-					yield return entity;
-			}
-
-			return DeserializeEnumeratedObject();
-		}
-
-		#endregion
-
 		#region NewtonsoftJsonSerializer
 
 		private sealed class NewtonsoftJsonSerializer : IObjectSerializer
@@ -89,30 +68,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 			#endregion
 
-			#region interface ISerializer
+			#region Methods
 
-			void IObjectSerializer.Serialize<T>( Stream stream, T value )
+			private static T Deserialize<T>( Stream stream )
 			{
-				if( stream == null ) throw new ArgumentNullException( nameof( stream ) );
-
-				try
-				{
-					using var streamWriter = new StreamWriter( stream, Encoding.UTF8, 64 * 1024, false );
-
-					var jsonSerializer = CreateJsonSerializer();
-
-					jsonSerializer.Serialize( streamWriter, value );
-				}
-				catch( Newtonsoft.Json.JsonException exception )
-				{
-					throw new ObjectSerializerException( $"Serializing {typeof( T ).Name}", exception );
-				}
-			}
-
-			T IObjectSerializer.Deserialize<T>( Stream stream )
-			{
-				if( stream == null ) throw new ArgumentNullException( nameof( stream ) );
-
 				try
 				{
 					using var reader = new Newtonsoft.Json.JsonTextReader( new StreamReader( stream, Encoding.UTF8, true, 4096, true ) ) { CloseInput = false };
@@ -125,6 +84,54 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				{
 					throw new ObjectSerializerException( $"Deserializing {typeof( T ).Name}", exception );
 				}
+			}
+
+			#endregion
+
+			#region interface ISerializer
+
+			Task IObjectSerializer.SerializeAsync<T>( Stream stream, T value )
+			{
+				if( stream == null ) throw new ArgumentNullException( nameof( stream ) );
+
+				try
+				{
+					using var streamWriter = new StreamWriter( stream, Encoding.UTF8, 64 * 1024, false );
+
+					var jsonSerializer = CreateJsonSerializer();
+
+					jsonSerializer.Serialize( streamWriter, value );
+
+					return Task.CompletedTask;
+				}
+				catch( Newtonsoft.Json.JsonException exception )
+				{
+					throw new ObjectSerializerException( $"Serializing {typeof( T ).Name}", exception );
+				}
+			}
+
+			Task<T> IObjectSerializer.DeserializeAsync<T>( Stream stream )
+			{
+				if( stream == null ) throw new ArgumentNullException( nameof( stream ) );
+
+				return Task.FromResult( Deserialize<T>( stream ) );
+			}
+
+			IAsyncEnumerable<T> IObjectSerializer.DeserializeAsyncEnumerable<T>( [NotNull] Stream stream )
+			{
+				if( stream == null ) throw new ArgumentNullException( nameof( stream ) );
+								
+				async IAsyncEnumerable<T> DeserializeAsyncEnumerable()
+				{
+					var items = Deserialize<IEnumerable<T>>( stream );
+
+					if( items == null ) yield break;
+
+					foreach( var item in items )
+						yield return await Task.FromResult( item ).ConfigureAwait( false );
+				}
+
+				return DeserializeAsyncEnumerable();
 			}
 
 			#endregion
@@ -154,34 +161,76 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 			#region interface ISerializer
 
-			void IObjectSerializer.Serialize<T>( Stream stream, T value )
+			Task IObjectSerializer.SerializeAsync<T>( Stream stream, T value )
 			{
 				if( stream == null ) throw new ArgumentNullException( nameof( stream ) );
 
-				try
+				async Task SerializeAsync()
 				{
-					System.Text.Json.JsonSerializer.Serialize( stream, value, Options );
+					try
+					{
+						await System.Text.Json.JsonSerializer.SerializeAsync( stream, value, Options ).ConfigureAwait( false );
 
-					stream.Close();
+						stream.Close();
+					}
+					catch( System.Text.Json.JsonException exception )
+					{
+						throw new ObjectSerializerException( $"Serializing {typeof( T ).Name}", exception );
+					}
 				}
-				catch( System.Text.Json.JsonException exception )
-				{
-					throw new ObjectSerializerException( $"Serializing {typeof( T ).Name}", exception );
-				}
+
+				return SerializeAsync();
 			}
 
-			T IObjectSerializer.Deserialize<T>( Stream stream )
+			Task<T> IObjectSerializer.DeserializeAsync<T>( Stream stream )
 			{
 				if( stream == null ) throw new ArgumentNullException( nameof( stream ) );
 
-				try
+				async Task<T> DeserializeAsync()
 				{
-					return System.Text.Json.JsonSerializer.Deserialize<T>( stream, Options );
+					try
+					{
+						return await System.Text.Json.JsonSerializer.DeserializeAsync<T>( stream, Options ).ConfigureAwait( false );
+					}
+					catch( System.Text.Json.JsonException exception )
+					{
+						throw new ObjectSerializerException( $"Deserializing {typeof( T ).Name}", exception );
+					}
 				}
-				catch( System.Text.Json.JsonException exception )
+
+				return DeserializeAsync();
+			}
+
+			IAsyncEnumerable<T> IObjectSerializer.DeserializeAsyncEnumerable<T>( [NotNull] Stream stream )
+			{
+				if( stream == null ) throw new ArgumentNullException( nameof( stream ) );
+
+				async IAsyncEnumerable<T> DeserializeAsyncEnumerable()
 				{
-					throw new ObjectSerializerException( $"Deserializing {typeof( T ).Name}", exception );
+					var values = System.Text.Json.JsonSerializer.DeserializeAsyncEnumerable<T>( stream, Options ).ConfigureAwait( false );
+
+					await using( var enumerator = values.GetAsyncEnumerator() )
+					{
+						for( var moveNext = true; moveNext; )
+						{
+							try
+							{
+								moveNext = await enumerator.MoveNextAsync();
+							}
+							catch( System.Text.Json.JsonException exception )
+							{
+								throw new ObjectSerializerException( $"Deserializing enumerable of {typeof( T ).Name}", exception );
+							}
+
+							if( moveNext )
+							{
+								yield return enumerator.Current;
+							}
+						}
+					}
 				}
+
+				return DeserializeAsyncEnumerable();
 			}
 
 			#endregion
