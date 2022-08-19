@@ -15,6 +15,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Linq;
 	using System.Net.Mime;
 	using System.Text;
@@ -327,7 +328,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 
 			EquatableFrom<AbstractAttributeDefinitionDto>( value => EquatableFromType[value is AttributeDefinitionDto ? typeof( AttributeDefinitionDto ) : typeof( CatalogAttributeDefinitionDto )]( value ) ),
 
-			EquatableFrom<AttributeDto> (value => Tuple.Create( value.Key, value.Value ) ),
+			EquatableFrom<AttributeDto> (value => Tuple.Create( value.Key, EquatableFromAttributeValue(value.Value) ) ),
 
 			EquatableFrom<CatalogDto>( value => Tuple.Create( value.Name, value.Uuid, value.ValidAttributes.ToArray(), EquatableFromMany( value.CatalogEntries ) ) ),
 
@@ -433,6 +434,16 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 		private static IStructuralEquatable EquatableFromMany<T>( IEnumerable<T> values )
 		{
 			return values.Where( value => value != null ).Select( value => EquatableFromType[value.GetType()]( value ) ).ToArray();
+		}
+
+		private static string EquatableFromAttributeValue( string value )
+		{
+			if( double.TryParse( value, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var doubleValue ) )
+			{
+				return doubleValue.ToString( "G17", CultureInfo.InvariantCulture );
+			}
+
+			return value;
 		}
 
 		#endregion

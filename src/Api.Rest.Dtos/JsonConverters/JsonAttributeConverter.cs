@@ -15,6 +15,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 	using System;
 	using System.Buffers;
 	using System.Buffers.Text;
+	using System.Text;
 	using System.Text.Json;
 	using System.Text.Json.Serialization;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
@@ -56,17 +57,14 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 					return true;
 
 				case JsonTokenType.Number:
-					if( reader.TryGetInt32( out var intValue ) )
-					{
-						attribute = new AttributeDto( key, intValue );
-						return true;
-					}
-					else if( reader.TryGetDouble( out var doubleValue ) )
-					{
-						attribute = new AttributeDto( key, doubleValue );
-						return true;
-					}
-					break;
+					var valueSpan = reader.HasValueSequence ? reader.ValueSequence.ToArray() : reader.ValueSpan;
+#if NETSTANDARD
+					var value = Encoding.UTF8.GetString( valueSpan.ToArray() );
+#else
+					var value = Encoding.UTF8.GetString( valueSpan );
+#endif
+					attribute = new AttributeDto( key, value );
+					return true;
 			}
 
 			attribute = default;
