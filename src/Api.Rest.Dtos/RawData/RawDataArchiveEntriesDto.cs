@@ -46,7 +46,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// List of files in specified archive.
 		/// </summary>
 		[Newtonsoft.Json.JsonProperty( "entries" )]
-		[JsonPropertyName( "archiveInfo" )]
+		[JsonPropertyName( "entries" )]
 		public string[] Entries { get; set; }
 
 		#endregion

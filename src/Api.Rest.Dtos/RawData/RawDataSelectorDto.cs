@@ -56,7 +56,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// Key to specify raw data of target entity.
 		/// </summary>
 		[Newtonsoft.Json.JsonProperty( "key" )]
-		[JsonPropertyName( "target" )]
+		[JsonPropertyName( "key" )]
 		public int Key { get; set; }
 
 		#endregion
