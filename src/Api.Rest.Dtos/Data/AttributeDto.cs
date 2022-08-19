@@ -142,13 +142,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		[CanBeNull]
 		public string GetStringValue()
 		{
-			if( RawValue is string valueString )
-				return valueString;
-
-			if( !string.IsNullOrEmpty( Value ) )
-				return Value;
-
-			return null;
+			return Value;
 		}
 
 		/// <summary>
@@ -161,16 +155,16 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			if( RawValue != null )
 				return RawValue;
 
-			if( string.IsNullOrEmpty( _Value ) )
-				return null;
-
 			if( type == typeof( string ) )
 				return _Value;
+
+			if( string.IsNullOrEmpty( _Value ) )
+				return null;
 
 			if( type == typeof( DateTime ) )
 				return GetDateValue();
 
-			if( type == typeof( float ) || type ==  typeof( double ) )
+			if( type == typeof( float ) || type == typeof( double ) )
 				return GetDoubleValue();
 
 			if( type == typeof( int ) )
