@@ -57,8 +57,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		public AttributeDto( ushort key, object rawValue )
 		{
 			Key = key;
-			_Value = null;
-			RawValue = rawValue;
+			_Value = rawValue as string;
+			RawValue = rawValue is not string ? rawValue : null;
 			ValidateRawValue();
 		}
 
@@ -112,7 +112,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			switch( RawValue )
 			{
 				case null:
-				case string:
 				case double:
 				case int:
 				case short:
