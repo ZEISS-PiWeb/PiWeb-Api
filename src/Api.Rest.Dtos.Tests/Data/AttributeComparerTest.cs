@@ -32,52 +32,80 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 		#region methods
 
 		[Test]
-		public void Test_CompareAttributesWithDifferentKeys()
+		public void Test_Compare_Attributes_With_Different_Keys()
 		{
 			// arrange
-			var xAttribute = new AttributeDto( Fixture.Create<ushort>(), Fixture.Create<string>() );
-			var yAttribute = new AttributeDto( Fixture.Create<ushort>(), Fixture.Create<string>() );
+			var xAttribute = new AttributeDto( Fixture.Create<ushort>(), "foo" );
+			var yAttribute = new AttributeDto( Fixture.Create<ushort>(), "foo" );
 
 			// act, assert
 			Assert.That( Equals( xAttribute, yAttribute ), Is.False );
+
+			Assert.That( xAttribute == yAttribute, Is.False );
+			Assert.That( xAttribute != yAttribute, Is.True );
 		}
 
 		[Test]
-		public void Test_CompareAttributesWithDifferentTypes()
+		public void Test_Compare_Attribute_With_Value_And_Attribute_With_RawValue()
 		{
 			// arrange
 			var attributeKey = Fixture.Create<ushort>();
-			var xAttribute = new AttributeDto( attributeKey, Fixture.Create<string>() );
-			var yAttribute = new AttributeDto( attributeKey, Fixture.Create<double>() );
+			var xAttribute = new AttributeDto( attributeKey, 42 );
+			var yAttribute = new AttributeDto( attributeKey, "foo" );
 
 			// act, assert
 			Assert.That( Equals( xAttribute, yAttribute ), Is.False );
+
+			Assert.That( xAttribute == yAttribute, Is.False );
+			Assert.That( xAttribute != yAttribute, Is.True );
 		}
 
 		[Test]
-		[TestCaseSource( nameof( CreateCompareAttributesByReferenceEqualityTestCases ) )]
-		public void Test_CompareAttributesByReferenceEquality( AttributeCompareTestCase testCase )
+		public void Test_Compare_Attributes_With_Different_RawValue_Types()
 		{
 			// arrange
+			var attributeKey = Fixture.Create<ushort>();
+			var xAttribute = new AttributeDto( attributeKey, 42 );
+			var yAttribute = new AttributeDto( attributeKey, 1.23 );
 
 			// act, assert
-			Assert.That( Equals( testCase.X, testCase.Y ), Is.EqualTo( testCase.ExpectedResult ) );
+			Assert.That( Equals( xAttribute, yAttribute ), Is.False );
+
+			Assert.That( xAttribute == yAttribute, Is.False );
+			Assert.That( xAttribute != yAttribute, Is.True );
 		}
 
 		[Test]
-		[TestCase( null, null, ExpectedResult = true )]
-		[TestCase( "", "", ExpectedResult = true )]
-		[TestCase( " ", " ", ExpectedResult = true )]
-		[TestCase( "\t", "\t", ExpectedResult = true )]
-		[TestCase( "Hello World", "Hello World", ExpectedResult = true )]
-		[TestCase( null, "", ExpectedResult = true )]
-		[TestCase( null, " ", ExpectedResult = false )]
-		[TestCase( "", " ", ExpectedResult = false )]
-		[TestCase( "Hello World", "", ExpectedResult = false )]
-		[TestCase( "Hello World", " ", ExpectedResult = false )]
-		[TestCase( "Hello World", "\t", ExpectedResult = false )]
-		[TestCase( "Hello World", "hello World", ExpectedResult = false )]
-		public bool Test_CompareStringAttributes( string x, string y )
+		public void Test_Compare_Attributes_By_ReferenceEquality_Of_RawValue()
+		{
+			// arrange
+			var attributeKey = Fixture.Create<ushort>();
+			var attributeValue = new CatalogEntryDto { Key = Fixture.Create<short>() };
+
+			var xAttribute = new AttributeDto( attributeKey, attributeValue );
+			var yAttribute = new AttributeDto( attributeKey, attributeValue );
+
+			// act, assert
+			Assert.That( Equals( xAttribute, yAttribute ), Is.True );
+
+			Assert.That( xAttribute == yAttribute, Is.True );
+			Assert.That( xAttribute != yAttribute, Is.False );
+		}
+
+		[Test]
+		[TestCase( null, null, true )]
+		[TestCase( "", "", true )]
+		[TestCase( " ", " ", true )]
+		[TestCase( "\t", "\t", true )]
+		[TestCase( "Hello World", "Hello World", true )]
+		[TestCase( null, "", true )]
+		[TestCase( null, " ", false )]
+		[TestCase( "", " ",  false )]
+		[TestCase( "Hello World", "",  false )]
+		[TestCase( "Hello World", " ",  false )]
+		[TestCase( "Hello World", "\t",  false )]
+		[TestCase( "Hello World", "hello World",  false )]
+		public void Test_Compare_String_Attributes( string x, string y, bool expectedResult )
 		{
 			// arrange
 			var attributeKey = Fixture.Create<ushort>();
@@ -85,19 +113,22 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			var yAttribute = new AttributeDto( attributeKey, y );
 
 			// act, assert
-			return Equals( xAttribute, yAttribute );
+			Assert.That( Equals( xAttribute, yAttribute ), Is.EqualTo( expectedResult ) );
+
+			Assert.That( xAttribute == yAttribute, Is.EqualTo( expectedResult ) );
+			Assert.That( xAttribute != yAttribute, Is.Not.EqualTo( expectedResult ) );
 		}
 
 		[Test]
-		[TestCase( 1, 1, ExpectedResult = true )]
-		[TestCase( 1, 2, ExpectedResult = false )]
-		[TestCase( -1, -1, ExpectedResult = true )]
-		[TestCase( -1, -2, ExpectedResult = false )]
-		[TestCase( -1, 1, ExpectedResult = false )]
-		[TestCase( 0, 0, ExpectedResult = true )]
-		[TestCase( int.MinValue, int.MinValue, ExpectedResult = true )]
-		[TestCase( int.MaxValue, int.MaxValue, ExpectedResult = true )]
-		public bool Test_CompareIntegerAttributes( int x, int y )
+		[TestCase( 1, 1,  true )]
+		[TestCase( 1, 2,  false )]
+		[TestCase( -1, -1,  true )]
+		[TestCase( -1, -2,  false )]
+		[TestCase( -1, 1,  false )]
+		[TestCase( 0, 0,  true )]
+		[TestCase( int.MinValue, int.MinValue,  true )]
+		[TestCase( int.MaxValue, int.MaxValue,  true )]
+		public void Test_Compare_Integer_Attributes( int x, int y, bool expectedResult )
 		{
 			// arrange
 			var attributeKey = Fixture.Create<ushort>();
@@ -105,29 +136,22 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			var yAttribute = new AttributeDto( attributeKey, y );
 
 			// act, assert
-			return Equals( xAttribute, yAttribute );
+			Assert.That( Equals( xAttribute, yAttribute ), Is.EqualTo( expectedResult ) );
+
+			Assert.That( xAttribute == yAttribute, Is.EqualTo( expectedResult ) );
+			Assert.That( xAttribute != yAttribute, Is.Not.EqualTo( expectedResult ) );
 		}
 
 		[Test]
-		[TestCase( 1, 1, ExpectedResult = true )]
-		[TestCase( 1, 2, ExpectedResult = false )]
-		[TestCase( 0.1, 0.1, ExpectedResult = true )]
-		[TestCase( 0.1, 0.2, ExpectedResult = false )]
-		[TestCase( -1, -1, ExpectedResult = true )]
-		[TestCase( -1, -2, ExpectedResult = false )]
-		[TestCase( -0.1, -0.1, ExpectedResult = true )]
-		[TestCase( -0.1, -0.2, ExpectedResult = false )]
-		[TestCase( -0.1, 0.1, ExpectedResult = false )]
-		[TestCase( 0.0, 0.0, ExpectedResult = true )]
-		[TestCase( double.NaN, 1, ExpectedResult = false )]
-		[TestCase( double.NaN, double.NaN, ExpectedResult = false )]
-		[TestCase( double.PositiveInfinity, 1, ExpectedResult = false )]
-		[TestCase( double.NegativeInfinity, 1, ExpectedResult = false )]
-		[TestCase( double.PositiveInfinity, double.PositiveInfinity, ExpectedResult = true )]
-		[TestCase( double.NegativeInfinity, double.NegativeInfinity, ExpectedResult = true )]
-		[TestCase( double.PositiveInfinity, double.NegativeInfinity, ExpectedResult = false )]
-		[TestCase( double.NegativeInfinity, double.PositiveInfinity, ExpectedResult = false )]
-		public bool Test_CompareDoubleAttributes( double x, double y )
+		[TestCase( 1, 1,  true )]
+		[TestCase( 1, 2,  false )]
+		[TestCase( -1, -1,  true )]
+		[TestCase( -1, -2,  false )]
+		[TestCase( -1, 1,  false )]
+		[TestCase( 0, 0,  true )]
+		[TestCase( short.MinValue, short.MinValue,  true )]
+		[TestCase( short.MaxValue, short.MaxValue,  true )]
+		public void Test_Compare_Short_Attributes( short x, short y, bool expectedResult )
 		{
 			// arrange
 			var attributeKey = Fixture.Create<ushort>();
@@ -135,38 +159,132 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			var yAttribute = new AttributeDto( attributeKey, y );
 
 			// act, assert
-			return Equals( xAttribute, yAttribute );
+			Assert.That( Equals( xAttribute, yAttribute ), Is.EqualTo( expectedResult ) );
+
+			Assert.That( xAttribute == yAttribute, Is.EqualTo( expectedResult ) );
+			Assert.That( xAttribute != yAttribute, Is.Not.EqualTo( expectedResult ) );
+		}
+
+		[Test]
+		[TestCase( 1, 1,  true )]
+		[TestCase( 1, 2,  false )]
+		[TestCase( 0.1, 0.1,  true )]
+		[TestCase( 0.1, 0.2,  false )]
+		[TestCase( -1, -1,  true )]
+		[TestCase( -1, -2,  false )]
+		[TestCase( -0.1, -0.1,  true )]
+		[TestCase( -0.1, -0.2,  false )]
+		[TestCase( -0.1, 0.1,  false )]
+		[TestCase( 0.0, 0.0,  true )]
+		[TestCase( double.NaN, 1,  false )]
+		[TestCase( double.NaN, double.NaN,  false )]
+		[TestCase( double.PositiveInfinity, 1,  false )]
+		[TestCase( double.NegativeInfinity, 1,  false )]
+		[TestCase( double.PositiveInfinity, double.PositiveInfinity,  true )]
+		[TestCase( double.NegativeInfinity, double.NegativeInfinity,  true )]
+		[TestCase( double.PositiveInfinity, double.NegativeInfinity,  false )]
+		[TestCase( double.NegativeInfinity, double.PositiveInfinity,  false )]
+		public void Test_Compare_Double_Attributes( double x, double y, bool expectedResult )
+		{
+			// arrange
+			var attributeKey = Fixture.Create<ushort>();
+			var xAttribute = new AttributeDto( attributeKey, x );
+			var yAttribute = new AttributeDto( attributeKey, y );
+
+			// act, assert
+			Assert.That( Equals( xAttribute, yAttribute ), Is.EqualTo( expectedResult ) );
+
+			Assert.That( xAttribute == yAttribute, Is.EqualTo( expectedResult ) );
+			Assert.That( xAttribute != yAttribute, Is.Not.EqualTo( expectedResult ) );
 		}
 
 		[Test]
 		[TestCaseSource( nameof( CreateCompareDateTimeAttributesTestCases ) )]
-		public void Test_CompareDateTimeAttributes( AttributeCompareTestCase testCase )
+		public void Test_Compare_DateTime_Attributes( AttributeCompareTestCase testCase )
 		{
 			// arrange
 
 			// act, assert
 			Assert.That( Equals( testCase.X, testCase.Y ), Is.EqualTo( testCase.ExpectedResult ) );
+
+			Assert.That( testCase.X == testCase.Y, Is.EqualTo( testCase.ExpectedResult ) );
+			Assert.That( testCase.X != testCase.Y, Is.Not.EqualTo( testCase.ExpectedResult ) );
 		}
 
 		[Test]
 		[TestCaseSource( nameof( CreateCompareCatalogAttributesTestCases ) )]
-		public void Test_CompareCatalogEntryAttributes( AttributeCompareTestCase testCase )
+		public void Test_Compare_CatalogEntry_Attributes( AttributeCompareTestCase testCase )
 		{
 			// arrange
 
 			// act, assert
 			Assert.That( Equals( testCase.X, testCase.Y ), Is.EqualTo( testCase.ExpectedResult ) );
+
+			Assert.That( testCase.X == testCase.Y, Is.EqualTo( testCase.ExpectedResult ) );
+			Assert.That( testCase.X != testCase.Y, Is.Not.EqualTo( testCase.ExpectedResult ) );
+		}
+
+		[Test]
+		public void Test_GetHashCode_IsSame_When_Key_And_Value_Are_Same()
+		{
+			// arrange
+			var attribute1 = new AttributeDto( 1, "foo" );
+			var attribute2 = new AttributeDto( 1, "foo" );
+
+			// act
+			var hashCode1 = attribute1.GetHashCode();
+			var hashCode2 = attribute2.GetHashCode();
+
+			// assert
+			Assert.That( hashCode1, Is.EqualTo( hashCode2 ) );
+		}
+
+		[Test]
+		public void Test_GetHashCode_IsSame_When_RawValues_Are_Different_But_Return_Same_Value()
+		{
+			// arrange
+			var attribute1 = new AttributeDto( 1, 1.23 );
+			var attribute2 = new AttributeDto( 1, "1.23" );
+
+			// act
+			var hashCode1 = attribute1.GetHashCode();
+			var hashCode2 = attribute2.GetHashCode();
+
+			// assert
+			Assert.That( hashCode1, Is.EqualTo( hashCode2 ) );
+		}
+
+		[Test]
+		public void Test_GetHashCode_IsDifferent_When_Keys_Are_Different()
+		{
+			var attribute1 = new AttributeDto( 1, "foo" );
+			var attribute2 = new AttributeDto( 2, "foo" );
+
+			// act
+			var hashCode1 = attribute1.GetHashCode();
+			var hashCode2 = attribute2.GetHashCode();
+
+			// assert
+			Assert.That( hashCode1, Is.Not.EqualTo( hashCode2 ) );
+		}
+
+		[Test]
+		public void Test_GetHashCode_IsDifferent_When_Values_Are_Different()
+		{
+			var attribute1 = new AttributeDto( 1, "foo" );
+			var attribute2 = new AttributeDto( 1, "bar" );
+
+			// act
+			var hashCode1 = attribute1.GetHashCode();
+			var hashCode2 = attribute2.GetHashCode();
+
+			// assert
+			Assert.That( hashCode1, Is.Not.EqualTo( hashCode2 ) );
 		}
 
 		#endregion
 
 		#region helper methods
-
-		private static IEnumerable CreateCompareAttributesByReferenceEqualityTestCases()
-		{
-			var attribute = new AttributeDto( Fixture.Create<ushort>(), Fixture.Create<string>() );
-			yield return new AttributeCompareTestCase { X = attribute, Y = attribute, ExpectedResult = true };
-		}
 
 		private static IEnumerable CreateCompareDateTimeAttributesTestCases()
 		{
@@ -190,7 +308,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 				ExpectedResult = false
 			};
 
-			var catalogEntryKey = (short)77;
+			const short catalogEntryKey = 77;
 			yield return new AttributeCompareTestCase
 			{
 				X = new AttributeDto( attributeKey, new CatalogEntryDto { Key = catalogEntryKey } ),
