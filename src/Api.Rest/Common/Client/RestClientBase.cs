@@ -346,10 +346,15 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		private static async Task<T> ResponseToObjectAsync<T>( HttpResponseMessage response, IObjectSerializer serializer )
 		{
-			using( var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false ) )
+			if( response.StatusCode != HttpStatusCode.NoContent )
 			{
-				return await serializer.DeserializeAsync<T>( responseStream ).ConfigureAwait( false );
+				using( var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false ) )
+				{
+					return await serializer.DeserializeAsync<T>( responseStream ).ConfigureAwait( false );
+				}
 			}
+
+			return default;
 		}
 
 		private static Task<Uri> LocationHeaderToUrl( HttpResponseMessage response )
