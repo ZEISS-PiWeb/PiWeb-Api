@@ -89,12 +89,14 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 		{
 			var propertyNames = new List<string>();
 
-			while( reader.Read() && reader.TokenType != JsonTokenType.EndObject )
+			var startDepth = reader.CurrentDepth;
+
+			while( reader.Read() && ( reader.TokenType != JsonTokenType.EndObject || reader.CurrentDepth != startDepth ) )
 			{
-				if( reader.TokenType == JsonTokenType.PropertyName )
+				if( reader.TokenType == JsonTokenType.PropertyName && reader.CurrentDepth == startDepth + 1 )
 					propertyNames.Add( reader.GetString() );
 				else
-					reader.Skip();
+					reader.TrySkip();
 			}
 
 			return propertyNames;
