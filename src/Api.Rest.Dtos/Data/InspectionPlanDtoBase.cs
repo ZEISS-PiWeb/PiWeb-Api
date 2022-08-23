@@ -68,20 +68,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Gets or sets the path of this inspection plan entity.
 		/// </summary>
 		[Newtonsoft.Json.JsonIgnore]
-		[JsonIgnore]
+		[JsonPropertyName( "path" ), JsonConverter( typeof( JsonPathInformationConverter ) )]
 		public PathInformationDto Path
 		{
 			[NotNull] get => _Path ?? PathInformationDto.Root;
-			set => _Path = value;
-		}
-
-		/// <summary>
-		/// Gets or sets the path of this inspection plan entity.
-		/// </summary>
-		[JsonInclude, JsonPropertyName( "path" ), JsonConverter( typeof( JsonPathInformationConverter ) )]
-		public PathInformationDto PathCore
-		{
-			private get => _Path;
 			set => _Path = value;
 		}
 
