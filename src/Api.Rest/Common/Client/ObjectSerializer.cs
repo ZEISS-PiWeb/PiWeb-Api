@@ -13,7 +13,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
+	using System.Runtime.CompilerServices;
 	using System.Text;
+	using System.Threading;
 	using System.Threading.Tasks;
 	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
@@ -90,7 +92,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 			#region interface ISerializer
 
-			Task IObjectSerializer.SerializeAsync<T>( Stream stream, T value )
+			Task IObjectSerializer.SerializeAsync<T>( Stream stream, T value, CancellationToken cancellationToken )
 			{
 				if( stream == null ) throw new ArgumentNullException( nameof( stream ) );
 
@@ -110,14 +112,14 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				}
 			}
 
-			Task<T> IObjectSerializer.DeserializeAsync<T>( Stream stream )
+			Task<T> IObjectSerializer.DeserializeAsync<T>( Stream stream, CancellationToken cancellationToken )
 			{
 				if( stream == null ) throw new ArgumentNullException( nameof( stream ) );
 
 				return Task.FromResult( Deserialize<T>( stream ) );
 			}
 
-			IAsyncEnumerable<T> IObjectSerializer.DeserializeAsyncEnumerable<T>( [NotNull] Stream stream )
+			IAsyncEnumerable<T> IObjectSerializer.DeserializeAsyncEnumerable<T>( Stream stream, CancellationToken cancellationToken )
 			{
 				if( stream == null ) throw new ArgumentNullException( nameof( stream ) );
 								
@@ -161,7 +163,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 			#region interface ISerializer
 
-			Task IObjectSerializer.SerializeAsync<T>( Stream stream, T value )
+			Task IObjectSerializer.SerializeAsync<T>( Stream stream, T value, CancellationToken cancellationToken )
 			{
 				if( stream == null ) throw new ArgumentNullException( nameof( stream ) );
 
@@ -169,20 +171,22 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				{
 					try
 					{
-						await System.Text.Json.JsonSerializer.SerializeAsync( stream, value, Options ).ConfigureAwait( false );
-
-						stream.Close();
+						await System.Text.Json.JsonSerializer.SerializeAsync( stream, value, Options, cancellationToken ).ConfigureAwait( false );
 					}
 					catch( System.Text.Json.JsonException exception )
 					{
 						throw new ObjectSerializerException( $"Serializing {typeof( T ).Name}", exception );
+					}
+					finally
+					{
+						stream.Close();
 					}
 				}
 
 				return SerializeAsync();
 			}
 
-			Task<T> IObjectSerializer.DeserializeAsync<T>( Stream stream )
+			Task<T> IObjectSerializer.DeserializeAsync<T>( Stream stream, CancellationToken cancellationToken )
 			{
 				if( stream == null ) throw new ArgumentNullException( nameof( stream ) );
 
@@ -190,7 +194,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				{
 					try
 					{
-						return await System.Text.Json.JsonSerializer.DeserializeAsync<T>( stream, Options ).ConfigureAwait( false );
+						return await System.Text.Json.JsonSerializer.DeserializeAsync<T>( stream, Options, cancellationToken ).ConfigureAwait( false );
 					}
 					catch( System.Text.Json.JsonException exception )
 					{
@@ -201,21 +205,23 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				return DeserializeAsync();
 			}
 
-			IAsyncEnumerable<T> IObjectSerializer.DeserializeAsyncEnumerable<T>( [NotNull] Stream stream )
+			IAsyncEnumerable<T> IObjectSerializer.DeserializeAsyncEnumerable<T>( Stream stream, CancellationToken cancellationToken )
 			{
 				if( stream == null ) throw new ArgumentNullException( nameof( stream ) );
 
-				async IAsyncEnumerable<T> DeserializeAsyncEnumerable()
+				async IAsyncEnumerable<T> DeserializeAsyncEnumerable( [EnumeratorCancellation] CancellationToken cancellationToken )
 				{
-					var values = System.Text.Json.JsonSerializer.DeserializeAsyncEnumerable<T>( stream, Options ).ConfigureAwait( false );
+					var values = System.Text.Json.JsonSerializer.DeserializeAsyncEnumerable<T>( stream, Options, cancellationToken );
 
-					await using( var enumerator = values.GetAsyncEnumerator() )
+					var enumerator = values.GetAsyncEnumerator( cancellationToken );
+
+					await using( enumerator.ConfigureAwait( false ) )
 					{
 						for( var moveNext = true; moveNext; )
 						{
 							try
 							{
-								moveNext = await enumerator.MoveNextAsync();
+								moveNext = await enumerator.MoveNextAsync().ConfigureAwait( false );
 							}
 							catch( System.Text.Json.JsonException exception )
 							{
@@ -230,7 +236,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 					}
 				}
 
-				return DeserializeAsyncEnumerable();
+				return DeserializeAsyncEnumerable( cancellationToken );
 			}
 
 			#endregion

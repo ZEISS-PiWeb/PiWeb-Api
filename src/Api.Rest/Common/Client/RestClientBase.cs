@@ -257,19 +257,19 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			return PerformRequestAsync<object>( requestCreationHandler, false, null, true, cancellationToken );
 		}
 
-		public Task Request( [NotNull] Func<IObjectSerializer, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		public Task Request( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync<object>( () => requestCreationHandler( _Serializer ), false, null, true, cancellationToken );
+			return PerformRequestAsync<object>( () => requestCreationHandler( _Serializer, cancellationToken ), false, null, true, cancellationToken );
 		}
 
 		public Task<T> Request<T>( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync( requestCreationHandler, false, response => ResponseToObjectAsync<T>( response, _Serializer ), true, cancellationToken );
+			return PerformRequestAsync( requestCreationHandler, false, response => ResponseToObjectAsync<T>( response, _Serializer, cancellationToken ), true, cancellationToken );
 		}
 
-		public Task<T> Request<T>( [NotNull] Func<IObjectSerializer, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		public Task<T> Request<T>( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync( () => requestCreationHandler( _Serializer ), false, response => ResponseToObjectAsync<T>( response, _Serializer ), true, cancellationToken );
+			return PerformRequestAsync( () => requestCreationHandler( _Serializer, cancellationToken ), false, response => ResponseToObjectAsync<T>( response, _Serializer, cancellationToken ), true, cancellationToken );
 		}
 
 		public Task<Stream> RequestStream( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
@@ -277,16 +277,16 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			return PerformRequestAsync( requestCreationHandler, true, ResponseToStreamAsync, false, cancellationToken );
 		}
 
-		public Task<Stream> RequestStream( [NotNull] Func<IObjectSerializer, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		public Task<Stream> RequestStream( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync( () => requestCreationHandler( _Serializer ), true, ResponseToStreamAsync, false, cancellationToken );
+			return PerformRequestAsync( () => requestCreationHandler( _Serializer, cancellationToken ), true, ResponseToStreamAsync, false, cancellationToken );
 		}
 
 		public async IAsyncEnumerable<T> RequestEnumerated<T>( [NotNull] Func<HttpRequestMessage> requestCreationHandler, [EnumeratorCancellation] CancellationToken cancellationToken )
 		{
-			var items = await PerformRequestAsync( requestCreationHandler, true, response => Task.FromResult( ResponseToAsyncEnumerable<T>( response, _Serializer ) ), false, cancellationToken );
+			var items = await PerformRequestAsync( requestCreationHandler, true, response => Task.FromResult( ResponseToAsyncEnumerable<T>( response, _Serializer, cancellationToken ) ), false, cancellationToken );
 
-			await foreach( var item in items.ConfigureAwait( false ).WithCancellation( cancellationToken ) )
+			await foreach( var item in items.ConfigureAwait( false ) )
 			{
 				yield return item;
 			}
@@ -294,9 +294,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		public async IAsyncEnumerable<T> RequestEnumerated<T>( [NotNull] Func<IObjectSerializer, HttpRequestMessage> requestCreationHandler, [EnumeratorCancellation] CancellationToken cancellationToken )
 		{
-			var items = await PerformRequestAsync( () => requestCreationHandler( _Serializer ), true, response => Task.FromResult( ResponseToAsyncEnumerable<T>( response, _Serializer ) ), false, cancellationToken );
+			var items = await PerformRequestAsync( () => requestCreationHandler( _Serializer ), true, response => Task.FromResult( ResponseToAsyncEnumerable<T>( response, _Serializer, cancellationToken ) ), false, cancellationToken );
 
-			await foreach (var item in items.ConfigureAwait( false ).WithCancellation( cancellationToken ) )
+			await foreach (var item in items.ConfigureAwait( false ) )
 			{
 				yield return item;
 			}
@@ -344,13 +344,13 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			return PerformRequestAsync( () => requestCreationHandler( _Serializer ), false, LocationHeaderToUrl, true, cancellationToken );
 		}
 
-		private static async Task<T> ResponseToObjectAsync<T>( HttpResponseMessage response, IObjectSerializer serializer )
+		private static async Task<T> ResponseToObjectAsync<T>( HttpResponseMessage response, IObjectSerializer serializer, CancellationToken cancellationToken )
 		{
 			if( response.StatusCode != HttpStatusCode.NoContent )
 			{
 				using( var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false ) )
 				{
-					return await serializer.DeserializeAsync<T>( responseStream ).ConfigureAwait( false );
+					return await serializer.DeserializeAsync<T>( responseStream, cancellationToken ).ConfigureAwait( false );
 				}
 			}
 
@@ -366,13 +366,13 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			return Task.FromResult( result );
 		}
 
-		private static async IAsyncEnumerable<T> ResponseToAsyncEnumerable<T>( HttpResponseMessage response, IObjectSerializer serializer )
+		private static async IAsyncEnumerable<T> ResponseToAsyncEnumerable<T>( HttpResponseMessage response, IObjectSerializer serializer, [EnumeratorCancellation] CancellationToken cancellationToken )
 		{
 			using( response )
 			{
 				using( var responseStream = await ResponseToStreamAsync( response ).ConfigureAwait( false ) )
 				{
-					await foreach( var item in serializer.DeserializeAsyncEnumerable<T>( responseStream ).ConfigureAwait( false ) )
+					await foreach( var item in serializer.DeserializeAsyncEnumerable<T>( responseStream, cancellationToken ).ConfigureAwait( false ) )
 					{
 						yield return item;
 					}
@@ -446,7 +446,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 						continue;
 					}
 
-					await HandleFaultedResponse( response, _Serializer ).ConfigureAwait( false );
+					await HandleFaultedResponse( response, _Serializer, cancellationToken ).ConfigureAwait( false );
 				}
 			}
 			catch( HttpRequestException ex )
@@ -510,16 +510,16 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			return response.Content.ReadAsStreamAsync();
 		}
 
-		private static async Task HandleFaultedResponse( HttpResponseMessage response, IObjectSerializer serializer )
+		private static async Task HandleFaultedResponse( HttpResponseMessage response, IObjectSerializer serializer, CancellationToken cancellationToken )
 		{
-			await HandleClientBasedFaults( response, serializer ).ConfigureAwait( false );
+			await HandleClientBasedFaults( response, serializer, cancellationToken ).ConfigureAwait( false );
 			HandleServerBasedFaults( response );
 		}
 
 		/// <summary>
 		/// Handles all responses with status codes between 400 and 499
 		/// </summary>
-		private static async Task HandleClientBasedFaults( HttpResponseMessage response, IObjectSerializer serializer )
+		private static async Task HandleClientBasedFaults( HttpResponseMessage response, IObjectSerializer serializer, CancellationToken cancellationToken )
 		{
 			if( response.StatusCode < HttpStatusCode.BadRequest || response.StatusCode >= HttpStatusCode.InternalServerError )
 				return;
@@ -529,7 +529,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				Error error;
 				try
 				{
-					error = await serializer.DeserializeAsync<Error>( responseStream ).ConfigureAwait( false )
+					error = await serializer.DeserializeAsync<Error>( responseStream, cancellationToken ).ConfigureAwait( false )
 							?? new Error( $"Request {response.RequestMessage.Method} {response.RequestMessage.RequestUri} was not successful: {(int)response.StatusCode} ({response.ReasonPhrase})" );
 				}
 				catch( ObjectSerializerException )
