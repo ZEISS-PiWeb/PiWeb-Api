@@ -13,7 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	#region usings
 
 	using System;
-	using Newtonsoft.Json;
+	using System.Text.Json.Serialization;
 
 	#endregion
 
@@ -40,13 +40,15 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets the uuid of this catalog.
 		/// </summary>
-		[JsonProperty( "uuid" )]
+		[Newtonsoft.Json.JsonProperty( "uuid" )]
+		[JsonPropertyName( "uuid" )]
 		public Guid Uuid { get; set; }
 
 		/// <summary>
 		/// Gets or sets the name of the catalog.
 		/// </summary>
-		[JsonProperty( "name" )]
+		[Newtonsoft.Json.JsonProperty( "name" )]
+		[JsonPropertyName( "name" )]
 		public string Name { get; set; }
 
 		#endregion

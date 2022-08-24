@@ -12,8 +12,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
 	#region usings
 
-	using Newtonsoft.Json;
-	using Newtonsoft.Json.Converters;
+	using System.Text.Json.Serialization;
 
 	#endregion
 
@@ -25,7 +24,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// * When a value inside the values list should contain a comma, the entry has to be quoted, i.e. "'value,with,two commas', othervalue"
 	/// * Dates have to be specified in ISO-8601 format
 	/// </summary>
-	[JsonConverter( typeof( StringEnumConverter ) )]
+	[Newtonsoft.Json.JsonConverter( typeof( Newtonsoft.Json.Converters.StringEnumConverter ) )]
+	[JsonConverter( typeof( JsonStringEnumConverter ) )]
 	public enum OperationDto
 	{
 		/// <summary>

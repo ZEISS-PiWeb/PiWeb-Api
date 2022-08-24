@@ -187,6 +187,7 @@ Task("Pack_Dtos")
         Dependencies             = new [] {
             new NuSpecDependency { Id = "Microsoft.Extensions.ObjectPool", Version = "6.0.6" },
             new NuSpecDependency { Id = "Newtonsoft.Json", Version = "13.0.1" },
+			new NuSpecDependency { Id = "System.Text.Json", Version = "6.0.5" },
             new NuSpecDependency { Id = "JetBrains.Annotations", Version = "2020.3.0" },
             new NuSpecDependency { Id = "Zeiss.PiWeb.Api.Definitions", Version = nugetVersion }
         },
@@ -237,6 +238,7 @@ Task("Pack_Client")
             new NuSpecDependency { Id = "CacheCow.Client", Version = "2.8.3" },
             new NuSpecDependency { Id = "Newtonsoft.Json", Version = "13.0.1" },
             new NuSpecDependency { Id = "Newtonsoft.Json.Bson", Version = "1.0.2" },
+			new NuSpecDependency { Id = "System.Text.Json", Version = "6.0.5" },
             new NuSpecDependency { Id = "IdentityModel", Version = "5.1.0" },
             new NuSpecDependency { Id = "Microsoft.IdentityModel.Logging", Version = "6.11.1" },
             new NuSpecDependency { Id = "Microsoft.IdentityModel.Tokens", Version = "6.11.1" },

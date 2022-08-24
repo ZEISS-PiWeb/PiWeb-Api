@@ -9,13 +9,11 @@
 	using BenchmarkDotNet.Configs;
 	using BenchmarkDotNet.Filters;
 	using BenchmarkDotNet.Running;
-	using Newtonsoft.Json;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data;
 
 	#endregion
-
 
 	/// <summary>
 	/// This class contains various benchmarks for testing the inspection plan serialization/deseialization.
@@ -37,6 +35,9 @@
 		private const string SerializationCategory = "Serialization";
 		private const string DeserializationCategory = "Deserialization";
 
+		private const string NewtonsoftJsonCategory = "NewtonsoftJson";
+		private const string SystemTextJsonCategory = "SystemTextJson";
+
 		#endregion
 
 		#region members
@@ -45,9 +46,30 @@
 		private static readonly string MeasurementsJson = SerializationTestHelper.ReadResourceString( "Samples.measurements.json" );
 		private static readonly string ValuesJson = SerializationTestHelper.ReadResourceString( "Samples.values.json" );
 
-		private static readonly IReadOnlyList<InspectionPlanCharacteristicDto> Characteristics = JsonConvert.DeserializeObject<IReadOnlyList<InspectionPlanCharacteristicDto>>( CharacteristicJson );
-		private static readonly IReadOnlyList<SimpleMeasurementDto> Measurements = JsonConvert.DeserializeObject<IReadOnlyList<SimpleMeasurementDto>>( MeasurementsJson );
-		private static readonly IReadOnlyList<DataMeasurementDto> Values = JsonConvert.DeserializeObject<IReadOnlyList<DataMeasurementDto>>( ValuesJson );
+		private static readonly IReadOnlyList<InspectionPlanCharacteristicDto> Characteristics = Newtonsoft.Json.JsonConvert.DeserializeObject<IReadOnlyList<InspectionPlanCharacteristicDto>>( CharacteristicJson );
+		private static readonly IReadOnlyList<SimpleMeasurementDto> Measurements = Newtonsoft.Json.JsonConvert.DeserializeObject<IReadOnlyList<SimpleMeasurementDto>>( MeasurementsJson );
+		private static readonly IReadOnlyList<DataMeasurementDto> Values = Newtonsoft.Json.JsonConvert.DeserializeObject<IReadOnlyList<DataMeasurementDto>>( ValuesJson );
+
+		private static readonly IReadOnlyList<string[]> TestCases = new[]
+		{
+			new[] { InspectionPlanCategory },
+			new[] { MeasurementCategory },
+			new[] { ValueCategory },
+			new[] { SerializationCategory },
+			new[] { DeserializationCategory },
+
+			new[] { NewtonsoftJsonCategory, InspectionPlanCategory },
+			new[] { NewtonsoftJsonCategory, MeasurementCategory },
+			new[] { NewtonsoftJsonCategory, ValueCategory },
+			new[] { NewtonsoftJsonCategory, SerializationCategory },
+			new[] { NewtonsoftJsonCategory, DeserializationCategory },
+
+			new[] { SystemTextJsonCategory, InspectionPlanCategory },
+			new[] { SystemTextJsonCategory, MeasurementCategory },
+			new[] { SystemTextJsonCategory, ValueCategory },
+			new[] { SystemTextJsonCategory, SerializationCategory },
+			new[] { SystemTextJsonCategory, DeserializationCategory },
+		};
 
 		#endregion
 
@@ -59,41 +81,17 @@
 			ExecuteBenchmarks();
 		}
 
-		[Test, Explicit]
-		public void RunInspectionPlanBenchmarks()
+		[TestCaseSource( nameof( TestCases ) ), Explicit]
+		public void RunBenchmarks( string[] categories )
 		{
-			ExecuteBenchmarks( InspectionPlanCategory );
-		}
-
-		[Test, Explicit]
-		public void RunMeasurementBenchmarks()
-		{
-			ExecuteBenchmarks( MeasurementCategory );
-		}
-
-		[Test, Explicit]
-		public void RunValueBenchmarks()
-		{
-			ExecuteBenchmarks( ValueCategory );
-		}
-
-		[Test, Explicit]
-		public void RunDeserializationBenchmarks()
-		{
-			ExecuteBenchmarks( DeserializationCategory );
-		}
-
-		[Test, Explicit]
-		public void RunSerializationBenchmarks()
-		{
-			ExecuteBenchmarks( SerializationCategory );
+			ExecuteBenchmarks( categories );
 		}
 
 		private static void ExecuteBenchmarks( params string[] categories )
 		{
 			var config = (IConfig)new DebugInProcessConfig();
 			if( categories != null && categories.Length > 0 )
-				config = config.AddFilter( new AnyCategoriesFilter( categories ) );
+				config = config.AddFilter( new AllCategoriesFilter( categories ) );
 
 			var summary = BenchmarkRunner.Run<SerializationBenchmark>( config );
 
@@ -101,45 +99,87 @@
 		}
 
 		[Benchmark]
-		[BenchmarkCategory( SerializationCategory, InspectionPlanCategory )]
-		public string SerializeCharacteristics()
+		[BenchmarkCategory( SerializationCategory, InspectionPlanCategory, NewtonsoftJsonCategory )]
+		public string SerializeCharacteristicsNewtonsoftJson()
 		{
-			return JsonConvert.SerializeObject( Characteristics );
+			return Newtonsoft.Json.JsonConvert.SerializeObject( Characteristics );
 		}
 
 		[Benchmark]
-		[BenchmarkCategory( SerializationCategory, MeasurementCategory )]
-		public string SerializeMeasurements()
+		[BenchmarkCategory( SerializationCategory, InspectionPlanCategory, SystemTextJsonCategory )]
+		public string SerializeCharacteristicsSystemTextJson()
 		{
-			return JsonConvert.SerializeObject( Measurements );
+			return System.Text.Json.JsonSerializer.Serialize( Characteristics );
 		}
 
 		[Benchmark]
-		[BenchmarkCategory( SerializationCategory, ValueCategory )]
-		public string SerializeValues()
+		[BenchmarkCategory( SerializationCategory, MeasurementCategory, NewtonsoftJsonCategory )]
+		public string SerializeMeasurementsNewtonsoftJson()
 		{
-			return JsonConvert.SerializeObject( Values );
+			return Newtonsoft.Json.JsonConvert.SerializeObject( Measurements );
 		}
 
 		[Benchmark]
-		[BenchmarkCategory( DeserializationCategory, InspectionPlanCategory )]
-		public IReadOnlyList<InspectionPlanCharacteristicDto> DeserializeCharacteristics()
+		[BenchmarkCategory( SerializationCategory, MeasurementCategory, SystemTextJsonCategory )]
+		public string SerializeMeasurementsSystemTextJson()
 		{
-			return JsonConvert.DeserializeObject<IReadOnlyList<InspectionPlanCharacteristicDto>>( CharacteristicJson );
+			return System.Text.Json.JsonSerializer.Serialize( Measurements );
 		}
 
 		[Benchmark]
-		[BenchmarkCategory( DeserializationCategory, MeasurementCategory )]
-		public IReadOnlyList<SimpleMeasurementDto> DeserializeMeasurements()
+		[BenchmarkCategory( SerializationCategory, ValueCategory, NewtonsoftJsonCategory )]
+		public string SerializeValuesNewtonsoftJson()
 		{
-			return JsonConvert.DeserializeObject<IReadOnlyList<SimpleMeasurementDto>>( MeasurementsJson );
+			return Newtonsoft.Json.JsonConvert.SerializeObject( Values );
 		}
 
 		[Benchmark]
-		[BenchmarkCategory( DeserializationCategory, ValueCategory )]
-		public IReadOnlyList<DataMeasurementDto> DeserializeValues()
+		[BenchmarkCategory( SerializationCategory, ValueCategory, SystemTextJsonCategory )]
+		public string SerializeValuesSystemTextJson()
 		{
-			return JsonConvert.DeserializeObject<IReadOnlyList<DataMeasurementDto>>( ValuesJson );
+			return System.Text.Json.JsonSerializer.Serialize( Values );
+		}
+
+		[Benchmark]
+		[BenchmarkCategory( DeserializationCategory, InspectionPlanCategory, NewtonsoftJsonCategory )]
+		public IReadOnlyList<InspectionPlanCharacteristicDto> DeserializeCharacteristicsNewtonsoftJson()
+		{
+			return Newtonsoft.Json.JsonConvert.DeserializeObject<IReadOnlyList<InspectionPlanCharacteristicDto>>( CharacteristicJson );
+		}
+
+		[Benchmark]
+		[BenchmarkCategory( DeserializationCategory, InspectionPlanCategory, SystemTextJsonCategory )]
+		public IReadOnlyList<InspectionPlanCharacteristicDto> DeserializeCharacteristicsSystemTextJson()
+		{
+			return System.Text.Json.JsonSerializer.Deserialize<IReadOnlyList<InspectionPlanCharacteristicDto>>( CharacteristicJson );
+		}
+
+		[Benchmark]
+		[BenchmarkCategory( DeserializationCategory, MeasurementCategory, NewtonsoftJsonCategory )]
+		public IReadOnlyList<SimpleMeasurementDto> DeserializeMeasurementsNewtonsoftJson()
+		{
+			return Newtonsoft.Json.JsonConvert.DeserializeObject<IReadOnlyList<SimpleMeasurementDto>>( MeasurementsJson );
+		}
+
+		[Benchmark]
+		[BenchmarkCategory( DeserializationCategory, MeasurementCategory, SystemTextJsonCategory )]
+		public IReadOnlyList<SimpleMeasurementDto> DeserializeMeasurementsSystemTextJson()
+		{
+			return System.Text.Json.JsonSerializer.Deserialize<IReadOnlyList<SimpleMeasurementDto>>( MeasurementsJson );
+		}
+
+		[Benchmark]
+		[BenchmarkCategory( DeserializationCategory, ValueCategory, NewtonsoftJsonCategory )]
+		public IReadOnlyList<DataMeasurementDto> DeserializeValuesNewtonsoftJson()
+		{
+			return Newtonsoft.Json.JsonConvert.DeserializeObject<IReadOnlyList<DataMeasurementDto>>( ValuesJson );
+		}
+
+		[Benchmark]
+		[BenchmarkCategory( DeserializationCategory, ValueCategory, SystemTextJsonCategory )]
+		public IReadOnlyList<DataMeasurementDto> DeserializeValuesSystemTextJson()
+		{
+			return System.Text.Json.JsonSerializer.Deserialize<IReadOnlyList<DataMeasurementDto>>( ValuesJson );
 		}
 
 		#endregion

@@ -13,7 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	#region usings
 
 	using System;
-	using Newtonsoft.Json;
+	using System.Text.Json.Serialization;
 
 	#endregion
 
@@ -37,7 +37,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Thrown exception during execution, wrapped in an error object.
 		/// </summary>
-		[JsonProperty( NullValueHandling = NullValueHandling.Include )]
+		[Newtonsoft.Json.JsonProperty( NullValueHandling = Newtonsoft.Json.NullValueHandling.Include )]
+		[JsonIgnore( Condition = JsonIgnoreCondition.Never )]
 		public Error Exception { get; set; }
 
 		#endregion

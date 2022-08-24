@@ -13,8 +13,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 	#region usings
 
 	using System;
+	using System.Text.Json.Serialization;
 	using JetBrains.Annotations;
-	using Newtonsoft.Json;
 
 	#endregion
 
@@ -47,19 +47,22 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// <summary>
 		/// <see cref="RawDataTargetEntityDto"/> of raw data.
 		/// </summary>
-		[JsonProperty( "target" )]
+		[Newtonsoft.Json.JsonProperty( "target" )]
+		[JsonPropertyName( "target" )]
 		public RawDataTargetEntityDto Target { get; set; }
 
 		/// <summary>
 		/// Key to specify raw data of target entity.
 		/// </summary>
-		[JsonProperty( "key" )]
+		[Newtonsoft.Json.JsonProperty( "key" )]
+		[JsonPropertyName( "key" )]
 		public int Key { get; set; }
 
 		/// <summary>
 		/// List of requested files in specified archive.
 		/// </summary>
-		[JsonProperty( "entries" )]
+		[Newtonsoft.Json.JsonProperty( "entries" )]
+		[JsonPropertyName( "entries" )]
 		public string[] Entries { get; set; }
 
 		#endregion

@@ -14,9 +14,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 	using System.Collections.Generic;
 	using System.Globalization;
-	using Newtonsoft.Json;
+	using System.Text.Json.Serialization;
 	using Zeiss.PiWeb.Api.Definitions;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
+	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
 
 	#endregion
 
@@ -57,6 +58,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Convinience property for accessing the measurement value (K1).
 		/// </summary>
+		[Newtonsoft.Json.JsonIgnore]
 		[JsonIgnore]
 		public double? MeasuredValue
 		{
@@ -80,7 +82,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		#region interface IAttributeItemDto
 
 		/// <inheritdoc />
-		[JsonProperty( "attributes" ), JsonConverter( typeof( AttributeArrayConverter ) )]
+		[Newtonsoft.Json.JsonProperty( "attributes" ), Newtonsoft.Json.JsonConverter( typeof( AttributeArrayConverter ) )]
+		[JsonPropertyName( "attributes" ), JsonConverter( typeof( JsonAttributeArrayConverter ) )]
 		public IReadOnlyList<AttributeDto> Attributes { get; set; }
 
 		#endregion

@@ -13,7 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	#region usings
 
 	using System;
-	using Newtonsoft.Json;
+	using System.Text.Json.Serialization;
 
 	#endregion
 
@@ -30,7 +30,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Whenever a characteristic below that part (but not below sub parts) is changed, created or deleted,
 		/// this timestamp will be updated by the server.
 		/// </summary>
-		[JsonProperty( "charChangeDate" )]
+		[Newtonsoft.Json.JsonProperty( "charChangeDate" )]
+		[JsonPropertyName( "charChangeDate" )]
 		public DateTime CharChangeDate { get; set; }
 
 		#endregion

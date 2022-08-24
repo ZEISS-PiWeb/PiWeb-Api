@@ -18,9 +18,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 	using System.IO;
 	using System.Security.Cryptography;
 	using System.Text;
+	using System.Text.Json;
 	using System.Threading;
 	using JetBrains.Annotations;
-	using Newtonsoft.Json;
 
 	#endregion
 
@@ -103,7 +103,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			if( !Directory.Exists( _Directory ) )
 				Directory.CreateDirectory( _Directory );
 
-			var serialized = JsonConvert.SerializeObject( _CredentialCache );
+			var serialized = JsonSerializer.Serialize( _CredentialCache );
 			var bytes = Encoding.UTF8.GetBytes( serialized );
 			bytes = ProtectedData.Protect( bytes, null, DataProtectionScope.CurrentUser );
 
@@ -146,7 +146,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 						var bytes = ProtectedData.Unprotect( memStream.ToArray(), null, DataProtectionScope.CurrentUser );
 						var serialized = Encoding.UTF8.GetString( bytes );
 
-						var deserialized = JsonConvert.DeserializeObject<Dictionary<string, OAuthTokenCredential>>( serialized );
+						var deserialized = JsonSerializer.Deserialize<Dictionary<string, OAuthTokenCredential>>( serialized );
 
 						_CredentialCache.Clear();
 						foreach( var entry in deserialized )

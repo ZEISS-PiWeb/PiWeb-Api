@@ -17,8 +17,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Text;
-	using Newtonsoft.Json;
+	using System.Text.Json.Serialization;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
+	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
 
 	#endregion
 
@@ -31,7 +32,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// * A characteristic path element can have other characteristic elements as children
 	/// * A characteristic path element can not have part elements as children
 	/// </summary>
-	[JsonConverter( typeof( PathInformationConverter ) )]
+	[Newtonsoft.Json.JsonConverter( typeof( PathInformationConverter ) )]
+	[JsonConverter( typeof( JsonPathInformationConverter ) )]
 	public sealed class PathInformationDto : IFormattable, IEnumerable<PathElementDto>
 	{
 		#region members

@@ -15,8 +15,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Text.Json.Serialization;
 	using JetBrains.Annotations;
-	using Newtonsoft.Json;
 
 	#endregion
 
@@ -53,7 +53,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets a list of possible catalog entry attribute (i.e. columns of a catalog).
 		/// </summary>
-		[JsonProperty( "validAttributes" )]
+		[Newtonsoft.Json.JsonProperty( "validAttributes" )]
+		[JsonPropertyName( "validAttributes" )]
 		public IReadOnlyList<ushort> ValidAttributes
 		{
 			[NotNull] get => _ValidAttributes;
@@ -63,7 +64,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets the list of catalog entries that belong to this catalog.
 		/// </summary>
-		[JsonProperty( "catalogEntries" )]
+		[Newtonsoft.Json.JsonProperty( "catalogEntries" )]
+		[JsonPropertyName( "catalogEntries" )]
 		public IReadOnlyList<CatalogEntryDto> CatalogEntries
 		{
 			[NotNull] get => _CatalogEntries;

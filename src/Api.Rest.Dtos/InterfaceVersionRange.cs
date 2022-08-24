@@ -14,7 +14,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 
 	using System;
 	using System.Collections.Generic;
-	using Newtonsoft.Json;
+	using System.Text.Json.Serialization;
 
 	#endregion
 
@@ -22,7 +22,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 	{
 		#region properties
 
-		[JsonProperty( "supportedVersions" )]
+		[Newtonsoft.Json.JsonProperty( "supportedVersions" )]
+		[JsonPropertyName( "supportedVersions" )]
 		public IEnumerable<Version> SupportedVersions { get; set; }
 
 		#endregion
