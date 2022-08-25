@@ -292,9 +292,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			}
 		}
 
-		public async IAsyncEnumerable<T> RequestEnumerated<T>( [NotNull] Func<IObjectSerializer, HttpRequestMessage> requestCreationHandler, [EnumeratorCancellation] CancellationToken cancellationToken )
+		public async IAsyncEnumerable<T> RequestEnumerated<T>( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, [EnumeratorCancellation] CancellationToken cancellationToken )
 		{
-			var items = await PerformRequestAsync( () => requestCreationHandler( _Serializer ), true, response => Task.FromResult( ResponseToAsyncEnumerable<T>( response, _Serializer, cancellationToken ) ), false, cancellationToken );
+			var items = await PerformRequestAsync( () => requestCreationHandler( _Serializer, cancellationToken ), true, response => Task.FromResult( ResponseToAsyncEnumerable<T>( response, _Serializer, cancellationToken ) ), false, cancellationToken );
 
 			await foreach (var item in items.ConfigureAwait( false ) )
 			{
@@ -307,9 +307,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			return PerformRequestAsync( requestCreationHandler, false, ResponseToBytesAsync, true, cancellationToken );
 		}
 
-		public Task<byte[]> RequestBytes( [NotNull] Func<IObjectSerializer, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		public Task<byte[]> RequestBytes( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync( () => requestCreationHandler( _Serializer ), false, ResponseToBytesAsync, true, cancellationToken );
+			return PerformRequestAsync( () => requestCreationHandler( _Serializer, cancellationToken ), false, ResponseToBytesAsync, true, cancellationToken );
 		}
 
 		public Task<T> RequestBinary<T>( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
@@ -317,9 +317,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			return PerformRequestAsync( requestCreationHandler, false, BinaryResponseToObjectAsync<T>, true, cancellationToken );
 		}
 
-		public Task<T> RequestBinary<T>( [NotNull] Func<IObjectSerializer, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		public Task<T> RequestBinary<T>( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync( () => requestCreationHandler( _Serializer ), false, BinaryResponseToObjectAsync<T>, true, cancellationToken );
+			return PerformRequestAsync( () => requestCreationHandler( _Serializer, cancellationToken ), false, BinaryResponseToObjectAsync<T>, true, cancellationToken );
 		}
 
 		/// <summary>
