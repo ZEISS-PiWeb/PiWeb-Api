@@ -72,7 +72,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		public string ToString( IFormatProvider provider )
 		{
-			if( Attributes == null )
+			if( Attributes == null || _Attributes.Count == 0 )
 				return "";
 
 			if( Attributes.Count == 1 )
@@ -92,7 +92,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				allSameEntries &= attribute.Value == _Attributes[ 0 ].Value;
 			}
 
-			if( allSameEntries && _Attributes != null && _Attributes.Count > 0 )
+			if( allSameEntries )
 				return Convert.ToString( GetTypedAttributeValue( Attributes[ 0 ] ), provider );
 
 			return sb.ToString();
