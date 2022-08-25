@@ -14,7 +14,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 
 	using System;
 	using System.Collections;
-	using System.Globalization;
 	using System.Xml;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
