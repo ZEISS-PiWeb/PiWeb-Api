@@ -224,6 +224,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			{
 				int value             => value,
 				short value           => value,
+				double value          => value % 1 == 0 ? (int)value : null,
 				CatalogEntryDto entry => entry.Key,
 				string value          => ParseIntValue( value ),
 				_                     => ParseIntValue( _Value )

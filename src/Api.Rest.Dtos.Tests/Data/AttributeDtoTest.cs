@@ -882,100 +882,100 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 		/// </remark>
 		private static IEnumerable CreateNullAttributeTestCases()
 		{
-		// @formatter:off — disable formatter after this line
+			// @formatter:off — disable formatter after this line
 
-		// value: null
-		yield return CreateTestCase( null,  null, null, "",    null, null,   "null" );
+			// value: null
+			yield return CreateTestCase( null,  null, null, "",    null, null,   "null" );
 
 			// @formatter:on — enable formatter after this line
 		}
 
 		private static IEnumerable CreateAlphaNumericAttributeTestCases()
 		{
-		// @formatter:off — disable formatter after this line
+			// @formatter:off — disable formatter after this line
 
-		// value: "foo"
-		yield return CreateTestCase(         "foo", null, null, "foo", null,  null,"\"foo\"" );
-		yield return CreateTestCase( (object)"foo", null, null, "foo", null, "foo","\"foo\" (object)" );
+			// value: "foo"
+			yield return CreateTestCase(         "foo", null, null, "foo", null,  null,"\"foo\"" );
+			yield return CreateTestCase( (object)"foo", null, null, "foo", null, "foo","\"foo\" (object)" );
 
-		// value: "" (empty string)
-		yield return CreateTestCase(         "", null, null,    "" ,   null,  null,   "\"\"" );
-		yield return CreateTestCase( (object)"", null, null,    "" ,   null,    "",   "\"\" (object)" );
+			// value: "" (empty string)
+			yield return CreateTestCase(         "", null, null,    "" ,   null,  null,   "\"\"" );
+			yield return CreateTestCase( (object)"", null, null,    "" ,   null,    "",   "\"\" (object)" );
 
 			// @formatter:on — enable formatter after this line
 		}
 
 		private static IEnumerable CreateIntegerAttributeTestCases()
 		{
-		// @formatter:off — disable formatter after this line
+			// @formatter:off — disable formatter after this line
 
-		// value: 1 as integer, short and string
-		yield return CreateTestCase(           1, 1,  1.0,    "1", null,   1, "1" );
-		yield return CreateTestCase(    (short)1, 1,  1.0,    "1", null,   1, "1 (short)" );
-		yield return CreateTestCase(         "1", 1,  1.0,    "1", null,null, "\"1\"" );
-		yield return CreateTestCase( (object)"1", 1,  1.0,    "1", null, "1", "\"1\" (object)" );
+			// value: 1 as integer, short and string
+			yield return CreateTestCase(           1, 1,  1.0,    "1", null,   1, "1" );
+			yield return CreateTestCase(    (short)1, 1,  1.0,    "1", null,   1, "1 (short)" );
+			yield return CreateTestCase(         "1", 1,  1.0,    "1", null,null, "\"1\"" );
+			yield return CreateTestCase( (object)"1", 1,  1.0,    "1", null, "1", "\"1\" (object)" );
 
 			// @formatter:on — enable formatter after this line
 		}
 
 		private static IEnumerable CreateFloatAttributeTestCases()
 		{
-		// @formatter:off — disable formatter after this line
+			// @formatter:off — disable formatter after this line
 
-		// value: 1.0 as double and string
-		yield return CreateTestCase(           1.0,    null,  1.0,     "1", null,      1, "1.0" );
-		yield return CreateTestCase(         "1.0",    null,  1.0,   "1.0", null,   null, "\"1.0\"" );
-		yield return CreateTestCase( (object)"1.0",    null,  1.0,   "1.0", null,  "1.0", "\"1.0\" (object)" );
+			// value: 1.0 as double and string
+			yield return CreateTestCase(           1.0,       1,  1.0,     "1", null,    1.0, "1.0" );
+			yield return CreateTestCase(         "1.0",    null,  1.0,   "1.0", null,   null, "\"1.0\"" );
+			yield return CreateTestCase( (object)"1.0",    null,  1.0,   "1.0", null,  "1.0", "\"1.0\" (object)" );
 
-		// value: -1.78 as double and string
-		yield return CreateTestCase(           -1.78, null, -1.78, "-1.78", null,   -1.78, "-1.78" );
-		yield return CreateTestCase(         "-1.78", null, -1.78, "-1.78", null,    null, "\"-1.78\"" );
-		yield return CreateTestCase( (object)"-1.78", null, -1.78, "-1.78", null, "-1.78", "\"-1.78\" (object)" );
+			// value: -1.78 as double and string
+			yield return CreateTestCase(           -1.78, null, -1.78, "-1.78", null,   -1.78, "-1.78" );
+			yield return CreateTestCase(         "-1.78", null, -1.78, "-1.78", null,    null, "\"-1.78\"" );
+			yield return CreateTestCase( (object)"-1.78", null, -1.78, "-1.78", null, "-1.78", "\"-1.78\" (object)" );
 
-		// value: special double values like NaN and Infinity
-		yield return CreateTestCase( double.NaN,              null,               double.NaN,       "NaN", null, double.NaN,              "NaN" );
-		yield return CreateTestCase( double.PositiveInfinity, null,  double.PositiveInfinity,  "Infinity", null, double.PositiveInfinity, "Infinity" );
-		yield return CreateTestCase( double.NegativeInfinity, null,  double.NegativeInfinity, "-Infinity", null, double.NegativeInfinity, "-Infinity" );
-		yield return CreateTestCase( "NaN",                   null,               double.NaN,       "NaN", null, null,                    "\"NaN\"" );
-		yield return CreateTestCase( "Infinity",              null,  double.PositiveInfinity,  "Infinity", null, null,                    "\"Infinity\"" );
-		yield return CreateTestCase( "-Infinity",             null,  double.NegativeInfinity, "-Infinity", null, null,                    "\"-Infinity\"" );
-		yield return CreateTestCase( (object)"NaN",           null,               double.NaN,       "NaN", null, "NaN",                   "\"NaN\" (object)" );
-		yield return CreateTestCase( (object)"Infinity",      null,  double.PositiveInfinity,  "Infinity", null, "Infinity",              "\"Infinity\" (object)" );
-		yield return CreateTestCase( (object)"-Infinity",     null,  double.NegativeInfinity, "-Infinity", null, "-Infinity",             "\"-Infinity\" (object)" );
+			// value: special double values like NaN and Infinity
+			yield return CreateTestCase( double.NaN,              null,               double.NaN,       "NaN", null, double.NaN,              "NaN" );
+			yield return CreateTestCase( double.PositiveInfinity, null,  double.PositiveInfinity,  "Infinity", null, double.PositiveInfinity, "Infinity" );
+			yield return CreateTestCase( double.NegativeInfinity, null,  double.NegativeInfinity, "-Infinity", null, double.NegativeInfinity, "-Infinity" );
+			yield return CreateTestCase( "NaN",                   null,               double.NaN,       "NaN", null, null,                    "\"NaN\"" );
+			yield return CreateTestCase( "Infinity",              null,  double.PositiveInfinity,  "Infinity", null, null,                    "\"Infinity\"" );
+			yield return CreateTestCase( "-Infinity",             null,  double.NegativeInfinity, "-Infinity", null, null,                    "\"-Infinity\"" );
+			yield return CreateTestCase( (object)"NaN",           null,               double.NaN,       "NaN", null, "NaN",                   "\"NaN\" (object)" );
+			yield return CreateTestCase( (object)"Infinity",      null,  double.PositiveInfinity,  "Infinity", null, "Infinity",              "\"Infinity\" (object)" );
+			yield return CreateTestCase( (object)"-Infinity",     null,  double.NegativeInfinity, "-Infinity", null, "-Infinity",             "\"-Infinity\" (object)" );
 
 			// @formatter:on — enable formatter after this line
 		}
 
 		private static IEnumerable CreateDateTimeAttributeTestCases()
 		{
-		// @formatter:off — disable formatter after this line
+			// @formatter:off — disable formatter after this line
 
-		// value: date
-		var universalTime = DateTime.Parse( "2015-03-09T19:12:00Z" ).ToUniversalTime();
-		var universalTimeAsString = XmlConvert.ToString( universalTime, XmlDateTimeSerializationMode.RoundtripKind );
+			// value: date
+			var universalTime = DateTime.Parse( "2015-03-09T19:12:00Z" ).ToUniversalTime();
+			var universalTimeAsString = XmlConvert.ToString( universalTime, XmlDateTimeSerializationMode.RoundtripKind );
 
-		var unspecifiedTime = new DateTime( universalTime.Ticks, DateTimeKind.Unspecified );
-		var unspecifiedTimeAsString = XmlConvert.ToString( unspecifiedTime, XmlDateTimeSerializationMode.RoundtripKind );
+			var unspecifiedTime = new DateTime( universalTime.Ticks, DateTimeKind.Unspecified );
+			var unspecifiedTimeAsString = XmlConvert.ToString( unspecifiedTime, XmlDateTimeSerializationMode.RoundtripKind );
 
-		yield return CreateTestCase( universalTime,         null, null, universalTimeAsString,   universalTime, universalTime,         $"utc: {universalTimeAsString}" );
-		yield return CreateTestCase( unspecifiedTime,       null, null, unspecifiedTimeAsString, universalTime, unspecifiedTime,       $"unspecified: {unspecifiedTimeAsString}" );
+			yield return CreateTestCase( universalTime,         null, null, universalTimeAsString,   universalTime, universalTime,         $"utc: {universalTimeAsString}" );
+			yield return CreateTestCase( unspecifiedTime,       null, null, unspecifiedTimeAsString, universalTime, unspecifiedTime,       $"unspecified: {unspecifiedTimeAsString}" );
 
-		yield return CreateTestCase( universalTimeAsString,           null, null, universalTimeAsString,     universalTime, null,                    $"\"{universalTimeAsString}\"" );
-		yield return CreateTestCase( unspecifiedTimeAsString,         null, null, unspecifiedTimeAsString,   universalTime, null,                    $"\"{universalTimeAsString}\"" );
-		yield return CreateTestCase( (object)universalTimeAsString,   null, null, universalTimeAsString,     universalTime, universalTimeAsString,   $"\"{universalTimeAsString}\" (object)" );
-		yield return CreateTestCase( (object)unspecifiedTimeAsString, null, null, unspecifiedTimeAsString,   universalTime, unspecifiedTimeAsString, $"\"{unspecifiedTimeAsString}\" (object)" );
+			yield return CreateTestCase( universalTimeAsString,           null, null, universalTimeAsString,     universalTime, null,                    $"\"{universalTimeAsString}\"" );
+			yield return CreateTestCase( unspecifiedTimeAsString,         null, null, unspecifiedTimeAsString,   universalTime, null,                    $"\"{universalTimeAsString}\"" );
+			yield return CreateTestCase( (object)universalTimeAsString,   null, null, universalTimeAsString,     universalTime, universalTimeAsString,   $"\"{universalTimeAsString}\" (object)" );
+			yield return CreateTestCase( (object)unspecifiedTimeAsString, null, null, unspecifiedTimeAsString,   universalTime, unspecifiedTimeAsString, $"\"{unspecifiedTimeAsString}\" (object)" );
 
 			// @formatter:on — enable formatter after this line
 		}
 
 		private static IEnumerable CreateCatalogEntryAttributeTestCases()
 		{
-		// @formatter:off — disable formatter after this line
+			// @formatter:off — disable formatter after this line
 
-		// value: date
-		var catalogEntry = new CatalogEntryDto{ Key = 4 };
+			// value: date
+			var catalogEntry = new CatalogEntryDto{ Key = 4 };
 
-		yield return CreateTestCase( catalogEntry, 4, 4,       "4", null,catalogEntry, "catalog entry" );
+			yield return CreateTestCase( catalogEntry, 4, 4,       "4", null,catalogEntry, "catalog entry" );
 
 			// @formatter:on — enable formatter after this line
 		}
