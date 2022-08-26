@@ -61,21 +61,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 		}
 
 		[Test]
-		public void Test_Ctr_For_RawValue_As_String_Value()
-		{
-			// arrange
-
-			// act
-			var attribute = new AttributeDto( 1, (object)"foo" );
-
-			// assert
-			Assert.That( attribute.Value, Is.EqualTo( "foo" ) );
-			Assert.That( attribute.RawValue, Is.Null );
-		}
-
-		[Test]
 		[TestCaseSource( nameof( CreateValidRawValueTestCases ) )]
-		public void Test_Ctr_For_RawValue( object rawValue, string expectedValue, object expectedRawValue )
+		public void Test_Ctr_For_RawValue( object rawValue, string expectedValue )
 		{
 			// arrange
 
@@ -83,7 +70,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			var attribute = new AttributeDto( 1, rawValue );
 
 			Assert.That( attribute.Value, Is.EqualTo( expectedValue ) );
-			Assert.That( attribute.RawValue, Is.EqualTo( expectedRawValue ) );
+			Assert.That( attribute.RawValue, Is.EqualTo( rawValue ) );
 		}
 
 		[Test]
@@ -780,7 +767,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 
 		[Test]
 		[TestCaseSource( nameof( CreateValidRawValueTestCases ) )]
-		public void Test_IsNull_For_RawValue( object rawValue, string expectedValue, object expectedRawValue )
+		public void Test_IsNull_For_RawValue( object rawValue, string expectedValue )
 		{
 			// arrange
 
@@ -821,18 +808,18 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 
 		private static IEnumerable CreateValidRawValueTestCases()
 		{
-			yield return new TestCaseData( null, "", null ) { TestName = "null" };
-			yield return new TestCaseData( "", "", null ) { TestName = "empty string" };
-			yield return new TestCaseData( "foo", "foo", null ) { TestName = "string value" };
-			yield return new TestCaseData( 2, "2", 2 ) { TestName = "integer value" };
-			yield return new TestCaseData( (short)2, "2", (short)2 ) { TestName = "short value" };
-			yield return new TestCaseData( 1.23, "1.23", 1.23 ) { TestName = "double value" };
+			yield return new TestCaseData( null, "" ) { TestName = "null" };
+			yield return new TestCaseData( "", "" ) { TestName = "empty string" };
+			yield return new TestCaseData( "foo", "foo" ) { TestName = "string value" };
+			yield return new TestCaseData( 2, "2" ) { TestName = "integer value" };
+			yield return new TestCaseData( (short)2, "2" ) { TestName = "short value" };
+			yield return new TestCaseData( 1.23, "1.23" ) { TestName = "double value" };
 
 			var dateTime = DateTime.Parse( "2015-03-09T19:12:00Z" ).ToUniversalTime();
-			yield return new TestCaseData( dateTime, "2015-03-09T19:12:00Z", dateTime ) { TestName = "datetime" };
+			yield return new TestCaseData( dateTime, "2015-03-09T19:12:00Z" ) { TestName = "datetime" };
 
 			var catalogEntry = new CatalogEntryDto { Key = 2 };
-			yield return new TestCaseData( catalogEntry, "2", catalogEntry ) { TestName = "catalog entry" };
+			yield return new TestCaseData( catalogEntry, "2" ) { TestName = "catalog entry" };
 		}
 
 		private static IEnumerable CreateCompareDateTimeAttributesTestCases()
@@ -908,10 +895,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 		// @formatter:off — disable formatter after this line
 
 		// value: "foo"
-		yield return CreateTestCase( "foo", null, null, "foo", null, null,"\"foo\"" );
+		yield return CreateTestCase( "foo", null, null, "foo", null, "foo","\"foo\"" );
 
 		// value: "" (empty string)
-		yield return CreateTestCase( "", null, null,    "" ,   null, null,   "\"\"" );
+		yield return CreateTestCase( "", null, null,    "" ,   null,    "",   "\"\"" );
 
 			// @formatter:on — enable formatter after this line
 		}
@@ -921,9 +908,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 		// @formatter:off — disable formatter after this line
 
 		// value: 1 as integer and string
-		yield return CreateTestCase( 1,        1,  1.0,    "1", null, 1, "1" );
-		yield return CreateTestCase( (short)1, 1,  1.0,    "1", null, 1, "1 (short)" );
-		yield return CreateTestCase( "1",      1,  1.0,    "1", null, null, "\"1\"" );
+		yield return CreateTestCase( 1,        1,  1.0,    "1", null,   1, "1" );
+		yield return CreateTestCase( (short)1, 1,  1.0,    "1", null,   1, "1 (short)" );
+		yield return CreateTestCase( "1",      1,  1.0,    "1", null, "1", "\"1\"" );
 
 			// @formatter:on — enable formatter after this line
 		}
@@ -933,20 +920,20 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 		// @formatter:off — disable formatter after this line
 
 		// value: 1.0 as double and string
-		yield return CreateTestCase( 1.0,      null,  1.0,     "1", null,     1, "1.0" );
-		yield return CreateTestCase( "1.0",    null,  1.0,   "1.0", null,  null, "\"1.0\"" );
+		yield return CreateTestCase( 1.0,      null,  1.0,     "1", null,      1, "1.0" );
+		yield return CreateTestCase( "1.0",    null,  1.0,   "1.0", null,  "1.0", "\"1.0\"" );
 
 		// value: -1.78 as double and string
 		yield return CreateTestCase(  -1.78,  null, -1.78, "-1.78", null,   -1.78, "-1.78" );
-		yield return CreateTestCase( "-1.78", null, -1.78, "-1.78", null,    null, "\"-1.78\"" );
+		yield return CreateTestCase( "-1.78", null, -1.78, "-1.78", null, "-1.78", "\"-1.78\"" );
 
 		// value: special double values like NaN and Infinity
 		yield return CreateTestCase( double.NaN,              null,               double.NaN,       "NaN", null, double.NaN,              "NaN" );
 		yield return CreateTestCase( double.PositiveInfinity, null,  double.PositiveInfinity,  "Infinity", null, double.PositiveInfinity, "Infinity" );
 		yield return CreateTestCase( double.NegativeInfinity, null,  double.NegativeInfinity, "-Infinity", null, double.NegativeInfinity, "-Infinity" );
-		yield return CreateTestCase( "NaN",                   null,               double.NaN,       "NaN", null, null,                    "\"NaN\"" );
-		yield return CreateTestCase( "Infinity",              null,  double.PositiveInfinity,  "Infinity", null, null,                    "\"Infinity\"" );
-		yield return CreateTestCase( "-Infinity",             null,  double.NegativeInfinity, "-Infinity", null, null,                    "\"-Infinity\"" );
+		yield return CreateTestCase( "NaN",                   null,               double.NaN,       "NaN", null, "NaN",                   "\"NaN\"" );
+		yield return CreateTestCase( "Infinity",              null,  double.PositiveInfinity,  "Infinity", null, "Infinity",              "\"Infinity\"" );
+		yield return CreateTestCase( "-Infinity",             null,  double.NegativeInfinity, "-Infinity", null, "-Infinity",             "\"-Infinity\"" );
 
 			// @formatter:on — enable formatter after this line
 		}
@@ -962,9 +949,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 		var unspecifiedTime = new DateTime( universalTime.Ticks, DateTimeKind.Unspecified );
 		var unspecifiedTimeAsString = XmlConvert.ToString( unspecifiedTime, XmlDateTimeSerializationMode.RoundtripKind );
 
-		yield return CreateTestCase( universalTimeAsString, null, null, universalTimeAsString,   universalTime, null,           $"\"{universalTimeAsString}\"" );
-		yield return CreateTestCase( universalTime,         null, null, universalTimeAsString,   universalTime, universalTime,  $"utc: {universalTimeAsString}" );
-		yield return CreateTestCase( unspecifiedTime,       null, null, unspecifiedTimeAsString, universalTime, unspecifiedTime, $"unspecified: {unspecifiedTimeAsString}" );
+		yield return CreateTestCase( universalTimeAsString, null, null, universalTimeAsString,   universalTime, universalTimeAsString, $"\"{universalTimeAsString}\"" );
+		yield return CreateTestCase( universalTime,         null, null, universalTimeAsString,   universalTime, universalTime,         $"utc: {universalTimeAsString}" );
+		yield return CreateTestCase( unspecifiedTime,       null, null, unspecifiedTimeAsString, universalTime, unspecifiedTime,       $"unspecified: {unspecifiedTimeAsString}" );
 
 			// @formatter:on — enable formatter after this line
 		}
