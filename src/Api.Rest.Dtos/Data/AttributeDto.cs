@@ -59,8 +59,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		public AttributeDto( ushort key, object rawValue )
 		{
 			Key = key;
-			_Value = rawValue as string;
-			RawValue = rawValue is not string ? rawValue : null;
+			_Value = null;
+			RawValue = rawValue;
 			ValidateRawValue();
 		}
 
@@ -114,6 +114,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			switch( RawValue )
 			{
 				case null:
+				case string:
 				case double:
 				case int:
 				case short:
@@ -138,7 +139,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		}
 
 		/// <summary>
-		/// Returns the encapsulated value as a <see cref="string"/>. If the value is not a string <code>null</code> is returned.
+		/// Returns the encapsulated value as a <see cref="string"/>. If the value is not a string <see langword="null"/> is returned.
 		/// </summary>
 		[CanBeNull]
 		public string GetStringValue()
@@ -175,58 +176,72 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		}
 
 		/// <summary>
-		/// Returns the value for key <code>key</code> as a <see cref="double"/>.
+		/// Returns the value of the attribute as a <see cref="double"/>.
 		/// </summary>
 		/// <remarks>
-		/// If the parsing fails, <code>null</code> is returned.
+		/// If the parsing fails, <see langword="null"/> is returned.
 		/// </remarks>
 		public double? GetDoubleValue()
 		{
-			switch( RawValue )
+			return RawValue switch
 			{
-				case int value:
-					return value;
-				case short value:
-					return value;
-				case double value:
-					return value;
-				case CatalogEntryDto entry:
-					return entry.Key;
-			}
+				int value             => value,
+				short value           => value,
+				double value          => value,
+				CatalogEntryDto entry => entry.Key,
+				string value          => ParseDoubleValue( value ),
+				_                     => ParseDoubleValue( _Value )
+			};
+		}
 
+		/// <summary>
+		/// Parses the string representation of a number to an double value.
+		/// </summary>
+		/// <param name="value">The string representation of a number.</param>
+		/// <returns>The double value or <see langword="null"/> if the value could not be parsed.</returns>
+		private double? ParseDoubleValue( string value )
+		{
 #if NETSTANDARD
-			if( double.TryParse( _Value, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var result ) )
+			if( double.TryParse( value, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var result ) )
 				return result;
 #else
-			if( double.TryParse( _Value.AsSpan(), NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var result ) )
+			if( double.TryParse( value.AsSpan(), NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var result ) )
 				return result;
 #endif
+
 			return null;
 		}
 
 		/// <summary>
-		/// Returns the value for key <code>key</code> as a <see cref="int"/>.
+		/// Returns the value of the attribute as a <see cref="int"/>.
 		/// </summary>
 		/// <remarks>
-		/// If the parsing fails, <code>null</code> is returned.
+		/// If the parsing fails, <see langword="null"/> is returned.
 		/// </remarks>
 		public int? GetIntValue()
 		{
-			switch( RawValue )
+			return RawValue switch
 			{
-				case int value:
-					return value;
-				case short value:
-					return value;
-				case CatalogEntryDto entry:
-					return entry.Key;
-			}
+				int value             => value,
+				short value           => value,
+				CatalogEntryDto entry => entry.Key,
+				string value          => ParseIntValue( value ),
+				_                     => ParseIntValue( _Value )
+			};
+		}
 
+		/// <summary>
+		/// Parses the string representation of a number to an integer value.
+		/// </summary>
+		/// <param name="value">The string representation of a number.</param>
+		/// <returns>The integer value or <see langword="null"/> if the value could not be parsed.</returns>
+		private int? ParseIntValue( string value )
+		{
 #if NETSTANDARD
-			if( int.TryParse( _Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var result ) )
+			if( int.TryParse( value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var result ) )
 				return result;
 #else
-			if( int.TryParse( _Value.AsSpan(), NumberStyles.Integer, CultureInfo.InvariantCulture, out var result ) )
+			if( int.TryParse( value.AsSpan(), NumberStyles.Integer, CultureInfo.InvariantCulture, out var result ) )
 				return result;
 #endif
 
@@ -234,10 +249,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		}
 
 		/// <summary>
-		/// Returns the value as a <see cref="DateTime"/>.
+		/// Returns the value of the attribute as a <see cref="DateTime"/>.
 		/// </summary>
 		/// <remarks>
-		/// If the parsing fails, <code>null</code> is returned.
+		/// If the parsing fails, <see langword="null"/> is returned.
 		/// </remarks>
 		public DateTime? GetDateValue()
 		{
@@ -246,6 +261,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				DateTime date;
 				if( RawValue is DateTime rawDateTime )
 					date = rawDateTime;
+				else if( RawValue is string value )
+					date = XmlConvert.ToDateTime( value, XmlDateTimeSerializationMode.RoundtripKind );
 				else if( !string.IsNullOrEmpty( _Value ) )
 					date = XmlConvert.ToDateTime( _Value, XmlDateTimeSerializationMode.RoundtripKind );
 				else
