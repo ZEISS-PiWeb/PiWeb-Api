@@ -192,7 +192,7 @@ The REST DataService is the endpoint for everything related to PiWeb data like p
 
 The base address is:
 ```http
-http(s)://serverUri:port/instanceName/DataServiceRest
+http(s)://serverHost:port/instanceName/DataServiceRest
 ```
 
 For further information see the [DataService documentation](http://zeiss-piweb.github.io/PiWeb-Api/dataservice/v1.4/ "Data Service documentation")
@@ -202,7 +202,7 @@ Use the RawDataService to fetch, create, update and delete additional data, i.e.
 
 The base address is:
 ```http
-http(s)://serverUri:port/instanceName/RawDataServiceRest
+http(s)://serverHost:port/instanceName/RawDataServiceRest
 ```
 For further information see the [RawDataService documentation](http://zeiss-piweb.github.io/PiWeb-Api/rawdataservice/v1.4/ "RawData Service documentation")
 
@@ -230,9 +230,9 @@ The .NET SDK has a global version, depending on your chosen NuGet package or Git
 The REST API instead doesn't have a version as a whole, each service has its own version. <br>
 You can find out the supported service versions by making a GET request to its base URL:
 ```html
-http(s)://ServerUri:Port/instanceName/dataServiceRest
+http(s)://ServerHost:Port/instanceName/dataServiceRest
 or
-http(s)://ServerUri:Port/instanceName/rawDataServiceRest
+http(s)://ServerHost:Port/instanceName/rawDataServiceRest
 ```
 
 Response:
@@ -270,13 +270,55 @@ Content-Type: application/json; charset=utf-8
 if your chosen tool or script language does not work directly with present encoding.
 
 <h2 id="{{page.sections['general']['secs']['security'].anchor}}">{{page.sections['general']['secs']['security'].title}}</h2>
-Access to PiWeb Server service might require authentication. Authentication can be either *basic authentication*, based on username and password, or *Windows authentication* based on Active Directory integration.
+Access to PiWeb Server service might require authentication. Authentication can be either *basic authentication* based on username and password, *Windows authentication* based on Active Directory integration
+or OpenID connect authentication.
 
-If PiWeb Server is secured by basic authentication you have to pass the credentials in the HTTP Authorization header. The authorization header must contain the `Basic` key word followed by base64 encoded `user:password` string:
+**Basic authentication**
+
+If PiWeb Server is secured by basic authentication you have to pass the credentials in the HTTP authorization header. The authorization header must contain the `Basic` key word followed by base64 encoded `user:password` string:
 
 ```http
 Authorization: Basic QWRtaW5pc3RyYXRvcjphZG0hbiFzdHJhdDBy
 ```
+<br/>
+**OpenID connect authentication**
+
+If PiWeb Server is secured by OpenID connect authentication you have to obtain an access token and pass it in the HTTP authorization header. The access token can be obtained from an OpenID Issuer.
+The OpenID issuer URL is provided by a helper endpoint. Invoke a GET request on this endpoint without any authorization header.
+
+```http
+http(s)://serverHost:port/instanceName/OAuthServiceRest/oauthTokenInformation
+```
+
+A JSON response with the following format will be returned.
+
+```json
+{"openIdAuthority":"https://issuerHost:port/basePath"}
+```
+
+The OpenID issuer URL can be used together with the [OpenID connect](https://openid.net/connect/) specifications to obtain an access token. You can use
+a OpenID connect client library to help dealing with all the details. Following a short description together with the PiWeb specifics.
+
+First use [OpenID connect discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfig) to get the URL of the authorization and
+token endpoints. Then you can use the [OpenID connect](https://openid.net/specs/openid-connect-core-1_0.html) specification to get an access token.
+
+The authorization flow used by PiWeb is the Authorization Code Flow + PKCE. You need to specify the client id "f1ddf74a-7ed1-4963-ab60-a1138a089791" and the
+scope "piweb". Additionally the scopes "profile", "email" and "offline_access" are supported as well. The redirect_uri is "urn:ietf:wg:oauth:2.0:oob".
+
+The obtained authorization code, the PKCE code verifier and the client secret "d2940022-7469-4790-9498-776e3adac79f" are sent to the token endpoint
+which returns an access token.
+
+The access token can be used to authenticate requests to PiWeb services. PiWeb server uses the authentication scheme "Bearer" for OpenID connect
+authentication. The HTTP authorization header must contain the scheme "Bearer" as well as the obtained access token.
+
+```http
+GET /DataServiceRest/serviceInformation HTTP/1.1
+Authorization: Bearer access_token
+```
+
+The access token is valid for 1 hour. When the access token has expired you need to obtain a new access token. The expiration date can be obtained
+by client from the access token itself. The access token is a JSON Web Token as defined in [RFC7519](https://www.rfc-editor.org/rfc/rfc7519)
+and contains the claim "exp" defining its expiration date.
 
 <h2 id="{{page.sections['general']['secs']['parameter'].anchor}}">{{page.sections['general']['secs']['parameter'].title}}</h2>
 

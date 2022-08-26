@@ -3,6 +3,7 @@
 Examples in this section:
 + [Authenticate with basic authentication](#-example--authenticate-with-basic-authentication)
 + [Authenticate using ActiveDirectory (Windows)](#-example--authenticate-using-activedirectory-windows)
++ [Authenticate using OpenID connect](#-example--authenticate-using-openid-connect)
 <hr>
 
 Access to PiWeb server service might require authentication. Our .NET client supports all authentication modes:
@@ -49,3 +50,23 @@ DataServiceClient.AuthenticationContainer = authContainer;
 {% endhighlight %}
 This tells the ServiceClient to use Windows Authentication (ActiveDirectory). From now on the client will use your Windows user account for authentication. You do not have to specify credentials as the client will check and fetch your information from the organization directory. <br>
 Remember that your authentication mode has to match the mode set in the server settings.
+
+{{ site.headers['example'] }} Authenticate using OpenID connect
+
+{% highlight csharp %}
+// use OAuthHelper to get the OIDC access token for the service
+var oAuthTokenCredential = await OAuthHelper.GetAuthenticationInformationForDatabaseUrlAsync(serverUri.AbsoluteUri, requestCallbackAsync: OAuthRequestCallbackAsync);
+
+//Set the clients AuthenticationContainer use the acquired access token
+DataServiceClient.AuthenticationContainer = new AuthenticationContainer(oAuthTokenCredential.AccessToken);
+{% endhighlight %}
+
+This tells the ServiceClient to use OpenID connect authentication sending the provided access token in the authentication header.
+
+In order for this to work you need to provide a callback method. This callback method gets an `OAuthRequest` as argument.
+The callback should open a browser at the start URL and monitor the browser until the callback URL is displayed in the
+address bar. The final callback URL with all the parameters or form inputs should be returned and are used by the
+`OAuthHelper` to get the access token as well as related information which are returned as `OAuthTokenCredential`.
+
+An example for the required browser interaction using [WebView2](https://www.nuget.org/packages/Microsoft.Web.WebView2/)
+is shown in a [C# sample application](https://github.com/ZEISS-PiWeb/PiWeb-Training).
