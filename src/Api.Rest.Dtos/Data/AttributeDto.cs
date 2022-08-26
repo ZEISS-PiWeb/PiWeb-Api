@@ -199,7 +199,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		/// <param name="value">The string representation of a number.</param>
 		/// <returns>The double value or <see langword="null"/> if the value could not be parsed.</returns>
-		private double? ParseDoubleValue( string value )
+		private static double? ParseDoubleValue( string value )
 		{
 #if NETSTANDARD
 			if( double.TryParse( value, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var result ) )
@@ -235,7 +235,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		/// <param name="value">The string representation of a number.</param>
 		/// <returns>The integer value or <see langword="null"/> if the value could not be parsed.</returns>
-		private int? ParseIntValue( string value )
+		private static int? ParseIntValue( string value )
 		{
 #if NETSTANDARD
 			if( int.TryParse( value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var result ) )
