@@ -31,7 +31,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		/// <param name="paths">Given paths</param>
 		/// <returns>Parts</returns>
-		public static IReadOnlyList<PathInformationDto> GetParts( this IEnumerable<PathInformationDto> paths )
+		[NotNull]
+		public static IReadOnlyList<PathInformationDto> GetParts( [CanBeNull] this IEnumerable<PathInformationDto> paths )
 		{
 			var selectedPaths = paths ?? Enumerable.Empty<PathInformationDto>();
 			return selectedPaths.Where( p => p.Type == InspectionPlanEntityDto.Part ).ToArray();
@@ -42,7 +43,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		/// <param name="paths">Given paths</param>
 		/// <returns>Characteristics</returns>
-		public static IReadOnlyList<PathInformationDto> GetCharacteristics( this IEnumerable<PathInformationDto> paths )
+		[NotNull]
+		public static IReadOnlyList<PathInformationDto> GetCharacteristics( [CanBeNull] this IEnumerable<PathInformationDto> paths )
 		{
 			var selectedPaths = paths ?? Enumerable.Empty<PathInformationDto>();
 			return selectedPaths.Where( p => p.Type == InspectionPlanEntityDto.Characteristic ).ToArray();
@@ -52,7 +54,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Finds the lowest common path all paths are part of.
 		/// </summary>
 		/// <param name="paths">The paths that should be analyzed.</param>
-		public static PathInformationDto FindCommonParent( params PathInformationDto[] paths )
+		[NotNull]
+		public static PathInformationDto FindCommonParent( [CanBeNull] params PathInformationDto[] paths )
 		{
 			if( paths == null )
 				return PathInformationDto.Root;
@@ -63,20 +66,17 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Finds the lowest common path all paths are part of.
 		/// </summary>
-		/// <param name="pathList">The paths that should be analyzed.</param>
+		/// <param name="paths">The paths that should be analyzed.</param>
 		[NotNull]
-		public static PathInformationDto FindCommonParent( [CanBeNull] IEnumerable<PathInformationDto> pathList )
+		public static PathInformationDto FindCommonParent( [CanBeNull] IEnumerable<PathInformationDto> paths )
 		{
-			if( pathList == null )
-				return PathInformationDto.Root;
-
-			var paths = pathList.ToArray();
-			return FindCommonParentInternal( paths );
+			return FindCommonParent( paths?.ToArray() );
 		}
 
-		private static PathInformationDto FindCommonParentInternal( [NotNull] PathInformationDto[] paths )
+		[NotNull]
+		private static PathInformationDto FindCommonParentInternal( [NotNull] IReadOnlyList<PathInformationDto> paths )
 		{
-			switch( paths.Length )
+			switch( paths.Count )
 			{
 				case 0:
 					return PathInformationDto.Root;
@@ -106,7 +106,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 				var currentElement = paths[ 0 ][ currentIndex ];
 
-				for( var i = 1; i < paths.Length; i++ )
+				for( var i = 1; i < paths.Count; i++ )
 				{
 					if( paths[ i ].Count <= currentIndex || paths[ i ][ currentIndex ] != currentElement )
 						return currentParent;
@@ -117,9 +117,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			}
 		}
 
-		/// <summary> Finds the lowest common part all paths are part of.</summary>
+		/// <summary>
+		/// Finds the lowest common part all paths are part of.
+		/// </summary>
 		/// <param name="paths">The paths that should be analyzed.</param>
-		public static PathInformationDto FindCommonParentPart( params PathInformationDto[] paths )
+		[NotNull]
+		public static PathInformationDto FindCommonParentPart( [CanBeNull] params PathInformationDto[] paths )
 		{
 			if( paths == null || paths.Length == 0 )
 				return PathInformationDto.Root;
@@ -133,32 +136,32 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			return result;
 		}
 
-		/// <summary> Finds the lowest common part all paths are part of.</summary>
+		/// <summary>
+		/// Finds the lowest common part all paths are part of.
+		/// </summary>
 		/// <param name="paths">The paths that should be analyzed.</param>
-		public static PathInformationDto FindCommonParentPart( IEnumerable<PathInformationDto> paths )
+		[NotNull]
+		public static PathInformationDto FindCommonParentPart( [CanBeNull] IEnumerable<PathInformationDto> paths )
 		{
-			var result = FindCommonParent( paths );
-			if( !result.IsRoot && result[ result.Count - 1 ].Type != InspectionPlanEntityDto.Part )
-			{
-				result = result.ParentPartPath;
-			}
-
-			return result;
+			return FindCommonParentPart( paths?.ToArray() );
 		}
 
-		/// <summary>Returns a list of the superordinated parts. For a characteristic the superordinated part is returned even if the
-		/// characteristic has superordinated characteristics. For a part the part itself is returned. </summary>
-		public static PathInformationDto[] FindParentParts( IEnumerable<PathInformationDto> paths )
+		/// <summary>
+		/// Returns a list of the parent parts.
+		/// <list type="bullet">
+		///		<item>For a characteristic the parent part is returned even if the characteristic has parent characteristics.</item>
+		///		<item>For a part the part itself is returned.</item>
+		/// </list>
+		/// </summary>
+		[NotNull]
+		public static PathInformationDto[] FindParentParts( [CanBeNull] IEnumerable<PathInformationDto> paths )
 		{
-			var parents = new HashSet<PathInformationDto>();
-
 			if( paths == null )
-				return parents.ToArray();
+				return Array.Empty<PathInformationDto>();
 
+			var parents = new HashSet<PathInformationDto>();
 			foreach( var p in paths )
-			{
 				parents.Add( p.Type == InspectionPlanEntityDto.Characteristic ? p.ParentPartPath : p );
-			}
 
 			return parents.ToArray();
 		}
@@ -169,12 +172,14 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <param name="path">The path that should be relative to <paramref name="basePath"/>.</param>
 		/// <param name="basePath">The base path.</param>
 		/// <returns>The resulting relative path.</returns>
-		public static PathInformationDto RelativeTo( this PathInformationDto path, PathInformationDto basePath )
+		[NotNull]
+		public static PathInformationDto RelativeTo( [CanBeNull] this PathInformationDto path, [CanBeNull] PathInformationDto basePath )
 		{
 			return InternalRelativeTo( path, basePath );
 		}
 
-		private static PathInformationDto InternalRelativeTo( PathInformationDto path, PathInformationDto basePath )
+		[NotNull]
+		private static PathInformationDto InternalRelativeTo( [CanBeNull] PathInformationDto path, [CanBeNull] PathInformationDto basePath )
 		{
 			if( path == null || path.IsRoot ) return PathInformationDto.Root;
 			if( basePath == null || path.IsRoot ) return path;
@@ -202,12 +207,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <param name="p2">The second comparison path.</param>
 		/// <param name="comparison">The type of string comparison to use.</param>
 		/// <returns>True if both paths are equals, otherwise false.</returns>
-		public static bool Equals( this PathInformationDto p1, PathInformationDto p2, StringComparison comparison )
+		public static bool Equals( [CanBeNull] this PathInformationDto p1, [CanBeNull] PathInformationDto p2, StringComparison comparison )
 		{
-			if( ReferenceEquals( p1, null ) && ReferenceEquals( p2, null ) )
+			if( ReferenceEquals( p1, p2 ) )
 				return true;
 
-			if( ReferenceEquals( p1, null ) || p1.Count != p2.Count )
+			if( p1 is null || p2 is null || p1.Count != p2.Count )
 				return false;
 
 			for( var i = p1.Count - 1; i >= 0; i-- )

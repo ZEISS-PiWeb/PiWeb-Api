@@ -15,7 +15,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using JetBrains.Annotations;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 
@@ -26,255 +25,419 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 	{
 		#region constants
 
-		private const char Delimiter = ';';
-		private const string Root = "\\";
+		private const string Root = "/";
 
 		#endregion
 
 		#region methods
 
 		[Test]
-		[TestCase( "P:Part1;P:Part11;C:Char1", "P:Part1;P:Part11;C:Char1", StringComparison.CurrentCulture, true )]
-		[TestCase( "P:Part1;P:Part11;C:Char1", "P:Part1;P:Part11;P:Char1", StringComparison.CurrentCulture, false )]
-		[TestCase( "P:Part1;P:Part11;C:Char1", "P:Part1;P:Part21;C:Char1", StringComparison.CurrentCulture, false )]
-		[TestCase( "P:Part1;P:Part11;C:Char1", "P:part1;P:part11;C:char1", StringComparison.CurrentCulture, false )]
-		[TestCase( "P:Part1;P:Part11;C:Char1", "P:part1;P:part11;C:char1", StringComparison.CurrentCultureIgnoreCase, true )]
-		public void Should_Check_Paths_For_Equal(
+		public void Test_FindCommonParent_For_Null_Reference()
+		{
+			// arrange
+
+			// act
+			var commonParentPath = PathInformationExtension.FindCommonParent( (IEnumerable<PathInformationDto>)null );
+
+			// assert
+			Assert.That( commonParentPath, Is.EqualTo( PathInformationDto.Root ) );
+		}
+
+		[Test]
+		public void Test_FindCommonParent_For_Empty_Path()
+		{
+			// arrange
+
+			// act
+			var commonParentPath = PathInformationExtension.FindCommonParent( Enumerable.Empty<PathInformationDto>() );
+
+			// assert
+			Assert.That( commonParentPath, Is.EqualTo( PathInformationDto.Root ) );
+		}
+
+		[Test]
+		[TestCase( "PPP:/A/B/C/" )]
+		[TestCase( "PPC:/A/B/C/" )]
+		[TestCase( Root )]
+		public void Test_FindCommonParent_For_One_Path( string pathString )
+		{
+			// arrange
+			var path = PathHelper.RoundtripString2PathInformation( pathString );
+
+			// act
+			var commonParentPath = PathInformationExtension.FindCommonParent( new List<PathInformationDto> { path } );
+
+			// assert
+			Assert.That( commonParentPath, Is.EqualTo( path ) );
+		}
+
+		[Test]
+		[TestCase( "PPP:/A/B/C/", "PPP:/D/E/F/" )]
+		[TestCase( "PCC:/A/B/C/", "PCC:/D/E/F/" )]
+		public void Test_FindCommonParent_For_Two_Paths_Is_Root( string path1String, string path2String )
+		{
+			// arrange
+			var path1 = PathHelper.RoundtripString2PathInformation( path1String );
+			var path2 = PathHelper.RoundtripString2PathInformation( path2String );
+
+			// act
+			var commonParentPath = PathInformationExtension.FindCommonParent( new List<PathInformationDto> { path1, path2 } );
+
+			// assert
+			Assert.That( commonParentPath, Is.EqualTo( PathInformationDto.Root ) );
+		}
+
+		[Test]
+		[TestCase( "PPP:/A/B/C/", "PPP:/A/B/C/", "PPP:/A/B/C/" )]
+		[TestCase( "PCC:/A/B/C/", "PCC:/A/B/C/", "PCC:/A/B/C/" )]
+		[TestCase( "PPP:/A/B/C/", "PPP:/A/B/D/", "PP:/A/B/" )]
+		[TestCase( "PCC:/A/B/C/", "PCC:/A/B/D/", "PC:/A/B/" )]
+		[TestCase( "PPP:/A/B/C/", "PP:/A/B/", "PP:/A/B/" )]
+		[TestCase( "PCC:/A/B/C/", "PC:/A/B/", "PC:/A/B/" )]
+		public void Test_FindCommonParent_For_Two_Paths( string path1String, string path2String, string expectedPathString )
+		{
+			// arrange
+			var path1 = PathHelper.RoundtripString2PathInformation( path1String );
+			var path2 = PathHelper.RoundtripString2PathInformation( path2String );
+
+			// act
+			var commonParentPath = PathInformationExtension.FindCommonParent( new List<PathInformationDto> { path1, path2 } );
+
+			// assert
+			Assert.That( commonParentPath, Is.EqualTo( PathHelper.RoundtripString2PathInformation( expectedPathString ) ) );
+		}
+
+		[Test]
+		[TestCase( "PPP:/A/B/C/", "PPP:/D/E/F/", "PPP:/G/H/I/" )]
+		[TestCase( "PCC:/A/B/C/", "PCC:/D/E/F/", "PCC:/G/H/I/" )]
+		public void Test_FindCommonParent_For_More_Than_Two_Paths_Is_Root( string path1String, string path2String, string path3String )
+		{
+			// arrange
+			var path1 = PathHelper.RoundtripString2PathInformation( path1String );
+			var path2 = PathHelper.RoundtripString2PathInformation( path2String );
+			var path3 = PathHelper.RoundtripString2PathInformation( path3String );
+
+			// act
+			var commonParentPath = PathInformationExtension.FindCommonParent( new List<PathInformationDto> { path1, path2, path3 } );
+
+			// assert
+			Assert.That( commonParentPath, Is.EqualTo( PathInformationDto.Root ) );
+		}
+
+		[Test]
+		[TestCase( "PPP:/A/B/C/", "PPP:/A/B/C/", "PPP:/A/B/C/", "PPP:/A/B/C/" )]
+		[TestCase( "PCC:/A/B/C/", "PCC:/A/B/C/", "PCC:/A/B/C/", "PCC:/A/B/C/" )]
+		[TestCase( "PPP:/A/B/C/", "PPP:/A/B/D/", "PPP:/A/B/E/", "PP:/A/B/" )]
+		[TestCase( "PCC:/A/B/C/", "PCC:/A/B/D/", "PCC:/A/B/E/", "PC:/A/B/" )]
+		[TestCase( "PPP:/A/B/C/", "PP:/A/B/", "PPP:/A/B/D/", "PP:/A/B/" )]
+		[TestCase( "PCC:/A/B/C/", "PC:/A/B/", "PCC:/A/B/D/", "PC:/A/B/" )]
+		public void Test_FindCommonParent_For_More_Than_Two_Paths( string path1String, string path2String, string path3String, string expectedPathString )
+		{
+			// arrange
+			var path1 = PathHelper.RoundtripString2PathInformation( path1String );
+			var path2 = PathHelper.RoundtripString2PathInformation( path2String );
+			var path3 = PathHelper.RoundtripString2PathInformation( path3String );
+
+			// act
+			var commonParentPath = PathInformationExtension.FindCommonParent( new List<PathInformationDto> { path1, path2, path3 } );
+
+			// assert
+			Assert.That( commonParentPath, Is.EqualTo( PathHelper.RoundtripString2PathInformation( expectedPathString ) ) );
+		}
+
+		[Test]
+		public void Test_FindCommonParentPart_For_Null_Reference()
+		{
+			// arrange
+
+			// act
+			var commonParentPath = PathInformationExtension.FindCommonParentPart( (IEnumerable<PathInformationDto>)null );
+
+			// assert
+			Assert.That( commonParentPath, Is.EqualTo( PathInformationDto.Root ) );
+		}
+
+		[Test]
+		public void Test_FindCommonParentPart_For_Empty_Path()
+		{
+			// arrange
+
+			// act
+			var commonParentPath = PathInformationExtension.FindCommonParentPart( Enumerable.Empty<PathInformationDto>() );
+
+			// assert
+			Assert.That( commonParentPath, Is.EqualTo( PathInformationDto.Root ) );
+		}
+
+		[Test]
+		[TestCase( "PPP:/A/B/C/", "PPP:/A/B/C/" )]
+		[TestCase( "PPC:/A/B/C/", "PP:/A/B/" )]
+		[TestCase( Root, Root )]
+		public void Test_FindCommonParentPart_For_One_Path( string pathString, string expectedPathString )
+		{
+			// arrange
+			var path = PathHelper.RoundtripString2PathInformation( pathString );
+
+			// act
+			var commonParentPath = PathInformationExtension.FindCommonParentPart( new List<PathInformationDto> { path } );
+
+			// assert
+			Assert.That( commonParentPath, Is.EqualTo( PathHelper.RoundtripString2PathInformation( expectedPathString ) ) );
+		}
+
+		[Test]
+		[TestCase( "PPP:/A/B/C/", "PPP:/D/E/F/" )]
+		[TestCase( "PCC:/A/B/C/", "PCC:/D/E/F/" )]
+		[TestCase( "CCC:/A/B/C/", "CCC:/A/E/F/" )]
+		public void Test_FindCommonParentPart_For_Two_Paths_Is_Root( string path1String, string path2String )
+		{
+			// arrange
+			var path1 = PathHelper.RoundtripString2PathInformation( path1String );
+			var path2 = PathHelper.RoundtripString2PathInformation( path2String );
+
+			// act
+			var commonParentPath = PathInformationExtension.FindCommonParentPart( new List<PathInformationDto> { path1, path2 } );
+
+			// assert
+			Assert.That( commonParentPath, Is.EqualTo( PathInformationDto.Root ) );
+		}
+
+		[Test]
+		[TestCase( "PPP:/A/B/C/", "PPP:/A/B/C/", "PPP:/A/B/C/" )]
+		[TestCase( "PCC:/A/B/C/", "PCC:/A/B/C/", "P:/A/" )]
+		[TestCase( "PPP:/A/B/C/", "PPP:/A/B/D/", "PP:/A/B/" )]
+		[TestCase( "PCC:/A/B/C/", "PCC:/A/B/D/", "P:/A/" )]
+		[TestCase( "PPP:/A/B/C/", "PP:/A/B/", "PP:/A/B/" )]
+		[TestCase( "PCC:/A/B/C/", "PC:/A/B/", "P:/A/" )]
+		public void Test_FindCommonParentPart_For_Two_Paths( string path1String, string path2String, string expectedPathString )
+		{
+			// arrange
+			var path1 = PathHelper.RoundtripString2PathInformation( path1String );
+			var path2 = PathHelper.RoundtripString2PathInformation( path2String );
+
+			// act
+			var commonParentPath = PathInformationExtension.FindCommonParentPart( new List<PathInformationDto> { path1, path2 } );
+
+			// assert
+			Assert.That( commonParentPath, Is.EqualTo( PathHelper.RoundtripString2PathInformation( expectedPathString ) ) );
+		}
+
+		[Test]
+		[TestCase( "PPP:/A/B/C/", "PPP:/D/E/F/", "PPP:/G/H/I/" )]
+		[TestCase( "PCC:/A/B/C/", "PCC:/D/E/F/", "PCC:/G/H/I/" )]
+		[TestCase( "CCC:/A/B/C/", "CCC:/A/E/F/", "CCC:/A/H/I/" )]
+		public void Test_FindCommonParentPart_For_More_Than_Two_Paths_Is_Root( string path1String, string path2String, string path3String )
+		{
+			// arrange
+			var path1 = PathHelper.RoundtripString2PathInformation( path1String );
+			var path2 = PathHelper.RoundtripString2PathInformation( path2String );
+			var path3 = PathHelper.RoundtripString2PathInformation( path3String );
+
+			// act
+			var commonParentPath = PathInformationExtension.FindCommonParentPart( new List<PathInformationDto> { path1, path2, path3 } );
+
+			// assert
+			Assert.That( commonParentPath, Is.EqualTo( PathInformationDto.Root ) );
+		}
+
+		[Test]
+		[TestCase( "PPP:/A/B/C/", "PPP:/A/B/C/", "PPP:/A/B/C/", "PPP:/A/B/C/" )]
+		[TestCase( "PCC:/A/B/C/", "PCC:/A/B/C/", "PCC:/A/B/C/", "P:/A/" )]
+		[TestCase( "PPP:/A/B/C/", "PPP:/A/B/D/", "PPP:/A/B/E/", "PP:/A/B/" )]
+		[TestCase( "PCC:/A/B/C/", "PCC:/A/B/D/", "PCC:/A/B/E/", "P:/A/" )]
+		[TestCase( "PPP:/A/B/C/", "PP:/A/B/", "PPP:/A/B/D/", "PP:/A/B/" )]
+		[TestCase( "PCC:/A/B/C/", "PC:/A/B/", "PCC:/A/B/D/", "P:/A/" )]
+		public void Test_FindCommonParentPart_For_More_Than_Two_Paths( string path1String, string path2String, string path3String, string expectedPathString )
+		{
+			// arrange
+			var path1 = PathHelper.RoundtripString2PathInformation( path1String );
+			var path2 = PathHelper.RoundtripString2PathInformation( path2String );
+			var path3 = PathHelper.RoundtripString2PathInformation( path3String );
+
+			// act
+			var commonParentPath = PathInformationExtension.FindCommonParentPart( new List<PathInformationDto> { path1, path2, path3 } );
+
+			// assert
+			Assert.That( commonParentPath, Is.EqualTo( PathHelper.RoundtripString2PathInformation( expectedPathString ) ) );
+		}
+
+		[Test]
+		public void Test_FindParentParts_For_Null_Reference()
+		{
+			// arrange
+
+			// act
+			var result = PathInformationExtension.FindParentParts( (IEnumerable<PathInformationDto>)null );
+
+			// assert
+			Assert.That( result, Is.EqualTo( PathInformationDto.Root ) );
+		}
+
+		[Test]
+		public void Test_FindParentParts_For_Empty_Path()
+		{
+			// arrange
+
+			// act
+			var result = PathInformationExtension.FindParentParts( Enumerable.Empty<PathInformationDto>() );
+
+			// assert
+			Assert.That( result, Is.EqualTo( PathInformationDto.Root ) );
+		}
+
+		[Test]
+		[TestCase( "PPP:/A/B/C/", "PPP:/A/B/C/" )]
+		[TestCase( "PPC:/A/B/C/", "PP:/A/B/" )]
+		[TestCase( "CCC:/A/B/C/", Root )]
+		[TestCase( Root, Root )]
+		public void Test_FindParentParts_For_One_Path( string pathString, string expectedPathString )
+		{
+			// arrange
+			var path = PathHelper.RoundtripString2PathInformation( pathString );
+
+			// act
+			var result = PathInformationExtension.FindParentParts( new List<PathInformationDto> { path } );
+
+			// assert
+			Assert.That( result, Has.Length.EqualTo( 1 ) );
+			Assert.That( result, Has.ItemAt( 0 ).EqualTo( PathHelper.RoundtripString2PathInformation( expectedPathString ) ) );
+		}
+
+		[Test]
+		public void Test_FindParentParts_For_Multiple_Paths()
+		{
+			// arrange
+			var paths = new[]
+			{
+				PathHelper.RoundtripString2PathInformation( Root ),
+				PathHelper.RoundtripString2PathInformation( "P:/P1/" ),
+				PathHelper.RoundtripString2PathInformation( "PP:/P1/P2/" ),
+				PathHelper.RoundtripString2PathInformation( "PPC:/P1/P2/C1/" ),
+				PathHelper.RoundtripString2PathInformation( "PPCC:/P1/P2/C1/C2/" ),
+				PathHelper.RoundtripString2PathInformation( "CC:/C1/C2/" )
+			};
+
+			var expectedPaths = new[]
+			{
+				PathHelper.RoundtripString2PathInformation( Root ),
+				PathHelper.RoundtripString2PathInformation( "P:/P1/" ),
+				PathHelper.RoundtripString2PathInformation( "PP:/P1/P2/" )
+			};
+
+			// act
+			var result = PathInformationExtension.FindParentParts( paths );
+
+			// assert
+			Assert.That( result, Is.EquivalentTo( expectedPaths ) );
+		}
+
+		[Test]
+		[TestCase( StringComparison.CurrentCulture )]
+		[TestCase( StringComparison.CurrentCultureIgnoreCase )]
+		public void Test_Compare_Paths_By_ReferenceEquality( StringComparison comparison )
+		{
+			// arrange
+			var path = PathHelper.RoundtripString2PathInformation( "P:/P1/" );
+
+			// act
+			var result = path.Equals( path, comparison );
+
+			// assert
+			Assert.That( result, Is.True );
+		}
+
+		[Test]
+		[TestCase( Root, Root, StringComparison.CurrentCulture, true )]
+		[TestCase( "PPC:/P1/P2/C1/", "PP:/P1/P2/", StringComparison.CurrentCulture, false )]
+		[TestCase( "PPC:/P1/P2/C1/", "PPC:/P1/P2/C1/", StringComparison.CurrentCulture, true )]
+		[TestCase( "PPC:/P1/P2/C1/", "PPP:/P1/P2/C1/", StringComparison.CurrentCulture, false )]
+		[TestCase( "PPC:/P1/P2/C1/", "PPC:/P1/P3/C1/", StringComparison.CurrentCulture, false )]
+		[TestCase( "PPC:/P1/P2/C1/", "PPC:/p1/P2/C1/", StringComparison.CurrentCulture, false )]
+		[TestCase( "PPC:/P1/P2/C1/", "PPC:/p1/P2/C1/", StringComparison.CurrentCultureIgnoreCase, true )]
+		public void Test_Compare_Paths(
 			string path1String,
 			string path2String,
 			StringComparison comparison,
 			bool expected )
 		{
-			//***** arrange *****
-			var path1 = CreatePath( path1String );
-			var path2 = CreatePath( path2String );
+			// arrange
+			var path1 = PathHelper.RoundtripString2PathInformation( path1String );
+			var path2 = PathHelper.RoundtripString2PathInformation( path2String );
 
-			//***** act *****
+			// act
 			var result = path1.Equals( path2, comparison );
 
-			//***** assert *****
+			// assert
 			Assert.That( result, Is.EqualTo( expected ) );
 		}
 
-		private static PathInformationDto CreatePath( string pathString )
-		{
-			if( string.IsNullOrEmpty( pathString ) )
-				return null;
-
-			if( pathString[0] == Root[0] )
-				return PathInformationDto.Root;
-
-			var pathSegments = pathString.Split( Delimiter );
-			var pathElements = new List<PathElementDto>( pathSegments.Length );
-			var isParentChar = false;
-			foreach( var pathSegment in pathSegments )
-			{
-				var pathElement = CreatePathElement( pathSegment );
-				if( isParentChar && pathElement.Type == InspectionPlanEntityDto.Part )
-					throw new ArgumentException( "Cannot add part as child of characteristic." );
-
-				isParentChar = pathElement.Type == InspectionPlanEntityDto.Characteristic;
-				pathElements.Add( pathElement );
-			}
-
-			return new PathInformationDto( pathElements );
-		}
-
-		private static PathElementDto CreatePathElement( [NotNull] string pathSegment )
-		{
-			if( pathSegment.IndexOf( ':' ) != 1 )
-				throw new ArgumentException( $"Invalid format of path segment \"{pathSegment}\"." );
-
-			switch( pathSegment[ 0 ] )
-			{
-				case 'P':
-				case 'p':
-					return PathElementDto.Part( pathSegment.Substring( 2 ) );
-
-				case 'C':
-				case 'c':
-					return PathElementDto.Char( pathSegment.Substring( 2 ) );
-
-				default:
-					throw new ArgumentException( $"Invalid format of path segment \"{pathSegment}\"." );
-			}
-		}
-
 		[Test]
-		public void Should_Get_Parts_Of_Paths()
+		public void Test_GetParts_Of_Paths()
 		{
-			//***** arrange *****
-			var path1 = CreatePath( "P:Part1;P:Part2" );
-			var path2 = CreatePath( "P:Part3;P:Part4;C:Char1" );
-			var path3 = CreatePath( "P:Part1;P:Part2" );
-			var path4 = CreatePath( "P:Part1;C:Char2" );
-			var path5 = CreatePath( "P:Part1;P:Part2;P:Part3" );
+			// arrange
+			var path1 = PathHelper.RoundtripString2PathInformation( "PP:/Part1/Part2/" );
+			var path2 = PathHelper.RoundtripString2PathInformation( "PPC:/Part3/Part4/Char1/" );
+			var path3 = PathHelper.RoundtripString2PathInformation( "PP:/Part1/Part2/" );
+			var path4 = PathHelper.RoundtripString2PathInformation( "PC:/Part1/Char2/" );
+			var path5 = PathHelper.RoundtripString2PathInformation( "PPP:/Part1/Part2/Part3/" );
 			var paths = new[] { path1, path2, path3, path4, path5 };
 
-			//***** act *****
+			// act
 			var parts = paths.GetParts();
 
-			//***** assert *****
+			// assert
 			Assert.That( parts, Has.Length.EqualTo( 3 ) );
 			Assert.That( parts, Is.EquivalentTo( new[] { path1, path3, path5 } ) );
 		}
 
 		[Test]
-		public void Should_Get_Characteristics_Of_Paths()
+		public void Test_GetCharacteristics_Of_Paths()
 		{
-			//***** arrange *****
-			var path1 = CreatePath( "P:Part1;P:Part2" );
-			var path2 = CreatePath( "P:Part3;P:Part4;C:Char1" );
-			var path3 = CreatePath( "P:Part1;P:Part2" );
-			var path4 = CreatePath( "P:Part1;C:Char2" );
-			var path5 = CreatePath( "P:Part1;P:Part2;P:Part3" );
+			// arrange
+			var path1 = PathHelper.RoundtripString2PathInformation( "PP:/Part1/Part2/" );
+			var path2 = PathHelper.RoundtripString2PathInformation( "PPC:/Part3/Part4/Char1/" );
+			var path3 = PathHelper.RoundtripString2PathInformation( "PP:/Part1/Part2/" );
+			var path4 = PathHelper.RoundtripString2PathInformation( "PC:/Part1/Char2/" );
+			var path5 = PathHelper.RoundtripString2PathInformation( "PPP:/Part1/Part2/Part3/" );
 			var paths = new[] { path1, path2, path3, path4, path5 };
 
-			//***** act *****
+			// act
 			var characteristics = paths.GetCharacteristics();
 
-			//***** assert *****
+			// assert
 			Assert.That( characteristics, Has.Length.EqualTo( 2 ) );
 			Assert.That( characteristics, Is.EquivalentTo( new[] { path2, path4 } ) );
 		}
 
 		[Test]
-		[TestCase( "P:Part1", "P:Part1" )]
-		[TestCase( "P:PartX", "P:PartX;P:Part2;C:Char1", "P:PartX;P:Part3;C:Char1" )]
-		[TestCase( "P:PartY;C:CharY", "P:PartY;C:CharY;C:Char1", "P:PartY;C:CharY;C:Char2;C:Char3", "P:PartY;C:CharY;C:Char2;C:Char4" )]
-		public void Should_Find_Common_Parent_Path( string expectedString, params string[] pathStrings )
+		[TestCase( null, "P:/Part1/", Root )]
+		[TestCase( Root, "P:/Part1/", Root )]
+		[TestCase( "P:/Part1/", null, "P:/Part1/" )]
+		[TestCase( "P:/Part1/", Root, "P:/Part1/" )]
+		[TestCase( "P:/Part1/", "P:/Part1/", Root )]
+		[TestCase( "P:/Part1/", "P:/Part2/", "P:/Part1/" )]
+		[TestCase( "PP:/Part1/Part2/", "P:/Part1/", "P:/Part2/" )]
+		[TestCase( "PPC:/Part1/Part2/Char1/", "P:/Part1/", "PC:/Part2/Char1/" )]
+		[TestCase( "PPC:/Part1/Part2/Char1/", "PP:/Part1/Part3/", "PC:/Part2/Char1/" )]
+		public void Test_Provide_Relative_Path( string pathString, string basePathString, string expectedPathString )
 		{
-			//***** arrange *****
-			var expected = CreatePath( expectedString );
-			var paths = pathStrings.Select( CreatePath ).ToArray();
-
-			//***** act *****
-			var parentPath = PathInformationExtension.FindCommonParent( paths );
-
-			//***** assert *****
-			Assert.That( parentPath, Is.EqualTo( expected ) );
-		}
-
-		[Test]
-		[TestCase( "P:Part1", "P:Part2" )]
-		[TestCase( "P:PartX", "P:PartY;C:Char1", "P:PartY;P:Part3;C:Char1" )]
-		public void Should_Find_Common_Parent_Path_Return_Root( params string[] pathStrings )
-		{
-			//***** arrange *****
-			var paths = pathStrings.Select( CreatePath ).ToArray();
-
-			//***** act *****
-			var parentPath = PathInformationExtension.FindCommonParent( paths );
-
-			//***** assert *****
-			Assert.That( parentPath, Is.EqualTo( PathInformationDto.Root ) );
-		}
-
-		[Test]
-		[TestCase( "P:Part1", "P:Part1" )]
-		[TestCase( "P:PartX", "P:PartX;P:Part2;C:Char1", "P:PartX;P:Part3;C:Char1" )]
-		[TestCase( "P:PartY", "P:PartY;C:CharY;C:Char1", "P:PartY;C:CharY;C:Char2;C:Char3", "P:PartY;C:CharY;C:Char2;C:Char4" )]
-		public void Should_Find_Common_Parent_Part_Path( string expectedString, params string[] pathStrings )
-		{
-			//***** arrange *****
-			var expected = CreatePath( expectedString );
-			var paths = pathStrings.Select( CreatePath ).ToArray();
-
-			//***** act *****
-			var parentPath = PathInformationExtension.FindCommonParentPart( paths );
-
-			//***** assert *****
-			Assert.That( parentPath, Is.EqualTo( expected ) );
-		}
-
-		[Test]
-		[TestCase( "P:Part1", "P:Part2" )]
-		[TestCase( "P:PartX", "P:PartY;C:Char1", "P:PartY;P:Part3;C:Char1" )]
-		[TestCase( "C:CharX;C:Char1", "C:CharX;C:Char2" )]
-		public void Should_Find_Common_Parent_Part_Path_Return_Root( params string[] pathStrings )
-		{
-			//***** arrange *****
-			var paths = pathStrings.Select( CreatePath ).ToArray();
-
-			//***** act *****
-			var parentPath = PathInformationExtension.FindCommonParentPart( paths );
-
-			//***** assert *****
-			Assert.That( parentPath, Is.EqualTo( PathInformationDto.Root ) );
-		}
-
-		[Test]
-		[TestCase( Root, Root )]
-		[TestCase( "P:Part1", "P:Part1" )]
-		[TestCase( "P:Part1;P:Part2", "P:Part1;P:Part2" )]
-		[TestCase( "P:Part1;P:Part2;C:Char1", "P:Part1;P:Part2" )]
-		[TestCase( "P:Part1;P:Part2;C:Char1;C:Char2", "P:Part1;P:Part2" )]
-		[TestCase( "C:Char1;C:Char2", Root )]
-		public void Should_Find_Parent_Part_For_Single_Path( string pathString, string expectedPathString )
-		{
-			//***** arrange *****
-
-			var paths = new[] { CreatePath( pathString ) };
-			var expectedPath = CreatePath( expectedPathString );
-
-			//***** act *****
-			var result = PathInformationExtension.FindParentParts( paths );
-
-			//***** assert *****
-			Assert.That( result, Has.Length.EqualTo( 1 ) );
-			Assert.That( result, Has.ItemAt( 0 ).EqualTo( expectedPath ) );
-		}
-
-		[Test]
-		public void Should_Find_Parent_Parts_For_Multiple_Paths()
-		{
-			//***** arrange *****
-			var paths = new[]
-			{
-				CreatePath( Root ),
-				CreatePath( "P:Part1" ),
-				CreatePath( "P:Part1;P:Part2" ),
-				CreatePath( "P:Part1;P:Part2;C:Char1" ),
-				CreatePath( "P:Part1;P:Part2;C:Char1;C:Char2" ),
-				CreatePath( "C:Char1;C:Char2" )
-			};
-
-			var expectedPaths = new[]
-			{
-				CreatePath( Root ),
-				CreatePath( "P:Part1" ),
-				CreatePath( "P:Part1;P:Part2" )
-			};
-
-			//***** act *****
-			var result = PathInformationExtension.FindParentParts( paths );
-
-			//***** assert *****
-			Assert.That( result, Is.EquivalentTo( expectedPaths ) );
-		}
-
-		[Test]
-		[TestCase( null, "P:Part1", Root )]
-		[TestCase( Root, "P:Part1", Root )]
-		[TestCase( "P:Part1", null, "P:Part1" )]
-		[TestCase( "P:Part1", Root, "P:Part1" )]
-		[TestCase( "P:Part1", "P:Part1", Root )]
-		[TestCase( "P:Part1", "P:Part2", "P:Part1" )]
-		[TestCase( "P:Part1;P:Part2", "P:Part1", "P:Part2" )]
-		[TestCase( "P:Part1;P:Part2;C:Char1", "P:Part1", "P:Part2;C:Char1" )]
-		[TestCase( "P:Part1;P:Part2;C:Char1", "P:Part1;P:Part3", "P:Part2;C:Char1" )]
-		public void Should_Provide_Relative_Path( string pathString, string basePathString, string expectedPathString )
-		{
-			//***** arrange *****
+			// arrange
 			var path = CreatePath( pathString );
 			var basePath = CreatePath( basePathString );
 			var expectedPath = CreatePath( expectedPathString );
 
-			//***** act *****
+			// act
 			var result = path.RelativeTo( basePath );
 
-			//***** assert *****
+			// assert
 			Assert.That( result, Is.EqualTo( expectedPath ) );
+		}
+
+		private static PathInformationDto CreatePath( string pathString )
+		{
+			if( pathString is null )
+				return null;
+			return PathHelper.RoundtripString2PathInformation( pathString );
 		}
 
 		#endregion
