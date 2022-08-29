@@ -13,10 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	#region usings
 
 	using System;
-	using System.Collections.Generic;
-	using System.Globalization;
 	using System.Linq;
-	using System.Xml;
 
 	#endregion
 
