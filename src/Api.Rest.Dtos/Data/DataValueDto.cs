@@ -12,6 +12,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
 	#region usings
 
+	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Text.Json.Serialization;
@@ -24,23 +25,21 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// <summary>
 	/// This class represents a single measurement value that belongs to one characteristic and one measurement.
 	/// </summary>
-	public class DataValueDto : IAttributeItemDto
+	[JsonConverter( typeof( JsonDataValueConverter ) )]
+	[Newtonsoft.Json.JsonConverter( typeof( DataValueConverter ) )]
+
+	public struct DataValueDto : IAttributeItemDto
 	{
 		#region constructors
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DataValueDto"/> class.
 		/// </summary>
-		public DataValueDto()
-		{ }
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DataValueDto"/> class.
-		/// </summary>
 		public DataValueDto( double? measuredValue )
 		{
-			if( measuredValue.HasValue )
-				Attributes = new[] { new AttributeDto( WellKnownKeys.Value.MeasuredValue, measuredValue.Value ) };
+			Attributes = measuredValue.HasValue
+				? new[] { new AttributeDto( WellKnownKeys.Value.MeasuredValue, measuredValue.Value ) }
+				: Array.Empty<AttributeDto>();
 		}
 
 		/// <summary>

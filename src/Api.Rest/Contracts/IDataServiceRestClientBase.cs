@@ -360,7 +360,6 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// Fetches a list of measurements and measurement values for the <paramref name="partPath"/>. The search operation
 		/// can be parameterized using the specified <paramref name="filter"/>. If the filter is empty, all measurements for
 		/// the specified part will be fetched.
-		/// <remarks>The <see cref="DataCharacteristicDto"/> objects within the returned measurements does not include the characteristics' paths due to perform issues.</remarks>
 		/// </summary>
 		/// <param name="partPath">The part path to fetch the measurements and values for.</param>
 		/// <param name="filter">A filter that can be used to further restrict the search operation.</param>

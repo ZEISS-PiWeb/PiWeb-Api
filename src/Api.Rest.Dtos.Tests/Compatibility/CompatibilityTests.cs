@@ -157,11 +157,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 					new AttributeDto( Measurement.BatchNumber, "5" ),
 					new AttributeDto( Measurement.InspectorName, 2 ),
 				},
-				Characteristics = new[]
+				Characteristics = new Dictionary<Guid, DataValueDto>
 				{
-					new DataCharacteristicDto { Uuid = new Guid( "b71a5bd7-5406-46a3-a5b7-458ba1c0248d" ), Value = new DataValueDto( 0.15108030390438515 ) },
-					new DataCharacteristicDto { Uuid = new Guid( "8c72afa6-fc67-4fbd-8606-e3727d79c8ff" ), Value = new DataValueDto( -0.06273457511599848 ) },
-					new DataCharacteristicDto { Uuid = new Guid( "a5d13d7f-4029-4fb5-a7b5-3f40718df85a" ), Value = new DataValueDto( 0.03185869918795966 ) }
+					{ new Guid( "b71a5bd7-5406-46a3-a5b7-458ba1c0248d" ), new DataValueDto( 0.15108030390438515 ) },
+					{ new Guid( "8c72afa6-fc67-4fbd-8606-e3727d79c8ff" ), new DataValueDto( -0.06273457511599848 ) },
+					{ new Guid( "a5d13d7f-4029-4fb5-a7b5-3f40718df85a" ), new DataValueDto( 0.03185869918795966 ) }
 				}
 			},
 
@@ -341,9 +341,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 																	EquatableFromMany( value.CatalogAttributes ),
 																	value.VersioningType ) ),
 
-			EquatableFrom<DataCharacteristicDto>( value => Tuple.Create( value.Uuid, value.Value.MeasuredValue ) ),
+			EquatableFrom<KeyValuePair<Guid, DataValueDto>>( value => Tuple.Create( value.Key, EquatableFromMany( value.Value.Attributes ) ) ),
 
-			EquatableFrom<DataValueDto>( value => EquatableFromMany(value.Attributes) ),
+			EquatableFrom<DataValueDto>( value => EquatableFromMany( value.Attributes ) ),
 
 			EquatableFrom<SimpleMeasurementStatusDto>( value => Tuple.Create( value.Id, value.Count, value.Uuid?.ToArray() ) ),
 

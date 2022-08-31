@@ -1,4 +1,4 @@
-﻿namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Benchmarks
+namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Benchmarks
 {
 	#region usings
 

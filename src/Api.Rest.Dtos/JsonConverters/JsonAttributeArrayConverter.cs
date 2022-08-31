@@ -33,6 +33,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 			if( reader.TokenType != JsonTokenType.StartObject )
 				return Array.Empty<AttributeDto>();
 
+			return ReadAttributes( ref reader );
+		}
+
+		internal static IReadOnlyList<AttributeDto> ReadAttributes( ref Utf8JsonReader reader )
+		{
 			var result = new List<AttributeDto>();
 
 			while( reader.Read() && reader.TokenType == JsonTokenType.PropertyName )
@@ -49,10 +54,15 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 		{
 			writer.WriteStartObject();
 
-			foreach( var attribute in value )
-				JsonAttributeConverter.WriteAsProperty( writer, attribute, options );
+			WriteAttributes( writer, value, options );
 
 			writer.WriteEndObject();
+		}
+
+		internal static void WriteAttributes( Utf8JsonWriter writer, IEnumerable<AttributeDto> value, JsonSerializerOptions options )
+		{
+			foreach( var attribute in value )
+				JsonAttributeConverter.WriteAsProperty( writer, attribute, options );
 		}
 
 		#endregion

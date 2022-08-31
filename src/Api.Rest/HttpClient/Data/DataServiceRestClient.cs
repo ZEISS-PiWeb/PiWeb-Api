@@ -153,17 +153,22 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			return result;
 		}
 
-		private static IReadOnlyCollection<DataCharacteristicDto> Combine( IReadOnlyCollection<DataCharacteristicDto> list1, IReadOnlyCollection<DataCharacteristicDto> list2 )
+		private static IReadOnlyDictionary<Guid, DataValueDto> Combine( IReadOnlyDictionary<Guid, DataValueDto> list1, IReadOnlyDictionary<Guid, DataValueDto> list2 )
 		{
 			if( list1 == null )
 				return list2;
 			if( list2 == null )
 				return list1;
 
-			var result = new List<DataCharacteristicDto>( list1.Count + list2.Count );
-
-			result.AddRange( list1 );
-			result.AddRange( list2 );
+			var result = new Dictionary<Guid, DataValueDto>( list1.Count + list2.Count );
+			foreach( var item in list1 )
+			{
+				result.Add( item.Key, item.Value );
+			}
+			foreach( var item in list2 )
+			{
+				result.Add( item.Key, item.Value );
+			}
 
 			return result;
 		}
