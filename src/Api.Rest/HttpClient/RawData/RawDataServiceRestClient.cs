@@ -298,7 +298,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 
 			var requestPath = $"rawData/{targetEntity.Entity}/{targetEntity.Uuid}/{targetKey}/archiveEntries";
 
-			return ( await _RestClient.Request<RawDataArchiveEntriesDto[]>( RequestBuilder.CreateGet( requestPath ), cancellationToken ) ).First();
+			return ( await _RestClient.Request<RawDataArchiveEntriesDto[]>( RequestBuilder.CreateGet( requestPath ), cancellationToken ).ConfigureAwait( false ) ).First();
 		}
 
 		/// <inheritdoc />
@@ -320,7 +320,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 				? $"rawData/{targetEntity.Entity}/{targetEntity.Uuid}/{targetKey}/archiveContent/{fileName}?expectedArchiveMd5={expectedArchiveMd5}"
 				: $"rawData/{targetEntity.Entity}/{targetEntity.Uuid}/{targetKey}/archiveContent/{fileName}";
 
-			return await _RestClient.RequestBytes( RequestBuilder.CreateGet( requestPath ), cancellationToken );
+			return await _RestClient.RequestBytes( RequestBuilder.CreateGet( requestPath ), cancellationToken ).ConfigureAwait( false );
 		}
 
 		/// <inheritdoc />
@@ -340,7 +340,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 			return await _RestClient.Request<RawDataArchiveEntriesDto[]>( RequestBuilder.CreatePost(
 					"rawData/archiveEntryQuery",
 					Payload.Create( query ) ),
-				cancellationToken );
+				cancellationToken ).ConfigureAwait( false );
 		}
 
 		/// <inheritdoc />
@@ -356,7 +356,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 			}
 			var query = new RawDataBulkQueryDto( selectors.ToArray() );
 
-			return await RawDataArchiveEntryQuery( query, cancellationToken );
+			return await RawDataArchiveEntryQuery( query, cancellationToken ).ConfigureAwait( false );
 		}
 
 		/// <inheritdoc />
@@ -376,7 +376,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 			using var stream = await _RestClient.RequestStream( RequestBuilder.CreatePost(
 					"rawData/archiveContentQuery",
 					Payload.Create( query ) ),
-				cancellationToken );
+				cancellationToken ).ConfigureAwait( false );
 
 			return RestClientHelper.DeserializeBinaryObject<RawDataArchiveContentDto[]>( stream );
 		}
