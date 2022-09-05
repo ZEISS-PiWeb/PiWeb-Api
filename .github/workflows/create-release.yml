@@ -1,0 +1,79 @@
+﻿# Create a stable API NuGet release. This workflow is manually triggered.
+
+name: Create release
+
+# Run on manual trigger only
+on:
+  workflow_dispatch:
+
+jobs:
+  compute-version:
+    uses: ./.github/workflows/gitversion.yml
+    with:
+      prerelease: "false"
+
+  release-flow:
+    needs: compute-version
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - name: Output nuget version to variable
+        run: |
+          echo "NUGET_VERSION=${{ needs.compute-version.outputs.package_version }}" >> $GITHUB_ENV
+
+      - name: Setup git config
+        run: |
+          # setup the username and email. We use the 'GitHub Actions Bot'
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          
+      - name: Start release branch
+        run: |
+          git checkout develop
+          git checkout -b release/${{ env.NUGET_VERSION }}
+          
+      - name: Commit and merge changes
+        run: |
+          echo Change version number, commit and push
+          sed -i 's#<PackageVersion>[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]#<PackageVersion>${{ env.NUGET_VERSION }}#g' ./src/Api.Definitions/Api.Definitions.csproj
+          sed -i 's#<AssemblyVersion>[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]#<AssemblyVersion>${{ env.NUGET_VERSION }}#g' ./src/Api.Definitions/Api.Definitions.csproj
+          sed -i 's#<AssemblyVersion>[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]#<PackageVersion>${{ env.NUGET_VERSION }}#g' ./src/Api.Rest.Dtos/Api.Rest.Dtos.csproj
+          sed -i 's#<AssemblyVersion>[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]#<AssemblyVersion>${{ env.NUGET_VERSION }}#g' ./src/Api.Rest.Dtos/Api.Rest.Dtos.csproj
+          sed -i 's#<AssemblyVersion>[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]#<PackageVersion>${{ env.NUGET_VERSION }}#g' ./src/Api.Rest/Api.Rest.csproj
+          sed -i 's#<AssemblyVersion>[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]#<AssemblyVersion>${{ env.NUGET_VERSION }}#g' ./src/Api.Rest/Api.Rest.csproj
+          git add ./src/Api.Definitions/Api.Definitions.csproj
+          git add ./src/Api.Rest.Dtos/Api.Rest.Dtos.csproj
+          git add ./src/Api.Rest/Api.Rest.csproj
+          git commit -m "Raises version number to ${{ env.NUGET_VERSION }}"
+          echo Checkout master
+          git checkout master
+          echo Merge release into master
+          git merge --no-ff release/${{ env.NUGET_VERSION }}
+          echo Tag release commit
+          git tag v${{ env.NUGET_VERSION }}
+          echo Checkout develop
+          git checkout develop
+          echo Merge back master into develop
+          git merge --no-ff master
+          
+      - name: Push all branches
+        run: |
+          git checkout master
+          git push origin master --tags
+          git checkout develop
+          git push origin develop
+          git checkout release/${{ env.NUGET_VERSION }}
+          git push origin release/${{ env.NUGET_VERSION }}
+          
+  build-and-publish:
+    needs: release-flow
+    uses: ./.github/workflows/build-and-pack.yml
+    with:
+      configuration: "Release"
+      prerelease: "false"
+      publish_target: "nuget.org"
+    secrets: inherit

@@ -1,0 +1,70 @@
+﻿# Build, test and pack the source code as a nuget.
+
+name: Build, test & pack
+
+on:
+  workflow_call:
+    inputs:
+      configuration:
+        description: 'Define whether this is a debug or a release build.'
+        required: true
+        type: string
+      prerelease:
+        description: 'Define if this is a prerelease.'
+        required: true
+        type: string
+      publish_target:
+        description: 'Define the publish target (GitHub/nuget.org).'
+        required: true
+        type: string
+
+defaults:
+  run:
+    working-directory: src
+
+jobs:
+  compute-version:
+    uses: ./.github/workflows/gitversion.yml
+    with:
+      prerelease: ${{ inputs.prerelease }}
+
+
+  build-and-pack:
+
+    needs: compute-version
+    # TODO. Currently some test fails on Ubuntu
+    runs-on: windows-latest
+    
+    steps:      
+    - uses: actions/checkout@v3
+           
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 5.0.x #TODO Currently net6.0 breaks AppVeyor build
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --no-restore -c ${{ inputs.configuration }}
+      
+    - name: Test
+      run: dotnet test --no-build --verbosity normal -c ${{ inputs.configuration }}
+      
+    - name: Pack
+      run: dotnet pack --no-restore --no-build -o package_output -c ${{ inputs.configuration }} -p:PackageVersion=${{ needs.compute-version.outputs.package_version }} #lets test azure feed
+      
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: packages
+        path: src/package_output/*.nupkg
+        
+  publish:
+    needs: build-and-pack
+    if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+    uses: ./.github/workflows/publish.yml
+    with:
+      target: ${{ inputs.publish_target }}
+    secrets: inherit

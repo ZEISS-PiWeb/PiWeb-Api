@@ -1,0 +1,18 @@
+﻿# Workflow to build and publish the develop branch
+
+name: Build on develop
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  develop:
+    uses: ./.github/workflows/build-and-pack.yml
+    with:
+      configuration: "Debug"
+      prerelease: "true"
+      publish_target: "GitHub"
+    secrets: inherit
