@@ -13,6 +13,10 @@ on:
         description: 'Define if this is a prerelease.'
         required: true
         type: string
+      suffix:
+        description: 'Define the prerelease suffix, e.g. alpha.'
+        required: true
+        type: string
       publish_target:
         description: 'Define the publish target (GitHub/nuget.org).'
         required: true
@@ -27,6 +31,7 @@ jobs:
     uses: ./.github/workflows/gitversion.yml
     with:
       prerelease: ${{ inputs.prerelease }}
+      suffix: ${{ inputs.suffix }}
 
 
   build-and-pack:

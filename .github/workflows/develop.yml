@@ -14,5 +14,6 @@ jobs:
     with:
       configuration: "Debug"
       prerelease: "true"
-      publish_target: "GitHub"
+      suffix: "beta"
+      publish_target: "nuget.org"
     secrets: inherit

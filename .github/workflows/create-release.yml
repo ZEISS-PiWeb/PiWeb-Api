@@ -75,5 +75,6 @@ jobs:
     with:
       configuration: "Release"
       prerelease: "false"
+      suffix: "stable"
       publish_target: "nuget.org"
     secrets: inherit

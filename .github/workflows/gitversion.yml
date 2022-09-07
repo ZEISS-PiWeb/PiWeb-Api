@@ -9,6 +9,10 @@ on:
         description: 'Define if this is a prerelease.'
         required: true
         type: string
+      suffix:
+        description: 'Define the prerelease suffix, e.g. alpha.'
+        required: true
+        type: string
     outputs:
       package_version:
         description: "Computed version for the package (SemVer)"
@@ -40,7 +44,7 @@ jobs:
     - name: Append prerelease suffix
       if: inputs.prerelease == 'true'
       run: |
-        echo "::set-output name=prerelease_suffix::-alpha$(printf %4s ${{ steps.gitversion.outputs.increment }} | tr ' ' 0).${{ github.run_number }}-${{ github.run_attempt }}"
+        echo "::set-output name=prerelease_suffix::-${{ inputs.suffix }}$(printf %4s ${{ steps.gitversion.outputs.increment }} | tr ' ' 0).${{ github.run_number }}-${{ github.run_attempt }}"
       id: prerelease_version
       
     - name: Output version
