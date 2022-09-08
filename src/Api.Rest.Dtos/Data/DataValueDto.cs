@@ -14,8 +14,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 	using System;
 	using System.Collections.Generic;
-	using System.Globalization;
 	using System.Text.Json.Serialization;
+	using JetBrains.Annotations;
+	using Newtonsoft.Json;
 	using Zeiss.PiWeb.Api.Definitions;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
@@ -25,11 +26,16 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// <summary>
 	/// This class represents a single measurement value that belongs to one characteristic and one measurement.
 	/// </summary>
-	[JsonConverter( typeof( JsonDataValueConverter ) )]
+	[System.Text.Json.Serialization.JsonConverter( typeof( JsonDataValueConverter ) )]
 	[Newtonsoft.Json.JsonConverter( typeof( DataValueConverter ) )]
-
-	public struct DataValueDto : IAttributeItemDto
+	public struct DataValueDto : IAttributeItemDto, IEquatable<DataValueDto>
 	{
+		#region members
+
+		private IReadOnlyList<AttributeDto> _Attributes;
+
+		#endregion
+
 		#region constructors
 
 		/// <summary>
@@ -37,7 +43,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		public DataValueDto( double? measuredValue )
 		{
-			Attributes = measuredValue.HasValue
+			_Attributes = measuredValue.HasValue
 				? new[] { new AttributeDto( WellKnownKeys.Value.MeasuredValue, measuredValue.Value ) }
 				: Array.Empty<AttributeDto>();
 		}
@@ -45,9 +51,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DataValueDto"/> class.
 		/// </summary>
-		public DataValueDto( IReadOnlyList<AttributeDto> attributes )
+		public DataValueDto( [NotNull] IReadOnlyList<AttributeDto> attributes )
 		{
-			Attributes = attributes;
+			_Attributes = attributes ?? throw new ArgumentNullException( nameof( attributes ) );
 		}
 
 		#endregion
@@ -58,32 +64,66 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Convinience property for accessing the measurement value (K1).
 		/// </summary>
 		[Newtonsoft.Json.JsonIgnore]
-		[JsonIgnore]
-		public double? MeasuredValue
-		{
-			get
-			{
-				var attribute = this.GetAttribute( WellKnownKeys.Value.MeasuredValue );
-				if( attribute == null )
-					return null;
-
-				if( attribute.Value.RawValue != null )
-					return (double)attribute.Value.RawValue;
-				if( !string.IsNullOrEmpty( attribute.Value.Value ) )
-					return double.Parse( attribute.Value.Value, CultureInfo.InvariantCulture );
-
-				return null;
-			}
-		}
+		[System.Text.Json.Serialization.JsonIgnore]
+		public double? MeasuredValue => this.GetDoubleAttributeValue( WellKnownKeys.Value.MeasuredValue );
 
 		#endregion
 
 		#region interface IAttributeItemDto
 
 		/// <inheritdoc />
-		[Newtonsoft.Json.JsonProperty( "attributes" ), Newtonsoft.Json.JsonConverter( typeof( AttributeArrayConverter ) )]
-		[JsonPropertyName( "attributes" ), JsonConverter( typeof( JsonAttributeArrayConverter ) )]
-		public IReadOnlyList<AttributeDto> Attributes { get; set; }
+		[JsonProperty( "attributes" ), Newtonsoft.Json.JsonConverter( typeof( AttributeArrayConverter ) )]
+		[JsonPropertyName( "attributes" ), System.Text.Json.Serialization.JsonConverter( typeof( JsonAttributeArrayConverter ) )]
+		public IReadOnlyList<AttributeDto> Attributes
+		{
+			get => _Attributes ?? Array.Empty<AttributeDto>();
+			set => _Attributes = value;
+		}
+
+		#endregion
+
+		#region methods
+
+		/// <inheritdoc />
+		public bool Equals( DataValueDto other )
+		{
+			if( Attributes.Count != other.Attributes.Count )
+				return false;
+
+			if( Attributes.Count == 0 )
+				return true;
+
+			if( Attributes.Count == 1 )
+				return Attributes[ 0 ].Equals( other.Attributes[ 0 ] );
+
+			// ReSharper disable once LoopCanBeConvertedToQuery
+			// ReSharper disable once ForCanBeConvertedToForeach
+			for( var i = 0; i < Attributes.Count; i++ )
+			{
+				var attribute = other.GetAttribute( Attributes[ i ].Key );
+				if( attribute is null || !Attributes[ i ].Equals( attribute.Value ) )
+					return false;
+			}
+
+			return true;
+		}
+
+		/// <inheritdoc />
+		public override bool Equals( object obj )
+		{
+			return obj is DataValueDto other && Equals( other );
+		}
+
+		/// <inheritdoc />
+		public override int GetHashCode()
+		{
+			return Attributes.Count switch
+			{
+				0 => 0,
+				1 => Attributes[ 0 ].GetHashCode(),
+				_ => HashCode.Combine( MeasuredValue, Attributes.Count )
+			};
+		}
 
 		#endregion
 	}
