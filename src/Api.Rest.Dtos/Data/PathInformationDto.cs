@@ -302,11 +302,17 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <inheritdoc />
 		public override bool Equals( object obj )
 		{
+			if( ReferenceEquals( this, obj ) )
+				return true;
+
 			if( obj is not PathInformationDto other )
 				return false;
 
 			if( other._PathElements.Count != _PathElements.Count )
 				return false;
+
+			if( _PathElements.Count == 0 )
+				return true;
 
 			if( GetHashCode() != other.GetHashCode() )
 				return false;
