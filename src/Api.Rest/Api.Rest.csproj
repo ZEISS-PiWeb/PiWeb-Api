@@ -37,6 +37,7 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageTags>ZEISS PiWeb API</PackageTags>
     <Version>$(InformationalVersion)</Version>
+    <RepositoryUrl>https://github.com/ZEISS-PiWeb/PiWeb-Api</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup>
