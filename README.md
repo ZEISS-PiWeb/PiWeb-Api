@@ -1,8 +1,7 @@
 PiWeb-Api
 =========
 
-[![Build status](https://ci.appveyor.com/api/projects/status/q48run5x0ge40h9p/branch/master?svg=true&passingText=master%20-%20OK&pendingText=master%20-%20PENDING&failingText=master%20-%20FAILED)](https://ci.appveyor.com/project/czjlorenz/piweb-api/branch/master)
-[![Build status](https://ci.appveyor.com/api/projects/status/q48run5x0ge40h9p/branch/develop?svg=true&passingText=develop%20-%20OK&pendingText=develop%20-%20PENDING&failingText=develop%20-%20FAILED)](https://ci.appveyor.com/project/czjlorenz/piweb-api/branch/develop)
+[![Build on develop](https://github.com/ZEISS-PiWeb/PiWeb-Api/actions/workflows/develop.yml/badge.svg?branch=develop&event=push)](https://github.com/ZEISS-PiWeb/PiWeb-Api/actions/workflows/develop.yml)
 
 <p align="center">
   <img src="https://github.com/ZEISS-PiWeb/PiWeb-Api/blob/master/Logo.png" />
@@ -37,6 +36,11 @@ Release Notes for our REST API can be found on their particular documentation pa
 You can select the right version with the dropdown in the upper right corner. Release notes are displayed directly at the top of the page.
 
 Release Notes for our .NET SDK NuGet are available on [NuGet.org](https://www.nuget.org/packages/Zeiss.PiWeb.Api.Rest/).
+
+### Contributing
+
+Feel free to contribute to the PiWeb API SDK. For further information about our workflow take a look at the [BUILDING.md](https://github.com/ZEISS-PiWeb/PiWeb-Api/blob/develop/BUILDING.md).
+
 
 <hr>
 
