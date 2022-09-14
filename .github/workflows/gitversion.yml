@@ -40,11 +40,11 @@ jobs:
       with:
         format: "${major}.${minor}.${patch}"
         
-    # Format is X.X.X-alpha000X.X-X, e.g. 8.1.0-alpha0008.42-1, where 0008 means 8 commits since last tag, 42 is the github run number and 1 is the build try.
+    # Format is X.X.X-alpha000X-X, e.g. 8.1.0-alpha0008-42, where 0008 means 8 commits since last tag and 42 is the github run number.
     - name: Append prerelease suffix
       if: inputs.prerelease == 'true'
       run: |
-        echo "::set-output name=prerelease_suffix::-${{ inputs.suffix }}$(printf %4s ${{ steps.gitversion.outputs.increment }} | tr ' ' 0).${{ github.run_number }}-${{ github.run_attempt }}"
+        echo "::set-output name=prerelease_suffix::-${{ inputs.suffix }}$(printf %4s ${{ steps.gitversion.outputs.increment }} | tr ' ' 0)-${{ github.run_number }}"
       id: prerelease_version
       
     - name: Output version
