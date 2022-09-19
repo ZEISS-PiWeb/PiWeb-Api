@@ -19,7 +19,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// <summary>
 	/// Enumeration of possible inspection plan entities.
 	/// </summary>
-	[Newtonsoft.Json.JsonConverter( typeof( Newtonsoft.Json.Converters.StringEnumConverter ) )]
 	[JsonConverter( typeof( JsonStringEnumConverter ) )]
 	public enum InspectionPlanEntityDto : byte
 	{

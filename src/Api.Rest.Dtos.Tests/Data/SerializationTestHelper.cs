@@ -12,12 +12,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 {
 	#region usings
 
-	using System;
-	using System.Collections.Generic;
 	using System.IO;
-	using Newtonsoft.Json;
-	using NUnit.Framework;
-	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 
 	#endregion
 

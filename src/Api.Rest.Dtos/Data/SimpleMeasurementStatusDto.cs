@@ -32,14 +32,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Gets or sets the unique id of the status. Currently this can be one of the following:
 		/// <code>InTol</code>, <code>OutWarn</code> and <code>OutTol</code>.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "id" )]
 		[JsonPropertyName( "id" )]
 		public string Id { get; set; }
 
 		/// <summary>
 		/// Gets or sets the number of characteristics with this measurement status.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "count" )]
 		[JsonPropertyName( "count" )]
 		public int Count { get; set; }
 
@@ -47,7 +45,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Gets or sets the uuids of the characteristics that have this status. This property will only be populated
 		/// when the detailed status is requested with <see cref="MeasurementStatisticsDto.Detailed"/>.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "uuid" )]
 		[JsonPropertyName( "uuid" )]
 		public IReadOnlyCollection<Guid> Uuid { get; set; }
 

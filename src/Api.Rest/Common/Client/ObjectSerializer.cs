@@ -10,16 +10,19 @@
 
 namespace Zeiss.PiWeb.Api.Rest.Common.Client
 {
+	#region usings
+
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Runtime.CompilerServices;
-	using System.Text;
+	using System.Text.Json;
+	using System.Text.Json.Serialization;
 	using System.Threading;
 	using System.Threading.Tasks;
-	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
-	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
+
+	#endregion
 
 	/// <summary>
 	/// Provides a set of static extensions to <see cref="IObjectSerializer"/>.
@@ -29,139 +32,33 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		#region members
 
 		/// <summary>
-		/// Newtonsoft.Json de-/serialization
-		/// </summary>
-		public static readonly IObjectSerializer NewtonsoftJson = new NewtonsoftJsonSerializer();
-
-		/// <summary>
-		/// System.Text.Json de-/serialization
-		/// </summary>
-		public static readonly IObjectSerializer SystemTextJson = new SystemTextJsonSerializer();
-
-		/// <summary>
 		/// Default de-/serialization
 		/// </summary>
-		public static readonly IObjectSerializer Default = NewtonsoftJson;
+		public static readonly IObjectSerializer Default = new SystemTextJsonSerializer();
 
 		#endregion
 
-		#region NewtonsoftJsonSerializer
-
-		private sealed class NewtonsoftJsonSerializer : IObjectSerializer
-		{
-			#region methods
-
-			private static Newtonsoft.Json.JsonSerializer CreateJsonSerializer()
-			{
-				return new Newtonsoft.Json.JsonSerializer
-				{
-					Formatting = Newtonsoft.Json.Formatting.None,
-
-					DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat,
-					NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
-
-					Converters =
-					{
-						new Newtonsoft.Json.Converters.VersionConverter(),
-						new InspectionPlanDtoBaseConverter()
-					}
-				};
-			}
-
-			#endregion
-
-			#region Methods
-
-			private static T Deserialize<T>( Stream stream )
-			{
-				try
-				{
-					using var reader = new Newtonsoft.Json.JsonTextReader( new StreamReader( stream, Encoding.UTF8, true, 4096, true ) ) { CloseInput = false };
-
-					var jsonSerializer = CreateJsonSerializer();
-
-					return jsonSerializer.Deserialize<T>( reader );
-				}
-				catch( Newtonsoft.Json.JsonException exception )
-				{
-					throw new ObjectSerializerException( $"Deserializing {typeof( T ).Name}", exception );
-				}
-			}
-
-			#endregion
-
-			#region interface ISerializer
-
-			Task IObjectSerializer.SerializeAsync<T>( Stream stream, T value, CancellationToken cancellationToken )
-			{
-				if( stream == null ) throw new ArgumentNullException( nameof( stream ) );
-
-				try
-				{
-					using var streamWriter = new StreamWriter( stream, Encoding.UTF8, 64 * 1024, false );
-
-					var jsonSerializer = CreateJsonSerializer();
-
-					jsonSerializer.Serialize( streamWriter, value );
-
-					return Task.CompletedTask;
-				}
-				catch( Newtonsoft.Json.JsonException exception )
-				{
-					throw new ObjectSerializerException( $"Serializing {typeof( T ).Name}", exception );
-				}
-			}
-
-			Task<T> IObjectSerializer.DeserializeAsync<T>( Stream stream, CancellationToken cancellationToken )
-			{
-				if( stream == null ) throw new ArgumentNullException( nameof( stream ) );
-
-				return Task.FromResult( Deserialize<T>( stream ) );
-			}
-
-			IAsyncEnumerable<T> IObjectSerializer.DeserializeAsyncEnumerable<T>( Stream stream, CancellationToken cancellationToken )
-			{
-				if( stream == null ) throw new ArgumentNullException( nameof( stream ) );
-								
-				async IAsyncEnumerable<T> DeserializeAsyncEnumerable()
-				{
-					var items = Deserialize<IEnumerable<T>>( stream );
-
-					if( items == null ) yield break;
-
-					foreach( var item in items )
-						yield return await Task.FromResult( item ).ConfigureAwait( false );
-				}
-
-				return DeserializeAsyncEnumerable();
-			}
-
-			#endregion
-		}
-
-		#endregion
-
-		#region SystemTextJsonSerializer
+		#region class SystemTextJsonSerializer
 
 		private sealed class SystemTextJsonSerializer : IObjectSerializer
 		{
 			#region members
 
-			private static readonly System.Text.Json.JsonSerializerOptions Options = new()
+			private static readonly JsonSerializerOptions Options = new()
 			{
-				DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
+				DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
 
 				WriteIndented = false,
 
 				Converters =
 				{
-					new JsonInspectionPlanDtoBaseConverter()
+					new InspectionPlanDtoBaseConverter()
 				}
 			};
 
 			#endregion
 
-			#region interface ISerializer
+			#region interface IObjectSerializer
 
 			Task IObjectSerializer.SerializeAsync<T>( Stream stream, T value, CancellationToken cancellationToken )
 			{
@@ -171,9 +68,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				{
 					try
 					{
-						await System.Text.Json.JsonSerializer.SerializeAsync( stream, value, Options, cancellationToken ).ConfigureAwait( false );
+						await JsonSerializer.SerializeAsync( stream, value, Options, cancellationToken ).ConfigureAwait( false );
 					}
-					catch( System.Text.Json.JsonException exception )
+					catch( JsonException exception )
 					{
 						throw new ObjectSerializerException( $"Serializing {typeof( T ).Name}", exception );
 					}
@@ -194,9 +91,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				{
 					try
 					{
-						return await System.Text.Json.JsonSerializer.DeserializeAsync<T>( stream, Options, cancellationToken ).ConfigureAwait( false );
+						return await JsonSerializer.DeserializeAsync<T>( stream, Options, cancellationToken ).ConfigureAwait( false );
 					}
-					catch( System.Text.Json.JsonException exception )
+					catch( JsonException exception )
 					{
 						throw new ObjectSerializerException( $"Deserializing {typeof( T ).Name}", exception );
 					}
@@ -211,7 +108,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 				async IAsyncEnumerable<T> DeserializeAsyncEnumerable( [EnumeratorCancellation] CancellationToken cancellationToken )
 				{
-					var values = System.Text.Json.JsonSerializer.DeserializeAsyncEnumerable<T>( stream, Options, cancellationToken );
+					var values = JsonSerializer.DeserializeAsyncEnumerable<T>( stream, Options, cancellationToken );
 
 					var enumerator = values.GetAsyncEnumerator( cancellationToken );
 
@@ -223,7 +120,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 							{
 								moveNext = await enumerator.MoveNextAsync().ConfigureAwait( false );
 							}
-							catch( System.Text.Json.JsonException exception )
+							catch( JsonException exception )
 							{
 								throw new ObjectSerializerException( $"Deserializing enumerable of {typeof( T ).Name}", exception );
 							}

@@ -30,7 +30,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Whenever a characteristic below that part (but not below sub parts) is changed, created or deleted,
 		/// this timestamp will be updated by the server.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "charChangeDate" )]
 		[JsonPropertyName( "charChangeDate" )]
 		public DateTime CharChangeDate { get; set; }
 

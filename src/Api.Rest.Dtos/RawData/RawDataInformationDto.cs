@@ -72,7 +72,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// <summary>
 		/// Gets or sets the target object this raw data object belongs to.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "target" )]
 		[JsonPropertyName( "target" )]
 		public RawDataTargetEntityDto Target { get; set; }
 
@@ -80,7 +79,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// This is a unique key that identifies this specific raw data object for a corresponding entity. An entity (Part, Characteristic, Measurement, Value)
 		/// can have multiple raw data object that are distinct by this key.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "key" )]
 		[JsonPropertyName( "key" )]
 		public int? Key { get; set; }
 
@@ -90,14 +88,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// <remarks>
 		/// Please note that this filename is not unique (unlike filenames in traditional file systems).
 		/// </remarks>
-		[Newtonsoft.Json.JsonProperty( "fileName" )]
 		[JsonPropertyName( "fileName" )]
 		public string FileName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the mime type of the raw data object.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "mimeType" )]
 		[JsonPropertyName( "mimeType" )]
 		public string MimeType { get; set; }
 
@@ -108,7 +104,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// The attribute <code>LastModified</code> will be set by the Rawdata-Service.
 		/// A user value will be ignored.
 		/// </remarks>
-		[Newtonsoft.Json.JsonProperty( "lastModified" )]
 		[JsonPropertyName( "lastModified" )]
 		public DateTime LastModified { get; set; }
 
@@ -119,21 +114,18 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// The attribute <code>Created</code> will be set by the Rawdata-Service.
 		/// A user value will be ignored.
 		/// </remarks>
-		[Newtonsoft.Json.JsonProperty( "created" )]
 		[JsonPropertyName( "created" )]
 		public DateTime Created { get; set; }
 
 		/// <summary>
 		/// Gets or sets the size of the raw data object in bytes.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "size" )]
 		[JsonPropertyName( "size" )]
 		public int Size { get; set; }
 
 		/// <summary>
 		/// Gets or sets the MD5-Hash of the raw data object.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "md5" )]
 		[JsonPropertyName( "md5" )]
 		public Guid MD5 { get; set; }
 
@@ -143,7 +135,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// <remarks>
 		/// This property exists for serialization compatibility reasons only. This will be removed in a future version of this interface.
 		/// </remarks>
-		[Newtonsoft.Json.JsonIgnore]
 		[JsonIgnore]
 		public string MD5String
 		{

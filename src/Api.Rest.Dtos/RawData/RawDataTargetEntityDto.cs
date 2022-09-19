@@ -58,14 +58,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// <summary>
 		/// Gets or sets the entity to which this raw data object belongs to.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "entity" )]
 		[JsonPropertyName( "entity" )]
 		public RawDataEntityDto Entity { get; set; }
 
 		/// <summary>
 		/// Gets or sets the uuid of the entity.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "uuid" )]
 		[JsonPropertyName( "uuid" )]
 		public string Uuid { get; set; }
 

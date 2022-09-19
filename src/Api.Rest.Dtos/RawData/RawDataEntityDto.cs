@@ -19,7 +19,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 	/// <summary>
 	/// Enumeration that specifies the entity to which a raw data object is attached to.
 	/// </summary>
-	[Newtonsoft.Json.JsonConverter( typeof( Newtonsoft.Json.Converters.StringEnumConverter ) )]
 	[JsonConverter( typeof( JsonStringEnumConverter ) )]
 	public enum RawDataEntityDto
 	{

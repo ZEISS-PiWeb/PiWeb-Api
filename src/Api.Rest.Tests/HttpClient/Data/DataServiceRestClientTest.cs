@@ -13,10 +13,9 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Data
 	#region usings
 
 	using System;
-	using System.Linq;
+	using System.Text.Json;
 	using System.Threading.Tasks;
 	using FluentAssertions;
-	using Newtonsoft.Json;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 	using Zeiss.PiWeb.Api.Rest.HttpClient.Data;
@@ -68,8 +67,8 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Data
 					{ Attributes = new[] { new AttributeDto( 5, 3 ), new AttributeDto( 55, 20 ), new AttributeDto( 999, 3 ) } }
 			};
 
-			server.RegisterResponse( "/DataServiceRest/measurements?partUuids=%7B11111111-1111-1111-1111-111111111111%7D&order=5%20Asc%2C55%20Asc", JsonConvert.SerializeObject( firstMeasurementSet ) );
-			server.RegisterResponse( "/DataServiceRest/measurements?partUuids=%7B22222222-2222-2222-2222-222222222222%7D&order=5%20Asc%2C55%20Asc", JsonConvert.SerializeObject( secondMeasurementSet ) );
+			server.RegisterResponse( "/DataServiceRest/measurements?partUuids=%7B11111111-1111-1111-1111-111111111111%7D&order=5%20Asc%2C55%20Asc", JsonSerializer.Serialize( firstMeasurementSet ) );
+			server.RegisterResponse( "/DataServiceRest/measurements?partUuids=%7B22222222-2222-2222-2222-222222222222%7D&order=5%20Asc%2C55%20Asc", JsonSerializer.Serialize( secondMeasurementSet ) );
 
 			var result = await client.GetMeasurements( filter: new MeasurementFilterAttributesDto
 			{
@@ -97,8 +96,8 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Data
 
 			var secondMeasurementSet = new[] { new SimpleMeasurementDto(), new SimpleMeasurementDto(), new SimpleMeasurementDto() };
 
-			server.RegisterResponse( "/DataServiceRest/measurements?partUuids=%7B11111111-1111-1111-1111-111111111111%7D&limitResult=5&order=4%20Desc", JsonConvert.SerializeObject( firstMeasurementSet ) );
-			server.RegisterResponse( "/DataServiceRest/measurements?partUuids=%7B22222222-2222-2222-2222-222222222222%7D&limitResult=5&order=4%20Desc", JsonConvert.SerializeObject( secondMeasurementSet ) );
+			server.RegisterResponse( "/DataServiceRest/measurements?partUuids=%7B11111111-1111-1111-1111-111111111111%7D&limitResult=5&order=4%20Desc", JsonSerializer.Serialize( firstMeasurementSet ) );
+			server.RegisterResponse( "/DataServiceRest/measurements?partUuids=%7B22222222-2222-2222-2222-222222222222%7D&limitResult=5&order=4%20Desc", JsonSerializer.Serialize( secondMeasurementSet ) );
 
 			var result = await client.GetMeasurements( filter: new MeasurementFilterAttributesDto
 			{

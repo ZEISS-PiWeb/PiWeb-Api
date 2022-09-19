@@ -38,14 +38,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// <summary>
 		/// <see cref="RawDataInformationDto"/> of original archive.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "archiveInfo" )]
 		[JsonPropertyName( "archiveInfo" )]
 		public RawDataInformationDto ArchiveInfo { get; set; }
 
 		/// <summary>
 		/// List of files in specified archive.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "entries" )]
 		[JsonPropertyName( "entries" )]
 		public string[] Entries { get; set; }
 

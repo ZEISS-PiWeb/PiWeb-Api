@@ -21,7 +21,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// beim Koppeln von Messungen verschiedener Teile anhand eines primären Messungsschlüssels
 	/// für jeden im Suchergebnis enthaltenen Attributwert des Schlüssels erfüllt sein muss.
 	/// </summary>
-	[Newtonsoft.Json.JsonConverter( typeof( Newtonsoft.Json.Converters.StringEnumConverter ) )]
 	[JsonConverter( typeof( JsonStringEnumConverter ) )]
 	public enum MeasurementMergeConditionDto
 	{

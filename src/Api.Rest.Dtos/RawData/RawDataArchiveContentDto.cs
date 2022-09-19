@@ -37,35 +37,30 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// <summary>
 		/// Full name of the file.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "fileName" )]
 		[JsonPropertyName( "fileName" )]
 		public string FileName { get; set; }
 
 		/// <summary>
 		/// Length of data.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "size" )]
 		[JsonPropertyName( "size" )]
 		public int Size { get; set; }
 
 		/// <summary>
 		/// Actual data representing the file.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "data" )]
 		[JsonPropertyName( "data" )]
 		public byte[] Data { get; set; }
 
 		/// <summary>
 		/// MD5 checksum of data.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "md5" )]
 		[JsonPropertyName( "md5" )]
 		public Guid MD5 { get; set; }
 
 		/// <summary>
 		/// <see cref="RawDataInformationDto"/> of original archive.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "archiveInfo" )]
 		[JsonPropertyName( "archiveInfo" )]
 		public RawDataInformationDto ArchiveInfo { get; set; }
 

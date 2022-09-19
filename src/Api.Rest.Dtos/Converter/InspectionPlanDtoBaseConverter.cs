@@ -3,7 +3,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
-/* (c) Carl Zeiss 2021                             */
+/* (c) Carl Zeiss 2022                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #endregion
@@ -15,130 +15,101 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using Newtonsoft.Json;
-	using Newtonsoft.Json.Linq;
+	using System.Text.Json;
+	using System.Text.Json.Serialization;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 
 	#endregion
 
 	/// <summary>
-	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="InspectionPlanDtoBase"/>-objects.
+	/// Specialized <see cref="JsonConverter"/> for <see cref="InspectionPlanDtoBase"/>-objects.
 	/// </summary>
-	public sealed class InspectionPlanDtoBaseConverter : JsonConverter
+	public sealed class InspectionPlanDtoBaseConverter : JsonConverter<InspectionPlanDtoBase>
 	{
-		#region constants
-
-		private const string HistoryFieldName = "history";
-		private const string CharChangeDateFieldName = "charChangeDate";
-
-		#endregion
-
 		#region methods
 
 		/// <inheritdoc />
-		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer )
+		public override void Write( Utf8JsonWriter writer, InspectionPlanDtoBase value, JsonSerializerOptions options )
 		{
 			switch( value )
 			{
 				case null:
-					writer.WriteNull();
+					writer.WriteNullValue();
 					break;
 
-				case InspectionPlanPartDto _:
-					serializer.Serialize( writer, value, typeof( InspectionPlanPartDto ) );
+				case InspectionPlanPartDto inspectionPlanPart:
+					JsonSerializer.Serialize( writer, inspectionPlanPart, options );
 					break;
 
-				case InspectionPlanCharacteristicDto _:
-					serializer.Serialize( writer, value, typeof( InspectionPlanCharacteristicDto ) );
+				case SimplePartDto simplePart:
+					JsonSerializer.Serialize( writer, simplePart, options );
 					break;
 
-				case SimplePartDto _:
-					serializer.Serialize( writer, value, typeof( SimplePartDto ) );
+				case InspectionPlanCharacteristicDto inspectionPlanCharacteristic:
+					JsonSerializer.Serialize( writer, inspectionPlanCharacteristic, options );
 					break;
 
 				default:
-					throw new JsonSerializationException( $"{nameof( value )} is invalid!" );
+					throw new NotImplementedException( $"{value.GetType().Name}" );
 			}
 		}
 
 		/// <inheritdoc />
-		public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer )
+		public override InspectionPlanDtoBase Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
 		{
-			if( reader == null )
-				throw new ArgumentNullException( nameof( reader ) );
+			var type = GetType( ref reader );
 
-			if( reader.TokenType == JsonToken.Null )
-				return null;
-
-			var jToken = JToken.Load( reader );
-
-			if( jToken == null )
-				throw new ArgumentNullException( nameof( jToken ) );
-
-			var target = existingValue ?? Create( jToken, serializer );
-
-			if( target == null )
-				throw new JsonSerializationException( "No object created." );
-
-			return target;
-		}
-
-		private static object Create( JToken jObject, JsonSerializer serializer )
-		{
-			using( var jsonReader = new JTokenReader( jObject ) )
+			return type switch
 			{
-				var type = GetType( jObject );
+				InspectionPlanItemType.InspectionPlanPartDto => JsonSerializer.Deserialize<InspectionPlanPartDto>( ref reader, options ),
 
-				switch( type )
-				{
-					case InspectionPlanItemType.SimplePartDto:
-						return serializer.Deserialize<SimplePartDto>( jsonReader );
+				InspectionPlanItemType.SimplePartDto => JsonSerializer.Deserialize<SimplePartDto>( ref reader, options ),
 
-					case InspectionPlanItemType.InspectionPlanPartDto:
-						return serializer.Deserialize<InspectionPlanPartDto>( jsonReader );
+				InspectionPlanItemType.InspectionPlanCharacteristicDto => JsonSerializer.Deserialize<InspectionPlanCharacteristicDto>( ref reader, options ),
 
-					case InspectionPlanItemType.InspectionPlanCharacteristicDto:
-						return serializer.Deserialize<InspectionPlanCharacteristicDto>( jsonReader );
-
-					default:
-						throw new InvalidOperationException( "No object created." );
-				}
-			}
+				_ => throw new NotImplementedException($"{type}")
+			};
 		}
 
-		private static InspectionPlanItemType GetType( JToken jToken )
+		private static InspectionPlanItemType GetType( ref Utf8JsonReader reader )
 		{
-			var fields = CollectFields( jToken );
+			var propertyNames = CollectPropertyNames( reader );
 
-			if( fields.Exists( x => x.Equals( HistoryFieldName, StringComparison.OrdinalIgnoreCase ) ) &&
-				fields.Exists( x => x.Equals( CharChangeDateFieldName, StringComparison.OrdinalIgnoreCase ) ) )
+			if( propertyNames.Any( propertyName => propertyName.Equals( nameof( InspectionPlanPartDto.History ), StringComparison.OrdinalIgnoreCase ) ) &&
+				propertyNames.Any( propertyName => propertyName.Equals( nameof( InspectionPlanPartDto.CharChangeDate ), StringComparison.OrdinalIgnoreCase ) ) )
 				return InspectionPlanItemType.InspectionPlanPartDto;
 
-			if( fields.Exists( x => x.Equals( CharChangeDateFieldName, StringComparison.OrdinalIgnoreCase ) ) )
+			if( propertyNames.Any( propertyName => propertyName.Equals( nameof( SimplePartDto.CharChangeDate ), StringComparison.OrdinalIgnoreCase ) ) )
 				return InspectionPlanItemType.SimplePartDto;
 
 			return InspectionPlanItemType.InspectionPlanCharacteristicDto;
 		}
 
-		private static List<string> CollectFields( JToken jToken )
+		private static IReadOnlyList<string> CollectPropertyNames( Utf8JsonReader reader )
 		{
-			return jToken.Children<JProperty>().Select( i => i.Path ).ToList();
-		}
+			var propertyNames = new List<string>();
 
-		/// <inheritdoc />
-		public override bool CanConvert( Type objectType )
-		{
-			return objectType == typeof( InspectionPlanDtoBase );
+			var startDepth = reader.CurrentDepth;
+
+			while( reader.Read() && ( reader.TokenType != JsonTokenType.EndObject || reader.CurrentDepth != startDepth ) )
+			{
+				if( reader.TokenType == JsonTokenType.PropertyName && reader.CurrentDepth == startDepth + 1 )
+					propertyNames.Add( reader.GetString() );
+				else
+					reader.TrySkip();
+			}
+
+			return propertyNames;
 		}
 
 		#endregion
 
-		#region class InspectionPlanItemType
+		#region InspectionPlanItemType
 
 		private enum InspectionPlanItemType
 		{
-			SimplePartDto,
 			InspectionPlanPartDto,
+			SimplePartDto,
 			InspectionPlanCharacteristicDto
 		}
 

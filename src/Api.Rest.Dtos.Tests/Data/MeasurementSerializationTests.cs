@@ -14,11 +14,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 
 	using System;
 	using System.Collections.Generic;
-	using System.IO;
-	using Newtonsoft.Json;
+	using System.Text.Json;
 	using NUnit.Framework;
-	using Zeiss.PiWeb.Api.Definitions;
-	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 
 	#endregion
@@ -37,8 +34,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 		[Test]
 		public void SerializingMeasurements_SerializesProperly()
 		{
-			var deserialized = JsonConvert.DeserializeObject<IReadOnlyList<SimpleMeasurementDto>>( MeasurementsJson );
-			var serialized = JsonConvert.SerializeObject( deserialized );
+			var deserialized = JsonSerializer.Deserialize<IReadOnlyList<SimpleMeasurementDto>>( MeasurementsJson );
+			var serialized = JsonSerializer.Serialize( deserialized );
 
 			Assert.That( serialized, Is.Not.Null.Or.Empty );
 		}
@@ -46,7 +43,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 		[Test]
 		public void DeserializingMeasurements_RestoresStructureProperly()
 		{
-			var deserialized = JsonConvert.DeserializeObject<IReadOnlyList<SimpleMeasurementDto>>( MeasurementsJson );
+			var deserialized = JsonSerializer.Deserialize<IReadOnlyList<SimpleMeasurementDto>>( MeasurementsJson );
 
 			Assert.That( deserialized, Is.Not.Null );
 			Assert.That( deserialized, Has.Exactly( 600 ).Items );

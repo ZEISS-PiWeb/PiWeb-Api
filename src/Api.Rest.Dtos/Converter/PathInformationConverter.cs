@@ -13,38 +13,33 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 	#region usings
 
 	using System;
-	using Newtonsoft.Json;
+	using System.Text.Json;
+	using System.Text.Json.Serialization;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 
 	#endregion
 
 	/// <summary>
-	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="PathInformationDto"/>-objects.
+	/// Specialized <see cref="JsonConverter"/> for <see cref="PathInformationDto"/>-objects.
 	/// </summary>
-	public sealed class PathInformationConverter : JsonConverter
+	public sealed class PathInformationConverter : JsonConverter<PathInformationDto>
 	{
 		#region methods
 
 		/// <inheritdoc />
-		public override bool CanConvert( Type objectType )
+		public override PathInformationDto Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
 		{
-			return typeof( PathInformationDto ) == objectType;
-		}
-
-		/// <inheritdoc />
-		public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer )
-		{
-			if( reader.TokenType != JsonToken.String )
+			if( reader.TokenType != JsonTokenType.String )
 				return null;
 
-			return PathHelper.RoundtripString2PathInformation( (string)reader.Value );
+			return PathHelper.RoundtripString2PathInformation( reader.GetString() );
 
 		}
 
 		/// <inheritdoc />
-		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer )
+		public override void Write( Utf8JsonWriter writer, PathInformationDto value, JsonSerializerOptions options )
 		{
-			writer.WriteValue( PathHelper.PathInformation2RoundtripString( (PathInformationDto)value ) );
+			writer.WriteStringValue( PathHelper.PathInformation2RoundtripString( value ) );
 		}
 
 		#endregion
