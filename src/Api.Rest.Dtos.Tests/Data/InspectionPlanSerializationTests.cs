@@ -14,9 +14,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 
 	using System;
 	using System.Collections.Generic;
-	using System.IO;
 	using Newtonsoft.Json;
 	using NUnit.Framework;
+	using Zeiss.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 
 	#endregion
@@ -60,7 +60,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			Assert.That( deserialized, Has.Exactly( 2 ).Items );
 
 			Assert.That( deserialized[ 0 ].Uuid, Is.EqualTo( Guid.Empty ) );
-			Assert.That( deserialized[ 0 ].Path, Is.EqualTo( PathInformationDto.Root ) );
+			Assert.That( deserialized[ 0 ].Path, Is.EqualTo( PathInformation.Root ) );
 			Assert.That( deserialized[ 0 ].Comment, Is.Null );
 			Assert.That( deserialized[ 0 ].Timestamp, Is.EqualTo( DateTime.Parse( "2022-01-31T19:00:37.15Z" ).ToUniversalTime() ) );
 			Assert.That( deserialized[ 0 ].CharChangeDate, Is.EqualTo( DateTime.Parse( "2022-06-30T06:25:35.56Z" ).ToUniversalTime() ) );
@@ -69,7 +69,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			Assert.That( deserialized[ 0 ].Attributes, Is.Empty );
 
 			Assert.That( deserialized[ 1 ].Uuid, Is.EqualTo( new Guid( "fe85eefe-f08d-4e78-9f06-0e3b3cc9275e" ) ) );
-			Assert.That( deserialized[ 1 ].Path, Is.EqualTo( new PathInformationDto( PathElementDto.Part( "Blechteil" ) ) ) );
+			Assert.That( deserialized[ 1 ].Path, Is.EqualTo( new PathInformation( PathElement.Part( "Blechteil" ) ) ) );
 			Assert.That( deserialized[ 1 ].Comment, Is.Null );
 			Assert.That( deserialized[ 1 ].Timestamp, Is.EqualTo( DateTime.Parse( "2022-06-30T06:25:35.46Z" ).ToUniversalTime() ) );
 			Assert.That( deserialized[ 1 ].CharChangeDate, Is.EqualTo( DateTime.Parse( "2022-01-31T19:02:58.767Z" ).ToUniversalTime() ) );
@@ -90,7 +90,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			Assert.That( deserialized, Has.Exactly( 45 ).Items );
 
 			Assert.That( deserialized[ 0 ].Uuid, Is.EqualTo( new Guid( "b71a5bd7-5406-46a3-a5b7-458ba1c0248d" ) ) );
-			Assert.That( deserialized[ 0 ].Path, Is.EqualTo( new PathInformationDto( PathElementDto.Part( "Blechteil" ), PathElementDto.Char( "Abweichung_3" ) ) ) );
+			Assert.That( deserialized[ 0 ].Path, Is.EqualTo( new PathInformation( PathElement.Part( "Blechteil" ), PathElement.Char( "Abweichung_3" ) ) ) );
 			Assert.That( deserialized[ 0 ].Comment, Is.Null );
 			Assert.That( deserialized[ 0 ].Timestamp, Is.EqualTo( DateTime.Parse( "2022-01-31T19:02:58.683Z" ).ToUniversalTime() ) );
 			Assert.That( deserialized[ 0 ].Comment, Is.Null );
@@ -98,7 +98,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			Assert.That( deserialized[ 0 ].Attributes, Has.Exactly( 16 ).Items );
 
 			Assert.That( deserialized[ 1 ].Uuid, Is.EqualTo( new Guid( "8c72afa6-fc67-4fbd-8606-e3727d79c8ff" ) ) );
-			Assert.That( deserialized[ 1 ].Path, Is.EqualTo( new PathInformationDto( PathElementDto.Part( "Blechteil" ), PathElementDto.Char( "Abweichung_4" ) ) ) );
+			Assert.That( deserialized[ 1 ].Path, Is.EqualTo( new PathInformation( PathElement.Part( "Blechteil" ), PathElement.Char( "Abweichung_4" ) ) ) );
 			Assert.That( deserialized[ 1 ].Comment, Is.Null );
 			Assert.That( deserialized[ 1 ].Timestamp, Is.EqualTo( DateTime.Parse( "2022-01-31T19:02:58.683Z" ).ToUniversalTime() ) );
 			Assert.That( deserialized[ 1 ].Comment, Is.Null );

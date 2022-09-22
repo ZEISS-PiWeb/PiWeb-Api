@@ -16,7 +16,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 	using System.Collections.Generic;
 	using System.Linq;
 	using JetBrains.Annotations;
-	using Zeiss.PiWeb.Api.Rest.Common.Client;
 	using Zeiss.PiWeb.Api.Rest.Common.Data;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 

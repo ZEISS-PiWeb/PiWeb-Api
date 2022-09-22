@@ -14,8 +14,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 
 	using System;
 	using System.Collections.Generic;
-	using System.Globalization;
-	using System.Linq;
 	using Newtonsoft.Json;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 

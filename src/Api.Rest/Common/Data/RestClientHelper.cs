@@ -21,6 +21,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 	using JetBrains.Annotations;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Bson;
+	using Zeiss.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Common.Client;
 	using Zeiss.PiWeb.Api.Rest.Common.Utilities;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
@@ -74,7 +75,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		/// <param name="requestedCharacteristicAttributes">Restricts the characteristic attributes that are returned.</param>
 		/// <param name="withHistory">Determines if the history should be returned.</param>
 		/// <returns></returns>
-		public static List<ParameterDefinition> ParseToParameter( PathInformationDto partPath = null, IReadOnlyCollection<Guid> partUuids = null, IReadOnlyCollection<Guid> charUuids = null, ushort? depth = null, AttributeSelector requestedPartAttributes = null, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false )
+		public static List<ParameterDefinition> ParseToParameter( PathInformation partPath = null, IReadOnlyCollection<Guid> partUuids = null, IReadOnlyCollection<Guid> charUuids = null, ushort? depth = null, AttributeSelector requestedPartAttributes = null, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false )
 		{
 			var parameter = new List<ParameterDefinition>();
 			if( partPath != null )

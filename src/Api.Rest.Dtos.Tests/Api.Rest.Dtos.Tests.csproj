@@ -16,6 +16,7 @@
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+        <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.0.0" />
         <PackageReference Include="NUnit" Version="3.13.2" />
         <PackageReference Include="NUnit3TestAdapter" Version="4.0.0">
             <PrivateAssets>all</PrivateAssets>
@@ -24,6 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Api.Contracts\Api.Contracts.csproj" />
         <ProjectReference Include="..\Api.Rest.Dtos\Api.Rest.Dtos.csproj" />
     </ItemGroup>
 

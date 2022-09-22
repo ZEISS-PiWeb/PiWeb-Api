@@ -17,6 +17,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 	using System.Threading;
 	using System.Threading.Tasks;
 	using JetBrains.Annotations;
+	using Zeiss.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 
@@ -166,7 +167,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="requestedPartAttributes">The attribute selector to determine which attributes to return.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		[NotNull]
-		Task<IReadOnlyList<InspectionPlanPartDto>> GetParts( PathInformationDto partPath = null, IReadOnlyCollection<Guid> partUuids = null, ushort? depth = null, AttributeSelector requestedPartAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default );
+		Task<IReadOnlyList<InspectionPlanPartDto>> GetParts( PathInformation partPath = null, IReadOnlyCollection<Guid> partUuids = null, ushort? depth = null, AttributeSelector requestedPartAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Fetches a single part by its uuid.
@@ -201,7 +202,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// </summary>
 		/// <param name="partPath">The parent part for the delete operation.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task DeleteParts( [NotNull] PathInformationDto partPath, CancellationToken cancellationToken = default );
+		Task DeleteParts( [NotNull] PathInformation partPath, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Deletes all parts and child parts below the parts specified by <paramref name="partUuids"/> from the database. Since parts act as the parent
@@ -237,7 +238,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="requestedCharacteristicAttributes">The attribute selector to determine which attributes to return.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		[NotNull]
-		Task<IReadOnlyList<InspectionPlanCharacteristicDto>> GetCharacteristics( PathInformationDto partPath = null, ushort? depth = null, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default );
+		Task<IReadOnlyList<InspectionPlanCharacteristicDto>> GetCharacteristics( PathInformation partPath = null, ushort? depth = null, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Fetches characteristics based on their <paramref name="charUuids"/>.
@@ -281,7 +282,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// </summary>
 		/// <param name="charPath">The characteristic path for the delete operation.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task DeleteCharacteristics( [NotNull] PathInformationDto charPath, CancellationToken cancellationToken = default );
+		Task DeleteCharacteristics( [NotNull] PathInformation charPath, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Deletes the characteristics <paramref name="charUuid"/> and their sub characteristics from the database.
@@ -298,7 +299,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="filter">A filter that can be used to further restrict the search operation.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		[NotNull]
-		Task<IReadOnlyList<SimpleMeasurementDto>> GetMeasurements( PathInformationDto partPath = null, MeasurementFilterAttributesDto filter = null, CancellationToken cancellationToken = default );
+		Task<IReadOnlyList<SimpleMeasurementDto>> GetMeasurements( PathInformation partPath = null, MeasurementFilterAttributesDto filter = null, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Fetches a list of measurement attribute values of the attribute <paramref name="key" /> for the <paramref name="partPath" />. The search operation can be parameterized using the specified
@@ -310,7 +311,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		/// <returns></returns>
 		[NotNull]
-		Task<IReadOnlyList<string>> GetDistinctMeasurementAttributeValues( ushort key, PathInformationDto partPath = null, DistinctMeasurementFilterAttributesDto filter = null, CancellationToken cancellationToken = default );
+		Task<IReadOnlyList<string>> GetDistinctMeasurementAttributeValues( ushort key, PathInformation partPath = null, DistinctMeasurementFilterAttributesDto filter = null, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Adds the measurements parts to the database.
@@ -336,7 +337,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="aggregation">Specifies what types of measurements will be deleted (normal/aggregated measurements or both).</param>
 		/// <param name="deep">Specifies if measurements of <paramref name="partPath"/> only or also measurements of sub parts will be deleted.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task DeleteMeasurementsByPartPath( PathInformationDto partPath = null, GenericSearchConditionDto filter = null, AggregationMeasurementSelectionDto aggregation = AggregationMeasurementSelectionDto.Default, MeasurementDeleteBehaviorDto deep = MeasurementDeleteBehaviorDto.DeleteForCurrentPartOnly, CancellationToken cancellationToken = default );
+		Task DeleteMeasurementsByPartPath( PathInformation partPath = null, GenericSearchConditionDto filter = null, AggregationMeasurementSelectionDto aggregation = AggregationMeasurementSelectionDto.Default, MeasurementDeleteBehaviorDto deep = MeasurementDeleteBehaviorDto.DeleteForCurrentPartOnly, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Deletes the measurements including the measurement values for parts that uuids are within <paramref name="partUuids"/> list. The <paramref name="filter"/> can be used
@@ -365,7 +366,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <param name="filter">A filter that can be used to further restrict the search operation.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		[NotNull]
-		Task<IReadOnlyList<DataMeasurementDto>> GetMeasurementValues( PathInformationDto partPath = null, MeasurementValueFilterAttributesDto filter = null, CancellationToken cancellationToken = default );
+		Task<IReadOnlyList<DataMeasurementDto>> GetMeasurementValues( PathInformation partPath = null, MeasurementValueFilterAttributesDto filter = null, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Adds the measurements and measurement values parts to the database. Please note that no single values can be inserted or updated. Whole

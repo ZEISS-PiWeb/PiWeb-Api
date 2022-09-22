@@ -17,7 +17,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using System.Text;
 	using System.Threading;
 	using System.Threading.Tasks;
-	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
 

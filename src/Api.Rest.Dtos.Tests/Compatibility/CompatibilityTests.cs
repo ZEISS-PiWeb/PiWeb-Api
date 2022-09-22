@@ -20,6 +20,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 	using System.Net.Mime;
 	using System.Text;
 	using NUnit.Framework;
+	using Zeiss.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;

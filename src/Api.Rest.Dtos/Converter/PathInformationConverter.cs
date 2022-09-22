@@ -14,12 +14,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 
 	using System;
 	using Newtonsoft.Json;
-	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
+	using Zeiss.PiWeb.Api.Contracts;
 
 	#endregion
 
 	/// <summary>
-	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="PathInformationDto"/>-objects.
+	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="PathInformation"/>-objects.
 	/// </summary>
 	public sealed class PathInformationConverter : JsonConverter
 	{
@@ -28,7 +28,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 		/// <inheritdoc />
 		public override bool CanConvert( Type objectType )
 		{
-			return typeof( PathInformationDto ) == objectType;
+			return typeof( PathInformation ) == objectType;
 		}
 
 		/// <inheritdoc />
@@ -44,7 +44,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 		/// <inheritdoc />
 		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer )
 		{
-			writer.WriteValue( PathHelper.PathInformation2RoundtripString( (PathInformationDto)value ) );
+			writer.WriteValue( PathHelper.PathInformation2RoundtripString( (PathInformation)value ) );
 		}
 
 		#endregion

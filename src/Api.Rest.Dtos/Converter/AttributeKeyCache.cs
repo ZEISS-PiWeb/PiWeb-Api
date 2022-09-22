@@ -12,11 +12,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 {
 	#region usings
 
-	using System;
 	using System.Collections.Concurrent;
-	using System.Collections.Generic;
 	using System.Globalization;
-	using System.Runtime.CompilerServices;
 
 	#endregion
 
