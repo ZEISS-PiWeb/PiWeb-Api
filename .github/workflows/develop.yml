@@ -10,10 +10,7 @@ on:
 
 jobs:
   develop:
-    uses: ./.github/workflows/build-and-pack.yml
+    uses: ZEISS-PiWeb/github-actions/.github/workflows/develop.yml@main
     with:
-      configuration: "Debug"
-      prerelease: "true"
-      suffix: "beta"
-      publish_target: "nuget.org"
+      do_pack: true  
     secrets: inherit
