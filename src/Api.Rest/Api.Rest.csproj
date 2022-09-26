@@ -5,7 +5,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <RootNamespace>Zeiss.PiWeb.Api.Rest</RootNamespace>
-    <TargetFrameworks>netstandard2.0;netcoreapp3.1;net48;net5.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <PackageVersion>8.0.0</PackageVersion>
   </PropertyGroup>

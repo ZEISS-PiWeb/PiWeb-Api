@@ -7,31 +7,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  get-feature-branch:
-  
-    runs-on: ubuntu-latest
-    outputs:
-      branch_name: ${{ steps.normalize.outputs.branch_name }}
-    
-    steps:
-    - uses: actions/checkout@v3
-    
-    # Remove feature/fix branch prefix, hyphens etc. and trim to 20 characters
-    - name: Normalize branch name
-      run: |
-        branch="${{ github.ref_name }}"
-        noSlashes=`echo $branch | sed "s/[^[:alnum:]]//g"`
-        noFeature="${noSlashes/feature/}"
-        noFix="${noFeature/fix/}"
-        echo "::set-output name=branch_name::$( echo $noFix | cut -c 1-20 )"
-      id: normalize
-
-  feature-branch:
-    needs: get-feature-branch
-    uses: ./.github/workflows/build-and-pack.yml
+  build-feature-branch:
+    uses: ZEISS-PiWeb/github-actions/.github/workflows/feature-branch.yml@main
     with:
-      configuration: "Debug"
-      prerelease: "true"
-      suffix: "alpha-${{ needs.get-feature-branch.outputs.branch_name }}"
-      publish_target: "None"
+      do_pack: true  
     secrets: inherit
