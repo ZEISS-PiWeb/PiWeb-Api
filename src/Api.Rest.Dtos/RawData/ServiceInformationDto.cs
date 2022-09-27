@@ -26,11 +26,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// <summary>
 		/// Gets or sets the version of the server backend.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "version" )]
 		[JsonPropertyName( "version" )]
 		public string Version { get; set; }
 
-		[Newtonsoft.Json.JsonProperty( "requestHeaderSize" )]
 		[JsonPropertyName( "requestHeaderSize" )]
 		public int RequestHeaderSize { get; set; }
 

@@ -50,7 +50,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// when the inspection plan search is performed with the versioning flag set. When creating new parts,
 		/// this information will be ignored by the server.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "history" )]
 		[JsonPropertyName( "history" )]
 		public IReadOnlyList<InspectionPlanCharacteristicDto> History { get; set; }
 

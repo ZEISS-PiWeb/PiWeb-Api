@@ -48,7 +48,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// <summary>
 		/// Selectors containing information about target and key of requested archives.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "selectors" )]
 		[JsonPropertyName( "selectors" )]
 		public RawDataSelectorDto[] Selectors { get; set; } = { };
 

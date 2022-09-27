@@ -14,8 +14,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 
 	using System;
 	using System.Collections.Generic;
-	using System.IO;
-	using Newtonsoft.Json;
+	using System.Text.Json;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 
@@ -36,8 +35,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 		[Test]
 		public void SerializingParts_SerializesProperly()
 		{
-			var deserialized = JsonConvert.DeserializeObject<IReadOnlyList<InspectionPlanPartDto>>( PartJson );
-			var serialized = JsonConvert.SerializeObject( deserialized );
+			var deserialized = JsonSerializer.Deserialize<IReadOnlyList<InspectionPlanPartDto>>( PartJson );
+			var serialized = JsonSerializer.Serialize( deserialized );
 
 			Assert.That( serialized, Is.Not.Null.Or.Empty );
 		}
@@ -45,8 +44,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 		[Test]
 		public void SerializingCharacteristics_SerializesProperly()
 		{
-			var deserialized = JsonConvert.DeserializeObject<IReadOnlyList<InspectionPlanCharacteristicDto>>( CharacteristicJson );
-			var serialized = JsonConvert.SerializeObject( deserialized );
+			var deserialized = JsonSerializer.Deserialize<IReadOnlyList<InspectionPlanCharacteristicDto>>( CharacteristicJson );
+			var serialized = JsonSerializer.Serialize( deserialized );
 
 			Assert.That( serialized, Is.Not.Null.Or.Empty );
 		}
@@ -54,7 +53,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 		[Test]
 		public void DeserializingParts_RestoresStructureProperly()
 		{
-			var deserialized = JsonConvert.DeserializeObject<IReadOnlyList<InspectionPlanPartDto>>( PartJson );
+			var deserialized = JsonSerializer.Deserialize<IReadOnlyList<InspectionPlanPartDto>>( PartJson );
 
 			Assert.That( deserialized, Is.Not.Null );
 			Assert.That( deserialized, Has.Exactly( 2 ).Items );
@@ -84,7 +83,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 		[Test]
 		public void DeserializingCharacteristics_RestoresStructureProperly()
 		{
-			var deserialized = JsonConvert.DeserializeObject<IReadOnlyList<InspectionPlanCharacteristicDto>>( CharacteristicJson );
+			var deserialized = JsonSerializer.Deserialize<IReadOnlyList<InspectionPlanCharacteristicDto>>( CharacteristicJson );
 
 			Assert.That( deserialized, Is.Not.Null );
 			Assert.That( deserialized, Has.Exactly( 45 ).Items );

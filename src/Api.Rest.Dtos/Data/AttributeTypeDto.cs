@@ -19,7 +19,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// <summary>
 	/// Holds attributes' possible data types.
 	/// </summary>
-	[Newtonsoft.Json.JsonConverter( typeof( Newtonsoft.Json.Converters.StringEnumConverter ) )]
 	[JsonConverter( typeof( JsonStringEnumConverter ) )]
 	public enum AttributeTypeDto
 	{

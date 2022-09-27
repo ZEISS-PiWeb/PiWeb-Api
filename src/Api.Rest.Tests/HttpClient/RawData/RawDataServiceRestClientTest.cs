@@ -14,9 +14,8 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.RawData
 
 	using System;
 	using System.Text;
+	using System.Text.Json;
 	using System.Threading.Tasks;
-	using Newtonsoft.Json;
-	using Newtonsoft.Json.Converters;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 	using Zeiss.PiWeb.Api.Rest.Dtos.RawData;
@@ -107,21 +106,21 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.RawData
 		private static void RegisterRawDataServiceVersionResponse( WebServer webServer, string version )
 		{
 			var interfaceVersionRange = new InterfaceVersionRange { SupportedVersions = new[] { new Version( version ) } };
-			var responseJson = JsonConvert.SerializeObject( interfaceVersionRange, new VersionConverter() );
+			var responseJson = JsonSerializer.Serialize( interfaceVersionRange );
 			webServer.RegisterResponse( "/RawDataServiceRest/", responseJson );
 		}
 
 		private static void RegisterCreateRawDataResponse( WebServer webServer, Guid partUuid, RawDataInformationDto responseObject )
 		{
 			var url = $"/RawDataServiceRest/rawData/Part/{partUuid}";
-			var responseJson = JsonConvert.SerializeObject( responseObject );
+			var responseJson = JsonSerializer.Serialize( responseObject );
 			webServer.RegisterResponse( url, responseJson );
 		}
 
 		private static void RegisterListRawDataResponse( WebServer webServer, Guid partUuid, RawDataInformationDto[] responseObject )
 		{
 			var url = $"/RawDataServiceRest/rawData/Part?uuids=%7B{partUuid}%7D";
-			var responseJson = JsonConvert.SerializeObject( responseObject );
+			var responseJson = JsonSerializer.Serialize( responseObject );
 			webServer.RegisterResponse( url, responseJson );
 		}
 

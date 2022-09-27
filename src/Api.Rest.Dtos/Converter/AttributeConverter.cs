@@ -13,47 +13,85 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 	#region usings
 
 	using System;
-	using Newtonsoft.Json;
+	using System.Buffers;
+	using System.Buffers.Text;
+	using System.Text;
+	using System.Text.Json;
+	using System.Text.Json.Serialization;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 
 	#endregion
 
-	public sealed class AttributeConverter : JsonConverter
+	/// <summary>
+	/// Specialized <see cref="JsonConverter"/> for <see cref="AttributeDto"/>-objects.
+	/// </summary>
+	public sealed class AttributeConverter : JsonConverter<AttributeDto>
 	{
 		#region methods
 
 		/// <inheritdoc />
-		public override bool CanConvert( Type objectType )
-		{
-			return typeof( AttributeDto ) == objectType;
-		}
-
-		/// <inheritdoc />
-		public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer )
+		public override AttributeDto Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
 		{
 			AttributeDto result = default;
 
-			while( reader.Read() && reader.TokenType == JsonToken.PropertyName )
-			{
-				var key = ushort.Parse( (string)reader.Value );
-				var value = reader.ReadAsString();
-
-				result = new AttributeDto( key, value );
-			}
+			while( reader.Read() && reader.TokenType == JsonTokenType.PropertyName )
+				TryReadFromProperty( ref reader, out result );
 
 			return result;
 		}
 
+		internal static bool TryReadFromProperty( ref Utf8JsonReader reader, out AttributeDto attribute )
+		{
+			var keySpan = reader.HasValueSequence ? reader.ValueSequence.ToArray() : reader.ValueSpan;
+
+			if( !Utf8Parser.TryParse( keySpan, out ushort key, out var bytesConsumed ) || keySpan.Length != bytesConsumed )
+				throw new FormatException( $"Input span was not in a correct format, on converting to '{nameof( UInt16 )}'" );
+
+			reader.Read();
+
+			switch( reader.TokenType )
+			{
+				case JsonTokenType.String:
+					attribute = new AttributeDto( key, reader.GetString() );
+					return true;
+
+				case JsonTokenType.Number:
+					var valueSpan = reader.HasValueSequence ? reader.ValueSequence.ToArray() : reader.ValueSpan;
+#if NETSTANDARD
+					var value = Encoding.UTF8.GetString( valueSpan.ToArray() );
+#else
+					var value = Encoding.UTF8.GetString( valueSpan );
+#endif
+					attribute = new AttributeDto( key, value );
+					return true;
+			}
+
+			attribute = default;
+
+			return false;
+		}
+
 		/// <inheritdoc />
-		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer )
+		public override void Write( Utf8JsonWriter writer, AttributeDto value, JsonSerializerOptions options )
 		{
 			writer.WriteStartObject();
 
-			var att = (AttributeDto)value;
-			writer.WritePropertyName( AttributeKeyCache.StringForKey( att.Key ) );
-			writer.WriteValue( att.RawValue ?? att.Value );
+			WriteAsProperty( writer, value, options );
 
 			writer.WriteEndObject();
+		}
+
+		internal static void WriteAsProperty( Utf8JsonWriter writer, in AttributeDto value, JsonSerializerOptions options )
+		{
+			var key = AttributeKeyCache.StringForKey( value.Key );
+
+			if( value.RawValue is not null )
+			{
+				writer.WritePropertyName( key );
+				JsonSerializer.Serialize( writer, value.RawValue, options );
+			}
+			else
+				writer.WriteString( key, value.Value );
 		}
 
 		#endregion

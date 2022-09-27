@@ -19,10 +19,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 	using System.Linq;
 	using System.Net.Mime;
 	using System.Text;
+	using System.Text.Json;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
-	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
 	using Zeiss.PiWeb.Api.Rest.Dtos.RawData;
 	using static PiWeb.Api.Definitions.WellKnownKeys;
 
@@ -380,16 +380,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 		}
 		.ToDictionary( pair => pair.Key, pair => pair.Value );
 
-		private static readonly Newtonsoft.Json.JsonSerializerSettings Settings = new()
-		{
-			NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
-			Converters = { new Newtonsoft.Json.Converters.VersionConverter(), new InspectionPlanDtoBaseConverter() }
-		};
-
-		private static readonly System.Text.Json.JsonSerializerOptions Options = new()
+		private static readonly JsonSerializerOptions Options = new()
 		{
 			DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
-			Converters = { new JsonInspectionPlanDtoBaseConverter() }
+			Converters = { new InspectionPlanDtoBaseConverter() }
 		};
 
 		#endregion
@@ -397,26 +391,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 		#region methods
 
 		[TestCaseSource( nameof( TestCases ) )]
-		public void Backward_Compatible<T>( T value )
-		{
-			var json = Newtonsoft.Json.JsonConvert.SerializeObject( value, Settings );
-
-			var deserializedValue = System.Text.Json.JsonSerializer.Deserialize<T>( json, Options );
-
-			var equatable = EquatableFromType[typeof( T )];
-
-			var expected = equatable( value );
-			var actual = equatable( deserializedValue );
-
-			Assert.AreEqual( expected, actual, $"{typeof( T ).Name}" );
-		}
-
-		[TestCaseSource( nameof( TestCases ) )]
 		public void Forward_Compatible<T>( T value )
 		{
-			var json = System.Text.Json.JsonSerializer.Serialize( value, Options );
+			var json = JsonSerializer.Serialize( value, Options );
 
-			var deserializedValue = Newtonsoft.Json.JsonConvert.DeserializeObject<T>( json, Settings );
+			var deserializedValue = JsonSerializer.Deserialize<T>( json, Options );
 
 			var equatable = EquatableFromType[typeof( T )];
 

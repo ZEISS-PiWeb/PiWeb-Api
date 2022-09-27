@@ -19,7 +19,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// <summary>
 	/// This enumeration specifies how the server is performing inspection plan versioning.
 	/// </summary>
-	[Newtonsoft.Json.JsonConverter( typeof( Newtonsoft.Json.Converters.StringEnumConverter ) )]
 	[JsonConverter( typeof( JsonStringEnumConverter ) )]
 	public enum VersioningTypeDto
 	{

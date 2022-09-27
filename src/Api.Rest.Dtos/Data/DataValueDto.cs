@@ -16,18 +16,15 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	using System.Collections.Generic;
 	using System.Text.Json.Serialization;
 	using JetBrains.Annotations;
-	using Newtonsoft.Json;
 	using Zeiss.PiWeb.Api.Definitions;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
-	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
 
 	#endregion
 
 	/// <summary>
 	/// This class represents a single measurement value that belongs to one characteristic and one measurement.
 	/// </summary>
-	[System.Text.Json.Serialization.JsonConverter( typeof( JsonDataValueConverter ) )]
-	[Newtonsoft.Json.JsonConverter( typeof( DataValueConverter ) )]
+	[JsonConverter( typeof( DataValueConverter ) )]
 	public struct DataValueDto : IAttributeItemDto, IEquatable<DataValueDto>
 	{
 		#region members
@@ -63,8 +60,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Convinience property for accessing the measurement value (K1).
 		/// </summary>
-		[Newtonsoft.Json.JsonIgnore]
-		[System.Text.Json.Serialization.JsonIgnore]
+		[JsonIgnore]
 		public double? MeasuredValue => this.GetDoubleAttributeValue( WellKnownKeys.Value.MeasuredValue );
 
 		#endregion
@@ -72,8 +68,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		#region interface IAttributeItemDto
 
 		/// <inheritdoc />
-		[JsonProperty( "attributes" ), Newtonsoft.Json.JsonConverter( typeof( AttributeArrayConverter ) )]
-		[JsonPropertyName( "attributes" ), System.Text.Json.Serialization.JsonConverter( typeof( JsonAttributeArrayConverter ) )]
+		[JsonPropertyName( "attributes" ), JsonConverter( typeof( AttributeArrayConverter ) )]
 		public IReadOnlyList<AttributeDto> Attributes
 		{
 			get => _Attributes ?? Array.Empty<AttributeDto>();

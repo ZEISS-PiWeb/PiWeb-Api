@@ -40,14 +40,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets the uuid of this catalog.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "uuid" )]
 		[JsonPropertyName( "uuid" )]
 		public Guid Uuid { get; set; }
 
 		/// <summary>
 		/// Gets or sets the name of the catalog.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "name" )]
 		[JsonPropertyName( "name" )]
 		public string Name { get; set; }
 

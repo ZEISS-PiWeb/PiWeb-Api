@@ -53,7 +53,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets a list of possible catalog entry attribute (i.e. columns of a catalog).
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "validAttributes" )]
 		[JsonPropertyName( "validAttributes" )]
 		public IReadOnlyList<ushort> ValidAttributes
 		{
@@ -64,7 +63,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets the list of catalog entries that belong to this catalog.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "catalogEntries" )]
 		[JsonPropertyName( "catalogEntries" )]
 		public IReadOnlyList<CatalogEntryDto> CatalogEntries
 		{

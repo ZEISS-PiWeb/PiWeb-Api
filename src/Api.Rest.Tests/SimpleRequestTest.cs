@@ -13,9 +13,9 @@ namespace Zeiss.PiWeb.Api.Rest.Tests
 	#region usings
 
 	using System;
+	using System.Text.Json;
 	using System.Threading.Tasks;
 	using AutoFixture;
-	using Newtonsoft.Json;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 	using Zeiss.PiWeb.Api.Rest.HttpClient.Data;
@@ -58,13 +58,13 @@ namespace Zeiss.PiWeb.Api.Rest.Tests
 
 			var config = Fixture.Create<ConfigurationDto>();
 
-			server.RegisterResponse( "/DataServiceRest/configuration", JsonConvert.SerializeObject( config ) );
+			server.RegisterResponse( "/DataServiceRest/configuration", JsonSerializer.Serialize( config ) );
 
 			// when
 			var result = await client.GetConfiguration();
 
 			// then
-			Assert.That( JsonConvert.SerializeObject( result ), Is.EqualTo( JsonConvert.SerializeObject( config ) ) );
+			Assert.That( JsonSerializer.Serialize( result ), Is.EqualTo( JsonSerializer.Serialize( config ) ) );
 		}
 
 		#endregion

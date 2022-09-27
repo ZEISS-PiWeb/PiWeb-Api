@@ -21,7 +21,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Definitions;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
-	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
 
 	#endregion
 
@@ -47,14 +46,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets the uuid of this measurement.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "uuid" )]
 		[JsonPropertyName( "uuid" )]
 		public Guid Uuid { get; set; }
 
 		/// <summary>
 		/// Gets or sets the uuid the part this measurement belongs to.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "partUuid" )]
 		[JsonPropertyName( "partUuid" )]
 		public Guid PartUuid { get; set; }
 
@@ -63,14 +60,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// timestamp whenever an attribute of this measurement is changed or whenever measurement values
 		/// of this measurement are updated, deleted and added.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "lastModified" )]
 		[JsonPropertyName( "lastModified" )]
 		public DateTime LastModified { get; set; }
 
 		/// <summary>
 		/// Gets or sets the creation timestamp of this measurement.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "created" )]
 		[JsonPropertyName( "created" )]
 		public DateTime Created { get; set; }
 
@@ -78,7 +73,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Gets or sets the status information for this measurement. This status information can be requested when
 		/// performing a measurement search using one of the values from <see cref="MeasurementStatisticsDto"/>.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "status" )]
 		[JsonPropertyName( "status" )]
 		public IReadOnlyList<SimpleMeasurementStatusDto> Status { get; set; }
 
@@ -86,7 +80,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Gets or sets the time of this measurement. If this measurement has no time attribute, then <see cref="MinimumValidDatabaseDateTime"/> will
 		/// be returned.
 		/// </summary>
-		[Newtonsoft.Json.JsonIgnore]
 		[JsonIgnore]
 		public DateTime? Time
 		{
@@ -131,14 +124,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Returns the measurement time and in case of no time is specified, the minimum time allowed (<see cref="System.Data.SqlTypes.SqlDateTime.MinValue"/>).
 		/// </summary>
-		[Newtonsoft.Json.JsonIgnore]
 		[JsonIgnore]
 		public DateTime TimeOrMinDate => Time ?? MinimumValidDatabaseDateTime;
 
 		/// <summary>
 		/// Returns the measurement time and in case of no time is specified, the creation date of the measurement.
 		/// </summary>
-		[Newtonsoft.Json.JsonIgnore]
 		[JsonIgnore]
 		public DateTime TimeOrCreationDate => Time ?? Created;
 
@@ -157,8 +148,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		#region interface IAttributeItemDto
 
 		/// <inheritdoc />
-		[Newtonsoft.Json.JsonProperty( "attributes" ), Newtonsoft.Json.JsonConverter( typeof( AttributeArrayConverter ) )]
-		[JsonPropertyName( "attributes" ), JsonConverter( typeof( JsonAttributeArrayConverter ) )]
+		[JsonPropertyName( "attributes" ), JsonConverter( typeof( AttributeArrayConverter ) )]
 		public IReadOnlyList<AttributeDto> Attributes
 		{
 			[NotNull] get => _Attributes;

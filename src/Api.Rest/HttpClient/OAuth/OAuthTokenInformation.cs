@@ -26,7 +26,6 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 		/// <summary>
 		/// The URL of the trusted OpenID Connect authority for this service.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "openIdAuthority" )]
 		[JsonPropertyName( "openIdAuthority" )]
 		public string OpenIdAuthority { get; set; }
 

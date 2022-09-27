@@ -58,7 +58,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <param name="maxUriLength">The uri length limit</param>
 		/// <param name="restClient">Custom implementation of RestClient</param>
 		public RawDataServiceRestClient( [NotNull] Uri serverUri, int maxUriLength = RestClientBase.DefaultMaxUriLength, RestClientBase restClient = null )
-			: base( restClient ?? new RestClient( serverUri, EndpointName, maxUriLength: maxUriLength, serializer: ObjectSerializer.SystemTextJson ) )
+			: base( restClient ?? new RestClient( serverUri, EndpointName, maxUriLength: maxUriLength, serializer: ObjectSerializer.Default ) )
 		{ }
 
 		#endregion

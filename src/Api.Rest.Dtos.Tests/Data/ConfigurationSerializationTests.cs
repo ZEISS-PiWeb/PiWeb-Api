@@ -12,13 +12,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 {
 	#region usings
 
-	using System;
-	using System.Collections.Generic;
-	using System.IO;
-	using Newtonsoft.Json;
+	using System.Text.Json;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Definitions;
-	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 
 	#endregion
@@ -37,8 +33,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 		[Test]
 		public void SerializingConfiguration_SerializesProperly()
 		{
-			var deserialized = JsonConvert.DeserializeObject<ConfigurationDto>( ConfigurationJson );
-			var serialized = JsonConvert.SerializeObject( deserialized );
+			var deserialized = JsonSerializer.Deserialize<ConfigurationDto>( ConfigurationJson );
+			var serialized = JsonSerializer.Serialize( deserialized );
 
 			Assert.That( serialized, Is.Not.Null.Or.Empty );
 		}
@@ -46,7 +42,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 		[Test]
 		public void DeserializingConfiguration_RestoresStructureProperly()
 		{
-			var deserialized = JsonConvert.DeserializeObject<ConfigurationDto>( ConfigurationJson );
+			var deserialized = JsonSerializer.Deserialize<ConfigurationDto>( ConfigurationJson );
 
 			Assert.That( deserialized, Is.Not.Null );
 			Assert.That( deserialized.AllAttributes, Has.Exactly( 80 ).Items );

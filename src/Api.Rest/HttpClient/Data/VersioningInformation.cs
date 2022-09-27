@@ -25,35 +25,30 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		/// <summary>
 		/// Gets or sets the id of this version entry.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "id" )]
 		[JsonPropertyName( "id" )]
 		public int ID { get; set; }
 
 		/// <summary>
 		/// Gets or sets the versioning comment.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "comment" )]
 		[JsonPropertyName( "comment" )]
 		public string Comment { get; set; }
 
 		/// <summary>
 		/// Gets or sets the comment of this inspection plan entity.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "user" )]
 		[JsonPropertyName( "user" )]
 		public string User { get; set; }
 
 		/// <summary>
 		/// Gets or sets the number of changed inspection plan items that where change.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "changeCount" )]
 		[JsonPropertyName( "changeCount" )]
 		public int ChangeCount { get; set; }
 
 		/// <summary>
 		/// Contains the date and time of the versioning change.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "dateCreated" )]
 		[JsonPropertyName( "dateCreated" )]
 		public DateTime DateCreated { get; set; }
 

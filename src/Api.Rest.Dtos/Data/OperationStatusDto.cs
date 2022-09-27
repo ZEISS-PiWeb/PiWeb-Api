@@ -37,7 +37,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Thrown exception during execution, wrapped in an error object.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( NullValueHandling = Newtonsoft.Json.NullValueHandling.Include )]
 		[JsonIgnore( Condition = JsonIgnoreCondition.Never )]
 		public Error Exception { get; set; }
 

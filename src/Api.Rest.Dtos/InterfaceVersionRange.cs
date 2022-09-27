@@ -22,7 +22,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos
 	{
 		#region properties
 
-		[Newtonsoft.Json.JsonProperty( "supportedVersions" )]
 		[JsonPropertyName( "supportedVersions" )]
 		public IEnumerable<Version> SupportedVersions { get; set; }
 

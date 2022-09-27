@@ -19,7 +19,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// <summary>
 	/// This enumeration specifies the order direction when searching for measurement .
 	/// </summary>
-	[Newtonsoft.Json.JsonConverter( typeof( Newtonsoft.Json.Converters.StringEnumConverter ) )]
 	[JsonConverter( typeof( JsonStringEnumConverter ) )]
 	public enum OrderDirectionDto
 	{

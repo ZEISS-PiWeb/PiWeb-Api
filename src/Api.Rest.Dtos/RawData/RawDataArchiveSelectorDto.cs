@@ -47,21 +47,18 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// <summary>
 		/// <see cref="RawDataTargetEntityDto"/> of raw data.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "target" )]
 		[JsonPropertyName( "target" )]
 		public RawDataTargetEntityDto Target { get; set; }
 
 		/// <summary>
 		/// Key to specify raw data of target entity.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "key" )]
 		[JsonPropertyName( "key" )]
 		public int Key { get; set; }
 
 		/// <summary>
 		/// List of requested files in specified archive.
 		/// </summary>
-		[Newtonsoft.Json.JsonProperty( "entries" )]
 		[JsonPropertyName( "entries" )]
 		public string[] Entries { get; set; }
 
