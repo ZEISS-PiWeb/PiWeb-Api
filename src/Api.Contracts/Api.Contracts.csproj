@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
-    <RootNamespace>Zeiss.PiWeb.Api.Rest.Dtos</RootNamespace>
+  	<TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
+    <RootNamespace>Zeiss.PiWeb.Api.Contracts</RootNamespace>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageVersion>8.0.0</PackageVersion>
@@ -10,13 +10,12 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Assembly information">
-    <AssemblyTitle>Contains the JSON-serializable DataTransferObjects (DTO) that will be exchanged between ZEISS PiWeb Server and client(s).</AssemblyTitle>
-    <AssemblyName>Zeiss.PiWeb.Api.Rest.Dtos</AssemblyName>
+    <AssemblyTitle>Contains contract classes used by the ZEISS PiWeb API.</AssemblyTitle>
+    <AssemblyName>Zeiss.PiWeb.Api.Contracts</AssemblyName>
     <AssemblyVersion>8.0.0</AssemblyVersion>
     <Company>Carl Zeiss Industrielle Messtechnik GmbH</Company>
     <Copyright>Copyright © 2020 $(Company)</Copyright>
-    <Description>Contains the JSON-serializable DataTransferObjects (DTO) that will be exchanged between ZEISS PiWeb Server and client(s).
-    The ZEISS PiWeb API nuget depends on this package.</Description>
+    <Description>Contains contract classes used by the ZEISS PiWeb API. The ZEISS PiWeb API nuget depends on this package.</Description>
     <FileVersion>$(AssemblyVersion)</FileVersion>
     <InformationalVersion>$(AssemblyVersion)</InformationalVersion>
     <NeutralLanguage>en</NeutralLanguage>
@@ -29,11 +28,11 @@
     <EmbedAllSources>true</EmbedAllSources>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIconUrl>https://raw.githubusercontent.com/ZEISS-PiWeb/PiWeb-Api/develop/logo128px.png</PackageIconUrl>
-    <PackageId>Zeiss.PiWeb.Api.Rest.Dtos</PackageId>
+    <PackageId>Zeiss.PiWeb.Api.Contracts</PackageId>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/ZEISS-PiWeb/PiWeb-Api</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageTags>ZEISS PiWeb Dtos</PackageTags>
+    <PackageTags>ZEISS PiWeb API</PackageTags>
     <Version>$(InformationalVersion)</Version>
     <RepositoryUrl>https://github.com/ZEISS-PiWeb/PiWeb-Api</RepositoryUrl>
   </PropertyGroup>
@@ -42,25 +41,16 @@
     <SupportedPlatform Include="browser" />
   </ItemGroup>
 
-    <ItemGroup Label=".NET references" Condition="'$(TargetFrameworkIdentifier)' != '.NETCoreApp'">
-      <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
-      <PackageReference Include="System.Buffers" Version="4.5.1" />
-      <PackageReference Include="System.Memory" Version="4.5.5" />
-    </ItemGroup>
-
-    <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="System.Text.Json" Version="6.0.5" />
-    <PackageReference Include="SauceControl.InheritDoc" Version="1.3.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+  <ItemGroup Label=".NET references" Condition="'$(TargetFrameworkIdentifier)' != '.NETCoreApp'">
+    <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
+    <PackageReference Include="System.Buffers" Version="4.5.1" />
+    <PackageReference Include="System.Memory" Version="4.5.5" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Api.Contracts\Api.Contracts.csproj" />
-    <ProjectReference Include="..\Api.Definitions\Api.Definitions.csproj" />
+    <PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
+    <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="6.0.9" />
+    <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -19,6 +19,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 	using System.Threading;
 	using System.Threading.Tasks;
 	using JetBrains.Annotations;
+	using Zeiss.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Definitions;
 	using Zeiss.PiWeb.Api.Rest.Common.Client;
 	using Zeiss.PiWeb.Api.Rest.Common.Data;
@@ -87,7 +88,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			}
 		}
 
-		private async Task<IReadOnlyList<DataMeasurementDto>> GetMeasurementValuesSplitByMeasurement( PathInformationDto partPath, MeasurementValueFilterAttributesDto filter, CancellationToken cancellationToken )
+		private async Task<IReadOnlyList<DataMeasurementDto>> GetMeasurementValuesSplitByMeasurement( PathInformation partPath, MeasurementValueFilterAttributesDto filter, CancellationToken cancellationToken )
 		{
 			var newFilter = filter.Clone();
 			newFilter.MeasurementUuids = null;
@@ -118,7 +119,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			return resultSets > 1 ? LimitAndSortResult( result, filter, resultSets ) : result;
 		}
 
-		private async Task<IReadOnlyList<DataMeasurementDto>> GetMeasurementValuesSplitByCharacteristics( PathInformationDto partPath, MeasurementValueFilterAttributesDto filter, CancellationToken cancellationToken )
+		private async Task<IReadOnlyList<DataMeasurementDto>> GetMeasurementValuesSplitByCharacteristics( PathInformation partPath, MeasurementValueFilterAttributesDto filter, CancellationToken cancellationToken )
 		{
 			var newFilter = filter.Clone();
 			newFilter.CharacteristicsUuidList = null;
@@ -173,7 +174,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			return result;
 		}
 
-		private static List<ParameterDefinition> CreateParameterDefinitions<T>( PathInformationDto partPath, T filter, int? key = null ) where T : AbstractMeasurementFilterAttributesDto
+		private static List<ParameterDefinition> CreateParameterDefinitions<T>( PathInformation partPath, T filter, int? key = null ) where T : AbstractMeasurementFilterAttributesDto
 		{
 			var parameter = new List<ParameterDefinition>();
 
@@ -592,7 +593,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		}
 
 		/// <inheritdoc />
-		public async Task<IReadOnlyList<InspectionPlanPartDto>> GetParts( PathInformationDto partPath = null, IReadOnlyCollection<Guid> partUuids = null, ushort? depth = null, AttributeSelector requestedPartAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default )
+		public async Task<IReadOnlyList<InspectionPlanPartDto>> GetParts( PathInformation partPath = null, IReadOnlyCollection<Guid> partUuids = null, ushort? depth = null, AttributeSelector requestedPartAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default )
 		{
 			if( partUuids != null && partUuids.Count > 0 )
 			{
@@ -652,7 +653,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 
 		/// <inheritdoc />
 		/// <exception cref="ArgumentNullException"><paramref name="partPath"/> is <see langword="null"/>.</exception>
-		public Task DeleteParts( PathInformationDto partPath, CancellationToken cancellationToken = default )
+		public Task DeleteParts( PathInformation partPath, CancellationToken cancellationToken = default )
 		{
 			if( partPath == null ) throw new ArgumentNullException( nameof( partPath ) );
 			var parameter = ParameterDefinition.Create( "partPath", PathHelper.PathInformation2DatabaseString( partPath ) );
@@ -692,7 +693,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		}
 
 		/// <inheritdoc />
-		public async Task<IReadOnlyList<InspectionPlanCharacteristicDto>> GetCharacteristics( PathInformationDto partPath = null, ushort? depth = null, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default )
+		public async Task<IReadOnlyList<InspectionPlanCharacteristicDto>> GetCharacteristics( PathInformation partPath = null, ushort? depth = null, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false, CancellationToken cancellationToken = default )
 		{
 			var parameter = RestClientHelper.ParseToParameter( partPath, null, null, depth, null, requestedCharacteristicAttributes, withHistory );
 			return await _RestClient.Request<IReadOnlyList<InspectionPlanCharacteristicDto>>( RequestBuilder.CreateGet( "characteristics", parameter ), cancellationToken ).ConfigureAwait( false );
@@ -774,7 +775,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 
 		/// <inheritdoc />
 		/// <exception cref="ArgumentNullException"><paramref name="charPath"/> is <see langword="null"/>.</exception>
-		public Task DeleteCharacteristics( PathInformationDto charPath, CancellationToken cancellationToken = default )
+		public Task DeleteCharacteristics( PathInformation charPath, CancellationToken cancellationToken = default )
 		{
 			if( charPath == null ) throw new ArgumentNullException( nameof( charPath ) );
 			var parameter = ParameterDefinition.Create( "charPath", PathHelper.PathInformation2DatabaseString( charPath ) );
@@ -795,7 +796,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		}
 
 		/// <inheritdoc />
-		public async Task<IReadOnlyList<SimpleMeasurementDto>> GetMeasurements( PathInformationDto partPath = null, MeasurementFilterAttributesDto filter = null, CancellationToken cancellationToken = default )
+		public async Task<IReadOnlyList<SimpleMeasurementDto>> GetMeasurements( PathInformation partPath = null, MeasurementFilterAttributesDto filter = null, CancellationToken cancellationToken = default )
 		{
 			await ThrowOnUnsupportedMergeAttributes( filter?.MergeAttributes, cancellationToken );
 			await ThrowOnUnsupportedMergeMasterPart( filter, cancellationToken );
@@ -853,7 +854,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		}
 
 		/// <inheritdoc />
-		public async Task<IReadOnlyList<string>> GetDistinctMeasurementAttributeValues( ushort key, PathInformationDto partPath = null, DistinctMeasurementFilterAttributesDto filter = null, CancellationToken cancellationToken = default )
+		public async Task<IReadOnlyList<string>> GetDistinctMeasurementAttributeValues( ushort key, PathInformation partPath = null, DistinctMeasurementFilterAttributesDto filter = null, CancellationToken cancellationToken = default )
 		{
 			await ThrowOnUnsupportedDistinctMeasurementValueSearch( cancellationToken );
 			await ThrowOnUnsupportedLimitResultPerPart( filter, cancellationToken );
@@ -902,7 +903,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		}
 
 		/// <inheritdoc />
-		public async Task DeleteMeasurementsByPartPath( PathInformationDto partPath = null, GenericSearchConditionDto filter = null, AggregationMeasurementSelectionDto aggregation = AggregationMeasurementSelectionDto.Default, MeasurementDeleteBehaviorDto deep = MeasurementDeleteBehaviorDto.DeleteForCurrentPartOnly, CancellationToken cancellationToken = default )
+		public async Task DeleteMeasurementsByPartPath( PathInformation partPath = null, GenericSearchConditionDto filter = null, AggregationMeasurementSelectionDto aggregation = AggregationMeasurementSelectionDto.Default, MeasurementDeleteBehaviorDto deep = MeasurementDeleteBehaviorDto.DeleteForCurrentPartOnly, CancellationToken cancellationToken = default )
 		{
 			var parameter = new List<ParameterDefinition>();
 
@@ -976,7 +977,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		}
 
 		/// <inheritdoc />
-		public async Task<IReadOnlyList<DataMeasurementDto>> GetMeasurementValues( PathInformationDto partPath = null, MeasurementValueFilterAttributesDto filter = null, CancellationToken cancellationToken = default )
+		public async Task<IReadOnlyList<DataMeasurementDto>> GetMeasurementValues( PathInformation partPath = null, MeasurementValueFilterAttributesDto filter = null, CancellationToken cancellationToken = default )
 		{
 			await ThrowOnUnsupportedMergeAttributes( filter?.MergeAttributes, cancellationToken );
 			await ThrowOnUnsupportedLimitResultPerPart( filter, cancellationToken );

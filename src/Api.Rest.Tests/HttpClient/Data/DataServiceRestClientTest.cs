@@ -13,7 +13,6 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Data
 	#region usings
 
 	using System;
-	using System.Linq;
 	using System.Threading.Tasks;
 	using FluentAssertions;
 	using Newtonsoft.Json;

@@ -16,7 +16,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 	using System.Collections.Generic;
 	using System.Linq;
 	using NUnit.Framework;
-	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
+	using Zeiss.PiWeb.Api.Contracts;
 
 	#endregion
 
@@ -37,10 +37,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			// arrange
 
 			// act
-			var commonParentPath = PathInformationExtension.FindCommonParent( (IEnumerable<PathInformationDto>)null );
+			var commonParentPath = PathInformationExtension.FindCommonParent( (IEnumerable<PathInformation>)null );
 
 			// assert
-			Assert.That( commonParentPath, Is.EqualTo( PathInformationDto.Root ) );
+			Assert.That( commonParentPath, Is.EqualTo( PathInformation.Root ) );
 		}
 
 		[Test]
@@ -49,10 +49,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			// arrange
 
 			// act
-			var commonParentPath = PathInformationExtension.FindCommonParent( Enumerable.Empty<PathInformationDto>() );
+			var commonParentPath = PathInformationExtension.FindCommonParent( Enumerable.Empty<PathInformation>() );
 
 			// assert
-			Assert.That( commonParentPath, Is.EqualTo( PathInformationDto.Root ) );
+			Assert.That( commonParentPath, Is.EqualTo( PathInformation.Root ) );
 		}
 
 		[Test]
@@ -65,7 +65,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			var path = PathHelper.RoundtripString2PathInformation( pathString );
 
 			// act
-			var commonParentPath = PathInformationExtension.FindCommonParent( new List<PathInformationDto> { path } );
+			var commonParentPath = PathInformationExtension.FindCommonParent( new List<PathInformation> { path } );
 
 			// assert
 			Assert.That( commonParentPath, Is.EqualTo( path ) );
@@ -81,10 +81,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			var path2 = PathHelper.RoundtripString2PathInformation( path2String );
 
 			// act
-			var commonParentPath = PathInformationExtension.FindCommonParent( new List<PathInformationDto> { path1, path2 } );
+			var commonParentPath = PathInformationExtension.FindCommonParent( new List<PathInformation> { path1, path2 } );
 
 			// assert
-			Assert.That( commonParentPath, Is.EqualTo( PathInformationDto.Root ) );
+			Assert.That( commonParentPath, Is.EqualTo( PathInformation.Root ) );
 		}
 
 		[Test]
@@ -101,7 +101,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			var path2 = PathHelper.RoundtripString2PathInformation( path2String );
 
 			// act
-			var commonParentPath = PathInformationExtension.FindCommonParent( new List<PathInformationDto> { path1, path2 } );
+			var commonParentPath = PathInformationExtension.FindCommonParent( new List<PathInformation> { path1, path2 } );
 
 			// assert
 			Assert.That( commonParentPath, Is.EqualTo( PathHelper.RoundtripString2PathInformation( expectedPathString ) ) );
@@ -118,10 +118,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			var path3 = PathHelper.RoundtripString2PathInformation( path3String );
 
 			// act
-			var commonParentPath = PathInformationExtension.FindCommonParent( new List<PathInformationDto> { path1, path2, path3 } );
+			var commonParentPath = PathInformationExtension.FindCommonParent( new List<PathInformation> { path1, path2, path3 } );
 
 			// assert
-			Assert.That( commonParentPath, Is.EqualTo( PathInformationDto.Root ) );
+			Assert.That( commonParentPath, Is.EqualTo( PathInformation.Root ) );
 		}
 
 		[Test]
@@ -139,7 +139,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			var path3 = PathHelper.RoundtripString2PathInformation( path3String );
 
 			// act
-			var commonParentPath = PathInformationExtension.FindCommonParent( new List<PathInformationDto> { path1, path2, path3 } );
+			var commonParentPath = PathInformationExtension.FindCommonParent( new List<PathInformation> { path1, path2, path3 } );
 
 			// assert
 			Assert.That( commonParentPath, Is.EqualTo( PathHelper.RoundtripString2PathInformation( expectedPathString ) ) );
@@ -151,10 +151,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			// arrange
 
 			// act
-			var commonParentPath = PathInformationExtension.FindCommonParentPart( (IEnumerable<PathInformationDto>)null );
+			var commonParentPath = PathInformationExtension.FindCommonParentPart( (IEnumerable<PathInformation>)null );
 
 			// assert
-			Assert.That( commonParentPath, Is.EqualTo( PathInformationDto.Root ) );
+			Assert.That( commonParentPath, Is.EqualTo( PathInformation.Root ) );
 		}
 
 		[Test]
@@ -163,10 +163,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			// arrange
 
 			// act
-			var commonParentPath = PathInformationExtension.FindCommonParentPart( Enumerable.Empty<PathInformationDto>() );
+			var commonParentPath = PathInformationExtension.FindCommonParentPart( Enumerable.Empty<PathInformation>() );
 
 			// assert
-			Assert.That( commonParentPath, Is.EqualTo( PathInformationDto.Root ) );
+			Assert.That( commonParentPath, Is.EqualTo( PathInformation.Root ) );
 		}
 
 		[Test]
@@ -179,7 +179,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			var path = PathHelper.RoundtripString2PathInformation( pathString );
 
 			// act
-			var commonParentPath = PathInformationExtension.FindCommonParentPart( new List<PathInformationDto> { path } );
+			var commonParentPath = PathInformationExtension.FindCommonParentPart( new List<PathInformation> { path } );
 
 			// assert
 			Assert.That( commonParentPath, Is.EqualTo( PathHelper.RoundtripString2PathInformation( expectedPathString ) ) );
@@ -196,10 +196,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			var path2 = PathHelper.RoundtripString2PathInformation( path2String );
 
 			// act
-			var commonParentPath = PathInformationExtension.FindCommonParentPart( new List<PathInformationDto> { path1, path2 } );
+			var commonParentPath = PathInformationExtension.FindCommonParentPart( new List<PathInformation> { path1, path2 } );
 
 			// assert
-			Assert.That( commonParentPath, Is.EqualTo( PathInformationDto.Root ) );
+			Assert.That( commonParentPath, Is.EqualTo( PathInformation.Root ) );
 		}
 
 		[Test]
@@ -216,7 +216,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			var path2 = PathHelper.RoundtripString2PathInformation( path2String );
 
 			// act
-			var commonParentPath = PathInformationExtension.FindCommonParentPart( new List<PathInformationDto> { path1, path2 } );
+			var commonParentPath = PathInformationExtension.FindCommonParentPart( new List<PathInformation> { path1, path2 } );
 
 			// assert
 			Assert.That( commonParentPath, Is.EqualTo( PathHelper.RoundtripString2PathInformation( expectedPathString ) ) );
@@ -234,10 +234,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			var path3 = PathHelper.RoundtripString2PathInformation( path3String );
 
 			// act
-			var commonParentPath = PathInformationExtension.FindCommonParentPart( new List<PathInformationDto> { path1, path2, path3 } );
+			var commonParentPath = PathInformationExtension.FindCommonParentPart( new List<PathInformation> { path1, path2, path3 } );
 
 			// assert
-			Assert.That( commonParentPath, Is.EqualTo( PathInformationDto.Root ) );
+			Assert.That( commonParentPath, Is.EqualTo( PathInformation.Root ) );
 		}
 
 		[Test]
@@ -255,7 +255,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			var path3 = PathHelper.RoundtripString2PathInformation( path3String );
 
 			// act
-			var commonParentPath = PathInformationExtension.FindCommonParentPart( new List<PathInformationDto> { path1, path2, path3 } );
+			var commonParentPath = PathInformationExtension.FindCommonParentPart( new List<PathInformation> { path1, path2, path3 } );
 
 			// assert
 			Assert.That( commonParentPath, Is.EqualTo( PathHelper.RoundtripString2PathInformation( expectedPathString ) ) );
@@ -267,10 +267,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			// arrange
 
 			// act
-			var result = PathInformationExtension.FindParentParts( (IEnumerable<PathInformationDto>)null );
+			var result = PathInformationExtension.FindParentParts( (IEnumerable<PathInformation>)null );
 
 			// assert
-			Assert.That( result, Is.EqualTo( PathInformationDto.Root ) );
+			Assert.That( result, Is.EqualTo( PathInformation.Root ) );
 		}
 
 		[Test]
@@ -279,10 +279,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			// arrange
 
 			// act
-			var result = PathInformationExtension.FindParentParts( Enumerable.Empty<PathInformationDto>() );
+			var result = PathInformationExtension.FindParentParts( Enumerable.Empty<PathInformation>() );
 
 			// assert
-			Assert.That( result, Is.EqualTo( PathInformationDto.Root ) );
+			Assert.That( result, Is.EqualTo( PathInformation.Root ) );
 		}
 
 		[Test]
@@ -296,7 +296,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			var path = PathHelper.RoundtripString2PathInformation( pathString );
 
 			// act
-			var result = PathInformationExtension.FindParentParts( new List<PathInformationDto> { path } );
+			var result = PathInformationExtension.FindParentParts( new List<PathInformation> { path } );
 
 			// assert
 			Assert.That( result, Has.Length.EqualTo( 1 ) );
@@ -433,7 +433,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			Assert.That( result, Is.EqualTo( expectedPath ) );
 		}
 
-		private static PathInformationDto CreatePath( string pathString )
+		private static PathInformation CreatePath( string pathString )
 		{
 			if( pathString is null )
 				return null;

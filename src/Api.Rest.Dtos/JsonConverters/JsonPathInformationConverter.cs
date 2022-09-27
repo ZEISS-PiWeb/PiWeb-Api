@@ -15,19 +15,19 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 	using System;
 	using System.Text.Json;
 	using System.Text.Json.Serialization;
-	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
+	using Zeiss.PiWeb.Api.Contracts;
 
 	#endregion
 
 	/// <summary>
-	/// Specialized <see cref="JsonConverter"/> for <see cref="PathInformationDto"/>-objects.
+	/// Specialized <see cref="JsonConverter"/> for <see cref="PathInformation"/>-objects.
 	/// </summary>
-	public sealed class JsonPathInformationConverter : JsonConverter<PathInformationDto>
+	public sealed class JsonPathInformationConverter : JsonConverter<PathInformation>
 	{
 		#region methods
 
 		/// <inheritdoc />
-		public override PathInformationDto Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
+		public override PathInformation Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
 		{
 			if( reader.TokenType != JsonTokenType.String )
 				return null;
@@ -37,7 +37,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 		}
 
 		/// <inheritdoc />
-		public override void Write( Utf8JsonWriter writer, PathInformationDto value, JsonSerializerOptions options )
+		public override void Write( Utf8JsonWriter writer, PathInformation value, JsonSerializerOptions options )
 		{
 			writer.WriteStringValue( PathHelper.PathInformation2RoundtripString( value ) );
 		}

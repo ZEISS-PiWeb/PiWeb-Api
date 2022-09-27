@@ -17,6 +17,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	using System.Diagnostics;
 	using System.Text.Json.Serialization;
 	using JetBrains.Annotations;
+	using Zeiss.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
 
@@ -34,7 +35,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		private IReadOnlyList<AttributeDto> _Attributes;
 
 		[Newtonsoft.Json.JsonProperty( "path" ), Newtonsoft.Json.JsonConverter( typeof( PathInformationConverter ) )]
-		private PathInformationDto _Path;
+		private PathInformation _Path;
 
 		#endregion
 
@@ -69,9 +70,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		[Newtonsoft.Json.JsonIgnore]
 		[JsonPropertyName( "path" ), JsonConverter( typeof( JsonPathInformationConverter ) )]
-		public PathInformationDto Path
+		public PathInformation Path
 		{
-			[NotNull] get => _Path ?? PathInformationDto.Root;
+			[NotNull] get => _Path ?? PathInformation.Root;
 			set => _Path = value;
 		}
 

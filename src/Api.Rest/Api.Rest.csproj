@@ -92,6 +92,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Api.Contracts\Api.Contracts.csproj" />
     <ProjectReference Include="..\Api.Definitions\Api.Definitions.csproj" />
     <ProjectReference Include="..\Api.Rest.Dtos\Api.Rest.Dtos.csproj" />
   </ItemGroup>
