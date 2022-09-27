@@ -16,7 +16,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 	using System.Collections;
 	using System.Xml;
 	using NUnit.Framework;
+	using Zeiss.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
+	using Attribute = Zeiss.PiWeb.Api.Contracts.Attribute;
 
 	#endregion
 
@@ -206,7 +208,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 
 			var catalogUuid = Guid.NewGuid();
 
-			var defaultCatalogEntry = new CatalogEntryDto { Key = 0, Attributes = new[] { new AttributeDto( 1, "n.def." ) } };
+			var defaultCatalogEntry = new CatalogEntryDto { Key = 0, Attributes = new[] { new Attribute( 1, "n.def." ) } };
 			var catalog = new CatalogDto
 			{
 				Uuid = catalogUuid,
@@ -234,8 +236,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 
 			var catalogUuid = Guid.NewGuid();
 
-			var defaultCatalogEntry = new CatalogEntryDto { Key = 0, Attributes = new[] { new AttributeDto( 1, "n.def." ) } };
-			var catalogEntry1 = new CatalogEntryDto { Key = 1, Attributes = new[] { new AttributeDto( 1, "first entry" ) } };
+			var defaultCatalogEntry = new CatalogEntryDto { Key = 0, Attributes = new[] { new Attribute( 1, "n.def." ) } };
+			var catalogEntry1 = new CatalogEntryDto { Key = 1, Attributes = new[] { new Attribute( 1, "first entry" ) } };
 			var catalog = new CatalogDto
 			{
 				Uuid = catalogUuid,
@@ -260,9 +262,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 		#region helper methods
 
 		/// <remark>
-		/// The null attribute is handled differently than other alpha numeric attributes because <see cref="AttributeDto.GetRawValue"/>
-		/// for a null attribute, unlike other alpha numeric attributes, returns <see cref="AttributeDto.Value"/> rather than
-		/// <see cref="AttributeDto._Value"/> which is <see langword="null" />.
+		/// The null attribute is handled differently than other alpha numeric attributes because <see cref="Attribute.GetRawValue"/>
+		/// for a null attribute, unlike other alpha numeric attributes, returns <see cref="Attribute.Value"/> rather than
+		/// <see cref="Attribute._Value"/> which is <see langword="null" />.
 		/// </remark>
 		private static IEnumerable CreateNullAttributeTestCases()
 		{
@@ -302,7 +304,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 
 		private static string ValueFromAttribute( object rawValue )
 		{
-			return new AttributeDto( 1, rawValue ).Value;
+			return new Attribute( 1, rawValue ).Value;
 		}
 
 		private static IEnumerable CreateFloatAttributeTestCases()

@@ -8,7 +8,7 @@
 
 #endregion
 
-namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
+namespace Zeiss.PiWeb.Api.Contracts
 {
 	#region usings
 
@@ -27,7 +27,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Returns the attribute with the key <code>key</code>.
 		/// </summary>
-		public static AttributeDto? GetAttribute( this IAttributeItemDto item, ushort key )
+		public static Attribute? GetAttribute( this IAttributeItem item, ushort key )
 		{
 			return GetAttribute( item, key, out _ );
 		}
@@ -35,7 +35,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Returns the attribute with the key <code>key</code>.
 		/// </summary>
-		public static AttributeDto? GetAttribute( this IAttributeItemDto item, ushort key, out int index )
+		public static Attribute? GetAttribute( this IAttributeItem item, ushort key, out int index )
 		{
 			var attributes = item?.Attributes;
 			if( attributes != null )
@@ -55,7 +55,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Returns the value for key <code>key</code>.
 		/// </summary>
-		public static string GetAttributeValue( this IAttributeItemDto item, ushort key )
+		public static string GetAttributeValue( this IAttributeItem item, ushort key )
 		{
 			return GetAttribute( item, key )?.Value;
 		}
@@ -66,7 +66,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <remarks>
 		/// If the attribute is either empty, does not exist or parsing fails <code>null</code> is returned.
 		/// </remarks>
-		public static double? GetDoubleAttributeValue( this IAttributeItemDto item, ushort key )
+		public static double? GetDoubleAttributeValue( this IAttributeItem item, ushort key )
 		{
 			return GetAttribute( item, key )?.GetDoubleValue();
 		}
@@ -77,7 +77,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <remarks>
 		/// If the attribute is either empty, does not exist or parsing fails <code>null</code> is returned.
 		/// </remarks>
-		public static int? GetIntAttributeValue( this IAttributeItemDto item, ushort key )
+		public static int? GetIntAttributeValue( this IAttributeItem item, ushort key )
 		{
 			return GetAttribute( item, key )?.GetIntValue();
 		}
@@ -88,52 +88,32 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <remarks>
 		/// If the attribute is either empty, does not exist or parsing fails <code>null</code> is returned.
 		/// </remarks>
-		public static DateTime? GetDateAttributeValue( this IAttributeItemDto item, ushort key )
+		public static DateTime? GetDateAttributeValue( this IAttributeItem item, ushort key )
 		{
 			return GetAttribute( item, key )?.GetDateValue();
-		}
-
-		/// <summary>
-		/// Returns the attribute's value of the attribute with the key <paramref name="key"/> If the attribute consists of a catalog entry the entry
-		/// is returned, otherwise the attribute's value (string, int, double or DateTime) is returned.
-		/// </summary>
-		public static object GetRawAttributeValue(
-			this IAttributeItemDto item,
-			ushort key,
-			ConfigurationDto configuration,
-			CatalogCollectionDto catalogs )
-		{
-			var attribute = item.GetAttribute( key );
-			if( attribute == null )
-				return null;
-
-			if( attribute.Value.RawValue != null )
-				return attribute.Value.RawValue;
-
-			return configuration.ParseValue( key, attribute.Value.Value, catalogs );
 		}
 
 		/// <summary>
 		/// Inserts or replaces the attribute for the given key with an attribute that is interpreted as deletion
 		/// by merge models (effectively deleting the corresponding base attribute from existance)
 		/// </summary>
-		public static void InsertNullAttribute( this IAttributeItemDto item, ushort key )
+		public static void InsertNullAttribute( this IAttributeItem item, ushort key )
 		{
-			InternalSetAttribute( item, new AttributeDto( key, null ) );
+			InternalSetAttribute( item, new Attribute( key, null ) );
 		}
 
 		/// <summary>
 		/// Sets the <code>value</code> for the attribute with the key <code>key</code>.
 		/// </summary>
-		public static void SetAttributeValue( this IAttributeItemDto item, ushort key, string value )
+		public static void SetAttributeValue( this IAttributeItem item, ushort key, string value )
 		{
-			item.SetAttribute( new AttributeDto( key, value ) );
+			item.SetAttribute( new Attribute( key, value ) );
 		}
 
 		/// <summary>
 		/// Sets the <code>value</code> for the attribute with the key <code>key</code>.
 		/// </summary>
-		public static void SetAttribute( this IAttributeItemDto item, AttributeDto? value )
+		public static void SetAttribute( this IAttributeItem item, Attribute? value )
 		{
 			if( value == null )
 				return;
@@ -151,7 +131,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Removes the attribute with the key <code>key</code>
 		/// </summary>
-		public static void RemoveAttribute( this IAttributeItemDto item, ushort key )
+		public static void RemoveAttribute( this IAttributeItem item, ushort key )
 		{
 			var attribute = GetAttribute( item, key, out var index );
 			if( attribute == null )
@@ -159,7 +139,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 			// Remove attribute
 			var sourceAttributes = item.Attributes;
-			var attributes = new AttributeDto[ sourceAttributes.Count - 1 ];
+			var attributes = new Attribute[ sourceAttributes.Count - 1 ];
 
 			for( var i = 0; i < index; i++ )
 			{
@@ -174,7 +154,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			item.Attributes = attributes;
 		}
 
-		private static void InternalSetAttribute( this IAttributeItemDto item, AttributeDto value )
+		private static void InternalSetAttribute( this IAttributeItem item, Attribute value )
 		{
 			var sourceAttributes = item.Attributes;
 
@@ -184,7 +164,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				// Add attribute
 				if( sourceAttributes != null && sourceAttributes.Count > 0 )
 				{
-					var attributes = new AttributeDto[ sourceAttributes.Count + 1 ];
+					var attributes = new Attribute[ sourceAttributes.Count + 1 ];
 					for( var i = 0; i < sourceAttributes.Count; i++ )
 					{
 						attributes[ i ] = sourceAttributes[ i ];

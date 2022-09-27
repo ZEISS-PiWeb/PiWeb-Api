@@ -18,22 +18,24 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 	using System.Text;
 	using System.Text.Json;
 	using System.Text.Json.Serialization;
+	using Zeiss.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
+	using Attribute = Zeiss.PiWeb.Api.Contracts.Attribute;
 
 	#endregion
 
 	/// <summary>
-	/// Specialized <see cref="JsonConverter"/> for <see cref="AttributeDto"/>-objects.
+	/// Specialized <see cref="JsonConverter"/> for <see cref="Contracts.Attribute"/>-objects.
 	/// </summary>
-	public sealed class JsonAttributeConverter : JsonConverter<AttributeDto>
+	public sealed class JsonAttributeConverter : JsonConverter<Attribute>
 	{
 		#region methods
 
 		/// <inheritdoc />
-		public override AttributeDto Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
+		public override Attribute Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
 		{
-			AttributeDto result = default;
+			Attribute result = default;
 
 			while( reader.Read() && reader.TokenType == JsonTokenType.PropertyName )
 				TryReadFromProperty( ref reader, out result );
@@ -41,7 +43,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 			return result;
 		}
 
-		internal static bool TryReadFromProperty( ref Utf8JsonReader reader, out AttributeDto attribute )
+		internal static bool TryReadFromProperty( ref Utf8JsonReader reader, out Attribute attribute )
 		{
 			var keySpan = reader.HasValueSequence ? reader.ValueSequence.ToArray() : reader.ValueSpan;
 
@@ -53,7 +55,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 			switch( reader.TokenType )
 			{
 				case JsonTokenType.String:
-					attribute = new AttributeDto( key, reader.GetString() );
+					attribute = new Attribute( key, reader.GetString() );
 					return true;
 
 				case JsonTokenType.Number:
@@ -63,7 +65,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 #else
 					var value = Encoding.UTF8.GetString( valueSpan );
 #endif
-					attribute = new AttributeDto( key, value );
+					attribute = new Attribute( key, value );
 					return true;
 			}
 
@@ -73,7 +75,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 		}
 
 		/// <inheritdoc />
-		public override void Write( Utf8JsonWriter writer, AttributeDto value, JsonSerializerOptions options )
+		public override void Write( Utf8JsonWriter writer, Attribute value, JsonSerializerOptions options )
 		{
 			writer.WriteStartObject();
 
@@ -82,7 +84,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 			writer.WriteEndObject();
 		}
 
-		internal static void WriteAsProperty( Utf8JsonWriter writer, in AttributeDto value, JsonSerializerOptions options )
+		internal static void WriteAsProperty( Utf8JsonWriter writer, in Attribute value, JsonSerializerOptions options )
 		{
 			var key = AttributeKeyCache.StringForKey( value.Key );
 

@@ -18,6 +18,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
+	using Attribute = Zeiss.PiWeb.Api.Contracts.Attribute;
 
 	#endregion
 
@@ -76,9 +77,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			Assert.That( deserialized[ 1 ].Comment, Is.Null );
 			Assert.That( deserialized[ 1 ].Version, Is.EqualTo( 0 ) );
 			Assert.That( deserialized[ 1 ].Attributes, Has.Exactly( 10 ).Items );
-			Assert.That( deserialized[ 1 ].Attributes[ 0 ], Is.EqualTo( new AttributeDto( 1001, "122345" ) ) );
-			Assert.That( deserialized[ 1 ].Attributes[ 1 ], Is.EqualTo( new AttributeDto( 1003, "Blechteil" ) ) );
-			Assert.That( deserialized[ 1 ].Attributes[ 9 ], Is.EqualTo( new AttributeDto( 1900, "Kommentar" ) ) );
+			Assert.That( deserialized[ 1 ].Attributes[ 0 ], Is.EqualTo( new Attribute( 1001, "122345" ) ) );
+			Assert.That( deserialized[ 1 ].Attributes[ 1 ], Is.EqualTo( new Attribute( 1003, "Blechteil" ) ) );
+			Assert.That( deserialized[ 1 ].Attributes[ 9 ], Is.EqualTo( new Attribute( 1900, "Kommentar" ) ) );
 		}
 
 		[Test]

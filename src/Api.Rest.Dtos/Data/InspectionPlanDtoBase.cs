@@ -20,6 +20,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	using Zeiss.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
+	using Attribute = Zeiss.PiWeb.Api.Contracts.Attribute;
 
 	#endregion
 
@@ -28,11 +29,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// (constants, even when renamed) and a unique <see cref="Path"/>.
 	/// </summary>
 	[DebuggerDisplay( "{" + nameof( Path ) + "}" )]
-	public abstract class InspectionPlanDtoBase : IAttributeItemDto
+	public abstract class InspectionPlanDtoBase : IAttributeItem
 	{
 		#region members
 
-		private IReadOnlyList<AttributeDto> _Attributes;
+		private IReadOnlyList<Attribute> _Attributes;
 
 		[Newtonsoft.Json.JsonProperty( "path" ), Newtonsoft.Json.JsonConverter( typeof( PathInformationConverter ) )]
 		private PathInformation _Path;
@@ -109,9 +110,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <inheritdoc />
 		[Newtonsoft.Json.JsonProperty( "attributes" ), Newtonsoft.Json.JsonConverter( typeof( AttributeArrayConverter ) )]
 		[JsonPropertyName( "attributes" ), JsonConverter( typeof( JsonAttributeArrayConverter ) )]
-		public IReadOnlyList<AttributeDto> Attributes
+		public IReadOnlyList<Attribute> Attributes
 		{
-			[NotNull] get => _Attributes ?? Array.Empty<AttributeDto>();
+			[NotNull] get => _Attributes ?? Array.Empty<Attribute>();
 			set => _Attributes = value;
 		}
 

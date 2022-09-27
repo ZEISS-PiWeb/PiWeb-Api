@@ -16,7 +16,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 	using System.Collections;
 	using System.Globalization;
 	using NUnit.Framework;
+	using Zeiss.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
+	using Attribute = Zeiss.PiWeb.Api.Contracts.Attribute;
 
 	#endregion
 
@@ -47,7 +49,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 		public void Test_Description_Of_CatalogEntry_With_One_Attribute( CatalogEntryDescriptionTestCase testCase )
 		{
 			// arrange
-			var catalogEntry = new CatalogEntryDto { Attributes = new[] { new AttributeDto( 1, testCase.AttributeValue ) } };
+			var catalogEntry = new CatalogEntryDto { Attributes = new[] { new Attribute( 1, testCase.AttributeValue ) } };
 
 			// act
 			var description = catalogEntry.ToString( CultureInfo.InvariantCulture );
@@ -69,8 +71,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			{
 				Attributes = new[]
 				{
-					new AttributeDto( 1, testCase.AttributeValue ),
-					new AttributeDto( 2, testCase.AttributeValue )
+					new Attribute( 1, testCase.AttributeValue ),
+					new Attribute( 2, testCase.AttributeValue )
 				}
 			};
 
@@ -93,8 +95,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			{
 				Attributes = new[]
 				{
-					new AttributeDto( 1, null ),
-					new AttributeDto( 2, testCase.AttributeValue )
+					new Attribute( 1, null ),
+					new Attribute( 2, testCase.AttributeValue )
 				}
 			};
 
@@ -113,8 +115,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			{
 				Attributes = new[]
 				{
-					new AttributeDto( 1, "foo" ),
-					new AttributeDto( 2, "42.5" )
+					new Attribute( 1, "foo" ),
+					new Attribute( 2, "42.5" )
 				}
 			};
 
