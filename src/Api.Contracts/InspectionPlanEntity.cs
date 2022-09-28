@@ -13,7 +13,7 @@ namespace Zeiss.PiWeb.Api.Contracts
 	/// <summary>
 	/// Enumeration of possible inspection plan entities.
 	/// </summary>
-	public enum InspectionPlanEntityDto : byte
+	public enum InspectionPlanEntity : byte
 	{
 		/// <summary>
 		/// The entity is a part.

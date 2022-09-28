@@ -35,7 +35,7 @@ namespace Zeiss.PiWeb.Api.Contracts
 		public static IReadOnlyList<PathInformation> GetParts( [CanBeNull] this IEnumerable<PathInformation> paths )
 		{
 			var selectedPaths = paths ?? Enumerable.Empty<PathInformation>();
-			return selectedPaths.Where( p => p.Type == InspectionPlanEntityDto.Part ).ToArray();
+			return selectedPaths.Where( p => p.Type == InspectionPlanEntity.Part ).ToArray();
 		}
 
 		/// <summary>
@@ -47,7 +47,7 @@ namespace Zeiss.PiWeb.Api.Contracts
 		public static IReadOnlyList<PathInformation> GetCharacteristics( [CanBeNull] this IEnumerable<PathInformation> paths )
 		{
 			var selectedPaths = paths ?? Enumerable.Empty<PathInformation>();
-			return selectedPaths.Where( p => p.Type == InspectionPlanEntityDto.Characteristic ).ToArray();
+			return selectedPaths.Where( p => p.Type == InspectionPlanEntity.Characteristic ).ToArray();
 		}
 
 		/// <summary>
@@ -128,7 +128,7 @@ namespace Zeiss.PiWeb.Api.Contracts
 				return PathInformation.Root;
 
 			var result = FindCommonParentInternal( paths );
-			if( !result.IsRoot && result[ result.Count - 1 ].Type != InspectionPlanEntityDto.Part )
+			if( !result.IsRoot && result[ result.Count - 1 ].Type != InspectionPlanEntity.Part )
 			{
 				result = result.ParentPartPath;
 			}
@@ -161,7 +161,7 @@ namespace Zeiss.PiWeb.Api.Contracts
 
 			var parents = new HashSet<PathInformation>();
 			foreach( var p in paths )
-				parents.Add( p.Type == InspectionPlanEntityDto.Characteristic ? p.ParentPartPath : p );
+				parents.Add( p.Type == InspectionPlanEntity.Characteristic ? p.ParentPartPath : p );
 
 			return parents.ToArray();
 		}

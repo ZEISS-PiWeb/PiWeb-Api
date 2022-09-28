@@ -106,7 +106,7 @@ namespace Zeiss.PiWeb.Api.Contracts
 		[NotNull]
 		public static PathInformation String2PartPathInformation( [NotNull] string path )
 		{
-			return ColloquialString2PathInformationInternal( path, InspectionPlanEntityDto.Part, null );
+			return ColloquialString2PathInformationInternal( path, InspectionPlanEntity.Part, null );
 		}
 
 		/// <summary>
@@ -115,7 +115,7 @@ namespace Zeiss.PiWeb.Api.Contracts
 		[NotNull]
 		public static PathInformation String2PartPathInformation( [NotNull] string path, StringPool stringPool )
 		{
-			return ColloquialString2PathInformationInternal( path, InspectionPlanEntityDto.Part, stringPool );
+			return ColloquialString2PathInformationInternal( path, InspectionPlanEntity.Part, stringPool );
 		}
 
 		/// <summary>
@@ -124,7 +124,7 @@ namespace Zeiss.PiWeb.Api.Contracts
 		[NotNull]
 		public static PathInformation String2CharPathInformation( [NotNull] string path )
 		{
-			return ColloquialString2PathInformationInternal( path, InspectionPlanEntityDto.Characteristic, null );
+			return ColloquialString2PathInformationInternal( path, InspectionPlanEntity.Characteristic, null );
 		}
 
 		/// <summary>
@@ -133,7 +133,7 @@ namespace Zeiss.PiWeb.Api.Contracts
 		[NotNull]
 		public static PathInformation String2CharPathInformation( [NotNull] string path, StringPool stringPool )
 		{
-			return ColloquialString2PathInformationInternal( path, InspectionPlanEntityDto.Characteristic, stringPool );
+			return ColloquialString2PathInformationInternal( path, InspectionPlanEntity.Characteristic, stringPool );
 		}
 
 		/// <summary>
@@ -141,7 +141,7 @@ namespace Zeiss.PiWeb.Api.Contracts
 		/// All path elements will be of the type given in <paramref name="entity"/>.
 		/// </summary>
 		[NotNull]
-		private static PathInformation ColloquialString2PathInformationInternal( [NotNull] string path, InspectionPlanEntityDto entity, [CanBeNull] StringPool stringPool )
+		private static PathInformation ColloquialString2PathInformationInternal( [NotNull] string path, InspectionPlanEntity entity, [CanBeNull] StringPool stringPool )
 		{
 			if( string.IsNullOrEmpty( path ) )
 				throw new ArgumentException( "The path string must not be null or empty.", nameof( path ) );
@@ -149,7 +149,7 @@ namespace Zeiss.PiWeb.Api.Contracts
 			// fast code path for root path
 			if( path == DelimiterString )
 			{
-				if( entity != InspectionPlanEntityDto.Part )
+				if( entity != InspectionPlanEntity.Part )
 					throw new ArgumentException( "The root path must always be of type part.", nameof( entity ) );
 
 				return PathInformation.Root;
@@ -206,15 +206,15 @@ namespace Zeiss.PiWeb.Api.Contracts
 			return String2PathInformationInternal( path, structure, stringPool, null );
 		}
 
-		private static InspectionPlanEntityDto StructureIdentifierToEntity( ReadOnlySpan<char> structure, int index )
+		private static InspectionPlanEntity StructureIdentifierToEntity( ReadOnlySpan<char> structure, int index )
 		{
 			if( structure.Length <= index )
 				throw new ArgumentException( $"Invalid structure '{structure.ToString()}'. Expected a structure that has at least a length of {index}." );
-			return structure[ index ] == 'P' ? InspectionPlanEntityDto.Part : InspectionPlanEntityDto.Characteristic;
+			return structure[ index ] == 'P' ? InspectionPlanEntity.Part : InspectionPlanEntity.Characteristic;
 		}
 
 		[NotNull]
-		private static PathInformation String2PathInformationInternal( ReadOnlySpan<char> path, ReadOnlySpan<char> structure, [CanBeNull] StringPool stringPool, InspectionPlanEntityDto? explicitEntity )
+		private static PathInformation String2PathInformationInternal( ReadOnlySpan<char> path, ReadOnlySpan<char> structure, [CanBeNull] StringPool stringPool, InspectionPlanEntity? explicitEntity )
 		{
 			if( structure.Length > 0 && !explicitEntity.HasValue )
 			{
@@ -262,7 +262,7 @@ namespace Zeiss.PiWeb.Api.Contracts
 		}
 
 		// correctly unescape quotes by evaluating all characters left to right, might be slow but gives correct results
-		private static int GetPathElementsFromQuotedString( ReadOnlySpan<char> path, ReadOnlySpan<char> structure, InspectionPlanEntityDto? explicitEntity, IList<PathElement> result )
+		private static int GetPathElementsFromQuotedString( ReadOnlySpan<char> path, ReadOnlySpan<char> structure, InspectionPlanEntity? explicitEntity, IList<PathElement> result )
 		{
 			VerifyQuotedPath( path );
 
@@ -319,7 +319,7 @@ namespace Zeiss.PiWeb.Api.Contracts
 			}
 		}
 
-		private static int GetPathElementsFromUnquotedString( ReadOnlySpan<char> path, ReadOnlySpan<char> structure, InspectionPlanEntityDto? explicitEntity, [CanBeNull] StringPool stringPool, IList<PathElement> result )
+		private static int GetPathElementsFromUnquotedString( ReadOnlySpan<char> path, ReadOnlySpan<char> structure, InspectionPlanEntity? explicitEntity, [CanBeNull] StringPool stringPool, IList<PathElement> result )
 		{
 			VerifyUnquotedPath( path );
 
@@ -437,7 +437,7 @@ namespace Zeiss.PiWeb.Api.Contracts
 			// ReSharper disable once ForCanBeConvertedToForeach
 			for( var i = 0; i < path.Count; i++ )
 			{
-				sb.Append( path[ i ].Type == InspectionPlanEntityDto.Part ? 'P' : 'C' );
+				sb.Append( path[ i ].Type == InspectionPlanEntity.Part ? 'P' : 'C' );
 			}
 		}
 
@@ -495,7 +495,7 @@ namespace Zeiss.PiWeb.Api.Contracts
 			{
 				for( var i = 0; i < path.Count; i++ )
 				{
-					result[ i ] = path[ i ].Type == InspectionPlanEntityDto.Part ? 'P' : 'C';
+					result[ i ] = path[ i ].Type == InspectionPlanEntity.Part ? 'P' : 'C';
 				}
 				return new string( result, 0, path.Count );
 			}
