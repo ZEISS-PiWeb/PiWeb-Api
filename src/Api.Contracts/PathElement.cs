@@ -43,7 +43,7 @@ namespace Zeiss.PiWeb.Api.Contracts
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PathElement"/> class.
 		/// </summary>
-		public PathElement( InspectionPlanEntityDto type = InspectionPlanEntityDto.Part, string value = "" )
+		public PathElement( InspectionPlanEntity type = InspectionPlanEntity.Part, string value = "" )
 		{
 			Type = type;
 			Value = value ?? string.Empty;
@@ -56,7 +56,7 @@ namespace Zeiss.PiWeb.Api.Contracts
 		/// <summary>
 		/// Gibt den Type des Pfadabschnittes zurück.
 		/// </summary>
-		public InspectionPlanEntityDto Type { get; }
+		public InspectionPlanEntity Type { get; }
 
 		/// <summary>
 		/// Gibt den Namen zurück.
@@ -73,19 +73,19 @@ namespace Zeiss.PiWeb.Api.Contracts
 		#region methods
 
 		/// <summary>
-		/// Creates a new path element with type <see cref="InspectionPlanEntityDto.Part"/>.
+		/// Creates a new path element with type <see cref="InspectionPlanEntity.Part"/>.
 		/// </summary>
 		public static PathElement Part( string name )
 		{
-			return new PathElement( InspectionPlanEntityDto.Part, name );
+			return new PathElement( InspectionPlanEntity.Part, name );
 		}
 
 		/// <summary>
-		/// Creates a new path element with type <see cref="InspectionPlanEntityDto.Characteristic"/>.
+		/// Creates a new path element with type <see cref="InspectionPlanEntity.Characteristic"/>.
 		/// </summary>
 		public static PathElement Char( string name )
 		{
-			return new PathElement( InspectionPlanEntityDto.Characteristic, name );
+			return new PathElement( InspectionPlanEntity.Characteristic, name );
 		}
 
 		/// <summary>

@@ -106,7 +106,7 @@ namespace Zeiss.PiWeb.Api.Contracts
 			get
 			{
 				var upcount = 1;
-				while( upcount < Count && this[ Count - 1 - upcount ].Type == InspectionPlanEntityDto.Characteristic )
+				while( upcount < Count && this[ Count - 1 - upcount ].Type == InspectionPlanEntity.Characteristic )
 				{
 					upcount += 1;
 				}
@@ -143,7 +143,7 @@ namespace Zeiss.PiWeb.Api.Contracts
 		/// <summary>
 		/// Returns the type of the last path element.
 		/// </summary>
-		public InspectionPlanEntityDto Type => _PathElements.Count == 0 ? InspectionPlanEntityDto.Part : this[ Count - 1 ].Type;
+		public InspectionPlanEntity Type => _PathElements.Count == 0 ? InspectionPlanEntity.Part : this[ Count - 1 ].Type;
 
 		#endregion
 
