@@ -17,9 +17,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	using System.Text.Json.Serialization;
 	using JetBrains.Annotations;
 	using Newtonsoft.Json;
+	using Zeiss.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Definitions;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
+	using Attribute = Zeiss.PiWeb.Api.Contracts.Attribute;
 
 	#endregion
 
@@ -28,11 +30,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// </summary>
 	[System.Text.Json.Serialization.JsonConverter( typeof( JsonDataValueConverter ) )]
 	[Newtonsoft.Json.JsonConverter( typeof( DataValueConverter ) )]
-	public struct DataValueDto : IAttributeItemDto, IEquatable<DataValueDto>
+	public struct DataValueDto : IAttributeItem, IEquatable<DataValueDto>
 	{
 		#region members
 
-		private IReadOnlyList<AttributeDto> _Attributes;
+		private IReadOnlyList<Attribute> _Attributes;
 
 		#endregion
 
@@ -44,14 +46,14 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		public DataValueDto( double? measuredValue )
 		{
 			_Attributes = measuredValue.HasValue
-				? new[] { new AttributeDto( WellKnownKeys.Value.MeasuredValue, measuredValue.Value ) }
-				: Array.Empty<AttributeDto>();
+				? new[] { new Attribute( WellKnownKeys.Value.MeasuredValue, measuredValue.Value ) }
+				: Array.Empty<Attribute>();
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DataValueDto"/> class.
 		/// </summary>
-		public DataValueDto( [NotNull] IReadOnlyList<AttributeDto> attributes )
+		public DataValueDto( [NotNull] IReadOnlyList<Attribute> attributes )
 		{
 			_Attributes = attributes ?? throw new ArgumentNullException( nameof( attributes ) );
 		}
@@ -74,9 +76,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <inheritdoc />
 		[JsonProperty( "attributes" ), Newtonsoft.Json.JsonConverter( typeof( AttributeArrayConverter ) )]
 		[JsonPropertyName( "attributes" ), System.Text.Json.Serialization.JsonConverter( typeof( JsonAttributeArrayConverter ) )]
-		public IReadOnlyList<AttributeDto> Attributes
+		public IReadOnlyList<Attribute> Attributes
 		{
-			get => _Attributes ?? Array.Empty<AttributeDto>();
+			get => _Attributes ?? Array.Empty<Attribute>();
 			set => _Attributes = value;
 		}
 

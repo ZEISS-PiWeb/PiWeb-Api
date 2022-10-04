@@ -8,21 +8,21 @@
 
 #endregion
 
-namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
+namespace Zeiss.PiWeb.Api.Contracts
 {
 	using System.Collections.Generic;
 
 	/// <summary>
-	/// This interface represents entities that contain a list of <see cref="AttributeDto"/>.
+	/// This interface represents entities that contain a list of <see cref="Attribute"/>.
 	/// </summary>
-	public interface IAttributeItemDto
+	public interface IAttributeItem
 	{
 		#region properties
 
 		/// <summary>
 		/// Returns all attributes for this item.
 		/// </summary>
-		IReadOnlyList<AttributeDto> Attributes { get; set; }
+		IReadOnlyList<Attribute> Attributes { get; set; }
 
 		#endregion
 	}

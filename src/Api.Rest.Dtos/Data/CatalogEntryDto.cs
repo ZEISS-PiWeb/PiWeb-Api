@@ -19,19 +19,21 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	using System.Text;
 	using System.Text.Json.Serialization;
 	using JetBrains.Annotations;
+	using Zeiss.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
+	using Attribute = Zeiss.PiWeb.Api.Contracts.Attribute;
 
 	#endregion
 
 	/// <summary>
 	/// Holds information of a <see cref="CatalogDto"/>'s entry
 	/// </summary>
-	public class CatalogEntryDto : IAttributeItemDto, IFormattable
+	public class CatalogEntryDto : IAttributeItem, IFormattable
 	{
 		#region members
 
-		private IReadOnlyList<AttributeDto> _Attributes = Array.Empty<AttributeDto>();
+		private IReadOnlyList<Attribute> _Attributes = Array.Empty<Attribute>();
 
 		#endregion
 
@@ -98,7 +100,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			return sb.ToString();
 		}
 
-		private static object GetTypedAttributeValue( AttributeDto attribute )
+		private static object GetTypedAttributeValue( Attribute attribute )
 		{
 			if( attribute.RawValue != null )
 				return ( attribute.RawValue is DateTime time ) ? time.ToLocalTime() : attribute.RawValue;
@@ -113,13 +115,13 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <inheritdoc />
 		[Newtonsoft.Json.JsonProperty( "attributes" ), Newtonsoft.Json.JsonConverter( typeof( AttributeArrayConverter ) )]
 		[JsonPropertyName( "attributes" ), JsonConverter( typeof( JsonAttributeArrayConverter ) )]
-		public IReadOnlyList<AttributeDto> Attributes
+		public IReadOnlyList<Attribute> Attributes
 		{
 			[NotNull] get => _Attributes;
 			set
 			{
-				value ??= Array.Empty<AttributeDto>();
-				_Attributes = value.All( attr => attr.IsNull() ) ? Array.Empty<AttributeDto>() : value;
+				value ??= Array.Empty<Attribute>();
+				_Attributes = value.All( attr => attr.IsNull() ) ? Array.Empty<Attribute>() : value;
 			}
 		}
 

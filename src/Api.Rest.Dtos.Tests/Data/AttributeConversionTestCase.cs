@@ -13,7 +13,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 	#region usings
 
 	using System;
+	using Zeiss.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
+	using Attribute = Zeiss.PiWeb.Api.Contracts.Attribute;
 
 	#endregion
 
@@ -23,7 +25,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 
 		public string DisplayText { get; set; }
 
-		public AttributeDto Attribute { get; set; }
+		public Attribute Attribute { get; set; }
 
 		public int? ExpectedIntValue { get; set; }
 		public double? ExpectedDoubleValue { get; set; }

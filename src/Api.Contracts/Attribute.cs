@@ -8,17 +8,14 @@
 
 #endregion
 
-namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
+namespace Zeiss.PiWeb.Api.Contracts
 {
 	#region usings
 
 	using System;
 	using System.Globalization;
-	using System.Text.Json.Serialization;
 	using System.Xml;
 	using JetBrains.Annotations;
-	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
-	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
 
 	#endregion
 
@@ -27,9 +24,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// </summary>
 	/// <remarks>This class is immutable.</remarks>
 	[Serializable]
-	[Newtonsoft.Json.JsonConverter( typeof( AttributeConverter ) )]
-	[JsonConverter( typeof( JsonAttributeConverter ) )]
-	public readonly struct AttributeDto : IEquatable<AttributeDto>
+	public readonly struct Attribute : IEquatable<Attribute>
 	{
 		#region members
 
@@ -40,11 +35,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		#region constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="AttributeDto"/> class with key <code>key</code> and value <code>value</code>.
+		/// Initializes a new instance of the <see cref="Attribute"/> class with key <code>key</code> and value <code>value</code>.
 		/// </summary>
 		/// <param name="key">The key of the newly created attribute.</param>
 		/// <param name="value">The value.</param>
-		public AttributeDto( ushort key, string value )
+		public Attribute( ushort key, string value )
 		{
 			Key = key;
 			_Value = value;
@@ -52,11 +47,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="AttributeDto"/> class with key <code>key</code> and value <code>rawValue</code>.
+		/// Initializes a new instance of the <see cref="Attribute"/> class with key <code>key</code> and value <code>rawValue</code>.
 		/// </summary>
 		/// <param name="key">The key of the newly created attribute.</param>
 		/// <param name="rawValue">The raw value.</param>
-		public AttributeDto( ushort key, object rawValue )
+		public Attribute( ushort key, object rawValue )
 		{
 			Key = key;
 			_Value = null;
@@ -94,9 +89,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				if( RawValue is DateTime dateTimeValue )
 					return XmlConvert.ToString( dateTimeValue, XmlDateTimeSerializationMode.RoundtripKind );
 
-				if( RawValue is CatalogEntryDto catalogEntryValue )
-					return catalogEntryValue.Key.ToString();
-
 				return Convert.ToString( RawValue, CultureInfo.InvariantCulture );
 			}
 		}
@@ -119,7 +111,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				case int:
 				case short:
 				case DateTime:
-				case CatalogEntryDto:
 					return;
 				default:
 					throw new ArgumentException( $"Unable to initialize the attribute. Invalid value '{RawValue}' with type '{RawValue.GetType()}'" );
@@ -188,7 +179,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				int value             => value,
 				short value           => value,
 				double value          => value,
-				CatalogEntryDto entry => entry.Key,
 				string value          => ParseDoubleValue( value ),
 				_                     => ParseDoubleValue( _Value )
 			};
@@ -225,7 +215,6 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				int value             => value,
 				short value           => value,
 				double value          => value % 1 == 0 ? (int)value : null,
-				CatalogEntryDto entry => entry.Key,
 				string value          => ParseIntValue( value ),
 				_                     => ParseIntValue( _Value )
 			};
@@ -313,16 +302,13 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			if( valueX is DateTime dateTimeValueX && valueY is DateTime dateTimeValueY )
 				return DateTime.Equals( dateTimeValueX.ToUniversalTime(), dateTimeValueY.ToUniversalTime() );
 
-			if( valueX is CatalogEntryDto catalogEntryX && valueY is CatalogEntryDto catalogEntryY )
-				return catalogEntryX.Key == catalogEntryY.Key;
-
 			return valueX.Equals( valueY );
 		}
 
 		/// <inheritdoc />
 		public override bool Equals( object obj )
 		{
-			return obj is AttributeDto other && Equals( other );
+			return obj is Attribute other && Equals( other );
 		}
 
 		/// <inheritdoc />
@@ -333,12 +319,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			return HashCode.Combine( Key, Value );
 		}
 
-		public static bool operator ==( AttributeDto left, AttributeDto right )
+		public static bool operator ==( Attribute left, Attribute right )
 		{
 			return left.Equals( right );
 		}
 
-		public static bool operator !=( AttributeDto left, AttributeDto right )
+		public static bool operator !=( Attribute left, Attribute right )
 		{
 			return !left.Equals( right );
 		}
@@ -354,7 +340,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		#region interface IEquatable<Attribute>
 
 		/// <inheritdoc />
-		public bool Equals( AttributeDto other )
+		public bool Equals( Attribute other )
 		{
 			if( Key != other.Key )
 				return false;

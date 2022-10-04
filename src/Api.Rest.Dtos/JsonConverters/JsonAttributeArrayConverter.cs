@@ -16,29 +16,31 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 	using System.Collections.Generic;
 	using System.Text.Json;
 	using System.Text.Json.Serialization;
+	using Zeiss.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
+	using Attribute = Zeiss.PiWeb.Api.Contracts.Attribute;
 
 	#endregion
 
 	/// <summary>
-	/// Specialized <see cref="JsonConverter"/> for <see cref="AttributeDto"/> collections.
+	/// Specialized <see cref="JsonConverter"/> for <see cref="Contracts.Attribute"/> collections.
 	/// </summary>
-	public sealed class JsonAttributeArrayConverter : JsonConverter<IReadOnlyList<AttributeDto>>
+	public sealed class JsonAttributeArrayConverter : JsonConverter<IReadOnlyList<Attribute>>
 	{
 		#region methods
 
 		/// <inheritdoc />
-		public override IReadOnlyList<AttributeDto> Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
+		public override IReadOnlyList<Attribute> Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
 		{
 			if( reader.TokenType != JsonTokenType.StartObject )
-				return Array.Empty<AttributeDto>();
+				return Array.Empty<Attribute>();
 
 			return ReadAttributes( ref reader );
 		}
 
-		internal static IReadOnlyList<AttributeDto> ReadAttributes( ref Utf8JsonReader reader )
+		internal static IReadOnlyList<Attribute> ReadAttributes( ref Utf8JsonReader reader )
 		{
-			var result = new List<AttributeDto>();
+			var result = new List<Attribute>();
 
 			while( reader.Read() && reader.TokenType == JsonTokenType.PropertyName )
 			{
@@ -50,7 +52,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 		}
 
 		/// <inheritdoc />
-		public override void Write( Utf8JsonWriter writer, IReadOnlyList<AttributeDto> value, JsonSerializerOptions options )
+		public override void Write( Utf8JsonWriter writer, IReadOnlyList<Attribute> value, JsonSerializerOptions options )
 		{
 			writer.WriteStartObject();
 
@@ -59,7 +61,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 			writer.WriteEndObject();
 		}
 
-		internal static void WriteAttributes( Utf8JsonWriter writer, IEnumerable<AttributeDto> value, JsonSerializerOptions options )
+		internal static void WriteAttributes( Utf8JsonWriter writer, IEnumerable<Attribute> value, JsonSerializerOptions options )
 		{
 			foreach( var attribute in value )
 				JsonAttributeConverter.WriteAsProperty( writer, attribute, options );

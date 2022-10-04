@@ -17,8 +17,10 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Data
 	using FluentAssertions;
 	using Newtonsoft.Json;
 	using NUnit.Framework;
+	using Zeiss.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 	using Zeiss.PiWeb.Api.Rest.HttpClient.Data;
+	using Attribute = Zeiss.PiWeb.Api.Contracts.Attribute;
 
 	#endregion
 
@@ -50,21 +52,21 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Data
 			var firstMeasurementSet = new[]
 			{
 				new SimpleMeasurementDto
-					{ Attributes = new[] { new AttributeDto( 5, 3 ), new AttributeDto( 55, 10 ), new AttributeDto( 999, 2 ) } },
+					{ Attributes = new[] { new Attribute( 5, 3 ), new Attribute( 55, 10 ), new Attribute( 999, 2 ) } },
 				new SimpleMeasurementDto
-					{ Attributes = new[] { new AttributeDto( 5, 1 ), new AttributeDto( 55, 99 ), new AttributeDto( 999, 0 ) } },
+					{ Attributes = new[] { new Attribute( 5, 1 ), new Attribute( 55, 99 ), new Attribute( 999, 0 ) } },
 				new SimpleMeasurementDto
-					{ Attributes = new[] { new AttributeDto( 5, 6 ), new AttributeDto( 55, 99 ), new AttributeDto( 999, 5 ) } }
+					{ Attributes = new[] { new Attribute( 5, 6 ), new Attribute( 55, 99 ), new Attribute( 999, 5 ) } }
 			};
 
 			var secondMeasurementSet = new[]
 			{
 				new SimpleMeasurementDto
-					{ Attributes = new[] { new AttributeDto( 5, 4 ), new AttributeDto( 55, 99 ), new AttributeDto( 999, 4 ) } },
+					{ Attributes = new[] { new Attribute( 5, 4 ), new Attribute( 55, 99 ), new Attribute( 999, 4 ) } },
 				new SimpleMeasurementDto
-					{ Attributes = new[] { new AttributeDto( 5, 2 ), new AttributeDto( 55, 99 ), new AttributeDto( 999, 1 ) } },
+					{ Attributes = new[] { new Attribute( 5, 2 ), new Attribute( 55, 99 ), new Attribute( 999, 1 ) } },
 				new SimpleMeasurementDto
-					{ Attributes = new[] { new AttributeDto( 5, 3 ), new AttributeDto( 55, 20 ), new AttributeDto( 999, 3 ) } }
+					{ Attributes = new[] { new Attribute( 5, 3 ), new Attribute( 55, 20 ), new Attribute( 999, 3 ) } }
 			};
 
 			server.RegisterResponse( "/DataServiceRest/measurements?partUuids=%7B11111111-1111-1111-1111-111111111111%7D&order=5%20Asc%2C55%20Asc", JsonConvert.SerializeObject( firstMeasurementSet ) );

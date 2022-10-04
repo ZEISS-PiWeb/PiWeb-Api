@@ -26,6 +26,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
 	using Zeiss.PiWeb.Api.Rest.Dtos.RawData;
 	using static PiWeb.Api.Definitions.WellKnownKeys;
+	using Attribute = Zeiss.PiWeb.Api.Contracts.Attribute;
 
 	#endregion
 
@@ -40,11 +41,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 
 			new CatalogAttributeDefinitionDto { Key = 13, Description = "Test", QueryEfficient = false, Catalog = new Guid( "11D4115C-41A7-4D47-A353-AF5DF61503EA" ) },
 
-			new AttributeDto( Characteristic.MeasurementModule, "Abweichungen" ),
-			new AttributeDto( Characteristic.X, 2919.0 ),
-			new AttributeDto( Characteristic.AlignmentType, 0 ),
-			new AttributeDto( Measurement.Time, new DateTime( 2010, 11, 04, 19, 44, 52, 8, DateTimeKind.Utc ) ),
-			new AttributeDto( Measurement.Time, (object)null ),
+			new Attribute( Characteristic.MeasurementModule, "Abweichungen" ),
+			new Attribute( Characteristic.X, 2919.0 ),
+			new Attribute( Characteristic.AlignmentType, 0 ),
+			new Attribute( Measurement.Time, new DateTime( 2010, 11, 04, 19, 44, 52, 8, DateTimeKind.Utc ) ),
+			new Attribute( Measurement.Time, (object)null ),
 
 			new CatalogDto
 			{
@@ -58,8 +59,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 						Key = 1,
 						Attributes = new[]
 						{
-							new AttributeDto( Catalog.OperatorNumber, 13 ),
-							new AttributeDto( Catalog.OperatorName, "Müller" ),
+							new Attribute( Catalog.OperatorNumber, 13 ),
+							new Attribute( Catalog.OperatorName, "Müller" ),
 						}
 					},
 					new CatalogEntryDto
@@ -67,8 +68,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 						Key = 2,
 						Attributes = new[]
 						{
-							new AttributeDto( Catalog.OperatorNumber, 42 ),
-							new AttributeDto( Catalog.OperatorName, "Meier" ),
+							new Attribute( Catalog.OperatorNumber, 42 ),
+							new Attribute( Catalog.OperatorName, "Meier" ),
 						}
 					},
 					new CatalogEntryDto
@@ -76,8 +77,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 						Key = 3,
 						Attributes = new[]
 						{
-							new AttributeDto( Catalog.OperatorNumber, 73 ),
-							new AttributeDto( Catalog.OperatorName, "Schulze" ),
+							new Attribute( Catalog.OperatorNumber, 73 ),
+							new Attribute( Catalog.OperatorName, "Schulze" ),
 						}
 					}
 				}
@@ -120,9 +121,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 			{
 				Attributes = new[]
 				{
-					new AttributeDto( Value.MeasuredValue, 0.15108030390438515 ),
-					new AttributeDto( Value.AggregatedCp, 0.25108030390438873 ),
-					new AttributeDto( Value.AggregatedMaximum, 0.551080303904385 )
+					new Attribute( Value.MeasuredValue, 0.15108030390438515 ),
+					new Attribute( Value.AggregatedCp, 0.25108030390438873 ),
+					new Attribute( Value.AggregatedMaximum, 0.551080303904385 )
 				}
 			},
 
@@ -140,9 +141,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 				},
 				Attributes = new[]
 				{
-					new AttributeDto( Measurement.Time, new DateTime( 2022, 01, 31, 19, 02, 59, 71, DateTimeKind.Utc) ),
-					new AttributeDto( Measurement.BatchNumber, "5" ),
-					new AttributeDto( Measurement.InspectorName, 2 ),
+					new Attribute( Measurement.Time, new DateTime( 2022, 01, 31, 19, 02, 59, 71, DateTimeKind.Utc) ),
+					new Attribute( Measurement.BatchNumber, "5" ),
+					new Attribute( Measurement.InspectorName, 2 ),
 				}
 			},
 
@@ -154,9 +155,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 				Created = new DateTime( 2010, 12, 05, 22, 37, 49, 12, DateTimeKind.Utc ),
 				Attributes = new[]
 				{
-					new AttributeDto( Measurement.Time, new DateTime( 2022, 01, 31, 19, 02, 59, 71, DateTimeKind.Utc) ),
-					new AttributeDto( Measurement.BatchNumber, "5" ),
-					new AttributeDto( Measurement.InspectorName, 2 ),
+					new Attribute( Measurement.Time, new DateTime( 2022, 01, 31, 19, 02, 59, 71, DateTimeKind.Utc) ),
+					new Attribute( Measurement.BatchNumber, "5" ),
+					new Attribute( Measurement.InspectorName, 2 ),
 				},
 				Characteristics = new Dictionary<Guid, DataValueDto>
 				{
@@ -174,9 +175,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 				Timestamp = new DateTime( 2022, 01, 31, 19, 02, 58, 683, DateTimeKind.Utc ),
 				Attributes = new[]
 				{
-					new AttributeDto( Characteristic.NominalValue, 0.0 ),
-					new AttributeDto( Characteristic.LowerSpecificationLimit, -0.5 ),
-					new AttributeDto( Characteristic.UpperSpecificationLimit, 0.5 )
+					new Attribute( Characteristic.NominalValue, 0.0 ),
+					new Attribute( Characteristic.LowerSpecificationLimit, -0.5 ),
+					new Attribute( Characteristic.UpperSpecificationLimit, 0.5 )
 				}
 			},
 
@@ -189,9 +190,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 				Timestamp = new DateTime( 2022, 06, 30, 6, 25, 35, 46, DateTimeKind.Utc ),
 				Attributes = new[]
 				{
-					new AttributeDto( Part.Number, 122345 ),
-					new AttributeDto( Part.Abbreviation, "Blechteil" ),
-					new AttributeDto( Part.Organisation, "Presswerk" )
+					new Attribute( Part.Number, 122345 ),
+					new Attribute( Part.Abbreviation, "Blechteil" ),
+					new Attribute( Part.Organisation, "Presswerk" )
 				}
 			},
 
@@ -233,9 +234,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 					Timestamp = new DateTime( 2022, 01, 31, 19, 02, 58, 683, DateTimeKind.Utc ),
 					Attributes = new[]
 					{
-						new AttributeDto( Characteristic.NominalValue, 0.0 ),
-						new AttributeDto( Characteristic.LowerSpecificationLimit, -0.5 ),
-						new AttributeDto( Characteristic.UpperSpecificationLimit, 0.5 )
+						new Attribute( Characteristic.NominalValue, 0.0 ),
+						new Attribute( Characteristic.LowerSpecificationLimit, -0.5 ),
+						new Attribute( Characteristic.UpperSpecificationLimit, 0.5 )
 					}
 				},
 
@@ -248,9 +249,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 					Timestamp = new DateTime( 2022, 06, 30, 6, 25, 35, 46, DateTimeKind.Utc ),
 					Attributes = new[]
 					{
-						new AttributeDto( Part.Number, 122345 ),
-						new AttributeDto( Part.Abbreviation, "Blechteil" ),
-						new AttributeDto( Part.Organisation, "Presswerk" )
+						new Attribute( Part.Number, 122345 ),
+						new Attribute( Part.Abbreviation, "Blechteil" ),
+						new Attribute( Part.Organisation, "Presswerk" )
 					},
 					History = new[]
 					{
@@ -263,9 +264,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 							Timestamp = new DateTime( 2022, 06, 29, 7, 26, 12, 863, DateTimeKind.Utc ),
 							Attributes = new[]
 							{
-								new AttributeDto( Part.Number, 122344 ),
-								new AttributeDto( Part.Abbreviation, "Blechteil" ),
-								new AttributeDto( Part.Organisation, "Presswerk" )
+								new Attribute( Part.Number, 122344 ),
+								new Attribute( Part.Abbreviation, "Blechteil" ),
+								new Attribute( Part.Organisation, "Presswerk" )
 							}
 						},
 					},
@@ -280,9 +281,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 					Timestamp = new DateTime( 2022, 06, 30, 6, 25, 35, 46, DateTimeKind.Utc ),
 					Attributes = new[]
 					{
-						new AttributeDto( Part.Number, 122345 ),
-						new AttributeDto( Part.Abbreviation, "Blechteil" ),
-						new AttributeDto( Part.Organisation, "Presswerk" )
+						new Attribute( Part.Number, 122345 ),
+						new Attribute( Part.Abbreviation, "Blechteil" ),
+						new Attribute( Part.Organisation, "Presswerk" )
 					}
 				},
 
@@ -329,7 +330,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 
 			EquatableFrom<AbstractAttributeDefinitionDto>( value => EquatableFromType[value is AttributeDefinitionDto ? typeof( AttributeDefinitionDto ) : typeof( CatalogAttributeDefinitionDto )]( value ) ),
 
-			EquatableFrom<AttributeDto> (value => Tuple.Create( value.Key, EquatableFromAttributeValue(value.Value) ) ),
+			EquatableFrom<Attribute> (value => Tuple.Create( value.Key, EquatableFromAttributeValue(value.Value) ) ),
 
 			EquatableFrom<CatalogDto>( value => Tuple.Create( value.Name, value.Uuid, value.ValidAttributes.ToArray(), EquatableFromMany( value.CatalogEntries ) ) ),
 
@@ -384,13 +385,22 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 		private static readonly Newtonsoft.Json.JsonSerializerSettings Settings = new()
 		{
 			NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
-			Converters = { new Newtonsoft.Json.Converters.VersionConverter(), new InspectionPlanDtoBaseConverter() }
+			Converters =
+			{
+				new Newtonsoft.Json.Converters.VersionConverter(),
+				new InspectionPlanDtoBaseConverter(),
+				new AttributeConverter()
+			}
 		};
 
 		private static readonly System.Text.Json.JsonSerializerOptions Options = new()
 		{
 			DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
-			Converters = { new JsonInspectionPlanDtoBaseConverter() }
+			Converters =
+			{
+				new JsonInspectionPlanDtoBaseConverter(),
+				new JsonAttributeConverter(),
+			}
 		};
 
 		#endregion

@@ -15,12 +15,14 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 	using System;
 	using System.Collections.Generic;
 	using Newtonsoft.Json;
+	using Zeiss.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
+	using Attribute = Zeiss.PiWeb.Api.Contracts.Attribute;
 
 	#endregion
 
 	/// <summary>
-	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="AttributeDto"/> collections.
+	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="Contracts.Attribute"/> collections.
 	/// </summary>
 	public sealed class AttributeArrayConverter : JsonConverter
 	{
@@ -29,27 +31,27 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 		/// <inheritdoc />
 		public override bool CanConvert( Type objectType )
 		{
-			return typeof( IReadOnlyList<AttributeDto> ) == objectType;
+			return typeof( IReadOnlyList<Attribute> ) == objectType;
 		}
 
 		/// <inheritdoc />
 		public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer )
 		{
 			if( reader.TokenType != JsonToken.StartObject )
-				return Array.Empty<AttributeDto>();
+				return Array.Empty<Attribute>();
 
 			return ReadAttributes( reader );
 		}
 
-		internal static IReadOnlyList<AttributeDto> ReadAttributes( JsonReader reader )
+		internal static IReadOnlyList<Attribute> ReadAttributes( JsonReader reader )
 		{
-			var result = new List<AttributeDto>();
+			var result = new List<Attribute>();
 			while( reader.Read() && reader.TokenType == JsonToken.PropertyName )
 			{
 				var key = ushort.Parse( (string)reader.Value );
 				var value = reader.ReadAsString();
 
-				result.Add( new AttributeDto( key, value ) );
+				result.Add( new Attribute( key, value ) );
 			}
 
 			return result;
@@ -59,11 +61,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer )
 		{
 			writer.WriteStartObject();
-			WriteAttributes( writer, (IReadOnlyList<AttributeDto>)value );
+			WriteAttributes( writer, (IReadOnlyList<Attribute>)value );
 			writer.WriteEndObject();
 		}
 
-		internal static void WriteAttributes( JsonWriter writer, IReadOnlyList<AttributeDto> attributes )
+		internal static void WriteAttributes( JsonWriter writer, IReadOnlyList<Attribute> attributes )
 		{
 			if( attributes == null || attributes.Count == 0 )
 				return;

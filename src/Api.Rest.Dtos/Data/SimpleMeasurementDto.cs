@@ -19,9 +19,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	using System.Text.Json.Serialization;
 	using System.Xml;
 	using JetBrains.Annotations;
+	using Zeiss.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Definitions;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
+	using Attribute = Zeiss.PiWeb.Api.Contracts.Attribute;
 
 	#endregion
 
@@ -30,13 +32,13 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// A measurement is identified by an <see cref="Uuid"/>. A measurement always belongs to one and only one part.
 	/// </summary>
 	[DebuggerDisplay( "Measurement (Uuid={Uuid} Time={Time})" )]
-	public class SimpleMeasurementDto : IAttributeItemDto
+	public class SimpleMeasurementDto : IAttributeItem
 	{
 		#region members
 
 		private static readonly DateTime MinimumValidDatabaseDateTime = DateTime.SpecifyKind( SqlDateTime.MinValue.Value, DateTimeKind.Utc );
 
-		private IReadOnlyList<AttributeDto> _Attributes = Array.Empty<AttributeDto>();
+		private IReadOnlyList<Attribute> _Attributes = Array.Empty<Attribute>();
 		private DateTime? _CachedTimeValue;
 		private bool _HasCachedTime;
 
@@ -121,7 +123,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				}
 				else
 				{
-					this.SetAttribute( new AttributeDto( WellKnownKeys.Measurement.Time, XmlConvert.ToString( value.Value, XmlDateTimeSerializationMode.RoundtripKind ) ) );
+					this.SetAttribute( new Attribute( WellKnownKeys.Measurement.Time, XmlConvert.ToString( value.Value, XmlDateTimeSerializationMode.RoundtripKind ) ) );
 					_CachedTimeValue = value;
 					_HasCachedTime = true;
 				}
@@ -159,12 +161,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <inheritdoc />
 		[Newtonsoft.Json.JsonProperty( "attributes" ), Newtonsoft.Json.JsonConverter( typeof( AttributeArrayConverter ) )]
 		[JsonPropertyName( "attributes" ), JsonConverter( typeof( JsonAttributeArrayConverter ) )]
-		public IReadOnlyList<AttributeDto> Attributes
+		public IReadOnlyList<Attribute> Attributes
 		{
 			[NotNull] get => _Attributes;
 			set
 			{
-				_Attributes = value ?? Array.Empty<AttributeDto>();
+				_Attributes = value ?? Array.Empty<Attribute>();
 				_CachedTimeValue = null;
 				_HasCachedTime = false;
 			}
