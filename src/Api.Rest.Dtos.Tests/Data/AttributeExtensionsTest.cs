@@ -482,7 +482,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			// @formatter:off — disable formatter after this line
 
 			// value: null
-			yield return CreateTestCase( null,  null, null, "",    null, null,   "null" );
+			yield return CreateTestCase( null,  null, null, null,    null, null,   "null" );
 
 			// @formatter:on — enable formatter after this line
 		}

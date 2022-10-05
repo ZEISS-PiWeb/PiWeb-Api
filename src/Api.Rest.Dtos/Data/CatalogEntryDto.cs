@@ -88,7 +88,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				if( sb.Length > 0 )
 					sb.Append( " - " );
 
-				if( attribute.Value.Trim().Length > 0 )
+				if( attribute.Value is not null && attribute.Value.Trim().Length > 0 )
 					sb.Append( Convert.ToString( GetTypedAttributeValue( attribute ), provider ) );
 
 				allSameEntries &= attribute.Value == _Attributes[ 0 ].Value;
@@ -100,6 +100,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			return sb.ToString();
 		}
 
+		[CanBeNull]
 		private static object GetTypedAttributeValue( Attribute attribute )
 		{
 			if( attribute.RawValue != null )

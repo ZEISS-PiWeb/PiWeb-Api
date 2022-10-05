@@ -67,6 +67,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 #endif
 					attribute = new Attribute( key, value );
 					return true;
+				case JsonTokenType.Null:
+					attribute = new Attribute( key, null );
+					return true;
 			}
 
 			attribute = default;
