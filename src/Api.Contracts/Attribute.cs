@@ -76,12 +76,16 @@ namespace Zeiss.PiWeb.Api.Contracts
 		/// <summary>
 		/// Returns the string parsed attribute value of this attribute.
 		/// </summary>
+		[CanBeNull]
 		public string Value
 		{
 			get
 			{
 				if( _Value != null )
 					return _Value;
+
+				if( RawValue is null )
+					return null;
 
 				if( RawValue is double doubleValue )
 					return doubleValue.ToString( "G17", CultureInfo.InvariantCulture );
@@ -176,11 +180,11 @@ namespace Zeiss.PiWeb.Api.Contracts
 		{
 			return RawValue switch
 			{
-				int value             => value,
-				short value           => value,
-				double value          => value,
-				string value          => ParseDoubleValue( value ),
-				_                     => ParseDoubleValue( _Value )
+				int value    => value,
+				short value  => value,
+				double value => value,
+				string value => ParseDoubleValue( value ),
+				_            => ParseDoubleValue( _Value )
 			};
 		}
 
@@ -212,11 +216,11 @@ namespace Zeiss.PiWeb.Api.Contracts
 		{
 			return RawValue switch
 			{
-				int value             => value,
-				short value           => value,
-				double value          => value % 1 == 0 ? (int)value : null,
-				string value          => ParseIntValue( value ),
-				_                     => ParseIntValue( _Value )
+				int value    => value,
+				short value  => value,
+				double value => value % 1 == 0 ? (int)value : null,
+				string value => ParseIntValue( value ),
+				_            => ParseIntValue( _Value )
 			};
 		}
 

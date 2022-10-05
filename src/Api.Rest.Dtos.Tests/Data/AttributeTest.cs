@@ -43,7 +43,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			var attribute = new Attribute( 1, null );
 
 			// assert
-			Assert.That( attribute.Value, Is.EqualTo( string.Empty ) );
+			Assert.That( attribute.Value, Is.Null );
 			Assert.That( attribute.RawValue, Is.Null );
 		}
 
@@ -131,7 +131,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 		[TestCase( " ", " ", true )]
 		[TestCase( "\t", "\t", true )]
 		[TestCase( "Hello World", "Hello World", true )]
-		[TestCase( null, "", true )]
+		[TestCase( null, "", false )]
 		[TestCase( null, " ", false )]
 		[TestCase( "", " ", false )]
 		[TestCase( "Hello World", "", false )]
@@ -724,7 +724,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 
 		private static IEnumerable CreateValidRawValueTestCases()
 		{
-			yield return new TestCaseData( null, "" ) { TestName = "null" };
+			yield return new TestCaseData( null, null ) { TestName = "null" };
 			yield return new TestCaseData( "", "" ) { TestName = "empty string" };
 			yield return new TestCaseData( "foo", "foo" ) { TestName = "string value" };
 			yield return new TestCaseData( 2, "2" ) { TestName = "integer value" };
@@ -756,7 +756,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 			// @formatter:off — disable formatter after this line
 
 			// value: null
-			yield return CreateTestCase( null,  null, null, "",    null, null,   "null" );
+			yield return CreateTestCase( null,  null, null, null,    null, null,   "null" );
 
 			// @formatter:on — enable formatter after this line
 		}
