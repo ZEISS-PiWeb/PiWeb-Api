@@ -30,7 +30,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// </summary>
 	[System.Text.Json.Serialization.JsonConverter( typeof( JsonDataValueConverter ) )]
 	[Newtonsoft.Json.JsonConverter( typeof( DataValueConverter ) )]
-	public struct DataValueDto : IAttributeItem, IEquatable<DataValueDto>
+	public sealed class DataValueDto : IAttributeItem, IEquatable<DataValueDto>
 	{
 		#region members
 
@@ -39,6 +39,14 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		#endregion
 
 		#region constructors
+
+		/// <summary>
+		/// Initializes a new emoty instance of the <see cref="DataValueDto"/> class.
+		/// </summary>
+		public DataValueDto()
+		{
+			_Attributes = Array.Empty<Attribute>();
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DataValueDto"/> class.
@@ -89,6 +97,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <inheritdoc />
 		public bool Equals( DataValueDto other )
 		{
+			if( other is null )
+				return false;
+
 			if( Attributes.Count != other.Attributes.Count )
 				return false;
 
