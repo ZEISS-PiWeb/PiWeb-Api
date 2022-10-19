@@ -15,7 +15,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 	using System;
 	using System.Threading;
 	using System.Threading.Tasks;
-	using Zeiss.PiWeb.Api.Contracts;
+	using Zeiss.PiWeb.Api.Core;
 	using Zeiss.PiWeb.Api.Rest.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 

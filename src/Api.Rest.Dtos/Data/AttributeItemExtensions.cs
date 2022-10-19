@@ -12,7 +12,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
 	#region usings
 
-	using Zeiss.PiWeb.Api.Contracts;
+	using Zeiss.PiWeb.Api.Core;
 
 	#endregion
 

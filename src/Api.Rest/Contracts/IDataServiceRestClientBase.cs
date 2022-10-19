@@ -17,7 +17,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 	using System.Threading;
 	using System.Threading.Tasks;
 	using JetBrains.Annotations;
-	using Zeiss.PiWeb.Api.Contracts;
+	using Zeiss.PiWeb.Api.Core;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 

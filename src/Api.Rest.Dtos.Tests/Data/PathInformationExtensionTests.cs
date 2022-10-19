@@ -16,7 +16,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 	using System.Collections.Generic;
 	using System.Linq;
 	using NUnit.Framework;
-	using Zeiss.PiWeb.Api.Contracts;
+	using Zeiss.PiWeb.Api.Core;
 
 	#endregion
 

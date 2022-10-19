@@ -19,11 +19,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	using System.Text.Json.Serialization;
 	using System.Xml;
 	using JetBrains.Annotations;
-	using Zeiss.PiWeb.Api.Contracts;
+	using Zeiss.PiWeb.Api.Core;
 	using Zeiss.PiWeb.Api.Definitions;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
-	using Attribute = Zeiss.PiWeb.Api.Contracts.Attribute;
+	using Attribute = Zeiss.PiWeb.Api.Core.Attribute;
 
 	#endregion
 

@@ -15,7 +15,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 	using System;
 	using System.Text.Json;
 	using System.Text.Json.Serialization;
-	using Zeiss.PiWeb.Api.Contracts;
+	using Zeiss.PiWeb.Api.Core;
 
 	#endregion
 

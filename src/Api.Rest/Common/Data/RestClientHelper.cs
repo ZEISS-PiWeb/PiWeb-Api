@@ -21,7 +21,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 	using JetBrains.Annotations;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Bson;
-	using Zeiss.PiWeb.Api.Contracts;
+	using Zeiss.PiWeb.Api.Core;
 	using Zeiss.PiWeb.Api.Rest.Common.Client;
 	using Zeiss.PiWeb.Api.Rest.Common.Utilities;
 	using Zeiss.PiWeb.Api.Rest.Dtos;

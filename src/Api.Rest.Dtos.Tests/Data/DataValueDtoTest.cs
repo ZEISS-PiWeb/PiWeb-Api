@@ -13,7 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 	#region usings
 
 	using NUnit.Framework;
-	using Zeiss.PiWeb.Api.Contracts;
+	using Zeiss.PiWeb.Api.Core;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 
 	#endregion

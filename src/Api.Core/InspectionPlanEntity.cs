@@ -8,7 +8,7 @@
 
 #endregion
 
-namespace Zeiss.PiWeb.Api.Contracts
+namespace Zeiss.PiWeb.Api.Core
 {
 	/// <summary>
 	/// Enumeration of possible inspection plan entities.
