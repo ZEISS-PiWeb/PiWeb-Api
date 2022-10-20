@@ -17,10 +17,10 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Data
 	using FluentAssertions;
 	using Newtonsoft.Json;
 	using NUnit.Framework;
-	using Zeiss.PiWeb.Api.Contracts;
+	using Zeiss.PiWeb.Api.Core;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 	using Zeiss.PiWeb.Api.Rest.HttpClient.Data;
-	using Attribute = Zeiss.PiWeb.Api.Contracts.Attribute;
+	using Attribute = Zeiss.PiWeb.Api.Core.Attribute;
 
 	#endregion
 

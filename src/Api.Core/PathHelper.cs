@@ -8,7 +8,7 @@
 
 #endregion
 
-namespace Zeiss.PiWeb.Api.Contracts
+namespace Zeiss.PiWeb.Api.Core
 {
 	#region usings
 
@@ -16,9 +16,9 @@ namespace Zeiss.PiWeb.Api.Contracts
 	using System.Buffers;
 	using System.Collections.Generic;
 	using System.Text;
+	using CommunityToolkit.HighPerformance.Buffers;
 	using JetBrains.Annotations;
 	using Microsoft.Extensions.ObjectPool;
-	using CommunityToolkit.HighPerformance.Buffers;
 
 	#endregion
 

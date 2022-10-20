@@ -17,9 +17,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 	using System.Xml;
 	using AutoFixture;
 	using NUnit.Framework;
-	using Zeiss.PiWeb.Api.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
-	using Attribute = Zeiss.PiWeb.Api.Contracts.Attribute;
+	using Attribute = Zeiss.PiWeb.Api.Core.Attribute;
 
 	#endregion
 

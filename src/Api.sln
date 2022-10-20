@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Rest.Dtos", "Api.Rest.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Rest.Dtos.Tests", "Api.Rest.Dtos.Tests\Api.Rest.Dtos.Tests.csproj", "{3A6AFFB6-94AE-432D-968B-CC469587496F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Contracts", "Api.Contracts\Api.Contracts.csproj", "{558E76E0-9FA8-4349-A4EB-8B69C7BF03EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Core", "Api.Core\Api.Core.csproj", "{558E76E0-9FA8-4349-A4EB-8B69C7BF03EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

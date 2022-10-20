@@ -15,7 +15,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 	using System;
 	using FluentAssertions;
 	using NUnit.Framework;
-	using Zeiss.PiWeb.Api.Contracts;
+	using Zeiss.PiWeb.Api.Core;
 
 	#endregion
 

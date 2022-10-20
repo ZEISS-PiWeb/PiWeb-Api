@@ -20,13 +20,13 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 	using System.Net.Mime;
 	using System.Text;
 	using NUnit.Framework;
-	using Zeiss.PiWeb.Api.Contracts;
+	using Zeiss.PiWeb.Api.Core;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
 	using Zeiss.PiWeb.Api.Rest.Dtos.RawData;
 	using static PiWeb.Api.Definitions.WellKnownKeys;
-	using Attribute = Zeiss.PiWeb.Api.Contracts.Attribute;
+	using Attribute = Zeiss.PiWeb.Api.Core.Attribute;
 
 	#endregion
 

@@ -13,9 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 	#region usings
 
 	using System;
-	using Zeiss.PiWeb.Api.Contracts;
-	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
-	using Attribute = Zeiss.PiWeb.Api.Contracts.Attribute;
+	using Attribute = Zeiss.PiWeb.Api.Core.Attribute;
 
 	#endregion
 

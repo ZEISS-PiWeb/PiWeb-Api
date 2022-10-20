@@ -15,14 +15,14 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 	using System;
 	using System.Collections.Generic;
 	using Newtonsoft.Json;
-	using Zeiss.PiWeb.Api.Contracts;
+	using Zeiss.PiWeb.Api.Core;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
-	using Attribute = Zeiss.PiWeb.Api.Contracts.Attribute;
+	using Attribute = Zeiss.PiWeb.Api.Core.Attribute;
 
 	#endregion
 
 	/// <summary>
-	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="Contracts.Attribute"/> collections.
+	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="Attribute"/> collections.
 	/// </summary>
 	public sealed class AttributeArrayConverter : JsonConverter
 	{
