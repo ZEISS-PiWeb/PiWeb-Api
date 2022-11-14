@@ -30,7 +30,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		/// <summary>
 		/// Gets or sets the unique id of the status. Currently this can be one of the following:
-		/// <code>InTol</code>, <code>OutWarn</code> and <code>OutTol</code>.
+		/// <code>Green</code>, <code>Yellow</code> and <code>Red</code>.
 		/// </summary>
 		[Newtonsoft.Json.JsonProperty( "id" )]
 		[JsonPropertyName( "id" )]
