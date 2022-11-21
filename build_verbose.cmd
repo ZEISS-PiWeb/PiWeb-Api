@@ -1,1 +1,0 @@
-@PowerShell.exe -NoProfile -NonInteractive -NoLogo -ExecutionPolicy Unrestricted -Command "& { $ErrorActionPreference = 'Stop'; & '.\build.ps1' @args; EXIT $LASTEXITCODE }" -Verbosity Diagnostic
