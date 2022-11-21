@@ -35,6 +35,7 @@
     <PackageTags>ZEISS PiWeb API</PackageTags>
     <Version>$(InformationalVersion)</Version>
     <RepositoryUrl>https://github.com/ZEISS-PiWeb/PiWeb-Api</RepositoryUrl>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/RELEASE_NOTES_Definitions.txt"))</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
