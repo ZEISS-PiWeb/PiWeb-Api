@@ -36,6 +36,7 @@
     <PackageTags>ZEISS PiWeb Dtos</PackageTags>
     <Version>$(InformationalVersion)</Version>
     <RepositoryUrl>https://github.com/ZEISS-PiWeb/PiWeb-Api</RepositoryUrl>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/RELEASE_NOTES_Dtos.txt"))</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
