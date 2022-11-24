@@ -4,4 +4,43 @@
 -------------------------------------------------------------------------------------------
 ======================================================
 
-Work in progress.
+==========================================
+New Features
+==========================================
+
+- Added new package Zeiss.PiWeb.Api.Core
+○ contains commonly used core objects with own logic which are no longer simple DTOs, e.g. Attribute, PathInformation, PathElement, InspectionPlanEntity enum as well as their extensions and PathHelper class
+○ Attribute and PathElement are now readonly structs to significantly reduce GC pressure and object creation
+
+- Used readonly lists and collections instead of arrays in many parameters and return types to avoid allocations and save many .ToArrays() when using methods
+- Removed DataCharacteristic since it had no real benefit (simple container for characteristic uuid and the value)
+○ replaced by dictionary of uuid and DataValueDto
+
+- Added request caching, since built-in caching was removed with .NET Core/5
+○ New dependency: CacheCow.Client >= 2.8.3
+○ Provides InMemoryCacheStore (not persistent)
+○ Added simple FilesystemCacheStore (persistent) which can be extended
+○ Use RestClientBase properties CacheStore and VaryHeaderStore to configure
+
+- Added RawData methods which accept and return streams
+- Added possibility to clear the access token cache for OAuth
+- Optimized PathInformation and PathHelper to speed up path operations
+
+- Added support for System.Text.Json serialization
+○ Speeds up JSON serialization
+○ Package will suport both Newtonsoft.Json and System.Text.Json for a transitional period
+○ Newtonsoft.Json may be removed in a future release
+○ Configure using optional RestClientBase constructor parameter 'serializer' which can be either the NewtonsoftJsonSerializer or the SystemTextJsonSerializer, default is Newtonsoft
+
+- Switched from ﻿BSD-4-Clause to ﻿BSD-3-Clause lincense
+- DataValueDto now implements interface IEquatable
+- Removed .NET Framework 4.8 and .NET Core 3.1 as target frameworks
+○ .NET Standard 2.0 stays
+○ .NET 5 is updated to .NET 6
+
+
+==========================================
+Bugfixes
+==========================================
+
+- Method CheckCatalogEntryUsage now correctly expects data type short for the entry key
