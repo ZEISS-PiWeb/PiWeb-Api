@@ -5,7 +5,7 @@
     <RootNamespace>Zeiss.PiWeb.Api.Definitions</RootNamespace>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageVersion>7.1.0</PackageVersion>
+    <PackageVersion>8.0.0</PackageVersion>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
