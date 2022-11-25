@@ -2,9 +2,11 @@ PiWeb-Api
 =========
 
 [![Build on develop](https://github.com/ZEISS-PiWeb/PiWeb-Api/actions/workflows/develop.yml/badge.svg?branch=develop&event=push)](https://github.com/ZEISS-PiWeb/PiWeb-Api/actions/workflows/develop.yml)
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+[![Nuget](https://img.shields.io/nuget/v/Zeiss.PiWeb.Api.Rest?style=flat&logo=nuget)](https://www.nuget.org/packages/Zeiss.PiWeb.Api.Rest/)
 
 <p align="center">
-  <img src="https://github.com/ZEISS-PiWeb/PiWeb-Api/blob/master/Logo.png" />
+  <img src="https://github.com/ZEISS-PiWeb/PiWeb-Api/blob/main/Logo.png" />
 </p>
 
 The PiWeb-API is a communication interface for the quality data management system [ZEISS PiWeb](http://www.zeiss.com/industrial-metrology/en_de/products/software/piweb.html). The interface is based on an HTTP/S web service architecture.
