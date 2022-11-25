@@ -13,7 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 	#region usings
 
 	using System;
-	using Newtonsoft.Json;
+	using System.Text.Json.Serialization;
 
 	#endregion
 
@@ -37,31 +37,36 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// <summary>
 		/// Full name of the file.
 		/// </summary>
-		[JsonProperty( "fileName" )]
+		[Newtonsoft.Json.JsonProperty( "fileName" )]
+		[JsonPropertyName( "fileName" )]
 		public string FileName { get; set; }
 
 		/// <summary>
 		/// Length of data.
 		/// </summary>
-		[JsonProperty( "size" )]
+		[Newtonsoft.Json.JsonProperty( "size" )]
+		[JsonPropertyName( "size" )]
 		public int Size { get; set; }
 
 		/// <summary>
 		/// Actual data representing the file.
 		/// </summary>
-		[JsonProperty( "data" )]
+		[Newtonsoft.Json.JsonProperty( "data" )]
+		[JsonPropertyName( "data" )]
 		public byte[] Data { get; set; }
 
 		/// <summary>
 		/// MD5 checksum of data.
 		/// </summary>
-		[JsonProperty( "md5" )]
+		[Newtonsoft.Json.JsonProperty( "md5" )]
+		[JsonPropertyName( "md5" )]
 		public Guid MD5 { get; set; }
 
 		/// <summary>
 		/// <see cref="RawDataInformationDto"/> of original archive.
 		/// </summary>
-		[JsonProperty( "archiveInfo" )]
+		[Newtonsoft.Json.JsonProperty( "archiveInfo" )]
+		[JsonPropertyName( "archiveInfo" )]
 		public RawDataInformationDto ArchiveInfo { get; set; }
 
 		#endregion

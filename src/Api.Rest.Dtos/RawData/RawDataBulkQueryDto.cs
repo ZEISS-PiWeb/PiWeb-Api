@@ -13,8 +13,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 	#region usings
 
 	using System;
+	using System.Text.Json.Serialization;
 	using JetBrains.Annotations;
-	using Newtonsoft.Json;
 
 	#endregion
 
@@ -48,7 +48,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// <summary>
 		/// Selectors containing information about target and key of requested archives.
 		/// </summary>
-		[JsonProperty( "selectors" )]
+		[Newtonsoft.Json.JsonProperty( "selectors" )]
+		[JsonPropertyName( "selectors" )]
 		public RawDataSelectorDto[] Selectors { get; set; } = { };
 
 		#endregion

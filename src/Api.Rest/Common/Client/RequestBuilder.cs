@@ -20,8 +20,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using System.Net.Http;
 	using System.Net.Http.Headers;
 	using System.Text;
+	using System.Threading;
 	using JetBrains.Annotations;
-	using Zeiss.PiWeb.Api.Rest.Common.Data;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 
 	#endregion
@@ -31,72 +31,150 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		#region methods
 
 		/// <summary>
-		/// Creates a new GET-<see cref="HttpRequestMessage"/> based on the <paramref name="relativeUri"/> 
-		/// and extended by possible additional query parameters represented by <paramref name="parameterDefinitions"/>
+		/// Creates a new GET-<see cref="HttpRequestMessage"/> based on the <paramref name="relativeUri"/>
 		/// </summary>
-		public static Func<HttpRequestMessage> CreateGet( string relativeUri, params ParameterDefinition[] parameterDefinitions )
+		public static Func<HttpRequestMessage> CreateGet( string relativeUri )
 		{
-			return Create( HttpMethod.Get, relativeUri, Payload.Empty, null, parameterDefinitions );
+			return Create( HttpMethod.Get, relativeUri, null, Array.Empty<ParameterDefinition>() );
 		}
 
 		/// <summary>
-		/// Creates a new DELETE-<see cref="HttpRequestMessage"/> based on the <paramref name="relativeUri"/> 
-		/// and extended by possible additional query parameters represented by <paramref name="parameterDefinitions"/>
+		/// Creates a new GET-<see cref="HttpRequestMessage"/> based on the <paramref name="relativeUri"/>
+		/// and extended by possible additional query parameters represented by <paramref name="parameterDefinition"/>
 		/// </summary>
-		public static Func<HttpRequestMessage> CreateDelete( string relativeUri, params ParameterDefinition[] parameterDefinitions )
+		public static Func<HttpRequestMessage> CreateGet( string relativeUri, ParameterDefinition parameterDefinition )
 		{
-			return Create( HttpMethod.Delete, relativeUri, Payload.Empty, null, parameterDefinitions );
+			return Create( HttpMethod.Get, relativeUri, null, new[] { parameterDefinition } );
 		}
 
 		/// <summary>
-		/// Creates a new POST-<see cref="HttpRequestMessage"/> based on the <paramref name="relativeUri"/> 
+		/// Creates a new GET-<see cref="HttpRequestMessage"/> based on the <paramref name="relativeUri"/>
+		/// and extended by possible additional query parameters represented by <paramref name="parameterDefinitions"/>
+		/// </summary>
+		public static Func<HttpRequestMessage> CreateGet( string relativeUri, IEnumerable<ParameterDefinition> parameterDefinitions )
+		{
+			return Create( HttpMethod.Get, relativeUri, null, parameterDefinitions );
+		}
+
+		/// <summary>
+		/// Creates a new DELETE-<see cref="HttpRequestMessage"/> based on the <paramref name="relativeUri"/>
+		/// </summary>
+		public static Func<HttpRequestMessage> CreateDelete( string relativeUri )
+		{
+			return Create( HttpMethod.Delete, relativeUri, null, Array.Empty<ParameterDefinition>() );
+		}
+
+		/// <summary>
+		/// Creates a new DELETE-<see cref="HttpRequestMessage"/> based on the <paramref name="relativeUri"/>
+		/// and extended by possible additional query parameters represented by <paramref name="parameterDefinition"/>
+		/// </summary>
+		public static Func<HttpRequestMessage> CreateDelete( string relativeUri, ParameterDefinition parameterDefinition )
+		{
+			return Create( HttpMethod.Delete, relativeUri, null, new[] { parameterDefinition } );
+		}
+
+		/// <summary>
+		/// Creates a new DELETE-<see cref="HttpRequestMessage"/> based on the <paramref name="relativeUri"/>
+		/// and extended by possible additional query parameters represented by <paramref name="parameterDefinitions"/>
+		/// </summary>
+		public static Func<HttpRequestMessage> CreateDelete( string relativeUri, IEnumerable<ParameterDefinition> parameterDefinitions )
+		{
+			return Create( HttpMethod.Delete, relativeUri, null, parameterDefinitions );
+		}
+
+		/// <summary>
+		/// Creates a new POST-<see cref="HttpRequestMessage"/> based on the <paramref name="relativeUri"/>.
+		/// The body of the HTTP message is provided by the <paramref name="payload"/> parameter.
+		/// </summary>
+		public static Func<IObjectSerializer, CancellationToken, HttpRequestMessage> CreatePost( string relativeUri, [NotNull] Payload payload )
+		{
+			return Create( HttpMethod.Post, relativeUri, payload, null, Array.Empty<ParameterDefinition>() );
+		}
+
+		/// <summary>
+		/// Creates a new POST-<see cref="HttpRequestMessage"/> based on the <paramref name="relativeUri"/>
+		/// and extended by possible additional query parameters represented by <paramref name="parameterDefinition"/>
+		/// The body of the HTTP message is provided by the <paramref name="payload"/> parameter.
+		/// </summary>
+		public static Func<IObjectSerializer, CancellationToken, HttpRequestMessage> CreatePost( string relativeUri, [NotNull] Payload payload, ParameterDefinition parameterDefinition )
+		{
+			return Create( HttpMethod.Post, relativeUri, payload, null, new [] { parameterDefinition } );
+		}
+
+		/// <summary>
+		/// Creates a new POST-<see cref="HttpRequestMessage"/> based on the <paramref name="relativeUri"/>
 		/// and extended by possible additional query parameters represented by <paramref name="parameterDefinitions"/>
 		/// The body of the HTTP message is provided by the <paramref name="payload"/> parameter.
 		/// </summary>
-		public static Func<HttpRequestMessage> CreatePost( string relativeUri, [NotNull] Payload payload, params ParameterDefinition[] parameterDefinitions )
+		public static Func<IObjectSerializer, CancellationToken, HttpRequestMessage> CreatePost( string relativeUri, [NotNull] Payload payload, IEnumerable<ParameterDefinition> parameterDefinitions )
 		{
 			return Create( HttpMethod.Post, relativeUri, payload, null, parameterDefinitions );
 		}
 
 		/// <summary>
-		/// Creates a new PUT-<see cref="HttpRequestMessage"/> based on the <paramref name="relativeUri"/> 
+		/// Creates a new PUT-<see cref="HttpRequestMessage"/> based on the <paramref name="relativeUri"/>.
+		/// The body of the HTTP message is provided by the <paramref name="payload"/> parameter.
+		/// </summary>
+		public static Func<IObjectSerializer, CancellationToken, HttpRequestMessage> CreatePut( string relativeUri, [NotNull] Payload payload )
+		{
+			return Create( HttpMethod.Put, relativeUri, payload, null, Array.Empty<ParameterDefinition>() );
+		}
+
+		/// <summary>
+		/// Creates a new PUT-<see cref="HttpRequestMessage"/> based on the <paramref name="relativeUri"/>
+		/// and extended by possible additional query parameters represented by <paramref name="parameterDefinition"/>
+		/// The body of the HTTP message is provided by the <paramref name="payload"/> parameter.
+		/// </summary>
+		public static Func<IObjectSerializer, CancellationToken, HttpRequestMessage> CreatePut( string relativeUri, [NotNull] Payload payload, ParameterDefinition parameterDefinition )
+		{
+			return Create( HttpMethod.Put, relativeUri, payload, null, new[] { parameterDefinition } );
+		}
+
+		/// <summary>
+		/// Creates a new PUT-<see cref="HttpRequestMessage"/> based on the <paramref name="relativeUri"/>
 		/// and extended by possible additional query parameters represented by <paramref name="parameterDefinitions"/>
 		/// The body of the HTTP message is provided by the <paramref name="payload"/> parameter.
 		/// </summary>
-		public static Func<HttpRequestMessage> CreatePut( string relativeUri, [NotNull] Payload payload, params ParameterDefinition[] parameterDefinitions )
+		public static Func<IObjectSerializer, CancellationToken, HttpRequestMessage> CreatePut( string relativeUri, [NotNull] Payload payload, IEnumerable<ParameterDefinition> parameterDefinitions )
 		{
 			return Create( HttpMethod.Put, relativeUri, payload, null, parameterDefinitions );
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="HttpRequestMessage"/> for http verb <paramref name="method"/> based on the <paramref name="relativeUri"/> 
+		/// Creates a new <see cref="HttpRequestMessage"/> for http verb <paramref name="method"/> based on the <paramref name="relativeUri"/>
 		/// and extended by possible additional query parameters represented by <paramref name="parameterDefinitions"/>
 		/// The body of the HTTP message is provided by the <paramref name="payload"/> parameter.
 		/// </summary>
 		/// <exception cref="ArgumentNullException"><paramref name="payload"/> is <see langword="null" />.</exception>
-		public static Func<HttpRequestMessage> Create( HttpMethod method, string relativeUri, [NotNull] Payload payload, KeyValuePair<string, string>[] additionalHttpRequestHeader, params ParameterDefinition[] parameterDefinitions )
+		public static Func<IObjectSerializer, CancellationToken, HttpRequestMessage> Create( HttpMethod method, string relativeUri, [NotNull] Payload payload, KeyValuePair<string, string>[] additionalHttpRequestHeader, IEnumerable<ParameterDefinition> parameterDefinitions )
 		{
 			if( payload == null ) throw new ArgumentNullException( nameof( payload ) );
 
-			return () => CreateInternal( method, relativeUri, payload, additionalHttpRequestHeader, parameterDefinitions );
+			return (serializer, cancellationToken ) => CreateInternal( method, relativeUri, payload, serializer, cancellationToken, additionalHttpRequestHeader, parameterDefinitions );
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="HttpRequestMessage"/> for http verb <paramref name="method"/> based on the <paramref name="relativeUri"/> 
+		/// Creates a new <see cref="HttpRequestMessage"/> for http verb <paramref name="method"/> based on the <paramref name="relativeUri"/>
+		/// and extended by possible additional query parameters represented by <paramref name="parameterDefinitions"/>
+		/// </summary>
+		public static Func<HttpRequestMessage> Create( HttpMethod method, string relativeUri, KeyValuePair<string, string>[] additionalHttpRequestHeader, IEnumerable<ParameterDefinition> parameterDefinitions )
+		{
+			return () => CreateInternal( method, relativeUri, Payload.Empty, null, CancellationToken.None, additionalHttpRequestHeader, parameterDefinitions );
+		}
+
+		/// <summary>
+		/// Creates a new <see cref="HttpRequestMessage"/> for http verb <paramref name="method"/> based on the <paramref name="relativeUri"/>
 		/// and extended by possible additional query parameters represented by <paramref name="parameterDefinitions"/>
 		/// The body of the HTTP message is provided by the <paramref name="payload"/> parameter.
 		/// </summary>
-		private static HttpRequestMessage CreateInternal( HttpMethod method, string relativeUri, Payload payload, KeyValuePair<string, string>[] additionalHttpRequestHeader, params ParameterDefinition[] parameterDefinitions )
+		private static HttpRequestMessage CreateInternal( HttpMethod method, string relativeUri, Payload payload, IObjectSerializer serializer, CancellationToken cancellationToken, KeyValuePair<string, string>[] additionalHttpRequestHeader, IEnumerable<ParameterDefinition> parameterDefinitions )
 		{
 			var request = SetParametersAndHeaders( method, relativeUri, additionalHttpRequestHeader, parameterDefinitions );
 			if( payload != Payload.Empty )
 			{
-				request.Content = new PushStreamContent( ( outputStream, content, context ) =>
+				request.Content = new PushStreamContent( ( outputStream, _, _ ) =>
 				{
-					using( var sw = new StreamWriter( outputStream, Encoding.UTF8, 64 * 1024, false ) )
-					{
-						RestClientHelper.CreateJsonSerializer().Serialize( sw, payload.Value );
-					}
+					return serializer.SerializeAsync( outputStream, payload.Value, cancellationToken );
 				}, new MediaTypeWithQualityHeaderValue( RestClientBase.MimeTypeJson ) );
 			}
 
@@ -104,7 +182,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="HttpRequestMessage"/> for http verb <paramref name="method"/> based on the <paramref name="relativeUri"/> 
+		/// Creates a new <see cref="HttpRequestMessage"/> for http verb <paramref name="method"/> based on the <paramref name="relativeUri"/>
 		/// and extended by possible additional query parameters represented by <paramref name="parameterDefinitions"/>
 		/// The attachment is provided by the <paramref name="stream"/> parameter.
 		/// </summary>
@@ -120,13 +198,13 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		}
 
 		/// <summary>
-		/// Creates a new <see cref="HttpRequestMessage"/> for http verb <paramref name="method"/> based on the <paramref name="relativeUri"/> 
+		/// Creates a new <see cref="HttpRequestMessage"/> for http verb <paramref name="method"/> based on the <paramref name="relativeUri"/>
 		/// and extended by possible additional query parameters represented by <paramref name="parameterDefinitions"/>
 		/// The attachment is provided by the <paramref name="stream"/> parameter.
 		/// </summary>
 		private static HttpRequestMessage CreateWithAttachmentInternal( [NotNull] HttpMethod method, string relativeUri, Stream stream, string mimeType, long? contentLength, Guid? contentMD5, string contentDisposition, params ParameterDefinition[] parameterDefinitions )
 		{
-			var request = CreateInternal( method, relativeUri, Payload.Empty, null, parameterDefinitions );
+			var request = CreateInternal( method, relativeUri, Payload.Empty, null, CancellationToken.None, null, parameterDefinitions );
 
 			if( stream == null )
 				return request;
@@ -145,7 +223,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			return request;
 		}
 
-		private static HttpRequestMessage SetParametersAndHeaders( HttpMethod method, string relativeUri, KeyValuePair<string, string>[] additionalHttpRequestHeader = null, params ParameterDefinition[] parameterDefinitions )
+		private static HttpRequestMessage SetParametersAndHeaders( HttpMethod method, string relativeUri, KeyValuePair<string, string>[] additionalHttpRequestHeader, IEnumerable<ParameterDefinition> parameterDefinitions )
 		{
 			relativeUri = AppendParameters( relativeUri, parameterDefinitions );
 			var request = new HttpRequestMessage( method, relativeUri );

@@ -58,7 +58,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <param name="maxUriLength">The uri length limit</param>
 		/// <param name="restClient">Custom implementation of RestClient</param>
 		public RawDataServiceRestClient( [NotNull] Uri serverUri, int maxUriLength = RestClientBase.DefaultMaxUriLength, RestClientBase restClient = null )
-			: base( restClient ?? new RestClient( serverUri, EndpointName, maxUriLength: maxUriLength ) )
+			: base( restClient ?? new RestClient( serverUri, EndpointName, maxUriLength: maxUriLength, serializer: ObjectSerializer.SystemTextJson ) )
 		{ }
 
 		#endregion
@@ -105,7 +105,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 			return result.SelectMany( r => r ).ToArray();
 		}
 
-		private async Task<RawDataInformationDto> CreateRawDataInternal( RawDataInformationDto info, byte[] data, HttpMethod method, CancellationToken cancellationToken )
+		private async Task<RawDataInformationDto> CreateRawDataInternal( RawDataInformationDto info, Stream data, HttpMethod method, CancellationToken cancellationToken )
 		{
 			StringUuidTools.CheckUuid( info.Target.Entity, info.Target.Uuid );
 
@@ -116,22 +116,20 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 				? $"rawData/{info.Target.Entity}/{info.Target.Uuid}/{info.Key}"
 				: $"rawData/{info.Target.Entity}/{info.Target.Uuid}";
 
-			var stream = new MemoryStream( data, 0, data.Length, false, true );
-
 			var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
-			var request = RequestBuilder.CreateWithAttachment( method, requestString, stream, info.MimeType, info.Size, info.MD5, info.FileName );
+			var request = RequestBuilder.CreateWithAttachment( method, requestString, data, info.MimeType, info.Size, info.MD5, info.FileName );
 
 			if ( featureMatrix.SupportsCreateRawDataResult )
-				return await _RestClient.Request<RawDataInformationDto>( request , cancellationToken );
+				return await _RestClient.Request<RawDataInformationDto>( request , cancellationToken ).ConfigureAwait( false );
 
-			await _RestClient.Request( request, cancellationToken );
+			await _RestClient.Request( request, cancellationToken ).ConfigureAwait( false );
 
 			var entity = info.Target.Entity;
-			var rawDataList = await ListRawData( entity, new[] { info.Target.Uuid }, null, cancellationToken );
+			var rawDataList = await ListRawData( entity, new[] { info.Target.Uuid }, null, cancellationToken ).ConfigureAwait( false );
 			return rawDataList.OrderByDescending( rawData => rawData.Key ?? 0 ).First();
 		}
 
-		private Task UpdateRawDataInternal( RawDataInformationDto info, byte[] data, HttpMethod method, CancellationToken cancellationToken )
+		private Task UpdateRawDataInternal( RawDataInformationDto info, Stream data, HttpMethod method, CancellationToken cancellationToken )
 		{
 			StringUuidTools.CheckUuid( info.Target.Entity, info.Target.Uuid );
 
@@ -142,8 +140,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 				? $"rawData/{info.Target.Entity}/{info.Target.Uuid}/{info.Key}"
 				: $"rawData/{info.Target.Entity}/{info.Target.Uuid}";
 
-			var stream = new MemoryStream( data, 0, data.Length, false, true );
-			return _RestClient.Request( RequestBuilder.CreateWithAttachment( method, requestString, stream, info.MimeType, info.Size, info.MD5, info.FileName ), cancellationToken );
+			return _RestClient.Request( RequestBuilder.CreateWithAttachment( method, requestString, data, info.MimeType, info.Size, info.MD5, info.FileName ), cancellationToken );
 		}
 
 		private async Task<ServiceInformationDto> GetServiceInformationInternal( FetchBehavior behavior, CancellationToken cancellationToken = default )
@@ -261,16 +258,32 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <param name="target">The <see cref="RawDataTargetEntityDto"/> that specifies the raw data object that should be fetched.</param>
 		/// <param name="rawDataKey">The unique key that identifies the raw data object for the specified target.</param>
 		/// <param name="expectedMd5">The md5 check sum that is expected for the result object. If this value is set, performance is better because server side round trips are reduced.</param>
-		/// <param name="cancellationToken">A token to cancel the hronous operation.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		/// <exception cref="ArgumentNullException"><paramref name="target"/> is <see langword="null" />.</exception>
 		public Task<byte[]> GetRawData( RawDataTargetEntityDto target, int rawDataKey, Guid? expectedMd5 = null, CancellationToken cancellationToken = default )
 		{
 			if( target == null ) throw new ArgumentNullException( nameof( target ) );
 
-			if( expectedMd5.HasValue )
-				return _RestClient.RequestBytes( RequestBuilder.CreateGet( $"rawData/{target.Entity}/{target.Uuid}/{rawDataKey}?expectedMd5={expectedMd5}" ), cancellationToken );
+			var query = expectedMd5 == null ? "" : $"?expectedMd5={expectedMd5}";
 
-			return _RestClient.RequestBytes( RequestBuilder.CreateGet( $"rawData/{target.Entity}/{target.Uuid}/{rawDataKey}" ), cancellationToken );
+			return _RestClient.RequestBytes( RequestBuilder.CreateGet( $"rawData/{target.Entity}/{target.Uuid}/{rawDataKey}{query}" ), cancellationToken );
+		}
+
+		/// <summary>
+		/// Fetches raw data as stream for the raw data item identified by <paramref name="target"/> and <paramref name="rawDataKey"/>.
+		/// </summary>
+		/// <param name="target">The <see cref="RawDataTargetEntityDto"/> that specifies the raw data object that should be fetched.</param>
+		/// <param name="rawDataKey">The unique key that identifies the raw data object for the specified target.</param>
+		/// <param name="expectedMd5">The md5 check sum that is expected for the result object. If this value is set, performance is better because server side round trips are reduced.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+		/// <exception cref="ArgumentNullException"><paramref name="target"/> is <see langword="null" />.</exception>
+		public Task<Stream> GetRawDataStream( RawDataTargetEntityDto target, int rawDataKey, Guid? expectedMd5 = null, CancellationToken cancellationToken = default )
+		{
+			if( target == null ) throw new ArgumentNullException( nameof( target ) );
+
+			var query = expectedMd5 == null ? "" : $"?expectedMd5={expectedMd5}";
+
+			return _RestClient.RequestStream( RequestBuilder.CreateGet( $"rawData/{target.Entity}/{target.Uuid}/{rawDataKey}{query}" ), cancellationToken );
 		}
 
 		/// <summary>
@@ -323,7 +336,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 
 			var requestPath = $"rawData/{targetEntity.Entity}/{targetEntity.Uuid}/{targetKey}/archiveEntries";
 
-			return ( await _RestClient.Request<RawDataArchiveEntriesDto[]>( RequestBuilder.CreateGet( requestPath ), cancellationToken ) ).First();
+			return ( await _RestClient.Request<RawDataArchiveEntriesDto[]>( RequestBuilder.CreateGet( requestPath ), cancellationToken ).ConfigureAwait( false ) ).First();
 		}
 
 		/// <inheritdoc />
@@ -345,7 +358,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 				? $"rawData/{targetEntity.Entity}/{targetEntity.Uuid}/{targetKey}/archiveContent/{fileName}?expectedArchiveMd5={expectedArchiveMd5}"
 				: $"rawData/{targetEntity.Entity}/{targetEntity.Uuid}/{targetKey}/archiveContent/{fileName}";
 
-			return await _RestClient.RequestBytes( RequestBuilder.CreateGet( requestPath ), cancellationToken );
+			return await _RestClient.RequestBytes( RequestBuilder.CreateGet( requestPath ), cancellationToken ).ConfigureAwait( false );
 		}
 
 		/// <inheritdoc />
@@ -365,7 +378,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 			return await _RestClient.Request<RawDataArchiveEntriesDto[]>( RequestBuilder.CreatePost(
 					"rawData/archiveEntryQuery",
 					Payload.Create( query ) ),
-				cancellationToken );
+				cancellationToken ).ConfigureAwait( false );
 		}
 
 		/// <inheritdoc />
@@ -381,7 +394,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 			}
 			var query = new RawDataBulkQueryDto( selectors.ToArray() );
 
-			return await RawDataArchiveEntryQuery( query, cancellationToken );
+			return await RawDataArchiveEntryQuery( query, cancellationToken ).ConfigureAwait( false );
 		}
 
 		/// <inheritdoc />
@@ -401,7 +414,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 			using var stream = await _RestClient.RequestStream( RequestBuilder.CreatePost(
 					"rawData/archiveContentQuery",
 					Payload.Create( query ) ),
-				cancellationToken );
+				cancellationToken ).ConfigureAwait( false );
 
 			return RestClientHelper.DeserializeBinaryObject<RawDataArchiveContentDto[]>( stream );
 		}
@@ -418,9 +431,29 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <exception cref="ArgumentNullException"><paramref name="info"/> or <paramref name="data"/> is <see langword="null" />.</exception>
 		public async Task<RawDataInformationDto> CreateRawData( RawDataInformationDto info, byte[] data, CancellationToken cancellationToken = default )
 		{
+			if( data == null ) throw new ArgumentNullException( nameof( data ) );
+
+			using var stream = new MemoryStream( data, 0, data.Length, false, true );
+
+			return await CreateRawData( info, stream, cancellationToken ).ConfigureAwait( false );
+		}
+
+		/// <summary>
+		/// Creates a new raw data object <paramref name="data"/> for the element specified by <paramref name="info"/>.
+		/// </summary>
+		/// <param name="data">The raw data to upload.</param>
+		/// <param name="info">The <see cref="RawDataInformationDto"/> object containing the <see cref="RawDataEntityDto"/> type and the uuid of the raw data that should be uploaded.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+		/// <remarks>
+		/// If key speciefied by <see cref="RawDataInformationDto.Key"/> is -1, a new key will be chosen by the server automatically. This is the preferred way.
+		/// </remarks>
+		/// <exception cref="ArgumentNullException"><paramref name="info"/> or <paramref name="data"/> is <see langword="null" />.</exception>
+		public Task<RawDataInformationDto> CreateRawData( RawDataInformationDto info, Stream data, CancellationToken cancellationToken = default )
+		{
 			if( info == null ) throw new ArgumentNullException( nameof( info ) );
 			if( data == null ) throw new ArgumentNullException( nameof( data ) );
-			return await CreateRawDataInternal( info, data, HttpMethod.Post, cancellationToken );
+
+			return CreateRawDataInternal( info, data, HttpMethod.Post, cancellationToken );
 		}
 
 		/// <summary>
@@ -430,7 +463,23 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <param name="info">The <see cref="RawDataInformationDto"/> object containing the <see cref="RawDataEntityDto"/> type, the uuid and the key of the raw data that should be updated.</param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		/// <exception cref="ArgumentNullException"><paramref name="info"/> is <see langword="null" />.</exception>
-		public Task UpdateRawData( RawDataInformationDto info, byte[] data, CancellationToken cancellationToken = default )
+		public async Task UpdateRawData( RawDataInformationDto info, byte[] data, CancellationToken cancellationToken = default )
+		{
+			if( data == null ) throw new ArgumentNullException( nameof( data ) );
+
+			using var stream = new MemoryStream( data, 0, data.Length, false, true );
+
+			await UpdateRawData( info, stream, cancellationToken ).ConfigureAwait( false );
+		}
+
+		/// <summary>
+		/// Updates the raw data object <paramref name="data"/> for the element identified by <paramref name="info"/>.
+		/// </summary>
+		/// <param name="data">The raw data to upload.</param>
+		/// <param name="info">The <see cref="RawDataInformationDto"/> object containing the <see cref="RawDataEntityDto"/> type, the uuid and the key of the raw data that should be updated.</param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+		/// <exception cref="ArgumentNullException"><paramref name="info"/> is <see langword="null" />.</exception>
+		public Task UpdateRawData( RawDataInformationDto info, Stream data, CancellationToken cancellationToken = default )
 		{
 			if( info == null ) throw new ArgumentNullException( nameof( info ) );
 

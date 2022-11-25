@@ -1,0 +1,22 @@
+======================================================
+-------------------------------------------------------------------------------------------
+ Version 8.0.0                                                                   
+-------------------------------------------------------------------------------------------
+======================================================
+
+
+==========================================
+New Features
+==========================================
+
+- Use readonly lists and collections instead of arrays to avoid allocations
+- Added dependency to new package Zeiss.PiWeb.Api.Core
+○ Moved Attribute, AttributeExtensions, IAttributeItem, InspectionPlanEntity, PathElement, PathHelper, PathInformation and PathInformationExtension from Dtos to new package
+
+- Removed DataCharacteristic since it had no real benefit (simple container for characteristic uuid and the value)
+○ Replaced by dictionary of uuid and DataValueDto
+
+- Added support for System.Text.Json serialization
+- DataValueDto now implements interface IEquatable
+- Switched from ﻿BSD-4-Clause to ﻿BSD-3-Clause lincense
+- Target framework .NET 5 is updated to .NET 6

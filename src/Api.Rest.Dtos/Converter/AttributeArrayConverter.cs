@@ -15,63 +15,66 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 	using System;
 	using System.Collections.Generic;
 	using Newtonsoft.Json;
+	using Zeiss.PiWeb.Api.Core;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
+	using Attribute = Zeiss.PiWeb.Api.Core.Attribute;
 
 	#endregion
 
 	/// <summary>
-	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="AttributeDto"/> arrays.
+	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="Attribute"/> collections.
 	/// </summary>
-	public class AttributeArrayConverter : JsonConverter
+	public sealed class AttributeArrayConverter : JsonConverter
 	{
 		#region methods
 
-		/// <summary>
-		/// Determines whether this instance can convert the specified object type.
-		/// </summary>
+		/// <inheritdoc />
 		public override bool CanConvert( Type objectType )
 		{
-			return typeof( AttributeDto[] ) == objectType;
+			return typeof( IReadOnlyList<Attribute> ) == objectType;
 		}
 
-		/// <summary>
-		/// Reads the JSON representation of the object.
-		/// </summary>
+		/// <inheritdoc />
 		public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer )
 		{
-			var result = new List<AttributeDto>();
-			if( reader.TokenType == JsonToken.StartObject )
-			{
-				while( reader.Read() && reader.TokenType == JsonToken.PropertyName )
-				{
-					var key = AttributeKeyCache.Cache.StringToKey( reader.Value.ToString() );
-					var value = reader.ReadAsString();
+			if( reader.TokenType != JsonToken.StartObject )
+				return Array.Empty<Attribute>();
 
-					result.Add( new AttributeDto( key, value ) );
-				}
-			}
-
-			return result.ToArray();
+			return ReadAttributes( reader );
 		}
 
-		/// <summary>
-		/// Writes the JSON representation of the object.
-		/// </summary>
+		internal static IReadOnlyList<Attribute> ReadAttributes( JsonReader reader )
+		{
+			var result = new List<Attribute>();
+			while( reader.Read() && reader.TokenType == JsonToken.PropertyName )
+			{
+				var key = ushort.Parse( (string)reader.Value );
+				var value = reader.ReadAsString();
+
+				result.Add( new Attribute( key, value ) );
+			}
+
+			return result;
+		}
+
+		/// <inheritdoc />
 		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer )
 		{
 			writer.WriteStartObject();
-
-			var attributes = (AttributeDto[])value;
-			if( attributes != null && attributes.Length > 0 )
-			{
-				foreach( var att in attributes )
-				{
-					writer.WritePropertyName( AttributeKeyCache.Cache.KeyToString( att.Key ) );
-					writer.WriteValue( att.RawValue ?? att.Value );
-				}
-			}
-
+			WriteAttributes( writer, (IReadOnlyList<Attribute>)value );
 			writer.WriteEndObject();
+		}
+
+		internal static void WriteAttributes( JsonWriter writer, IReadOnlyList<Attribute> attributes )
+		{
+			if( attributes == null || attributes.Count == 0 )
+				return;
+
+			foreach( var attribute in attributes )
+			{
+				writer.WritePropertyName( AttributeKeyCache.StringForKey( attribute.Key ) );
+				writer.WriteValue( attribute.RawValue ?? attribute.Value );
+			}
 		}
 
 		#endregion

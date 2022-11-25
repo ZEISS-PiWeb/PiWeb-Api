@@ -21,11 +21,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 	using JetBrains.Annotations;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Bson;
-	using Newtonsoft.Json.Converters;
+	using Zeiss.PiWeb.Api.Core;
 	using Zeiss.PiWeb.Api.Rest.Common.Client;
 	using Zeiss.PiWeb.Api.Rest.Common.Utilities;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
-	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 
 	#endregion
@@ -52,18 +51,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		#region methods
 
 		/// <summary>
-		/// Deserializes the <paramref name="data"/>-stream into a new object of type <typeparamref name="T"/>. The data is expected to be in JSON format.
-		/// </summary>
-		/// <exception cref="ArgumentNullException"><paramref name="data"/> is <see langword="null" />.</exception>
-		public static T DeserializeObject<T>( [NotNull] Stream data )
-		{
-			if( data == null ) throw new ArgumentNullException( nameof( data ) );
-
-			using var reader = new JsonTextReader( new StreamReader( data, Encoding.UTF8, true, 4096, true ) ) { CloseInput = false };
-			return CreateJsonSerializer().Deserialize<T>( reader );
-		}
-
-		/// <summary>
 		/// Deserializes the <paramref name="data"/>-stream into a new object of type <typeparamref name="T"/>. The data is expected to be in BSON format.
 		/// </summary>
 		/// <exception cref="ArgumentNullException"><paramref name="data"/> is <see langword="null" />.</exception>
@@ -78,31 +65,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		}
 
 		/// <summary>
-		/// Deserializes the <paramref name="data"/>-stream into a new enumerable object of type <typeparamref name="T"/>. The data is expected to be in JSON format.
-		/// </summary>
-		/// <exception cref="ArgumentNullException"><paramref name="data"/> is <see langword="null" />.</exception>
-		internal static IEnumerable<T> DeserializeEnumeratedObject<T>( [NotNull] Stream data )
-		{
-			if( data == null ) throw new ArgumentNullException( nameof( data ) );
-
-			IEnumerable<T> DeserializeEnumeratedObject()
-			{
-				using var streamReader = new StreamReader( data, Encoding.UTF8, true, 4096, true );
-				using var reader = new JsonTextReader( streamReader ) { CloseInput = false };
-				var result = CreateJsonSerializer().Deserialize<IEnumerable<T>>( reader );
-
-				if( result == null ) yield break;
-
-				foreach( var entity in result )
-				{
-					yield return entity;
-				}
-			}
-
-			return DeserializeEnumeratedObject();
-		}
-
-		/// <summary>
 		/// Parses inspection plan filter criterias to a <see cref="ParameterDefinition"/> list.
 		/// </summary>
 		/// <param name="partPath">Path of the part the query should be restricted by.</param>
@@ -113,7 +75,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		/// <param name="requestedCharacteristicAttributes">Restricts the characteristic attributes that are returned.</param>
 		/// <param name="withHistory">Determines if the history should be returned.</param>
 		/// <returns></returns>
-		public static List<ParameterDefinition> ParseToParameter( PathInformationDto partPath = null, Guid[] partUuids = null, Guid[] charUuids = null, ushort? depth = null, AttributeSelector requestedPartAttributes = null, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false )
+		public static List<ParameterDefinition> ParseToParameter( PathInformation partPath = null, IReadOnlyCollection<Guid> partUuids = null, IReadOnlyCollection<Guid> charUuids = null, ushort? depth = null, AttributeSelector requestedPartAttributes = null, AttributeSelector requestedCharacteristicAttributes = null, bool withHistory = false )
 		{
 			var parameter = new List<ParameterDefinition>();
 			if( partPath != null )
@@ -125,10 +87,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 			if( withHistory )
 				parameter.Add( ParameterDefinition.Create( "withHistory", true.ToString() ) );
 
-			if( partUuids != null && partUuids.Length > 0 )
+			if( partUuids != null && partUuids.Count > 0 )
 				parameter.Add( ParameterDefinition.Create( "partUuids", ConvertGuidListToString( partUuids ) ) );
 
-			if( charUuids != null && charUuids.Length > 0 )
+			if( charUuids != null && charUuids.Count > 0 )
 				parameter.Add( ParameterDefinition.Create( "charUuids", ConvertGuidListToString( charUuids ) ) );
 
 			if( requestedPartAttributes != null )
@@ -156,11 +118,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		public static ushort[] ConvertStringToUInt16List( string value )
 		{
 			if( value == null )
-				return new ushort[ 0 ];
+				return Array.Empty<ushort>();
 			if( value.StartsWith( QueryListStart ) && value.EndsWith( QueryListStop ) )
 				value = value.Substring( 1, value.Length - 2 );
 			if( string.IsNullOrEmpty( value ) )
-				return new ushort[ 0 ];
+				return Array.Empty<ushort>();
 			try
 			{
 				return value.Split( ',' ).Select( s => ushort.Parse( s, CultureInfo.InvariantCulture ) ).ToArray();
@@ -190,26 +152,26 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 		}
 
 		/// <summary>Creates a list string from the ushorts <code>value</code>.</summary>
-		public static string ConvertUshortArrayToString( ushort[] value )
+		public static string ConvertUshortArrayToString( IReadOnlyCollection<ushort> value )
 		{
 			return ConvertFormattableArrayToString( value, formatProvider: CultureInfo.InvariantCulture );
 		}
 
 		/// <summary>Creates a list string from the shorts <code>value</code>.</summary>
-		internal static string ConvertShortArrayToString( short[] value )
+		internal static string ConvertShortArrayToString( IReadOnlyCollection<short> value )
 		{
 			return ConvertFormattableArrayToString( value, formatProvider: CultureInfo.InvariantCulture );
 		}
 
 		/// <summary>Creates a list string from the uuids <code>value</code>.</summary>
-		public static string ConvertGuidListToString( Guid[] value )
+		public static string ConvertGuidListToString( IReadOnlyCollection<Guid> value )
 		{
 			return ConvertFormattableArrayToString( value, "D" );
 		}
 
-		private static string ConvertFormattableArrayToString<T>( T[] value, string format = null, IFormatProvider formatProvider = null ) where T : IFormattable
+		private static string ConvertFormattableArrayToString<T>( IReadOnlyCollection<T> value, string format = null, IFormatProvider formatProvider = null ) where T : IFormattable
 		{
-			if( value == null || value.Length == 0 )
+			if( value == null || value.Count == 0 )
 				return "";
 
 			return ToListString( value.Select( v => v.ToString( format, formatProvider ) ) );
@@ -265,8 +227,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 			string requestPath,
 			int maxUriLength,
 			string parameterName,
-			Guid[] uuidsToSplit,
-			ParameterDefinition[] otherParameters )
+			IReadOnlyCollection<Guid> uuidsToSplit,
+			IReadOnlyCollection<ParameterDefinition> otherParameters )
 		{
 			if( serviceLocation == null ) throw new ArgumentNullException( nameof( serviceLocation ) );
 
@@ -301,7 +263,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 			string requestPath,
 			int maxUriLength,
 			string parameterName,
-			string[] pathsToSplit,
+			IReadOnlyCollection<string> pathsToSplit,
 			ParameterDefinition[] otherParameters )
 		{
 			if( serviceLocation == null ) throw new ArgumentNullException( nameof( serviceLocation ) );
@@ -321,20 +283,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Data
 			var collectionParameter = CollectionParameterFactory.Create( parameterName, pathsToSplit );
 
 			return splitter.SplitAndMerge( collectionParameter, otherParameters );
-		}
-
-		/// <summary>
-		/// Creates and configures the <see cref="JsonSerializer"/> that are needed by the services.
-		/// </summary>
-		internal static JsonSerializer CreateJsonSerializer()
-		{
-			return new JsonSerializer
-			{
-				Formatting = Formatting.None,
-				DateFormatHandling = DateFormatHandling.IsoDateFormat,
-				NullValueHandling = NullValueHandling.Ignore,
-				Converters = { new VersionConverter(), new InspectionPlanDtoBaseConverter() }
-			};
 		}
 
 		#endregion

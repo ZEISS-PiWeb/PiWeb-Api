@@ -15,6 +15,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 	using System;
 	using System.Threading;
 	using System.Threading.Tasks;
+	using Zeiss.PiWeb.Api.Core;
 	using Zeiss.PiWeb.Api.Rest.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 
@@ -72,7 +73,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
 		public static Task DeleteAllParts<T>( this IDataServiceRestClientBase<T> client, CancellationToken cancellationToken = default ) where T : DataServiceFeatureMatrix
 		{
-			return client.DeleteParts( PathInformationDto.Root, cancellationToken );
+			return client.DeleteParts( PathInformation.Root, cancellationToken );
 		}
 
 		#endregion

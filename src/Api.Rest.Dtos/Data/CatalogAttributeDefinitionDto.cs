@@ -13,16 +13,18 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	#region usings
 
 	using System;
-	using Newtonsoft.Json;
+	using System.Text.Json.Serialization;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
+	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
 
 	#endregion
 
 	/// <summary>
 	/// Defines an entity's attribute which is based on a <see cref="Catalog"/>.
 	/// </summary>
-	[JsonConverter( typeof( AttributeDefinitionConverter ) )]
-	public class CatalogAttributeDefinitionDto : AbstractAttributeDefinitionDto
+	[Newtonsoft.Json.JsonConverter( typeof( AttributeDefinitionConverter ) )]
+	[JsonConverter( typeof( JsonCatalogAttributeDefinitionConverter ) )]
+	public sealed class CatalogAttributeDefinitionDto : AbstractAttributeDefinitionDto
 	{
 		#region constructors
 

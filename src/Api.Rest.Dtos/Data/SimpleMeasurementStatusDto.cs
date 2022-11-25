@@ -13,8 +13,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	#region usings
 
 	using System;
+	using System.Collections.Generic;
 	using System.Diagnostics;
-	using Newtonsoft.Json;
+	using System.Text.Json.Serialization;
 
 	#endregion
 
@@ -29,23 +30,26 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		/// <summary>
 		/// Gets or sets the unique id of the status. Currently this can be one of the following:
-		/// <code>InTol</code>, <code>OutWarn</code> and <code>OutTol</code>.
+		/// <code>Green</code>, <code>Yellow</code> and <code>Red</code>.
 		/// </summary>
-		[JsonProperty( "id" )]
+		[Newtonsoft.Json.JsonProperty( "id" )]
+		[JsonPropertyName( "id" )]
 		public string Id { get; set; }
 
 		/// <summary>
 		/// Gets or sets the number of characteristics with this measurement status.
 		/// </summary>
-		[JsonProperty( "count" )]
+		[Newtonsoft.Json.JsonProperty( "count" )]
+		[JsonPropertyName( "count" )]
 		public int Count { get; set; }
 
 		/// <summary>
 		/// Gets or sets the uuids of the characteristics that have this status. This property will only be populated
 		/// when the detailed status is requested with <see cref="MeasurementStatisticsDto.Detailed"/>.
 		/// </summary>
-		[JsonProperty( "uuid" )]
-		public Guid[] Uuid { get; set; }
+		[Newtonsoft.Json.JsonProperty( "uuid" )]
+		[JsonPropertyName( "uuid" )]
+		public IReadOnlyCollection<Guid> Uuid { get; set; }
 
 		#endregion
 	}

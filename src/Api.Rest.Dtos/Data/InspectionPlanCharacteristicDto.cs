@@ -12,14 +12,15 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
 	#region usings
 
-	using Newtonsoft.Json;
+	using System.Collections.Generic;
+	using System.Text.Json.Serialization;
 
 	#endregion
 
 	/// <summary>
 	/// This class represents an inspection plan characteristics with its attributes and the version history.
 	/// </summary>
-	public class InspectionPlanCharacteristicDto : InspectionPlanDtoBase
+	public sealed class InspectionPlanCharacteristicDto : InspectionPlanDtoBase
 	{
 		#region constructors
 
@@ -30,8 +31,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// This constructor is required for the JSON deserializer to be able
 		/// to identify concrete classes to use when deserializing <see cref="History"/> property.
 		/// </remarks>
-		[JsonConstructor]
-		public InspectionPlanCharacteristicDto( InspectionPlanCharacteristicDto[] history )
+		public InspectionPlanCharacteristicDto( IReadOnlyList<InspectionPlanCharacteristicDto> history )
 		{
 			History = history;
 		}
@@ -50,8 +50,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// when the inspection plan search is performed with the versioning flag set. When creating new parts,
 		/// this information will be ignored by the server.
 		/// </summary>
-		[JsonProperty( "history" )]
-		public InspectionPlanDtoBase[] History { get; set; }
+		[Newtonsoft.Json.JsonProperty( "history" )]
+		[JsonPropertyName( "history" )]
+		public IReadOnlyList<InspectionPlanCharacteristicDto> History { get; set; }
 
 		#endregion
 	}

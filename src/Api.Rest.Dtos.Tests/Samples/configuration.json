@@ -1,0 +1,533 @@
+﻿{
+  "partAttributes": [
+    {
+      "key": 1001,
+      "description": "Teilenummer",
+      "length": 30,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 1003,
+      "description": "Teilekurzbezeichnung",
+      "length": 20,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 1004,
+      "description": "Zeichnungsstand",
+      "length": 20,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 1008,
+      "description": "Baureihe",
+      "length": 20,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 1011,
+      "description": "Modell/Variante",
+      "length": 40,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 1041,
+      "description": "Zeichnungsnummer",
+      "length": 30,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 1086,
+      "description": "Aufbaustufe",
+      "length": 40,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 1100,
+      "description": "Werksbereich",
+      "length": 40,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 1103,
+      "description": "Kostenstelle",
+      "length": 40,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 1900,
+      "description": "Kommentar",
+      "length": 8000,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    }
+  ],
+  "characteristicAttributes": [
+    {
+      "key": 2001,
+      "description": "Merkmalsnummer",
+      "length": 20,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2003,
+      "description": "Grundname",
+      "length": 80,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2004,
+      "description": "Richtung",
+      "catalog": "d7291afb-0a67-4c1e-8bcc-6fc455bcc0e5",
+      "definitionType": "CatalogAttributeDefinition"
+    },
+    {
+      "key": 2006,
+      "description": "Dokumentationspflicht",
+      "type": "Integer",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2021,
+      "description": "Berechnungsvorschrift",
+      "length": 256,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2022,
+      "description": "Anzahl Nachkommastellen",
+      "type": "Integer",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2101,
+      "description": "Nennmaß",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2110,
+      "description": "Unterer Grenzwert",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2111,
+      "description": "Oberer Grenzwert",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2142,
+      "description": "Einheit",
+      "length": 20,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2297,
+      "description": "Ausrichtung",
+      "catalog": "b6447390-ff58-41fe-af4f-253c7d21764c",
+      "definitionType": "CatalogAttributeDefinition"
+    },
+    {
+      "key": 2298,
+      "description": "Lage",
+      "catalog": "055b85db-61a9-4e0d-be16-cf5a27a81f5d",
+      "definitionType": "CatalogAttributeDefinition"
+    },
+    {
+      "key": 2299,
+      "description": "Orientierung",
+      "catalog": "bc33124a-a994-4537-ae30-2a447dfbfed8",
+      "definitionType": "CatalogAttributeDefinition"
+    },
+    {
+      "key": 2342,
+      "description": "Messmodul",
+      "length": 100,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2403,
+      "description": "Messsystem",
+      "length": 20,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2540,
+      "description": "X-Richtung",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2541,
+      "description": "Y-Richtung",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2542,
+      "description": "Z-Richtung",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2543,
+      "description": "X-Position",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2544,
+      "description": "Y-Position",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2545,
+      "description": "Z-Position",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2546,
+      "description": "Durchmesser",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2547,
+      "description": "Länge",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2548,
+      "description": "Länge2",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2549,
+      "description": "Winkel",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2805,
+      "description": "Auditfunktion",
+      "catalog": "8cee6551-b613-4c3d-b2ec-655f75d04436",
+      "definitionType": "CatalogAttributeDefinition"
+    },
+    {
+      "key": 8500,
+      "description": "Stichprobenumfang",
+      "type": "Integer",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 8501,
+      "description": "Stichprobenart",
+      "type": "Integer",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 9010,
+      "description": "Kartenkonfiguration (Lagekarte)",
+      "length": 255,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 9011,
+      "description": "Mittellage (Lagekarte)",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 9012,
+      "description": "Untere Eingriffsgrenze (Lagekarte)",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 9013,
+      "description": "Obere Eingriffsgrenze (Lagekarte)",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 9014,
+      "description": "Untere Warngrenze (Lagekarte)",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 9015,
+      "description": "Obere Warngrenze (Lagekarte)",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 9110,
+      "description": "Kartenkonfiguration (Streuungskarte)",
+      "length": 255,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 9111,
+      "description": "Mittellage (Streuungskarte)",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 9112,
+      "description": "Untere Eingriffsgrenze (Streuungskarte)",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 9113,
+      "description": "Obere Eingriffsgrenze (Streuungskarte)",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 9114,
+      "description": "Untere Warngrenze (Streuungskarte)",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 9115,
+      "description": "Obere Warngrenze (Streuungskarte)",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 12009,
+      "description": "Prüfmerkmalstyp",
+      "length": 255,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    }
+  ],
+  "measurementAttributes": [
+    {
+      "key": 4,
+      "description": "Zeit",
+      "type": "DateTime",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 6,
+      "description": "Chargennummer",
+      "length": 14,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 7,
+      "description": "Nest",
+      "catalog": "9e3e3e4d-11d0-4cdd-aaf5-a6f4a52b3630",
+      "definitionType": "CatalogAttributeDefinition"
+    },
+    {
+      "key": 8,
+      "description": "Prüfer",
+      "catalog": "065bdceb-8b41-4e35-a95d-b3e3035d20a8",
+      "definitionType": "CatalogAttributeDefinition"
+    },
+    {
+      "key": 9,
+      "description": "Text",
+      "length": 250,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 10,
+      "description": "Maschine",
+      "catalog": "453a7fb6-c114-4794-bdd9-b2a073f6f495",
+      "definitionType": "CatalogAttributeDefinition"
+    },
+    {
+      "key": 12,
+      "description": "Prüfmittel",
+      "catalog": "5b48e2ae-6239-4150-aca8-48f6a3a4e4e0",
+      "definitionType": "CatalogAttributeDefinition"
+    },
+    {
+      "key": 15,
+      "description": "Prüfart",
+      "catalog": "581861e0-e3d4-470b-a759-a31bbe9d7a68",
+      "definitionType": "CatalogAttributeDefinition"
+    },
+    {
+      "key": 16,
+      "description": "Produktionsnummer",
+      "length": 20,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 53,
+      "description": "Auftragsnummer",
+      "length": 20,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 802,
+      "description": "Variante",
+      "length": 20,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 803,
+      "description": "Fertigungsdatum",
+      "type": "DateTime",
+      "definitionType": "AttributeDefinition"
+    }
+  ],
+  "valueAttributes": [
+    {
+      "key": 1,
+      "description": "Messwert",
+      "type": "Float",
+      "definitionType": "AttributeDefinition"
+    }
+  ],
+  "catalogAttributes": [
+    {
+      "key": 2009,
+      "description": "Richtung",
+      "length": 10,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2090,
+      "description": "Orientierung",
+      "length": 10,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2091,
+      "description": "Lage",
+      "length": 10,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 2520,
+      "description": "Bezugssystem",
+      "length": 10,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 4062,
+      "description": "Maschinennummer",
+      "length": 20,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 4063,
+      "description": "Maschinenbezeichnung",
+      "length": 100,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 4072,
+      "description": ".Prüfmittelnummer",
+      "length": 20,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 4073,
+      "description": "Prüfmittelbezeichnung",
+      "length": 100,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 4074,
+      "description": ".Prüfmittelgruppe",
+      "length": 20,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 4092,
+      "description": ".Prüfernummer",
+      "length": 20,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 4093,
+      "description": "Prüfername",
+      "length": 100,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 4252,
+      "description": "Nestnummer",
+      "length": 20,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 4253,
+      "description": "Nestbezeichnung",
+      "length": 100,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 4391,
+      "description": "Prüfart",
+      "length": 80,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 4401,
+      "description": "Funktionsgruppe",
+      "length": 100,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    },
+    {
+      "key": 4402,
+      "description": "Priorität",
+      "length": 10,
+      "type": "AlphaNumeric",
+      "definitionType": "AttributeDefinition"
+    }
+  ],
+  "versioningType": "Off"
+}

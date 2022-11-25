@@ -21,7 +21,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	#endregion
 
 	/// <summary>
-	/// Class that encapsulates the url parameter for a measurement value search via PiWeb-REST web service.
+	/// This class contains a measurement search criteria for a distinct measurement search.
 	/// </summary>
 	public class DistinctMeasurementFilterAttributesDto : AbstractMeasurementFilterAttributesDto
 	{
@@ -55,16 +55,16 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		{
 			var items = new[]
 			{
-				Tuple.Create( PartUuidsParamName, partUuids ),
-				Tuple.Create( MeasurementUuidsParamName, measurementUuids ),
-				Tuple.Create( DeepParamName, deep ),
-				Tuple.Create( LimitResultParamName, limitResult ),
-				Tuple.Create( LimitResultPerPartParamName, limitResultPerPart ),
-				Tuple.Create( OrderByParamName, order ),
-				Tuple.Create( SearchConditionParamName, searchCondition ),
-				Tuple.Create( AggregationParamName, aggregation ),
-				Tuple.Create( FromModificationDateParamName, fromModificationDate ),
-				Tuple.Create( ToModificationDateParamName, toModificationDate )
+				ValueTuple.Create( PartUuidsParamName, partUuids ),
+				ValueTuple.Create( MeasurementUuidsParamName, measurementUuids ),
+				ValueTuple.Create( DeepParamName, deep ),
+				ValueTuple.Create( LimitResultParamName, limitResult ),
+				ValueTuple.Create( LimitResultPerPartParamName, limitResultPerPart ),
+				ValueTuple.Create( OrderByParamName, order ),
+				ValueTuple.Create( SearchConditionParamName, searchCondition ),
+				ValueTuple.Create( AggregationParamName, aggregation ),
+				ValueTuple.Create( FromModificationDateParamName, fromModificationDate ),
+				ValueTuple.Create( ToModificationDateParamName, toModificationDate )
 			};
 
 			var result = new DistinctMeasurementFilterAttributesDto();
@@ -120,11 +120,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 
 		/// <inheritdoc />
-		public override ParameterDefinition[] ToParameterDefinition()
+		public override IReadOnlyCollection<ParameterDefinition> ToParameterDefinition()
 		{
 			var result = new List<ParameterDefinition>();
 
-			if( PartUuids != null && PartUuids.Length > 0 )
+			if( PartUuids != null && PartUuids.Count > 0 )
 				result.Add( ParameterDefinition.Create( PartUuidsParamName, RestClientHelper.ConvertGuidListToString( PartUuids ) ) );
 
 			if( Deep )
@@ -136,10 +136,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			if( LimitResultPerPart >= 0 )
 				result.Add( ParameterDefinition.Create( LimitResultPerPartParamName, LimitResultPerPart.ToString() ) );
 
-			if( MeasurementUuids != null && MeasurementUuids.Length > 0 )
+			if( MeasurementUuids != null && MeasurementUuids.Count > 0 )
 				result.Add( ParameterDefinition.Create( MeasurementUuidsParamName, RestClientHelper.ConvertGuidListToString( MeasurementUuids ) ) );
 
-			if( OrderBy != null && OrderBy.Length > 0 )
+			if( OrderBy != null && OrderBy.Count > 0 )
 				result.Add( ParameterDefinition.Create( OrderByParamName, OrderByToString( OrderBy ) ) );
 
 			if( SearchCondition != null )
@@ -153,7 +153,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			if( ToModificationDate.HasValue )
 				result.Add( ParameterDefinition.Create( ToModificationDateParamName, XmlConvert.ToString( ToModificationDate.Value, XmlDateTimeSerializationMode.RoundtripKind ) ) );
 
-			return result.ToArray();
+			return result;
 		}
 
 		/// <summary>

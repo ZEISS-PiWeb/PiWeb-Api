@@ -13,6 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.Dtos.Data
 	#region usings
 
 	using System;
+	using System.Linq;
 	using FluentAssertions;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
@@ -27,7 +28,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.Dtos.Data
 		[Test]
 		public void Parse_ConditionContainsBrackets_Success()
 		{
-			var expected = new GenericSearchAttributeConditionDto()
+			var expected = new GenericSearchAttributeConditionDto
 			{
 				Attribute = 123,
 				Operation = OperationDto.Equal,
@@ -42,29 +43,25 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.Dtos.Data
 		[Test]
 		public void Parse_MultiConditionContainsBrackets_Success()
 		{
-			var expected = new GenericSearchAndDto()
+			var condition1 = new GenericSearchAttributeConditionDto
 			{
-				Conditions = new GenericSearchConditionDto[]
-				{
-					new GenericSearchAttributeConditionDto()
-					{
-						Attribute = 123,
-						Operation = OperationDto.Equal,
-						Value = "condition[]with[]b[ack]ets"
-					},
-					new GenericSearchAttributeConditionDto()
-					{
-						Attribute = 124,
-						Operation = OperationDto.In,
-						Value = "[100;-1;23];[2;-12;40];[-22;33;44]"
-					}
-				}
+				Attribute = 123,
+				Operation = OperationDto.Equal,
+				Value = "condition[]with[]b[ack]ets"
+			};
+			var condition2 = new GenericSearchAttributeConditionDto
+			{
+				Attribute = 124,
+				Operation = OperationDto.In,
+				Value = "[100;-1;23];[2;-12;40];[-22;33;44]"
 			};
 
 			var actual = (GenericSearchAndDto)SearchConditionParser.Parse( "123=[condition[]with[]b[ack]ets]+124In[[100;-1;23];[2;-12;40];[-22;33;44]]" );
 
 			// ReSharper disable once CoVariantArrayConversion
-			actual.Conditions.Should().BeEquivalentTo( expected.Conditions );
+			actual.Conditions.Should().HaveCount( 2 );
+			actual.Conditions.First().Should().BeEquivalentTo( condition1 );
+			actual.Conditions.Last().Should().BeEquivalentTo( condition2 );
 		}
 
 		[Test]
@@ -167,7 +164,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.Dtos.Data
 		[Test]
 		public void TryParse_ValidCondition_ReturnsTrue()
 		{
-			var expected = new GenericSearchAttributeConditionDto()
+			var expected = new GenericSearchAttributeConditionDto
 			{
 				Attribute = 123,
 				Operation = OperationDto.Equal,

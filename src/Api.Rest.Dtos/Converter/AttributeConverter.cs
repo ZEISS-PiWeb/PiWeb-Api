@@ -15,30 +15,31 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 	using System;
 	using Newtonsoft.Json;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
+	using Attribute = Zeiss.PiWeb.Api.Core.Attribute;
 
 	#endregion
 
-	public class AttributeConverter : JsonConverter
+	public sealed class AttributeConverter : JsonConverter
 	{
 		#region methods
 
 		/// <inheritdoc />
 		public override bool CanConvert( Type objectType )
 		{
-			return typeof( AttributeDto ) == objectType;
+			return typeof( Attribute ) == objectType;
 		}
 
 		/// <inheritdoc />
 		public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer )
 		{
-			var result = new AttributeDto();
+			Attribute result = default;
 
-			if( reader.Read() && reader.TokenType == JsonToken.PropertyName )
+			while( reader.Read() && reader.TokenType == JsonToken.PropertyName )
 			{
-				var key = AttributeKeyCache.Cache.StringToKey( reader.Value.ToString() );
+				var key = ushort.Parse( (string)reader.Value );
 				var value = reader.ReadAsString();
 
-				result = new AttributeDto( key, value );
+				result = new Attribute( key, value );
 			}
 
 			return result;
@@ -49,8 +50,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 		{
 			writer.WriteStartObject();
 
-			var att = (AttributeDto)value;
-			writer.WritePropertyName( AttributeKeyCache.Cache.KeyToString( att.Key ) );
+			var att = (Attribute)value;
+			writer.WritePropertyName( AttributeKeyCache.StringForKey( att.Key ) );
 			writer.WriteValue( att.RawValue ?? att.Value );
 
 			writer.WriteEndObject();

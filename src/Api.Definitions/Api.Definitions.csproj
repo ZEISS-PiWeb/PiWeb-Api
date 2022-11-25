@@ -1,17 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-  	<TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
+  	<TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
     <RootNamespace>Zeiss.PiWeb.Api.Definitions</RootNamespace>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageVersion>7.1.0</PackageVersion>
+    <PackageVersion>8.0.0</PackageVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Assembly information">
     <AssemblyTitle>Contains generic data used by the ZEISS PiWeb API.</AssemblyTitle>
     <AssemblyName>Zeiss.PiWeb.Api.Definitions</AssemblyName>
-    <AssemblyVersion>7.1.0</AssemblyVersion>
+    <AssemblyVersion>8.0.0</AssemblyVersion>
     <Company>Carl Zeiss Industrielle Messtechnik GmbH</Company>
     <Copyright>Copyright © 2020 $(Company)</Copyright>
     <Description>Contains generic data used by the ZEISS PiWeb API. The ZEISS PiWeb API nuget depends on this package.</Description>
@@ -22,28 +23,34 @@
   </PropertyGroup>
 
   <PropertyGroup Label="NuGet package specifications for local build">
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb; .xml;</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder); .xml;</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <Authors>$(Company)</Authors>
     <EmbedAllSources>true</EmbedAllSources>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIconUrl>https://raw.githubusercontent.com/ZEISS-PiWeb/PiWeb-Api/develop/logo128px.png</PackageIconUrl>
     <PackageId>Zeiss.PiWeb.Api.Definitions</PackageId>
-    <PackageLicenseFile>License.txt</PackageLicenseFile>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/ZEISS-PiWeb/PiWeb-Api</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageTags>ZEISS PiWeb API</PackageTags>
     <Version>$(InformationalVersion)</Version>
+    <RepositoryUrl>https://github.com/ZEISS-PiWeb/PiWeb-Api</RepositoryUrl>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/RELEASE_NOTES_Definitions.txt"))</PackageReleaseNotes>
   </PropertyGroup>
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\License.txt">
-      <Link>License.txt</Link>
+    <Content Include="..\..\LICENSE.txt">
+      <Link>LICENSE.txt</Link>
       <Pack>true</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>/</PackagePath>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

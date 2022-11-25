@@ -23,11 +23,14 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using System.Net;
 	using System.Net.Http;
 	using System.Net.Http.Headers;
+	using System.Runtime.CompilerServices;
+	using System.Runtime.Versioning;
 	using System.Text;
 	using System.Threading;
 	using System.Threading.Tasks;
+	using CacheCow.Client;
+	using CacheCow.Common;
 	using JetBrains.Annotations;
-	using Newtonsoft.Json;
 	using Zeiss.PiWeb.Api.Rest.Common.Data;
 	using Zeiss.PiWeb.Api.Rest.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
@@ -51,6 +54,13 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// </summary>
 		public const int MaximumPathSegmentLength = 255;
 
+		private readonly bool _IsBrowser
+#if NET5_0_OR_GREATER
+			= OperatingSystem.IsBrowser();
+#else
+			= false;
+#endif
+
 		#endregion
 
 		#region members
@@ -71,10 +81,16 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		public static readonly TimeSpan DefaultShortTimeout = TimeSpan.FromSeconds( 15 );
 
 		private readonly bool _Chunked;
+		[CanBeNull] private readonly DelegatingHandler _CustomHttpMessageHandler;
+
+		private readonly IObjectSerializer _Serializer;
 
 		private HttpClient _HttpClient;
 		private TimeoutHandler _TimeoutHandler;
-		private HttpClientHandler _WebRequestHandler;
+		private HttpClientHandler _HttpClientHandler;
+		private CachingHandler _CachingHandler;
+		private ICacheStore _CacheStore;
+		private IVaryHeaderStore _VaryHeaderStore;
 		private bool _IsDisposed;
 		private AuthenticationContainer _AuthenticationContainer = new AuthenticationContainer( AuthenticationMode.NoneOrBasic );
 
@@ -86,7 +102,14 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// Initializes a new instance of the <see cref="RestClientBase"/> class.
 		/// </summary>
 		/// <exception cref="ArgumentNullException"><paramref name="serverUri"/> is <see langword="null" />.</exception>
-		protected RestClientBase( [NotNull] Uri serverUri, string endpointName, TimeSpan? timeout = null, int maxUriLength = DefaultMaxUriLength, bool chunked = true )
+		protected RestClientBase(
+			[NotNull] Uri serverUri,
+			string endpointName,
+			TimeSpan? timeout = null,
+			int maxUriLength = DefaultMaxUriLength,
+			bool chunked = true,
+			[CanBeNull] DelegatingHandler customHttpMessageHandler = null,
+			[CanBeNull] IObjectSerializer serializer = null )
 		{
 			if( serverUri == null )
 				throw new ArgumentNullException( nameof( serverUri ) );
@@ -97,6 +120,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			}.Uri;
 
 			_Chunked = chunked;
+			_CustomHttpMessageHandler = customHttpMessageHandler;
+			_Serializer = serializer ?? ObjectSerializer.Default;
 
 			MaxUriLength = maxUriLength;
 
@@ -133,23 +158,33 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// <summary>
 		/// Gets or sets if system default proxy should be used.
 		/// </summary>
+		/// <remarks>
+		/// For executing within a browser this property is ignored and the browser's default is used.
+		/// </remarks>
+#pragma warning disable CA1416
 		public bool UseDefaultWebProxy
 		{
-			get => _WebRequestHandler.UseProxy;
+			get => _IsBrowser || _HttpClientHandler.UseProxy;
 			set
 			{
-				if( _WebRequestHandler.UseProxy != value )
-				{
-					_WebRequestHandler.UseProxy = value;
-				}
+				if( !_IsBrowser && _HttpClientHandler.UseProxy != value )
+					_HttpClientHandler.UseProxy = value;
 			}
 		}
+#pragma warning restore CA1416
 
 		/// <summary>
 		/// Returns the endpoint address of the webservice.
 		/// </summary>
 		public Uri ServiceLocation { get; }
 
+		/// <summary>
+		/// Gets or sets the information for authenticating requests.
+		/// </summary>
+		/// <remarks>
+		/// For executing within a browser this property is ignored.
+		/// Instead inject a custom <see cref="DelegatingHandler"/> to appropriately modify the request.
+		/// </remarks>
 		public AuthenticationContainer AuthenticationContainer
 		{
 			get => _AuthenticationContainer;
@@ -160,7 +195,56 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				if( _AuthenticationContainer == value ) return;
 
 				_AuthenticationContainer = value;
+
+				// Use the custom HTTP message handler for passing authentication relevant information in browser instead.
+				if( _IsBrowser )
+					return;
+
 				UpdateAuthenticationInformation();
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the client-side cache store to cache requests (triggered by HTTP headers, like Cache-Control and Etag).
+		/// If the value is <see langword="null" />, built-in caching is used (.Net Framework) or caching is disabled (.Net Standard, .Net Core).
+		/// </summary>
+		/// <remarks>
+		/// For example use <see cref="InMemoryCacheStore"/> or <see cref="FilesystemCacheStore"/>.
+		/// </remarks>
+		public ICacheStore CacheStore
+		{
+			get => _CacheStore;
+
+			set
+			{
+				if( value == _CacheStore )
+					return;
+
+				_CacheStore = value;
+
+				RebuildHttpClient();
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the header store to build header-dependent keys for the cache (see "Vary" HTTP header).
+		/// If the value is <see langword="null" />, the default VaryHeaderStore is used.
+		/// </summary>
+		/// <remarks>
+		/// For example use <see cref="InMemoryVaryHeaderStore"/> or <see cref="FilesystemVaryHeaderStore"/>.
+		/// </remarks>
+		public IVaryHeaderStore VaryHeaderStore
+		{
+			get => _VaryHeaderStore;
+
+			set
+			{
+				if( value == _VaryHeaderStore )
+					return;
+
+				_VaryHeaderStore = value;
+
+				RebuildHttpClient();
 			}
 		}
 
@@ -173,9 +257,19 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			return PerformRequestAsync<object>( requestCreationHandler, false, null, true, cancellationToken );
 		}
 
+		public Task Request( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		{
+			return PerformRequestAsync<object>( () => requestCreationHandler( _Serializer, cancellationToken ), false, null, true, cancellationToken );
+		}
+
 		public Task<T> Request<T>( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync( requestCreationHandler, false, ResponseToObjectAsync<T>, true, cancellationToken );
+			return PerformRequestAsync( requestCreationHandler, false, response => ResponseToObjectAsync<T>( response, _Serializer, cancellationToken ), true, cancellationToken );
+		}
+
+		public Task<T> Request<T>( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		{
+			return PerformRequestAsync( () => requestCreationHandler( _Serializer, cancellationToken ), false, response => ResponseToObjectAsync<T>( response, _Serializer, cancellationToken ), true, cancellationToken );
 		}
 
 		public Task<Stream> RequestStream( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
@@ -183,9 +277,29 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			return PerformRequestAsync( requestCreationHandler, true, ResponseToStreamAsync, false, cancellationToken );
 		}
 
-		public Task<IEnumerable<T>> RequestEnumerated<T>( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		public Task<Stream> RequestStream( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync( requestCreationHandler, true, ResponseToEnumerationAsync<T>, false, cancellationToken );
+			return PerformRequestAsync( () => requestCreationHandler( _Serializer, cancellationToken ), true, ResponseToStreamAsync, false, cancellationToken );
+		}
+
+		public async IAsyncEnumerable<T> RequestEnumerated<T>( [NotNull] Func<HttpRequestMessage> requestCreationHandler, [EnumeratorCancellation] CancellationToken cancellationToken )
+		{
+			var items = await PerformRequestAsync( requestCreationHandler, true, response => Task.FromResult( ResponseToAsyncEnumerable<T>( response, _Serializer, cancellationToken ) ), false, cancellationToken );
+
+			await foreach( var item in items.ConfigureAwait( false ) )
+			{
+				yield return item;
+			}
+		}
+
+		public async IAsyncEnumerable<T> RequestEnumerated<T>( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, [EnumeratorCancellation] CancellationToken cancellationToken )
+		{
+			var items = await PerformRequestAsync( () => requestCreationHandler( _Serializer, cancellationToken ), true, response => Task.FromResult( ResponseToAsyncEnumerable<T>( response, _Serializer, cancellationToken ) ), false, cancellationToken );
+
+			await foreach (var item in items.ConfigureAwait( false ) )
+			{
+				yield return item;
+			}
 		}
 
 		public Task<byte[]> RequestBytes( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
@@ -193,9 +307,19 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			return PerformRequestAsync( requestCreationHandler, false, ResponseToBytesAsync, true, cancellationToken );
 		}
 
+		public Task<byte[]> RequestBytes( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		{
+			return PerformRequestAsync( () => requestCreationHandler( _Serializer, cancellationToken ), false, ResponseToBytesAsync, true, cancellationToken );
+		}
+
 		public Task<T> RequestBinary<T>( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
 			return PerformRequestAsync( requestCreationHandler, false, BinaryResponseToObjectAsync<T>, true, cancellationToken );
+		}
+
+		public Task<T> RequestBinary<T>( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
+		{
+			return PerformRequestAsync( () => requestCreationHandler( _Serializer, cancellationToken ), false, BinaryResponseToObjectAsync<T>, true, cancellationToken );
 		}
 
 		/// <summary>
@@ -209,12 +333,28 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			return PerformRequestAsync( requestCreationHandler, false, LocationHeaderToUrl, true, cancellationToken );
 		}
 
-		private static async Task<T> ResponseToObjectAsync<T>( HttpResponseMessage response )
+		/// <summary>
+		/// Start an async operation. Returns an URL to poll for status updates if the operation is accepted, otherwise the operation is done synchronously.
+		/// </summary>
+		/// <returns>Returns a Task that represents the duration of the initial REST request. The result of the task contains
+		/// the URI for polling the operation result or null in case the server already finished the request synchronously.</returns>
+		/// <exception cref="RestClientException">The response indicated status Accepted, but did not contain polling information.</exception>
+		public Task<Uri> RequestAsyncOperation( [NotNull] Func<IObjectSerializer, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
-			using( var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false ) )
+			return PerformRequestAsync( () => requestCreationHandler( _Serializer ), false, LocationHeaderToUrl, true, cancellationToken );
+		}
+
+		private static async Task<T> ResponseToObjectAsync<T>( HttpResponseMessage response, IObjectSerializer serializer, CancellationToken cancellationToken )
+		{
+			if( response.StatusCode != HttpStatusCode.NoContent )
 			{
-				return RestClientHelper.DeserializeObject<T>( responseStream );
+				using( var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false ) )
+				{
+					return await serializer.DeserializeAsync<T>( responseStream, cancellationToken ).ConfigureAwait( false );
+				}
 			}
+
+			return default;
 		}
 
 		private static Task<Uri> LocationHeaderToUrl( HttpResponseMessage response )
@@ -226,19 +366,13 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			return Task.FromResult( result );
 		}
 
-		private static async Task<IEnumerable<T>> ResponseToEnumerationAsync<T>( HttpResponseMessage response )
-		{
-			var stream = await ResponseToStreamAsync( response ).ConfigureAwait( false );
-			return GetEnumeratedResponse<T>( response, stream );
-		}
-
-		private static IEnumerable<T> GetEnumeratedResponse<T>( IDisposable response, Stream responseStream )
+		private static async IAsyncEnumerable<T> ResponseToAsyncEnumerable<T>( HttpResponseMessage response, IObjectSerializer serializer, [EnumeratorCancellation] CancellationToken cancellationToken )
 		{
 			using( response )
 			{
-				using( responseStream )
+				using( var responseStream = await ResponseToStreamAsync( response ).ConfigureAwait( false ) )
 				{
-					foreach( var item in RestClientHelper.DeserializeEnumeratedObject<T>( responseStream ) )
+					await foreach( var item in serializer.DeserializeAsyncEnumerable<T>( responseStream, cancellationToken ).ConfigureAwait( false ) )
 					{
 						yield return item;
 					}
@@ -312,7 +446,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 						continue;
 					}
 
-					await HandleFaultedResponse( response ).ConfigureAwait( false );
+					await HandleFaultedResponse( response, _Serializer, cancellationToken ).ConfigureAwait( false );
 				}
 			}
 			catch( HttpRequestException ex )
@@ -376,16 +510,16 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			return response.Content.ReadAsStreamAsync();
 		}
 
-		private static async Task HandleFaultedResponse( HttpResponseMessage response )
+		private static async Task HandleFaultedResponse( HttpResponseMessage response, IObjectSerializer serializer, CancellationToken cancellationToken )
 		{
-			await HandleClientBasedFaults( response ).ConfigureAwait( false );
+			await HandleClientBasedFaults( response, serializer, cancellationToken ).ConfigureAwait( false );
 			HandleServerBasedFaults( response );
 		}
 
 		/// <summary>
 		/// Handles all responses with status codes between 400 and 499
 		/// </summary>
-		private static async Task HandleClientBasedFaults( HttpResponseMessage response )
+		private static async Task HandleClientBasedFaults( HttpResponseMessage response, IObjectSerializer serializer, CancellationToken cancellationToken )
 		{
 			if( response.StatusCode < HttpStatusCode.BadRequest || response.StatusCode >= HttpStatusCode.InternalServerError )
 				return;
@@ -395,10 +529,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				Error error;
 				try
 				{
-					error = RestClientHelper.DeserializeObject<Error>( responseStream )
+					error = await serializer.DeserializeAsync<Error>( responseStream, cancellationToken ).ConfigureAwait( false )
 							?? new Error( $"Request {response.RequestMessage.Method} {response.RequestMessage.RequestUri} was not successful: {(int)response.StatusCode} ({response.ReasonPhrase})" );
 				}
-				catch( JsonReaderException )
+				catch( ObjectSerializerException )
 				{
 					var buffer = ( responseStream as MemoryStream )?.ToArray();
 					var content = buffer != null ? Encoding.UTF8.GetString( buffer ) : null;
@@ -437,7 +571,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			var timeout = _TimeoutHandler.Timeout;
 
 			_HttpClient?.Dispose();
-			_WebRequestHandler?.Dispose();
+			_HttpClientHandler?.Dispose();
+			_CachingHandler?.Dispose();
 
 			BuildHttpClient( timeout );
 		}
@@ -445,9 +580,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		private void BuildHttpClient( TimeSpan? timeout )
 		{
 #if NETFRAMEWORK
-			_WebRequestHandler = new WebRequestHandler
+			var webRequestHandler = new WebRequestHandler
 			{
-				CachePolicy = new HttpRequestCachePolicy( HttpCacheAgeControl.MaxAge, TimeSpan.FromDays( 0 ) ),
 				AllowPipelining = true,
 				PreAuthenticate = true,
 				AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
@@ -466,30 +600,59 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				//     i.e. the Server is already authenticating every single request
 				UnsafeAuthenticatedConnectionSharing = true
 			};
+
+			if( _CacheStore == null )
+				webRequestHandler.CachePolicy = new HttpRequestCachePolicy( HttpCacheAgeControl.MaxAge, TimeSpan.FromDays( 0 ) );
+
+			_HttpClientHandler = webRequestHandler;
 #else
-			_WebRequestHandler = new HttpClientHandler
+			_HttpClientHandler = new HttpClientHandler();
+
+			// Almost all options are not available when running in browser
+			// and need to be done either manually or are not possible at all.
+			if( !_IsBrowser )
 			{
-				PreAuthenticate = true,
-				AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-			};
+#pragma warning disable CA1416
+				_HttpClientHandler.PreAuthenticate = true;
+				_HttpClientHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+#pragma warning restore CA1416
+			}
 #endif
+
+			if( _CacheStore == null )
+				_CachingHandler = null;
+			else
+			{
+				_CachingHandler = _VaryHeaderStore == null
+					? new CachingHandler( _CacheStore )
+					: new CachingHandler( _CacheStore, _VaryHeaderStore );
+
+				_CachingHandler.InnerHandler = _HttpClientHandler;
+				_CachingHandler.DoNotEmitCacheCowHeader = true;
+			}
 
 			_TimeoutHandler = new TimeoutHandler
 			{
 				Timeout = timeout ?? DefaultTimeout,
-				InnerHandler = _WebRequestHandler
+				InnerHandler = (HttpMessageHandler)_CachingHandler ?? _HttpClientHandler
 			};
 
-			 _HttpClient = new HttpClient( _TimeoutHandler )
+			if( _CustomHttpMessageHandler != null )
+				_CustomHttpMessageHandler.InnerHandler = _TimeoutHandler;
+
+			_HttpClient = new HttpClient( _CustomHttpMessageHandler ?? _TimeoutHandler )
 			{
 				Timeout = System.Threading.Timeout.InfiniteTimeSpan,
 				BaseAddress = ServiceLocation
 			};
 		}
 
+#if NET5_0_OR_GREATER
+		[UnsupportedOSPlatform( "browser" )]
+#endif
 		private void UpdateAuthenticationInformation()
 		{
-			_WebRequestHandler.ClientCertificates.Clear();
+			_HttpClientHandler.ClientCertificates.Clear();
 			_HttpClient.DefaultRequestHeaders.Authorization = null;
 
 			switch( _AuthenticationContainer.Mode )
@@ -513,7 +676,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 					UpdateUseWindowsCredentials( false );
 					if( _AuthenticationContainer.Certificate != null )
 					{
-						_WebRequestHandler.ClientCertificates.Add( _AuthenticationContainer.Certificate );
+						_HttpClientHandler.ClientCertificates.Add( _AuthenticationContainer.Certificate );
 					}
 
 					break;
@@ -533,14 +696,17 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			RaiseAuthenticationChanged();
 		}
 
+#if NET5_0_OR_GREATER
+		[UnsupportedOSPlatform( "browser" )]
+#endif
 		private void UpdateUseWindowsCredentials( bool useDefaultCredentials, ICredentials credentials = null )
 		{
 			// if one of those properties changes we unfortunately need to rebuild the request handler and therefore the http client
-			if( _WebRequestHandler.UseDefaultCredentials == useDefaultCredentials && _WebRequestHandler.Credentials == null && credentials == null ) return;
+			if( _HttpClientHandler.UseDefaultCredentials == useDefaultCredentials && _HttpClientHandler.Credentials == null && credentials == null ) return;
 
 			RebuildHttpClient();
-			_WebRequestHandler.Credentials = credentials;
-			_WebRequestHandler.UseDefaultCredentials = useDefaultCredentials;
+			_HttpClientHandler.Credentials = credentials;
+			_HttpClientHandler.UseDefaultCredentials = useDefaultCredentials;
 		}
 
 		private void RaiseAuthenticationChanged()
@@ -559,7 +725,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				if( disposing )
 				{
 					_HttpClient?.Dispose();
-					_WebRequestHandler?.Dispose();
+					_HttpClientHandler?.Dispose();
+					_CachingHandler?.Dispose();
 				}
 
 				_IsDisposed = true;

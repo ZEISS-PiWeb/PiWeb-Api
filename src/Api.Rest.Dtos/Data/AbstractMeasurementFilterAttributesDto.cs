@@ -13,24 +13,32 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	#region usings
 
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 
 	#endregion
 
+	/// <summary>
+	/// This class is the base class for a measurement or measurement value search criteria.
+	/// </summary>
 	public abstract class AbstractMeasurementFilterAttributesDto
 	{
 		#region constants
 
 		public const string PartUuidsParamName = "partUuids";
+		public const string MeasurementUuidsParamName = "measurementUuids";
+
 		protected const string DeepParamName = "deep";
 		protected const string LimitResultParamName = "limitResult";
 		protected const string LimitResultPerPartParamName = "limitResultPerPart";
 		protected const string OrderByParamName = "order";
-		public const string MeasurementUuidsParamName = "measurementUuids";
+
 		protected const string SearchConditionParamName = "searchCondition";
 		protected const string AggregationParamName = "aggregation";
 		protected const string FromModificationDateParamName = "fromModificationDate";
 		protected const string ToModificationDateParamName = "toModificationDate";
+
+		private static readonly IReadOnlyList<OrderDto> DefaultOrder = new[] { new OrderDto( 4, OrderDirectionDto.Desc, EntityDto.Measurement ) };
 
 		#endregion
 
@@ -44,7 +52,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			Deep = false;
 			LimitResult = -1;
 			LimitResultPerPart = -1;
-			OrderBy = new[] { new OrderDto( 4, OrderDirectionDto.Desc, EntityDto.Measurement ) };
+			OrderBy = DefaultOrder;
 			AggregationMeasurements = AggregationMeasurementSelectionDto.Default;
 		}
 
@@ -55,7 +63,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets the list of part uuids that should be usded to restrict the measurement search.
 		/// </summary>
-		public Guid[] PartUuids { get; set; }
+		public IReadOnlyList<Guid> PartUuids { get; set; }
 
 		/// <summary>
 		/// Gets or sets a flag if the search should only be performed for the specified part (<code>false</code>) or
@@ -76,7 +84,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets the sort order of the resulting measurements.
 		/// </summary>
-		public OrderDto[] OrderBy { get; set; }
+		public IReadOnlyList<OrderDto> OrderBy { get; set; }
 
 		/// <summary>
 		/// Gets or sets the search condition that should be used.
@@ -86,7 +94,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets the list of measurement uuids that should be returned.
 		/// </summary>
-		public Guid[] MeasurementUuids { get; set; }
+		public IReadOnlyList<Guid> MeasurementUuids { get; set; }
 
 		/// <summary>
 		/// Specifies what types of measurements will be returned (normal/aggregated measurements or both).
@@ -109,13 +117,13 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Specifies whether this filter will return all measurements of a part or a database (depending whether
 		/// a part path is specified when fetching data).
 		/// </summary>
-		public bool IsUnrestricted => LimitResult <= 0 && SearchCondition == null && ( PartUuids == null || PartUuids.Length == 0 );
+		public bool IsUnrestricted => LimitResult <= 0 && SearchCondition == null && ( PartUuids == null || PartUuids.Count == 0 );
 
 		#endregion
 
 		#region methods
 
-		public abstract ParameterDefinition[] ToParameterDefinition();
+		public abstract IReadOnlyCollection<ParameterDefinition> ToParameterDefinition();
 
 		/// <inheritdoc />
 		public override string ToString()
@@ -123,7 +131,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			return string.Join( " & ", ToParameterDefinition().Select( p => p.ToString() ) );
 		}
 
-		internal static string OrderByToString( OrderDto[] order )
+		internal static string OrderByToString( IEnumerable<OrderDto> order )
 		{
 			return string.Join( ",", order.Select( o => $"{o.Attribute} {o.Direction}" ) );
 		}

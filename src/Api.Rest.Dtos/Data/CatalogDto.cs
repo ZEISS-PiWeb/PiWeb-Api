@@ -14,8 +14,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text.Json.Serialization;
 	using JetBrains.Annotations;
-	using Newtonsoft.Json;
 
 	#endregion
 
@@ -27,9 +28,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	{
 		#region members
 
-		private readonly Dictionary<short, CatalogEntryDto> _Dictionary = new Dictionary<short, CatalogEntryDto>();
-		private CatalogEntryDto[] _CatalogEntries = Array.Empty<CatalogEntryDto>();
-		private ushort[] _ValidAttributes = Array.Empty<ushort>();
+		private Dictionary<short, CatalogEntryDto> _Dictionary;
+		private IReadOnlyList<CatalogEntryDto> _CatalogEntries = Array.Empty<CatalogEntryDto>();
+		private IReadOnlyList<ushort> _ValidAttributes = Array.Empty<ushort>();
 
 		#endregion
 
@@ -42,7 +43,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		{
 			get
 			{
+				_Dictionary ??= _CatalogEntries.ToDictionary( k => k.Key, v => v );
 				_Dictionary.TryGetValue( key, out var result );
+
 				return result;
 			}
 		}
@@ -50,8 +53,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets a list of possible catalog entry attribute (i.e. columns of a catalog).
 		/// </summary>
-		[JsonProperty( "validAttributes" )]
-		public ushort[] ValidAttributes
+		[Newtonsoft.Json.JsonProperty( "validAttributes" )]
+		[JsonPropertyName( "validAttributes" )]
+		public IReadOnlyList<ushort> ValidAttributes
 		{
 			[NotNull] get => _ValidAttributes;
 			set => _ValidAttributes = value ?? Array.Empty<ushort>();
@@ -60,19 +64,15 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets the list of catalog entries that belong to this catalog.
 		/// </summary>
-		[JsonProperty( "catalogEntries" )]
-		public CatalogEntryDto[] CatalogEntries
+		[Newtonsoft.Json.JsonProperty( "catalogEntries" )]
+		[JsonPropertyName( "catalogEntries" )]
+		public IReadOnlyList<CatalogEntryDto> CatalogEntries
 		{
 			[NotNull] get => _CatalogEntries;
 			set
 			{
-				_Dictionary.Clear();
-
+				_Dictionary = null;
 				_CatalogEntries = value ?? Array.Empty<CatalogEntryDto>();
-				foreach( var entry in _CatalogEntries )
-				{
-					_Dictionary[ entry.Key ] = entry;
-				}
 			}
 		}
 

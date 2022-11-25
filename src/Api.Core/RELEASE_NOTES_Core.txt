@@ -1,0 +1,16 @@
+======================================================
+-------------------------------------------------------------------------------------------
+ Version 8.0.0                                                                   
+-------------------------------------------------------------------------------------------
+======================================================
+
+
+==========================================
+New Features
+==========================================
+
+- Added new package Zeiss.PiWeb.Api.Core
+○ Contains commonly used core objects with own logic which are no longer simple DTOs, e.g. Attribute, PathInformation, PathElement, InspectionPlanEntity enum as well as their Extensions and PathHelper class
+○ Attribute and PathElement are now readonly structs to significantly reduce GC pressure and object creation
+
+- Optimized PathInformation and PathHelper to speed up path operations

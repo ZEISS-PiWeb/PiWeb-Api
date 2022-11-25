@@ -16,7 +16,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 	using System.Collections.Generic;
 	using System.Linq;
 	using JetBrains.Annotations;
-	using Zeiss.PiWeb.Api.Rest.Common.Client;
 	using Zeiss.PiWeb.Api.Rest.Common.Data;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 
@@ -66,7 +65,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		/// <exception cref="ArgumentNullException">
 		/// <paramref name="collectionParameter"/> or <paramref name="otherParameters"/> is <see langword="null" />.
 		/// </exception>
-		public IEnumerable<IEnumerable<ParameterDefinition>> SplitAndMerge<T>(
+		public IEnumerable<IReadOnlyCollection<ParameterDefinition>> SplitAndMerge<T>(
 			[NotNull] CollectionParameterDefinition<T> collectionParameter,
 			[NotNull] IEnumerable<ParameterDefinition> otherParameters )
 		{
@@ -104,11 +103,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		/// Merge split parameters with the other parameters.
 		/// </summary>
 		/// <returns>The complete set of parameters for each of the <paramref name="splitParameters"/></returns>
-		private static IEnumerable<IEnumerable<ParameterDefinition>> MergeWithOtherParameters(
+		private static IEnumerable<IReadOnlyCollection<ParameterDefinition>> MergeWithOtherParameters(
 			IEnumerable<ParameterDefinition> splitParameters,
 			IEnumerable<ParameterDefinition> otherParameters )
 		{
-			return splitParameters.Select( splitParameter => new[] { splitParameter }.Concat( otherParameters ) );
+			return splitParameters.Select( splitParameter => new[] { splitParameter }.Concat( otherParameters ).ToArray() );
 		}
 
 		#endregion

@@ -12,8 +12,9 @@ root = true
 end_of_line              = crlf
 insert_final_newline     = false
 trim_trailing_whitespace = true
+max_line_length = 140
 
-[*.{cs,sql,tt}]
+[*.{cs,sql,tt,razor}]
 indent_style = tab
 tab_width    = 4
 
@@ -21,7 +22,7 @@ tab_width    = 4
 indent_style = space
 indent_size  = 4
 
-[*.{config,json,resx,xml}]
+[*.{config,json,resx,xml,csproj}]
 indent_style = space
 indent_size  = 2
 
@@ -125,6 +126,10 @@ csharp_indent_case_contents                                              = true
 csharp_indent_case_contents_when_block                                   = false
 csharp_indent_switch_labels                                              = true
 csharp_indent_labels                                                     = no_change
+csharp_int_align_switch_expressions                                      = true
+csharp_int_align                                                         = true
+int_align_switch_expressions                                             = true
+int_align                                                                = true
 
 # Space preferences
 csharp_space_after_cast                                                  = false
@@ -163,12 +168,35 @@ resharper_braces_for_ifelse                                              = requi
 resharper_braces_for_lock                                                = required_for_multiline
 resharper_braces_for_using                                               = required_for_multiline
 resharper_braces_for_while                                               = required_for_multiline
-resharper_braces_redundant                                               = false
+resharper_braces_redundant                                               = true
 resharper_csharp_empty_block_style                                       = together
+resharper_csharp_int_align_assignments                                   = false
+resharper_csharp_int_align_binary_expressions                            = false
+resharper_csharp_int_align_comments                                      = false
+resharper_csharp_int_align_fields                                        = false
+resharper_csharp_int_align_invocations                                   = false
+resharper_csharp_int_align_methods                                       = false
+resharper_csharp_int_align_nested_ternary                                = false
+resharper_csharp_int_align_parameters                                    = false
+resharper_csharp_int_align_properties                                    = false
+resharper_csharp_int_align_switch_sections                               = false
+resharper_csharp_int_align_variables                                     = false
 resharper_csharp_space_within_array_access_brackets                      = true
 resharper_csharp_stick_comment                                           = false
 resharper_csharp_wrap_lines                                              = false
+resharper_int_align_assignments                                          = false
+resharper_int_align_binary_expressions                                   = false
+resharper_int_align_comments                                             = false
+resharper_int_align_fields                                               = false
+resharper_int_align_invocations                                          = false
+resharper_int_align_methods                                              = false
+resharper_int_align_nested_ternary                                       = false
+resharper_int_align_parameters                                           = false
+resharper_int_align_properties                                           = false
+resharper_int_align_switch_sections                                      = false
+resharper_int_align_variables                                            = false
 resharper_place_accessorholder_attribute_on_same_line                    = false
+resharper_place_simple_embedded_statement_on_same_line                   = false
 resharper_qualified_using_at_nested_scope                                = true
 resharper_space_between_attribute_sections                               = false
 resharper_space_within_array_rank_brackets                               = true
@@ -179,6 +207,11 @@ resharper_space_within_single_line_array_initializer_braces              = true
 resharper_space_within_sizeof_parentheses                                = true
 resharper_space_within_typeof_parentheses                                = true
 resharper_space_between_typecast_parentheses                             = false
+resharper_csharp_int_align_switch_expressions                            = true
+resharper_csharp_int_align                                               = true
+resharper_int_align_switch_expressions                                   = true
+resharper_int_align                                                      = true
+
 
 # ReSharper inspection severities
 resharper_format_string_problem_highlighting                             = error

@@ -13,23 +13,27 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	#region usings
 
 	using System;
+	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
 	using System.Text;
+	using System.Text.Json.Serialization;
 	using JetBrains.Annotations;
-	using Newtonsoft.Json;
+	using Zeiss.PiWeb.Api.Core;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
+	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
+	using Attribute = Zeiss.PiWeb.Api.Core.Attribute;
 
 	#endregion
 
 	/// <summary>
 	/// Holds information of a <see cref="CatalogDto"/>'s entry
 	/// </summary>
-	public class CatalogEntryDto : IAttributeItemDto
+	public class CatalogEntryDto : IAttributeItem, IFormattable
 	{
 		#region members
 
-		private AttributeDto[] _Attributes = Array.Empty<AttributeDto>();
+		private IReadOnlyList<Attribute> _Attributes = Array.Empty<Attribute>();
 
 		#endregion
 
@@ -50,7 +54,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets the unique key of this catalog entry.
 		/// </summary>
-		[JsonProperty( "key" )]
+		[Newtonsoft.Json.JsonProperty( "key" )]
+		[JsonPropertyName( "key" )]
 		public short Key { get; set; }
 
 		#endregion
@@ -69,33 +74,34 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		public string ToString( IFormatProvider provider )
 		{
-			if( Attributes == null )
+			if( Attributes == null || _Attributes.Count == 0 )
 				return "";
 
-			if( Attributes.Length == 1 )
+			if( Attributes.Count == 1 )
 				return Convert.ToString( GetTypedAttributeValue( Attributes[ 0 ] ), provider );
 
 			var allSameEntries = true;
 
 			var sb = new StringBuilder();
-			foreach( var att in Attributes )
+			foreach( var attribute in Attributes )
 			{
 				if( sb.Length > 0 )
 					sb.Append( " - " );
 
-				if( att.Value.Trim().Length > 0 )
-					sb.Append( Convert.ToString( GetTypedAttributeValue( att ), provider ) );
+				if( attribute.Value is not null && attribute.Value.Trim().Length > 0 )
+					sb.Append( Convert.ToString( GetTypedAttributeValue( attribute ), provider ) );
 
-				allSameEntries &= att.Value == _Attributes[ 0 ].Value;
+				allSameEntries &= attribute.Value == _Attributes[ 0 ].Value;
 			}
 
-			if( allSameEntries && _Attributes != null && _Attributes.Length > 0 )
+			if( allSameEntries )
 				return Convert.ToString( GetTypedAttributeValue( Attributes[ 0 ] ), provider );
 
 			return sb.ToString();
 		}
 
-		private object GetTypedAttributeValue( AttributeDto attribute )
+		[CanBeNull]
+		private static object GetTypedAttributeValue( Attribute attribute )
 		{
 			if( attribute.RawValue != null )
 				return ( attribute.RawValue is DateTime time ) ? time.ToLocalTime() : attribute.RawValue;
@@ -107,18 +113,27 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#region interface IAttributeItemDto
 
-		/// <summary>
-		/// Gets or sets the attributes that belong to this catalog entry.
-		/// </summary>
-		[JsonProperty( "attributes" ), JsonConverter( typeof( AttributeArrayConverter ) )]
-		public AttributeDto[] Attributes
+		/// <inheritdoc />
+		[Newtonsoft.Json.JsonProperty( "attributes" ), Newtonsoft.Json.JsonConverter( typeof( AttributeArrayConverter ) )]
+		[JsonPropertyName( "attributes" ), JsonConverter( typeof( JsonAttributeArrayConverter ) )]
+		public IReadOnlyList<Attribute> Attributes
 		{
 			[NotNull] get => _Attributes;
 			set
 			{
-				value = value ?? Array.Empty<AttributeDto>();
-				_Attributes = value.All( attr => attr.IsNull() ) ? Array.Empty<AttributeDto>() : value;
+				value ??= Array.Empty<Attribute>();
+				_Attributes = value.All( attr => attr.IsNull() ) ? Array.Empty<Attribute>() : value;
 			}
+		}
+
+		#endregion
+
+		#region interface IFormattable
+
+		/// <inheritdoc />
+		public string ToString( string format, IFormatProvider formatProvider )
+		{
+			return ToString( formatProvider );
 		}
 
 		#endregion

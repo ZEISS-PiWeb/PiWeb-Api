@@ -12,7 +12,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 {
 	#region usings
 
-	using Newtonsoft.Json;
+	using System.Text.Json.Serialization;
 
 	#endregion
 
@@ -26,10 +26,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		/// <summary>
 		/// Gets or sets the version of the server backend.
 		/// </summary>
-		[JsonProperty( "version" )]
+		[Newtonsoft.Json.JsonProperty( "version" )]
+		[JsonPropertyName( "version" )]
 		public string Version { get; set; }
 
-		[JsonProperty( "requestHeaderSize" )]
+		[Newtonsoft.Json.JsonProperty( "requestHeaderSize" )]
+		[JsonPropertyName( "requestHeaderSize" )]
 		public int RequestHeaderSize { get; set; }
 
 		#endregion

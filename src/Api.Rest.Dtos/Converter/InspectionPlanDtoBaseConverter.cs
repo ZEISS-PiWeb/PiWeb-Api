@@ -24,7 +24,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 	/// <summary>
 	/// Specialized <see cref="Newtonsoft.Json.JsonConverter"/> for <see cref="InspectionPlanDtoBase"/>-objects.
 	/// </summary>
-	public class InspectionPlanDtoBaseConverter : JsonConverter
+	public sealed class InspectionPlanDtoBaseConverter : JsonConverter
 	{
 		#region constants
 
@@ -35,9 +35,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 
 		#region methods
 
-		/// <summary>
-		/// Writes the JSON representation of the object.
-		/// </summary>
+		/// <inheritdoc />
 		public override void WriteJson( JsonWriter writer, object value, JsonSerializer serializer )
 		{
 			switch( value )
@@ -63,9 +61,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 			}
 		}
 
-		/// <summary>
-		/// Reads the JSON representation of the object.
-		/// </summary>
+		/// <inheritdoc />
 		public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer )
 		{
 			if( reader == null )
@@ -129,9 +125,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 			return jToken.Children<JProperty>().Select( i => i.Path ).ToList();
 		}
 
-		/// <summary>
-		/// Determines whether this instance can convert the specified object type.
-		/// </summary>
+		/// <inheritdoc />
 		public override bool CanConvert( Type objectType )
 		{
 			return objectType == typeof( InspectionPlanDtoBase );

@@ -13,13 +13,17 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	#region usings
 
 	using System;
+	using System.Collections.Generic;
 	using System.Data.SqlTypes;
 	using System.Diagnostics;
+	using System.Text.Json.Serialization;
 	using System.Xml;
 	using JetBrains.Annotations;
-	using Newtonsoft.Json;
+	using Zeiss.PiWeb.Api.Core;
 	using Zeiss.PiWeb.Api.Definitions;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
+	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
+	using Attribute = Zeiss.PiWeb.Api.Core.Attribute;
 
 	#endregion
 
@@ -28,13 +32,13 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// A measurement is identified by an <see cref="Uuid"/>. A measurement always belongs to one and only one part.
 	/// </summary>
 	[DebuggerDisplay( "Measurement (Uuid={Uuid} Time={Time})" )]
-	public class SimpleMeasurementDto : IAttributeItemDto
+	public class SimpleMeasurementDto : IAttributeItem
 	{
 		#region members
 
 		private static readonly DateTime MinimumValidDatabaseDateTime = DateTime.SpecifyKind( SqlDateTime.MinValue.Value, DateTimeKind.Utc );
 
-		private AttributeDto[] _Attributes = Array.Empty<AttributeDto>();
+		private IReadOnlyList<Attribute> _Attributes = Array.Empty<Attribute>();
 		private DateTime? _CachedTimeValue;
 		private bool _HasCachedTime;
 
@@ -45,13 +49,15 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets the uuid of this measurement.
 		/// </summary>
-		[JsonProperty( "uuid" )]
+		[Newtonsoft.Json.JsonProperty( "uuid" )]
+		[JsonPropertyName( "uuid" )]
 		public Guid Uuid { get; set; }
 
 		/// <summary>
 		/// Gets or sets the uuid the part this measurement belongs to.
 		/// </summary>
-		[JsonProperty( "partUuid" )]
+		[Newtonsoft.Json.JsonProperty( "partUuid" )]
+		[JsonPropertyName( "partUuid" )]
 		public Guid PartUuid { get; set; }
 
 		/// <summary>
@@ -59,26 +65,30 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// timestamp whenever an attribute of this measurement is changed or whenever measurement values
 		/// of this measurement are updated, deleted and added.
 		/// </summary>
-		[JsonProperty( "lastModified" )]
+		[Newtonsoft.Json.JsonProperty( "lastModified" )]
+		[JsonPropertyName( "lastModified" )]
 		public DateTime LastModified { get; set; }
 
 		/// <summary>
 		/// Gets or sets the creation timestamp of this measurement.
 		/// </summary>
-		[JsonProperty( "created" )]
+		[Newtonsoft.Json.JsonProperty( "created" )]
+		[JsonPropertyName( "created" )]
 		public DateTime Created { get; set; }
 
 		/// <summary>
 		/// Gets or sets the status information for this measurement. This status information can be requested when
 		/// performing a measurement search using one of the values from <see cref="MeasurementStatisticsDto"/>.
 		/// </summary>
-		[JsonProperty( "status" )]
-		public SimpleMeasurementStatusDto[] Status { get; set; }
+		[Newtonsoft.Json.JsonProperty( "status" )]
+		[JsonPropertyName( "status" )]
+		public IReadOnlyList<SimpleMeasurementStatusDto> Status { get; set; }
 
 		/// <summary>
 		/// Gets or sets the time of this measurement. If this measurement has no time attribute, then <see cref="MinimumValidDatabaseDateTime"/> will
 		/// be returned.
 		/// </summary>
+		[Newtonsoft.Json.JsonIgnore]
 		[JsonIgnore]
 		public DateTime? Time
 		{
@@ -90,11 +100,14 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 				try
 				{
-					var att = this.GetAttribute( WellKnownKeys.Measurement.Time );
-					if( att != null && !string.IsNullOrEmpty( att.Value ) )
-						_CachedTimeValue = XmlConvert.ToDateTime( att.Value, XmlDateTimeSerializationMode.RoundtripKind );
+					var attribute = this.GetAttribute( WellKnownKeys.Measurement.Time );
+					if( attribute != null && !string.IsNullOrEmpty( attribute.Value.Value ) )
+						_CachedTimeValue = XmlConvert.ToDateTime( attribute.Value.Value, XmlDateTimeSerializationMode.RoundtripKind );
 				}
-				catch { }
+				catch
+				{
+					// ignored
+				}
 
 				_HasCachedTime = true;
 
@@ -110,7 +123,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				}
 				else
 				{
-					this.SetAttribute( new AttributeDto( WellKnownKeys.Measurement.Time, XmlConvert.ToString( value.Value, XmlDateTimeSerializationMode.RoundtripKind ) ) );
+					this.SetAttribute( new Attribute( WellKnownKeys.Measurement.Time, XmlConvert.ToString( value.Value, XmlDateTimeSerializationMode.RoundtripKind ) ) );
 					_CachedTimeValue = value;
 					_HasCachedTime = true;
 				}
@@ -120,12 +133,14 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Returns the measurement time and in case of no time is specified, the minimum time allowed (<see cref="System.Data.SqlTypes.SqlDateTime.MinValue"/>).
 		/// </summary>
+		[Newtonsoft.Json.JsonIgnore]
 		[JsonIgnore]
 		public DateTime TimeOrMinDate => Time ?? MinimumValidDatabaseDateTime;
 
 		/// <summary>
 		/// Returns the measurement time and in case of no time is specified, the creation date of the measurement.
 		/// </summary>
+		[Newtonsoft.Json.JsonIgnore]
 		[JsonIgnore]
 		public DateTime TimeOrCreationDate => Time ?? Created;
 
@@ -144,13 +159,14 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		#region interface IAttributeItemDto
 
 		/// <inheritdoc />
-		[JsonProperty( "attributes" ), JsonConverter( typeof( AttributeArrayConverter ) )]
-		public AttributeDto[] Attributes
+		[Newtonsoft.Json.JsonProperty( "attributes" ), Newtonsoft.Json.JsonConverter( typeof( AttributeArrayConverter ) )]
+		[JsonPropertyName( "attributes" ), JsonConverter( typeof( JsonAttributeArrayConverter ) )]
+		public IReadOnlyList<Attribute> Attributes
 		{
 			[NotNull] get => _Attributes;
 			set
 			{
-				_Attributes = value ?? Array.Empty<AttributeDto>();
+				_Attributes = value ?? Array.Empty<Attribute>();
 				_CachedTimeValue = null;
 				_HasCachedTime = false;
 			}

@@ -16,9 +16,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
+	using System.Text.Json.Serialization;
 	using System.Xml;
 	using JetBrains.Annotations;
-	using Newtonsoft.Json;
 
 	#endregion
 
@@ -29,11 +29,11 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	{
 		#region members
 
-		private AbstractAttributeDefinitionDto[] _PartAttributes = Array.Empty<AbstractAttributeDefinitionDto>();
-		private AbstractAttributeDefinitionDto[] _CharacteristicAttributes = Array.Empty<AbstractAttributeDefinitionDto>();
-		private AbstractAttributeDefinitionDto[] _MeasurementAttributes = Array.Empty<AbstractAttributeDefinitionDto>();
-		private AbstractAttributeDefinitionDto[] _ValueAttributes = Array.Empty<AbstractAttributeDefinitionDto>();
-		private AttributeDefinitionDto[] _CatalogAttributes = Array.Empty<AttributeDefinitionDto>();
+		private IReadOnlyList<AbstractAttributeDefinitionDto> _PartAttributes = Array.Empty<AbstractAttributeDefinitionDto>();
+		private IReadOnlyList<AbstractAttributeDefinitionDto> _CharacteristicAttributes = Array.Empty<AbstractAttributeDefinitionDto>();
+		private IReadOnlyList<AbstractAttributeDefinitionDto> _MeasurementAttributes = Array.Empty<AbstractAttributeDefinitionDto>();
+		private IReadOnlyList<AbstractAttributeDefinitionDto> _ValueAttributes = Array.Empty<AbstractAttributeDefinitionDto>();
+		private IReadOnlyList<AttributeDefinitionDto> _CatalogAttributes = Array.Empty<AttributeDefinitionDto>();
 
 		private Dictionary<ushort, AbstractAttributeDefinitionDto> _PartAttributesDict;
 		private Dictionary<ushort, AbstractAttributeDefinitionDto> _CharacteristicAttributesDict;
@@ -47,42 +47,44 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		#region properties
 
 		private Dictionary<ushort, AbstractAttributeDefinitionDto> PartAttributesDict
-			=> _PartAttributesDict ?? ( _PartAttributesDict = FillTable( PartAttributes ) );
+			=> _PartAttributesDict ??= FillTable( PartAttributes );
 
 		private Dictionary<ushort, AbstractAttributeDefinitionDto> CharacteristicAttributesDict
-			=> _CharacteristicAttributesDict ?? ( _CharacteristicAttributesDict = FillTable( CharacteristicAttributes ) );
+			=> _CharacteristicAttributesDict ??= FillTable( CharacteristicAttributes );
 
 		private Dictionary<ushort, AbstractAttributeDefinitionDto> MeasurementAttributesDict
-			=> _MeasurementAttributesDict ?? ( _MeasurementAttributesDict = FillTable( MeasurementAttributes ) );
+			=> _MeasurementAttributesDict ??= FillTable( MeasurementAttributes );
 
 		private Dictionary<ushort, AbstractAttributeDefinitionDto> ValueAttributesDict
-			=> _ValueAttributesDict ?? ( _ValueAttributesDict = FillTable( ValueAttributes ) );
+			=> _ValueAttributesDict ??= FillTable( ValueAttributes );
 
 		private Dictionary<ushort, AbstractAttributeDefinitionDto> CatalogAttributesDict
-			=> _CatalogAttributesDict ?? ( _CatalogAttributesDict = FillTable( CatalogAttributes ) );
+			=> _CatalogAttributesDict ??= FillTable( CatalogAttributes );
 
 		private Dictionary<ushort, AbstractAttributeDefinitionDto> AllAttributesDict =>
-			_AllAttributesDict ?? ( _AllAttributesDict = PartAttributesDict
+			_AllAttributesDict ??= PartAttributesDict
 				.Concat( CharacteristicAttributesDict )
 				.Concat( MeasurementAttributesDict )
 				.Concat( ValueAttributesDict )
 				.Concat( CatalogAttributesDict )
-				.ToDictionary( kvp => kvp.Key, kvp => kvp.Value ) );
+				.ToDictionary( kvp => kvp.Key, kvp => kvp.Value );
 
 		/// <summary>
 		/// Returns a list of all attribute definitions in this configuration.
 		/// </summary>
+		[Newtonsoft.Json.JsonIgnore]
 		[JsonIgnore]
-		public AbstractAttributeDefinitionDto[] AllAttributes
+		public IReadOnlyCollection<AbstractAttributeDefinitionDto> AllAttributes
 		{
-			[NotNull] get => AllAttributesDict.Values.ToArray();
+			[NotNull] get => AllAttributesDict.Values;
 		}
 
 		/// <summary>
 		/// Gets or sets a list of all part attribute definitions.
 		/// </summary>
-		[JsonProperty( "partAttributes" )]
-		public AbstractAttributeDefinitionDto[] PartAttributes
+		[Newtonsoft.Json.JsonProperty( "partAttributes" )]
+		[JsonPropertyName( "partAttributes" )]
+		public IReadOnlyList<AbstractAttributeDefinitionDto> PartAttributes
 		{
 			[NotNull] get => _PartAttributes;
 			set
@@ -95,8 +97,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets a list of all characteristic attribute definitions.
 		/// </summary>
-		[JsonProperty( "characteristicAttributes" )]
-		public AbstractAttributeDefinitionDto[] CharacteristicAttributes
+		[Newtonsoft.Json.JsonProperty( "characteristicAttributes" )]
+		[JsonPropertyName( "characteristicAttributes" )]
+		public IReadOnlyList<AbstractAttributeDefinitionDto> CharacteristicAttributes
 		{
 			[NotNull] get => _CharacteristicAttributes;
 			set
@@ -109,8 +112,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets a list of all measurement attribute definitions.
 		/// </summary>
-		[JsonProperty( "measurementAttributes" )]
-		public AbstractAttributeDefinitionDto[] MeasurementAttributes
+		[Newtonsoft.Json.JsonProperty( "measurementAttributes" )]
+		[JsonPropertyName( "measurementAttributes" )]
+		public IReadOnlyList<AbstractAttributeDefinitionDto> MeasurementAttributes
 		{
 			[NotNull] get => _MeasurementAttributes;
 			set
@@ -123,8 +127,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets a list of all value attribute definitions.
 		/// </summary>
-		[JsonProperty( "valueAttributes" )]
-		public AbstractAttributeDefinitionDto[] ValueAttributes
+		[Newtonsoft.Json.JsonProperty( "valueAttributes" )]
+		[JsonPropertyName( "valueAttributes" )]
+		public IReadOnlyList<AbstractAttributeDefinitionDto> ValueAttributes
 		{
 			[NotNull] get => _ValueAttributes;
 			set
@@ -137,8 +142,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// <summary>
 		/// Gets or sets a list of all catalog attribute definitions.
 		/// </summary>
-		[JsonProperty( "catalogAttributes" )]
-		public AttributeDefinitionDto[] CatalogAttributes
+		[Newtonsoft.Json.JsonProperty( "catalogAttributes" )]
+		[JsonPropertyName( "catalogAttributes" )]
+		public IReadOnlyList<AttributeDefinitionDto> CatalogAttributes
 		{
 			[NotNull] get => _CatalogAttributes;
 			set
@@ -152,7 +158,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// The attribute <code>versioningType</code> defines, whether updates to parts or characteristics
 		/// overwrite existing values, or whether they create a new version of the entity.
 		/// </summary>
-		[JsonProperty( "versioningType" )]
+		[Newtonsoft.Json.JsonProperty( "versioningType" )]
+		[JsonPropertyName( "versioningType" )]
 		public VersioningTypeDto VersioningType { get; set; }
 
 		#endregion
@@ -182,21 +189,15 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		public IEnumerable<AbstractAttributeDefinitionDto> GetDefinitions( EntityDto entityType )
 		{
-			switch( entityType )
+			return entityType switch
 			{
-				case EntityDto.Part:
-					return _PartAttributes;
-				case EntityDto.Characteristic:
-					return _CharacteristicAttributes;
-				case EntityDto.Measurement:
-					return _MeasurementAttributes;
-				case EntityDto.Value:
-					return _ValueAttributes;
-				case EntityDto.Catalog:
-					return _CatalogAttributes;
-				default:
-					return Array.Empty<AbstractAttributeDefinitionDto>();
-			}
+				EntityDto.Part => _PartAttributes,
+				EntityDto.Characteristic => _CharacteristicAttributes,
+				EntityDto.Measurement => _MeasurementAttributes,
+				EntityDto.Value => _ValueAttributes,
+				EntityDto.Catalog => _CatalogAttributes,
+				_ => Array.Empty<AbstractAttributeDefinitionDto>()
+			};
 		}
 
 		/// <summary>
@@ -236,21 +237,15 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		public bool IsKeyOfType( EntityDto entityType, ushort key )
 		{
-			switch( entityType )
+			return entityType switch
 			{
-				case EntityDto.Part:
-					return PartAttributesDict.ContainsKey( key );
-				case EntityDto.Characteristic:
-					return CharacteristicAttributesDict.ContainsKey( key );
-				case EntityDto.Measurement:
-					return MeasurementAttributesDict.ContainsKey( key );
-				case EntityDto.Value:
-					return ValueAttributesDict.ContainsKey( key );
-				case EntityDto.Catalog:
-					return CatalogAttributesDict.ContainsKey( key );
-			}
-
-			return false;
+				EntityDto.Part => PartAttributesDict.ContainsKey( key ),
+				EntityDto.Characteristic => CharacteristicAttributesDict.ContainsKey( key ),
+				EntityDto.Measurement => MeasurementAttributesDict.ContainsKey( key ),
+				EntityDto.Value => ValueAttributesDict.ContainsKey( key ),
+				EntityDto.Catalog => CatalogAttributesDict.ContainsKey( key ),
+				_ => false
+			};
 		}
 
 		/// <summary>
@@ -284,38 +279,14 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		public string GetFormattedValue( ushort key, string value, CatalogCollectionDto catalogs, IFormatProvider provider = null )
 		{
-			if( value == null )
+			if( string.IsNullOrEmpty( value ) )
 				return null;
 
-			var def = GetDefinition( key );
-			if( def is CatalogAttributeDefinitionDto catalogAttributeDefinition )
-			{
-				var entry = catalogs?[ catalogAttributeDefinition.Catalog, value ];
-				if( entry != null )
-					return entry.ToString( CultureInfo.InvariantCulture );
-			}
-			else if( value.Length > 0 )
-			{
-				try
-				{
-					var attDef = (AttributeDefinitionDto)def;
-					switch( attDef.Type )
-					{
-						case AttributeTypeDto.Integer:
-							return int.Parse( value, CultureInfo.InvariantCulture ).ToString( provider ?? CultureInfo.CurrentUICulture );
-						case AttributeTypeDto.Float:
-							return double.Parse( value, CultureInfo.InvariantCulture ).ToString( provider ?? CultureInfo.CurrentUICulture );
-						case AttributeTypeDto.DateTime:
-							return XmlConvert.ToDateTime( value, XmlDateTimeSerializationMode.RoundtripKind ).ToString( provider ?? CultureInfo.CurrentUICulture );
-					}
-				}
-				catch
-				{
-					// ignored
-				}
-			}
+			var parsedValue = ParseValue( key, value, catalogs );
+			if( parsedValue is IFormattable formattable )
+				return formattable.ToString( null, provider );
 
-			return value;
+			return parsedValue.ToString();
 		}
 
 		/// <summary>
@@ -325,46 +296,46 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// </summary>
 		public object ParseValue( ushort key, string attributeValue, CatalogCollectionDto catalogs )
 		{
-			object result = attributeValue;
-			if( attributeValue != null )
+			if( string.IsNullOrEmpty( attributeValue ) )
+				return attributeValue;
+
+			var definition = GetDefinition( key );
+			if( definition is null )
+				throw new ArgumentException( $"Unable to parse attribute value - key '{key}' does not exist." );
+
+			if( definition is CatalogAttributeDefinitionDto catalogAttributeDefinition )
 			{
-				var def = GetDefinition( key );
-				if( def is CatalogAttributeDefinitionDto definition )
-				{
-					if( catalogs != null )
-						result = catalogs[ definition.Catalog, attributeValue ];
-				}
-				else if( attributeValue.Length > 0 )
-				{
-					try
-					{
-						var attDef = (AttributeDefinitionDto)def;
-						switch( attDef.Type )
-						{
-							case AttributeTypeDto.Integer:
-								result = int.Parse( attributeValue, CultureInfo.InvariantCulture );
-								break;
-							case AttributeTypeDto.Float:
-								result = double.Parse( attributeValue, CultureInfo.InvariantCulture );
-								break;
-							case AttributeTypeDto.DateTime:
-								result = XmlConvert.ToDateTime( attributeValue, XmlDateTimeSerializationMode.RoundtripKind );
-								break;
-						}
-					}
-					catch
-					{
-						// ignored
-					}
-				}
+				if( catalogs != null )
+					return catalogs[ catalogAttributeDefinition.Catalog, attributeValue ];
+
+				return attributeValue;
 			}
 
-			return result ?? attributeValue;
+			var attributeDefinition = (AttributeDefinitionDto)definition;
+			switch( attributeDefinition.Type )
+			{
+				case AttributeTypeDto.Integer:
+#if NETSTANDARD
+					return int.Parse( attributeValue, NumberStyles.Integer, CultureInfo.InvariantCulture );
+#else
+					return int.Parse( attributeValue.AsSpan(), NumberStyles.Integer, CultureInfo.InvariantCulture );
+#endif
+				case AttributeTypeDto.Float:
+#if NETSTANDARD
+					return double.Parse( attributeValue, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture );
+#else
+					return double.Parse( attributeValue.AsSpan(), NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture );
+#endif
+				case AttributeTypeDto.DateTime:
+					return XmlConvert.ToDateTime( attributeValue, XmlDateTimeSerializationMode.RoundtripKind );
+			}
+
+			return attributeValue;
 		}
 
-		private static Dictionary<ushort, AbstractAttributeDefinitionDto> FillTable( IEnumerable<AbstractAttributeDefinitionDto> atts )
+		private static Dictionary<ushort, AbstractAttributeDefinitionDto> FillTable( IEnumerable<AbstractAttributeDefinitionDto> attributes )
 		{
-			return atts.ToDictionary( a => a.Key, a => a );
+			return attributes.ToDictionary( a => a.Key, a => a );
 		}
 
 		#endregion

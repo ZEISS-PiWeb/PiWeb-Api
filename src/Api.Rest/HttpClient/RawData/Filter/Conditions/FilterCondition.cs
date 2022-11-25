@@ -25,8 +25,8 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter.Conditions
 	{
 		#region members
 
-		public static readonly AndFilterCondition True = new AndFilterCondition( new FilterCondition[ 0 ] );
-		public static readonly OrFilterCondition False = new OrFilterCondition( new FilterCondition[ 0 ] );
+		public static readonly AndFilterCondition True = new AndFilterCondition( Array.Empty<FilterCondition>() );
+		public static readonly OrFilterCondition False = new OrFilterCondition( Array.Empty<FilterCondition>() );
 
 		#endregion
 

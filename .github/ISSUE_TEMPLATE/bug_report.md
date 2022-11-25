@@ -7,6 +7,10 @@ assignees: ''
 
 ---
 
+**I am using:**
+[ ] C# NuGet
+[ ] REST API
+
 **Affected Version(s)**
 List the version(s) the bug affects here.
 
@@ -28,3 +32,8 @@ If applicable, add screenshots to help explain your problem.
 
 **Additional context**
 Add any other context about the problem here.
+
+**Important**
+Please remember to not post sensitive information like server URLs directly from log files, or at least replace them with a placeholder:
+_Bad_: https://internal.corporate.net/8085/DataServiceRest/Characteristics/partPath=/top_secret_car_model
+_Good_: https://PiWebServer/0000/DataServiceRest/Characteristics/partPath=/somePart/

@@ -22,7 +22,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 	/// <summary>
 	/// Specialized <see cref="JsonConverter"/> for <see cref="AbstractAttributeDefinitionDto"/>-objects.
 	/// </summary>
-	public class AttributeDefinitionConverter : JsonConverter
+	public sealed class AttributeDefinitionConverter : JsonConverter
 	{
 		#region methods
 
@@ -36,7 +36,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 		public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer )
 		{
 			var key = default( ushort );
-			var length = default( ushort );
+			var length = default( ushort? );
 			var queryEfficient = default( bool );
 			var description = default( string );
 			var attributeDefinitionType = default( string );

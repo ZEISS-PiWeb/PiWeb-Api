@@ -1,0 +1,12 @@
+﻿# Create a stable API NuGet release. This workflow is manually triggered.
+
+name: Create release
+
+# Run on manual trigger only
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    uses: ZEISS-PiWeb/github-actions/.github/workflows/create-release.yml@main
+    secrets: inherit

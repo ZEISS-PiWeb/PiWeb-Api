@@ -1,17 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
     <RootNamespace>Zeiss.PiWeb.Api.Rest.Dtos</RootNamespace>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageVersion>7.1.0</PackageVersion>
+    <PackageVersion>8.0.0</PackageVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Assembly information">
     <AssemblyTitle>Contains the JSON-serializable DataTransferObjects (DTO) that will be exchanged between ZEISS PiWeb Server and client(s).</AssemblyTitle>
     <AssemblyName>Zeiss.PiWeb.Api.Rest.Dtos</AssemblyName>
-    <AssemblyVersion>7.1.0</AssemblyVersion>
+    <AssemblyVersion>8.0.0</AssemblyVersion>
     <Company>Carl Zeiss Industrielle Messtechnik GmbH</Company>
     <Copyright>Copyright © 2020 $(Company)</Copyright>
     <Description>Contains the JSON-serializable DataTransferObjects (DTO) that will be exchanged between ZEISS PiWeb Server and client(s).
@@ -23,22 +24,35 @@
   </PropertyGroup>
 
   <PropertyGroup Label="NuGet package specifications for local build">
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb; .xml;</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder); .xml;</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <Authors>$(Company)</Authors>
     <EmbedAllSources>true</EmbedAllSources>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIconUrl>https://raw.githubusercontent.com/ZEISS-PiWeb/PiWeb-Api/develop/logo128px.png</PackageIconUrl>
     <PackageId>Zeiss.PiWeb.Api.Rest.Dtos</PackageId>
-    <PackageLicenseFile>License.txt</PackageLicenseFile>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/ZEISS-PiWeb/PiWeb-Api</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageTags>ZEISS PiWeb Dtos</PackageTags>
     <Version>$(InformationalVersion)</Version>
+    <RepositoryUrl>https://github.com/ZEISS-PiWeb/PiWeb-Api</RepositoryUrl>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/RELEASE_NOTES_Dtos.txt"))</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+    <ItemGroup Label=".NET references" Condition="'$(TargetFrameworkIdentifier)' != '.NETCoreApp'">
+      <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
+      <PackageReference Include="System.Buffers" Version="4.5.1" />
+      <PackageReference Include="System.Memory" Version="4.5.5" />
+    </ItemGroup>
+
+    <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.Text.Json" Version="6.0.5" />
     <PackageReference Include="SauceControl.InheritDoc" Version="1.3.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -46,14 +60,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Api.Core\Api.Core.csproj" />
     <ProjectReference Include="..\Api.Definitions\Api.Definitions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\License.txt">
-      <Link>License.txt</Link>
+    <Content Include="..\..\LICENSE.txt">
+      <Link>LICENSE.txt</Link>
       <Pack>true</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>/</PackagePath>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

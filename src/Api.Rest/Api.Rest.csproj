@@ -5,15 +5,15 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <RootNamespace>Zeiss.PiWeb.Api.Rest</RootNamespace>
-    <TargetFrameworks>netstandard2.0;netcoreapp3.1;net48;net5.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
-    <PackageVersion>7.1.0</PackageVersion>
+    <PackageVersion>8.0.0</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Assembly information">
     <AssemblyTitle>A .NET client for HTTP(S)/REST based communication with the quality data managament system ZEISS PiWeb</AssemblyTitle>
     <AssemblyName>Zeiss.PiWeb.Api.Rest</AssemblyName>
-    <AssemblyVersion>7.1.0</AssemblyVersion>
+    <AssemblyVersion>8.0.0</AssemblyVersion>
     <Company>Carl Zeiss Industrielle Messtechnik GmbH</Company>
     <Copyright>Copyright © 2020 $(Company)</Copyright>
     <Description>ZEISS PiWeb-API .NET Client provides an extensive set of methods for reading and writing  inspection plan structure as well
@@ -26,34 +26,42 @@
   </PropertyGroup>
 
   <PropertyGroup Label="NuGet package specifications">
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb; .xml;</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder); .xml;</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <Authors>$(Company)</Authors>
     <EmbedAllSources>true</EmbedAllSources>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIconUrl>https://raw.githubusercontent.com/ZEISS-PiWeb/PiWeb-Api/develop/logo128px.png</PackageIconUrl>
     <PackageId>Zeiss.PiWeb.Api.Rest</PackageId>
-    <PackageLicenseFile>License.txt</PackageLicenseFile>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/ZEISS-PiWeb/PiWeb-Api</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageTags>ZEISS PiWeb API</PackageTags>
     <Version>$(InformationalVersion)</Version>
+    <RepositoryUrl>https://github.com/ZEISS-PiWeb/PiWeb-Api</RepositoryUrl>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)../../../RELEASE_NOTES.txt"))</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup>
     <DebugType>Full</DebugType>
   </PropertyGroup>
 
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
   <ItemGroup Label=".NET references" Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
     <Reference Include="System.Net.Http.WebRequest" />
   </ItemGroup>
 
   <ItemGroup Label="NuGet references">
+    <PackageReference Include="CacheCow.Client" Version="2.8.3" />
     <PackageReference Include="IdentityModel" Version="5.1.0" />
     <PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
     <PackageReference Include="Microsoft.IdentityModel.Logging" Version="6.11.1" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.11.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.2" />
+    <PackageReference Include="System.Text.Json" Version="6.0.5" />
     <PackageReference Include="SauceControl.InheritDoc" Version="1.3.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -63,10 +71,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\License.txt">
-      <Link>License.txt</Link>
+    <Content Include="..\..\LICENSE.txt">
+      <Link>LICENSE.txt</Link>
       <Pack>true</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>/</PackagePath>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -85,6 +93,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Api.Core\Api.Core.csproj" />
     <ProjectReference Include="..\Api.Definitions\Api.Definitions.csproj" />
     <ProjectReference Include="..\Api.Rest.Dtos\Api.Rest.Dtos.csproj" />
   </ItemGroup>
