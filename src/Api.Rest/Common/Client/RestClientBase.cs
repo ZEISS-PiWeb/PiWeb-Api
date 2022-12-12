@@ -12,6 +12,10 @@
 using System.Net.Cache;
 #endif
 
+#if NET5_0_OR_GREATER
+using System.Runtime.Versioning;
+#endif
+
 namespace Zeiss.PiWeb.Api.Rest.Common.Client
 {
 	#region usings
@@ -24,7 +28,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using System.Net.Http;
 	using System.Net.Http.Headers;
 	using System.Runtime.CompilerServices;
-	using System.Runtime.Versioning;
 	using System.Text;
 	using System.Threading;
 	using System.Threading.Tasks;
@@ -109,7 +112,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			int maxUriLength = DefaultMaxUriLength,
 			bool chunked = true,
 			[CanBeNull] DelegatingHandler customHttpMessageHandler = null,
-			[CanBeNull] IObjectSerializer serializer = null )
+			[CanBeNull] IObjectSerializer serializer = null,
+			[CanBeNull] ICacheStore cacheStore = null,
+			[CanBeNull] IVaryHeaderStore varyHeaderStore = null )
 		{
 			if( serverUri == null )
 				throw new ArgumentNullException( nameof( serverUri ) );
@@ -122,6 +127,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			_Chunked = chunked;
 			_CustomHttpMessageHandler = customHttpMessageHandler;
 			_Serializer = serializer ?? ObjectSerializer.Default;
+			_CacheStore = cacheStore;
+			_VaryHeaderStore = varyHeaderStore;
 
 			MaxUriLength = maxUriLength;
 
@@ -348,10 +355,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		{
 			if( response.StatusCode != HttpStatusCode.NoContent )
 			{
-				using( var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false ) )
-				{
-					return await serializer.DeserializeAsync<T>( responseStream, cancellationToken ).ConfigureAwait( false );
-				}
+				using var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false );
+				return await serializer.DeserializeAsync<T>( responseStream, cancellationToken ).ConfigureAwait( false );
 			}
 
 			return default;
@@ -382,31 +387,26 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		private static async Task<byte[]> ResponseToBytesAsync( HttpResponseMessage response )
 		{
-			using( var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false ) )
-			{
-				if( response.Content.Headers.ContentLength.HasValue )
-				{
-					using( var memStream = new MemoryStream( new byte[ (int)response.Content.Headers.ContentLength.Value ], 0, (int)response.Content.Headers.ContentLength.Value, true, true ) )
-					{
-						await responseStream.CopyToAsync( memStream ).ConfigureAwait( false );
-						return memStream.GetBuffer();
-					}
-				}
+			using var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false );
 
-				using( var memStream = new MemoryStream() )
-				{
-					await responseStream.CopyToAsync( memStream ).ConfigureAwait( false );
-					return memStream.ToArray();
-				}
+			if( response.Content.Headers.ContentLength.HasValue )
+			{
+				using var memStream = new MemoryStream( new byte[ (int)response.Content.Headers.ContentLength.Value ], 0, (int)response.Content.Headers.ContentLength.Value, true, true );
+				await responseStream.CopyToAsync( memStream ).ConfigureAwait( false );
+				return memStream.GetBuffer();
+			}
+
+			using( var memStream = new MemoryStream() )
+			{
+				await responseStream.CopyToAsync( memStream ).ConfigureAwait( false );
+				return memStream.ToArray();
 			}
 		}
 
 		private static async Task<T> BinaryResponseToObjectAsync<T>( HttpResponseMessage response )
 		{
-			using( var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false ) )
-			{
-				return RestClientHelper.DeserializeBinaryObject<T>( responseStream );
-			}
+			using var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false );
+			return RestClientHelper.DeserializeBinaryObject<T>( responseStream );
 		}
 
 		private async Task<TResult> PerformRequestAsync<TResult>(
@@ -524,30 +524,28 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			if( response.StatusCode < HttpStatusCode.BadRequest || response.StatusCode >= HttpStatusCode.InternalServerError )
 				return;
 
-			using( var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false ) )
+			using var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait( false );
+			Error error;
+			try
 			{
-				Error error;
-				try
-				{
-					error = await serializer.DeserializeAsync<Error>( responseStream, cancellationToken ).ConfigureAwait( false )
-							?? new Error( $"Request {response.RequestMessage.Method} {response.RequestMessage.RequestUri} was not successful: {(int)response.StatusCode} ({response.ReasonPhrase})" );
-				}
-				catch( ObjectSerializerException )
-				{
-					var buffer = ( responseStream as MemoryStream )?.ToArray();
-					var content = buffer != null ? Encoding.UTF8.GetString( buffer ) : null;
-					error = new Error( $"Request {response.RequestMessage.Method} {response.RequestMessage.RequestUri} was not successful: {(int)response.StatusCode} ({response.ReasonPhrase})" )
-					{
-						ExceptionMessage = content
-					};
-				}
-				catch( Exception )
-				{
-					error = new Error( $"Request {response.RequestMessage.Method} {response.RequestMessage.RequestUri} was not successful: {(int)response.StatusCode} ({response.ReasonPhrase})" );
-				}
-
-				throw new WrappedServerErrorException( error, response );
+				error = await serializer.DeserializeAsync<Error>( responseStream, cancellationToken ).ConfigureAwait( false )
+						?? new Error( $"Request {response.RequestMessage.Method} {response.RequestMessage.RequestUri} was not successful: {(int)response.StatusCode} ({response.ReasonPhrase})" );
 			}
+			catch( ObjectSerializerException )
+			{
+				var buffer = ( responseStream as MemoryStream )?.ToArray();
+				var content = buffer != null ? Encoding.UTF8.GetString( buffer ) : null;
+				error = new Error( $"Request {response.RequestMessage.Method} {response.RequestMessage.RequestUri} was not successful: {(int)response.StatusCode} ({response.ReasonPhrase})" )
+				{
+					ExceptionMessage = content
+				};
+			}
+			catch( Exception )
+			{
+				error = new Error( $"Request {response.RequestMessage.Method} {response.RequestMessage.RequestUri} was not successful: {(int)response.StatusCode} ({response.ReasonPhrase})" );
+			}
+
+			throw new WrappedServerErrorException( error, response );
 		}
 
 		/// <summary>
