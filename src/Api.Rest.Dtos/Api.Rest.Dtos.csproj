@@ -23,7 +23,7 @@
   </PropertyGroup>
 
   <PropertyGroup Label="NuGet package specifications for local build">
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb; .xml;</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder); .xml;</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <Authors>$(Company)</Authors>
     <EmbedAllSources>true</EmbedAllSources>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -34,6 +34,8 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageTags>ZEISS PiWeb Dtos</PackageTags>
     <Version>$(InformationalVersion)</Version>
+    <RepositoryUrl>https://github.com/ZEISS-PiWeb/PiWeb-Api</RepositoryUrl>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/RELEASE_NOTES_Dtos.txt"))</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
