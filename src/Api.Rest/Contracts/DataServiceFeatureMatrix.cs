@@ -55,6 +55,9 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		// Request using a limit per part when fetching measurements.
 		public static readonly Version LimitResultPerPartMinVersion = new Version( 1, 8 );
 
+		// Request measurements by sending a post request with the serialized measurement filter attributes.
+		public static readonly Version MeasurementQueryMinVersion = new Version( 1, 9 );
+
 		#endregion
 
 		#region constructors
@@ -89,6 +92,8 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		public bool SupportsAsyncMeasurementDeletion => CurrentInterfaceVersion >= AsyncMeasurementDeletionMinVersion;
 
 		public bool SupportsLimitResultPerPart => CurrentInterfaceVersion >= LimitResultPerPartMinVersion;
+
+		public bool SupportsMeasurementQuery => CurrentInterfaceVersion >= MeasurementQueryMinVersion;
 
 		#endregion
 	}

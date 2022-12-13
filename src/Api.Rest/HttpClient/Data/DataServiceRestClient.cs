@@ -42,9 +42,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 
 		#region members
 
+		private readonly int _MaxRequestsInParallel;
+
 		private ServiceInformationDto _LastValidServiceInformation;
 		private DataServiceFeatureMatrix _FeatureMatrix;
-		private readonly int _MaxRequestsInParallel;
 
 		#endregion
 
@@ -170,6 +171,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			{
 				result.Add( item.Key, item.Value );
 			}
+
 			foreach( var item in list2 )
 			{
 				result.Add( item.Key, item.Value );
@@ -229,7 +231,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		/// <param name="filter">Set filter to check for LimitResult and OrderBy</param>
 		/// <param name="resultSets">Number of requests after splitting the initial request</param>
 		/// <returns>Array of measurements in correct order and size.</returns>
-		private static IReadOnlyList<T> LimitAndSortResult<T>( IEnumerable<T> source, AbstractMeasurementFilterAttributesDto filter, int resultSets ) where T: SimpleMeasurementDto
+		private static IReadOnlyList<T> LimitAndSortResult<T>( IEnumerable<T> source, AbstractMeasurementFilterAttributesDto filter, int resultSets ) where T : SimpleMeasurementDto
 		{
 			if( resultSets <= 1 )
 				return ConvertToList( source );
@@ -265,30 +267,30 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		/// <summary>
 		/// Sort the measurements according to the order criteria. Start a new OrderBy-chain.
 		/// </summary>
-		private static IOrderedEnumerable<T> StartAttributeOrderChain<T>( OrderDto order, IEnumerable<T> source ) where T: SimpleMeasurementDto
+		private static IOrderedEnumerable<T> StartAttributeOrderChain<T>( OrderDto order, IEnumerable<T> source ) where T : SimpleMeasurementDto
 		{
 			return order.Direction switch
 			{
-				OrderDirectionDto.Asc => source.OrderBy( SelectAttributeValues<T>( order ) ),
+				OrderDirectionDto.Asc  => source.OrderBy( SelectAttributeValues<T>( order ) ),
 				OrderDirectionDto.Desc => source.OrderByDescending( SelectAttributeValues<T>( order ) ),
-				_ => throw new ArgumentOutOfRangeException( nameof( order.Direction ) )
+				_                      => throw new ArgumentOutOfRangeException( nameof( order.Direction ) )
 			};
 		}
 
 		/// <summary>
 		/// Sort the measurements according to the order criteria. Chain it to a previous result.
 		/// </summary>
-		private static IOrderedEnumerable<T> AppendAttributeOrderChain<T>( OrderDto order, IOrderedEnumerable<T> orderedSource ) where T: SimpleMeasurementDto
+		private static IOrderedEnumerable<T> AppendAttributeOrderChain<T>( OrderDto order, IOrderedEnumerable<T> orderedSource ) where T : SimpleMeasurementDto
 		{
 			return order.Direction switch
 			{
-				OrderDirectionDto.Asc => orderedSource.ThenBy( SelectAttributeValues<T>( order ) ),
+				OrderDirectionDto.Asc  => orderedSource.ThenBy( SelectAttributeValues<T>( order ) ),
 				OrderDirectionDto.Desc => orderedSource.ThenByDescending( SelectAttributeValues<T>( order ) ),
-				_ => throw new ArgumentOutOfRangeException( nameof( order.Direction ) )
+				_                      => throw new ArgumentOutOfRangeException( nameof( order.Direction ) )
 			};
 		}
 
-		private static Func<T, object> SelectAttributeValues<T>( OrderDto order ) where  T: SimpleMeasurementDto
+		private static Func<T, object> SelectAttributeValues<T>( OrderDto order ) where T : SimpleMeasurementDto
 		{
 			if( order.Attribute == WellKnownKeys.Measurement.Time )
 				return measurement => measurement.Time;
@@ -419,6 +421,123 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 					"Clearing a part is not supported by this server.",
 					DataServiceFeatureMatrix.ClearPartMinVersion,
 					featureMatrix.CurrentInterfaceVersion );
+			}
+		}
+
+		private async Task<IReadOnlyList<DataMeasurementDto>> GetMeasurementValuesInternal( PathInformation partPath = null, MeasurementValueFilterAttributesDto filter = null, CancellationToken cancellationToken = default )
+		{
+			await ThrowOnUnsupportedMergeAttributes( filter?.MergeAttributes, cancellationToken );
+			await ThrowOnUnsupportedLimitResultPerPart( filter, cancellationToken );
+
+			if( filter?.MeasurementUuids?.Count > 0 )
+				return await GetMeasurementValuesSplitByMeasurement( partPath, filter, cancellationToken ).ConfigureAwait( false );
+
+			if( filter?.CharacteristicsUuidList?.Count > 0 )
+				return await GetMeasurementValuesSplitByCharacteristics( partPath, filter, cancellationToken ).ConfigureAwait( false );
+
+			return await _RestClient.Request<IReadOnlyList<DataMeasurementDto>>( RequestBuilder.CreateGet( "values", CreateParameterDefinitions( partPath, filter ) ), cancellationToken ).ConfigureAwait( false );
+		}
+
+		private async Task<IReadOnlyList<SimpleMeasurementDto>> GetMeasurementsInternal( PathInformation partPath = null, MeasurementFilterAttributesDto filter = null, CancellationToken cancellationToken = default )
+		{
+			await ThrowOnUnsupportedMergeAttributes( filter?.MergeAttributes, cancellationToken );
+			await ThrowOnUnsupportedMergeMasterPart( filter, cancellationToken );
+			await ThrowOnUnsupportedLimitResultPerPart( filter, cancellationToken );
+
+			const string requestPath = "measurements";
+
+			// split multiple measurement uuids into chunks of uuids using multiple requests to avoid "Request-URI Too Long" exception
+			if( filter?.MeasurementUuids?.Count > 0 )
+			{
+				var newFilter = filter.Clone();
+				newFilter.MeasurementUuids = null;
+
+				var parameterName = AbstractMeasurementFilterAttributesDto.MeasurementUuidsParamName;
+				var parameterDefinitions = CreateParameterDefinitions( partPath, newFilter );
+
+				//Split into multiple parameter sets to limit uuid parameter lenght
+				var parameterSets = RestClientHelper.SplitAndMergeParameters( ServiceLocation, requestPath, MaxUriLength, parameterName, filter.MeasurementUuids, parameterDefinitions );
+
+				//Execute requests in parallel
+				var result = new List<SimpleMeasurementDto>();
+
+#if NET6_0_OR_GREATER
+				await Parallel.ForEachAsync(
+					parameterSets,
+					new ParallelOptions { CancellationToken = cancellationToken, MaxDegreeOfParallelism = _MaxRequestsInParallel },
+					async ( parameterSet, token ) =>
+					{
+						var request = RequestBuilder.CreateGet( requestPath, parameterSet );
+						var measurements = await _RestClient.Request<IReadOnlyCollection<SimpleMeasurementDto>>( request, token ).ConfigureAwait( false );
+
+						lock( result )
+							result.AddRange( measurements );
+					} ).ConfigureAwait( false );
+#else
+				Parallel.ForEach(
+					parameterSets,
+					new ParallelOptions { CancellationToken = cancellationToken, MaxDegreeOfParallelism = _MaxRequestsInParallel },
+					parameterSet =>
+					{
+						var request = RequestBuilder.CreateGet( requestPath, parameterSet );
+						var measurements = _RestClient.Request<IReadOnlyCollection<SimpleMeasurementDto>>( request, cancellationToken ).ConfigureAwait( false ).GetAwaiter().GetResult();
+
+						lock( result )
+							result.AddRange( measurements );
+					} );
+#endif
+
+				return LimitAndSortResult( result, filter, result.Count );
+			}
+
+			// split multiple part uuids into chunks of uuids using multiple requests to avoid "Request-URI Too Long" exception
+			if( filter?.PartUuids?.Count > 0 )
+			{
+				var newFilter = filter.Clone();
+				newFilter.PartUuids = null;
+
+				const string parameterName = AbstractMeasurementFilterAttributesDto.PartUuidsParamName;
+				var parameterDefinitions = CreateParameterDefinitions( partPath, newFilter );
+
+				//Split into multiple parameter sets to limit uuid parameter lenght
+				var parameterSets = RestClientHelper.SplitAndMergeParameters( ServiceLocation, requestPath, MaxUriLength, parameterName, filter.PartUuids, parameterDefinitions );
+
+				//Execute requests in parallel
+				var result = new List<SimpleMeasurementDto>();
+
+#if NET6_0_OR_GREATER
+				await Parallel.ForEachAsync(
+					parameterSets,
+					new ParallelOptions { CancellationToken = cancellationToken, MaxDegreeOfParallelism = _MaxRequestsInParallel },
+					async ( parameterSet, token ) =>
+					{
+						var request = RequestBuilder.CreateGet( requestPath, parameterSet );
+						var measurements = await _RestClient.Request<IReadOnlyCollection<SimpleMeasurementDto>>( request, token ).ConfigureAwait( false );
+
+						lock( result )
+							result.AddRange( measurements );
+					} ).ConfigureAwait( false );
+#else
+				Parallel.ForEach(
+					parameterSets,
+					new ParallelOptions { CancellationToken = cancellationToken, MaxDegreeOfParallelism = _MaxRequestsInParallel },
+					parameterSet =>
+					{
+						var request = RequestBuilder.CreateGet( requestPath, parameterSet );
+						var measurements = _RestClient.Request<IReadOnlyCollection<SimpleMeasurementDto>>( request, cancellationToken ).ConfigureAwait( false ).GetAwaiter().GetResult();
+
+						lock( result )
+							result.AddRange( measurements );
+					} );
+#endif
+
+				return LimitAndSortResult( result, filter, result.Count );
+			}
+
+			{
+				var parameterDefinitions = CreateParameterDefinitions( partPath, filter );
+				var requestUrl = RequestBuilder.CreateGet( requestPath, parameterDefinitions );
+				return await _RestClient.Request<IReadOnlyList<SimpleMeasurementDto>>( requestUrl, cancellationToken ).ConfigureAwait( false );
 			}
 		}
 
@@ -799,6 +918,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			}
 		}
 
+
 		/// <inheritdoc />
 		public async Task<IReadOnlyList<SimpleMeasurementDto>> GetMeasurements( PathInformation partPath = null, MeasurementFilterAttributesDto filter = null, CancellationToken cancellationToken = default )
 		{
@@ -806,101 +926,14 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			await ThrowOnUnsupportedMergeMasterPart( filter, cancellationToken );
 			await ThrowOnUnsupportedLimitResultPerPart( filter, cancellationToken );
 
-			const string requestPath = "measurements";
+			var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+			if( !featureMatrix.SupportsMeasurementQuery )
+				return await GetMeasurementsInternal( partPath, filter, cancellationToken );
 
-			// split multiple measurement uuids into chunks of uuids using multiple requests to avoid "Request-URI Too Long" exception
-			if( filter?.MeasurementUuids?.Count > 0 )
-			{
-				var newFilter = filter.Clone();
-				newFilter.MeasurementUuids = null;
-
-				var parameterName = AbstractMeasurementFilterAttributesDto.MeasurementUuidsParamName;
-				var parameterDefinitions = CreateParameterDefinitions( partPath, newFilter );
-
-				//Split into multiple parameter sets to limit uuid parameter lenght
-				var parameterSets = RestClientHelper.SplitAndMergeParameters( ServiceLocation, requestPath, MaxUriLength, parameterName, filter.MeasurementUuids, parameterDefinitions );
-
-				//Execute requests in parallel
-				var result = new List<SimpleMeasurementDto>();
-
-#if NET6_0_OR_GREATER
-				await Parallel.ForEachAsync(
-					parameterSets,
-					new ParallelOptions { CancellationToken = cancellationToken, MaxDegreeOfParallelism = _MaxRequestsInParallel },
-					async ( parameterSet, token ) =>
-					{
-						var request = RequestBuilder.CreateGet( requestPath, parameterSet );
-						var measurements = await _RestClient.Request<IReadOnlyCollection<SimpleMeasurementDto>>( request, token ).ConfigureAwait( false );
-
-						lock( result )
-							result.AddRange( measurements );
-					} ).ConfigureAwait( false );
-#else
-				Parallel.ForEach(
-					parameterSets,
-					new ParallelOptions { CancellationToken = cancellationToken, MaxDegreeOfParallelism = _MaxRequestsInParallel },
-					parameterSet =>
-					{
-						var request = RequestBuilder.CreateGet( requestPath, parameterSet );
-						var measurements = _RestClient.Request<IReadOnlyCollection<SimpleMeasurementDto>>( request, cancellationToken ).ConfigureAwait( false ).GetAwaiter().GetResult();
-
-						lock( result )
-							result.AddRange( measurements );
-					} );
-#endif
-
-				return LimitAndSortResult( result, filter, result.Count );
-			}
-
-			// split multiple part uuids into chunks of uuids using multiple requests to avoid "Request-URI Too Long" exception
-			if( filter?.PartUuids?.Count > 0 )
-			{
-				var newFilter = filter.Clone();
-				newFilter.PartUuids = null;
-
-				const string parameterName = AbstractMeasurementFilterAttributesDto.PartUuidsParamName;
-				var parameterDefinitions = CreateParameterDefinitions( partPath, newFilter );
-
-				//Split into multiple parameter sets to limit uuid parameter lenght
-				var parameterSets = RestClientHelper.SplitAndMergeParameters( ServiceLocation, requestPath, MaxUriLength, parameterName, filter.PartUuids, parameterDefinitions );
-
-				//Execute requests in parallel
-				var result = new List<SimpleMeasurementDto>();
-
-#if NET6_0_OR_GREATER
-				await Parallel.ForEachAsync(
-					parameterSets,
-					new ParallelOptions { CancellationToken = cancellationToken, MaxDegreeOfParallelism = _MaxRequestsInParallel },
-					async ( parameterSet, token ) =>
-					{
-						var request = RequestBuilder.CreateGet( requestPath, parameterSet );
-						var measurements = await _RestClient.Request<IReadOnlyCollection<SimpleMeasurementDto>>( request, token ).ConfigureAwait( false );
-
-						lock( result )
-							result.AddRange( measurements );
-					} ).ConfigureAwait( false );
-#else
-				Parallel.ForEach(
-					parameterSets,
-					new ParallelOptions { CancellationToken = cancellationToken, MaxDegreeOfParallelism = _MaxRequestsInParallel },
-					parameterSet =>
-					{
-						var request = RequestBuilder.CreateGet( requestPath, parameterSet );
-						var measurements = _RestClient.Request<IReadOnlyCollection<SimpleMeasurementDto>>( request, cancellationToken ).ConfigureAwait( false ).GetAwaiter().GetResult();
-
-						lock( result )
-							result.AddRange( measurements );
-					} );
-#endif
-
-				return LimitAndSortResult( result, filter, result.Count );
-			}
-
-			{
-				var parameterDefinitions = CreateParameterDefinitions( partPath, filter );
-				var requestUrl = RequestBuilder.CreateGet( requestPath, parameterDefinitions );
-				return await _RestClient.Request<IReadOnlyList<SimpleMeasurementDto>>( requestUrl, cancellationToken ).ConfigureAwait( false );
-			}
+			const string requestPath = "measurementQuery";
+			var content = Payload.Create( new MeasurementQueryDto( partPath, filter ) );
+			var requestUrl = RequestBuilder.CreatePost( requestPath, content );
+			return await _RestClient.Request<IReadOnlyList<SimpleMeasurementDto>>( requestUrl, cancellationToken ).ConfigureAwait( false );
 		}
 
 		/// <inheritdoc />
@@ -1032,13 +1065,14 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			await ThrowOnUnsupportedMergeAttributes( filter?.MergeAttributes, cancellationToken );
 			await ThrowOnUnsupportedLimitResultPerPart( filter, cancellationToken );
 
-			if( filter?.MeasurementUuids?.Count > 0 )
-				return await GetMeasurementValuesSplitByMeasurement( partPath, filter, cancellationToken ).ConfigureAwait( false );
+			var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+			if( !featureMatrix.SupportsMeasurementQuery )
+				return await GetMeasurementValuesInternal( partPath, filter, cancellationToken );
 
-			if( filter?.CharacteristicsUuidList?.Count > 0 )
-				return await GetMeasurementValuesSplitByCharacteristics( partPath, filter, cancellationToken ).ConfigureAwait( false );
-
-			return await _RestClient.Request<IReadOnlyList<DataMeasurementDto>>( RequestBuilder.CreateGet( "values", CreateParameterDefinitions( partPath, filter ) ), cancellationToken ).ConfigureAwait( false );
+			const string requestPath = "measurementValueQuery";
+			var content = Payload.Create( new MeasurementValueQueryDto( partPath, filter ) );
+			var requestUrl = RequestBuilder.CreatePost( requestPath, content );
+			return await _RestClient.Request<IReadOnlyList<DataMeasurementDto>>( requestUrl, cancellationToken ).ConfigureAwait( false );
 		}
 
 		/// <inheritdoc />
