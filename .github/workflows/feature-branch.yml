@@ -1,0 +1,14 @@
+﻿# Workflow to build and publish feaute/fix branches
+
+name: Build on feature/fix branch
+
+# Run on manual trigger only
+on:
+  workflow_dispatch:
+
+jobs:
+  build-feature-branch:
+    uses: ZEISS-PiWeb/github-actions/.github/workflows/feature-branch.yml@main
+    with:
+      do_pack: true  
+    secrets: inherit
