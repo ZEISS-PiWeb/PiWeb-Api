@@ -43,6 +43,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 
 		private ServiceInformationDto _LastValidServiceInformation;
 		private DataServiceFeatureMatrix _FeatureMatrix;
+		private readonly int _MaxRequestsInParallel;
 
 		#endregion
 
@@ -54,9 +55,12 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		/// <param name="serverUri">The PiWeb Server uri, including port and instance</param>
 		/// <param name="maxUriLength">The uri length limit</param>
 		/// <param name="restClient">Custom implementation of RestClient</param>
-		public DataServiceRestClient( [NotNull] Uri serverUri, int maxUriLength = RestClientBase.DefaultMaxUriLength, RestClientBase restClient = null )
+		/// <param name="maxRequestsInParallel"> The maximum number of concurrent tasks enabled by a <see cref="T:System.Threading.Tasks.ParallelOptions" /> instance.</param>
+		public DataServiceRestClient( [NotNull] Uri serverUri, int maxUriLength = RestClientBase.DefaultMaxUriLength, RestClientBase restClient = null, int maxRequestsInParallel = 8 )
 			: base( restClient ?? new RestClient( serverUri, EndpointName, maxUriLength: maxUriLength ) )
-		{ }
+		{
+			_MaxRequestsInParallel = maxRequestsInParallel;
+		}
 
 		#endregion
 
@@ -794,12 +798,21 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 				var parameterSets = RestClientHelper.SplitAndMergeParameters( ServiceLocation, requestPath, MaxUriLength, parameterName, filter.MeasurementUuids, parameterDefinitions );
 
 				//Execute requests in parallel
-				var requests = parameterSets
-					.Select( set => RequestBuilder.CreateGet( requestPath, set.ToArray() ) )
-					.Select( request => _RestClient.Request<SimpleMeasurementDto[]>( request, cancellationToken ) );
-				var result = await Task.WhenAll( requests ).ConfigureAwait( false );
+				var result = new List<SimpleMeasurementDto>();
 
-				return LimitAndSortResult( result.SelectMany( r => r ), filter, result.Length ).ToArray();
+				Parallel.ForEach(
+					parameterSets,
+					new ParallelOptions { CancellationToken = cancellationToken, MaxDegreeOfParallelism = _MaxRequestsInParallel },
+					parameterSet =>
+					{
+						var request = RequestBuilder.CreateGet( requestPath, parameterSet.ToArray() );
+						var measurements = _RestClient.Request<IReadOnlyCollection<SimpleMeasurementDto>>( request, cancellationToken ).ConfigureAwait( false ).GetAwaiter().GetResult();
+
+						lock( result )
+							result.AddRange( measurements );
+					} );
+
+				return LimitAndSortResult( result, filter, result.Count ).ToArray();
 			}
 
 			// split multiple part uuids into chunks of uuids using multiple requests to avoid "Request-URI Too Long" exception
@@ -815,12 +828,21 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 				var parameterSets = RestClientHelper.SplitAndMergeParameters( ServiceLocation, requestPath, MaxUriLength, parameterName, filter.PartUuids, parameterDefinitions );
 
 				//Execute requests in parallel
-				var requests = parameterSets
-					.Select( set => RequestBuilder.CreateGet( requestPath, set.ToArray() ) )
-					.Select( request => _RestClient.Request<SimpleMeasurementDto[]>( request, cancellationToken ) );
-				var result = await Task.WhenAll( requests ).ConfigureAwait( false );
+				var result = new List<SimpleMeasurementDto>();
 
-				return LimitAndSortResult( result.SelectMany( r => r ), filter, result.Length ).ToArray();
+				Parallel.ForEach(
+					parameterSets,
+					new ParallelOptions { CancellationToken = cancellationToken, MaxDegreeOfParallelism = _MaxRequestsInParallel },
+					parameterSet =>
+					{
+						var request = RequestBuilder.CreateGet( requestPath, parameterSet.ToArray() );
+						var measurements = _RestClient.Request<IReadOnlyCollection<SimpleMeasurementDto>>( request, cancellationToken ).ConfigureAwait( false ).GetAwaiter().GetResult();
+
+						lock( result )
+							result.AddRange( measurements );
+					} );
+
+				return LimitAndSortResult( result, filter, result.Count ).ToArray();
 			}
 
 			{
