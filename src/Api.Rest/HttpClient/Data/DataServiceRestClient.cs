@@ -818,7 +818,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 				var parameterDefinitions = CreateParameterDefinitions( partPath, newFilter );
 
 				//Split into multiple parameter sets to limit uuid parameter lenght
-				var parameterSets = RestClientHelper.SplitAndMergeParameters( ServiceLocation, requestPath, MaxUriLength, parameterName, filter.MeasurementUuids, parameterDefinitions );
+				var parameterSets = RestClientHelper.SplitAndMergeParameters( ServiceLocation, requestPath, MaxUriLength, parameterName, filter.MeasurementUuids, parameterDefinitions ).ToArray();
 
 				//Execute requests in parallel
 				var result = new List<SimpleMeasurementDto>();
@@ -849,7 +849,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 					} );
 #endif
 
-				return LimitAndSortResult( result, filter, result.Count );
+				return LimitAndSortResult( result, filter, parameterSets.Length );
 			}
 
 			// split multiple part uuids into chunks of uuids using multiple requests to avoid "Request-URI Too Long" exception
@@ -862,7 +862,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 				var parameterDefinitions = CreateParameterDefinitions( partPath, newFilter );
 
 				//Split into multiple parameter sets to limit uuid parameter lenght
-				var parameterSets = RestClientHelper.SplitAndMergeParameters( ServiceLocation, requestPath, MaxUriLength, parameterName, filter.PartUuids, parameterDefinitions );
+				var parameterSets = RestClientHelper.SplitAndMergeParameters( ServiceLocation, requestPath, MaxUriLength, parameterName, filter.PartUuids, parameterDefinitions ).ToArray();
 
 				//Execute requests in parallel
 				var result = new List<SimpleMeasurementDto>();
@@ -893,7 +893,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 					} );
 #endif
 
-				return LimitAndSortResult( result, filter, result.Count );
+				return LimitAndSortResult( result, filter, parameterSets.Length );
 			}
 
 			{
