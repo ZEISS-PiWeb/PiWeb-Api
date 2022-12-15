@@ -10,7 +10,13 @@
 
 namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 {
+	#region usings
+
 	using System.Collections.Generic;
+	using System.Text.Json.Serialization;
+	using Newtonsoft.Json;
+
+	#endregion
 
 	#region usings
 
@@ -20,12 +26,23 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	/// Klasse zum Parsen einer Filterzeichenkette für Messdaten.
 	/// </summary>
 	public class GenericSearchConditionDto
-	{ }
+	{
+		#region constants
+
+		internal const string ConditionFieldName = "condition";
+		internal const string ConditionsFieldName = "conditions";
+		internal const string AttributeFieldName = "attribute";
+		internal const string FieldNameFieldName = "fieldName";
+
+		#endregion
+	}
 
 	public class GenericSearchNotDto : GenericSearchConditionDto
 	{
 		#region properties
 
+		[JsonProperty( ConditionFieldName )]
+		[JsonPropertyName( ConditionFieldName )]
 		public GenericSearchConditionDto Condition { get; set; }
 
 		#endregion
@@ -53,6 +70,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#region properties
 
+		[JsonProperty( ConditionsFieldName )]
+		[JsonPropertyName( ConditionsFieldName )]
 		public IReadOnlyCollection<GenericSearchConditionDto> Conditions { get; set; }
 
 		#endregion
@@ -62,7 +81,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	{
 		#region properties
 
+		[JsonProperty( "operation" )]
+		[JsonPropertyName( "operation" )]
 		public OperationDto Operation { get; set; }
+
+		[JsonProperty( "value" )]
+		[JsonPropertyName( "value" )]
 		public string Value { get; set; }
 
 		#endregion
@@ -72,6 +96,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	{
 		#region properties
 
+		[JsonProperty( AttributeFieldName )]
+		[JsonPropertyName( AttributeFieldName )]
 		public ushort Attribute { get; set; }
 
 		#endregion
@@ -81,6 +107,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	{
 		#region properties
 
+		[JsonProperty( FieldNameFieldName )]
+		[JsonPropertyName( FieldNameFieldName )]
 		public string FieldName { get; set; }
 
 		#endregion
