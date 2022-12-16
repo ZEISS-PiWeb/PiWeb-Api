@@ -45,7 +45,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 		// FUTURE: replace by a real cache with cleanup, this is a memory leak for long running processes
 		private static readonly CredentialRepository AccessTokenCache = new CredentialRepository( CacheFilePath );
-		
+
 		#endregion
 
 		#region methods
@@ -151,102 +151,78 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			if( AccessTokenCache.TryGetCredential( instanceUrl, out var result ) )
 			{
 				if( string.IsNullOrEmpty( refreshToken ) )
-				{
 					refreshToken = result.RefreshToken;
-				}
 
 				if( result.AccessTokenExpiration.AddMinutes( -5 ) > DateTime.UtcNow )
-				{
 					return result;
-				}
 			}
 
 			return null;
 		}
 
-		private static async Task<OAuthTokenCredential> TryGetOAuthTokenFromRefreshTokenAsync( TokenClient tokenClient, IDiscoveryCache discoveryCache, string refreshToken )
+		private static async Task<OAuthTokenCredential> TryGetOAuthTokenFromRefreshTokenAsync( TokenClient tokenClient, string userInfoEndpoint, string refreshToken )
 		{
 			// when a refresh token is present try to use it to acquire a new access token
-			if( !string.IsNullOrEmpty( refreshToken ) )
-			{
-				var tokenResponse = await tokenClient.RequestRefreshTokenAsync( refreshToken ).ConfigureAwait( false );
+			if( string.IsNullOrEmpty( refreshToken ) )
+				return null;
 
-				if( !tokenResponse.IsError )
-				{
-					using var httpClient = new HttpClient();
+			var tokenResponse = await tokenClient.RequestRefreshTokenAsync( refreshToken ).ConfigureAwait( false );
+			if( tokenResponse.IsError )
+				return null;
 
-					var discoveryInfo = await discoveryCache.GetAsync().ConfigureAwait( false );
-					if( discoveryInfo.IsError )
-					{
-						return null;
-					}
+			using var httpClient = new HttpClient();
+			var response = await httpClient
+				.GetUserInfoAsync( new UserInfoRequest { Address = userInfoEndpoint, Token = tokenResponse.AccessToken } )
+				.ConfigureAwait( false );
 
-					var response = await httpClient
-						.GetUserInfoAsync( new UserInfoRequest { Address = discoveryInfo.UserInfoEndpoint, Token = tokenResponse.AccessToken } )
-						.ConfigureAwait( false );
+			if( response.IsError )
+				return null;
 
-					if( response.IsError )
-					{
-						return null;
-					}
-
-					return OAuthTokenCredential.CreateWithClaims(
-						response.Claims,
-						tokenResponse.AccessToken,
-						DateTime.UtcNow + TimeSpan.FromSeconds( tokenResponse.ExpiresIn ),
-						tokenResponse.RefreshToken );
-				}
-			}
-
-			return null;
+			return OAuthTokenCredential.CreateWithClaims(
+				response.Claims,
+				tokenResponse.AccessToken,
+				DateTime.UtcNow + TimeSpan.FromSeconds( tokenResponse.ExpiresIn ),
+				tokenResponse.RefreshToken );
 		}
 
 		private static async Task<OAuthTokenCredential> TryGetOAuthTokenFromAuthorizeResponseAsync( TokenClient tokenClient, CryptoNumbers cryptoNumbers, AuthorizeResponse response )
 		{
-			if( response != null )
-			{
-				// claims des IdentityToken decodieren
-				var claims = DecodeSecurityToken( response.IdentityToken ).Claims.ToArray();
+			if( response == null )
+				return null;
 
-				// die folgenden validierungen sind notwendig, um diversen CSRF / man in the middle / etc. Angriffsszenarien zu begegnen
-				// state validieren
-				if( !string.Equals( cryptoNumbers.State, response.State, StringComparison.Ordinal ) )
-					throw new InvalidOperationException( "invalid state value in openid service responce." );
+			// claims des IdentityToken decodieren
+			var claims = DecodeSecurityToken( response.IdentityToken ).Claims.ToArray();
 
-				// nonce validieren
-				if( !ValidateNonce( cryptoNumbers.Nonce, claims ) )
-					throw new InvalidOperationException( "invalid nonce value in identity token." );
+			// die folgenden validierungen sind notwendig, um diversen CSRF / man in the middle / etc. Angriffsszenarien zu begegnen
+			// state validieren
+			if( !string.Equals( cryptoNumbers.State, response.State, StringComparison.Ordinal ) )
+				throw new InvalidOperationException( "invalid state value in openid service response." );
 
-				// c_hash validieren
-				if( !ValidateCodeHash( response.Code, claims ) )
-					throw new InvalidOperationException( "invalid c_hash value in identity token." );
+			// nonce validieren
+			if( !ValidateNonce( cryptoNumbers.Nonce, claims ) )
+				throw new InvalidOperationException( "invalid nonce value in identity token." );
 
-				// code eintauschen gegen access token und refresh token, dabei den code verifier mitschicken, um man-in-the-middle Angriff auf authorization code zu begegnen (PKCE)
-				var tokenResponse = await tokenClient.RequestAuthorizationCodeTokenAsync(
-					code: response.Code,
-					redirectUri: RedirectUri,
-					codeVerifier: cryptoNumbers.Verifier ).ConfigureAwait( false );
+			// c_hash validieren
+			if( !ValidateCodeHash( response.Code, claims ) )
+				throw new InvalidOperationException( "invalid c_hash value in identity token." );
 
-				if( tokenResponse.IsError )
-					throw new InvalidOperationException( "error during request of access token using authorization code: " + tokenResponse.Error );
+			// code eintauschen gegen access token und refresh token, dabei den code verifier mitschicken, um man-in-the-middle Angriff auf authorization code zu begegnen (PKCE)
+			var tokenResponse = await tokenClient.RequestAuthorizationCodeTokenAsync(
+				code: response.Code,
+				redirectUri: RedirectUri,
+				codeVerifier: cryptoNumbers.Verifier ).ConfigureAwait( false );
 
-				return OAuthTokenCredential.CreateWithIdentityToken( tokenResponse.IdentityToken, tokenResponse.AccessToken, DateTime.UtcNow + TimeSpan.FromSeconds( tokenResponse.ExpiresIn ), tokenResponse.RefreshToken );
-			}
+			if( tokenResponse.IsError )
+				throw new InvalidOperationException( "error during request of access token using authorization code: " + tokenResponse.Error );
 
-			return null;
+			return OAuthTokenCredential.CreateWithIdentityToken( tokenResponse.IdentityToken, tokenResponse.AccessToken, DateTime.UtcNow + TimeSpan.FromSeconds( tokenResponse.ExpiresIn ), tokenResponse.RefreshToken );
 		}
 
-		private static async Task<string> CreateOAuthStartUrl( IDiscoveryCache discoveryCache, CryptoNumbers cryptoNumbers )
+		private static string CreateOAuthStartUrl( string authorizeEndpoint, CryptoNumbers cryptoNumbers )
 		{
 			using var httpClient = new HttpClient();
 
-			var discoveryInfo = await discoveryCache.GetAsync().ConfigureAwait( false );
-			if( discoveryInfo.IsError )
-			{
-				return null;
-			}
-
-			var request = new RequestUrl( discoveryInfo.AuthorizeEndpoint );
+			var request = new RequestUrl( authorizeEndpoint );
 			return request.CreateAuthorizeUrl(
 				clientId: ClientId,
 				responseType: "id_token code",
@@ -268,14 +244,12 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			return authority;
 		}
 
-		private static async Task<TokenClient> CreateTokenClient( IDiscoveryCache discoveryCache )
+		private static TokenClient CreateTokenClient( string tokenEndpoint )
 		{
-			var discoveryInfo = await discoveryCache.GetAsync().ConfigureAwait( false );
-
 			var tokenClient = new HttpClient();
 			return new TokenClient( tokenClient, new TokenClientOptions
 			{
-				Address = discoveryInfo.TokenEndpoint,
+				Address = tokenEndpoint,
 				ClientId = ClientId,
 				ClientSecret = ClientSecret
 			} );
@@ -284,17 +258,17 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		public static async Task<OAuthTokenCredential> GetAuthenticationInformationForDatabaseUrlAsync( string databaseUrl, string refreshToken = null, Func<OAuthRequest, Task<OAuthResponse>> requestCallbackAsync = null )
 		{
 			var instanceUrl = GetInstanceUrl( databaseUrl );
-			var discoveryCache = new DiscoveryCache( await CreateAuthorityAsync( instanceUrl ).ConfigureAwait( false ));
 
 			var result = TryGetCurrentOAuthToken( instanceUrl, ref refreshToken );
 			if( result != null )
-			{
 				return result;
-			}
 
-			var tokenClient = await CreateTokenClient( discoveryCache ).ConfigureAwait( false );
+			var discoveryInfo = await GetDiscoveryInfoAsync( instanceUrl ).ConfigureAwait( false );
+			if( discoveryInfo.IsError )
+				return null;
 
-			result = await TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryCache, refreshToken ).ConfigureAwait( false );
+			var tokenClient = CreateTokenClient( discoveryInfo.TokenEndpoint );
+			result = await TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken ).ConfigureAwait( false );
 			if( result != null )
 			{
 				AccessTokenCache.Store( instanceUrl, result );
@@ -305,7 +279,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			if( requestCallbackAsync != null )
 			{
 				var cryptoNumbers = new CryptoNumbers();
-				var startUrl = await CreateOAuthStartUrl( discoveryCache, cryptoNumbers ).ConfigureAwait( false );
+				var startUrl = CreateOAuthStartUrl( discoveryInfo.AuthorizeEndpoint, cryptoNumbers );
 
 				var request = new OAuthRequest( startUrl, RedirectUri );
 				var response = ( await requestCallbackAsync( request ).ConfigureAwait( false ) )?.ToAuthorizeResponse();
@@ -326,18 +300,17 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		public static OAuthTokenCredential GetAuthenticationInformationForDatabaseUrl( string databaseUrl, string refreshToken = null, Func<OAuthRequest, OAuthResponse> requestCallback = null )
 		{
 			var instanceUrl = GetInstanceUrl( databaseUrl );
-			var discoveryCache = new DiscoveryCache( CreateAuthorityAsync( instanceUrl ).GetAwaiter().GetResult() );
 
 			var result = TryGetCurrentOAuthToken( instanceUrl, ref refreshToken );
 			if( result != null )
-			{
 				return result;
-			}
 
-			var tokenClient = CreateTokenClient( discoveryCache ).GetAwaiter().GetResult();
+			var discoveryInfo = GetDiscoveryInfoAsync( instanceUrl ).GetAwaiter().GetResult();
+			if( discoveryInfo.IsError )
+				return null;
 
-			result = TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryCache, refreshToken ).GetAwaiter().GetResult();
-
+			var tokenClient = CreateTokenClient( discoveryInfo.TokenEndpoint );
+			result = TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken ).GetAwaiter().GetResult();
 			if( result != null )
 			{
 				AccessTokenCache.Store( instanceUrl, result );
@@ -348,7 +321,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			if( requestCallback != null )
 			{
 				var cryptoNumbers = new CryptoNumbers();
-				var startUrl = CreateOAuthStartUrl( discoveryCache, cryptoNumbers ).GetAwaiter().GetResult();
+				var startUrl = CreateOAuthStartUrl( discoveryInfo.AuthorizeEndpoint, cryptoNumbers );
 
 				var request = new OAuthRequest( startUrl, RedirectUri );
 				var response = requestCallback( request )?.ToAuthorizeResponse();
@@ -366,6 +339,15 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			return null;
 		}
 
+		/// <summary>
+		/// Request target server for authentification settings.
+		/// </summary>
+		private static async Task<DiscoveryDocumentResponse> GetDiscoveryInfoAsync( string instanceUrl )
+		{
+			var discoveryCache = new DiscoveryCache( await CreateAuthorityAsync( instanceUrl ).ConfigureAwait( false ) );
+			var discoveryInfo = await discoveryCache.GetAsync().ConfigureAwait( false );
+			return discoveryInfo;
+		}
 
 		/// <summary>
 		/// get openid authority info from service without any authentication
