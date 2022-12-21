@@ -13,6 +13,8 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Data
 	#region usings
 
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 	using System.Threading.Tasks;
 	using FluentAssertions;
 	using Newtonsoft.Json;
@@ -108,6 +110,84 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Data
 			} );
 
 			result.Count.Should().Be( 5 );
+		}
+
+		[Test]
+		public async Task GetMeasurementValues_UriTooLong_RequestSplit()
+		{
+			using var server = WebServer.StartNew( Port );
+			//maxUriLength of 200 leads to request splitting
+			using var client = new DataServiceRestClient( Uri, 200 );
+
+			server.RegisterDefaultResponse( "[]" );
+
+			var uuids = new List<Guid>();
+
+			for( var i = 0; i < 20; i++ )
+				uuids.Add( Guid.NewGuid() );
+
+			await client.GetMeasurementValues( filter: new MeasurementValueFilterAttributesDto { MeasurementUuids = uuids, CharacteristicsUuidList = uuids } );
+
+			server.ReceivedRequests.Count().Should().BeGreaterThan( 5 );
+		}
+
+		[Test]
+		public async Task GetMeasurementValues_UriTooLong_UriLengthCorrect()
+		{
+			using var server = WebServer.StartNew( Port );
+			//maxUriLength of 200 leads to request splitting
+			using var client = new DataServiceRestClient( Uri, 200 );
+
+			server.RegisterDefaultResponse( "[]" );
+
+			var uuids = new List<Guid>();
+
+			for( var i = 0; i < 20; i++ )
+				uuids.Add( Guid.NewGuid() );
+
+			await client.GetMeasurementValues( filter: new MeasurementValueFilterAttributesDto { MeasurementUuids = uuids, CharacteristicsUuidList = uuids } );
+
+			foreach( var request in server.ReceivedRequests )
+				request.Length.Should().BeLessOrEqualTo( 200 );
+		}
+
+		[Test]
+		public async Task GetMeasurements_UriTooLong_RequestSplit()
+		{
+			using var server = WebServer.StartNew( Port );
+			//maxUriLength of 200 leads to request splitting
+			using var client = new DataServiceRestClient( Uri, 200 );
+
+			server.RegisterDefaultResponse( "[]" );
+
+			var uuids = new List<Guid>();
+
+			for( var i = 0; i < 20; i++ )
+				uuids.Add( Guid.NewGuid() );
+
+			await client.GetMeasurements( filter: new MeasurementFilterAttributesDto { MeasurementUuids = uuids } );
+
+			server.ReceivedRequests.Count().Should().BeGreaterThan( 5 );
+		}
+
+		[Test]
+		public async Task GetMeasurements_UriTooLong_UriLengthCorrect()
+		{
+			using var server = WebServer.StartNew( Port );
+			//maxUriLength of 200 leads to request splitting
+			using var client = new DataServiceRestClient( Uri, 200 );
+
+			server.RegisterDefaultResponse( "[]" );
+
+			var uuids = new List<Guid>();
+
+			for( var i = 0; i < 20; i++ )
+				uuids.Add( Guid.NewGuid() );
+
+			await client.GetMeasurements( filter: new MeasurementFilterAttributesDto { MeasurementUuids = uuids } );
+
+			foreach( var request in server.ReceivedRequests )
+				request.Length.Should().BeLessOrEqualTo( 200 );
 		}
 
 		#endregion
