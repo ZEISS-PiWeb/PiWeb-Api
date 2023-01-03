@@ -35,7 +35,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 		private const string ClientId = "f1ddf74a-7ed1-4963-ab60-a1138a089791";
 		private const string ClientSecret = "d2940022-7469-4790-9498-776e3adac79f";
-		private const string RedirectUri = "urn:ietf:wg:oauth:2.0:oob";
+		private const string RedirectUri = "https://login.microsoftonline.com/common/oauth2/nativeclient";
 
 		#endregion
 
