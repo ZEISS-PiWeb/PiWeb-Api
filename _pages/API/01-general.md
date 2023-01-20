@@ -68,122 +68,90 @@ This is the interface provided directly by PiWeb Server. It consists of two main
 Both APIs are versioned independently.
 
 <h2 id="{{page.sections['general']['secs']['model'].anchor}}">{{page.sections['general']['secs']['model'].title}}</h2>
+This section gives you an overview of the PiWeb domain model and explains common terminology used for the PiWeb API.
 
-This section gives you a brief overview of the PiWeb domain model and explains common terminology used for the PiWeb API. The following image shows a simplified version of the PiWeb domain model: <br>
+### Inspection plan and measurements
+The following image provides an overview to the inspection plan and its relations to measurements and measured values.<br>
 <br>
-<img src="/PiWeb-Api/images/domain_model_en.png" class="img-responsive center-block">
+<img src="/PiWeb-Api/images/inspectionPlanAndMeasurements.png" class="img-responsive center-block">
 
-<div class="panel panel-default">
-  <div class="panel-heading"
-        role="tab"
-        id="heading_detail_domain_model"
-        data-toggle="collapse"
-        href="#collapse_details"
-        aria-expanded="false">
-      <ul class="nav">
-        <li class="navbar-left"><span class="glyphicon glyphicon-menu-right"></span></li>
-        <li class="navbar-left fixedWidth">
-          <span class="label label-info">Details</span>
-        </li>
-        <li class="navbar-left">Detailed image of the domain model</li>
-      </ul>
-  </div>
-  <div  id="collapse_details"
-        class="panel-collapse collapse"
-        role="tabpanel">
-    <div class="panel-body">
-      Complete image of the domain model:
-      <img src="/PiWeb-Api/images/domain_model_full.png" class="img-responsive center-block">
-      <br>
-      Relations of additional data:
-      <img src="/PiWeb-Api/images/domain_model_additional_data.png" class="img-responsive center-block">
-    </div>
-  </div>
-</div>
+#### Inspection plan
+The inspection plan specifies the structure of parts, characteristics and possible sub-parts and sub-characteristics. Because the included elements are related hierarchically they are normally displayed in a tree structure.
 
-<hr>
+#### Part and root part
+A part can represent a simple component up to a complex assembly. It describes a workpiece in general, i. e. the workpiece type. This means that real parts that are later measured do not occur individually in the system, but are assigned to the workpiece in form of a measurement. It is also possible to assign sub-parts to a part which can be repeated numerous times.
 
-### Entities
-PiWeb's data structure is based on the following four entities: **parts**, **characteristics**, **measurements** and **measured values**. An entity is therefore an object that has certain properties and interaction possibilities. They form the center of the logic that runs within the system.
+The uppermost part is the root part which has no parent. It typically contains sub-nodes like parts and characteristics which again may contain sub-nodes. The connected PiWeb Server always provides a root node, from which any arbitrary part or characteristic can be reached.
 
-#### Parts
-Parts can represent a simple component up to complex assemblies. They describe a workpiece in general, i.e. the workpiece type. This means that real parts that are later measured do not occur individually in the system, but are assigned to the workpiece in form of a measurement. It is also possible to assign sub-parts to a part, this can be repeated numerous times.
-
-#### Characteristics
-Characteristics can be described as distinctive or important properties of a part. Examples would be bores, curves or oblong holes, i.e. places where accuracy needs to be checked. A characteristic can again have characteristics, which can be repeated many times. An example would be a hole that contains diameter and coordinates as child characteristics. <br>
+#### Characteristic
+A characteristic can be described as a distinctive or important property of a part. Examples are bores, curves or oblong holes, i. e. places where accuracy needs to be checked. A characteristic can itself contain sub-characteristics, which can be repeated many times. An example would be a hole that contains diameter and coordinates.
 
 Types of characteristics:
-+ *Characteristic* <br>
-The basic characteristic that can be assigned to parts and other characteristics.
-
-+ *Measurement point* <br>
-A characteristic which represents a point to measure, including coordinates and tolerance. These can only belong to a part and not to another characteristics.
-
-+ *Calculated characteristic* <br>
-A special type which is based on two other characteristics and a calculation rule to determine the value. It can contain other basic or calculated characteristics, but no measurement points.
-
-+ *Calculated measurement point* <br>
-A special type of measurement point that can be used to calculate distance, symmetry or offset of two other points.
-
+- *Characteristic*<br>
+  The basic characteristic that can be assigned to parts and other characteristics.
+- *Measurement point*<br>
+  A characteristic which represents a point to measure, including coordinates and tolerance. These can only belong to a part and not to another characteristic.
+- *Calculated characteristic*<br>
+  A special type which is based on at least two other characteristics and a calculation rule to determine the value. It can contain other basic or calculated characteristics, but no measurement points.
+- *Calculated measurement point*<br>
+  A special type of measurement point that can be used to calculate distance, symmetry or offset of two other points.
+  
 #### Measurement
 A measurement is a specific measurement process that can affect several characteristics. For example, if an inspector measures a part and records one, several, or all existing characteristics, this procedure and its values describe a measurement. Not all characteristics need to be measured. A measurement always belongs to only one part, deleting the part also removes the measurements.
 
-#### Measured Values
-A measured value describes an actual measured or recorded value that is assigned to a characteristic or attribute. They are part of a measurement. Values can be **numerical**, e.g. a simple floating point number, **attributive** or **enumerated**. Values of attributive characteristics can be categorized. An example would be the result of a quality inspection, which can either be *passed* or *failed*. These categories can be counted, so in this case the number would be two. <br>
+#### Measured value
+A measured value describes an actual measured or recorded value that is assigned to a characteristic or attribute. Multiple measured values are collected in a measurement. Values can be **numerical**, e. g. a simple floating point number, **attributive** or **enumerated**. 
 
- **Enumerated** characteristics are those that consider the number of a certain characteristic. If you examine a painted component for damaged spots, you can also count the occurrences. If the part has two damaged spots, this again represents a category, namely the parts with the exact number of two defects. These characteristics are therefore not "measurable" in the conventional sense.
-<hr>
+Values of **attributive** characteristics can be categorized. An example would be the result of a quality inspection, which can either be *passed* or *failed*. These categories can be counted, so in this case the number would be two.
 
-### Inspection Plan
-Inspection plans specify the structure of parts, characteristics and possible sub-parts and child characteristics. In order to get a better understanding of these, they are displayed in a tree structure. The uppermost part forms a root part, and the entries following in further levels form subnodes or leaves. The connected PiWeb Server always contains a root node for all objects, from which any arbitrary part or characteristic can be reached. <br>
-You can create inspection plans on the basis of the desired parts you want to measure and monitor. The inspection plan allows nesting, so that parts and characteristics can again contain such entities. Characteristics cannot contain any parts.
+**Enumerated** characteristics are those that consider the number of a certain characteristic. If you examine a painted component for damaged spots, you can also count the occurrences. If the part has two damaged spots, this again represents a category, namely the parts with the exact number of two defects. These characteristics are therefore not “measurable” in the conventional sense.
 
-The following image shows an example of a simple inspection plan:
+#### Example of inspection plan with measurements
+The following picture shows an example of an inspection plan and related measurements containing measured values. The inspection plan contains the target value while the measurements provide the actual measured values.<br>
+<br>
+<img src="/PiWeb-Api/images/inspectionPlanAndMeasurementsExample.png" class="img-responsive center-block">
 
-<img src="/PiWeb-Api/images/example_tree.png" class="img-responsive center-block">
+### Entity details
+In the following diagram the already explained domain terms *part*, *characteristic*, *measurement* and *measured value* are displayed with the more general term *Entity*. An entity is an object that has certain properties and interaction possibilities. Entities form the center of the logic that runs within the system.<br>
+<br>
+<img src="/PiWeb-Api/images/entityDetails.png" class="img-responsive center-block">
 
->{{ site.images['info'] }} The inspection plan contains the target values, while measurements contain the actually measured data.
+#### Additional data
+Additional data are files that can be attached to any entity in the inspection plan. This can be text files, images, log files, CAD models or any binary file. There is no limit to the number of files. They can be edited or removed as necessary.
 
-<hr>
+#### Attribute value and catalog entry
+Each entity can have several attribute values which can be seen as their properties. Such a value can have the data type `string`, `integer`, `floating point`, `data` and `catalog`. The last data type belongs to the specific attribute value, the catalog entry whose possible values are defined in a catalog.
+
+#### Attribute
+An attribute defines an attribute value including its data type and key. Each specific attribute defines where they can be used. For each of the four entities a separate type of attribute exists: *part attribute*, *characteristic attribute*, *measurement attribute* and *measured value attribute*. Examples for part attributes are: part ID, factory area and short description. Examples for characteristic attributes are: characteristic ID, upper limit and target value.
+Additionally it is also possible to specify attributes for a catalog entry which is an *catalog attribute*.
+
+The unique key of an attribute is important, as it has the purpose of an identifier for PiWeb attributes. The time/date attribute as an example has the key K4. PiWeb already knows a lot of important attributes and their keys by default, which is why changing them is not advised.
+
+Here are some examples for common attributes known by default:
+
+- *Measured value: K1*<br>
+  The attribute of a measured value, which contains the actual value.
+- *Time/Date: K4*<br>
+  The date of measurement.
+- *Target value: K2100*<br>
+  The desired value a characteristic should have, to which the actual measured value should be as close as possible
+- *Lower/Upper limit: K2110/K2111*<br>
+  The limit of acceptable tolerance between the target value and actual values.
+- *Lower/Upper control limit: K8012/K8013*<br>
+  A limit that determines when actions regarding production should be taken based on the number of bad parts
+- *Lower/Upper warning limit: K8014/K8015*<br>
+  A limit that determines when a warning about bad values should be triggered
 
 ### Configuration
-The configuration defines attributes and catalogs. Both can be created, edited or removed.
-
-#### Attributes
-Characteristic and attribute have a similar meaning, but need to be distinguished in PiWeb. Attributes are divided into four groups according to their affiliation to an entity. Therefore, there are part-, characteristic-, measurement- and measured value attributes. These can be seen as properties of an entity. For example, a characteristic can contain attributes such as characteristic-ID, upper and lower limit, target value, and much more. For parts there are attributes like part-ID, the factory area or a short description. The most important attribute of a measured value is the actual value, but there are no restrictions.
-
-Attributes are part of the configuration, and can be set individually. You assign a unique key to each attribute, define description, data type and length. The available data types are `string`, `integer`, `floating-point`, `date` and `catalog`. Catalog entries also have attributes and form a fifth group, although they are not an explicit entity.
-
-The unique key is important, as it has the purpose of an identifier for PiWeb to identify different attributes. The time/date attribute as an example has the key K4. PiWeb knows different important attributes and their keys, changing them is not advised.
-
-#### Important Attributes
-To get a better understanding of important attributes, you can find some basic information below:
-
-+ *Measured value: K1* <br>
-The attribute of a measured value, which contains the actual value.
-
-+ *Time/Date: K4* <br>
-The date of measurement.
-
-+ *Target value: K2100* <br>
-The desired value a characteristic should have, to which the actual measured value should be as close as possible
-
-+ *Lower/Upper limit: K2110/K2111*<br>
-The limit of acceptable tolerance between the target value and actual values.
-
-+ *Lower/Upper control limit: K8012/K8013*<br>
-A limit that determines when actions regarding production should be taken based on the number of bad parts
-
-+ *Lower/Upper warning limit: K8014/K8015*<br>
-A limit that determines when a warning about bad values should be triggered
+In the PiWeb configuration attributes can be defined ready to be used at parts, characteristics, measurements, measured values and catalog entries. The available catalogs and their contained catalog entries are specified as well.<br>
+<br>
+<img src="/PiWeb-Api/images/configuration.png" class="img-responsive center-block">
 
 #### Catalogs
 Catalogs represent a collection of different values. An entry has a number and can have several other attributes. Catalogs are used to simplify decisions at certain points by specifying the available values. The user does not have to enter data by hand, and cannot cause unintended typing errors.
 
- An example would be the machine catalog. This contains the different machines which could be used to measure a part. Additional information for each machine can be noted there too. Now an inspector selects the responsible machine from the catalog when entering a measurement, which makes things a lot easier. Other values than those stored in the catalog are not possible. Also simple variants, like the direction catalog, which contains directions like left and right, are possible.
-<hr>
-### Additional Data
-Additional data are attachments that can be added to any entity in the inspection plan. This can be text, images, log files, CAD models or any binary file. There is no limit to the number of files and you can edit or remove additional data as desired.
+An example would be the machine catalog. This contains the different machines which could be used to measure a part. Additional information for each machine can be noted there too. Now an inspector selects the responsible machine from the catalog when entering a measurement, which makes things a lot easier. Other values than those stored in the catalog are not possible. Also simple variants, like the direction catalog, which contains directions like left and right, are possible.
 
 <h2 id="{{page.sections['general']['secs']['services'].anchor}}">{{page.sections['general']['secs']['services'].title}}</h2>
 
