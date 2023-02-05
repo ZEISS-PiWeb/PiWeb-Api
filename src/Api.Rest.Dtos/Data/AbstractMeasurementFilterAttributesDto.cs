@@ -34,6 +34,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		protected const string OrderByParamName = "order";
 
 		protected const string SearchConditionParamName = "searchCondition";
+		protected const string CaseSensitiveParamName = "caseSensitive";
 		protected const string AggregationParamName = "aggregation";
 		protected const string FromModificationDateParamName = "fromModificationDate";
 		protected const string ToModificationDateParamName = "toModificationDate";
@@ -90,6 +91,12 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		/// Gets or sets the search condition that should be used.
 		/// </summary>
 		public GenericSearchConditionDto SearchCondition { get; set; }
+
+		/// <summary>
+		/// Gets or sets a flag if the search criteria should be compared case sensitive, case insensitive,
+		/// or by database default (if left to null)
+		/// </summary>
+		public bool? CaseSensitive { get; set; }
 
 		/// <summary>
 		/// Gets or sets the list of measurement uuids that should be returned.
