@@ -5,7 +5,7 @@
 {% assign version="1.9.0" %}
 {% capture features %}
     <ul>
-        <li>Endpoint for fetching measurements and values was extended by parameter <i>limitResultPerPart</i></li>
+        <li>Endpoint for fetching measurements and values was extended by parameter <i>caseSensitive</i></li>
     </ul>
 {% endcapture %}
 
