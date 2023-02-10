@@ -3,7 +3,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
-/* (c) Carl Zeiss 2015                             */
+/* (c) Carl Zeiss 2023                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #endregion
@@ -64,16 +64,16 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Converter
 
 			var fields = CollectFields( jToken );
 
-			if( fields.Contains( GenericSearchConditionDto.ConditionFieldName ) )
+			if( fields.Contains( GenericSearchConditionDto.NotDiscriminator ) )
 				return serializer.Deserialize<GenericSearchNotDto>( jsonReader );
 
-			if( fields.Contains( GenericSearchConditionDto.ConditionsFieldName ) )
+			if( fields.Contains( GenericSearchConditionDto.AndDiscriminator ) )
 				return serializer.Deserialize<GenericSearchAndDto>( jsonReader );
 
-			if( fields.Contains( GenericSearchConditionDto.FieldNameFieldName ) )
+			if( fields.Contains( GenericSearchConditionDto.FieldConditionDiscriminator ) )
 				return serializer.Deserialize<GenericSearchFieldConditionDto>( jsonReader );
 
-			if( fields.Contains( GenericSearchConditionDto.AttributeFieldName ) )
+			if( fields.Contains( GenericSearchConditionDto.AttributeConditionDiscriminator ) )
 				return serializer.Deserialize<GenericSearchAttributeConditionDto>( jsonReader );
 
 			return null;

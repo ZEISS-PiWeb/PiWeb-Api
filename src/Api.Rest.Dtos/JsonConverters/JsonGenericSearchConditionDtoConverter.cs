@@ -3,7 +3,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss IMT (IZfM Dresden)                   */
 /* Softwaresystem PiWeb                            */
-/* (c) Carl Zeiss 2022                             */
+/* (c) Carl Zeiss 2023                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #endregion
@@ -64,21 +64,20 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters
 		{
 			var propertyNames = CollectPropertyNames( reader );
 
-			if( propertyNames.Contains( GenericSearchConditionDto.ConditionFieldName ) )
+			if( propertyNames.Contains( GenericSearchConditionDto.NotDiscriminator ) )
 				return JsonSerializer.Deserialize<GenericSearchNotDto>( ref reader, options );
 
-			if( propertyNames.Contains( GenericSearchConditionDto.ConditionsFieldName ) )
+			if( propertyNames.Contains( GenericSearchConditionDto.AndDiscriminator ) )
 				return JsonSerializer.Deserialize<GenericSearchAndDto>( ref reader, options );
 
-			if( propertyNames.Contains( GenericSearchConditionDto.AttributeFieldName ) )
+			if( propertyNames.Contains( GenericSearchConditionDto.AttributeConditionDiscriminator ) )
 				return JsonSerializer.Deserialize<GenericSearchAttributeConditionDto>( ref reader, options );
 
-			if( propertyNames.Contains( GenericSearchConditionDto.FieldNameFieldName ) )
+			if( propertyNames.Contains( GenericSearchConditionDto.FieldConditionDiscriminator ) )
 				return JsonSerializer.Deserialize<GenericSearchFieldConditionDto>( ref reader, options );
 
 			throw new NotImplementedException( "Encountered unknown search condition type" );
 		}
-
 
 		[NotNull]
 		private static HashSet<string> CollectPropertyNames( Utf8JsonReader reader )

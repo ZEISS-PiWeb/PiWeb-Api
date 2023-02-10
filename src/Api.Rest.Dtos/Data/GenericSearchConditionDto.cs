@@ -29,10 +29,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	{
 		#region constants
 
-		internal const string ConditionFieldName = "condition";
-		internal const string ConditionsFieldName = "conditions";
-		internal const string AttributeFieldName = "attribute";
-		internal const string FieldNameFieldName = "fieldName";
+		internal const string NotDiscriminator = "condition";
+		internal const string AndDiscriminator = "conditions";
+		internal const string AttributeConditionDiscriminator = "attribute";
+		internal const string FieldConditionDiscriminator = "fieldName";
 
 		#endregion
 	}
@@ -41,8 +41,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	{
 		#region properties
 
-		[JsonProperty( ConditionFieldName )]
-		[JsonPropertyName( ConditionFieldName )]
+		[JsonProperty( NotDiscriminator )]
+		[JsonPropertyName( NotDiscriminator )]
 		public GenericSearchConditionDto Condition { get; set; }
 
 		#endregion
@@ -70,8 +70,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 		#region properties
 
-		[JsonProperty( ConditionsFieldName )]
-		[JsonPropertyName( ConditionsFieldName )]
+		[JsonProperty( AndDiscriminator )]
+		[JsonPropertyName( AndDiscriminator )]
 		public IReadOnlyCollection<GenericSearchConditionDto> Conditions { get; set; }
 
 		#endregion
@@ -96,8 +96,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	{
 		#region properties
 
-		[JsonProperty( AttributeFieldName )]
-		[JsonPropertyName( AttributeFieldName )]
+		[JsonProperty( AttributeConditionDiscriminator )]
+		[JsonPropertyName( AttributeConditionDiscriminator )]
 		public ushort Attribute { get; set; }
 
 		#endregion
@@ -107,8 +107,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 	{
 		#region properties
 
-		[JsonProperty( FieldNameFieldName )]
-		[JsonPropertyName( FieldNameFieldName )]
+		[JsonProperty( FieldConditionDiscriminator )]
+		[JsonPropertyName( FieldConditionDiscriminator )]
 		public string FieldName { get; set; }
 
 		#endregion
