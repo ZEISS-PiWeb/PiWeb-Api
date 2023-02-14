@@ -110,14 +110,14 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			string requestedMeasurementAttributes,
 			string requestedValueAttributes,
 			string searchCondition,
-			string caseSensitive,
 			string aggregation,
 			string fromModificationDate,
 			string toModificationDate,
 			string mergeAttributes,
 			string mergeCondition,
 			string mergeMasterPart,
-			string limitResultPerPart = "-1" )
+			string limitResultPerPart = "-1",
+			string caseSensitive = null )
 		{
 			var items = new[]
 			{
