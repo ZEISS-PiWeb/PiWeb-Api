@@ -2,9 +2,9 @@
 area: sdk
 title: .NET SDK
 level: 0
-version: 7.1
+version: 8.0
 isCurrentVersion: false
-permalink: "/sdk/v7.1/"
+permalink: "/sdk/v8.0/"
 sections:
   general:
     title: General Information
@@ -50,7 +50,7 @@ sections:
 
 <div class="alert alert-info fade in">
   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  Updating from a version prior to version 6.0.0? Please follow our <a href="#migration" class="alert-link">migration guide</a> to adapt your application to recent changes!
+  This page is still a work in progress! It is posible that not all information are up to date!
 </div>
 
 {% include version_combobox.html %}
