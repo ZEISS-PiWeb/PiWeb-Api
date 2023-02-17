@@ -2,9 +2,9 @@
 area: sdk
 title: .NET SDK
 level: 0
-version: 7.1
-isCurrentVersion: false
-permalink: "/sdk/v7.1/"
+version: 7.2
+isCurrentVersion: true
+permalink: "/sdk/v7.2/"
 sections:
   general:
     title: General Information
