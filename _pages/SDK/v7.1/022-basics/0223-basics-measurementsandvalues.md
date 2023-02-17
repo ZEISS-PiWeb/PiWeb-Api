@@ -170,7 +170,6 @@ Property                                                                        
 <nobr><code>OrderDto[]</code> OrderBy</nobr>                                          | The sort order of the resulting measurements.
 <nobr><code>Guid[]</code> PartUuids</nobr>                                            | The list of parts that should be used to restrict the measurement search.
 <nobr><code>GenericSearchConditionDto</code> SearchCondition</nobr>                   | The search condition that should be used.
-<nobr><code>bool?</code> CaseSensitive</nobr>                                         | `true` if SearchCondition string should be compared case sensitive, `false` if SearchCondition string should be compared case insensitive. If left unassigned, comparison is done in a database-default way.
 <nobr><code>bool</code> IsUnrestricted</nobr>                                         | Convenience property to check if restrictions are empty (LimitResult, SearchCondition, PartUuids all empty)
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
