@@ -15,15 +15,15 @@ An inspection plan object contains entities of two different types - parts and c
 #### InspectionPlanDtoBase
 
 {% capture table %}
-Property                                          | Description
---------------------------------------------------|--------------------------------------------------------------------
-<nobr><code>AttributeDto[]</code> Attributes</nobr>  | A set of attributes which describes the entity.
-<nobr><code>string</code> Comment</nobr>          | A comment which describes the last inspection plan change. The comment is only returned if versioning is enabled in the server settings.
-<nobr><code>PathInformationDto</code> Path</nobr>    | The path of this entity which describes the entity's hierarchical structure.
-<nobr><code>string</code> this[ushort key]</nobr> | Indexer for accessing entity's attribute value directly with the specified key
-<nobr><code>DateTime</code> TimeStamp</nobr>      | Contains the date and time of when the entity was last updated.
-<nobr><code>Guid</code> Uuid</nobr>               | Identifies this inspection plan entity uniquely.
-<nobr><code>uint</code> Version</nobr>            | Contains the entity´s revision number. The revision number starts with `0` and is globally incremented by `1` each time changes are applied to the inspection plan.
+Property                                                                | Description
+------------------------------------------------------------------------|----------------------------------------------
+<nobr><code>IReadOnlyList&lt;Attribute&gt;</code> Attributes</nobr>     | A set of attributes which describes the entity.
+<nobr><code>string</code> Comment</nobr>                                | A comment which describes the last inspection plan change. The comment is only returned if versioning is enabled in the server settings.
+<nobr><code>PathInformation</code> Path</nobr>                       | The path of this entity which describes the entity's hierarchical structure.
+<nobr><code>string</code> this[ushort key]</nobr>                       | Indexer for accessing entity's attribute value directly with the specified key
+<nobr><code>DateTime</code> TimeStamp</nobr>                            | Contains the date and time of when the entity was last updated.
+<nobr><code>Guid</code> Uuid</nobr>                                     | Identifies this inspection plan entity uniquely.
+<nobr><code>uint</code> Version</nobr>                                  | Contains the entity´s revision number. The revision number starts with `0` and is globally incremented by `1` each time changes are applied to the inspection plan.
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
@@ -49,14 +49,14 @@ Parts as well as characteristic may contain a version history if versioning is e
 {% capture table %}
 Property                                               | Description
 -------------------------------------------------------|-----------------------------------------------------
-<nobr><code>InspectionPlanBase[]</code> History</nobr> | The version history for this inspection plan entity.
+<nobr><code>IReadOnlyList&lt;InspectionPlanBase&gt;</code> History</nobr> | The version history for this inspection plan entity.
 
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
-#### PathInformationDto
+#### PathInformation
 The inspection plan is organized in a tree structure but saved to the database in a flat representation. Path information helps to convert from flat to tree structure.
-A `PathInformationDto` object includes an array of entity's path elements. These path elements contain the following properties:
+A `PathInformation` object includes an array of entity's path elements. These path elements contain the following properties:
 
 #### PathElementDto
 
@@ -69,15 +69,15 @@ Property                                               | Description
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
->{{ site.headers['bestPractice'] }} To create a `PathInformationDto` object you might use the `PathHelper` class which includes several helper methods:
+>{{ site.headers['bestPractice'] }} To create a `PathInformation` object you might use the `PathHelper` class which includes several helper methods:
 
 {% capture table %}
 Method                                                                                                   | Description
 ---------------------------------------------------------------------------------------------------------|-----------------------------------------------------
-<nobr><code>PathInformationDto RoundtripString2PathInformation( string path )</code></nobr>              | Creates a path information object based on `path` parameter in roundtrip format ("structure:database path")
-<nobr><code>PathInformationDto String2PartPathInformation( string path )</code></nobr>                   | Creates a path information object based on `path` parameter including plain part structure
-<nobr><code>PathInformationDto String2CharacteristicPathInformation( string path )</code></nobr>         | Creates a path information object based on `path` parameter including plain characteristic structure
-<nobr><code>PathInformationDto DatabaseString2PathInformation( string path, string structure)</code></nobr>| Creates a path information object based on `path` and `structure` parameter
+<nobr><code>PathInformation RoundtripString2PathInformation( string path )</code></nobr>              | Creates a path information object based on `path` parameter in roundtrip format ("structure:database path")
+<nobr><code>PathInformation String2PartPathInformation( string path )</code></nobr>                   | Creates a path information object based on `path` parameter including plain part structure
+<nobr><code>PathInformation String2CharacteristicPathInformation( string path )</code></nobr>         | Creates a path information object based on `path` parameter including plain characteristic structure
+<nobr><code>PathInformation DatabaseString2PathInformation( string path, string structure)</code></nobr>| Creates a path information object based on `path` and `structure` parameter
 
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
@@ -143,7 +143,7 @@ await DataServiceClient.CreateCharacteristics( new[] {char1, char2, char3} );
 {{ site.headers['example'] }} Fetching different entities
 
 {% highlight csharp %}
-//Create PathInformationDto of "MetalPart"
+//Create PathInformation of "MetalPart"
 var partPath = PathHelper.String2PartPathInformation( "/MetalPart/" );
 
 //Fetch all parts below "MetalPart"
@@ -164,7 +164,7 @@ Not all endpoints provide extensive filter possibilities, as it is much more per
 {{ site.headers['example'] }} Deleting "MetalPart"
 
 {% highlight csharp %}
-//Create PathInformationDto of "MetalPart"
+//Create PathInformation of "MetalPart"
 var partPath = PathHelper.String2PartPathInformation("/MetalPart/");
 
 //Get the part from server, depth 0 to only get the exact part and no children

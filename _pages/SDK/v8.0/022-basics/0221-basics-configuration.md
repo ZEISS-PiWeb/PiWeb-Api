@@ -25,13 +25,13 @@ var partDescriptionKey = WellKnownKeys.Part.Description;
 {% capture table %}
 Property                                          | Description
 --------------------------------------------------|--------------------------------------------------------------------
-<nobr><code>AbstractAttributeDefinitionDto[]</code> AllAttributes</nobr>              | Returns a list of all attribute definitions in this configuration.
-<nobr><code>AttributeDefinitionDto[]</code> CatalogAttributes</nobr>                  | Returns a list of all attribute definitions for a catalog entry in this configuration.
-<nobr><code>AbstractAttributeDefinitionDto[]</code> CharacteristicAttributes</nobr>   | Returns a list of all characteristic attribute definitions in this configuration.
-<nobr><code>AbstractAttributeDefinitionDto[]</code> MeasurementAttributes</nobr>      | Returns a list of all measurement attribute definitions in this configuration.
-<nobr><code>AbstractAttributeDefinitionDto[]</code> PartAttributes</nobr>             | Returns a list of all part attribute definitions in this configuration.
-<nobr><code>AbstractAttributeDefinitionDto[]</code> ValueAttributes</nobr>            | Returns a list of all value attribute definitions in this configuration.
-<nobr><code>VersioningType</code> VersioningTypeDto</nobr>                            | Specifies how the server is performing inspection plan versioning.
+<nobr><code>IReadOnlyCollection&lt;AbstractAttributeDefinitionDto&gt;</code> AllAttributes</nobr>        | Returns a list of all attribute definitions in this configuration.
+<nobr><code>IReadOnlyList&lt;AttributeDefinitionDto&gt;</code> CatalogAttributes</nobr>                  | Returns a list of all attribute definitions for a catalog entry in this configuration.
+<nobr><code>IReadOnlyList&lt;AbstractAttributeDefinitionDto&gt;</code> CharacteristicAttributes</nobr>   | Returns a list of all characteristic attribute definitions in this configuration.
+<nobr><code>IReadOnlyList&lt;AbstractAttributeDefinitionDto&gt;</code> MeasurementAttributes</nobr>      | Returns a list of all measurement attribute definitions in this configuration.
+<nobr><code>IReadOnlyList&lt;AbstractAttributeDefinitionDto&gt;</code> PartAttributes</nobr>             | Returns a list of all part attribute definitions in this configuration.
+<nobr><code>IReadOnlyList&lt;AbstractAttributeDefinitionDto&gt;</code> ValueAttributes</nobr>            | Returns a list of all value attribute definitions in this configuration.
+<nobr><code>VersioningType</code> VersioningTypeDto</nobr>                                               | Specifies how the server is performing inspection plan versioning.
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 

@@ -21,7 +21,7 @@ Measurements contain measured values for specific characteristics, and belong to
 {% capture table %}
 Property                                          | Description
 --------------------------------------------------|------------------------------------------------------------------
-`AttributeDto[]` Attributes                       | The attributes that belong to that measurement
+`IReadOnlyList<Attribute>` Attributes             | The attributes that belong to that measurement
 `DateTime` Created                                | The time of creation, *set by server*
 `DateTime` LastModified                           | The time of the last modification, *set by server*
 `Guid` PartUuid                                   | The Uuid of the part to which the measurement belongs
@@ -36,12 +36,12 @@ A `SimpleMeasurementDto` contains important information about the measurement it
 
 #### DataMeasurementDto
 {% capture table %}
-Property                                          | Description
---------------------------------------------------|------------------------------------------------------------------
-`DataCharacteristicDto[]` Characteristics         | The affected characteristics and their measured values
+Property                                                      | Description
+--------------------------------------------------------------|------------------------------------------------------------------
+`IReadOnlyDictionary<Guid, DataValueDto>` Characteristics     | The affected characteristics (by uuid) and their measured values
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
-In most cases however you want to create a measurement with actual measured values. The `DataMeasurementDto` class contains an additional list of `DataCharacteristicDto` objects, which store information about a characteristic and the corresponding value.
+In most cases however you want to create a measurement with actual measured values. The `DataMeasurementDto` class contains an additional dictionary which stores information about a characteristic and the corresponding value, whereas the characteristic uuid is the key and the DataValueDto represents the value.
 <hr>
 ### Creating measurements and measured values
 
@@ -61,43 +61,40 @@ await DataServiceClient.CreateParts( new[] { part } );
 await DataServiceClient.CreateCharacteristics( new[] { characteristic } );
 
 //Create value with characteristic
-var valueAndCharacteristic = new DataCharacteristicDto
+var valueAndCharacteristic = new Dictionary<Guid, DataValueDto>()
 {
-  //Always specify both, path and uuid of the characteristic. All other properties are obsolete
-  Path = characteristic.Path,
-  Uuid = characteristic.Uuid,
-  Value = new DataValueDto( 0.5 ) //This is your measured value!
+  { characteristic.Uuid, new DataValueDto( 0.5 ) } //This is your characteristic and the measured value!
 };
 
-//Create a measurement and assign the value-characteristic combination
+//Create a measurement and assign the characteristic-value dictionary
 var measurement = new DataMeasurementDto
 {
   Uuid = Guid.NewGuid(),
   PartUuid = part.Uuid,
   Time = DateTime.Now,
-  Characteristics = new[] { valueAndCharacteristic }
+  Characteristics = valueAndCharacteristic
 };
 
 //Create measurement on the server
 await DataServiceClient.CreateMeasurementValues( new[] { measurement } );
 {% endhighlight %}
-The `DataCharacteristicDto` represents a connection between an actual measured value and a characteristic. It is linked to the characteristic via its path and uuid, and contains the value in form of a `DataValueDto` object.
+The `Characteristics` dictionary contains entries, each representing a connection between an actual measured value and a characteristic. It is linked to the characteristic via its uuid and contains the value in form of a `DataValueDto` object.
 >{{ site.images['info'] }} The method `CreateMeasurementValues` is used to create measurements *with* measured values, not only measured values alone.
 
->{{ site.images['info'] }} The `Value` property in `DataCharacteristicDto` is a shortcut to the attribute with key *K1*, which is the measured value.
+>{{ site.images['info'] }} The `DataValueDto( numericalValue )` constructor without key in above example is a shortcut to the attribute with key *K1*, which is the measured value.
 
 >{{ site.images['warning'] }} *K1* is always associated with the measured value, changing this key is absolutely not advised as it would result in unexpected behavior!
 
-Instead of using the `Value` property you can access the measured value attribute like any other attribute:
+Instead of using this short version you can also access the measured value attribute like any other attribute:
 
 {{ site.headers['example'] }} Writing values using the attribute
 {% highlight csharp %}
 //Surrounding code is skipped here, see above example for details
 
 //Create the DataValueDto and add the attribute with value
-valueAndCharacteristic.Value = new DataValueDto
+var value = new DataValueDto
 {
-  Attributes = new[] { new AttributeDto( WellKnownKeys.Value.MeasuredValue, 0.5 ) }
+  Attributes = new[] { new Attribute( WellKnownKeys.Value.MeasuredValue, 0.5 ) }
   //You can set other attributes for the entity Value (if defined) here too
 };
 {% endhighlight %}
@@ -120,10 +117,10 @@ var measurement = new DataMeasurementDto
   Time = DateTime.Now,
   Attributes = new[]
     {
-      new AttributeDto( measurementAttributeDefinition.Key, "Ryan, Andrew" )
+      new Attribute( measurementAttributeDefinition.Key, "Ryan, Andrew" )
       //You can again set other attributes for the entity Measurement (if defined) here
     },
-  Characteristics = new[] {...}
+  Characteristics = {...}
 };
 
 //Create measurement on the server
@@ -138,8 +135,6 @@ This property is a shortcut to the attribute *Time* with key *K4*.
 
 Next to creating or updating measurements, another important functionality is fetching those measurements and measured values according to different criteria.
 
->{{ site.images['info'] }} To improve performance path information of characteristics in `DataMeasurementDto`s are always blank when fetching data.
-
 {{ site.headers['example'] }} Fetching measurements of a part
 {% highlight csharp %}
 //Create PathInformation of the desired part that contains measurements
@@ -151,7 +146,7 @@ var fetchedMeasurements = await DataServiceClient.GetMeasurements( partPath );
 //Or fetch all measurements of this part with measured values
 var fetchedMeasurementsWithValues = await DataServiceClient.GetMeasurementValues( partPath );
 {% endhighlight %}
-This is the simplest way to fetch measurements and the associated measured values as the unfiltered method returns all measurements of the specified part. Each measurement then contains a `DataCharacteristicDto` objects linking values to characteristics. Since this can result in a large collection of results you have the possibility to create a filter based on different criteria.
+This is the simplest way to fetch measurements and the associated measured values as the unfiltered method returns all measurements of the specified part. Each measurement then contains a `IReadOnlyDictionary<Guid, DataValueDto>` *Characteristics* linking values to characteristics. Since this can result in a large collection of results you have the possibility to create a filter based on different criteria.
 This can be done by using `MeasurementFilterAttributesDto` which is derived from `AbstractMeasurementFilterAttributesDto`:
 
 <img src="/PiWeb-Api/images/v6/measurementFilterAttributes_model.png" class="img-responsive center-block">
@@ -166,11 +161,10 @@ Property                                                                        
 <nobr><code>DateTime?</code> ToModificationDate</nobr>                                | Specifies a date to select all measurements that where modified before that date.
 <nobr><code>int</code> LimitResult</nobr>                                             | The maximum number of measurements that should be returned, unlimited if set to -1 (default).
 <nobr><code>int</code> LimitResultPerPart </nobr>                                     | Restricts the number of result items per part. This parameter only takes effect in combination with either PartPath & Deep or PartUuids:<br> PartPath & Deep: trigger a deep search returning at max LimitResultPerPart measurements for each child part.<br> PartUuids: return at max LimitResultPerPart measurements for each specified part. Unlimited if set to -1 (default).
-<nobr><code>Guid[]</code> MeasurementUuids</nobr>                                     | List of uuids of measurements that should be returned.
-<nobr><code>OrderDto[]</code> OrderBy</nobr>                                          | The sort order of the resulting measurements.
-<nobr><code>Guid[]</code> PartUuids</nobr>                                            | The list of parts that should be used to restrict the measurement search.
+<nobr><code>IReadOnlyList&lt;Guid&gt;</code> MeasurementUuids</nobr>                  | List of uuids of measurements that should be returned.
+<nobr><code>IReadOnlyList&lt;OrderDto&gt;</code> OrderBy</nobr>                       | The sort order of the resulting measurements.
+<nobr><code>IReadOnlyList&lt;Guid&gt;</code> PartUuids</nobr>                         | The list of parts that should be used to restrict the measurement search.
 <nobr><code>GenericSearchConditionDto</code> SearchCondition</nobr>                   | The search condition that should be used.
-<nobr><code>bool?</code> CaseSensitive</nobr>                                         | `true` if SearchCondition string should be compared case sensitive, `false` if SearchCondition string should be compared case insensitive. If left unassigned, comparison is done in a database-default way.
 <nobr><code>bool</code> IsUnrestricted</nobr>                                         | Convenience property to check if restrictions are empty (LimitResult, SearchCondition, PartUuids all empty)
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
@@ -180,8 +174,8 @@ The class `MeasurementValueFilterAttributesDto` contains further possibilities.
 {% capture table %}
 Property                                                                   | Description
 ---------------------------------------------------------------------------|------------------------------------------------------------------
-<nobr><code>Guid[]</code> CharacteristicsUuidList</nobr>                   | The list of characteristics including its measured values that should be returned.
-<nobr><code>ushort[]</code> MergeAttributes</nobr>                         | The list of primary measurement keys to be used for joining measurements across multiple parts on the server side.
+<nobr><code>IReadOnlyList&lt;Guid&gt;</code> CharacteristicsUuidList</nobr>                   | The list of characteristics including its measured values that should be returned.
+<nobr><code>IReadOnlyList&lt;ushort&gt;</code> MergeAttributes</nobr>                         | The list of primary measurement keys to be used for joining measurements across multiple parts on the server side.
 <nobr><code>MeasurementMergeConditionDto</code> MergeCondition</nobr>         | Specifies the condition that must be met when merging measurements across multiple parts using a primary key. Default value is <code>MeasurementMergeConditionDto.MeasurementsInAllParts</code>.
 <nobr><code>Guid</code> MergeMasterPart</nobr>                             | Specifies the part to be used as master part when merging measurements across multiple parts using a primary key.
 <nobr><code>AttributeSelector</code> RequestedMeasurementAttributes</nobr> | The selector for the measurement attributes. Default: all
@@ -222,7 +216,7 @@ var fetchedMeasurements = await DataServiceClient.GetMeasurementValues(
 {% endhighlight %}
 To retrieve only a subset of measurement attributes we set `RequestedMeasurementAttributes`, which requires an `AttributeSelector`. Simply add the keys of the desired attributes to the `Attributes` property, so in this case *time*, *inspector name* and *contract* attributes. The property `RequestedValueAttributes` works the same way for measured value attributes.
 
->{{ site.images['info'] }} The measured value attribute `K1` is always returned in the `Value` property of a `DataCharacteristicDto`, even when not explicitly requested in `AttributeSelector`.
+>{{ site.images['info'] }} The measured value attribute `K1` is always returned, even when not explicitly requested in `AttributeSelector`.
 
 {{ site.headers['example'] }} Using search conditions
 {% highlight csharp %}

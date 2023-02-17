@@ -157,12 +157,12 @@ The API offers the class `StringUuidTools` containing different useful methods f
 {% capture table %}
 Method                                          															| Description
 ------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------
-<nobr><code>void CheckUuid( RawDataEntityDto entity, string uuid )</code></nobr> 								| Check if a Uuid has the valid syntax. Throws an `ArgumentOutOfRangeException` if not.
-<nobr><code>void CheckUuids( RawDataEntityDto entity, IEnumerable&lt;string&gt; uuids )</code></nobr> 			|  Check a list of Uuids for valid syntax. Throws an `ArgumentOutOfRangeException` if a Uuid is not correct.
+<nobr><code>void CheckUuid( RawDataEntityDto entity, string uuid )</code></nobr> 							| Check if a Uuid has the valid syntax. Throws an `ArgumentOutOfRangeException` if not.
+<nobr><code>void CheckUuids( RawDataEntityDto entity, IEnumerable&lt;string&gt; uuids )</code></nobr> 		|  Check a list of Uuids for valid syntax. Throws an `ArgumentOutOfRangeException` if a Uuid is not correct.
 <nobr><code>string CreateStringUuidPair( Guid measurementGuid, Guid characteristicGuid )</code></nobr> 		| Creates a string containig a measurementUuid and a characteristicUuid in the form measurementUuid&#x007C;characteristicUuid.
 <nobr><code>bool IsStringUuidPair( string uuidPair )</code></nobr> 											| Checks if a given string is a unique UUID pair (in the form measurementUuid&#x007C;characteristicUuid).
 <nobr><code>ValueRawDataIdentifier SplitStringUuidPair( string uuidPair )</code></nobr> 					| Splits a string containig a measurementUuid and a characteristicUuid in the form measurementUuid&#x007C;characteristicUuid.
-<nobr><code>List<Guid> StringUuidListToGuidList( IEnumerable&lt;string&gt; uuids )</code></nobr> 			| Creates a list of Uuids from a list of Uuid strings.
+<nobr><code>IReadOnlyList<Guid> StringUuidListToGuidList( IEnumerable&lt;string&gt; uuids )</code></nobr> 	| Creates a list of Uuids from a list of Uuid strings.
 <nobr><code>Guid StringUuidToGuid( string uuid )</code></nobr> 												| Create a Uuid from a Uuid string.
 <nobr><code>bool TrySplitStringUuidPair( string uuidPair, out ValueRawDataIdentifierDto result )</code></nobr> | Try to splits a string containig a measurementUuid and a characteristicUuid in the form measurementUuid&#x007C;characteristicUuid.
 {% endcapture %}
