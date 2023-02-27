@@ -2,9 +2,9 @@
 area: sdk
 title: .NET SDK
 level: 0
-version: 8.0
-isCurrentVersion: false
-permalink: "/sdk/v8.0/"
+version: 8.1
+isCurrentVersion: true
+permalink: "/sdk/v8.1/"
 sections:
   general:
     title: General Information
