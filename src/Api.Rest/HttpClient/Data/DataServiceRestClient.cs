@@ -422,6 +422,21 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			}
 		}
 
+		private async Task ThrowOnUnsupportedCaseSensitiveSearch( AbstractMeasurementFilterAttributesDto filter, CancellationToken cancellationToken )
+		{
+			if( filter.CaseSensitive.HasValue )
+			{
+				var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+				if( !featureMatrix.SupportsCaseSensitiveAttributeSearch )
+				{
+					throw new OperationNotSupportedOnServerException(
+						"Specifying case sensitivity for search conditions is not supported by this server.",
+						DataServiceFeatureMatrix.CaseSensitiveAttributeSearchMinVersion,
+						featureMatrix.CurrentInterfaceVersion );
+				}
+			}
+		}
+
 		#endregion
 
 		#region interface IDataServiceRestClient
@@ -805,6 +820,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			await ThrowOnUnsupportedMergeAttributes( filter?.MergeAttributes, cancellationToken );
 			await ThrowOnUnsupportedMergeMasterPart( filter, cancellationToken );
 			await ThrowOnUnsupportedLimitResultPerPart( filter, cancellationToken );
+			await ThrowOnUnsupportedCaseSensitiveSearch( filter, cancellationToken );
 
 			const string requestPath = "measurements";
 
@@ -908,6 +924,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		{
 			await ThrowOnUnsupportedDistinctMeasurementValueSearch( cancellationToken );
 			await ThrowOnUnsupportedLimitResultPerPart( filter, cancellationToken );
+			await ThrowOnUnsupportedCaseSensitiveSearch( filter, cancellationToken );
 
 			if( filter?.MeasurementUuids?.Count > 0 )
 			{
@@ -1031,6 +1048,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		{
 			await ThrowOnUnsupportedMergeAttributes( filter?.MergeAttributes, cancellationToken );
 			await ThrowOnUnsupportedLimitResultPerPart( filter, cancellationToken );
+			await ThrowOnUnsupportedCaseSensitiveSearch( filter, cancellationToken );
 
 			if( filter?.MeasurementUuids?.Count > 0 )
 				return await GetMeasurementValuesSplitByMeasurement( partPath, filter, cancellationToken ).ConfigureAwait( false );
