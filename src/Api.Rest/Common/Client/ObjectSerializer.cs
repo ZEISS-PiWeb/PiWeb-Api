@@ -62,7 +62,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 					Converters =
 					{
 						new Newtonsoft.Json.Converters.VersionConverter(),
-						new InspectionPlanDtoBaseConverter()
+						new InspectionPlanDtoBaseConverter(),
+						new GenericSearchConditionConverter()
 					}
 				};
 			}
@@ -121,7 +122,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			IAsyncEnumerable<T> IObjectSerializer.DeserializeAsyncEnumerable<T>( Stream stream, CancellationToken cancellationToken )
 			{
 				if( stream == null ) throw new ArgumentNullException( nameof( stream ) );
-								
+
 				async IAsyncEnumerable<T> DeserializeAsyncEnumerable()
 				{
 					var items = Deserialize<IEnumerable<T>>( stream );
@@ -154,7 +155,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 				Converters =
 				{
-					new JsonInspectionPlanDtoBaseConverter()
+					new JsonInspectionPlanDtoBaseConverter(),
+					new JsonGenericSearchConditionDtoConverter()
 				}
 			};
 

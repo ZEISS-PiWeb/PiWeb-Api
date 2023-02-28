@@ -1,5 +1,22 @@
 ======================================================
 -------------------------------------------------------------------------------------------
+ Version 8.2.0                                                                   
+-------------------------------------------------------------------------------------------
+======================================================
+
+==========================================
+ New Features
+==========================================
+
+- Add new property 'CaseSensitive' to AbstractMeasurementFilterAttributesDto
+○ specify if string comparison in SearchCondition should be done case sensitive when fetching measurements (if the PiWeb server supports this feature)
+
+- Add optional parameter 'bypassLocalCache' to OAuthHelper method GetAuthenticationInformationForDatabaseUrl
+○ defines whether locally cached token information are neither used nor updated
+
+
+======================================================
+-------------------------------------------------------------------------------------------
  Version 8.1.0                                                                   
 -------------------------------------------------------------------------------------------
 ======================================================

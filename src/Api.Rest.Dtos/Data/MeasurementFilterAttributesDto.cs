@@ -108,7 +108,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			string mergeAttributes,
 			string mergeCondition,
 			string mergeMasterPart,
-			string limitResultPerPart = "-1")
+			string limitResultPerPart = "-1",
+			string caseSensitive = null )
 		{
 			var items = new[]
 			{
@@ -120,6 +121,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				ValueTuple.Create( OrderByParamName, order ),
 				ValueTuple.Create( RequestedMeasurementAttributesParamName, requestedMeasurementAttributes ),
 				ValueTuple.Create( SearchConditionParamName, searchCondition ),
+				ValueTuple.Create( CaseSensitiveParamName, caseSensitive ),
 				ValueTuple.Create( StatisticsParamName, statistics ),
 				ValueTuple.Create( AggregationParamName, aggregation ),
 				ValueTuple.Create( FromModificationDateParamName, fromModificationDate ),
@@ -163,6 +165,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 						case SearchConditionParamName:
 							result.SearchCondition = SearchConditionParser.Parse( value );
 							break;
+						case CaseSensitiveParamName:
+							result.CaseSensitive = bool.Parse( value );
+							break;
 						case StatisticsParamName:
 							result.Statistics = (MeasurementStatisticsDto)Enum.Parse( typeof( MeasurementStatisticsDto ), value );
 							break;
@@ -188,7 +193,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				}
 				catch( Exception ex )
 				{
-					throw new InvalidOperationException( $"Invalid filter value '{value}' for parameter '{key}'. The can be specified via url parameter in the form of 'key=value'. The following keys are valid: {"partUuids: [list of part uuids]\r\n" + "deep: [True|False]\r\n" + "limitResult: [short]\r\n" + "measurementUuids: [list of measurement uuids]\r\n" + "measurementAttributes: [attribute keys csv|Empty for all attributes]\r\n" + "orderBy:[ushort asc|desc, ushort asc|desc, ...]\r\n" + "searchCondition:[search filter string]\r\n" + "aggregation:[Measurements|AggregationMeasurements|Default|All]\r\n" + "statistics:[None|Simple|Detailed]\r\n" + "mergeAttributes:[list of measurement attributes]\r\n" + "mergeCondition: [None|MeasurementsInAtLeastTwoParts|MeasurementsInAllParts]\r\n" + "mergeMasterPart: [part uuid]\r\n" + "fromModificationDate:[Date]\r\n" + "toModificationDate:[Date]"}", ex );
+					throw new InvalidOperationException( $"Invalid filter value '{value}' for parameter '{key}'. The can be specified via url parameter in the form of 'key=value'. The following keys are valid: {"partUuids: [list of part uuids]\r\n" + "deep = [True|False]\r\n" + "limitResult: [short]\r\n" + "measurementUuids: [list of measurement uuids]\r\n" + "measurementAttributes: [attribute keys csv|Empty for all attributes]\r\n" + "orderBy:[ushort asc|desc, ushort asc|desc, ...]\r\n" + "searchCondition:[search filter string]\r\n" + "caseSensitive: [True|False]\r\n" + "aggregation:[Measurements|AggregationMeasurements|Default|All]\r\n" + "statistics:[None|Simple|Detailed]\r\n" + "mergeAttributes:[list of measurement attributes]\r\n" + "mergeCondition: [None|MeasurementsInAtLeastTwoParts|MeasurementsInAllParts]\r\n" + "mergeMasterPart: [part uuid]\r\n" + "fromModificationDate:[Date]\r\n" + "toModificationDate:[Date]"}", ex );
 				}
 			}
 
@@ -236,6 +241,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				OrderBy = OrderBy,
 				RequestedMeasurementAttributes = RequestedMeasurementAttributes,
 				SearchCondition = SearchCondition,
+				CaseSensitive = CaseSensitive,
 				MeasurementUuids = MeasurementUuids,
 				AggregationMeasurements = AggregationMeasurements,
 				FromModificationDate = FromModificationDate,
@@ -274,6 +280,9 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 
 			if( SearchCondition != null )
 				result.Add( ParameterDefinition.Create( SearchConditionParamName, SearchConditionParser.GenericConditionToString( SearchCondition ) ) );
+
+			if( CaseSensitive != null && CaseSensitive.Value )
+				result.Add( ParameterDefinition.Create( CaseSensitiveParamName, CaseSensitive.ToString() ) );
 
 			if( Statistics != MeasurementStatisticsDto.None )
 				result.Add( ParameterDefinition.Create( StatisticsParamName, Statistics.ToString() ) );

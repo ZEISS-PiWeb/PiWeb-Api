@@ -55,6 +55,9 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		// Request using a limit per part when fetching measurements.
 		public static readonly Version LimitResultPerPartMinVersion = new Version( 1, 8 );
 
+		// Compare the search condition for strings case sensitive.
+		public static readonly Version CaseSensitiveAttributeSearchMinVersion = new Version( 1, 10 );
+
 		#endregion
 
 		#region constructors
@@ -89,6 +92,8 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		public bool SupportsAsyncMeasurementDeletion => CurrentInterfaceVersion >= AsyncMeasurementDeletionMinVersion;
 
 		public bool SupportsLimitResultPerPart => CurrentInterfaceVersion >= LimitResultPerPartMinVersion;
+
+		public bool SupportsCaseSensitiveAttributeSearch => CurrentInterfaceVersion >= CaseSensitiveAttributeSearchMinVersion;
 
 		#endregion
 	}

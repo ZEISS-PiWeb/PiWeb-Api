@@ -29,6 +29,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 	#endregion
 
+	/// <summary>
+	/// Provides a number of useful methods for handling OAuth authentication.
+	/// </summary>
 	public static class OAuthHelper
 	{
 		#region constants
@@ -148,14 +151,14 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		private static OAuthTokenCredential TryGetCurrentOAuthToken( string instanceUrl, ref string refreshToken )
 		{
 			// if access token is still valid (5min margin to allow for clock skew), just return it from the cache
-			if( AccessTokenCache.TryGetCredential( instanceUrl, out var result ) )
-			{
-				if( string.IsNullOrEmpty( refreshToken ) )
-					refreshToken = result.RefreshToken;
+			if( !AccessTokenCache.TryGetCredential( instanceUrl, out var result ) )
+				return null;
 
-				if( result.AccessTokenExpiration.AddMinutes( -5 ) > DateTime.UtcNow )
-					return result;
-			}
+			if( string.IsNullOrEmpty( refreshToken ) )
+				refreshToken = result.RefreshToken;
+
+			if( result.AccessTokenExpiration.AddMinutes( -5 ) > DateTime.UtcNow )
+				return result;
 
 			return null;
 		}
@@ -185,28 +188,32 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 				tokenResponse.RefreshToken );
 		}
 
-		private static async Task<OAuthTokenCredential> TryGetOAuthTokenFromAuthorizeResponseAsync( TokenClient tokenClient, CryptoNumbers cryptoNumbers, AuthorizeResponse response )
+		private static async Task<OAuthTokenCredential> TryGetOAuthTokenFromAuthorizeResponseAsync(
+			TokenClient tokenClient,
+			CryptoNumbers cryptoNumbers,
+			AuthorizeResponse response )
 		{
 			if( response == null )
 				return null;
 
-			// claims des IdentityToken decodieren
+			// decode the claim's IdentityToken
 			var claims = DecodeSecurityToken( response.IdentityToken ).Claims.ToArray();
 
-			// die folgenden validierungen sind notwendig, um diversen CSRF / man in the middle / etc. Angriffsszenarien zu begegnen
-			// state validieren
+			// the following validation is necessary to protect against several kinds of CSRF / man-in-the-middle and other attack scenarios
+			// state validation
 			if( !string.Equals( cryptoNumbers.State, response.State, StringComparison.Ordinal ) )
 				throw new InvalidOperationException( "invalid state value in openid service response." );
 
-			// nonce validieren
+			// nonce validation
 			if( !ValidateNonce( cryptoNumbers.Nonce, claims ) )
 				throw new InvalidOperationException( "invalid nonce value in identity token." );
 
-			// c_hash validieren
+			// c_hash validation
 			if( !ValidateCodeHash( response.Code, claims ) )
 				throw new InvalidOperationException( "invalid c_hash value in identity token." );
 
-			// code eintauschen gegen access token und refresh token, dabei den code verifier mitschicken, um man-in-the-middle Angriff auf authorization code zu begegnen (PKCE)
+			// exchange the code for the access and refresh token, also send the code verifier,
+			// to handle man-in-the-middle attacks against the authorization code (PKCE)
 			var tokenResponse = await tokenClient.RequestAuthorizationCodeTokenAsync(
 				code: response.Code,
 				redirectUri: RedirectUri,
@@ -255,92 +262,127 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			} );
 		}
 
-		public static async Task<OAuthTokenCredential> GetAuthenticationInformationForDatabaseUrlAsync( string databaseUrl, string refreshToken = null, Func<OAuthRequest, Task<OAuthResponse>> requestCallbackAsync = null )
+		/// <summary>
+		/// Retrieves authentication information for a given database URL.
+		/// </summary>
+		/// <param name="databaseUrl">Database URL to retrieve authentication information for.</param>
+		/// <param name="refreshToken">Optional refresh token that is used to renew the authentication information.</param>
+		/// <param name="requestCallbackAsync">Optional callback to request the user to interactively authenticate.</param>
+		/// <param name="bypassLocalCache">Defines whether locally cached token information are neither used nor updated.</param>
+		/// <returns>A new <see cref="OAuthTokenCredential"/> instance, or <c>null</c>, if no token could be retrieved.</returns>
+		public static async Task<OAuthTokenCredential> GetAuthenticationInformationForDatabaseUrlAsync(
+			string databaseUrl,
+			string refreshToken = null,
+			Func<OAuthRequest, Task<OAuthResponse>> requestCallbackAsync = null,
+			bool bypassLocalCache = false )
 		{
 			var instanceUrl = GetInstanceUrl( databaseUrl );
 
-			var result = TryGetCurrentOAuthToken( instanceUrl, ref refreshToken );
-			if( result != null )
-				return result;
+			if( !bypassLocalCache )
+			{
+				var cachedToken = TryGetCurrentOAuthToken( instanceUrl, ref refreshToken );
+				if( cachedToken != null )
+					return cachedToken;
+			}
 
 			var discoveryInfo = await GetDiscoveryInfoAsync( instanceUrl ).ConfigureAwait( false );
 			if( discoveryInfo.IsError )
 				return null;
 
 			var tokenClient = CreateTokenClient( discoveryInfo.TokenEndpoint );
-			result = await TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken ).ConfigureAwait( false );
+			var result = await TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken ).ConfigureAwait( false );
 			if( result != null )
 			{
-				AccessTokenCache.Store( instanceUrl, result );
+				if( !bypassLocalCache )
+					AccessTokenCache.Store( instanceUrl, result );
+
 				return result;
 			}
 
 			// no refresh token or refresh token expired, do the full auth cycle eventually involving a password prompt
-			if( requestCallbackAsync != null )
-			{
-				var cryptoNumbers = new CryptoNumbers();
-				var startUrl = CreateOAuthStartUrl( discoveryInfo.AuthorizeEndpoint, cryptoNumbers );
+			if( requestCallbackAsync == null )
+				return null;
 
-				var request = new OAuthRequest( startUrl, RedirectUri );
-				var response = ( await requestCallbackAsync( request ).ConfigureAwait( false ) )?.ToAuthorizeResponse();
-				if( response != null )
-				{
-					result = await TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response ).ConfigureAwait( false );
-					if( result != null )
-					{
-						AccessTokenCache.Store( instanceUrl, result );
-						return result;
-					}
-				}
-			}
+			var cryptoNumbers = new CryptoNumbers();
+			var startUrl = CreateOAuthStartUrl( discoveryInfo.AuthorizeEndpoint, cryptoNumbers );
 
-			return null;
+			var request = new OAuthRequest( startUrl, RedirectUri );
+			var response = ( await requestCallbackAsync( request ).ConfigureAwait( false ) )?.ToAuthorizeResponse();
+			if( response == null )
+				return null;
+
+			result = await TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response ).ConfigureAwait( false );
+			if( result == null )
+				return null;
+
+			if( !bypassLocalCache )
+				AccessTokenCache.Store( instanceUrl, result );
+
+			return result;
 		}
 
-		public static OAuthTokenCredential GetAuthenticationInformationForDatabaseUrl( string databaseUrl, string refreshToken = null, Func<OAuthRequest, OAuthResponse> requestCallback = null )
+		/// <summary>
+		/// Retrieves authentication information for a given database URL.
+		/// </summary>
+		/// <param name="databaseUrl">Database URL to retrieve authentication information for.</param>
+		/// <param name="refreshToken">Optional refresh token that is used to renew the authentication information.</param>
+		/// <param name="requestCallback">Optional callback to request the user to interactively authenticate.</param>
+		/// <param name="bypassLocalCache">Defines whether locally cached token information are neither used nor updated.</param>
+		/// <returns>A new <see cref="OAuthTokenCredential"/> instance, or <c>null</c>, if no token could be retrieved.</returns>
+		public static OAuthTokenCredential GetAuthenticationInformationForDatabaseUrl(
+			string databaseUrl,
+			string refreshToken = null,
+			Func<OAuthRequest, OAuthResponse> requestCallback = null,
+			bool bypassLocalCache = false )
 		{
 			var instanceUrl = GetInstanceUrl( databaseUrl );
 
-			var result = TryGetCurrentOAuthToken( instanceUrl, ref refreshToken );
-			if( result != null )
-				return result;
+			if( !bypassLocalCache )
+			{
+				var cachedToken = TryGetCurrentOAuthToken( instanceUrl, ref refreshToken );
+				if( cachedToken != null )
+					return cachedToken;
+			}
 
 			var discoveryInfo = GetDiscoveryInfoAsync( instanceUrl ).GetAwaiter().GetResult();
 			if( discoveryInfo.IsError )
 				return null;
 
 			var tokenClient = CreateTokenClient( discoveryInfo.TokenEndpoint );
-			result = TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken ).GetAwaiter().GetResult();
+			var result = TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken ).GetAwaiter().GetResult();
 			if( result != null )
 			{
-				AccessTokenCache.Store( instanceUrl, result );
+				if( !bypassLocalCache )
+					AccessTokenCache.Store( instanceUrl, result );
+
 				return result;
 			}
 
 			// no refresh token or refresh token expired, do the full auth cycle eventually involving a password prompt
-			if( requestCallback != null )
-			{
-				var cryptoNumbers = new CryptoNumbers();
-				var startUrl = CreateOAuthStartUrl( discoveryInfo.AuthorizeEndpoint, cryptoNumbers );
+			if( requestCallback == null )
+				return null;
 
-				var request = new OAuthRequest( startUrl, RedirectUri );
-				var response = requestCallback( request )?.ToAuthorizeResponse();
-				if( response != null )
-				{
-					result = TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response ).GetAwaiter().GetResult();
-					if( result != null )
-					{
-						AccessTokenCache.Store( instanceUrl, result );
-						return result;
-					}
-				}
-			}
+			var cryptoNumbers = new CryptoNumbers();
+			var startUrl = CreateOAuthStartUrl( discoveryInfo.AuthorizeEndpoint, cryptoNumbers );
 
-			return null;
+			var request = new OAuthRequest( startUrl, RedirectUri );
+			var response = requestCallback( request )?.ToAuthorizeResponse();
+
+			if( response == null )
+				return null;
+
+			result = TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response ).GetAwaiter().GetResult();
+			if( result == null )
+				return null;
+
+			if( !bypassLocalCache )
+				AccessTokenCache.Store( instanceUrl, result );
+
+			return result;
 		}
 
 		/// <summary>
-		/// Request target server for authentification settings.
+		/// Request target server for authentication settings.
 		/// </summary>
 		private static async Task<DiscoveryDocumentResponse> GetDiscoveryInfoAsync( string instanceUrl )
 		{
@@ -378,18 +420,21 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		{
 			var cHash = tokenClaims.FirstOrDefault( c => c.Type == JwtClaimTypes.AuthorizationCodeHash );
 
-			using( var sha = SHA256.Create() )
-			{
-				var codeHash = sha.ComputeHash( Encoding.ASCII.GetBytes( authorizationCode ) );
-				var leftBytes = new byte[ 16 ];
-				Array.Copy( codeHash, leftBytes, 16 );
+			using var sha = SHA256.Create();
 
-				var codeHashB64 = Base64Url.Encode( leftBytes );
+			var codeHash = sha.ComputeHash( Encoding.ASCII.GetBytes( authorizationCode ) );
+			var leftBytes = new byte[ 16 ];
+			Array.Copy( codeHash, leftBytes, 16 );
 
-				return string.Equals( cHash.Value, codeHashB64, StringComparison.Ordinal );
-			}
+			var codeHashB64 = Base64Url.Encode( leftBytes );
+
+			return string.Equals( cHash.Value, codeHashB64, StringComparison.Ordinal );
 		}
 
+		/// <summary>
+		/// Clears locally cached authentication information for a given database URL.
+		/// </summary>
+		/// <param name="databaseUrl">Database URL to clear authentication information for.</param>
 		public static void ClearAuthenticationInformationForDatabaseUrl( string databaseUrl )
 		{
 			var instanceUrl = GetInstanceUrl( databaseUrl );
@@ -399,6 +444,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			// https://identityserver.github.io/Documentation/docsv2/endpoints/endSession.html
 		}
 
+		/// <summary>
+		/// Clears all locally cached authentication information.
+		/// </summary>
 		public static void ClearAllAuthenticationInformation()
 		{
 			AccessTokenCache.Clear();

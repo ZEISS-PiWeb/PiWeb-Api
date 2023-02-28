@@ -24,8 +24,10 @@ namespace Zeiss.PiWeb.Api.Rest.Tests
 	{
 		#region members
 
-		private readonly HttpListener _Listener = new HttpListener();
+		private readonly HttpListener _Listener = new();
 		private readonly IDictionary<string, Func<string>> _Responses = new Dictionary<string, Func<string>>();
+		private readonly List<string> _ReceivedRequests;
+		private string _DefaultResponse;
 
 		#endregion
 
@@ -35,7 +37,14 @@ namespace Zeiss.PiWeb.Api.Rest.Tests
 		{
 			var prefix = $"http://+:{port}/";
 			_Listener.Prefixes.Add( prefix );
+			_ReceivedRequests = new List<string>();
 		}
+
+		#endregion
+
+		#region properties
+
+		public IEnumerable<string> ReceivedRequests => _ReceivedRequests;
 
 		#endregion
 
@@ -58,18 +67,21 @@ namespace Zeiss.PiWeb.Api.Rest.Tests
 			{
 				while( _Listener.IsListening )
 				{
-					var ctx = await _Listener.GetContextAsync();
+					var context = await _Listener.GetContextAsync();
+
+					if( context.Request.Url is not null )
+						_ReceivedRequests.Add( context.Request.Url.ToString() );
 
 					try
 					{
-						var rstr = CreateResponse( ctx.Request );
-						var buf = Encoding.UTF8.GetBytes( rstr );
-						ctx.Response.ContentLength64 = buf.Length;
-						await ctx.Response.OutputStream.WriteAsync( buf, 0, buf.Length );
+						var response = CreateResponse( context.Request );
+						var buf = Encoding.UTF8.GetBytes( response );
+						context.Response.ContentLength64 = buf.Length;
+						await context.Response.OutputStream.WriteAsync( buf, 0, buf.Length );
 					}
 					finally
 					{
-						ctx.Response.OutputStream.Close();
+						context.Response.OutputStream.Close();
 					}
 				}
 			} );
@@ -85,12 +97,17 @@ namespace Zeiss.PiWeb.Api.Rest.Tests
 			RegisterResponse( uri, () => response );
 		}
 
+		public void RegisterDefaultResponse( string response )
+		{
+			_DefaultResponse = response;
+		}
+
 		private string CreateResponse( HttpListenerRequest request )
 		{
-			if( _Responses.TryGetValue( request.RawUrl, out var response ) )
+			if( request.RawUrl != null && _Responses.TryGetValue( request.RawUrl, out var response ) )
 				return response();
 
-			return string.Empty;
+			return _DefaultResponse ?? string.Empty;
 		}
 
 		#endregion
