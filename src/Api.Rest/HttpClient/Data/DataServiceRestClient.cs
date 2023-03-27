@@ -424,7 +424,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 
 		private async Task ThrowOnUnsupportedCaseSensitiveSearch( AbstractMeasurementFilterAttributesDto filter, CancellationToken cancellationToken )
 		{
-			if( filter.CaseSensitive.HasValue )
+			if( filter is { CaseSensitive: { } } )
 			{
 				var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
 				if( !featureMatrix.SupportsCaseSensitiveAttributeSearch )
