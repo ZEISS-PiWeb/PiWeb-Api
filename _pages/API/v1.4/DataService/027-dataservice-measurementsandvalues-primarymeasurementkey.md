@@ -26,7 +26,7 @@ Please note that these are measurements from three different inspection plan par
 
  A very basic query to this measurement table would look like the following:
 
-| **Full query:** | `/measurements?&orderBy=4&limitResult=3` |
+| **Full query:** | `/measurements?order=4 desc&limitResult=3` |
 |------------------|--------------------------------------------------------------------|
 | **orderBy** | `4` |
 | **limitResult** | `3` |
@@ -44,7 +44,7 @@ In our example, we are using attribute `14` as our primary measurement key. PiWe
 >{{ site.images['info'] }} PiWeb needs the parameter `partUuids` to be specified when applying the primary measurement keys. Querys with the parameter `partPath` specified and the parameter `deep` set to `true` are **not allowed**.
 
 
-| **Full query:** | `/measurements?&orderBy=4&limitResult=3&partUuids={uuid1,uuid2,uuid3}&mergeAttributes={14}` |
+| **Full query:** | `/measurements?order=4 desc&limitResult=3&partUuids={uuid1,uuid2,uuid3}&mergeAttributes={14}` |
 |------------------|--------------------------------------------------------------------|
 | **mergeAttributes** | `{14}` |
 | **mergeCondition** | `MeasurementsInAllParts` **(default)** |
@@ -59,7 +59,7 @@ The query returns three measurements with the Key `O` since it's the only key th
 
 Compared to the last query, the result will also include measurements with keys, that appear in only two parts.
 
-| **Full query:** | `/measurements?&orderBy=4&limitResult=3&partUuids={uuid1,uuid2,uuid3}&mergeAttributes={14}&mergeCondition=MeasurementsInAtLeastTwoParts` |
+| **Full query:** | `/measurements?order=4 desc&limitResult=3&partUuids={uuid1,uuid2,uuid3}&mergeAttributes={14}&mergeCondition=MeasurementsInAtLeastTwoParts` |
 |------------------|--------------------------------------------------------------------|
 | **mergeAttributes** | `{14}` |
 | **mergeCondition** | `MeasurementsInAtLeastTwoParts` |
@@ -74,7 +74,7 @@ The result set contains measurements with the keys `O` and `J` because the measu
 
 Setting the `mergeCondition` to `None` will result in single, non-matched measurements to be returned.
 
-| **Full query:** | `/measurements?&orderBy=4&limitResult=3&partUuids={uuid1,uuid2,uuid3}&mergeAttributes={14}&mergeCondition=None` |
+| **Full query:** | `/measurements?order=4 desc&limitResult=3&partUuids={uuid1,uuid2,uuid3}&mergeAttributes={14}&mergeCondition=None` |
 |------------------|--------------------------------------------------------------------|
 | **mergeAttributes** | `{14}` |
 | **mergeCondition** | `None` |
@@ -89,7 +89,7 @@ All measurements will be returned, only limited by the parameter `limitResult` w
 
 When the parameter `mergeMasterPart` is set, PiWeb will search for unique values of the primary measurement key only on measurements of the specified part. Measurements that are not measured on the specified part will therefore be filtered.
 
-| **Full query:** | `/measurements?&orderBy=4&limitResult=3&partUuids={uuid1,uuid2,uuid3}&mergeAttributes={14}&mergeCondition=None&mergeMasterPart=uuid` |
+| **Full query:** | `/measurements?order=4 desc&limitResult=3&partUuids={uuid1,uuid2,uuid3}&mergeAttributes={14}&mergeCondition=None&mergeMasterPart=uuid` |
 |------------------|--------------------------------------------------------------------|
 | **mergeAttributes** | `{14}` |
 | **mergeCondition** | `None` |
