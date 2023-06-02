@@ -93,12 +93,12 @@ An add request consists of 3 mandatory parts:
 3. The *HTTP headers* must provide meta information about the file, see below for details.
 
 {% capture table %}
-HTTP header variable | Description                  | Example Value
----------------------|------------------------------|--------------------------------------
-Content-Disposition  | Includes the file name       | "MetalPart.meshModel"
-Content-Length       | Includes the length in bytes | 2090682
-Content-MD5          | Includes file's MD5 hash sum in Base64 format | "vfawarMBqArlUCEIW4IDkw=="
-Content-Type         | Includes file's MIME type    | "application/x-zeiss-piweb-meshmodel"
+HTTP header variable | Description                                                | Example Value
+---------------------|------------------------------------------------------------|--------------------------------------
+Content-Disposition  | Includes the file name                                     | "MetalPart.meshModel"
+Content-Length       | Includes the length in bytes                               | 2090682
+Content-Type         | Includes file's MIME type                                  | "application/x-zeiss-piweb-meshmodel"
+Content-MD5          | (*optional*) Includes file's MD5 hash sum in Base64 format | "vfawarMBqArlUCEIW4IDkw=="
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
@@ -107,6 +107,8 @@ Content-Type         | Includes file's MIME type    | "application/x-zeiss-piweb
 >{{site.images['info']}} When adding a file, you can pass the desired file key as part of the uri. If you pass -1 or no key, the next available key will automatically be assigned by the server (recommended) and can be read from the result.
 
 >{{site.images['warning']}} If you pass a key which is already assigned to another file, this file will be replaced.
+
+>{{site.images['info']}} Remember, when adding a file for a measured value, you need to specify the target uuid in a compound format of *measurementUuid&#124;characteristicUuid*, instead of one single uuid.
 
 {% endcapture %}
 
@@ -163,12 +165,13 @@ An update request consists of 3 mandatory parts:
 3. The *HTTP headers* must provide meta information about the file, see below for details.
 
 {% capture table %}
-HTTP header variable | Description                  | Example Value
----------------------|------------------------------|--------------------------------------
-Content-Disposition  | Includes the file name       | "MetalPart.meshModel"
-Content-Length       | Includes the length in bytes | 2090682
-Content-MD5          | Includes file's MD5 hash sum in Base64 format | "vfawarMBqArlUCEIW4IDkw=="
-Content-Type         | Includes file's MIME type    | "application/x-zeiss-piweb-meshmodel"
+HTTP header variable | Description                                                | Example Value
+---------------------|------------------------------------------------------------|--------------------------------------
+Content-Disposition  | Includes the file name                                     | "MetalPart.meshModel"
+Content-Length       | Includes the length in bytes                               | 2090682
+Content-Type         | Includes file's MIME type                                  | "application/x-zeiss-piweb-meshmodel"
+Content-MD5          | (*optional*) Includes file's MD5 hash sum in Base64 format | "vfawarMBqArlUCEIW4IDkw=="
+
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
