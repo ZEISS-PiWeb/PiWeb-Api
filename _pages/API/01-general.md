@@ -45,7 +45,7 @@ PiWeb is a quality data management system capable of saving, managing, retrievin
 [ZEISS PiWeb](https://www.zeiss.com/metrology/products/software/piweb.html "ZEISS Metrology products").
 
 ### What is the PiWeb API?
-The PiWeb API provides the public interface of the web service through which various requests can be sent to PiWeb Server. You can create, manage and remove data, or retrieve relevant files and information from PiWeb Server. The used architecture is based on REpresentational State Transfer (REST), a detailed description can be found [here](https://medium.com/@sagar.mane006/understanding-rest-representational-state-transfer-85256b9424aa "Understanding REST").
+The PiWeb API provides the public interface of the web service through which various requests can be sent to PiWeb Server. You can create, manage and remove data, or retrieve relevant files and information from PiWeb Server. The used architecture is based on REpresentational State Transfer (REST).
 
 **The API fulfils two purposes:**
 
