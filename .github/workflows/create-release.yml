@@ -9,4 +9,6 @@ on:
 jobs:
   release:
     uses: ZEISS-PiWeb/github-actions/.github/workflows/create-release.yml@main
+    with:
+      dotnet_version: "7.0.x"
     secrets: inherit

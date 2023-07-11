@@ -11,4 +11,5 @@ jobs:
     uses: ZEISS-PiWeb/github-actions/.github/workflows/feature-branch.yml@main
     with:
       do_pack: true  
+      dotnet_version: "7.0.x"
     secrets: inherit
