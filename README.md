@@ -1,4 +1,4 @@
-PiWeb-Api
+ZEISS PiWeb-Api
 =========
 
 [![Build on develop](https://github.com/ZEISS-PiWeb/PiWeb-Api/actions/workflows/develop.yml/badge.svg?branch=develop&event=push)](https://github.com/ZEISS-PiWeb/PiWeb-Api/actions/workflows/develop.yml)
