@@ -189,12 +189,21 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// <exception cref="ArgumentNullException"><paramref name="method"/> is <see langword="null" />.</exception>
 		public static Func<HttpRequestMessage> CreateWithAttachment( [NotNull] HttpMethod method, string relativeUri, Stream stream, string mimeType, long? contentLength, Guid? contentMD5, string contentDisposition, params ParameterDefinition[] parameterDefinitions )
 		{
-			if( method == null ) throw new ArgumentNullException( nameof( method ) );
+			if( method == null )
+				throw new ArgumentNullException( nameof( method ) );
+
+			if( !stream.CanSeek )
+				throw new ArgumentException( "The stream must be seekable.", nameof( stream ) );
 
 			if( method != HttpMethod.Post && method != HttpMethod.Put )
 				throw new ArgumentOutOfRangeException( $"CreateWithAttachment is not allowed for {method}. Valid HttpMethods are {HttpMethod.Post} or {HttpMethod.Put}" );
 
-			return () => CreateWithAttachmentInternal( method, relativeUri, stream, mimeType, contentLength, contentMD5, contentDisposition, parameterDefinitions );
+			var position = stream.Position;
+			return () =>
+			{
+				stream.Position = position;
+				return CreateWithAttachmentInternal( method, relativeUri, stream, mimeType, contentLength, contentMD5, contentDisposition, parameterDefinitions );
+			};
 		}
 
 		/// <summary>
