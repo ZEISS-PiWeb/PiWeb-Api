@@ -192,16 +192,25 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			if( method == null )
 				throw new ArgumentNullException( nameof( method ) );
 
-			if( !stream.CanSeek )
-				throw new ArgumentException( "The stream must be seekable.", nameof( stream ) );
-
 			if( method != HttpMethod.Post && method != HttpMethod.Put )
 				throw new ArgumentOutOfRangeException( $"CreateWithAttachment is not allowed for {method}. Valid HttpMethods are {HttpMethod.Post} or {HttpMethod.Put}" );
 
-			var position = stream.Position;
+			var position = stream.CanSeek ? stream.Position : (long?)null;
+			var attempt = 0;
+
 			return () =>
 			{
-				stream.Position = position;
+				attempt++;
+				if( attempt > 1 )
+				{
+					if( position == null )
+					{
+						throw new InvalidOperationException( "Second attempt to send the request failed. Either the first attempt " +
+							"must succeed by setting valid authentication information in advance or the stream must be seekable." );
+					}
+					stream.Position = position.Value;
+				}
+
 				return CreateWithAttachmentInternal( method, relativeUri, stream, mimeType, contentLength, contentMD5, contentDisposition, parameterDefinitions );
 			};
 		}
