@@ -84,16 +84,13 @@ namespace Zeiss.PiWeb.Api.Core
 				if( _Value != null )
 					return _Value;
 
-				if( RawValue is null )
-					return null;
-
-				if( RawValue is double doubleValue )
-					return doubleValue.ToString( "G17", CultureInfo.InvariantCulture );
-
-				if( RawValue is DateTime dateTimeValue )
-					return XmlConvert.ToString( dateTimeValue, XmlDateTimeSerializationMode.RoundtripKind );
-
-				return Convert.ToString( RawValue, CultureInfo.InvariantCulture );
+				return RawValue switch
+				{
+					null                   => null,
+					double doubleValue     => doubleValue.ToString( "G17", CultureInfo.InvariantCulture ),
+					DateTime dateTimeValue => XmlConvert.ToString( dateTimeValue, XmlDateTimeSerializationMode.RoundtripKind ),
+					_                      => Convert.ToString( RawValue, CultureInfo.InvariantCulture )
+				};
 			}
 		}
 
@@ -262,10 +259,9 @@ namespace Zeiss.PiWeb.Api.Core
 				if( date is null )
 					return null;
 
-				if( date.Value.Kind != DateTimeKind.Unspecified )
-					return date.Value.ToUniversalTime();
-
-				return new DateTime( date.Value.Ticks, DateTimeKind.Local );
+				return date.Value.Kind != DateTimeKind.Unspecified
+					? date.Value.ToUniversalTime()
+					: new DateTime( date.Value.Ticks, DateTimeKind.Local );
 			}
 			catch
 			{
@@ -294,25 +290,16 @@ namespace Zeiss.PiWeb.Api.Core
 			if( valueX.GetType() != valueY.GetType() )
 				return false;
 
-			if( valueX is int intX && valueY is int intY )
-				return intX == intY;
+			return valueX switch
+			{
+				int intX when valueY is int intY                               => intX == intY,
+				short shortX when valueY is short shortY                       => shortX == shortY,
 
-			if( valueX is short shortX && valueY is short shortY )
-				return shortX == shortY;
-
-			if( valueX is double doubleX && valueY is double doubleY )
-				return doubleX == doubleY;
-
-			if( valueX is DateTime dateTimeValueX && valueY is DateTime dateTimeValueY )
-				return DateTime.Equals( dateTimeValueX.ToUniversalTime(), dateTimeValueY.ToUniversalTime() );
-
-			return valueX.Equals( valueY );
-		}
-
-		/// <inheritdoc />
-		public override bool Equals( object obj )
-		{
-			return obj is Attribute other && Equals( other );
+				// ReSharper disable once CompareOfFloatsByEqualityOperator - Don't use Equals here. There is a test case comparing NaN to NaN which must result to false.
+				double doubleX when valueY is double doubleY                   => doubleX == doubleY,
+				DateTime dateTimeValueX when valueY is DateTime dateTimeValueY => DateTime.Equals( dateTimeValueX.ToUniversalTime(), dateTimeValueY.ToUniversalTime() ),
+				_                                                              => valueX.Equals( valueY )
+			};
 		}
 
 		/// <inheritdoc />
@@ -323,11 +310,23 @@ namespace Zeiss.PiWeb.Api.Core
 			return HashCode.Combine( Key, Value );
 		}
 
+		/// <summary>
+		/// Checks whether two operands are equal.
+		/// </summary>
+		/// <param name="left">Left operand.</param>
+		/// <param name="right">Right operand.</param>
+		/// <returns><see langword="true"/> if the operands are equal; otherwise, <see langword="false"/>.</returns>
 		public static bool operator ==( Attribute left, Attribute right )
 		{
 			return left.Equals( right );
 		}
 
+		/// <summary>
+		/// Checks whether two operands are unequal.
+		/// </summary>
+		/// <param name="left">Left operand.</param>
+		/// <param name="right">Right operand.</param>
+		/// <returns><see langword="true"/> if the operands are unequal; otherwise, <see langword="false"/>.</returns>
 		public static bool operator !=( Attribute left, Attribute right )
 		{
 			return !left.Equals( right );
@@ -337,6 +336,12 @@ namespace Zeiss.PiWeb.Api.Core
 		public override string ToString()
 		{
 			return $"K{Key}: {Value}";
+		}
+
+		/// <inheritdoc />
+		public override bool Equals( object obj )
+		{
+			return obj is Attribute other && Equals( other );
 		}
 
 		#endregion
