@@ -354,10 +354,13 @@ namespace Zeiss.PiWeb.Api.Core
 			if( Key != other.Key )
 				return false;
 
-			if( RawValue is null || other.RawValue is null )
-				return Value == other.Value;
+			if( RawValue != null && other.RawValue != null )
+				return RawValueEquals( RawValue, other.RawValue );
 
-			return RawValueEquals( RawValue, other.RawValue );
+			if( RawValue is double || other.RawValue is double )
+				return Equals( RawValue ?? GetDoubleValue(), other.RawValue ?? other.GetDoubleValue() );
+
+			return Value == other.Value;
 		}
 
 		#endregion
