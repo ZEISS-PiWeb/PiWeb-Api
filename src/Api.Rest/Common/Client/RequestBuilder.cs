@@ -1,7 +1,7 @@
 ﻿#region copyright
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
-/* Carl Zeiss IMT (IZfM Dresden)                   */
+/* Carl Zeiss Industrielle Messtechnik GmbH        */
 /* Softwaresystem PiWeb                            */
 /* (c) Carl Zeiss 2016                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -189,12 +189,30 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// <exception cref="ArgumentNullException"><paramref name="method"/> is <see langword="null" />.</exception>
 		public static Func<HttpRequestMessage> CreateWithAttachment( [NotNull] HttpMethod method, string relativeUri, Stream stream, string mimeType, long? contentLength, Guid? contentMD5, string contentDisposition, params ParameterDefinition[] parameterDefinitions )
 		{
-			if( method == null ) throw new ArgumentNullException( nameof( method ) );
+			if( method == null )
+				throw new ArgumentNullException( nameof( method ) );
 
 			if( method != HttpMethod.Post && method != HttpMethod.Put )
 				throw new ArgumentOutOfRangeException( $"CreateWithAttachment is not allowed for {method}. Valid HttpMethods are {HttpMethod.Post} or {HttpMethod.Put}" );
 
-			return () => CreateWithAttachmentInternal( method, relativeUri, stream, mimeType, contentLength, contentMD5, contentDisposition, parameterDefinitions );
+			var position = stream.CanSeek ? stream.Position : (long?)null;
+			var attempt = 0;
+
+			return () =>
+			{
+				attempt++;
+				if( attempt > 1 )
+				{
+					if( position == null )
+					{
+						throw new InvalidOperationException( "Second attempt to send the request failed. Either the first attempt " +
+							"must succeed by setting valid authentication information in advance or the stream must be seekable." );
+					}
+					stream.Position = position.Value;
+				}
+
+				return CreateWithAttachmentInternal( method, relativeUri, stream, mimeType, contentLength, contentMD5, contentDisposition, parameterDefinitions );
+			};
 		}
 
 		/// <summary>
