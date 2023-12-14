@@ -231,6 +231,63 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 		}
 
 		[Test]
+		[TestCase( "1", 1, true )]
+		[TestCase( "1", 2, false )]
+		[TestCase( "0.1", 0.1, true )]
+		[TestCase( "0.1", 0.2, false )]
+		[TestCase( "-1", -1, true )]
+		[TestCase( "-1", -2, false )]
+		[TestCase( "-0.1", -0.1, true )]
+		[TestCase( "-0.1", -0.2, false )]
+		[TestCase( "-0.1", 0.1, false )]
+		[TestCase( "0.0", 0.0, true )]
+		[TestCase( "", 0.0, false )]
+		[TestCase( "foo", 0.0, false )]
+		public void Equals_LeftFromStringRightFromDouble_ReturnsCorrectResult( string x, double y, bool expectedResult )
+		{
+			// arrange
+			var attributeKey = Fixture.Create<ushort>();
+			var xAttribute = new Attribute( attributeKey, x );
+			var yAttribute = new Attribute( attributeKey, y );
+
+			// act, assert
+			Assert.That( Equals( xAttribute, yAttribute ), Is.EqualTo( expectedResult ) );
+
+			Assert.That( xAttribute == yAttribute, Is.EqualTo( expectedResult ) );
+			Assert.That( xAttribute != yAttribute, Is.Not.EqualTo( expectedResult ) );
+		}
+
+		[Test]
+		[TestCase( 1, "1", true )]
+		[TestCase( 1, "2", false )]
+		[TestCase( 0.1, "0.1", true )]
+		[TestCase( 0.1, "0.2", false )]
+		[TestCase( -1, "-1", true )]
+		[TestCase( -1, "-2", false )]
+		[TestCase( -0.1, "-0.1", true )]
+		[TestCase( -0.1, "-0.2", false )]
+		[TestCase( -0.1, "0.1", false )]
+		[TestCase( 0.0, "0.0", true )]
+		[TestCase( double.NaN, "1", false )]
+		[TestCase( double.PositiveInfinity, "1", false )]
+		[TestCase( double.NegativeInfinity, "1", false )]
+		[TestCase( 0.0, "", false )]
+		[TestCase( 0.0, "foo", false )]
+		public void Equals_LeftFromDoubleRightFromString_ReturnsCorrectResult( double x, string y, bool expectedResult )
+		{
+			// arrange
+			var attributeKey = Fixture.Create<ushort>();
+			var xAttribute = new Attribute( attributeKey, x );
+			var yAttribute = new Attribute( attributeKey, y );
+
+			// act, assert
+			Assert.That( Equals( xAttribute, yAttribute ), Is.EqualTo( expectedResult ) );
+
+			Assert.That( xAttribute == yAttribute, Is.EqualTo( expectedResult ) );
+			Assert.That( xAttribute != yAttribute, Is.Not.EqualTo( expectedResult ) );
+		}
+
+		[Test]
 		[TestCaseSource( nameof( CreateCompareDateTimeAttributesTestCases ) )]
 		public void Test_Compare_DateTime_Attributes( AttributeComparisonTestCase testCase )
 		{
