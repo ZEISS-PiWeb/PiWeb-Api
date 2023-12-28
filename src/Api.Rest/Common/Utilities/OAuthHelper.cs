@@ -34,7 +34,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 	/// </summary>
 	public static class OAuthHelper
 	{
-
 		#region members
 
 		private static readonly string CacheFilePath = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ), @"Zeiss\PiWeb\OpenIdTokens.dat" );
@@ -46,16 +45,31 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 		#region methods
 
+		/// <summary>
+		/// Decode a JSON Web Token (JWT).
+		/// </summary>
+		/// <param name="jwtEncodedString">The encoded string which represents the JWT.</param>
+		/// <returns>The decoded <see cref="JwtSecurityToken"/>.</returns>
 		public static JwtSecurityToken DecodeSecurityToken( string jwtEncodedString )
 		{
 			return new JwtSecurityToken( jwtEncodedString );
 		}
 
+		/// <summary>
+		/// Get all included claims from an encoded JSON Web Token (JWT).
+		/// </summary>
+		/// <param name="jwtEncodedString">The encoded string which represents the JWT.</param>
+		/// <returns>A collection of all included claims.</returns>
 		public static IEnumerable<Claim> GetClaimsFromSecurityToken( string jwtEncodedString )
 		{
 			return DecodeSecurityToken( jwtEncodedString ).Claims;
 		}
 
+		/// <summary>
+		/// Creates a friendly text representation of identity information contained in the provided claims, mainly name and email.
+		/// </summary>
+		/// <param name="claims">A collection of claims.</param>
+		/// <returns>A string containing name and email, e.g. for displaying.</returns>
 		public static string IdentityClaimsToFriendlyText( IList<Claim> claims )
 		{
 			var name = IdentityClaimsToUsername( claims );
@@ -64,16 +78,31 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			return $"{name} ({email})";
 		}
 
+		/// <summary>
+		/// Extract the value of the email identity claim.
+		/// </summary>
+		/// <param name="claims">A collection of claims.</param>
+		/// <returns>The email of the user.</returns>
 		public static string IdentityClaimsToEmail( IList<Claim> claims )
 		{
 			return claims.SingleOrDefault( claim => claim.Type == "email" )?.Value;
 		}
 
+		/// <summary>
+		/// Extract the value of the name identity claim.
+		/// </summary>
+		/// <param name="claims">A collection of claims.</param>
+		/// <returns>The name of the user.</returns>
 		public static string IdentityClaimsToUsername( IList<Claim> claims )
 		{
 			return claims.SingleOrDefault( claim => claim.Type == "name" )?.Value;
 		}
 
+		/// <summary>
+		/// Creates a friendly text representation of identity information from the provided JSON Web Token (JWT), mainly name and email.
+		/// </summary>
+		/// <param name="jwtEncodedString">The encoded string which represents the JWT.</param>
+		/// <returns>A string containing name and email, e.g. for displaying, or an empty string if no values could be extracted.</returns>
 		public static string TokenToFriendlyText( string jwtEncodedString )
 		{
 			if( string.IsNullOrEmpty( jwtEncodedString ) )
@@ -93,6 +122,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			return "";
 		}
 
+		/// <summary>
+		/// Extracts the username from the provided JSON Web Token (JWT).
+		/// </summary>
+		/// <param name="jwtEncodedString">The encoded string which represents the JWT.</param>
+		/// <returns>The username, or an empty string if no value could be extracted.</returns>
 		public static string TokenToUsername( string jwtEncodedString )
 		{
 			if( string.IsNullOrEmpty( jwtEncodedString ) )
@@ -112,6 +146,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			return "";
 		}
 
+		/// <summary>
+		/// Extracts the email from the provided JSON Web Token (JWT).
+		/// </summary>
+		/// <param name="jwtEncodedString">The encoded string which represents the JWT.</param>
+		/// <returns>The email of the user, or an empty string if no value could be extracted.</returns>
 		public static string TokenToMailAddress( string jwtEncodedString )
 		{
 			if( string.IsNullOrEmpty( jwtEncodedString ) )
@@ -405,6 +444,12 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			return discoveryInfo;
 		}
 
+		/// <summary>
+		/// Checks if the provided nonce in the token claims is valid and matching the expected nonce.
+		/// </summary>
+		/// <param name="expectedNonce">The expected nonce.</param>
+		/// <param name="tokenClaims">A collection of claims.</param>
+		/// <returns><see langword="true"/> if nonce is valid, otherwise <see langword="false"/>.</returns>
 		public static bool ValidateNonce( string expectedNonce, IEnumerable<Claim> tokenClaims )
 		{
 			var tokenNonce = tokenClaims.FirstOrDefault( c => c.Type == JwtClaimTypes.Nonce );
@@ -424,7 +469,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 			var codeHashB64 = Base64Url.Encode( leftBytes );
 
-			return string.Equals( cHash.Value, codeHashB64, StringComparison.Ordinal );
+			return string.Equals( cHash?.Value, codeHashB64, StringComparison.Ordinal );
 		}
 
 		/// <summary>
