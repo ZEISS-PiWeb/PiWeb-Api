@@ -238,8 +238,10 @@ Content-Type: application/json; charset=utf-8
 if your chosen tool or script language does not work directly with present encoding.
 
 <h2 id="{{page.sections['general']['secs']['security'].anchor}}">{{page.sections['general']['secs']['security'].title}}</h2>
-Access to PiWeb Server service might require authentication. Authentication can be either *basic authentication* based on username and password, *Windows authentication* based on Active Directory integration
-or OpenID connect authentication.
+Access to PiWeb Server service might require authentication. Authentication can be either *basic authentication* based on username and password, *Windows authentication* based on Active Directory integration, *certificate authentication*
+or *OpenID connect authentication*. Our .NET SDK (C# API) offers convenient functionality to use all possible authentication methods, corresponding documentation can be found in the
+[security section](http://zeiss-piweb.github.io/PiWeb-Api/sdk/v8.2/#ba-security ".NET SDK security documentation") of the .NET SDK. When accessing the PiWeb API via REST using different clients (e.g. Python), it can be necessary to use 3rd party 
+libraries or to implement authentication methods yourself. We do not offer detailed documentation on how to do this, instead you can find further information following provided links.
 
 **Basic authentication**
 
@@ -248,6 +250,16 @@ If PiWeb Server is secured by basic authentication you have to pass the credenti
 ```http
 Authorization: Basic QWRtaW5pc3RyYXRvcjphZG0hbiFzdHJhdDBy
 ```
+<br/>
+**Windows authentication**
+
+If PiWeb Server is secured by Windows authentication you have to follow the [Kerberos protocol](https://learn.microsoft.com/en-us/windows-server/security/kerberos/kerberos-authentication-overview) to authenticate your client. This is easy using our .NET SDK (C# API). For different clients (e.g. Python) this can be more complex, we suggest to use available libraries.
+
+<br/>
+**Certificate authentication**
+
+If PiWeb Server is secured by certificate authentication you have to provide a valid X.509 certificate of an authorized user along with the REST request.
+
 <br/>
 **OpenID connect authentication**
 
