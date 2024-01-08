@@ -34,14 +34,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 	/// </summary>
 	public static class OAuthHelper
 	{
-		#region constants
-
-		private const string ClientId = "f1ddf74a-7ed1-4963-ab60-a1138a089791";
-		private const string ClientSecret = "d2940022-7469-4790-9498-776e3adac79f";
-		private const string RedirectUri = "urn:ietf:wg:oauth:2.0:oob";
-
-		#endregion
-
 		#region members
 
 		private static readonly string CacheFilePath = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ), @"Zeiss\PiWeb\OpenIdTokens.dat" );
@@ -53,16 +45,31 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 		#region methods
 
+		/// <summary>
+		/// Decode a JSON Web Token (JWT).
+		/// </summary>
+		/// <param name="jwtEncodedString">The encoded string which represents the JWT.</param>
+		/// <returns>The decoded <see cref="JwtSecurityToken"/>.</returns>
 		public static JwtSecurityToken DecodeSecurityToken( string jwtEncodedString )
 		{
 			return new JwtSecurityToken( jwtEncodedString );
 		}
 
+		/// <summary>
+		/// Get all included claims from an encoded JSON Web Token (JWT).
+		/// </summary>
+		/// <param name="jwtEncodedString">The encoded string which represents the JWT.</param>
+		/// <returns>A collection of all included claims.</returns>
 		public static IEnumerable<Claim> GetClaimsFromSecurityToken( string jwtEncodedString )
 		{
 			return DecodeSecurityToken( jwtEncodedString ).Claims;
 		}
 
+		/// <summary>
+		/// Creates a friendly text representation of identity information contained in the provided claims, mainly name and email.
+		/// </summary>
+		/// <param name="claims">A collection of claims.</param>
+		/// <returns>A string containing name and email, e.g. for displaying.</returns>
 		public static string IdentityClaimsToFriendlyText( IList<Claim> claims )
 		{
 			var name = IdentityClaimsToUsername( claims );
@@ -71,16 +78,31 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			return $"{name} ({email})";
 		}
 
+		/// <summary>
+		/// Extract the value of the email identity claim.
+		/// </summary>
+		/// <param name="claims">A collection of claims.</param>
+		/// <returns>The email of the user.</returns>
 		public static string IdentityClaimsToEmail( IList<Claim> claims )
 		{
 			return claims.SingleOrDefault( claim => claim.Type == "email" )?.Value;
 		}
 
+		/// <summary>
+		/// Extract the value of the name identity claim.
+		/// </summary>
+		/// <param name="claims">A collection of claims.</param>
+		/// <returns>The name of the user.</returns>
 		public static string IdentityClaimsToUsername( IList<Claim> claims )
 		{
 			return claims.SingleOrDefault( claim => claim.Type == "name" )?.Value;
 		}
 
+		/// <summary>
+		/// Creates a friendly text representation of identity information from the provided JSON Web Token (JWT), mainly name and email.
+		/// </summary>
+		/// <param name="jwtEncodedString">The encoded string which represents the JWT.</param>
+		/// <returns>A string containing name and email, e.g. for displaying, or an empty string if no values could be extracted.</returns>
 		public static string TokenToFriendlyText( string jwtEncodedString )
 		{
 			if( string.IsNullOrEmpty( jwtEncodedString ) )
@@ -100,6 +122,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			return "";
 		}
 
+		/// <summary>
+		/// Extracts the username from the provided JSON Web Token (JWT).
+		/// </summary>
+		/// <param name="jwtEncodedString">The encoded string which represents the JWT.</param>
+		/// <returns>The username, or an empty string if no value could be extracted.</returns>
 		public static string TokenToUsername( string jwtEncodedString )
 		{
 			if( string.IsNullOrEmpty( jwtEncodedString ) )
@@ -119,6 +146,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			return "";
 		}
 
+		/// <summary>
+		/// Extracts the email from the provided JSON Web Token (JWT).
+		/// </summary>
+		/// <param name="jwtEncodedString">The encoded string which represents the JWT.</param>
+		/// <returns>The email of the user, or an empty string if no value could be extracted.</returns>
 		public static string TokenToMailAddress( string jwtEncodedString )
 		{
 			if( string.IsNullOrEmpty( jwtEncodedString ) )
@@ -191,7 +223,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		private static async Task<OAuthTokenCredential> TryGetOAuthTokenFromAuthorizeResponseAsync(
 			TokenClient tokenClient,
 			CryptoNumbers cryptoNumbers,
-			AuthorizeResponse response )
+			AuthorizeResponse response,
+			OAuthTokenInformation tokenInformation )
 		{
 			if( response == null )
 				return null;
@@ -213,10 +246,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 				throw new InvalidOperationException( "invalid c_hash value in identity token." );
 
 			// exchange the code for the access and refresh token, also send the code verifier,
-			// to handle man-in-the-middle attacks against the authorization code (PKCE)
+			// to handle man-in-the-middle attacks against the authorization code (PKCE).
+			// Code not null here since ValidateCodeHash succeeded.
 			var tokenResponse = await tokenClient.RequestAuthorizationCodeTokenAsync(
-				code: response.Code,
-				redirectUri: RedirectUri,
+				code: response.Code!,
+				redirectUri: tokenInformation.RedirectUri,
 				codeVerifier: cryptoNumbers.Verifier ).ConfigureAwait( false );
 
 			if( tokenResponse.IsError )
@@ -225,40 +259,52 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			return OAuthTokenCredential.CreateWithIdentityToken( tokenResponse.IdentityToken, tokenResponse.AccessToken, DateTime.UtcNow + TimeSpan.FromSeconds( tokenResponse.ExpiresIn ), tokenResponse.RefreshToken );
 		}
 
-		private static string CreateOAuthStartUrl( string authorizeEndpoint, CryptoNumbers cryptoNumbers )
+		private static string CreateOAuthStartUrl( string authorizeEndpoint, CryptoNumbers cryptoNumbers, OAuthTokenInformation tokenInformation )
 		{
 			using var httpClient = new HttpClient();
 
 			var request = new RequestUrl( authorizeEndpoint );
 			return request.CreateAuthorizeUrl(
-				clientId: ClientId,
+				clientId: tokenInformation.ClientID,
 				responseType: "id_token code",
 				responseMode: "form_post",
-				scope: "openid profile email offline_access piweb",
-				redirectUri: RedirectUri,
+				scope: tokenInformation.RequestedScopes,
+				redirectUri: tokenInformation.RedirectUri,
 				state: cryptoNumbers.State,
 				nonce: cryptoNumbers.Nonce,
 				codeChallenge: cryptoNumbers.Challenge,
 				codeChallengeMethod: OidcConstants.CodeChallengeMethods.Sha256 );
 		}
 
-		private static async Task<string> CreateAuthorityAsync( string instanceUrl )
+		/// <summary>
+		/// Get public OAuth token information from PiWeb server.
+		/// FUTURE: use the WebFinger method discovery method described in OpenID connect specification section 2
+		/// <seealso>
+		///     <cref>https://openid.net/specs/openid-connect-discovery-1_0.html#IssuerDiscovery</cref>
+		/// </seealso>
+		/// </summary>
+		private static async Task<OAuthTokenInformation> GetTokenInformationAsync( string instanceUrl )
 		{
-			var authority = await DiscoverOpenIdAuthorityAsync( instanceUrl ).ConfigureAwait( false );
-			if( authority == null )
-				throw new InvalidOperationException( "cannot detect OpenID authority from resource URL." );
+			var oauthServiceRest = new OAuthServiceRestClient( new Uri( instanceUrl ) )
+			{
+				UseDefaultWebProxy = true
+			};
 
-			return authority;
+			var tokenInformation = await oauthServiceRest.GetOAuthTokenInformation().ConfigureAwait( false );
+
+			if( tokenInformation == null )
+				throw new InvalidOperationException( "cannot detect OpenID token information from resource URL." );
+
+			return tokenInformation;
 		}
 
-		private static TokenClient CreateTokenClient( string tokenEndpoint )
+		private static TokenClient CreateTokenClient( string tokenEndpoint, string clientId )
 		{
 			var tokenClient = new HttpClient();
 			return new TokenClient( tokenClient, new TokenClientOptions
 			{
 				Address = tokenEndpoint,
-				ClientId = ClientId,
-				ClientSecret = ClientSecret
+				ClientId = clientId,
 			} );
 		}
 
@@ -285,11 +331,12 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 					return cachedToken;
 			}
 
-			var discoveryInfo = await GetDiscoveryInfoAsync( instanceUrl ).ConfigureAwait( false );
+			var tokenInformation = await GetTokenInformationAsync( instanceUrl ).ConfigureAwait( false );
+			var discoveryInfo = await GetDiscoveryInfoAsync( tokenInformation ).ConfigureAwait( false );
 			if( discoveryInfo.IsError )
 				return null;
 
-			var tokenClient = CreateTokenClient( discoveryInfo.TokenEndpoint );
+			var tokenClient = CreateTokenClient( discoveryInfo.TokenEndpoint, tokenInformation.ClientID );
 			var result = await TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken ).ConfigureAwait( false );
 			if( result != null )
 			{
@@ -304,14 +351,14 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 				return null;
 
 			var cryptoNumbers = new CryptoNumbers();
-			var startUrl = CreateOAuthStartUrl( discoveryInfo.AuthorizeEndpoint, cryptoNumbers );
+			var startUrl = CreateOAuthStartUrl( discoveryInfo.AuthorizeEndpoint, cryptoNumbers, tokenInformation );
 
-			var request = new OAuthRequest( startUrl, RedirectUri );
+			var request = new OAuthRequest( startUrl, tokenInformation.RedirectUri );
 			var response = ( await requestCallbackAsync( request ).ConfigureAwait( false ) )?.ToAuthorizeResponse();
 			if( response == null )
 				return null;
 
-			result = await TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response ).ConfigureAwait( false );
+			result = await TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response, tokenInformation ).ConfigureAwait( false );
 			if( result == null )
 				return null;
 
@@ -344,11 +391,12 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 					return cachedToken;
 			}
 
-			var discoveryInfo = GetDiscoveryInfoAsync( instanceUrl ).GetAwaiter().GetResult();
+			var tokenInformation = GetTokenInformationAsync( instanceUrl ).GetAwaiter().GetResult();
+			var discoveryInfo = GetDiscoveryInfoAsync( tokenInformation ).GetAwaiter().GetResult();
 			if( discoveryInfo.IsError )
 				return null;
 
-			var tokenClient = CreateTokenClient( discoveryInfo.TokenEndpoint );
+			var tokenClient = CreateTokenClient( discoveryInfo.TokenEndpoint, tokenInformation.ClientID );
 			var result = TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken ).GetAwaiter().GetResult();
 			if( result != null )
 			{
@@ -363,15 +411,15 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 				return null;
 
 			var cryptoNumbers = new CryptoNumbers();
-			var startUrl = CreateOAuthStartUrl( discoveryInfo.AuthorizeEndpoint, cryptoNumbers );
+			var startUrl = CreateOAuthStartUrl( discoveryInfo.AuthorizeEndpoint, cryptoNumbers, tokenInformation );
 
-			var request = new OAuthRequest( startUrl, RedirectUri );
+			var request = new OAuthRequest( startUrl, tokenInformation.RedirectUri );
 			var response = requestCallback( request )?.ToAuthorizeResponse();
 
 			if( response == null )
 				return null;
 
-			result = TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response ).GetAwaiter().GetResult();
+			result = TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response, tokenInformation ).GetAwaiter().GetResult();
 			if( result == null )
 				return null;
 
@@ -384,31 +432,24 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		/// <summary>
 		/// Request target server for authentication settings.
 		/// </summary>
-		private static async Task<DiscoveryDocumentResponse> GetDiscoveryInfoAsync( string instanceUrl )
+		private static async Task<DiscoveryDocumentResponse> GetDiscoveryInfoAsync( OAuthTokenInformation tokenInformation )
 		{
-			var discoveryCache = new DiscoveryCache( await CreateAuthorityAsync( instanceUrl ).ConfigureAwait( false ) );
+			var discoveryCache = new DiscoveryCache( tokenInformation.OpenIdAuthority,
+				new DiscoveryPolicy
+				{
+					AdditionalEndpointBaseAddresses = tokenInformation.AdditionalEndpointBaseAddresses
+				} );
+
 			var discoveryInfo = await discoveryCache.GetAsync().ConfigureAwait( false );
 			return discoveryInfo;
 		}
 
 		/// <summary>
-		/// get openid authority info from service without any authentication
-		/// FUTURE: use the WebFinger method discovery method described in OpenID connect specification section 2
-		/// <seealso>
-		///     <cref>https://openid.net/specs/openid-connect-discovery-1_0.html#IssuerDiscovery</cref>
-		/// </seealso>
+		/// Checks if the provided nonce in the token claims is valid and matching the expected nonce.
 		/// </summary>
-		private static async Task<string> DiscoverOpenIdAuthorityAsync( string resourceUrl )
-		{
-			var oauthServiceRest = new OAuthServiceRestClient( new Uri( resourceUrl ) )
-			{
-				UseDefaultWebProxy = true
-			};
-
-			var tokenInfo = await oauthServiceRest.GetOAuthTokenInformation().ConfigureAwait( false );
-			return tokenInfo.OpenIdAuthority;
-		}
-
+		/// <param name="expectedNonce">The expected nonce.</param>
+		/// <param name="tokenClaims">A collection of claims.</param>
+		/// <returns><see langword="true"/> if nonce is valid, otherwise <see langword="false"/>.</returns>
 		public static bool ValidateNonce( string expectedNonce, IEnumerable<Claim> tokenClaims )
 		{
 			var tokenNonce = tokenClaims.FirstOrDefault( c => c.Type == JwtClaimTypes.Nonce );
@@ -428,7 +469,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 			var codeHashB64 = Base64Url.Encode( leftBytes );
 
-			return string.Equals( cHash.Value, codeHashB64, StringComparison.Ordinal );
+			return string.Equals( cHash?.Value, codeHashB64, StringComparison.Ordinal );
 		}
 
 		/// <summary>
