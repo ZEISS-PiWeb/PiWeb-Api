@@ -27,6 +27,8 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 	using Zeiss.PiWeb.Api.Rest.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 	using Zeiss.PiWeb.Api.Rest.Dtos.RawData;
+	using Zeiss.PiWeb.Api.Rest.HttpClient.Builder;
+	using Zeiss.PiWeb.Api.Rest.HttpClient.Data;
 	using Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter.Conditions;
 
 	#endregion
@@ -38,7 +40,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 	{
 		#region constants
 
-		private const string EndpointName = "RawDataServiceRest/";
+		/// <summary>
+		/// The name of the endpoint of this service.
+		/// </summary>
+		public const string EndpointName = "RawDataServiceRest/";
 
 		#endregion
 
@@ -61,11 +66,22 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 			: base( restClient ?? new RestClient( serverUri, EndpointName, maxUriLength: maxUriLength, serializer: ObjectSerializer.SystemTextJson ) )
 		{ }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RawDataServiceRestClient"/> class.
+		/// </summary>
+		/// <param name="settings">The settings of the rest service.</param>
+		internal RawDataServiceRestClient( RestClientSettings settings )
+			: base( new RestClient( EndpointName, settings ) )
+		{ }
+
 		#endregion
 
 		#region methods
 
-		private Task<RawDataInformationDto[]> ListRawDataForAllEntities( [NotNull] IFilterCondition filter, string requestPath, CancellationToken cancellationToken = default )
+		private Task<RawDataInformationDto[]> ListRawDataForAllEntities(
+			[NotNull] IFilterCondition filter,
+			string requestPath,
+			CancellationToken cancellationToken = default )
 		{
 			if( filter == null )
 				throw new ArgumentNullException( nameof( filter ) );

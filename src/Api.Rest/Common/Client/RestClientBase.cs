@@ -20,6 +20,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.IO;
+	using System.Linq;
 	using System.Net;
 	using System.Net.Http;
 	using System.Net.Http.Headers;
@@ -34,6 +35,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using Zeiss.PiWeb.Api.Rest.Common.Data;
 	using Zeiss.PiWeb.Api.Rest.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
+	using Zeiss.PiWeb.Api.Rest.HttpClient.Builder;
 
 	#endregion
 
@@ -81,18 +83,29 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		public static readonly TimeSpan DefaultShortTimeout = TimeSpan.FromSeconds( 15 );
 
 		private readonly bool _Chunked;
-		[CanBeNull] private readonly DelegatingHandler _CustomHttpMessageHandler;
-
-		private readonly IObjectSerializer _Serializer;
-
-		private HttpClient _HttpClient;
-		private TimeoutHandler _TimeoutHandler;
-		private HttpClientHandler _HttpClientHandler;
-		private CachingHandler _CachingHandler;
 		private ICacheStore _CacheStore;
 		private IVaryHeaderStore _VaryHeaderStore;
-		private bool _IsDisposed;
+		private readonly IObjectSerializer _Serializer;
+
+		// This is only used by the legacy constructor to preserve old behavior
+		[CanBeNull] private readonly DelegatingHandler _CustomHttpMessageHandler;
+
+		// These are set by the settings based constructor used by rest client builders
+		[NotNull] private readonly IReadOnlyCollection<Func<DelegatingHandler>> _DelegatingHandlerFactories =
+			new List<Func<DelegatingHandler>>();
+		[NotNull] private ICollection<DelegatingHandler> _DelegatingHandlers = new List<DelegatingHandler>();
+
 		private AuthenticationContainer _AuthenticationContainer = new AuthenticationContainer( AuthenticationMode.NoneOrBasic );
+
+		private HttpClient _HttpClient;
+		private HttpClientHandler _HttpClientHandler;
+		private TimeoutHandler _TimeoutHandler;
+		private CachingHandler _CachingHandler;
+
+		private bool _UseProxy = true;
+		private TimeSpan _Timeout;
+
+		private bool _IsDisposed;
 
 		#endregion
 
@@ -124,8 +137,38 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			_Serializer = serializer ?? ObjectSerializer.Default;
 
 			MaxUriLength = maxUriLength;
+			_Timeout = timeout ?? DefaultTimeout;
 
-			BuildHttpClient( timeout );
+			BuildHttpClient();
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RestClientBase"/> class. This constructor exists to support
+		/// rest client creation via <see cref="RestClientBuilder"/>.
+		/// </summary>
+		internal RestClientBase( [NotNull] string endpointName, [NotNull] RestClientSettings settings )
+		{
+			if( endpointName == null )
+				throw new ArgumentNullException( nameof( endpointName ) );
+			if( settings == null )
+				throw new ArgumentNullException( nameof( settings ) );
+
+			ServiceLocation = new UriBuilder( settings.ServerUri )
+			{
+				Path = ( settings.ServerUri.AbsolutePath.Replace( "/DataServiceSoap", "" ) + "/" + endpointName ).Replace( "//", "/" )
+			}.Uri;
+
+			_Timeout = settings.Timeout;
+			_UseProxy = settings.UseSystemProxy;
+			_Chunked = settings.AllowChunkedDataTransfer;
+
+			_CustomHttpMessageHandler = null;
+			_DelegatingHandlerFactories = new List<Func<DelegatingHandler>>( settings.DelegatingHandlerFactories );
+
+			_Serializer = settings.Serializer;
+			MaxUriLength = settings.MaxUriLength;
+
+			BuildHttpClient();
 		}
 
 		#endregion
@@ -148,10 +191,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			get => _TimeoutHandler.Timeout;
 			set
 			{
+				_Timeout = Timeout;
 				if( _TimeoutHandler.Timeout != value )
-				{
 					_TimeoutHandler.Timeout = value;
-				}
 			}
 		}
 
@@ -164,10 +206,14 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 #pragma warning disable CA1416
 		public bool UseDefaultWebProxy
 		{
-			get => _IsBrowser || _HttpClientHandler.UseProxy;
+			get => _IsBrowser || _UseProxy;
 			set
 			{
-				if( !_IsBrowser && _HttpClientHandler.UseProxy != value )
+				if( _IsBrowser )
+					return;
+
+				_UseProxy = value;
+				if( _HttpClientHandler.UseProxy != value )
 					_HttpClientHandler.UseProxy = value;
 			}
 		}
@@ -200,7 +246,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				if( _IsBrowser )
 					return;
 
+#pragma warning disable CA1416
 				UpdateAuthenticationInformation();
+#pragma warning restore CA1416
 			}
 		}
 
@@ -296,7 +344,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		{
 			var items = await PerformRequestAsync( () => requestCreationHandler( _Serializer, cancellationToken ), true, response => Task.FromResult( ResponseToAsyncEnumerable<T>( response, _Serializer, cancellationToken ) ), false, cancellationToken );
 
-			await foreach (var item in items.ConfigureAwait( false ) )
+			await foreach( var item in items.ConfigureAwait( false ) )
 			{
 				yield return item;
 			}
@@ -568,44 +616,21 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		private void RebuildHttpClient()
 		{
-			var timeout = _TimeoutHandler.Timeout;
+			var currentDelegatingHandlers = _DelegatingHandlers;
+			_DelegatingHandlers = new List<DelegatingHandler>();
 
 			_HttpClient?.Dispose();
 			_HttpClientHandler?.Dispose();
 			_CachingHandler?.Dispose();
 
-			BuildHttpClient( timeout );
+			foreach( var delegatingHandler in currentDelegatingHandlers.Reverse() )
+				delegatingHandler.Dispose();
+
+			BuildHttpClient();
 		}
 
-		private void BuildHttpClient( TimeSpan? timeout )
+		private void BuildHttpClient()
 		{
-#if NETFRAMEWORK
-			var webRequestHandler = new WebRequestHandler
-			{
-				AllowPipelining = true,
-				PreAuthenticate = true,
-				AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-				// PIWEB-8519
-				// When using WindowsAuthentication, PiWeb Clients create lots of sockets in TIME_WAIT state.
-				// During QDB export with RawData this may lead to exhaustion of ephemeral ports for new connections
-				// resulting in exceptions.
-				// The following assignment disables closing of the socket connection but has a few security
-				// implications. After careful review I think these are not relevant for us currently.
-				// Therefore it should be safe for us to switch this on.
-				// Review:
-				// - HttpWebRequest.ConnectionGroupName is set to a hash of the instance hash code
-				// - PiWeb Clients do not do impersonation
-				// - PiWeb Clients are using single sign on exclusively, which means no user B can hijack a connection of user A
-				// - Inspecting Client/Server communication with Fiddler reveals that every request does a 401 roundtrip,
-				//     i.e. the Server is already authenticating every single request
-				UnsafeAuthenticatedConnectionSharing = true
-			};
-
-			if( _CacheStore == null )
-				webRequestHandler.CachePolicy = new HttpRequestCachePolicy( HttpCacheAgeControl.MaxAge, TimeSpan.FromDays( 0 ) );
-
-			_HttpClientHandler = webRequestHandler;
-#else
 			_HttpClientHandler = new HttpClientHandler();
 
 			// Almost all options are not available when running in browser
@@ -615,9 +640,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 #pragma warning disable CA1416
 				_HttpClientHandler.PreAuthenticate = true;
 				_HttpClientHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+				_HttpClientHandler.UseProxy = _UseProxy;
 #pragma warning restore CA1416
 			}
-#endif
 
 			if( _CacheStore == null )
 				_CachingHandler = null;
@@ -633,14 +658,27 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 			_TimeoutHandler = new TimeoutHandler
 			{
-				Timeout = timeout ?? DefaultTimeout,
+				Timeout = _Timeout,
 				InnerHandler = (HttpMessageHandler)_CachingHandler ?? _HttpClientHandler
 			};
 
-			if( _CustomHttpMessageHandler != null )
-				_CustomHttpMessageHandler.InnerHandler = _TimeoutHandler;
+			var outerMostHandler = (DelegatingHandler)_TimeoutHandler;
+			foreach( var handlerFactory in _DelegatingHandlerFactories )
+			{
+				var newHandler = handlerFactory();
+				_DelegatingHandlers.Add( newHandler );
 
-			_HttpClient = new HttpClient( _CustomHttpMessageHandler ?? _TimeoutHandler )
+				newHandler.InnerHandler = outerMostHandler;
+				outerMostHandler = newHandler;
+			}
+
+			if( _CustomHttpMessageHandler != null )
+			{
+				_CustomHttpMessageHandler.InnerHandler = outerMostHandler;
+				outerMostHandler = _CustomHttpMessageHandler;
+			}
+
+			_HttpClient = new HttpClient( outerMostHandler )
 			{
 				Timeout = System.Threading.Timeout.InfiniteTimeSpan,
 				BaseAddress = ServiceLocation
@@ -724,9 +762,15 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			{
 				if( disposing )
 				{
+					var currentDelegatingHandlers = _DelegatingHandlers;
+					_DelegatingHandlers = new List<DelegatingHandler>();
+
 					_HttpClient?.Dispose();
 					_HttpClientHandler?.Dispose();
 					_CachingHandler?.Dispose();
+
+					foreach( var delegatingHandler in currentDelegatingHandlers.Reverse() )
+						delegatingHandler.Dispose();
 				}
 
 				_IsDisposed = true;

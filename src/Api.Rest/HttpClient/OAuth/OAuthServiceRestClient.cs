@@ -17,6 +17,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 	using System.Threading.Tasks;
 	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Common.Client;
+	using Zeiss.PiWeb.Api.Rest.HttpClient.Builder;
 
 	#endregion
 
@@ -25,6 +26,15 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 	/// </summary>
 	public class OAuthServiceRestClient : CommonRestClientBase, IOAuthServiceRestClient
 	{
+		#region constants
+
+		/// <summary>
+		/// The name of the endpoint of this service.
+		/// </summary>
+		public const string EndpointName = "OAuthServiceRest/";
+
+		#endregion
+
 		#region constructors
 
 		/// <summary>
@@ -35,7 +45,15 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 		/// </param>
 		/// <exception cref="ArgumentNullException"><paramref name="serverUri"/> is <see langword="null" />.</exception>
 		public OAuthServiceRestClient( [NotNull] Uri serverUri )
-			: base( new RestClient( serverUri, "OAuthServiceRest/", serializer: ObjectSerializer.SystemTextJson ) )
+			: base( new RestClient( serverUri, EndpointName, serializer: ObjectSerializer.SystemTextJson ) )
+		{ }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="OAuthServiceRestClient"/> class.
+		/// </summary>
+		/// <param name="settings">The settings of the rest service.</param>
+		internal OAuthServiceRestClient( RestClientSettings settings )
+			: base( new RestClient( EndpointName, settings ) )
 		{ }
 
 		#endregion
