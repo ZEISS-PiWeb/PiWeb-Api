@@ -17,6 +17,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 	using System.Threading;
 	using System.Threading.Tasks;
 	using JetBrains.Annotations;
+	using Zeiss.PiWeb.Api.Rest.Common.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 	using Zeiss.PiWeb.Api.Rest.Dtos.RawData;
 
@@ -24,6 +25,15 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 
 	public interface IRawDataServiceRestClientBase<T> where T : RawDataServiceFeatureMatrix
 	{
+		#region properties
+
+		/// <summary>
+		/// A custom rest client that can be used to execute rest request created by a rest request builder.
+		/// </summary>
+		public ICustomRestClient CustomRestClient { get; }
+
+		#endregion
+
 		#region methods
 
 		/// <summary>
@@ -40,11 +50,21 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		Task<InterfaceVersionRange> GetInterfaceInformation( CancellationToken cancellationToken = default );
 
 		/// <summary>
-		/// Method for fetching the <see cref="RawDataServiceFeatureMatrix"/>
+		/// Returns a <see cref="RawDataServiceFeatureMatrix"/> that describes features and abilities of the server for the
+		/// raw data service endpoint.
 		/// </summary>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		/// <returns></returns>
 		Task<T> GetFeatureMatrix( CancellationToken cancellationToken = default );
+
+		/// <summary>
+		/// Returns a <see cref="RawDataServiceFeatureMatrix"/> that describes features and abilities of the server for the
+		/// raw data service endpoint.
+		/// </summary>
+		/// <param name="refreshPolicy">
+		/// Specifies if a previous result can be returned or if the server should be queried again requiring at least one rest request.
+		/// </param>
+		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+		Task<RawDataServiceFeatureMatrix> GetFeatureMatrix( RefreshPolicy refreshPolicy, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Fetches a list of raw data information for the <paramref name="entity"/> identified by <paramref name="uuids"/> and filtered by <paramref name="filter"/>.

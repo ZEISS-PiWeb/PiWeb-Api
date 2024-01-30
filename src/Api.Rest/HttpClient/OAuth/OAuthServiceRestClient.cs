@@ -17,6 +17,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 	using System.Threading.Tasks;
 	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Common.Client;
+	using Zeiss.PiWeb.Api.Rest.Common.Contracts;
 	using Zeiss.PiWeb.Api.Rest.HttpClient.Builder;
 
 	#endregion
@@ -59,6 +60,9 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 		#endregion
 
 		#region interface IOAuthServiceRestClient
+
+		/// <inheritdoc />
+		public ICustomRestClient CustomRestClient => _RestClient;
 
 		/// <summary>
 		/// Get information about valid OAuth issues authorities and resource ids.

@@ -15,6 +15,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 	using System.Threading;
 	using System.Threading.Tasks;
 	using Zeiss.PiWeb.Api.Rest.Common.Client;
+	using Zeiss.PiWeb.Api.Rest.Common.Contracts;
 
 	#endregion
 
@@ -23,6 +24,15 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 	/// </summary>
 	public interface IOAuthServiceRestClient : IRestClient
 	{
+		#region properties
+
+		/// <summary>
+		/// A custom rest client that can be used to execute rest request created by a rest request builder.
+		/// </summary>
+		public ICustomRestClient CustomRestClient { get; }
+
+		#endregion
+
 		#region methods
 
 		/// <summary>
