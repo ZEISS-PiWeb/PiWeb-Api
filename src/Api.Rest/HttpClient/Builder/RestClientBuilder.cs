@@ -122,7 +122,7 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 	/// </summary>
 	public RestClientSettings GetSettings()
 	{
-		return new RestClientSettings()
+		var settings = new RestClientSettings()
 		{
 			ServerUri = _ServerUri,
 			Timeout = _Timeout,
@@ -133,8 +133,11 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 			CacheStore = _CacheStore ?? ( _HttpCachingEnabled ? _InternalSharedCacheStore.Value : null ),
 			VaryHeaderStore = _VaryHeaderStore ?? ( _HttpCachingEnabled ? _InternalSharedVaryHeaderStore.Value : null ),
 			UseSystemProxy = _UseSystemProxy,
-			DelegatingHandlerFactories = new List<Func<DelegatingHandler>>( _DelegatingHandlerFactories )
+			DelegatingHandlerFactories = new List<Func<DelegatingHandler>>( _DelegatingHandlerFactories ),
+			AuthenticationHandler = _AuthenticationHandler
 		};
+
+		return settings;
 	}
 
 	/// <summary>
@@ -303,7 +306,8 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 	/// <inheritdoc />
 	public DataServiceRestClient CreateDataServiceRestClient()
 	{
-		return new DataServiceRestClient( GetSettings() );
+		var settings = GetSettings();
+		return new DataServiceRestClient( settings );
 	}
 
 	/// <inheritdoc />

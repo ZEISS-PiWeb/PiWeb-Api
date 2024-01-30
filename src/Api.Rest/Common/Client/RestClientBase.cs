@@ -494,8 +494,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 					request = requestCreationHandler();
 					SetDefaultHttpHeaders( request );
 
-					var requestContext = new RequestContext( this, request, currentSession, attempt, retryPayload, cancellationToken );
-					_AuthenticationHandler?.HandleRequest( requestContext );
+					if( _AuthenticationHandler != null )
+					{
+						var requestContext = new RequestContext( this, request, currentSession, attempt, retryPayload, cancellationToken );
+						await _AuthenticationHandler.HandleRequest( requestContext ).ConfigureAwait( false );
+					}
 
 					response = await _HttpClient.SendAsync( request, completionOptions, cancellationToken ).ConfigureAwait( false );
 
@@ -512,7 +515,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 					if( _AuthenticationHandler != null )
 					{
 						var context = new ResponseContext( this, request, response, currentSession, attempt, cancellationToken );
-						_AuthenticationHandler.HandleResponse( context );
+						await _AuthenticationHandler.HandleResponse( context ).ConfigureAwait( false );
 						if( context.RetryRequest )
 						{
 							response.Dispose();
