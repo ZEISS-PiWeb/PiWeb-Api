@@ -17,6 +17,7 @@ using System.Threading;
 using CacheCow.Client;
 using CacheCow.Common;
 using JetBrains.Annotations;
+using Zeiss.PiWeb.Api.Rest.Common.Authentication;
 using Zeiss.PiWeb.Api.Rest.Common.Client;
 using Zeiss.PiWeb.Api.Rest.HttpClient.Data;
 using Zeiss.PiWeb.Api.Rest.HttpClient.OAuth;
@@ -97,6 +98,11 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 	/// Specifies whether a system-wide http proxy setting will be respected.
 	/// </summary>
 	private bool _UseSystemProxy = true;
+
+	/// <summary>
+	/// The authentication handler or <c>null</c> when no handler is set.
+	/// </summary>
+	[CanBeNull] private IAuthenticationHandler _AuthenticationHandler;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="RestClientBuilder"/> class.
@@ -282,6 +288,15 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 	public virtual RestClientBuilder ClearDelegatingHandlerFactories()
 	{
 		_DelegatingHandlerFactories.Clear();
+		return this;
+	}
+
+	/// <summary>
+	/// Sets a handler used to define the authentication behavior of all rest clients.
+	/// </summary>
+	public virtual RestClientBuilder SetAuthenticationHandler( [CanBeNull] IAuthenticationHandler authenticationHandler )
+	{
+		_AuthenticationHandler = authenticationHandler;
 		return this;
 	}
 

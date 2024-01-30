@@ -18,6 +18,7 @@ using System.Net.Http;
 using CacheCow.Client;
 using CacheCow.Common;
 using JetBrains.Annotations;
+using Zeiss.PiWeb.Api.Rest.Common.Authentication;
 using Zeiss.PiWeb.Api.Rest.Common.Client;
 
 #endregion
@@ -82,6 +83,12 @@ public record RestClientSettings
 	/// The delegating handler factories to use for creating delegating handler chains.
 	/// </summary>
 	public IReadOnlyCollection<Func<DelegatingHandler>> DelegatingHandlerFactories { get; set; }
+
+	/// <summary>
+	/// The authentication handler or <c>null</c> when no handler is set.
+	/// </summary>
+	[CanBeNull]
+	public IAuthenticationHandler AuthenticationHandler { get; set; }
 
 	#endregion
 }
