@@ -33,6 +33,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using CacheCow.Common;
 	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Common.Authentication;
+	using Zeiss.PiWeb.Api.Rest.Common.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Common.Data;
 	using Zeiss.PiWeb.Api.Rest.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
@@ -40,7 +41,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 	#endregion
 
-	public abstract class RestClientBase : IDisposable
+	public abstract class RestClientBase : IDisposable, ICustomRestClient
 	{
 		#region constants
 
