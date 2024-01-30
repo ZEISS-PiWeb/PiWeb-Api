@@ -26,6 +26,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 	using Zeiss.PiWeb.Api.Rest.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
+	using Zeiss.PiWeb.Api.Rest.HttpClient.Builder;
 
 	#endregion
 
@@ -36,7 +37,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 	{
 		#region constants
 
-		private const string EndpointName = "DataServiceRest/";
+		/// <summary>
+		/// The name of the endpoint of this service.
+		/// </summary>
+		public const string EndpointName = "DataServiceRest/";
 
 		#endregion
 
@@ -61,6 +65,16 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			: base( restClient ?? new RestClient( serverUri, EndpointName, maxUriLength: maxUriLength, serializer: ObjectSerializer.SystemTextJson ) )
 		{
 			_MaxRequestsInParallel = maxRequestsInParallel;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DataServiceRestClient"/> class.
+		/// </summary>
+		/// <param name="settings">The settings of the rest service.</param>
+		internal DataServiceRestClient( RestClientSettings settings )
+			: base( new RestClient( EndpointName, settings ) )
+		{
+			_MaxRequestsInParallel = settings.MaxRequestsInParallel;
 		}
 
 		#endregion
