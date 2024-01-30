@@ -32,6 +32,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using CacheCow.Client;
 	using CacheCow.Common;
 	using JetBrains.Annotations;
+	using Zeiss.PiWeb.Api.Rest.Common.Authentication;
 	using Zeiss.PiWeb.Api.Rest.Common.Data;
 	using Zeiss.PiWeb.Api.Rest.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
@@ -87,6 +88,12 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		private IVaryHeaderStore _VaryHeaderStore;
 		private readonly IObjectSerializer _Serializer;
 
+		/// <summary>
+		/// This value will be increased atomically to uniquely identify a request session which consists of an original rest request
+		/// and all of its retry attempts.
+		/// </summary>
+		private long _LatestSession = 0;
+
 		// This is only used by the legacy constructor to preserve old behavior
 		[CanBeNull] private readonly DelegatingHandler _CustomHttpMessageHandler;
 
@@ -95,6 +102,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			new List<Func<DelegatingHandler>>();
 		[NotNull] private ICollection<DelegatingHandler> _DelegatingHandlers = new List<DelegatingHandler>();
 
+		private readonly IAuthenticationHandler _AuthenticationHandler;
 		private AuthenticationContainer _AuthenticationContainer = new AuthenticationContainer( AuthenticationMode.NoneOrBasic );
 
 		private HttpClient _HttpClient;
@@ -163,12 +171,16 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			_Chunked = settings.AllowChunkedDataTransfer;
 
 			_CustomHttpMessageHandler = null;
+			_AuthenticationHandler = settings.AuthenticationHandler;
+
 			_DelegatingHandlerFactories = new List<Func<DelegatingHandler>>( settings.DelegatingHandlerFactories );
 
 			_Serializer = settings.Serializer;
 			MaxUriLength = settings.MaxUriLength;
 
 			BuildHttpClient();
+
+			_AuthenticationHandler?.InitializeRestClient( new InitializationContext( this ) );
 		}
 
 		#endregion
@@ -466,6 +478,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			HttpRequestMessage request = null;
 			HttpResponseMessage response = null;
 
+			var currentSession = Interlocked.Increment( ref _LatestSession );
+			var attempt = 1;
+			object retryPayload = null;
+
 			try
 			{
 				await CheckAuthenticationInformationAsync( cancellationToken ).ConfigureAwait( false );
@@ -476,6 +492,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				{
 					request = requestCreationHandler();
 					SetDefaultHttpHeaders( request );
+
+					var requestContext = new RequestContext( this, request, currentSession, attempt, retryPayload, cancellationToken );
+					_AuthenticationHandler?.HandleRequest( requestContext );
+
 					response = await _HttpClient.SendAsync( request, completionOptions, cancellationToken ).ConfigureAwait( false );
 
 					if( response.IsSuccessStatusCode )
@@ -488,9 +508,24 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 						return default;
 					}
 
+					if( _AuthenticationHandler != null )
+					{
+						var context = new ResponseContext( this, request, response, currentSession, attempt, cancellationToken );
+						_AuthenticationHandler.HandleResponse( context );
+						if( context.RetryRequest )
+						{
+							response.Dispose();
+							retryPayload = context.RetryPayload;
+							++attempt;
+							continue;
+						}
+					}
+
 					if( await UpdateAuthenticationInformationAsync( response, cancellationToken ).ConfigureAwait( false ) )
 					{
 						response.Dispose();
+						retryPayload = null;
+						++attempt;
 						continue;
 					}
 
