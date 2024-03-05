@@ -1,4 +1,10 @@
-namespace Zeiss.PiWeb.Api.Rest.Common.Contracts;
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Carl Zeiss IMT (IZM Dresden)                    */
+/* Softwaresystem PiWeb                            */
+/* (c) Carl Zeiss 2024                             */
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
+
+namespace Zeiss.PiWeb.Api.Rest.Contracts;
 
 #region usings
 
@@ -11,12 +17,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Zeiss.PiWeb.Api.Rest.Common.Client;
-using Zeiss.PiWeb.Api.Rest.Contracts;
 
 #endregion
 
 /// <summary>
-/// Represent a custom rest client that can be used to execute rest request created by an request builder.
+/// Represent a custom rest client that can be used to execute generic rest requests created by a request builder.
 /// </summary>
 public interface ICustomRestClient
 {

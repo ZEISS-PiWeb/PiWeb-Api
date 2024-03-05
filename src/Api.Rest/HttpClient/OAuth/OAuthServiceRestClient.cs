@@ -17,7 +17,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 	using System.Threading.Tasks;
 	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Common.Client;
-	using Zeiss.PiWeb.Api.Rest.Common.Contracts;
+	using Zeiss.PiWeb.Api.Rest.Contracts;
 	using Zeiss.PiWeb.Api.Rest.HttpClient.Builder;
 
 	#endregion

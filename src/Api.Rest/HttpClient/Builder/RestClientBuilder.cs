@@ -10,6 +10,8 @@
 
 namespace Zeiss.PiWeb.Api.Rest.HttpClient.Builder;
 
+#region usings
+
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -23,6 +25,8 @@ using Zeiss.PiWeb.Api.Rest.HttpClient.Data;
 using Zeiss.PiWeb.Api.Rest.HttpClient.OAuth;
 using Zeiss.PiWeb.Api.Rest.HttpClient.RawData;
 
+#endregion
+
 /// <summary>
 /// <inheritdoc cref="Zeiss.PiWeb.Api.Rest.HttpClient.Builder.IRestClientBuilder" />
 /// Using this builder should be preferred over directly instantiating a rest client.
@@ -32,15 +36,17 @@ using Zeiss.PiWeb.Api.Rest.HttpClient.RawData;
 /// </summary>
 public class RestClientBuilder : IRestClientBuilder, IDisposable
 {
+	#region members
+
 	// The internal cache store used when http caching is enabled and no external cache store is set.
 	private readonly Lazy<ICacheStore> _InternalSharedCacheStore = new(
 		() => new InMemoryCacheStore(),
-		LazyThreadSafetyMode.ExecutionAndPublication );
+		LazyThreadSafetyMode.ExecutionAndPublication);
 
 	// The internal vary header store used when http caching is enabled and no external vary header store is set.
 	private readonly Lazy<IVaryHeaderStore> _InternalSharedVaryHeaderStore = new(
 		() => new InMemoryVaryHeaderStore(),
-		LazyThreadSafetyMode.ExecutionAndPublication );
+		LazyThreadSafetyMode.ExecutionAndPublication);
 
 	// Factories used for creating a delegating handler chains
 	[NotNull] private readonly List<Func<DelegatingHandler>> _DelegatingHandlerFactories = new List<Func<DelegatingHandler>>();
@@ -104,6 +110,10 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 	/// </summary>
 	[CanBeNull] private IAuthenticationHandler _AuthenticationHandler;
 
+	#endregion
+
+	#region constructors
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="RestClientBuilder"/> class.
 	/// </summary>
@@ -116,6 +126,10 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 
 		_ServerUri = serverUri;
 	}
+
+	#endregion
+
+	#region methods
 
 	/// <summary>
 	/// Creates an instance of <see cref="RestClientSettings"/> representing the current configuration of this builder.
@@ -144,7 +158,7 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 	/// Sets the timespan to wait before rest requests time out. Default value is 5 minutes.
 	/// </summary>
 	/// <param name="timeout">The timespan to wait.</param>
-	public virtual RestClientBuilder SetTimeout(TimeSpan timeout)
+	public virtual RestClientBuilder SetTimeout( TimeSpan timeout )
 	{
 		_Timeout = timeout;
 		return this;
@@ -154,7 +168,7 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 	/// Sets the timespan to wait before rest requests time out to a predefined value. Default timeout is 5 minutes.
 	/// </summary>
 	/// <param name="timeoutType">The standard timeout to set.</param>
-	public virtual RestClientBuilder SetStandardTimeout(StandardTimeoutType timeoutType)
+	public virtual RestClientBuilder SetStandardTimeout( StandardTimeoutType timeoutType )
 	{
 		_Timeout = timeoutType switch
 		{
@@ -171,7 +185,7 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 	/// Sets the maximum length of URIs generated for rest requests. Default value is 8192.
 	/// </summary>
 	/// <param name="maxUriLength">The maximum length.</param>
-	public virtual RestClientBuilder SetMaxUriLength(int maxUriLength)
+	public virtual RestClientBuilder SetMaxUriLength( int maxUriLength )
 	{
 		_MaxUriLength = maxUriLength;
 		return this;
@@ -182,7 +196,7 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 	/// Default value is 8.
 	/// </summary>
 	/// <param name="maxRequests">The maximum number of requests that may occur in parallel.</param>
-	public virtual RestClientBuilder SetMaxRequestsInParallel(int maxRequests)
+	public virtual RestClientBuilder SetMaxRequestsInParallel( int maxRequests )
 	{
 		_MaxRequestsInParallel = maxRequests;
 		return this;
@@ -192,7 +206,7 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 	/// Specifies whether chunked transfer encoding should be used. Default value is <c>true</c>.
 	/// </summary>
 	/// <param name="allowed"><c>True</c> if chunked transfer encoding should be used; otherwise, <c>false</c>.</param>
-	public virtual RestClientBuilder SetAllowChunkedTransferEncoding(bool allowed)
+	public virtual RestClientBuilder SetAllowChunkedTransferEncoding( bool allowed )
 	{
 		_AllowChunkedDataTransfer = allowed;
 		return this;
@@ -203,7 +217,7 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 	/// <see cref="ObjectSerializer.SystemTextJsonSerializer"/>.
 	/// </summary>
 	/// <param name="serializer">The custom serializer implementation.</param>
-	public virtual RestClientBuilder SetCustomSerializer( [NotNull] IObjectSerializer serializer)
+	public virtual RestClientBuilder SetCustomSerializer( [NotNull] IObjectSerializer serializer )
 	{
 		_Serializer = serializer ?? throw new ArgumentNullException( nameof( serializer ) );
 		return this;
@@ -232,7 +246,7 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 	/// </summary>
 	public virtual RestClientBuilder EnableExternalHttpCaching(
 		[NotNull] ICacheStore cacheStore,
-		[NotNull] IVaryHeaderStore varyHeaderStore)
+		[NotNull] IVaryHeaderStore varyHeaderStore )
 	{
 		_HttpCachingEnabled = true;
 		_CacheStore = cacheStore ?? throw new ArgumentNullException( nameof( cacheStore ) );
@@ -303,6 +317,36 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 		return this;
 	}
 
+	/// <summary>
+	/// Performs cleanup.
+	/// </summary>
+	/// <param name="disposing">
+	/// Indicates whether the method call comes from a Dispose method (<c>true</c>) or from a finalizer (<c>false</c>).
+	/// </param>
+	protected virtual void Dispose( bool disposing )
+	{
+		if( _InternalSharedCacheStore.IsValueCreated )
+			_InternalSharedCacheStore.Value.Dispose();
+
+		if( _InternalSharedVaryHeaderStore.IsValueCreated )
+			_InternalSharedVaryHeaderStore.Value.Dispose();
+	}
+
+	#endregion
+
+	#region interface IDisposable
+
+	/// <inheritdoc />
+	public void Dispose()
+	{
+		Dispose( true );
+		GC.SuppressFinalize( this );
+	}
+
+	#endregion
+
+	#region interface IRestClientBuilder
+
 	/// <inheritdoc />
 	public DataServiceRestClient CreateDataServiceRestClient()
 	{
@@ -322,25 +366,5 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 		return new OAuthServiceRestClient( GetSettings() );
 	}
 
-	/// <summary>
-	/// Performs cleanup.
-	/// </summary>
-	/// <param name="disposing">
-	/// Indicates whether the method call comes from a Dispose method (<c>true</c>) or from a finalizer (<c>false</c>).
-	/// </param>
-	protected virtual void Dispose( bool disposing )
-	{
-		if( _InternalSharedCacheStore.IsValueCreated )
-			_InternalSharedCacheStore.Value.Dispose();
-
-		if( _InternalSharedVaryHeaderStore.IsValueCreated )
-			_InternalSharedVaryHeaderStore.Value.Dispose();
-	}
-
-	/// <inheritdoc />
-	public void Dispose()
-	{
-		Dispose( true );
-		GC.SuppressFinalize( this );
-	}
+	#endregion
 }
