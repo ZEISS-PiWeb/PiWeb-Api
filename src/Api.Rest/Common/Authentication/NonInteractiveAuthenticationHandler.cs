@@ -3,7 +3,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss Industrielle Messtechnik GmbH        */
 /* Softwaresystem PiWeb                            */
-/* (c) Carl Zeiss 2016                             */
+/* (c) Carl Zeiss 2024                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #endregion
@@ -145,8 +145,6 @@ public class NonInteractiveAuthenticationHandler : IAuthenticationHandler
 			default:
 				context.UpdateAuthenticationContainer( new AuthenticationContainer( AuthenticationMode.NoneOrBasic ) );
 				break;
-
-			// NonInteractiveAuthenticationHandler.Certificate( Certificate );
 		}
 	}
 
@@ -274,8 +272,8 @@ public class NonInteractiveAuthenticationHandler : IAuthenticationHandler
 	}
 
 	/// <summary>
-	/// Creates a new <see cref="NonInteractiveAuthenticationHandler"/> instance which implements certificate authentication based
-	/// on https client certificates.
+	/// Creates a new <see cref="NonInteractiveAuthenticationHandler"/> instance which implements authentication based
+	/// on a client certificate.
 	/// </summary>
 	/// <param name="certificate">The certificate.</param>
 	/// <returns>The new instance.</returns>
@@ -285,8 +283,8 @@ public class NonInteractiveAuthenticationHandler : IAuthenticationHandler
 	}
 
 	/// <summary>
-	/// Creates a new <see cref="NonInteractiveAuthenticationHandler"/> instance which implements certificate authentication based
-	/// on https client certificates.
+	/// Creates a new <see cref="NonInteractiveAuthenticationHandler"/> instance which implements authentication based
+	/// on a client certificate.
 	/// </summary>
 	/// <param name="certificateThumbprint">
 	/// The thumbprint of the certificate to use. The certificate will be looked up in the local certificate storage of the current

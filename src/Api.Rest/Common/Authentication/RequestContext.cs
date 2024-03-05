@@ -3,7 +3,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss Industrielle Messtechnik GmbH        */
 /* Softwaresystem PiWeb                            */
-/* (c) Carl Zeiss 2016                             */
+/* (c) Carl Zeiss 2024                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #endregion
@@ -68,26 +68,22 @@ internal class RequestContext : IRequestContext
 	public long Attempt { get; }
 
 	/// <inheritdoc />
-	[NotNull]
 	public HttpRequestMessage CurrentRequest { get; }
 
 	/// <inheritdoc />
-	[NotNull]
 	public AuthenticationContainer CurrentAuthenticationContainer => _RestClient.AuthenticationContainer;
 
 	/// <inheritdoc />
-	[NotNull]
 	public Uri ServiceLocation => _RestClient.ServiceLocation;
 
 	/// <inheritdoc />
-	[CanBeNull]
 	public object RetryPayload { get; }
 
 	/// <inheritdoc />
 	public CancellationToken CancellationToken { get; }
 
 	/// <inheritdoc />
-	public void UpdateAuthenticationContainer( [NotNull] AuthenticationContainer newAuthenticationContainer )
+	public void UpdateAuthenticationContainer( AuthenticationContainer newAuthenticationContainer )
 	{
 		_RestClient.AuthenticationContainer =
 			newAuthenticationContainer ?? throw new ArgumentNullException( nameof( newAuthenticationContainer ) );

@@ -34,6 +34,6 @@ public interface IRestClientBuilder
 	/// <summary>
 	/// Creates an oauth data service rest client using the current setup.
 	/// </summary>
-	/// <returns>The created raw data service rest client.</returns>
+	/// <returns>The created oauth service rest client.</returns>
 	public OAuthServiceRestClient CreateOAuthServiceRestClient();
 }

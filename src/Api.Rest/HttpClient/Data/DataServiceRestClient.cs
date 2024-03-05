@@ -22,7 +22,6 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 	using Zeiss.PiWeb.Api.Core;
 	using Zeiss.PiWeb.Api.Definitions;
 	using Zeiss.PiWeb.Api.Rest.Common.Client;
-	using Zeiss.PiWeb.Api.Rest.Common.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Common.Data;
 	using Zeiss.PiWeb.Api.Rest.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
