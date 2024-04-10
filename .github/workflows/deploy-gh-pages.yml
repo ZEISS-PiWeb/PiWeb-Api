@@ -1,0 +1,12 @@
+# Workflow to build and deploy the API documentation using GitHub Pages
+
+name: Build and deploy Github Pages
+
+on:
+  push:
+    branches: [ gh-pages ]
+
+jobs:
+  build-and-deploy-pages:
+    uses: ZEISS-PiWeb/github-actions/.github/workflows/deploy-gh-pages.yml@main
+    secrets: inherit
