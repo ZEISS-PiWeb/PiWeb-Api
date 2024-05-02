@@ -30,6 +30,13 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.RawData
 		[JsonPropertyName( "version" )]
 		public string Version { get; set; }
 
+		/// <summary>
+		/// Gets or sets the extended server version.
+		/// </summary>
+		[Newtonsoft.Json.JsonProperty( "extendedVersion" )]
+		[JsonPropertyName( "extendedVersion" )]
+		public string ExtendedVersion { get; set; }
+
 		[Newtonsoft.Json.JsonProperty( "requestHeaderSize" )]
 		[JsonPropertyName( "requestHeaderSize" )]
 		public int RequestHeaderSize { get; set; }
