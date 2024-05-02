@@ -45,6 +45,13 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 		public string Version { get; set; }
 
 		/// <summary>
+		/// Gets or sets the extended server version.
+		/// </summary>
+		[Newtonsoft.Json.JsonProperty( "extendedVersion" )]
+		[JsonPropertyName( "extendedVersion" )]
+		public string ExtendedVersion { get; set; }
+
+		/// <summary>
 		/// Gets or sets whether the server has security enabled.
 		/// </summary>
 		[Newtonsoft.Json.JsonProperty( "securityEnabled" )]
