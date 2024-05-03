@@ -63,7 +63,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// Specifies if a previous result can be returned or if the server should be queried again requiring at least one rest request.
 		/// </param>
 		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		Task<RawDataServiceFeatureMatrix> GetFeatureMatrix( RefreshPolicy refreshPolicy, CancellationToken cancellationToken = default );
+		Task<T> GetFeatureMatrix( RefreshPolicy refreshPolicy, CancellationToken cancellationToken = default );
 
 		/// <summary>
 		/// Fetches a list of raw data information for the <paramref name="entity"/> identified by <paramref name="uuids"/> and filtered by <paramref name="filter"/>.
