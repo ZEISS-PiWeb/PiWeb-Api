@@ -719,8 +719,13 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			_HttpClient = new HttpClient( outerMostHandler )
 			{
 				Timeout = System.Threading.Timeout.InfiniteTimeSpan,
-				BaseAddress = ServiceLocation
+				BaseAddress = ServiceLocation,
+#if NET6_0_OR_GREATER
+				// support HTTP/3 and HTTP/2 and HTTP/1.1
+				DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrHigher
+#endif
 			};
+
 		}
 
 #if NET5_0_OR_GREATER

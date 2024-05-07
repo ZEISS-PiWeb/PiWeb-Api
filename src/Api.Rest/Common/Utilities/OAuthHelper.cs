@@ -205,7 +205,13 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			if( tokenResponse.IsError )
 				return null;
 
-			using var httpClient = new HttpClient();
+			using var httpClient = new HttpClient
+			{
+#if NET6_0_OR_GREATER
+				// support HTTP/3 and HTTP/2 and HTTP/1.1
+				DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrHigher
+#endif
+			};
 			var response = await httpClient
 				.GetUserInfoAsync( new UserInfoRequest { Address = userInfoEndpoint, Token = tokenResponse.AccessToken } )
 				.ConfigureAwait( false );
@@ -261,7 +267,13 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 		private static string CreateOAuthStartUrl( string authorizeEndpoint, CryptoNumbers cryptoNumbers, OAuthTokenInformation tokenInformation )
 		{
-			using var httpClient = new HttpClient();
+			using var httpClient = new HttpClient
+			{
+#if NET6_0_OR_GREATER
+				// support HTTP/3 and HTTP/2 and HTTP/1.1
+				DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrHigher
+#endif
+			};
 
 			var request = new RequestUrl( authorizeEndpoint );
 			return request.CreateAuthorizeUrl(
@@ -300,7 +312,13 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 		private static TokenClient CreateTokenClient( string tokenEndpoint, string clientId )
 		{
-			var tokenClient = new HttpClient();
+			var tokenClient = new HttpClient
+			{
+#if NET6_0_OR_GREATER
+				// support HTTP/3 and HTTP/2 and HTTP/1.1
+				DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrHigher
+#endif
+			};
 			return new TokenClient( tokenClient, new TokenClientOptions
 			{
 				Address = tokenEndpoint,
