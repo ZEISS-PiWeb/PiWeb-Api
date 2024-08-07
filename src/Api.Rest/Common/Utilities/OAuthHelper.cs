@@ -17,15 +17,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 	using System.IdentityModel.Tokens.Jwt;
 	using System.IO;
 	using System.Linq;
-	using System.Net.Http;
 	using System.Security.Claims;
-	using System.Security.Cryptography;
-	using System.Text;
 	using System.Threading.Tasks;
-	using IdentityModel;
-	using IdentityModel.Client;
 	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.HttpClient.OAuth;
+	using Zeiss.PiWeb.Api.Rest.HttpClient.OAuth.AuthenticationFlows;
 
 	#endregion
 
@@ -195,117 +191,35 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			return null;
 		}
 
-		private static async Task<OAuthTokenCredential> TryGetOAuthTokenFromRefreshTokenAsync( TokenClient tokenClient, string userInfoEndpoint, string refreshToken )
-		{
-			// when a refresh token is present try to use it to acquire a new access token
-			if( string.IsNullOrEmpty( refreshToken ) )
-				return null;
-
-			var tokenResponse = await tokenClient.RequestRefreshTokenAsync( refreshToken ).ConfigureAwait( false );
-			if( tokenResponse.IsError )
-				return null;
-
-			using var httpClient = new HttpClient();
-			var response = await httpClient
-				.GetUserInfoAsync( new UserInfoRequest { Address = userInfoEndpoint, Token = tokenResponse.AccessToken } )
-				.ConfigureAwait( false );
-
-			if( response.IsError )
-				return null;
-
-			return OAuthTokenCredential.CreateWithClaims(
-				response.Claims,
-				tokenResponse.AccessToken,
-				DateTime.UtcNow + TimeSpan.FromSeconds( tokenResponse.ExpiresIn ),
-				tokenResponse.RefreshToken );
-		}
-
-		private static async Task<OAuthTokenCredential> TryGetOAuthTokenFromAuthorizeResponseAsync(
-			TokenClient tokenClient,
-			CryptoNumbers cryptoNumbers,
-			AuthorizeResponse response,
-			OAuthTokenInformation tokenInformation )
-		{
-			if( response == null )
-				return null;
-
-			// decode the claim's IdentityToken
-			var claims = DecodeSecurityToken( response.IdentityToken ).Claims.ToArray();
-
-			// the following validation is necessary to protect against several kinds of CSRF / man-in-the-middle and other attack scenarios
-			// state validation
-			if( !string.Equals( cryptoNumbers.State, response.State, StringComparison.Ordinal ) )
-				throw new InvalidOperationException( "invalid state value in openid service response." );
-
-			// nonce validation
-			if( !ValidateNonce( cryptoNumbers.Nonce, claims ) )
-				throw new InvalidOperationException( "invalid nonce value in identity token." );
-
-			// c_hash validation
-			if( !ValidateCodeHash( response.Code, claims ) )
-				throw new InvalidOperationException( "invalid c_hash value in identity token." );
-
-			// exchange the code for the access and refresh token, also send the code verifier,
-			// to handle man-in-the-middle attacks against the authorization code (PKCE).
-			// Code not null here since ValidateCodeHash succeeded.
-			var tokenResponse = await tokenClient.RequestAuthorizationCodeTokenAsync(
-				code: response.Code!,
-				redirectUri: tokenInformation.RedirectUri,
-				codeVerifier: cryptoNumbers.Verifier ).ConfigureAwait( false );
-
-			if( tokenResponse.IsError )
-				throw new InvalidOperationException( "error during request of access token using authorization code: " + tokenResponse.Error );
-
-			return OAuthTokenCredential.CreateWithIdentityToken( tokenResponse.IdentityToken, tokenResponse.AccessToken, DateTime.UtcNow + TimeSpan.FromSeconds( tokenResponse.ExpiresIn ), tokenResponse.RefreshToken );
-		}
-
-		private static string CreateOAuthStartUrl( string authorizeEndpoint, CryptoNumbers cryptoNumbers, OAuthTokenInformation tokenInformation )
-		{
-			using var httpClient = new HttpClient();
-
-			var request = new RequestUrl( authorizeEndpoint );
-			return request.CreateAuthorizeUrl(
-				clientId: tokenInformation.ClientID,
-				responseType: "id_token code",
-				responseMode: "form_post",
-				scope: tokenInformation.RequestedScopes,
-				redirectUri: tokenInformation.RedirectUri,
-				state: cryptoNumbers.State,
-				nonce: cryptoNumbers.Nonce,
-				codeChallenge: cryptoNumbers.Challenge,
-				codeChallengeMethod: OidcConstants.CodeChallengeMethods.Sha256 );
-		}
-
 		/// <summary>
-		/// Get public OAuth token information from PiWeb server.
+		/// Get public OAuth configuration from PiWeb server.
 		/// FUTURE: use the WebFinger method discovery method described in OpenID connect specification section 2
 		/// <seealso>
 		///     <cref>https://openid.net/specs/openid-connect-discovery-1_0.html#IssuerDiscovery</cref>
 		/// </seealso>
 		/// </summary>
-		private static async Task<OAuthTokenInformation> GetTokenInformationAsync( string instanceUrl )
+		private static async Task<OAuthConfiguration> GetOAuthConfigurationAsync( string instanceUrl )
 		{
 			var oauthServiceRest = new OAuthServiceRestClient( new Uri( instanceUrl ) )
 			{
 				UseDefaultWebProxy = true
 			};
 
-			var tokenInformation = await oauthServiceRest.GetOAuthTokenInformation().ConfigureAwait( false );
+			var tokenInformation = await oauthServiceRest.GetOAuthConfiguration().ConfigureAwait( false );
 
 			if( tokenInformation == null )
-				throw new InvalidOperationException( "cannot detect OpenID token information from resource URL." );
+				throw new InvalidOperationException( "Cannot detect OpenID token information from resource URL." );
 
 			return tokenInformation;
 		}
 
-		private static TokenClient CreateTokenClient( string tokenEndpoint, string clientId )
+		private static IOidcAuthenticationFlow ChooseSuitableAuthenticationFlow( OAuthConfiguration tokenInformation )
 		{
-			var tokenClient = new HttpClient();
-			return new TokenClient( tokenClient, new TokenClientOptions
-			{
-				Address = tokenEndpoint,
-				ClientId = clientId,
-			} );
+			// Authorization code flow is preferred if supported
+			if( tokenInformation.SupportedOidcAuthenticationFlows.HasFlag( OidcAuthenticationFlows.AuthorizationCodeFlow ) )
+				return new AuthorizationCodeFlow();
+
+			return new HybridFlow();
 		}
 
 		/// <summary>
@@ -331,34 +245,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 					return cachedToken;
 			}
 
-			var tokenInformation = await GetTokenInformationAsync( instanceUrl ).ConfigureAwait( false );
-			var discoveryInfo = await GetDiscoveryInfoAsync( tokenInformation ).ConfigureAwait( false );
-			if( discoveryInfo.IsError )
-				return null;
+			var tokenInformation = await GetOAuthConfigurationAsync( instanceUrl ).ConfigureAwait( false );
 
-			var tokenClient = CreateTokenClient( discoveryInfo.TokenEndpoint, tokenInformation.ClientID );
-			var result = await TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken ).ConfigureAwait( false );
-			if( result != null )
-			{
-				if( !bypassLocalCache )
-					AccessTokenCache.Store( instanceUrl, result );
+			var authenticationFlow = ChooseSuitableAuthenticationFlow( tokenInformation );
+			var result = await authenticationFlow.ExecuteAuthenticationFlowAsync( refreshToken, tokenInformation, requestCallbackAsync ).ConfigureAwait( false );
 
-				return result;
-			}
-
-			// no refresh token or refresh token expired, do the full auth cycle eventually involving a password prompt
-			if( requestCallbackAsync == null )
-				return null;
-
-			var cryptoNumbers = new CryptoNumbers();
-			var startUrl = CreateOAuthStartUrl( discoveryInfo.AuthorizeEndpoint, cryptoNumbers, tokenInformation );
-
-			var request = new OAuthRequest( startUrl, tokenInformation.RedirectUri );
-			var response = ( await requestCallbackAsync( request ).ConfigureAwait( false ) )?.ToAuthorizeResponse();
-			if( response == null )
-				return null;
-
-			result = await TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response, tokenInformation ).ConfigureAwait( false );
 			if( result == null )
 				return null;
 
@@ -391,35 +282,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 					return cachedToken;
 			}
 
-			var tokenInformation = GetTokenInformationAsync( instanceUrl ).GetAwaiter().GetResult();
-			var discoveryInfo = GetDiscoveryInfoAsync( tokenInformation ).GetAwaiter().GetResult();
-			if( discoveryInfo.IsError )
-				return null;
+			var tokenInformation = GetOAuthConfigurationAsync( instanceUrl ).GetAwaiter().GetResult();
 
-			var tokenClient = CreateTokenClient( discoveryInfo.TokenEndpoint, tokenInformation.ClientID );
-			var result = TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken ).GetAwaiter().GetResult();
-			if( result != null )
-			{
-				if( !bypassLocalCache )
-					AccessTokenCache.Store( instanceUrl, result );
+			var authenticationFlow = ChooseSuitableAuthenticationFlow( tokenInformation );
+			var result = authenticationFlow.ExecuteAuthenticationFlow( refreshToken, tokenInformation, requestCallback );
 
-				return result;
-			}
-
-			// no refresh token or refresh token expired, do the full auth cycle eventually involving a password prompt
-			if( requestCallback == null )
-				return null;
-
-			var cryptoNumbers = new CryptoNumbers();
-			var startUrl = CreateOAuthStartUrl( discoveryInfo.AuthorizeEndpoint, cryptoNumbers, tokenInformation );
-
-			var request = new OAuthRequest( startUrl, tokenInformation.RedirectUri );
-			var response = requestCallback( request )?.ToAuthorizeResponse();
-
-			if( response == null )
-				return null;
-
-			result = TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response, tokenInformation ).GetAwaiter().GetResult();
 			if( result == null )
 				return null;
 
@@ -427,49 +294,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 				AccessTokenCache.Store( instanceUrl, result );
 
 			return result;
-		}
-
-		/// <summary>
-		/// Request target server for authentication settings.
-		/// </summary>
-		private static async Task<DiscoveryDocumentResponse> GetDiscoveryInfoAsync( OAuthTokenInformation tokenInformation )
-		{
-			var discoveryCache = new DiscoveryCache( tokenInformation.OpenIdAuthority,
-				new DiscoveryPolicy
-				{
-					AdditionalEndpointBaseAddresses = tokenInformation.AdditionalEndpointBaseAddresses
-				} );
-
-			var discoveryInfo = await discoveryCache.GetAsync().ConfigureAwait( false );
-			return discoveryInfo;
-		}
-
-		/// <summary>
-		/// Checks if the provided nonce in the token claims is valid and matching the expected nonce.
-		/// </summary>
-		/// <param name="expectedNonce">The expected nonce.</param>
-		/// <param name="tokenClaims">A collection of claims.</param>
-		/// <returns><see langword="true"/> if nonce is valid, otherwise <see langword="false"/>.</returns>
-		public static bool ValidateNonce( string expectedNonce, IEnumerable<Claim> tokenClaims )
-		{
-			var tokenNonce = tokenClaims.FirstOrDefault( c => c.Type == JwtClaimTypes.Nonce );
-
-			return tokenNonce != null && string.Equals( tokenNonce.Value, expectedNonce, StringComparison.Ordinal );
-		}
-
-		private static bool ValidateCodeHash( string authorizationCode, IEnumerable<Claim> tokenClaims )
-		{
-			var cHash = tokenClaims.FirstOrDefault( c => c.Type == JwtClaimTypes.AuthorizationCodeHash );
-
-			using var sha = SHA256.Create();
-
-			var codeHash = sha.ComputeHash( Encoding.ASCII.GetBytes( authorizationCode ) );
-			var leftBytes = new byte[ 16 ];
-			Array.Copy( codeHash, leftBytes, 16 );
-
-			var codeHashB64 = Base64Url.Encode( leftBytes );
-
-			return string.Equals( cHash?.Value, codeHashB64, StringComparison.Ordinal );
 		}
 
 		/// <summary>
@@ -495,32 +319,5 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 		#endregion
 
-		#region class CryptoNumbers
-
-		private class CryptoNumbers
-		{
-			#region constructors
-
-			public CryptoNumbers()
-			{
-				Nonce = CryptoRandom.CreateUniqueId(); // only default length of 16 as this is included in the access token which should small
-				State = CryptoRandom.CreateUniqueId( 32 );
-				Verifier = CryptoRandom.CreateUniqueId( 32 );
-				Challenge = Verifier.ToCodeChallenge();
-			}
-
-			#endregion
-
-			#region properties
-
-			public string Nonce { get; }
-			public string State { get; }
-			public string Verifier { get; }
-			public string Challenge { get; }
-
-			#endregion
-		}
-
-		#endregion
 	}
 }
