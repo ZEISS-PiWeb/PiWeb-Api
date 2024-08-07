@@ -16,6 +16,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 	using System.Threading.Tasks;
 	using Zeiss.PiWeb.Api.Rest.Common.Client;
 	using Zeiss.PiWeb.Api.Rest.Contracts;
+	using Zeiss.PiWeb.Api.Rest.Dtos;
 
 	#endregion
 
@@ -36,13 +37,26 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 		#region methods
 
 		/// <summary>
-		/// Method to query the <see cref="OAuthTokenInformation"/>.
+		/// Method for fetching the <see cref="InterfaceVersionRange"/> to check for relevant supported features.
+		/// </summary>
 		/// <remarks>
 		/// This method can also be used for quick connection check to test if the service is alive. It is
-		/// quaranteed that this method returns quickly and does perform a lot of work server side.
+		/// guaranteed that this method returns quickly and does perform a lot of work server side.
 		/// </remarks>
+		/// <param name="cancellationToken">A cancellation token to cancel the web service call.</param>
+		Task<InterfaceVersionRange> GetInterfaceInformation( CancellationToken cancellationToken = default );
+
+		/// <summary>
+		/// Method to query the <see cref="OAuthTokenInformation"/>.
 		/// </summary>
+		/// <param name="cancellationToken">A cancellation token to cancel the web service call.</param>
 		Task<OAuthTokenInformation> GetOAuthTokenInformation( CancellationToken cancellationToken = default );
+
+		/// <summary>
+		/// Get information about valid OAuth authorities and client settings.
+		/// </summary>
+		/// <param name="cancellationToken">A cancellation token to cancel the web service call.</param>
+		Task<OAuthConfiguration> GetOAuthConfiguration( CancellationToken cancellationToken = default );
 
 		#endregion
 	}
