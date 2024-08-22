@@ -18,6 +18,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Common.Client;
 	using Zeiss.PiWeb.Api.Rest.Contracts;
+	using Zeiss.PiWeb.Api.Rest.Dtos;
 	using Zeiss.PiWeb.Api.Rest.HttpClient.Builder;
 
 	#endregion
@@ -33,6 +34,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 		/// The name of the endpoint of this service.
 		/// </summary>
 		public const string EndpointName = "OAuthServiceRest/";
+		private OAuthServiceFeatureMatrix _FeatureMatrix;
 
 		#endregion
 
@@ -64,13 +66,42 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 		/// <inheritdoc />
 		public ICustomRestClient CustomRestClient => _RestClient;
 
-		/// <summary>
-		/// Get information about valid OAuth issues authorities and resource ids.
-		/// </summary>
-		/// <param name="cancellationToken">A cancellation token to cancel the web service call.</param>
+		/// <inheritdoc />
+		public async Task<InterfaceVersionRange> GetInterfaceInformation( CancellationToken cancellationToken = default )
+		{
+			return await _RestClient.Request<InterfaceVersionRange>( RequestBuilder.CreateGet( "" ), cancellationToken ).ConfigureAwait( false );
+		}
+
+		/// <inheritdoc />
 		public Task<OAuthTokenInformation> GetOAuthTokenInformation( CancellationToken cancellationToken = default )
 		{
-			return _RestClient.Request<OAuthTokenInformation>( RequestBuilder.CreateGet( "oauthTokenInformation" ), default );
+			return _RestClient.Request<OAuthTokenInformation>( RequestBuilder.CreateGet( "oauthTokenInformation" ), cancellationToken );
+		}
+
+		/// <inheritdoc />
+		public async Task<OAuthConfiguration> GetOAuthConfiguration( CancellationToken cancellationToken = default )
+		{
+			var featureMatrix = await GetFeatureMatrixInternal( FetchBehavior.FetchIfNotCached, cancellationToken ).ConfigureAwait( false );
+			if (featureMatrix.SupportsOAuthConfiguration)
+				return await _RestClient.Request<OAuthConfiguration>( RequestBuilder.CreateGet( "oAuthConfiguration" ), cancellationToken ).ConfigureAwait( false );
+
+			var tokenInformation = await _RestClient.Request<OAuthTokenInformation>( RequestBuilder.CreateGet( "oauthTokenInformation" ), cancellationToken ).ConfigureAwait( false );
+
+			return new OAuthConfiguration
+			{
+				LocalTokenInformation = tokenInformation
+			};
+		}
+
+		private async Task<OAuthServiceFeatureMatrix> GetFeatureMatrixInternal( FetchBehavior behavior, CancellationToken cancellationToken = default )
+		{
+			if( behavior == FetchBehavior.FetchAlways || _FeatureMatrix == null )
+			{
+				var interfaceVersionRange = await GetInterfaceInformation( cancellationToken ).ConfigureAwait( false );
+				_FeatureMatrix = new OAuthServiceFeatureMatrix( interfaceVersionRange );
+			}
+
+			return _FeatureMatrix;
 		}
 
 		#endregion
