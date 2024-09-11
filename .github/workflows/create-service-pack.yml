@@ -57,5 +57,5 @@ jobs:
       is_prerelease: false
       suffix: "stable"
       publish_target: "nuget.org"
-      dotnet_version: "7.0.x"
+      dotnet_version: "8.0.x"
     secrets: inherit
