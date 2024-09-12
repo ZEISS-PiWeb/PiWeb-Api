@@ -55,7 +55,7 @@
 
   <ItemGroup Label="NuGet references">
     <PackageReference Include="CacheCow.Client" Version="2.13.1" />
-    <PackageReference Include="IdentityModel" Version="6.2.0" />
+    <PackageReference Include="IdentityModel" Version="7.0.0" />
     <PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
     <PackageReference Include="Microsoft.IdentityModel.Logging" Version="8.0.2" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.2" />
