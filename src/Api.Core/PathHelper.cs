@@ -160,10 +160,42 @@ namespace Zeiss.PiWeb.Api.Core
 				path = DelimiterString + path;
 
 			// convert to database format by appending a delimiter if it is not already present (beware of escaping)
-			if( !path.EndsWith( DelimiterString, StringComparison.Ordinal ) || path.EndsWith( EscapedDelimiter, StringComparison.Ordinal ) )
+			if(!EndsWithDelimiter( path ))
 				path += DelimiterString;
 
 			return String2PathInformationInternal( path.AsSpan(), "".AsSpan(), stringPool, entity );
+		}
+
+		/// <summary>
+		/// Checks whether the path string already contains a delimiter at the end.
+		/// </summary>
+		private static bool EndsWithDelimiter( string path )
+		{
+			var isEscaped = false;
+			var hasDelimiter = false;
+
+			foreach( var character in path )
+			{
+				switch( character )
+				{
+					case Escape when !isEscaped:
+						isEscaped = true;
+						hasDelimiter = false;
+						continue;
+					case Delimiter:
+					{
+						if( !isEscaped )
+							hasDelimiter = true;
+						break;
+					}
+					default:
+						hasDelimiter = false;
+						break;
+				}
+
+				isEscaped = false;
+			}
+			return hasDelimiter;
 		}
 
 		/// <summary>
