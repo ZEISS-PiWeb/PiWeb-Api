@@ -111,6 +111,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		private CachingHandler _CachingHandler;
 
 		private bool _UseProxy = true;
+		private bool _CheckCertificateRevocationList = false;
 		private TimeSpan _Timeout;
 
 		private bool _IsDisposed;
@@ -168,6 +169,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 			_Timeout = settings.Timeout;
 			_UseProxy = settings.UseSystemProxy;
+			_CheckCertificateRevocationList = settings.CheckCertificateRevocationList;
 			_Chunked = settings.AllowChunkedDataTransfer;
 
 			_CustomHttpMessageHandler = null;
@@ -227,6 +229,26 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				_UseProxy = value;
 				if( _HttpClientHandler.UseProxy != value )
 					_HttpClientHandler.UseProxy = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets a value that indicates whether the certificate is checked against the certificate authority revocation list.
+		/// </summary>
+		/// <remarks>
+		/// For executing within a browser this property is ignored.
+		/// </remarks>
+		public bool CheckCertificateRevocationList
+		{
+			get => !_IsBrowser && _CheckCertificateRevocationList;
+
+			set
+			{
+				if( _IsBrowser )
+					return;
+
+				_CheckCertificateRevocationList = value;
+				_HttpClientHandler.CheckCertificateRevocationList = value;
 			}
 		}
 #pragma warning restore CA1416
@@ -679,6 +701,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				_HttpClientHandler.PreAuthenticate = true;
 				_HttpClientHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 				_HttpClientHandler.UseProxy = _UseProxy;
+				_HttpClientHandler.CheckCertificateRevocationList = _CheckCertificateRevocationList;
 #pragma warning restore CA1416
 			}
 

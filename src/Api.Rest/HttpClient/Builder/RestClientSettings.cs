@@ -80,6 +80,11 @@ public record RestClientSettings
 	public bool UseSystemProxy { get; set; } = true;
 
 	/// <summary>
+	/// Specifies whether the certificate is checked against the certificate authority revocation list.
+	/// </summary>
+	public bool CheckCertificateRevocationList { get; set; } = false;
+
+	/// <summary>
 	/// The delegating handler factories to use for creating delegating handler chains.
 	/// </summary>
 	public IReadOnlyCollection<Func<DelegatingHandler>> DelegatingHandlerFactories { get; set; }

@@ -106,6 +106,11 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 	private bool _UseSystemProxy = true;
 
 	/// <summary>
+	/// Specifies whether the certificate is checked against the certificate authority revocation list.
+	/// </summary>
+	private bool _CheckCertificateRevocationList = false;
+
+	/// <summary>
 	/// The authentication handler or <c>null</c> when no handler is set.
 	/// </summary>
 	[CanBeNull] private IAuthenticationHandler _AuthenticationHandler;
@@ -147,6 +152,7 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 			CacheStore = _CacheStore ?? ( _HttpCachingEnabled ? _InternalSharedCacheStore.Value : null ),
 			VaryHeaderStore = _VaryHeaderStore ?? ( _HttpCachingEnabled ? _InternalSharedVaryHeaderStore.Value : null ),
 			UseSystemProxy = _UseSystemProxy,
+			CheckCertificateRevocationList = _CheckCertificateRevocationList,
 			DelegatingHandlerFactories = new List<Func<DelegatingHandler>>( _DelegatingHandlerFactories ),
 			AuthenticationHandler = _AuthenticationHandler
 		};
@@ -273,6 +279,15 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 	public virtual RestClientBuilder SetUseSystemHttpProxy( bool useSystemProxy )
 	{
 		_UseSystemProxy = useSystemProxy;
+		return this;
+	}
+
+	/// <summary>
+	/// Specifies whether the certificate is checked against the certificate authority revocation list.
+	/// </summary>
+	public virtual RestClientBuilder SetCheckCertificateRevocationList( bool checkCertificateRevocationList )
+	{
+		_CheckCertificateRevocationList = checkCertificateRevocationList;
 		return this;
 	}
 
