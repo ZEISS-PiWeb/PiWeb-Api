@@ -123,46 +123,57 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 				return;
 
 			var fileInfo = new FileInfo( _Filename );
-			if( fileInfo.Exists )
-			{
-				var fileChanged = ( _FileLastWriteTime != fileInfo.LastWriteTimeUtc ) || ( _FileLength != fileInfo.Length );
-
-				if( fileChanged )
-				{
-					using( var memStream = new MemoryStream() )
-					{
-						using( var stream = WaitForFileStream( _Filename, FileMode.Open, FileAccess.Read, FileShare.Read ) )
-						{
-							stream.CopyTo( memStream );
-							if( stream.Position == 0 )
-							{
-								// File is empty
-								_FileLastWriteTime = default;
-								_FileLength = 0;
-								return;
-							}
-						}
-
-						var bytes = ProtectedData.Unprotect( memStream.ToArray(), null, DataProtectionScope.CurrentUser );
-						var serialized = Encoding.UTF8.GetString( bytes );
-
-						var deserialized = JsonSerializer.Deserialize<Dictionary<string, OAuthTokenCredential>>( serialized );
-
-						_CredentialCache.Clear();
-						foreach( var entry in deserialized )
-						{
-							_CredentialCache.AddOrUpdate( entry.Key, key => entry.Value, ( key, value ) => entry.Value );
-						}
-
-						_FileLastWriteTime = fileInfo.LastWriteTimeUtc;
-						_FileLength = fileInfo.Length;
-					}
-				}
-			}
-			else
+			if( !fileInfo.Exists )
 			{
 				_FileLastWriteTime = default;
 				_FileLength = 0;
+				return;
+			}
+
+			var fileChanged = ( _FileLastWriteTime != fileInfo.LastWriteTimeUtc ) || ( _FileLength != fileInfo.Length );
+
+			if( !fileChanged )
+				return;
+
+			using var memStream = new MemoryStream();
+			using( var stream = WaitForFileStream( _Filename, FileMode.Open, FileAccess.Read, FileShare.Read ) )
+			{
+				stream.CopyTo( memStream );
+				if( stream.Position == 0 )
+				{
+					// File is empty
+					_FileLastWriteTime = default;
+					_FileLength = 0;
+					return;
+				}
+			}
+
+			if( !TryDecryptData( memStream.ToArray(), out var bytes ) )
+				return;
+
+			var serialized = Encoding.UTF8.GetString( bytes );
+			var deserialized = JsonSerializer.Deserialize<Dictionary<string, OAuthTokenCredential>>( serialized );
+
+			_CredentialCache.Clear();
+			foreach( var entry in deserialized )
+				_CredentialCache.AddOrUpdate( entry.Key, key => entry.Value, ( key, value ) => entry.Value );
+
+			_FileLastWriteTime = fileInfo.LastWriteTimeUtc;
+			_FileLength = fileInfo.Length;
+		}
+
+		private static bool TryDecryptData( byte[] encryptedData, out byte[] decryptedData )
+		{
+			decryptedData = Array.Empty<byte>();
+			try
+			{
+				decryptedData = ProtectedData.Unprotect( encryptedData, null, DataProtectionScope.CurrentUser );
+				return true;
+			}
+			catch( CryptographicException )
+			{
+				// File could not be encrypted, e.g. different user with no permission
+				return false;
 			}
 		}
 
