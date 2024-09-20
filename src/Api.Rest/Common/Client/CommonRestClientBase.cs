@@ -105,6 +105,13 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			set => _RestClient.UseDefaultWebProxy = value;
 		}
 
+		/// <inheritdoc />
+		public bool CheckCertificateRevocationList
+		{
+			get => _RestClient.CheckCertificateRevocationList;
+			set => _RestClient.CheckCertificateRevocationList = value;
+		}
+
 		public event EventHandler AuthenticationChanged;
 
 		#endregion
