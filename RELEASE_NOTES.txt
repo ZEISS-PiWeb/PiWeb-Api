@@ -1,6 +1,6 @@
 ======================================================
 -------------------------------------------------------------------------------------------
- Version 8.3.1                                                                   
+ Version 9.0.0                                                                   
 -------------------------------------------------------------------------------------------
 ======================================================
 
@@ -9,117 +9,39 @@
  Bugfixes
 ==========================================
 
-- fixed a precision issue when comparing attributes where one attribute was created from a string and the other from a double
-- fixed an issue with multiple request attempts using the same stream not resetting the stream before the next attempt
-
-
-======================================================
--------------------------------------------------------------------------------------------
- Version 8.3.0                                                                   
--------------------------------------------------------------------------------------------
-======================================================
+- Correctly recognize backslash at the end of path as part of name (#248)
+- Discard OIDC token file on decryption exception to allow for normal login retry (#250)
+- Fix measurement search with AllAttributeSelectionDto.False still returning attributes (#253)
 
 
 ==========================================
 New Features
 ==========================================
 
-- Added .NET 7 as target framework
-- Updated NuGet dependencies:
- ○ CacheCow.Client from 2.8.3 to 2.12.1
- ○ Microsoft.IdentityModel.Logging from 6.11.1 to 6.31.0
- ○ Newtonsoft.Json from 13.0.1 to 13.0.3
- ○ System.Text.Json from 6.0.5 to 7.0.3
- ○ System.IdentityModel.Tokens.Jwt from 6.11.1 to 6.31.0
- ○ System.Security.Cryptography.ProtectedData from 5.0.0 to 7.0.1
-
-
-======================================================
--------------------------------------------------------------------------------------------
- Version 8.2.1                                                                   
--------------------------------------------------------------------------------------------
-======================================================
-
-==========================================
- Bugfixes
-==========================================
-
-- fixed possible NullReferenceException when using GetMeasurements/Values without any filter
-
-
-======================================================
--------------------------------------------------------------------------------------------
- Version 8.2.0                                                                   
--------------------------------------------------------------------------------------------
-======================================================
-
-==========================================
- New Features
-==========================================
-
-- Add new property 'CaseSensitive' to AbstractMeasurementFilterAttributesDto
-○ specify if string comparison in SearchCondition should be done case sensitive when fetching measurements (if the PiWeb server supports this feature)
-
-- Add optional parameter 'bypassLocalCache' to OAuthHelper method GetAuthenticationInformationForDatabaseUrl
-○ defines whether locally cached token information are neither used nor updated
-
-
-======================================================
--------------------------------------------------------------------------------------------
- Version 8.1.0                                                                   
--------------------------------------------------------------------------------------------
-======================================================
-
-==========================================
- New Features
-==========================================
-
-- Add optional parameter maxRequestsInParallel for DataServiceRestClient constructor to limit parallel request, e.g. when requests are splitted due to URI length restrictions
-
-
-======================================================
--------------------------------------------------------------------------------------------
- Version 8.0.0                                                                   
--------------------------------------------------------------------------------------------
-======================================================
-
-==========================================
-New Features
-==========================================
-
-- Added new package Zeiss.PiWeb.Api.Core
-○ contains commonly used core objects with own logic which are no longer simple DTOs, e.g. Attribute, PathInformation, PathElement, InspectionPlanEntity enum as well as their extensions and PathHelper class
-○ Attribute and PathElement are now readonly structs to significantly reduce GC pressure and object creation
-
-- Used readonly lists and collections instead of arrays in many parameters and return types to avoid allocations and save many .ToArrays() when using methods
-- Removed DataCharacteristic since it had no real benefit (simple container for characteristic uuid and the value)
-○ replaced by dictionary of uuid and DataValueDto
-
-- Added request caching, since built-in caching was removed with .NET Core/5
-○ New dependency: CacheCow.Client >= 2.8.3
-○ Provides InMemoryCacheStore (not persistent)
-○ Added simple FilesystemCacheStore (persistent) which can be extended
-○ Use RestClientBase properties CacheStore and VaryHeaderStore to configure
-
-- Added RawData methods which accept and return streams
-- Added possibility to clear the access token cache for OAuth
-- Optimized PathInformation and PathHelper to speed up path operations
-
-- Added support for System.Text.Json serialization
-○ Speeds up JSON serialization
-○ Package will suport both Newtonsoft.Json and System.Text.Json for a transitional period
-○ Newtonsoft.Json may be removed in a future release
-○ Configure using optional RestClientBase constructor parameter 'serializer' which can be either the NewtonsoftJsonSerializer or the SystemTextJsonSerializer, default is Newtonsoft
-
-- Switched from ﻿BSD-4-Clause to ﻿BSD-3-Clause lincense
-- DataValueDto now implements interface IEquatable
-- Removed .NET Framework 4.8 and .NET Core 3.1 as target frameworks
-○ .NET Standard 2.0 stays
-○ .NET 5 is updated to .NET 6
-
-
-==========================================
-Bugfixes
-==========================================
-
-- Method CheckCatalogEntryUsage now correctly expects data type short for the entry key
+- Improve creation of REST clients (#234)
+    ○ Add RestClientBuilder to build REST clients using a fluent syntax to configure available options
+    ○ Add new REST client constructor using settings from provided RestClientSettings instead of having to deal with parameter overloads
+    ○ Add possibility of using DelegatingHandlers to implement and inject custom behaviour into the request pipeline of the REST clients
+    ○ Add IAuthenticationHandler interface to enable custom authentication handling which can be injected by using the RestClientBuilder
+    ○ Add ICustomRestClient access via public property, which enables implementing custom REST requests as extension methods on REST clients
+- Extend OIDC configuration to make it more flexible, public configuration will now be fetched automatically from the PiWeb Server if available (#231)
+- Add extended version property (#238)
+    ○ Add property 'ExtendedVersion' to ServiceInformationDto which consists of Version-BuildDate-BuildHash
+- Enable OIDC authorization code flow (#244)
+    ○ Adds support for the OIDC authorization code flow as described in the OpenID specification
+    ○ Add feature matrix to allow checking supported features of the OAuth REST service
+    ○ Add interface abstraction for OIDC flows and implementations for the hybrid and authorization code flow
+    ○ Add new OAuthConfigruation class which combines different token information and a flags enum to get information about supported flows on server side
+- Support optional certificate revocation list check (#251)
+    ○ Add REST client setting 'CheckCertificateRevocationList' to enable checking the TLS certificate revocation list (default: false)
+- Update target framework and dependencies (#246)
+    ○ remove .NET 7
+    ○ add .NET 8
+    ○ JetBrains.Annotations from 2020.3.0 to 2024.2.0
+    ○ CacheCow.Client from 2.12.1 to 2.13.1
+    ○ IdentityModel from 6.2.0 to 7.0.0
+    ○ Microsoft.IdentityModel.Logging from 6.34.0 to 8.0.2
+    ○ Microsoft.IdentityModel.Tokens from 6.34.0 to 8.0.2
+    ○ System.Text.Json from 7.0.3 to 8.0.4
+    ○ System.IdentityModel.Tokens.Jwt from 6.34.0 to 8.0.2
+    ○ System.Security.Cryptography.ProtectedData 7.0.1 to 8.0.0
