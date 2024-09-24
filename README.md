@@ -13,10 +13,10 @@ The PiWeb-API is a communication interface for the quality data management syste
 
 #### What's the PiWeb-API?
 
-The PiWeb-API provides an extensive set of web service endpoints for reading and writing measurement and quality data from and to the PiWeb server. With these HTTP/S endpoints it is very easy to read and write the inspection plan structure as well as measurements and measurement values.
+The PiWeb-API provides an extensive set of web service endpoints for reading and writing measurement and quality data from and to the PiWeb Server. With these HTTP/S endpoints it is very easy to read and write the inspection plan structure as well as measurements and measurement values.
 
 Additional to the HTTP/S based REST API there is also a .NET client library, which is available on NuGet.org: [Zeiss.PiWeb.Api.Rest](https://www.nuget.org/packages/Zeiss.PiWeb.Api.Rest/).
->API .NET SDK v6.0.0 introduced major architectural changes. Updating to version 6.0.0? Please follow our **[migration guide](http://zeiss-piweb.github.io/PiWeb-Api/sdk/v6.0/#migration)** to adapt your application to recent changes!
+>API .NET SDK v8.0.0 introduced architectural changes. Updating to version 8.0.0? Please follow our **[migration guide](http://zeiss-piweb.github.io/PiWeb-Api/sdk/v8.0/#migration)** to adapt your application to recent changes!
 
 #### Learn more
 
