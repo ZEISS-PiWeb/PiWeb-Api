@@ -61,7 +61,7 @@ Furthermore, the API offers the possibility to query and retrieve measurement da
 {% capture table %}
 REST API        | .NET SDK (C# API)
 ------------- | -----------------------------------------------------------------------------------
-This is the interface provided directly by PiWeb Server. It consists of two main services, DataService and RawDataService, explained in the section [Services](#gi-services "Services"). Requests are made using HTTP(S), and data is transferred in [JSON format](#gi-formats "Formats"). | The .NET SDK offers C# client implementations for DataService and RawDataService. This way you can develop software using C# objects, methods and available properties instead of pure HTTP(S) and JSON. You can find further information in the [.NET SDK documentation](http://zeiss-piweb.github.io/PiWeb-Api/sdk/v6.0/ ".NET SDK documentation").
+This is the interface provided directly by PiWeb Server. It consists of two main services, DataService and RawDataService, explained in the section [Services](#gi-services "Services"). Requests are made using HTTP(S), and data is transferred in [JSON format](#gi-formats "Formats"). | The .NET SDK offers C# client implementations for DataService and RawDataService. This way you can develop software using C# objects, methods and available properties instead of pure HTTP(S) and JSON. You can find further information in the [.NET SDK documentation](http://zeiss-piweb.github.io/PiWeb-Api/sdk/v8.3/ ".NET SDK documentation").
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
@@ -163,7 +163,7 @@ The base address is:
 http(s)://serverHost:port/instanceName/DataServiceRest
 ```
 
-For further information see the [DataService documentation](http://zeiss-piweb.github.io/PiWeb-Api/dataservice/v1.4/ "Data Service documentation")
+For further information see the [DataService documentation](http://zeiss-piweb.github.io/PiWeb-Api/dataservice/v1.10/ "Data Service documentation")
 
 #### Raw Data Service
 Use the RawDataService to fetch, create, update and delete additional data, i.e. raw data. <br>
@@ -172,7 +172,7 @@ The base address is:
 ```http
 http(s)://serverHost:port/instanceName/RawDataServiceRest
 ```
-For further information see the [RawDataService documentation](http://zeiss-piweb.github.io/PiWeb-Api/rawdataservice/v1.4/ "RawData Service documentation")
+For further information see the [RawDataService documentation](http://zeiss-piweb.github.io/PiWeb-Api/rawdataservice/v1.10/ "RawData Service documentation")
 
 >{{ site.images['info'] }} `instanceName` and `https` are optional and depend on the server settings.
 
@@ -240,7 +240,7 @@ if your chosen tool or script language does not work directly with present encod
 <h2 id="{{page.sections['general']['secs']['security'].anchor}}">{{page.sections['general']['secs']['security'].title}}</h2>
 Access to PiWeb Server service might require authentication. Authentication can be either *basic authentication* based on username and password, *Windows authentication* based on Active Directory integration, *certificate authentication*
 or *OpenID connect authentication*. Our .NET SDK (C# API) offers convenient functionality to use all possible authentication methods, corresponding documentation can be found in the
-[security section](http://zeiss-piweb.github.io/PiWeb-Api/sdk/v8.2/#ba-security ".NET SDK security documentation") of the .NET SDK. When accessing the PiWeb API via REST using different clients (e.g. Python), it can be necessary to use 3rd party 
+[security section](http://zeiss-piweb.github.io/PiWeb-Api/sdk/v8.3/#ba-security ".NET SDK security documentation") of the .NET SDK. When accessing the PiWeb API via REST using different clients (e.g. Python), it can be necessary to use 3rd party 
 libraries or to implement authentication methods yourself. We do not offer detailed documentation on how to do this, instead you can find further information following provided links.
 
 **Basic authentication**

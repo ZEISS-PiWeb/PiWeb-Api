@@ -2,10 +2,10 @@
 
 <p></p>
 
-{% assign version="1.9.0" %}
+{% assign version="1.11.0" %}
 {% capture features %}
     <ul>
-        <li>Internal optimizations for PiWeb clients.</li>
+        <li>Coming soon.</li>
     </ul>
 {% endcapture %}
 

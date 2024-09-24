@@ -2,10 +2,10 @@
 
 <p></p>
 
-{% assign version="1.9.0" %}
+{% assign version="1.10.0" %}
 {% capture features %}
     <ul>
-        <li>Internal optimizations for PiWeb clients.</li>
+        <li>Endpoint for fetching measurements and values was extended by parameter <i>caseSensitive</i></li>
     </ul>
 {% endcapture %}
 
