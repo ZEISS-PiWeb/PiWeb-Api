@@ -1,7 +1,8 @@
 ---
 area: dataService
 level: 0
-version: 1.6
+version: 16
+displayVersion: "1.6"
 title: Data Service
 permalink: /dataservice/v1.6/
 sections:

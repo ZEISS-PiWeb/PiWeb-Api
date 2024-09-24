@@ -2,7 +2,8 @@
 area: sdk
 title: .NET SDK
 level: 0
-version: 5.0
+version: 50
+displayVersion: "5.0"
 permalink: "/sdk/v5.0/"
 sections:
   general:

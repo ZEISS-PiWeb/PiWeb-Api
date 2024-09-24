@@ -2,7 +2,8 @@
 area: sdk
 title: .NET SDK
 level: 0
-version: 8.0
+version: 80
+displayVersion: "8.0"
 isCurrentVersion: false
 permalink: "/sdk/v8.0/"
 sections:

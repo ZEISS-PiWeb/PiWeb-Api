@@ -1,7 +1,8 @@
 ---
 area: rawDataService
 level: 0
-version: 1.5
+version: 15
+displayVersion: "1.5"
 title: Rawdata Service
 permalink: /rawdataservice/v1.5/
 sections:
