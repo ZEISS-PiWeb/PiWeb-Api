@@ -26,6 +26,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 	using Zeiss.PiWeb.Api.Rest.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
+	using Zeiss.PiWeb.Api.Rest.HttpClient.Builder;
 
 	#endregion
 
@@ -36,7 +37,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 	{
 		#region constants
 
-		private const string EndpointName = "DataServiceRest/";
+		/// <summary>
+		/// The name of the endpoint of this service.
+		/// </summary>
+		public const string EndpointName = "DataServiceRest/";
 
 		#endregion
 
@@ -61,6 +65,16 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			: base( restClient ?? new RestClient( serverUri, EndpointName, maxUriLength: maxUriLength, serializer: ObjectSerializer.SystemTextJson ) )
 		{
 			_MaxRequestsInParallel = maxRequestsInParallel;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DataServiceRestClient"/> class.
+		/// </summary>
+		/// <param name="settings">The settings of the rest service.</param>
+		internal DataServiceRestClient( RestClientSettings settings )
+			: base( new RestClient( EndpointName, settings ) )
+		{
+			_MaxRequestsInParallel = settings.MaxRequestsInParallel;
 		}
 
 		#endregion
@@ -442,6 +456,9 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		#region interface IDataServiceRestClient
 
 		/// <inheritdoc />
+		public ICustomRestClient CustomRestClient => _RestClient;
+
+		/// <inheritdoc />
 		public async Task<ServiceInformationDto> GetServiceInformation( CancellationToken cancellationToken = default )
 		{
 			var serviceInformation = await GetServiceInformationInternal( FetchBehavior.FetchAlways, cancellationToken ).ConfigureAwait( false );
@@ -461,7 +478,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 			{
 				if( ex.StatusCode != HttpStatusCode.NotFound ) throw;
 
-				// this call didn't exist in Version 1.0.0. We interprete the missing endpoint as Version 1.0.0
+				// this call didn't exist in Version 1.0.0. We interpret the missing endpoint as Version 1.0.0
 				return new InterfaceVersionRange { SupportedVersions = new[] { new Version( 1, 0, 0 ) } };
 			}
 		}
@@ -469,7 +486,19 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		/// <inheritdoc />
 		public Task<DataServiceFeatureMatrix> GetFeatureMatrix( CancellationToken cancellationToken = default )
 		{
-			return GetFeatureMatrixInternal( FetchBehavior.FetchAlways, cancellationToken );
+			return GetFeatureMatrix( RefreshPolicy.RefreshAlways, cancellationToken );
+		}
+
+		/// <inheritdoc />
+		public Task<DataServiceFeatureMatrix> GetFeatureMatrix(
+			RefreshPolicy refreshPolicy,
+			CancellationToken cancellationToken = default )
+		{
+			var fetchBehavior = refreshPolicy == RefreshPolicy.UseLatestResult
+				? FetchBehavior.FetchIfNotCached
+				: FetchBehavior.FetchAlways;
+
+			return GetFeatureMatrixInternal( fetchBehavior, cancellationToken );
 		}
 
 		/// <inheritdoc />

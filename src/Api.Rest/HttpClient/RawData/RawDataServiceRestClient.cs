@@ -27,6 +27,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 	using Zeiss.PiWeb.Api.Rest.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 	using Zeiss.PiWeb.Api.Rest.Dtos.RawData;
+	using Zeiss.PiWeb.Api.Rest.HttpClient.Builder;
 	using Zeiss.PiWeb.Api.Rest.HttpClient.RawData.Filter.Conditions;
 
 	#endregion
@@ -38,7 +39,10 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 	{
 		#region constants
 
-		private const string EndpointName = "RawDataServiceRest/";
+		/// <summary>
+		/// The name of the endpoint of this service.
+		/// </summary>
+		public const string EndpointName = "RawDataServiceRest/";
 
 		#endregion
 
@@ -61,11 +65,22 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 			: base( restClient ?? new RestClient( serverUri, EndpointName, maxUriLength: maxUriLength, serializer: ObjectSerializer.SystemTextJson ) )
 		{ }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RawDataServiceRestClient"/> class.
+		/// </summary>
+		/// <param name="settings">The settings of the rest service.</param>
+		internal RawDataServiceRestClient( RestClientSettings settings )
+			: base( new RestClient( EndpointName, settings ) )
+		{ }
+
 		#endregion
 
 		#region methods
 
-		private Task<RawDataInformationDto[]> ListRawDataForAllEntities( [NotNull] IFilterCondition filter, string requestPath, CancellationToken cancellationToken = default )
+		private Task<RawDataInformationDto[]> ListRawDataForAllEntities(
+			[NotNull] IFilterCondition filter,
+			string requestPath,
+			CancellationToken cancellationToken = default )
 		{
 			if( filter == null )
 				throw new ArgumentNullException( nameof( filter ) );
@@ -175,6 +190,9 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 
 		#region interface IRawDataServiceRestClient
 
+		/// <inheritdoc />
+		public ICustomRestClient CustomRestClient => _RestClient;
+
 		/// <summary>
 		/// Method for fetching the <see cref="ServiceInformationDto"/>. This method can be used for connection checking. The call returns quickly
 		/// and does not produce any noticeable server load.
@@ -207,14 +225,22 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 			}
 		}
 
-		/// <summary>
-		/// Method for fetching the <see cref="RawDataServiceFeatureMatrix"/>
-		/// </summary>
-		/// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-		/// <returns></returns>
+		/// <inheritdoc />
 		public Task<RawDataServiceFeatureMatrix> GetFeatureMatrix( CancellationToken cancellationToken = default )
 		{
 			return GetFeatureMatrixInternal( FetchBehavior.FetchAlways, cancellationToken );
+		}
+
+		/// <inheritdoc />
+		public Task<RawDataServiceFeatureMatrix> GetFeatureMatrix(
+			RefreshPolicy refreshPolicy,
+			CancellationToken cancellationToken = default )
+		{
+			var fetchBehavior = refreshPolicy == RefreshPolicy.UseLatestResult
+				? FetchBehavior.FetchIfNotCached
+				: FetchBehavior.FetchAlways;
+
+			return GetFeatureMatrixInternal( fetchBehavior, cancellationToken );
 		}
 
 		/// <summary>

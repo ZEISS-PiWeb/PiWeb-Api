@@ -127,6 +127,30 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 		}
 
 		[Test]
+		public void String2PartPathInformation_PathEndsWithBackslash_ReturnsPathInformationDto()
+		{
+			const string path = "Bad\\\\/";
+			var result = PathHelper.String2PartPathInformation( path );
+			Assert.AreEqual( result, new PathInformation(new PathElement(value: "Bad\\")) );
+		}
+
+		[Test]
+		public void String2PartPathInformation_PathEndsWithSlash_ReturnsPathInformationDto()
+		{
+			const string path = "Bad\\/";
+			var result = PathHelper.String2PartPathInformation( path );
+			Assert.AreEqual( result, new PathInformation(new PathElement(value: "Bad/")) );
+		}
+
+		[Test]
+		public void String2PartPathInformation_PathEndsWithSlashAndBackslash_ReturnsPathInformationDto()
+		{
+			const string path = "Bad\\/\\\\";
+			var result = PathHelper.String2PartPathInformation( path );
+			Assert.AreEqual( result, new PathInformation(new PathElement(value: "Bad/\\")) );
+		}
+
+		[Test]
 		public void String2CharPathInformation_PathIsEmpty_ThrowsException()
 		{
 			Assert.Throws<ArgumentException>( () => PathHelper.String2CharPathInformation( string.Empty ) );

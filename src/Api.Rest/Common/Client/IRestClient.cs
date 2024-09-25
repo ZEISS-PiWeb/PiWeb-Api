@@ -34,6 +34,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		bool UseDefaultWebProxy { get; set; }
 
+		bool CheckCertificateRevocationList { get; set; }
+
 		#endregion
 	}
 }

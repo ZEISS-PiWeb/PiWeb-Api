@@ -262,11 +262,21 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			if( CharacteristicsUuidList != null && CharacteristicsUuidList.Count > 0 )
 				result.Add( ParameterDefinition.Create( CharacteristicsUuidListParamName, RestClientHelper.ConvertGuidListToString( CharacteristicsUuidList ) ) );
 
-			if( RequestedValueAttributes != null && RequestedValueAttributes.AllAttributes != AllAttributeSelectionDto.True && RequestedValueAttributes.Attributes != null )
-				result.Add( ParameterDefinition.Create( RequestedValueAttributesParamName, RestClientHelper.ConvertUshortArrayToString( RequestedValueAttributes.Attributes ) ) );
+			if( RequestedValueAttributes != null )
+			{
+				if( RequestedValueAttributes.AllAttributes != AllAttributeSelectionDto.True && RequestedValueAttributes.Attributes != null )
+					result.Add( ParameterDefinition.Create( RequestedValueAttributesParamName, RestClientHelper.ConvertUshortArrayToString( RequestedValueAttributes.Attributes ) ) );
+				else if( RequestedMeasurementAttributes.AllAttributes == AllAttributeSelectionDto.False )
+					result.Add( ParameterDefinition.Create( RequestedValueAttributesParamName, "{}" ) );
+			}
 
-			if( RequestedMeasurementAttributes != null && RequestedMeasurementAttributes.AllAttributes != AllAttributeSelectionDto.True && RequestedMeasurementAttributes.Attributes != null )
-				result.Add( ParameterDefinition.Create( RequestedMeasurementAttributesParamName, RestClientHelper.ConvertUshortArrayToString( RequestedMeasurementAttributes.Attributes ) ) );
+			if( RequestedMeasurementAttributes != null )
+			{
+				if( RequestedMeasurementAttributes.AllAttributes != AllAttributeSelectionDto.True && RequestedMeasurementAttributes.Attributes != null )
+					result.Add( ParameterDefinition.Create( RequestedMeasurementAttributesParamName, RestClientHelper.ConvertUshortArrayToString( RequestedMeasurementAttributes.Attributes ) ) );
+				else if( RequestedMeasurementAttributes.AllAttributes == AllAttributeSelectionDto.False )
+					result.Add( ParameterDefinition.Create( RequestedMeasurementAttributesParamName, "{}" ) );
+			}
 
 			if( OrderBy != null && OrderBy.Count > 0 )
 				result.Add( ParameterDefinition.Create( OrderByParamName, OrderByToString( OrderBy ) ) );

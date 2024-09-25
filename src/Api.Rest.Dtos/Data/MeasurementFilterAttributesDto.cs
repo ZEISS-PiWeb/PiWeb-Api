@@ -272,8 +272,13 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 			if( MeasurementUuids != null && MeasurementUuids.Count > 0 )
 				result.Add( ParameterDefinition.Create( MeasurementUuidsParamName, RestClientHelper.ConvertGuidListToString( MeasurementUuids ) ) );
 
-			if( RequestedMeasurementAttributes != null && RequestedMeasurementAttributes.AllAttributes != AllAttributeSelectionDto.True && RequestedMeasurementAttributes.Attributes != null )
-				result.Add( ParameterDefinition.Create( RequestedMeasurementAttributesParamName, RestClientHelper.ConvertUshortArrayToString( RequestedMeasurementAttributes.Attributes ) ) );
+			if( RequestedMeasurementAttributes != null )
+			{
+				if( RequestedMeasurementAttributes.AllAttributes != AllAttributeSelectionDto.True && RequestedMeasurementAttributes.Attributes != null )
+					result.Add( ParameterDefinition.Create( RequestedMeasurementAttributesParamName, RestClientHelper.ConvertUshortArrayToString( RequestedMeasurementAttributes.Attributes ) ) );
+				else if( RequestedMeasurementAttributes.AllAttributes == AllAttributeSelectionDto.False )
+					result.Add( ParameterDefinition.Create( RequestedMeasurementAttributesParamName, "{}" ) );
+			}
 
 			if( OrderBy != null && OrderBy.Count > 0 )
 				result.Add( ParameterDefinition.Create( OrderByParamName, OrderByToString( OrderBy ) ) );
