@@ -172,7 +172,7 @@ The base address is:
 ```http
 http(s)://serverHost:port/instanceName/RawDataServiceRest
 ```
-For further information see the [RawDataService documentation](http://zeiss-piweb.github.io/PiWeb-Api/rawdataservice/v1.10/ "RawData Service documentation")
+For further information see the [RawDataService documentation](http://zeiss-piweb.github.io/PiWeb-Api/rawdataservice/v1.8/ "RawData Service documentation")
 
 >{{ site.images['info'] }} `instanceName` and `https` are optional and depend on the server settings.
 
