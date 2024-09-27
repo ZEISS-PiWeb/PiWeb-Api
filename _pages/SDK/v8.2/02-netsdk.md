@@ -2,7 +2,8 @@
 area: sdk
 title: .NET SDK
 level: 0
-version: 8.2
+version: 82
+displayVersion: "8.2"
 isCurrentVersion: false
 permalink: "/sdk/v8.2/"
 sections:
@@ -50,7 +51,7 @@ sections:
 
 <div class="alert alert-info fade in">
   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  This page is still a work in progress! It is possible that not all information are up to date!
+  Updating from a NuGet version prior to version 7.2.0? Please follow our <a href="#migration" class="alert-link">migration guide</a> to adapt your application to recent changes!
 </div>
 
 {% include version_combobox.html %}

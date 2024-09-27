@@ -2,7 +2,8 @@
 area: sdk
 title: .NET SDK
 level: 0
-version: 7.2
+version: 72
+displayVersion: "7.2"
 isCurrentVersion: false
 permalink: "/sdk/v7.2/"
 sections:
