@@ -248,7 +248,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 				if( Uri.TryCreate( instanceUrl, UriKind.Absolute, out var uriResult ) )
 				{
 					await Console.Out.WriteLineAsync( $"Retrieve access token from cache with key 2: {uriResult.Authority}" );
-					cachedToken = TryGetCurrentOAuthToken( uriResult.Authority, ref refreshToken );
+					cachedToken = TryGetCurrentOAuthToken( $"{uriResult.Scheme}://{uriResult.Authority}", ref refreshToken );
 					if( cachedToken != null )
 						return cachedToken;
 				}
@@ -313,7 +313,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 				if( Uri.TryCreate( instanceUrl, UriKind.Absolute, out var uriResult ) )
 				{
 					Console.Out.WriteLine( $"Retrieve access token from cache with key 2: {uriResult.Authority}" );
-					cachedToken = TryGetCurrentOAuthToken( uriResult.Authority, ref refreshToken );
+					cachedToken = TryGetCurrentOAuthToken( $"{uriResult.Scheme}://{uriResult.Authority}", ref refreshToken );
 					if( cachedToken != null )
 						return cachedToken;
 				}
