@@ -240,9 +240,18 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 			if( !bypassLocalCache )
 			{
+				await Console.Out.WriteLineAsync( $"Retrieve access token from cache with key 1: {instanceUrl}" );
 				var cachedToken = TryGetCurrentOAuthToken( instanceUrl, ref refreshToken );
 				if( cachedToken != null )
 					return cachedToken;
+
+				if( Uri.TryCreate( instanceUrl, UriKind.Absolute, out var uriResult ) )
+				{
+					await Console.Out.WriteLineAsync( $"Retrieve access token from cache with key 2: {uriResult.Authority}" );
+					cachedToken = TryGetCurrentOAuthToken( uriResult.Authority, ref refreshToken );
+					if( cachedToken != null )
+						return cachedToken;
+				}
 			}
 
 			var tokenInformation = await GetOAuthConfigurationAsync( instanceUrl ).ConfigureAwait( false );
@@ -254,7 +263,26 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 				return null;
 
 			if( !bypassLocalCache )
+			{
+				try
+				{
+					// parse AUD claim from JWT token
+					var handler = new JwtSecurityTokenHandler();
+					var jwtSecurityToken = handler.ReadJwtToken( result.AccessToken );
+					foreach( var audience in jwtSecurityToken.Audiences )
+					{
+						await Console.Out.WriteLineAsync( $"Store access token into cache with key 1: {audience}" );
+						AccessTokenCache.Store( audience, result );
+					}
+				}
+				catch( Exception exception )
+				{
+					await Console.Out.WriteLineAsync( "Error while parsing JWT token: " + exception.Message );
+				}
+
+				await Console.Out.WriteLineAsync( $"Store access token into cache with key 2: {instanceUrl}" );
 				AccessTokenCache.Store( instanceUrl, result );
+			}
 
 			return result;
 		}
@@ -277,9 +305,18 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 
 			if( !bypassLocalCache )
 			{
+				Console.Out.WriteLine( $"Retrieve access token from cache with key 1: {instanceUrl}" );
 				var cachedToken = TryGetCurrentOAuthToken( instanceUrl, ref refreshToken );
 				if( cachedToken != null )
 					return cachedToken;
+
+				if( Uri.TryCreate( instanceUrl, UriKind.Absolute, out var uriResult ) )
+				{
+					Console.Out.WriteLine( $"Retrieve access token from cache with key 2: {uriResult.Authority}" );
+					cachedToken = TryGetCurrentOAuthToken( uriResult.Authority, ref refreshToken );
+					if( cachedToken != null )
+						return cachedToken;
+				}
 			}
 
 			var tokenInformation = GetOAuthConfigurationAsync( instanceUrl ).GetAwaiter().GetResult();
@@ -291,7 +328,26 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 				return null;
 
 			if( !bypassLocalCache )
+			{
+				try
+				{
+					// parse AUD claim from JWT token
+					var handler = new JwtSecurityTokenHandler();
+					var jwtSecurityToken = handler.ReadJwtToken( result.AccessToken );
+					foreach( var audience in jwtSecurityToken.Audiences )
+					{
+						Console.Out.WriteLine( $"Store access token into cache with key 1: {audience}" );
+						AccessTokenCache.Store( audience, result );
+					}
+				}
+				catch( Exception exception )
+				{
+					Console.Out.WriteLine( "Error while parsing JWT token: " + exception.Message );
+				}
+
+				Console.Out.WriteLine( $"Store access token into cache with key 2: {instanceUrl}" );
 				AccessTokenCache.Store( instanceUrl, result );
+			}
 
 			return result;
 		}
@@ -318,6 +374,5 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		}
 
 		#endregion
-
 	}
 }
