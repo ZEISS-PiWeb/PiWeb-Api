@@ -183,11 +183,20 @@ HTTP/1.1 200 Ok
 {% assign method="GET" %}
 {% assign endpoint="/attributes/:key/:value" %}
 {% assign summary="Checks if at least an attribute with :key and :value exists" %}
-{% assign description="If at least one entry with value for the given key exists HTTP status code 204 otherwise 404 is returned." %}
+{% assign description="If at least one entry with value for the given key exists HTTP status code 204 otherwise 404 is returned. <br/><br/> Remarks: The `:value` can be wrapped in quotation marks once, any additional quotation marks will be treated as part of the `:value`." %}
 
-{% assign exampleCaption="" %}
-{% assign jsonrequest="" %}
-{% assign jsonresponse="" %}
+{% assign exampleCaption="Check for attribute usages of the attribute with key `9` and value `Name`" %}
+{% capture jsonrequest %}
+{% highlight http %}
+GET /dataServiceRest/attributes/9/"Name" HTTP/1.1
+{% endhighlight %}
+{% endcapture %}
+
+{% capture jsonresponse %}
+{% highlight http %}
+HTTP/1.1 204 No Content
+{% endhighlight %}
+{% endcapture %}
 
 {% include endpointTab.html %}
 
