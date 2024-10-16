@@ -4,7 +4,7 @@ title: .NET SDK
 level: 0
 version: 90
 displayVersion: "9.0"
-isCurrentVersion: false
+isCurrentVersion: true
 permalink: "/sdk/v9.0/"
 sections:
   general:
@@ -37,7 +37,7 @@ sections:
     anchor: migration
     secs:
       nuget:
-        title: NuGet Version 6.0.0
+        title: NuGet Version 8.0.0
         anchor: mig-nuget
       structure:
         title: New structure
