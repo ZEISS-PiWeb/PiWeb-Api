@@ -319,6 +319,45 @@ HTTP/1.1 200 Ok
 
 {% include endpointTab.html %}
 
+{% assign linkId="inspectionPlanEndpointCountParts" %}
+{% assign method="GET" %}
+{% assign endpoint="/parts/count" %}
+{% assign summary="Get the count of parts" %}
+{% capture description %}
+Get the number of parts matching specified criteria.
+The result can be restricted by the following uri parameters:
+
+{% capture table %}
+Parameter name                                                                 | Description
+-------------------------------------------------------------------------------|--------------------------------
+<nobr><code>Guid list</code> partUuids<br></nobr>                              | Restricts the query to the parts with these uuids.
+<nobr><code>Path</code> partPath</nobr>                                        | Restricts the query to the part with this path.
+<nobr><code>ushort</code> depth</nobr><br><i>default:</i> <code>1</code>       | Determines how many levels of the inspection plan tree hierarchy should be fetched. Setting `depth=0` means that only the entity itself should be fetched, `depth=1` means the entity and its direct children should be fetched. Please note that depth is treated relative of the path depth of the provided part.
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
+
+{% endcapture %}
+
+{% assign exampleCaption="Count the parts under '/metal part' to a depth of 50" %}
+
+{% capture jsonrequest %}
+{% highlight http %}
+GET /dataServiceRest/parts/count?partPath=/metal%20part&depth=50 HTTP/1.1
+{% endhighlight %}
+{% endcapture %}
+
+{% capture jsonresponse %}
+{% highlight json %}
+
+{
+    "count": 4
+}
+
+{% endhighlight %}
+{% endcapture %}
+
+{% include endpointTab.html %}
+
 
 <p></p>
 
@@ -587,6 +626,45 @@ DELETE /dataServiceRest/characteristics/27e23a7c-dbe7-4863-8461-6abf7b03ddd7 HTT
 {% capture jsonresponse %}
 {% highlight http %}
 HTTP/1.1 200 Ok
+{% endhighlight %}
+{% endcapture %}
+
+{% include endpointTab.html %}
+
+{% assign linkId="inspectionPlanEndpointCountChars" %}
+{% assign method="GET" %}
+{% assign endpoint="/characteristics/count" %}
+{% assign summary="Get the count of characteristics" %}
+{% capture description %}
+Get the number of characteristics matching specified criteria.
+The result can be restricted by the following uri parameters:
+
+{% capture table %}
+Parameter name                                                                 | Description
+-------------------------------------------------------------------------------|--------------------------------
+<nobr><code>Guid list</code> charUuids<br></nobr>                              | Restricts the query to the characteristics with these uuids.
+<nobr><code>Path</code> partPath</nobr><br><i>default:</i> <code>/</code>      | Restricts the query to the part with this path. The <code>charUuids</code> parameter takes precedence over this parameter.
+<nobr><code>ushort</code> depth</nobr><br><i>default:</i> <code>65.535</code>  | Determines how many levels of the inspection plan tree hierarchy should be fetched. Setting `depth=0` means that only the entity itself should be fetched, `depth=1` means the entity and its direct children should be fetched. Please note that depth is treated relative of the path depth of the provided part or characteristic.
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
+
+{% endcapture %}
+
+{% assign exampleCaption="Count the characteristics under '/metal part' to a depth of 5" %}
+
+{% capture jsonrequest %}
+{% highlight http %}
+GET /dataServiceRest/characteristics/count?partPath=/metal%20part&depth=5 HTTP/1.1
+{% endhighlight %}
+{% endcapture %}
+
+{% capture jsonresponse %}
+{% highlight json %}
+
+{
+    "count": 87
+}
+
 {% endhighlight %}
 {% endcapture %}
 

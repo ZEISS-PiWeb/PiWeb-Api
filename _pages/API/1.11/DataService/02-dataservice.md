@@ -33,6 +33,9 @@ sections:
       measurementsAndValues:
         title: Measurements and Values
         anchor: ds-measurements-and-values
+      events:
+        title: Events
+        anchor: ds-events
 ---
 
 {% include version_combobox.html %}
@@ -52,3 +55,5 @@ sections:
 {% include_relative 025-dataservice-inspectionplan.md %}
 
 {% include_relative 026-dataservice-measurementsandvalues.md %}
+
+{% include_relative 028-dataservice-events.md %}

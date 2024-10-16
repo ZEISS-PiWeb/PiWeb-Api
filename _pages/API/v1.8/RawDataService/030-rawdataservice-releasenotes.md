@@ -6,6 +6,7 @@
 {% capture features %}
     <ul>
       <li>Internal optimizations for PiWeb clients.</li>
+      <li>Added endpoint to subscribe to <a href="/PiWeb-Api/rawdataservice/v1.8/#rs-events">events</a> of RawDataService activity</li>
     </ul>
 {% endcapture %}
 
