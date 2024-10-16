@@ -163,7 +163,7 @@ The base address is:
 http(s)://serverHost:port/instanceName/DataServiceRest
 ```
 
-For further information see the [DataService documentation](http://zeiss-piweb.github.io/PiWeb-Api/dataservice/v1.10/ "Data Service documentation")
+For further information see the [DataService documentation](http://zeiss-piweb.github.io/PiWeb-Api/dataservice/v1.11/ "Data Service documentation")
 
 #### Raw Data Service
 Use the RawDataService to fetch, create, update and delete additional data, i.e. raw data. <br>

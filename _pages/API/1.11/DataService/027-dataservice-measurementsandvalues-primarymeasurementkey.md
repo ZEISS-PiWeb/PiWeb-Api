@@ -28,7 +28,7 @@ Please note that these are measurements from three different inspection plan par
 
 | **Full query:** | `/measurements?order=4 desc&limitResult=3` |
 |------------------|--------------------------------------------------------------------|
-| **orderBy** | `4` | 
+| **order** | `4` | 
 | **limitResult** | `3` | 
 
 

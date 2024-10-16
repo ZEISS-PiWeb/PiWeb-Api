@@ -191,6 +191,8 @@ If you update a part you might want to:
 
 If versioning is activated on the server side, every update creates a new version entry. You should add a value for `comment` to explain why it was changed and by whom.
 The optimal format is "[Username]:Reason of change", e.g. "[John Doe]: Renamed 'Part1' to 'Part2'". This way it will be correctly displayed in PiWeb Planner.
+Please note that the JSON property `comment` can be added to different parts of the PUT request, however only one will be used by the PiWeb Server for the version entry.
+The `comment` of the first entry with actual changes will be used.
 
 {{site.images['info']}} If versioning is set to 'Controlled by the client' on server side it can be controlled by the following parameter:
 
@@ -319,6 +321,45 @@ HTTP/1.1 200 Ok
 
 {% include endpointTab.html %}
 
+{% assign linkId="inspectionPlanEndpointCountParts" %}
+{% assign method="GET" %}
+{% assign endpoint="/parts/count" %}
+{% assign summary="Get the count of parts" %}
+{% capture description %}
+Get the number of parts matching specified criteria.
+The result can be restricted by the following uri parameters:
+
+{% capture table %}
+Parameter name                                                                 | Description
+-------------------------------------------------------------------------------|--------------------------------
+<nobr><code>Guid list</code> partUuids<br></nobr>                              | Restricts the query to the parts with these uuids.
+<nobr><code>Path</code> partPath</nobr>                                        | Restricts the query to the part with this path.
+<nobr><code>ushort</code> depth</nobr><br><i>default:</i> <code>1</code>       | Determines how many levels of the inspection plan tree hierarchy should be fetched. Setting `depth=0` means that only the entity itself should be fetched, `depth=1` means the entity and its direct children should be fetched. Please note that depth is treated relative of the path depth of the provided part.
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
+
+{% endcapture %}
+
+{% assign exampleCaption="Count the parts under '/metal part' to a depth of 50" %}
+
+{% capture jsonrequest %}
+{% highlight http %}
+GET /dataServiceRest/parts/count?partPath=/metal%20part&depth=50 HTTP/1.1
+{% endhighlight %}
+{% endcapture %}
+
+{% capture jsonresponse %}
+{% highlight json %}
+
+{
+    "count": 4
+}
+
+{% endhighlight %}
+{% endcapture %}
+
+{% include endpointTab.html %}
+
 
 <p></p>
 
@@ -339,7 +380,7 @@ Parameter name                                                                 |
 -------------------------------------------------------------------------------|--------------------------------
 <nobr><code>Guid list</code> charUuids<br></nobr>                              | Restricts the query to the characteristics with these uuids.
 <nobr><code>Path</code> partPath</nobr><br><i>default:</i> <code>/</code>      | Restricts the query to the part with this path. The <code>charUuids</code> parameter takes precedence over this parameter.
-<nobr><code>ushort</code> depth</nobr><br><i>default:</i> <code>65.536</code>  | Determines how many levels of the inspection plan tree hierarchy should be fetched. Setting `depth=0` means that only the entity itself should be fetched, `depth=1` means the entity and its direct children should be fetched. Please note that depth is treated relative of the path depth of the provided part or characteristic.
+<nobr><code>ushort</code> depth</nobr><br><i>default:</i> <code>65.535</code>  | Determines how many levels of the inspection plan tree hierarchy should be fetched. Setting `depth=0` means that only the entity itself should be fetched, `depth=1` means the entity and its direct children should be fetched. Please note that depth is treated relative of the path depth of the provided part or characteristic.
 <nobr><code>bool</code> withHistory</nobr><br><i>default:</i> <code>false</code>| Determines whether the version history should be fetched or not. This only effects the query if versioning is activated on the server side.
 <nobr><code>All, None, ID list</code> requestedCharacteristicAttributes</nobr><br><i>default:</i> <code>All</code>                                                                                  | Restricts the query to the attributes that should be returned for characteristics, for example `requestedCharacteristicAttributes={2001, 2101}`
 {% endcapture %}
@@ -497,6 +538,8 @@ If you update characteristics you want to:
 
 If versioning is activated on the server side, every update creates a new version entry. You should add a value for `comment` to explain why it was changed and by whom.
 The optimal format is "[Username]:Reason of change", e.g. "[John Doe]: Renamed 'Characteristic1' to 'Characteristic2'". This way it will be correctly displayed in PiWeb Planner.
+Please note that the JSON property `comment` can be added to different characteristics of the PUT request, however only one will be used by the PiWeb Server for the version entry.
+The `comment` of the first entry with actual changes will be used.
 
 {{site.images['info']}} If versioning is set to 'Controlled by the client' on server side it can be controlled by the following parameter:
 
@@ -587,6 +630,45 @@ DELETE /dataServiceRest/characteristics/27e23a7c-dbe7-4863-8461-6abf7b03ddd7 HTT
 {% capture jsonresponse %}
 {% highlight http %}
 HTTP/1.1 200 Ok
+{% endhighlight %}
+{% endcapture %}
+
+{% include endpointTab.html %}
+
+{% assign linkId="inspectionPlanEndpointCountChars" %}
+{% assign method="GET" %}
+{% assign endpoint="/characteristics/count" %}
+{% assign summary="Get the count of characteristics" %}
+{% capture description %}
+Get the number of characteristics matching specified criteria.
+The result can be restricted by the following uri parameters:
+
+{% capture table %}
+Parameter name                                                                 | Description
+-------------------------------------------------------------------------------|--------------------------------
+<nobr><code>Guid list</code> charUuids<br></nobr>                              | Restricts the query to the characteristics with these uuids.
+<nobr><code>Path</code> partPath</nobr><br><i>default:</i> <code>/</code>      | Restricts the query to the part with this path. The <code>charUuids</code> parameter takes precedence over this parameter.
+<nobr><code>ushort</code> depth</nobr><br><i>default:</i> <code>65.535</code>  | Determines how many levels of the inspection plan tree hierarchy should be fetched. Setting `depth=0` means that only the entity itself should be fetched, `depth=1` means the entity and its direct children should be fetched. Please note that depth is treated relative of the path depth of the provided part or characteristic.
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
+
+{% endcapture %}
+
+{% assign exampleCaption="Count the characteristics under '/metal part' to a depth of 5" %}
+
+{% capture jsonrequest %}
+{% highlight http %}
+GET /dataServiceRest/characteristics/count?partPath=/metal%20part&depth=5 HTTP/1.1
+{% endhighlight %}
+{% endcapture %}
+
+{% capture jsonresponse %}
+{% highlight json %}
+
+{
+    "count": 87
+}
+
 {% endhighlight %}
 {% endcapture %}
 

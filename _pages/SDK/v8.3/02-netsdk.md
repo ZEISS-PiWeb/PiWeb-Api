@@ -4,7 +4,7 @@ title: .NET SDK
 level: 0
 version: 83
 displayVersion: "8.3"
-isCurrentVersion: true
+isCurrentVersion: false
 permalink: "/sdk/v8.3/"
 sections:
   general:

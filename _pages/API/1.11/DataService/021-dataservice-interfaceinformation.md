@@ -29,4 +29,4 @@ GET /dataServiceRest/ HTTP/1.1
 <h3 id="{{page.sections['interfaceInformation']['secs']['interfaceinformation'].anchor}}-objectstructure">Object Structure</h3>
 
 Interface information returns the highest available minor version of each major version. This lets the user decide which features can be used.
-As a minor version is backwards compatible to all previous minor versions, there is no point in enumerating them all. An user want to know which revision of each major version is available as that means they can work around possible bugs of older revisions.
+As a minor version is backwards compatible to all previous minor versions, there is no point in enumerating them all. A user wants to know which revision of each major version is available as that means they can work around possible bugs of older revisions.

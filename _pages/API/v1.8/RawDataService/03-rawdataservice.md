@@ -27,6 +27,9 @@ sections:
       rawDataObjects:
         title: Raw Data Objects
         anchor: rs-raw-data-objects
+      events:
+        title: Events
+        anchor: rs-events
 ---
 
 {% include version_combobox.html %}
@@ -44,3 +47,5 @@ sections:
 {% include_relative 034-rawdataservice-rawdataobjects.md %}
 
 {% include_relative 035-rawdataservice-archivelookup.md %}
+
+{% include_relative 036-rawdataservice-events.md %}
