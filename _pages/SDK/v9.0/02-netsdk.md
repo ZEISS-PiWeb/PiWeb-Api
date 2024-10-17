@@ -49,11 +49,6 @@ sections:
 
 ---
 
-<div class="alert alert-info fade in">
-  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  This page is still a work in progress! It is possible that not all information are up to date!
-</div>
-
 {% include version_combobox.html %}
 
 {% include_relative 021-general.md %}
