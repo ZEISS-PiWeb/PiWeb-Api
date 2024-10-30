@@ -1,61 +1,21 @@
-# Create a stable NuGet release as a service pack. This workflow is manually triggered.
+# Calls a workflow that
+# + runs on support branches only,
+# + raises version numbers semantically,
+# + sets a version tag,
+# + and publishes a NuGet.
+#
+# This workflow must be triggered manually.
 
 name: Create service pack
 
 on:
   workflow_dispatch:
-    inputs:
-      package_version:
-        description: 'Input service pack version (Major.Minor.Fix)'
-        required: true
-        type: string
-        default: ""
 
 jobs:
-  service-pack-flow:
-
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-        token: ${{ secrets.ADMIN_TOKEN }}
-        
-    - name: Setup git config
-      run: |
-        # setup the username and email. We use the 'GitHub Actions Bot'
-        git config user.name github-actions
-        git config user.email github-actions@github.com
-        
-    - name: Change to support branch
-      run: |
-        git checkout support/${{ inputs.package_version }}
-        
-    - name: Commit changes and tag
-      run: |
-        echo Change version number, commit and push
-        find . -type f -name "*.csproj" -exec sed -i 's#<PackageVersion>[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]#<PackageVersion>${{ inputs.package_version }}#g' '{}' \;
-        find . -type f -name "*.csproj" -exec sed -i 's#<AssemblyVersion>[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]#<AssemblyVersion>${{ inputs.package_version }}#g' '{}' \;
-
-        git add *.csproj
-        git commit -m "Raises version number to ${{ inputs.package_version }}"
-          
-        echo Tag service pack commit
-        git tag release/${{ inputs.package_version }}
-          
-    - name: Push all branches
-      run: |
-        git push origin support/${{ inputs.package_version }} --tags
-
-  build-and-release:
-    needs: service-pack-flow
-    uses: ZEISS-PiWeb/github-actions/.github/workflows/build-and-pack.yml@main
+  release:
+    # With @main we want the latest version. Consider using a version tag to avoid breaking changes.
+    uses: ZEISS-PiWeb/github-actions/.github/workflows/create-support-release.yml@main
     with:
-      configuration: "Release"
-      do_pack: true
-      is_prerelease: false
-      suffix: "stable"
-      publish_target: "nuget.org"
-      dotnet_version: "7.0.x"
+      generate_release_notes: false
+      dotnet_version: '7.0.x'
     secrets: inherit
