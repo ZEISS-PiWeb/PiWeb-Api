@@ -14,7 +14,6 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth;
 #region usings
 
 using System.Text.Json.Serialization;
-using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 #endregion
@@ -25,6 +24,13 @@ using Newtonsoft.Json;
 public class OAuthConfiguration
 {
 	#region properties
+
+	/// <summary>
+	/// Mode to select the token type which can be used as an access token.
+	/// </summary>
+	[JsonProperty( "accessTokenType" )]
+	[JsonPropertyName( "accessTokenType" )]
+	public AccessTokenType AccessTokenType { get; set; } = AccessTokenType.Auto;
 
 	/// <summary>
 	/// Flags enum representing the OIDC authentication flows supported by this PiWeb Server.

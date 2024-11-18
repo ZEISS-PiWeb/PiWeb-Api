@@ -13,10 +13,12 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth.AuthenticationFlows;
 #region usings
 
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using IdentityModel;
 using IdentityModel.Client;
+using Microsoft.IdentityModel.Tokens;
 using Zeiss.PiWeb.Api.Rest.Common.Utilities;
 
 #endregion
@@ -27,6 +29,37 @@ using Zeiss.PiWeb.Api.Rest.Common.Utilities;
 public abstract class OidcAuthenticationFlowBase
 {
 	#region methods
+
+	/// <summary>
+	/// Choose a suitable security token to use as an access token for requesting data, based on given configuration.
+	/// </summary>
+	/// <param name="tokenResponse">Response of a token request containing different security token.</param>
+	/// <param name="configuration">OAuth configuration containing the settings for authentication.</param>
+	/// <param name="expiration">Expiration time of the chosen token.</param>
+	protected static string ChooseAccessToken( TokenResponse tokenResponse, OAuthConfiguration configuration, out DateTime expiration )
+	{
+		expiration = default;
+		switch( configuration.AccessTokenType )
+		{
+			case AccessTokenType.Auto:
+				try
+				{
+					OAuthHelper.DecodeSecurityToken( tokenResponse.AccessToken );
+					expiration = DateTime.UtcNow + TimeSpan.FromSeconds( tokenResponse.ExpiresIn );
+					return tokenResponse.AccessToken;
+				}
+				catch( SecurityTokenMalformedException )
+				{
+					expiration = OAuthHelper.TokenToExpirationTime( tokenResponse.IdentityToken );
+					return tokenResponse.IdentityToken;
+				}
+			case AccessTokenType.OidcIdentityToken:
+				return tokenResponse.IdentityToken;
+			case AccessTokenType.OAuthAccessToken:
+			default:
+				return tokenResponse.AccessToken;
+		}
+	}
 
 	/// <summary>
 	/// Request target server for authentication settings.
@@ -87,8 +120,9 @@ public abstract class OidcAuthenticationFlowBase
 	/// <param name="tokenClient">A client to interact with the token endpoint of the identity provider.</param>
 	/// <param name="userInfoEndpoint">Location of the user info endpoint of the identity provider.</param>
 	/// <param name="refreshToken">Refresh token to acquire a new authentication token.</param>
+	/// <param name="configuration">OAuth configuration of the PiWeb Server.</param>
 	/// <returns>A valid <see cref="OAuthTokenCredential"/> or <see langword="null"/> if no token could be retrieved.</returns>
-	protected static async Task<OAuthTokenCredential> TryGetOAuthTokenFromRefreshTokenAsync( TokenClient tokenClient, string userInfoEndpoint, string refreshToken )
+	protected static async Task<OAuthTokenCredential> TryGetOAuthTokenFromRefreshTokenAsync( TokenClient tokenClient, string userInfoEndpoint, string refreshToken, OAuthConfiguration configuration )
 	{
 		// when a refresh token is present try to use it to acquire a new access token
 		if( string.IsNullOrEmpty( refreshToken ) )
@@ -96,6 +130,27 @@ public abstract class OidcAuthenticationFlowBase
 
 		var tokenResponse = await tokenClient.RequestRefreshTokenAsync( refreshToken ).ConfigureAwait( false );
 		if( tokenResponse.IsError )
+			return null;
+
+		var accessToken = ChooseAccessToken( tokenResponse, configuration, out var expirationDate );
+		if( accessToken == null )
+			return null;
+
+		if( tokenResponse.IdentityToken == null )
+			return await CreateCredentialsWithClaimsFromUserInfo( userInfoEndpoint, tokenResponse, configuration ).ConfigureAwait( false );
+
+		return OAuthTokenCredential.CreateWithIdentityToken(
+			tokenResponse.IdentityToken,
+			accessToken,
+			expirationDate,
+			tokenResponse.RefreshToken );
+	}
+
+	private static async Task<OAuthTokenCredential> CreateCredentialsWithClaimsFromUserInfo( string userInfoEndpoint, TokenResponse tokenResponse, OAuthConfiguration configuration )
+	{
+		var accessToken = ChooseAccessToken( tokenResponse, configuration, out var expirationDate );
+
+		if( accessToken == null )
 			return null;
 
 		using var httpClient = new HttpClient();
@@ -108,8 +163,8 @@ public abstract class OidcAuthenticationFlowBase
 
 		return OAuthTokenCredential.CreateWithClaims(
 			response.Claims,
-			tokenResponse.AccessToken,
-			DateTime.UtcNow + TimeSpan.FromSeconds( tokenResponse.ExpiresIn ),
+			accessToken,
+			expirationDate,
 			tokenResponse.RefreshToken );
 	}
 
