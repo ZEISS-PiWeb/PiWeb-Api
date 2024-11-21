@@ -91,8 +91,7 @@ public class HybridFlow : OidcAuthenticationFlowBase, IOidcAuthenticationFlow
 	public OAuthTokenCredential ExecuteAuthenticationFlow( string refreshToken, OAuthConfiguration configuration, Func<OAuthRequest, OAuthResponse> requestCallback )
 	{
 		var discoveryInfo = GetDiscoveryInfoAsync( configuration.LocalTokenInformation ).GetAwaiter().GetResult();
-		if( discoveryInfo.IsError )
-			return null;
+		ThrowOnInvalidDiscoveryDocument( discoveryInfo );
 
 		var tokenClient = CreateTokenClient( discoveryInfo.TokenEndpoint, configuration.LocalTokenInformation.ClientID );
 		var result = TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken, configuration ).GetAwaiter().GetResult();
@@ -109,8 +108,7 @@ public class HybridFlow : OidcAuthenticationFlowBase, IOidcAuthenticationFlow
 		var request = new OAuthRequest( startUrl, configuration.LocalTokenInformation.RedirectUri );
 		var response = requestCallback( request )?.ToAuthorizeResponse();
 
-		if( response == null )
-			return null;
+		ThrowOnInvalidAuthorizeResponse( response );
 
 		result = TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response, configuration, discoveryInfo ).GetAwaiter().GetResult();
 
@@ -121,8 +119,7 @@ public class HybridFlow : OidcAuthenticationFlowBase, IOidcAuthenticationFlow
 	public async Task<OAuthTokenCredential> ExecuteAuthenticationFlowAsync( string refreshToken, OAuthConfiguration configuration, Func<OAuthRequest, Task<OAuthResponse>> requestCallbackAsync )
 	{
 		var discoveryInfo = await GetDiscoveryInfoAsync( configuration.LocalTokenInformation ).ConfigureAwait( false );
-		if( discoveryInfo.IsError )
-			return null;
+		ThrowOnInvalidDiscoveryDocument( discoveryInfo );
 
 		var tokenClient = CreateTokenClient( discoveryInfo.TokenEndpoint, configuration.LocalTokenInformation.ClientID );
 		var result = await TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken, configuration ).ConfigureAwait( false );
@@ -139,8 +136,7 @@ public class HybridFlow : OidcAuthenticationFlowBase, IOidcAuthenticationFlow
 		var request = new OAuthRequest( startUrl, configuration.LocalTokenInformation.RedirectUri );
 		var response = ( await requestCallbackAsync( request ).ConfigureAwait( false ) )?.ToAuthorizeResponse();
 
-		if( response == null )
-			return null;
+		ThrowOnInvalidAuthorizeResponse( response );
 
 		result = await TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response, configuration, discoveryInfo ).ConfigureAwait( false );
 

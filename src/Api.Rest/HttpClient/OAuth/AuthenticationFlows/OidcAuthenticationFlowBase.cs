@@ -146,6 +146,34 @@ public abstract class OidcAuthenticationFlowBase
 			tokenResponse.RefreshToken );
 	}
 
+	/// <summary>
+	/// Check authorization response and throw if it is invalid.
+	/// </summary>
+	/// <param name="response">The received authorization response.</param>
+	/// <exception cref="InvalidOperationException">Authorization response is empty or has an error.</exception>
+	protected static void ThrowOnInvalidAuthorizeResponse( AuthorizeResponse response )
+	{
+		if( response == null )
+			throw new InvalidOperationException( "Error during request of access token using authorization code: authorization response was empty." );
+
+		if( response.IsError )
+			throw new InvalidOperationException( $"Error during request of access token using authorization code: {response.Error}. {response.ErrorDescription}." );
+	}
+
+	/// <summary>
+	/// Checks discovery response and throws if it is invalid.
+	/// </summary>
+	/// <param name="response">The received discovery response.</param>
+	/// <exception cref="InvalidOperationException">Discovery response is empty or has an error.</exception>
+	protected static void ThrowOnInvalidDiscoveryDocument( DiscoveryDocumentResponse response )
+	{
+		if( response == null )
+			throw new InvalidOperationException( "Error during request of discovery document: discovery response was empty." );
+
+		if( response.IsError )
+			throw new InvalidOperationException( $"Error during request of discovery document: {response.Error}." );
+	}
+
 	private static async Task<OAuthTokenCredential> CreateCredentialsWithClaimsFromUserInfo( string userInfoEndpoint, TokenResponse tokenResponse, OAuthConfiguration configuration )
 	{
 		var accessToken = ChooseAccessToken( tokenResponse, configuration, out var expirationDate );

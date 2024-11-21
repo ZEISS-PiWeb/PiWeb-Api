@@ -83,8 +83,7 @@ public class AuthorizationCodeFlow : OidcAuthenticationFlowBase, IOidcAuthentica
 	public OAuthTokenCredential ExecuteAuthenticationFlow( string refreshToken, OAuthConfiguration configuration, Func<OAuthRequest, OAuthResponse> requestCallback )
 	{
 		var discoveryInfo = GetDiscoveryInfoAsync( configuration.UpstreamTokenInformation ).GetAwaiter().GetResult();
-		if( discoveryInfo.IsError )
-			return null;
+		ThrowOnInvalidDiscoveryDocument( discoveryInfo );
 
 		var tokenClient = CreateTokenClient( discoveryInfo.TokenEndpoint, configuration.UpstreamTokenInformation.ClientID );
 		var result = TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken, configuration ).GetAwaiter().GetResult();
@@ -101,8 +100,7 @@ public class AuthorizationCodeFlow : OidcAuthenticationFlowBase, IOidcAuthentica
 		var request = new OAuthRequest( startUrl, configuration.UpstreamTokenInformation.RedirectUri );
 		var response = requestCallback( request )?.ToAuthorizeResponse();
 
-		if( response == null )
-			return null;
+		ThrowOnInvalidAuthorizeResponse( response );
 
 		result = TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response, configuration, discoveryInfo ).GetAwaiter().GetResult();
 
@@ -113,8 +111,7 @@ public class AuthorizationCodeFlow : OidcAuthenticationFlowBase, IOidcAuthentica
 	public async Task<OAuthTokenCredential> ExecuteAuthenticationFlowAsync( string refreshToken, OAuthConfiguration configuration, Func<OAuthRequest, Task<OAuthResponse>> requestCallbackAsync )
 	{
 		var discoveryInfo = await GetDiscoveryInfoAsync( configuration.UpstreamTokenInformation ).ConfigureAwait( false );
-		if( discoveryInfo.IsError )
-			return null;
+		ThrowOnInvalidDiscoveryDocument( discoveryInfo );
 
 		var tokenClient = CreateTokenClient( discoveryInfo.TokenEndpoint, configuration.UpstreamTokenInformation.ClientID );
 		var result = await TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken, configuration ).ConfigureAwait( false );
@@ -131,8 +128,7 @@ public class AuthorizationCodeFlow : OidcAuthenticationFlowBase, IOidcAuthentica
 		var request = new OAuthRequest( startUrl, configuration.UpstreamTokenInformation.RedirectUri );
 		var response = ( await requestCallbackAsync( request ).ConfigureAwait( false ) )?.ToAuthorizeResponse();
 
-		if( response == null )
-			return null;
+		ThrowOnInvalidAuthorizeResponse( response );
 
 		result = await TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response, configuration, discoveryInfo ).ConfigureAwait( false );
 
