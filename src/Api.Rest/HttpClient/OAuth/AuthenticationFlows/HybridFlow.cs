@@ -32,11 +32,13 @@ public class HybridFlow : OidcAuthenticationFlowBase, IOidcAuthenticationFlow
 		TokenClient tokenClient,
 		CryptoNumbers cryptoNumbers,
 		AuthorizeResponse response,
-		OAuthTokenInformation tokenInformation,
+		OAuthConfiguration configuration,
 		DiscoveryDocumentResponse discoveryDocument )
 	{
 		if( response == null )
 			return null;
+
+		var tokenInformation = configuration.LocalTokenInformation;
 
 		// decode the IdentityToken claims
 		var decodedToken = OAuthHelper.DecodeSecurityToken( response.IdentityToken );
@@ -72,7 +74,13 @@ public class HybridFlow : OidcAuthenticationFlowBase, IOidcAuthenticationFlow
 		if( tokenResponse.IsError )
 			throw new InvalidOperationException( $"Error during request of access token using authorization code: {tokenResponse.Error}." );
 
-		return OAuthTokenCredential.CreateWithIdentityToken( tokenResponse.IdentityToken, tokenResponse.AccessToken, DateTime.UtcNow + TimeSpan.FromSeconds( tokenResponse.ExpiresIn ), tokenResponse.RefreshToken );
+		var accessToken = ChooseAccessToken( tokenResponse, configuration, out var expirationDate );
+
+		return OAuthTokenCredential.CreateWithIdentityToken(
+			tokenResponse.IdentityToken,
+			accessToken,
+			expirationDate,
+			tokenResponse.RefreshToken );
 	}
 
 	#endregion
@@ -83,11 +91,10 @@ public class HybridFlow : OidcAuthenticationFlowBase, IOidcAuthenticationFlow
 	public OAuthTokenCredential ExecuteAuthenticationFlow( string refreshToken, OAuthConfiguration configuration, Func<OAuthRequest, OAuthResponse> requestCallback )
 	{
 		var discoveryInfo = GetDiscoveryInfoAsync( configuration.LocalTokenInformation ).GetAwaiter().GetResult();
-		if( discoveryInfo.IsError )
-			return null;
+		ThrowOnInvalidDiscoveryDocument( discoveryInfo );
 
 		var tokenClient = CreateTokenClient( discoveryInfo.TokenEndpoint, configuration.LocalTokenInformation.ClientID );
-		var result = TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken ).GetAwaiter().GetResult();
+		var result = TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken, configuration ).GetAwaiter().GetResult();
 		if( result != null )
 			return result;
 
@@ -101,10 +108,9 @@ public class HybridFlow : OidcAuthenticationFlowBase, IOidcAuthenticationFlow
 		var request = new OAuthRequest( startUrl, configuration.LocalTokenInformation.RedirectUri );
 		var response = requestCallback( request )?.ToAuthorizeResponse();
 
-		if( response == null )
-			return null;
+		ThrowOnInvalidAuthorizeResponse( response );
 
-		result = TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response, configuration.LocalTokenInformation, discoveryInfo ).GetAwaiter().GetResult();
+		result = TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response, configuration, discoveryInfo ).GetAwaiter().GetResult();
 
 		return result;
 	}
@@ -113,11 +119,10 @@ public class HybridFlow : OidcAuthenticationFlowBase, IOidcAuthenticationFlow
 	public async Task<OAuthTokenCredential> ExecuteAuthenticationFlowAsync( string refreshToken, OAuthConfiguration configuration, Func<OAuthRequest, Task<OAuthResponse>> requestCallbackAsync )
 	{
 		var discoveryInfo = await GetDiscoveryInfoAsync( configuration.LocalTokenInformation ).ConfigureAwait( false );
-		if( discoveryInfo.IsError )
-			return null;
+		ThrowOnInvalidDiscoveryDocument( discoveryInfo );
 
 		var tokenClient = CreateTokenClient( discoveryInfo.TokenEndpoint, configuration.LocalTokenInformation.ClientID );
-		var result = await TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken ).ConfigureAwait( false );
+		var result = await TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken, configuration ).ConfigureAwait( false );
 		if( result != null )
 			return result;
 
@@ -131,10 +136,9 @@ public class HybridFlow : OidcAuthenticationFlowBase, IOidcAuthenticationFlow
 		var request = new OAuthRequest( startUrl, configuration.LocalTokenInformation.RedirectUri );
 		var response = ( await requestCallbackAsync( request ).ConfigureAwait( false ) )?.ToAuthorizeResponse();
 
-		if( response == null )
-			return null;
+		ThrowOnInvalidAuthorizeResponse( response );
 
-		result = await TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response, configuration.LocalTokenInformation, discoveryInfo ).ConfigureAwait( false );
+		result = await TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response, configuration, discoveryInfo ).ConfigureAwait( false );
 
 		return result;
 	}
