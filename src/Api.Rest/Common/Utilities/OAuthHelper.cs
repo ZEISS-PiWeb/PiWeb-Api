@@ -75,6 +75,33 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		}
 
 		/// <summary>
+		/// Extract the value of the JWT 'exp' token claim and convert it to the expiration date.
+		/// </summary>
+		/// <param name="jwtEncodedString">The JWT encoded token string.</param>
+		/// <returns>The expiration date of the token in UTC time.</returns>
+		public static DateTime TokenToExpirationTime( string jwtEncodedString )
+		{
+			if( string.IsNullOrEmpty( jwtEncodedString ) )
+				return default;
+
+			try
+			{
+				var claims = GetClaimsFromSecurityToken( jwtEncodedString ).ToList();
+				var expClaim = claims.SingleOrDefault( claim => claim.Type == "exp" )?.Value;
+
+				return long.TryParse( expClaim, out var secondsSinceEpoch )
+					? DateTimeOffset.FromUnixTimeSeconds( secondsSinceEpoch ).UtcDateTime
+					: default;
+			}
+			catch
+			{
+				// ignored
+			}
+
+			return default;
+		}
+
+		/// <summary>
 		/// Extract the value of the email identity claim.
 		/// </summary>
 		/// <param name="claims">A collection of claims.</param>
@@ -318,6 +345,5 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		}
 
 		#endregion
-
 	}
 }

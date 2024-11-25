@@ -31,11 +31,13 @@ public class AuthorizationCodeFlow : OidcAuthenticationFlowBase, IOidcAuthentica
 		TokenClient tokenClient,
 		CryptoNumbers cryptoNumbers,
 		AuthorizeResponse response,
-		OAuthTokenInformation tokenInformation,
+		OAuthConfiguration configuration,
 		DiscoveryDocumentResponse discoveryDocument )
 	{
 		if( response?.Code == null )
 			return null;
+
+		var tokenInformation = configuration.UpstreamTokenInformation;
 
 		// exchange the code for the access and refresh token, also send the code verifier,
 		// to handle man-in-the-middle attacks against the authorization code (PKCE).
@@ -64,7 +66,13 @@ public class AuthorizationCodeFlow : OidcAuthenticationFlowBase, IOidcAuthentica
 		if( !OAuthTokenValidator.ValidateNonce( cryptoNumbers.Nonce, claims ) )
 			throw new InvalidOperationException( "Invalid nonce value in identity token." );
 
-		return OAuthTokenCredential.CreateWithIdentityToken( tokenResponse.IdentityToken, tokenResponse.AccessToken, DateTime.UtcNow + TimeSpan.FromSeconds( tokenResponse.ExpiresIn ), tokenResponse.RefreshToken );
+		var accessToken = ChooseAccessToken( tokenResponse, configuration, out var expirationDate );
+
+		return OAuthTokenCredential.CreateWithIdentityToken(
+			tokenResponse.IdentityToken,
+			accessToken,
+			expirationDate,
+			tokenResponse.RefreshToken );
 	}
 
 	#endregion
@@ -75,11 +83,10 @@ public class AuthorizationCodeFlow : OidcAuthenticationFlowBase, IOidcAuthentica
 	public OAuthTokenCredential ExecuteAuthenticationFlow( string refreshToken, OAuthConfiguration configuration, Func<OAuthRequest, OAuthResponse> requestCallback )
 	{
 		var discoveryInfo = GetDiscoveryInfoAsync( configuration.UpstreamTokenInformation ).GetAwaiter().GetResult();
-		if( discoveryInfo.IsError )
-			return null;
+		ThrowOnInvalidDiscoveryDocument( discoveryInfo );
 
 		var tokenClient = CreateTokenClient( discoveryInfo.TokenEndpoint, configuration.UpstreamTokenInformation.ClientID );
-		var result = TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken ).GetAwaiter().GetResult();
+		var result = TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken, configuration ).GetAwaiter().GetResult();
 		if( result != null )
 			return result;
 
@@ -93,10 +100,9 @@ public class AuthorizationCodeFlow : OidcAuthenticationFlowBase, IOidcAuthentica
 		var request = new OAuthRequest( startUrl, configuration.UpstreamTokenInformation.RedirectUri );
 		var response = requestCallback( request )?.ToAuthorizeResponse();
 
-		if( response == null )
-			return null;
+		ThrowOnInvalidAuthorizeResponse( response );
 
-		result = TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response, configuration.UpstreamTokenInformation, discoveryInfo ).GetAwaiter().GetResult();
+		result = TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response, configuration, discoveryInfo ).GetAwaiter().GetResult();
 
 		return result;
 	}
@@ -105,11 +111,10 @@ public class AuthorizationCodeFlow : OidcAuthenticationFlowBase, IOidcAuthentica
 	public async Task<OAuthTokenCredential> ExecuteAuthenticationFlowAsync( string refreshToken, OAuthConfiguration configuration, Func<OAuthRequest, Task<OAuthResponse>> requestCallbackAsync )
 	{
 		var discoveryInfo = await GetDiscoveryInfoAsync( configuration.UpstreamTokenInformation ).ConfigureAwait( false );
-		if( discoveryInfo.IsError )
-			return null;
+		ThrowOnInvalidDiscoveryDocument( discoveryInfo );
 
 		var tokenClient = CreateTokenClient( discoveryInfo.TokenEndpoint, configuration.UpstreamTokenInformation.ClientID );
-		var result = await TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken ).ConfigureAwait( false );
+		var result = await TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken, configuration ).ConfigureAwait( false );
 		if( result != null )
 			return result;
 
@@ -123,10 +128,9 @@ public class AuthorizationCodeFlow : OidcAuthenticationFlowBase, IOidcAuthentica
 		var request = new OAuthRequest( startUrl, configuration.UpstreamTokenInformation.RedirectUri );
 		var response = ( await requestCallbackAsync( request ).ConfigureAwait( false ) )?.ToAuthorizeResponse();
 
-		if( response == null )
-			return null;
+		ThrowOnInvalidAuthorizeResponse( response );
 
-		result = await TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response, configuration.UpstreamTokenInformation, discoveryInfo ).ConfigureAwait( false );
+		result = await TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response, configuration, discoveryInfo ).ConfigureAwait( false );
 
 		return result;
 	}
