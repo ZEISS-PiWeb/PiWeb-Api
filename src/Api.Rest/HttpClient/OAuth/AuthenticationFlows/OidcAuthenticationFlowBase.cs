@@ -54,10 +54,16 @@ public abstract class OidcAuthenticationFlowBase
 					return tokenResponse.IdentityToken;
 				}
 			case AccessTokenType.OidcIdentityToken:
+			{
+				expiration = OAuthHelper.TokenToExpirationTime( tokenResponse.IdentityToken );
 				return tokenResponse.IdentityToken;
+			}
 			case AccessTokenType.OAuthAccessToken:
 			default:
+			{
+				expiration = DateTime.UtcNow + TimeSpan.FromSeconds( tokenResponse.ExpiresIn );
 				return tokenResponse.AccessToken;
+			}
 		}
 	}
 
