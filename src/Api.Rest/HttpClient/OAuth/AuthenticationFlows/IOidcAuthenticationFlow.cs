@@ -13,6 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth.AuthenticationFlows;
 #region usings
 
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Zeiss.PiWeb.Api.Rest.Common.Utilities;
@@ -42,9 +43,11 @@ public interface IOidcAuthenticationFlow
 	/// <param name="refreshToken">Refresh token to acquire a new authentication token.</param>
 	/// <param name="configuration">OAuth configuration containing the settings for authentication.</param>
 	/// <param name="requestCallbackAsync">The asynchronous callback to execute for authentication, e.g opening a browser window.</param>
+	/// <param name="cancellationToken">The <see cref="CancellationToken"/> that can be used to cancel the operation.</param>
 	Task<OAuthTokenCredential> ExecuteAuthenticationFlowAsync( [CanBeNull] string refreshToken,
 		OAuthConfiguration configuration,
-		Func<OAuthRequest, Task<OAuthResponse>> requestCallbackAsync );
+		Func<OAuthRequest, Task<OAuthResponse>> requestCallbackAsync,
+		CancellationToken cancellationToken );
 
 	#endregion
 }

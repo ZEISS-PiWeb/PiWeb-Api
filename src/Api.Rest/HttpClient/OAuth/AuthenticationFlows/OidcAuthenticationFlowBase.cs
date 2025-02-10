@@ -15,6 +15,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth.AuthenticationFlows;
 using System;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using IdentityModel;
 using IdentityModel.Client;
@@ -73,14 +74,14 @@ public abstract class OidcAuthenticationFlowBase
 	/// <param name="tokenInformation">Token information containing the discovery location and other settings.</param>
 	protected static async Task<DiscoveryDocumentResponse> GetDiscoveryInfoAsync( OAuthTokenInformation tokenInformation )
 	{
-		var discoveryCache = new DiscoveryCache( tokenInformation.OpenIdAuthority,
-			new DiscoveryPolicy
-			{
-				AdditionalEndpointBaseAddresses = tokenInformation.AdditionalEndpointBaseAddresses
-			} );
+		var discoveryPolicy = new DiscoveryPolicy
+		{
+			AdditionalEndpointBaseAddresses = tokenInformation.AdditionalEndpointBaseAddresses
+		};
 
-		var discoveryInfo = await discoveryCache.GetAsync().ConfigureAwait( false );
-		return discoveryInfo;
+		var discoveryCache = new DiscoveryCache( tokenInformation.OpenIdAuthority, discoveryPolicy );
+
+		return await discoveryCache.GetAsync().ConfigureAwait( false );
 	}
 
 	/// <summary>
@@ -128,13 +129,13 @@ public abstract class OidcAuthenticationFlowBase
 	/// <param name="refreshToken">Refresh token to acquire a new authentication token.</param>
 	/// <param name="configuration">OAuth configuration of the PiWeb Server.</param>
 	/// <returns>A valid <see cref="OAuthTokenCredential"/> or <see langword="null"/> if no token could be retrieved.</returns>
-	protected static async Task<OAuthTokenCredential> TryGetOAuthTokenFromRefreshTokenAsync( TokenClient tokenClient, string userInfoEndpoint, string refreshToken, OAuthConfiguration configuration )
+	protected static async Task<OAuthTokenCredential> TryGetOAuthTokenFromRefreshTokenAsync( TokenClient tokenClient, string userInfoEndpoint, string refreshToken, OAuthConfiguration configuration, CancellationToken cancellationToken = default )
 	{
 		// when a refresh token is present try to use it to acquire a new access token
 		if( string.IsNullOrEmpty( refreshToken ) )
 			return null;
 
-		var tokenResponse = await tokenClient.RequestRefreshTokenAsync( refreshToken ).ConfigureAwait( false );
+		var tokenResponse = await tokenClient.RequestRefreshTokenAsync( refreshToken, cancellationToken: cancellationToken ).ConfigureAwait( false );
 		if( tokenResponse.IsError )
 			return null;
 

@@ -18,6 +18,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 	using System.IO;
 	using System.Linq;
 	using System.Security.Claims;
+	using System.Threading;
 	using System.Threading.Tasks;
 	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.HttpClient.OAuth;
@@ -225,14 +226,14 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		///     <cref>https://openid.net/specs/openid-connect-discovery-1_0.html#IssuerDiscovery</cref>
 		/// </seealso>
 		/// </summary>
-		private static async Task<OAuthConfiguration> GetOAuthConfigurationAsync( string instanceUrl )
+		private static async Task<OAuthConfiguration> GetOAuthConfigurationAsync( string instanceUrl, CancellationToken cancellationToken = default )
 		{
 			var oauthServiceRest = new OAuthServiceRestClient( new Uri( instanceUrl ) )
 			{
 				UseDefaultWebProxy = true
 			};
 
-			var tokenInformation = await oauthServiceRest.GetOAuthConfiguration().ConfigureAwait( false );
+			var tokenInformation = await oauthServiceRest.GetOAuthConfiguration( cancellationToken ).ConfigureAwait( false );
 
 			if( tokenInformation == null )
 				throw new InvalidOperationException( "Cannot detect OpenID token information from resource URL." );
@@ -256,12 +257,14 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 		/// <param name="refreshToken">Optional refresh token that is used to renew the authentication information.</param>
 		/// <param name="requestCallbackAsync">Optional callback to request the user to interactively authenticate.</param>
 		/// <param name="bypassLocalCache">Defines whether locally cached token information are neither used nor updated.</param>
+		/// <param name="cancellationToken">The <see cref="CancellationToken"/> that can be used to cancel the operation.</param>
 		/// <returns>A new <see cref="OAuthTokenCredential"/> instance, or <c>null</c>, if no token could be retrieved.</returns>
 		public static async Task<OAuthTokenCredential> GetAuthenticationInformationForDatabaseUrlAsync(
 			string databaseUrl,
 			string refreshToken = null,
 			Func<OAuthRequest, Task<OAuthResponse>> requestCallbackAsync = null,
-			bool bypassLocalCache = false )
+			bool bypassLocalCache = false,
+			CancellationToken cancellationToken = default )
 		{
 			var instanceUrl = GetInstanceUrl( databaseUrl );
 
@@ -272,10 +275,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 					return cachedToken;
 			}
 
-			var tokenInformation = await GetOAuthConfigurationAsync( instanceUrl ).ConfigureAwait( false );
+			var tokenInformation = await GetOAuthConfigurationAsync( instanceUrl, cancellationToken ).ConfigureAwait( false );
 
 			var authenticationFlow = ChooseSuitableAuthenticationFlow( tokenInformation );
-			var result = await authenticationFlow.ExecuteAuthenticationFlowAsync( refreshToken, tokenInformation, requestCallbackAsync ).ConfigureAwait( false );
+			var result = await authenticationFlow.ExecuteAuthenticationFlowAsync( refreshToken, tokenInformation, requestCallbackAsync, cancellationToken ).ConfigureAwait( false );
 
 			if( result == null )
 				return null;

@@ -14,6 +14,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth.AuthenticationFlows;
 
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using IdentityModel.Client;
 using Zeiss.PiWeb.Api.Rest.Common.Utilities;
@@ -32,7 +33,8 @@ public class AuthorizationCodeFlow : OidcAuthenticationFlowBase, IOidcAuthentica
 		CryptoNumbers cryptoNumbers,
 		AuthorizeResponse response,
 		OAuthConfiguration configuration,
-		DiscoveryDocumentResponse discoveryDocument )
+		DiscoveryDocumentResponse discoveryDocument,
+		CancellationToken cancellationToken = default )
 	{
 		if( response?.Code == null )
 			return null;
@@ -44,11 +46,14 @@ public class AuthorizationCodeFlow : OidcAuthenticationFlowBase, IOidcAuthentica
 		var tokenResponse = await tokenClient.RequestAuthorizationCodeTokenAsync(
 			code: response.Code,
 			redirectUri: tokenInformation.RedirectUri,
-			codeVerifier: cryptoNumbers.Verifier ).ConfigureAwait( false );
+			codeVerifier: cryptoNumbers.Verifier,
+			cancellationToken: cancellationToken ).ConfigureAwait( false );
 
 		if( tokenResponse.IsError )
+		{
 			throw new InvalidOperationException(
 				$"Error during request of access token using authorization code: {tokenResponse.Error}. {tokenResponse.ErrorDescription}." );
+		}
 
 		// decode the IdentityToken claims
 		var claims = OAuthHelper.DecodeSecurityToken( tokenResponse.IdentityToken ).Claims.ToArray();
@@ -108,13 +113,13 @@ public class AuthorizationCodeFlow : OidcAuthenticationFlowBase, IOidcAuthentica
 	}
 
 	/// <inheritdoc />
-	public async Task<OAuthTokenCredential> ExecuteAuthenticationFlowAsync( string refreshToken, OAuthConfiguration configuration, Func<OAuthRequest, Task<OAuthResponse>> requestCallbackAsync )
+	public async Task<OAuthTokenCredential> ExecuteAuthenticationFlowAsync( string refreshToken, OAuthConfiguration configuration, Func<OAuthRequest, Task<OAuthResponse>> requestCallbackAsync, CancellationToken cancellationToken )
 	{
 		var discoveryInfo = await GetDiscoveryInfoAsync( configuration.UpstreamTokenInformation ).ConfigureAwait( false );
 		ThrowOnInvalidDiscoveryDocument( discoveryInfo );
 
 		var tokenClient = CreateTokenClient( discoveryInfo.TokenEndpoint, configuration.UpstreamTokenInformation.ClientID );
-		var result = await TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken, configuration ).ConfigureAwait( false );
+		var result = await TryGetOAuthTokenFromRefreshTokenAsync( tokenClient, discoveryInfo.UserInfoEndpoint, refreshToken, configuration, cancellationToken ).ConfigureAwait( false );
 		if( result != null )
 			return result;
 
@@ -130,7 +135,7 @@ public class AuthorizationCodeFlow : OidcAuthenticationFlowBase, IOidcAuthentica
 
 		ThrowOnInvalidAuthorizeResponse( response );
 
-		result = await TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response, configuration, discoveryInfo ).ConfigureAwait( false );
+		result = await TryGetOAuthTokenFromAuthorizeResponseAsync( tokenClient, cryptoNumbers, response, configuration, discoveryInfo, cancellationToken ).ConfigureAwait( false );
 
 		return result;
 	}
