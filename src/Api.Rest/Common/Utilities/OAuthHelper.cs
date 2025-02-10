@@ -280,8 +280,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			if( result == null )
 				return null;
 
-			if( !bypassLocalCache )
-				AccessTokenCache.Store( instanceUrl, result );
+			AccessTokenCache.Store( instanceUrl, result );
 
 			return result;
 		}
@@ -317,8 +316,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Utilities
 			if( result == null )
 				return null;
 
-			if( !bypassLocalCache )
-				AccessTokenCache.Store( instanceUrl, result );
+			AccessTokenCache.Store( instanceUrl, result );
 
 			return result;
 		}
