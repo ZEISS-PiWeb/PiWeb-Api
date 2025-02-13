@@ -155,7 +155,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// Initializes a new instance of the <see cref="RestClientBase"/> class. This constructor exists to support
 		/// rest client creation via <see cref="RestClientBuilder"/>.
 		/// </summary>
-		internal RestClientBase( [NotNull] string endpointName, [NotNull] RestClientSettings settings )
+		protected RestClientBase( [NotNull] string endpointName, [NotNull] RestClientSettings settings )
 		{
 			if( endpointName == null )
 				throw new ArgumentNullException( nameof( endpointName ) );
