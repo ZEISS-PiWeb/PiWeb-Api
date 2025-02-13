@@ -50,16 +50,16 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		{
 			using( var cts = GetCancellationTokenSource( cancellationToken ) )
 			{
-				var timeoutTime = cts is null
-					? 0
-					: Environment.TickCount + Timeout.Ticks / TimeSpan.TicksPerMillisecond;
+				var timeoutTickCount = cts is null
+					? long.MaxValue
+					: Environment.TickCount + Timeout.Ticks;
 
 				try
 				{
 					return await base.SendAsync( request, cts?.Token ?? cancellationToken )
 						.ConfigureAwait( false );
 				}
-				catch( OperationCanceledException ex ) when( !cancellationToken.IsCancellationRequested && Environment.TickCount >= timeoutTime )
+				catch( OperationCanceledException ex ) when( !cancellationToken.IsCancellationRequested && Environment.TickCount >= timeoutTickCount )
 				{
 					throw new TimeoutException(
 						$"The request was canceled due to the configured timeout of {Timeout.TotalSeconds} seconds elapsing.", ex );
