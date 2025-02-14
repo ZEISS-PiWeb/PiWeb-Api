@@ -39,7 +39,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// </summary>
 		/// <exception cref="ArgumentNullException"><paramref name="endpointName"/> is <see langword="null" />.</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="settings"/> is <see langword="null" />.</exception>
-		internal RestClient( [NotNull] string endpointName, [NotNull] RestClientSettings settings )
+		public RestClient( [NotNull] string endpointName, [NotNull] RestClientSettings settings )
 			: base( endpointName, settings )
 		{ }
 

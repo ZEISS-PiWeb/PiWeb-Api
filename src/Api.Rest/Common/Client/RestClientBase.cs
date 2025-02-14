@@ -95,7 +95,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		private long _LatestSession = 0;
 
 		// This is only used by the legacy constructor to preserve old behavior
-		[CanBeNull] private readonly DelegatingHandler _CustomHttpMessageHandler;
+		[CanBeNull] private readonly DelegatingHandler _LegacyDelegatingHandler;
 
 		// These are set by the settings based constructor used by rest client builders
 		[NotNull] private readonly IReadOnlyCollection<Func<DelegatingHandler>> _DelegatingHandlerFactories =
@@ -142,7 +142,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			}.Uri;
 
 			_Chunked = chunked;
-			_CustomHttpMessageHandler = customHttpMessageHandler;
+			_LegacyDelegatingHandler = customHttpMessageHandler;
 			_Serializer = serializer ?? ObjectSerializer.Default;
 
 			MaxUriLength = maxUriLength;
@@ -155,7 +155,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// Initializes a new instance of the <see cref="RestClientBase"/> class. This constructor exists to support
 		/// rest client creation via <see cref="RestClientBuilder"/>.
 		/// </summary>
-		internal RestClientBase( [NotNull] string endpointName, [NotNull] RestClientSettings settings )
+		protected RestClientBase( [NotNull] string endpointName, [NotNull] RestClientSettings settings )
 		{
 			if( endpointName == null )
 				throw new ArgumentNullException( nameof( endpointName ) );
@@ -172,7 +172,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			_CheckCertificateRevocationList = settings.CheckCertificateRevocationList;
 			_Chunked = settings.AllowChunkedDataTransfer;
 
-			_CustomHttpMessageHandler = null;
+			_LegacyDelegatingHandler = null;
 			_AuthenticationHandler = settings.AuthenticationHandler;
 
 			_DelegatingHandlerFactories = new List<Func<DelegatingHandler>>( settings.DelegatingHandlerFactories );
@@ -202,7 +202,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// </summary>
 		public TimeSpan Timeout
 		{
-			get => _TimeoutHandler.Timeout;
+			get => _Timeout;
 			set
 			{
 				_Timeout = Timeout;
@@ -705,41 +705,46 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 #pragma warning restore CA1416
 			}
 
+			HttpMessageHandler outerDelegatingHandler = _HttpClientHandler;
+
 			if( _CacheStore == null )
+			{
 				_CachingHandler = null;
+			}
 			else
 			{
 				_CachingHandler = _VaryHeaderStore == null
 					? new CachingHandler( _CacheStore )
 					: new CachingHandler( _CacheStore, _VaryHeaderStore );
-
-				_CachingHandler.InnerHandler = _HttpClientHandler;
 				_CachingHandler.DoNotEmitCacheCowHeader = true;
+
+				_CachingHandler.InnerHandler = outerDelegatingHandler;
+				outerDelegatingHandler = _CachingHandler;
 			}
 
 			_TimeoutHandler = new TimeoutHandler
 			{
 				Timeout = _Timeout,
-				InnerHandler = (HttpMessageHandler)_CachingHandler ?? _HttpClientHandler
+				InnerHandler = outerDelegatingHandler
 			};
+			outerDelegatingHandler = _TimeoutHandler;
 
-			var outerMostHandler = (DelegatingHandler)_TimeoutHandler;
 			foreach( var handlerFactory in _DelegatingHandlerFactories )
 			{
 				var newHandler = handlerFactory();
 				_DelegatingHandlers.Add( newHandler );
 
-				newHandler.InnerHandler = outerMostHandler;
-				outerMostHandler = newHandler;
+				newHandler.InnerHandler = outerDelegatingHandler;
+				outerDelegatingHandler = newHandler;
 			}
 
-			if( _CustomHttpMessageHandler != null )
+			if( _LegacyDelegatingHandler != null )
 			{
-				_CustomHttpMessageHandler.InnerHandler = outerMostHandler;
-				outerMostHandler = _CustomHttpMessageHandler;
+				_LegacyDelegatingHandler.InnerHandler = outerDelegatingHandler;
+				outerDelegatingHandler = _LegacyDelegatingHandler;
 			}
 
-			_HttpClient = new HttpClient( outerMostHandler )
+			_HttpClient = new HttpClient( outerDelegatingHandler )
 			{
 				Timeout = System.Threading.Timeout.InfiniteTimeSpan,
 				BaseAddress = ServiceLocation

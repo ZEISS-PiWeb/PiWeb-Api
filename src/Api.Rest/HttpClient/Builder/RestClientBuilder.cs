@@ -365,8 +365,7 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 	/// <inheritdoc />
 	public DataServiceRestClient CreateDataServiceRestClient()
 	{
-		var settings = GetSettings();
-		return new DataServiceRestClient( settings );
+		return new DataServiceRestClient( GetSettings() );
 	}
 
 	/// <inheritdoc />
