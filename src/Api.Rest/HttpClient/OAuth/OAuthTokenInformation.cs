@@ -48,6 +48,13 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 		public string BrowserClientID { get; set; } = "9dea0b08-987e-4018-836a-fd610e64a967";
 
 		/// <summary>
+		/// ClientID of the app registration for PiWeb browser applications (compatibility mode) at the OpenID provider.
+		/// </summary>
+		[JsonProperty( "browserCompatibilityClientId" )]
+		[JsonPropertyName( "browserCompatibilityClientId" )]
+		public string BrowserCompatibilityClientID { get; set; } = "afbb7954-9d2a-4e10-bf24-c8616258fed4";
+
+		/// <summary>
 		/// Redirect URI after successful authentication.
 		/// </summary>
 		[JsonProperty( "redirectUri" )]
