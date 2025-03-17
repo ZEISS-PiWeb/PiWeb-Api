@@ -13,5 +13,5 @@ jobs:
     uses: ZEISS-PiWeb/github-actions/.github/workflows/develop.yml@main
     with:
       do_pack: true
-      dotnet_version: "8.0.x"
+      dotnet_version: "9.0.x"
     secrets: inherit

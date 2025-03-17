@@ -10,5 +10,5 @@ jobs:
   release:
     uses: ZEISS-PiWeb/github-actions/.github/workflows/create-release.yml@main
     with:
-      dotnet_version: "8.0.x"
+      dotnet_version: "9.0.x"
     secrets: inherit
