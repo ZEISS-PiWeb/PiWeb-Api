@@ -1,5 +1,35 @@
 ======================================================
 -------------------------------------------------------------------------------------------
+ Version 9.1.0                                                                   
+-------------------------------------------------------------------------------------------
+======================================================
+
+
+==========================================
+ Bugfixes
+==========================================
+- Update dependencies (#265)
+    ○ System.Text.Json from 8.0.4 to 8.0.5
+- fix OIDC token expiration time extraction (#268)
+
+==========================================
+New Features
+==========================================
+- Make RestClient constructor public (#270)
+	○ constructor taking a settings object is now public
+	○ custom rest clients based on RestClient can now be implemented by NuGet users
+- Add new properties to OAuthTokenInformation (#272 and #273)
+	○ add BrowserClientID and BrowserCompatibilityClientID
+	○ allows different client implementations to use the correct ID based on their technology 
+	○ existing property ClientID should be used for native applications
+- Update target framework (#275)
+    ○ remove .NET 6
+    ○ add .NET 9
+
+
+
+======================================================
+-------------------------------------------------------------------------------------------
  Version 9.0.1                                                                   
 -------------------------------------------------------------------------------------------
 ======================================================
