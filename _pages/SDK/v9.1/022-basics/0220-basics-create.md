@@ -6,7 +6,7 @@ Examples in this section:
 + [Creating REST clients using the RestClientBuilder](#-example--creating-rest-clients-using-the-restclientbuilder)
 <hr>
 
-Creating a .NET REST client is quite simple. You choose the required client based on the use case (DataService for parts, measurements, values and configuration, or RawDataService for additional data), and pass in the `Uri` object pointing to your PiWeb server or your PiWeb cloud database. The SDK also offers a RestClientBuilder for easy creation and configuration of necessary REST clients with a fluent syntax. 
+Creating a .NET REST client is quite simple. You choose the required client based on the use case (`DataServiceRestClient` for parts, measurements, values and configuration, or `RawDataServiceRestClient` for additional data), and pass in the `Uri` object pointing to your PiWeb server or your PiWeb cloud database. The SDK also offers a `RestClientBuilder` for easy creation and configuration of necessary REST clients with a fluent syntax. 
 
 The `Uri` for your PiWeb server can be found in the PiWeb server UI. The `Uri` for PiWeb cloud is the base URI https://piwebcloud-service.metrology.zeiss.com with the database id appended. The database id can be found
 in PiWeb cloud portal.

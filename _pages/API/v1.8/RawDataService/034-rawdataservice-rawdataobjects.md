@@ -102,7 +102,7 @@ Content-MD5          | (*optional*) Includes file's MD5 hash sum in Base64 forma
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
 
->{{site.images['info']}} The allowed raw data file names (see `Content-Disposition`) can be restricted on the server.
+>{{site.images['info']}} The allowed raw data file names (see `Content-Disposition`) can be restricted. See the option `Restrict filenames by a whitelist` in the advanced options of the PiWeb Server.
 
 >{{site.images['info']}} When adding a file, you can pass the desired file key as part of the uri. If you pass -1 or no key, the next available key will automatically be assigned by the server (recommended) and can be read from the result.
 
@@ -245,3 +245,12 @@ HTTP/1.1 200 OK
 {% endcapture %}
 
 {% include endpointTab.html %}
+
+<h4>Encoding filenames</h4>
+
+Per definition, HTTP headers are ASCII-only, making special characters in the filename sent via Content-Disposition header slightly more complex. When using our .NET SDK NuGet, the framework does all encoding when it encounters non-ASCII-characters. For this, it is using the [Encoded-Word](https://en.wikipedia.org/wiki/MIME#Encoded-Word) syntax. An example header value would look like this:
+
+`attachment; filename="=?utf-8?B?ZsO2w7Ziw6RyLnR4dA==?="`
+
+Where `utf-8` ist the charset, `B` is the encoding (Base64), and the following `ZsO2w7Ziw6RyLnR4dA==` is the actual filename in Base64 encoding, e.g. `fööbär.txt` in this example. All separated by `?`, 
+with a leading `=?` and trailing `?=`. Other charsets and encodings are possible, you can find more information about this in the documentation of used Encoded-Word syntax. When using the RawDataService directly via REST, you may need to implement this yourself.
