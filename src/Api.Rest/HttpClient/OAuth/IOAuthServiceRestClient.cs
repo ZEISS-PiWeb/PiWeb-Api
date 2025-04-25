@@ -40,8 +40,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 		/// Method for fetching the <see cref="InterfaceVersionRange"/> to check for relevant supported features.
 		/// </summary>
 		/// <remarks>
-		/// This method can also be used for quick connection check to test if the service is alive. It is
-		/// guaranteed that this method returns quickly and does perform a lot of work server side.
+		/// This method can be used for connection checking. The call returns quickly and does not produce any noticeable server load.
 		/// </remarks>
 		/// <param name="cancellationToken">A cancellation token to cancel the web service call.</param>
 		Task<InterfaceVersionRange> GetInterfaceInformation( CancellationToken cancellationToken = default );
