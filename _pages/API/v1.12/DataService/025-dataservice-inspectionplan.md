@@ -21,6 +21,7 @@ Parameter name                                                                 |
 <nobr><code>ushort</code> depth</nobr><br><i>default:</i> <code>1</code>       | Determines how many levels of the inspection plan tree hierarchy should be fetched. Setting `depth=0` means that only the entity itself should be fetched, `depth=1` means the entity and its direct children should be fetched. Please note that depth is treated relative of the path depth of the provided part.
 <nobr><code>bool</code> withHistory</nobr><br><i>default:</i> <code>false</code>| Determines whether the version history should be fetched or not. This only effects the query if versioning is activated on the server side.
 <nobr><code>All, None, ID list</code> requestedPartAttributes</nobr><br><i>default:</i> <code>All</code>                                                                                            | Restricts the query to the attributes that should be returned for parts, for example `requestedPartAttributes={1001, 1008}`.
+<nobr><code>Condition</code> searchCondition </nobr>                              | The query will only return items matching all conditions. A simple condition consists of the attribute key, followed by an operator and the value to match enclosed in brackets. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. It can be necessary to encode '+' as '%2B'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ], multiple values are separated by a comma. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`<br>`searchCondition=4>[2012-11-13T00:00:00Z]+852=[1]`<br>`searchCondition=10In[3,21,50]`<br>`searchCondition=6Like[%Example string condition%]`<br>`searchCondition=6=[Example string condition]` <br>
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
 
@@ -335,6 +336,7 @@ Parameter name                                                                 |
 <nobr><code>Guid list</code> partUuids<br></nobr>                              | Restricts the query to the parts with these uuids.
 <nobr><code>Path</code> partPath</nobr>                                        | Restricts the query to the part with this path.
 <nobr><code>ushort</code> depth</nobr><br><i>default:</i> <code>1</code>       | Determines how many levels of the inspection plan tree hierarchy should be fetched. Setting `depth=0` means that only the entity itself should be fetched, `depth=1` means the entity and its direct children should be fetched. Please note that depth is treated relative of the path depth of the provided part.
+<nobr><code>Condition</code> searchCondition </nobr>                              | The query will only return items matching all conditions. A simple condition consists of the attribute key, followed by an operator and the value to match enclosed in brackets. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. It can be necessary to encode '+' as '%2B'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ], multiple values are separated by a comma. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`<br>`searchCondition=4>[2012-11-13T00:00:00Z]+852=[1]`<br>`searchCondition=10In[3,21,50]`<br>`searchCondition=6Like[%Example string condition%]`<br>`searchCondition=6=[Example string condition]` <br>
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
 
@@ -383,10 +385,11 @@ Parameter name                                                                 |
 <nobr><code>ushort</code> depth</nobr><br><i>default:</i> <code>65.535</code>  | Determines how many levels of the inspection plan tree hierarchy should be fetched. Setting `depth=0` means that only the entity itself should be fetched, `depth=1` means the entity and its direct children should be fetched. Please note that depth is treated relative of the path depth of the provided part or characteristic.
 <nobr><code>bool</code> withHistory</nobr><br><i>default:</i> <code>false</code>| Determines whether the version history should be fetched or not. This only effects the query if versioning is activated on the server side.
 <nobr><code>All, None, ID list</code> requestedCharacteristicAttributes</nobr><br><i>default:</i> <code>All</code>                                                                                  | Restricts the query to the attributes that should be returned for characteristics, for example `requestedCharacteristicAttributes={2001, 2101}`
+<nobr><code>Condition</code> searchCondition </nobr>                              | The query will only return items matching all conditions. A simple condition consists of the attribute key, followed by an operator and the value to match enclosed in brackets. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. It can be necessary to encode '+' as '%2B'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ], multiple values are separated by a comma. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`<br>`searchCondition=4>[2012-11-13T00:00:00Z]+852=[1]`<br>`searchCondition=10In[3,21,50]`<br>`searchCondition=6Like[%Example string condition%]`<br>`searchCondition=6=[Example string condition]` <br>
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
 
-{{ site.images['info'] }}You can only request direct characteristics of the part, characteristics of child parts will be ignored.
+{{ site.images['info'] }} You can only request direct characteristics of the part, characteristics of child parts will be ignored.
 
 {% endcapture %}
 {% assign exampleCaption="Fetch all characteristics beneath the part '/metal part' until depth=2" %}
@@ -649,6 +652,7 @@ Parameter name                                                                 |
 <nobr><code>Guid list</code> charUuids<br></nobr>                              | Restricts the query to the characteristics with these uuids.
 <nobr><code>Path</code> partPath</nobr><br><i>default:</i> <code>/</code>      | Restricts the query to the part with this path. The <code>charUuids</code> parameter takes precedence over this parameter.
 <nobr><code>ushort</code> depth</nobr><br><i>default:</i> <code>65.535</code>  | Determines how many levels of the inspection plan tree hierarchy should be fetched. Setting `depth=0` means that only the entity itself should be fetched, `depth=1` means the entity and its direct children should be fetched. Please note that depth is treated relative of the path depth of the provided part or characteristic.
+<nobr><code>Condition</code> searchCondition </nobr>                              | The query will only return items matching all conditions. A simple condition consists of the attribute key, followed by an operator and the value to match enclosed in brackets. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. It can be necessary to encode '+' as '%2B'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ], multiple values are separated by a comma. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`<br>`searchCondition=4>[2012-11-13T00:00:00Z]+852=[1]`<br>`searchCondition=10In[3,21,50]`<br>`searchCondition=6Like[%Example string condition%]`<br>`searchCondition=6=[Example string condition]` <br>
 {% endcapture %}
 {{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
 
@@ -667,6 +671,121 @@ GET /dataServiceRest/characteristics/count?partPath=/metal%20part&depth=5 HTTP/1
 
 {
     "count": 87
+}
+
+{% endhighlight %}
+{% endcapture %}
+
+{% include endpointTab.html %}
+
+#### Inspection Plan Items
+
+Inspection plan items are not entities by itself. Instead, the following endpoints can be used to fetch a hierarchical structure of parts and characteristics at the same time.
+
+{% assign linkId="inspectionPlanEndpointGetAllItems" %}
+{% assign method="GET" %}
+{% assign endpoint="/inspectionPlanItems" %}
+{% assign summary="Fetches parts and characteristics" %}
+{% capture description %}
+You can fetch all inspection plan items or only certain ones. Possible filter uri parameters are:
+
+{% capture table %}
+Parameter name                                                                 | Description
+-------------------------------------------------------------------------------|--------------------------------
+<nobr><code>ushort</code> depth</nobr><br><i>default:</i> <code>65.535</code>  | Determines how many levels of the inspection plan tree hierarchy should be fetched. Setting `depth=0` means that only the entity itself should be fetched, `depth=1` means the entity and its direct children should be fetched. Please note that depth is treated relative of the path depth of the provided part or characteristic.
+<nobr><code>Path list</code> paths</nobr><br><i>default:</i> <code>/</code>    | Restricts the query to items with the given paths. This parameter is only valid if <code>parentUuids</code> parameter is null or empty.
+<nobr><code>Guid list</code> parentUuids<br></nobr>                            | Restricts the query to children of items with these uuids. This parameter is only valid if <code>paths</code> parameter is null or empty.
+<nobr><code>Guid list</code> itemUuids<br></nobr>                              | Restricts the query to the inspection plan items (parts or characteristics) with these uuids.
+<nobr><code>All, None, ID list</code> requestedPartAttributes</nobr><br><i>default:</i> <code>All</code>            | Restricts the query to the attributes that should be returned for parts, for example `requestedPartAttributes={1001, 1008}`.
+<nobr><code>All, None, ID list</code> requestedCharacteristicAttributes</nobr><br><i>default:</i> <code>All</code>  | Restricts the query to the attributes that should be returned for characteristics, for example `requestedCharacteristicAttributes={2001, 2101}`.
+<nobr><code>bool</code> withHistory</nobr><br><i>default:</i> <code>false</code>| Determines whether the version history should be fetched or not. This only effects the query if versioning is activated on the server side.
+<code>Part, Characteristic, CharacteristicWithoutIntermediateParts, None</code> restrictToEntity<br><i>default:</i> <code>None</code>| Determine whether the inspection plan search should be limited to parts, characteristics, or not.
+<nobr><code>Condition</code> searchCondition </nobr>                              | The query will only return items matching all conditions. A simple condition consists of the attribute key, followed by an operator and the value to match enclosed in brackets. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. It can be necessary to encode '+' as '%2B'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ], multiple values are separated by a comma. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`<br>`searchCondition=4>[2012-11-13T00:00:00Z]+852=[1]`<br>`searchCondition=10In[3,21,50]`<br>`searchCondition=6Like[%Example string condition%]`<br>`searchCondition=6=[Example string condition]` <br> 
+
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
+
+{{ site.images['info'] }} You can only request direct characteristics of the part, characteristics of child parts will be ignored.
+
+{% endcapture %}
+{% assign exampleCaption="Fetch all inspection plan items beneath the part '/metal part'" %}
+
+{% capture jsonrequest %}
+{% highlight http %}
+GET /dataServiceRest/inspectionPlanItems?paths=/Metal%20part HTTP/1.1
+{% endhighlight %}
+{% endcapture %}
+
+{% capture jsonresponse %}
+{% highlight json %}
+
+[
+    {
+        "charChangeDate": "2025-05-20T12:20:30.167Z",
+        "uuid": "9d3a551c-fd0e-4885-8039-9237b5de50fb",
+        "comment": "",
+        "path": "P:/Metal part/",
+        "version": 0,
+        "timestamp": "2025-04-22T08:32:40.907Z",
+        "attributes": {}
+    },
+    {
+        "uuid": "a90d9ed0-f115-4626-8bf8-7e2bb19b06b3",
+        "comment": "",
+        "path": "PC:/Metal part/Curve_form1/",
+        "version": 0,
+        "timestamp": "2025-04-22T08:32:41.243Z",
+        "attributes": {
+            ...
+            "12009": "CharacteristicsCurveForm"
+        }
+    },
+    ...
+]
+
+{% endhighlight %}
+
+Versioning works the same way as with parts, described in the first endpoint [GET /parts](#ds-inspection-plan).
+
+{% endcapture %}
+
+{% include endpointTab.html %}
+
+{% assign linkId="inspectionPlanEndpointCountItems" %}
+{% assign method="GET" %}
+{% assign endpoint="/inspectionPlanItems/count" %}
+{% assign summary="Get the count of inspection plan items" %}
+{% capture description %}
+Get the number of items matching specified criteria.
+The result can be restricted by the following uri parameters:
+
+{% capture table %}
+Parameter name                                                                 | Description
+-------------------------------------------------------------------------------|--------------------------------
+<nobr><code>ushort</code> depth</nobr><br><i>default:</i> <code>65.535</code>  | Determines how many levels of the inspection plan tree hierarchy should be fetched. Setting `depth=0` means that only the entity itself should be fetched, `depth=1` means the entity and its direct children should be fetched. Please note that depth is treated relative of the path depth of the provided part or characteristic.
+<nobr><code>Path list</code> paths</nobr><br><i>default:</i> <code>/</code>    | Restricts the query to items with the given paths. This parameter is only valid if <code>parentUuids</code> parameter is null or empty.
+<nobr><code>Guid list</code> parentUuids<br></nobr>                            | Restricts the query to children of items with these uuids. This parameter is only valid if <code>paths</code> parameter is null or empty.
+<nobr><code>Guid list</code> itemUuids<br></nobr>                              | Restricts the query to the inspection plan items (parts or characteristics) with these uuids.
+<code>Part, Characteristic, CharacteristicWithoutIntermediateParts, None</code> restrictToEntity<br><i>default:</i> <code>None</code>| Determine whether the inspection plan search should be limited to parts, characteristics, or not.
+<nobr><code>Condition</code> searchCondition </nobr>                              | The query will only return items matching all conditions. A simple condition consists of the attribute key, followed by an operator and the value to match enclosed in brackets. Possible operators are: >, <, >=, <=, =, <>, In, NotIn, Like. <br> You can combine multiple conditions with '+'. It can be necessary to encode '+' as '%2B'. The format for date/time has to be “yyyy-mm-ddThh:mm:ssZ”. All values need to be surrounded by [ and ], multiple values are separated by a comma. <br> `searchCondition=4>[2012-11-13T00:00:00Z]`<br>`searchCondition=4>[2012-11-13T00:00:00Z]+852=[1]`<br>`searchCondition=10In[3,21,50]`<br>`searchCondition=6Like[%Example string condition%]`<br>`searchCondition=6=[Example string condition]` <br><br>`restrictToEntity` has to be set for the search condition to work. If `restrictToEntity` is not set the value `Part` is assumed.
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-inline">' }}
+
+{% endcapture %}
+
+{% assign exampleCaption="Count the items under '/Metal part'" %}
+
+{% capture jsonrequest %}
+{% highlight http %}
+GET /dataServiceRest/inspectionPlanItems/count?paths=/Metal%20part HTTP/1.1
+{% endhighlight %}
+{% endcapture %}
+
+{% capture jsonresponse %}
+{% highlight json %}
+
+{
+    "count": 42
 }
 
 {% endhighlight %}
