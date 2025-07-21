@@ -13,6 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 	#region usings
 
 	using System;
+	using FluentAssertions;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 
@@ -28,10 +29,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 		{
 			var result = OrderDtoParser.Parse( "4 asc", EntityDto.Measurement );
 
-			Assert.NotNull( result );
-			Assert.AreEqual( 4, result.Attribute );
-			Assert.AreEqual( OrderDirectionDto.Asc, result.Direction );
-			Assert.AreEqual( EntityDto.Measurement, result.Entity );
+			result.Should().NotBeNull();
+			result.Attribute.Should().Be( 4 );
+			result.Direction.Should().Be( OrderDirectionDto.Asc );
+			result.Entity.Should().Be( EntityDto.Measurement );
 		}
 
 		[Test]
@@ -39,7 +40,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 		{
 			var result = OrderDtoParser.Parse( "4 invalidDirection", EntityDto.Measurement );
 
-			Assert.AreEqual( OrderDirectionDto.Desc, result.Direction );
+			result.Direction.Should().Be( OrderDirectionDto.Desc );
 		}
 
 		[Test]

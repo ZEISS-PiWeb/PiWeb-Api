@@ -13,6 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data.Converter
 {
 	#region usings
 
+	using FluentAssertions;
 	using Newtonsoft.Json;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
@@ -41,7 +42,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data.Converter
 				json,
 				new InspectionPlanDtoBaseConverter() );
 
-			Assert.AreEqual( typeof( InspectionPlanPartDto ), deserialized.GetType() );
+			deserialized.GetType().Should().Be( typeof( InspectionPlanPartDto ) );
 		}
 
 		[Test]
@@ -57,7 +58,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data.Converter
 				json,
 				new InspectionPlanDtoBaseConverter() );
 
-			Assert.AreEqual( typeof( SimplePartDto ), deserialized.GetType() );
+			deserialized.GetType().Should().Be( typeof( SimplePartDto ) );
 		}
 
 		[Test]
@@ -74,7 +75,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data.Converter
 				json,
 				new InspectionPlanDtoBaseConverter() );
 
-			Assert.AreEqual( typeof( InspectionPlanCharacteristicDto ), deserialized.GetType() );
+			deserialized.GetType().Should().Be( typeof( InspectionPlanCharacteristicDto ) );
 		}
 
 		[Test]
@@ -82,7 +83,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data.Converter
 		{
 			var deserialized = JsonConvert.DeserializeObject<InspectionPlanDtoBase>( string.Empty, new InspectionPlanDtoBaseConverter() );
 
-			Assert.AreEqual( null, deserialized );
+			deserialized.Should().BeNull();
 		}
 
 		#endregion
