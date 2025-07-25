@@ -19,6 +19,10 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 
 	#endregion
 
+	#region usings
+
+	#endregion
+
 	[TestFixture]
 	public class PathHelperTests
 	{
@@ -37,7 +41,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 			var actualResult = PathHelper.String2PartPathInformation( path );
 
 			actualResult.Should().BeOfType<PathInformation>();
-			Assert.AreEqual( new PathInformation( PathElement.Part( "\u0001" ) ), actualResult );
+			actualResult.Should().BeEquivalentTo( new PathInformation( PathElement.Part( "\u0001" ) ) );
 		}
 
 		[Test]
@@ -47,7 +51,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 			var actualResult = PathHelper.String2PartPathInformation( path );
 
 			actualResult.Should().BeOfType<PathInformation>();
-			Assert.AreEqual( new PathInformation( PathElement.Part( "foo" ) ), actualResult );
+			actualResult.Should().BeEquivalentTo( new PathInformation( PathElement.Part( "foo" ) ) );
 		}
 
 		[Test]
@@ -57,7 +61,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 			var actualResult = PathHelper.String2PartPathInformation( path );
 
 			actualResult.Should().BeOfType<PathInformation>();
-			Assert.AreEqual( new PathInformation( PathElement.Part( "\u0001" ) ), actualResult );
+			actualResult.Should().BeEquivalentTo( new PathInformation( PathElement.Part( "\u0001" ) ) );
 		}
 
 		[Test]
@@ -67,7 +71,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 			var actualResult = PathHelper.String2PartPathInformation( path );
 
 			actualResult.Should().BeOfType<PathInformation>();
-			Assert.AreEqual( new PathInformation( PathElement.Part( "foo" ) ), actualResult );
+			actualResult.Should().BeEquivalentTo( new PathInformation( PathElement.Part( "foo" ) ) );
 		}
 
 		[Test]
@@ -77,7 +81,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 			var actualResult = PathHelper.String2PartPathInformation( path );
 
 			actualResult.Should().BeOfType<PathInformation>();
-			Assert.AreEqual( new PathInformation( PathElement.Part( "\u0001" ) ), actualResult );
+			actualResult.Should().BeEquivalentTo( new PathInformation( PathElement.Part( "\u0001" ) ) );
 		}
 
 		[Test]
@@ -87,7 +91,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 			var actualResult = PathHelper.String2PartPathInformation( path );
 
 			actualResult.Should().BeOfType<PathInformation>();
-			Assert.AreEqual( new PathInformation( PathElement.Part( "foo" ) ), actualResult );
+			actualResult.Should().BeEquivalentTo( new PathInformation( PathElement.Part( "foo" ) ) );
 		}
 
 		[Test]
@@ -97,7 +101,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 			var actualResult = PathHelper.String2PartPathInformation( path );
 
 			actualResult.Should().BeOfType<PathInformation>();
-			Assert.AreEqual( PathInformation.Root, actualResult );
+			actualResult.Should().BeEquivalentTo( PathInformation.Root );
 		}
 
 		[Test]
@@ -107,7 +111,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 			var actualResult = PathHelper.String2PartPathInformation( path );
 
 			actualResult.Should().BeOfType<PathInformation>();
-			Assert.AreEqual( new PathInformation( PathElement.Part( "foo" ), PathElement.Part( "bar" ) ), actualResult );
+			actualResult.Should().BeEquivalentTo( new PathInformation( PathElement.Part( "foo" ), PathElement.Part( "bar" ) ) );
 		}
 
 		[Test]
@@ -130,24 +134,24 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 		public void String2PartPathInformation_PathEndsWithBackslash_ReturnsPathInformationDto()
 		{
 			const string path = "Bad\\\\/";
-			var result = PathHelper.String2PartPathInformation( path );
-			Assert.AreEqual( result, new PathInformation(new PathElement(value: "Bad\\")) );
+			var actualResult = PathHelper.String2PartPathInformation( path );
+			actualResult.Should().BeEquivalentTo( new PathInformation( new PathElement( value: "Bad\\" ) ) );
 		}
 
 		[Test]
 		public void String2PartPathInformation_PathEndsWithSlash_ReturnsPathInformationDto()
 		{
 			const string path = "Bad\\/";
-			var result = PathHelper.String2PartPathInformation( path );
-			Assert.AreEqual( result, new PathInformation(new PathElement(value: "Bad/")) );
+			var actualResult = PathHelper.String2PartPathInformation( path );
+			actualResult.Should().BeEquivalentTo( new PathInformation( new PathElement( value: "Bad/" ) ) );
 		}
 
 		[Test]
 		public void String2PartPathInformation_PathEndsWithSlashAndBackslash_ReturnsPathInformationDto()
 		{
 			const string path = "Bad\\/\\\\";
-			var result = PathHelper.String2PartPathInformation( path );
-			Assert.AreEqual( result, new PathInformation(new PathElement(value: "Bad/\\")) );
+			var actualResult = PathHelper.String2PartPathInformation( path );
+			actualResult.Should().BeEquivalentTo( new PathInformation( new PathElement( value: "Bad/\\" ) ) );
 		}
 
 		[Test]
@@ -163,7 +167,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 			var actualResult = PathHelper.String2CharPathInformation( path );
 
 			actualResult.Should().BeOfType<PathInformation>();
-			Assert.AreEqual( new PathInformation( PathElement.Char( "\u0001" ) ), actualResult );
+			actualResult.Should().BeEquivalentTo( new PathInformation( PathElement.Char( "\u0001" ) ) );
 		}
 
 		[Test]
@@ -173,7 +177,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 			var actualResult = PathHelper.String2CharPathInformation( path );
 
 			actualResult.Should().BeOfType<PathInformation>();
-			Assert.AreEqual( new PathInformation( PathElement.Char( "foo" ) ), actualResult );
+			actualResult.Should().BeEquivalentTo( new PathInformation( PathElement.Char( "foo" ) ) );
 		}
 
 		[Test]
@@ -183,7 +187,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 			var actualResult = PathHelper.String2CharPathInformation( path );
 
 			actualResult.Should().BeOfType<PathInformation>();
-			Assert.AreEqual( new PathInformation( PathElement.Char( "\u0001" ) ), actualResult );
+			actualResult.Should().BeEquivalentTo( new PathInformation( PathElement.Char( "\u0001" ) ) );
 		}
 
 		[Test]
@@ -193,7 +197,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 			var actualResult = PathHelper.String2CharPathInformation( path );
 
 			actualResult.Should().BeOfType<PathInformation>();
-			Assert.AreEqual( new PathInformation( PathElement.Char( "foo" ) ), actualResult );
+			actualResult.Should().BeEquivalentTo( new PathInformation( PathElement.Char( "foo" ) ) );
 		}
 
 		[Test]
@@ -203,7 +207,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 			var actualResult = PathHelper.String2CharPathInformation( path );
 
 			actualResult.Should().BeOfType<PathInformation>();
-			Assert.AreEqual( new PathInformation( PathElement.Char( "\u0001" ) ), actualResult );
+			actualResult.Should().BeEquivalentTo( new PathInformation( PathElement.Char( "\u0001" ) ) );
 		}
 
 		[Test]
@@ -221,7 +225,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 			var actualResult = PathHelper.String2CharPathInformation( path );
 
 			actualResult.Should().BeOfType<PathInformation>();
-			Assert.AreEqual( new PathInformation( PathElement.Char( "foo" ), PathElement.Char( "bar" ) ), actualResult );
+			actualResult.Should().BeEquivalentTo( new PathInformation( PathElement.Char( "foo" ), PathElement.Char( "bar" ) ) );
 		}
 
 		[Test]
@@ -247,7 +251,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 			var actualResult = PathHelper.String2CharPathInformation( path );
 
 			actualResult.Should().BeOfType<PathInformation>();
-			Assert.AreEqual( new PathInformation( PathElement.Char( "foo" ) ), actualResult );
+			actualResult.Should().BeEquivalentTo( new PathInformation( PathElement.Char( "foo" ) ) );
 		}
 
 		[Test]
@@ -278,7 +282,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 			var actualResult = PathHelper.RoundtripString2PathInformation( path );
 
 			actualResult.Should().BeOfType<PathInformation>();
-			Assert.AreEqual( new PathInformation( PathElement.Part( "foo" ), PathElement.Part( "bar" ) ), actualResult );
+			actualResult.Should().BeEquivalentTo( new PathInformation( PathElement.Part( "foo" ), PathElement.Part( "bar" ) ) );
 		}
 
 		[Test]
@@ -288,7 +292,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 			var actualResult = PathHelper.RoundtripString2PathInformation( path );
 
 			actualResult.Should().BeOfType<PathInformation>();
-			Assert.AreEqual( new PathInformation( PathElement.Part( "foo" ), PathElement.Part( "bar" ), PathElement.Char( "char1" ) ), actualResult );
+			actualResult.Should().BeEquivalentTo( new PathInformation( PathElement.Part( "foo" ), PathElement.Part( "bar" ), PathElement.Char( "char1" ) ) );
 		}
 
 		[Test]
@@ -315,7 +319,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 			var actualResult = PathHelper.RoundtripString2PathInformation( path );
 
 			actualResult.Should().BeOfType<PathInformation>();
-			Assert.AreEqual( PathInformation.Root, actualResult );
+			actualResult.Should().BeEquivalentTo( PathInformation.Root );
 		}
 
 		[Test]
@@ -340,7 +344,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 			var actualResult = PathHelper.DatabaseString2PathInformation( path.AsSpan(), "".AsSpan() );
 
 			actualResult.Should().BeOfType<PathInformation>();
-			Assert.AreEqual( PathInformation.Root, actualResult );
+			actualResult.Should().BeEquivalentTo( PathInformation.Root );
 		}
 
 		[Test]
@@ -366,7 +370,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 
 			const string expected = "foo/bar";
 
-			Assert.AreEqual( expected, actualResult );
+			actualResult.Should().BeEquivalentTo( expected );
 		}
 
 		[Test]
@@ -374,7 +378,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 		{
 			var actualResult = PathHelper.PathInformation2String( PathInformation.Root );
 
-			Assert.AreEqual( PathHelper.DelimiterString, actualResult );
+			actualResult.Should().BeEquivalentTo( PathHelper.DelimiterString );
 		}
 
 		[Test]
@@ -391,7 +395,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 
 			const string expected = "PPC:/foo/bar/char1/";
 
-			Assert.AreEqual( expected, actualResult );
+			actualResult.Should().BeEquivalentTo( expected );
 		}
 
 		[Test]
@@ -399,7 +403,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 		{
 			var actualResult = PathHelper.PathInformation2RoundtripString( PathInformation.Root );
 
-			Assert.AreEqual( PathHelper.DelimiterString, actualResult );
+			actualResult.Should().BeEquivalentTo( PathHelper.DelimiterString );
 		}
 
 		[Test]
@@ -414,7 +418,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 		{
 			var actualResult = PathHelper.PathInformation2DatabaseString( PathInformation.Root );
 
-			Assert.AreEqual( PathHelper.DelimiterString, actualResult );
+			actualResult.Should().BeEquivalentTo( PathHelper.DelimiterString );
 		}
 
 		[Test]
@@ -431,7 +435,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests
 
 			const string expected = "PPC";
 
-			Assert.AreEqual( expected, actualResult );
+			actualResult.Should().BeEquivalentTo( expected );
 		}
 
 		#endregion
