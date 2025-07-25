@@ -12,7 +12,8 @@
     <ItemGroup>
         <PackageReference Include="AutoFixture" Version="4.18.0" />
         <PackageReference Include="BenchmarkDotNet" Version="0.13.5" />
-        <PackageReference Include="FluentAssertions" Version="6.11.0" />
+        <!-- do not update FluentAssertions. They changed their licensing model. Newer versions require a commercial license. -->
+        <PackageReference Include="FluentAssertions" Version="[7.2.0,8.0.0)" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.3.0" />
