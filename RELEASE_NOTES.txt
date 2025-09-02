@@ -1,5 +1,29 @@
 ======================================================
 -------------------------------------------------------------------------------------------
+ Version 9.1.1                                                                   
+-------------------------------------------------------------------------------------------
+======================================================
+
+==========================================
+ Bugfixes
+==========================================
+- Update dependencies (#285)
+    ○ JetBrains.Annotations from 2024.2.0 to 2024.3.0
+    ○ Microsoft.Extensions.ObjectPool from 8.0.8 to 9.0.4
+    ○ CommunityToolkit.HighPerformance from 8.3.0 to 8.4.0
+    ○ Microsoft.Bcl.HashCode from 1.1.1 to 6.0.0
+    ○ System.Buffers from 4.5.1 to 4.6.1
+    ○ System.Memory from 4.5.5 to 4.6.3
+    ○ System.Text.Json from 8.0.5 to 9.0.4
+    ○ Microsoft.IdentityModel.Logging from 8.0.2 to 8.12.1
+    ○ Microsoft.IdentityModel.Tokens from 8.0.2 to 8.12.1
+    ○ System.IdentityModel.Tokens.Jwt from 8.0.2 to 8.12.1
+    ○ Newtonsoft.Json.Bson from 1.0.2 to 1.0.3
+    ○ System.Security.Cryptography.ProtectedData from 8.0.0 to 9.0.4
+
+
+======================================================
+-------------------------------------------------------------------------------------------
  Version 9.1.0                                                                   
 -------------------------------------------------------------------------------------------
 ======================================================
