@@ -5,14 +5,14 @@
     <RootNamespace>Zeiss.PiWeb.Api.Core</RootNamespace>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageVersion>9.1.0</PackageVersion>
+    <PackageVersion>9.1.1</PackageVersion>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Assembly information">
     <AssemblyTitle>Contains core classes used by the ZEISS PiWeb API.</AssemblyTitle>
     <AssemblyName>Zeiss.PiWeb.Api.Core</AssemblyName>
-    <AssemblyVersion>9.1.0</AssemblyVersion>
+    <AssemblyVersion>9.1.1</AssemblyVersion>
     <Company>Carl Zeiss Industrielle Messtechnik GmbH</Company>
     <Copyright>Copyright © 2020 $(Company)</Copyright>
     <Description>Contains core classes used by the ZEISS PiWeb API. The ZEISS PiWeb API nuget depends on this package.</Description>
@@ -42,16 +42,10 @@
     <SupportedPlatform Include="browser" />
   </ItemGroup>
 
-  <ItemGroup Label=".NET references" Condition="'$(TargetFrameworkIdentifier)' != '.NETCoreApp'">
-    <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
-    <PackageReference Include="System.Buffers" Version="4.5.1" />
-    <PackageReference Include="System.Memory" Version="4.5.5" />
-  </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
-    <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="8.0.8" />
-    <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.3.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
+    <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="9.0.4" />
+    <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.4.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -61,6 +55,12 @@
       <PackagePath>/</PackagePath>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.Bcl.HashCode" Version="6.0.0" />
+    <PackageReference Include="System.Buffers" Version="4.6.1" />
+    <PackageReference Include="System.Memory" Version="4.6.3" />
   </ItemGroup>
 
 </Project>

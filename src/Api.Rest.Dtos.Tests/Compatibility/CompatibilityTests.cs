@@ -19,14 +19,21 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 	using System.Linq;
 	using System.Net.Mime;
 	using System.Text;
+	using System.Text.Json;
+	using System.Text.Json.Serialization;
+	using FluentAssertions;
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Converters;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Core;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 	using Zeiss.PiWeb.Api.Rest.Dtos.JsonConverters;
 	using Zeiss.PiWeb.Api.Rest.Dtos.RawData;
-	using static PiWeb.Api.Definitions.WellKnownKeys;
+	using static Definitions.WellKnownKeys;
 	using Attribute = Zeiss.PiWeb.Api.Core.Attribute;
+	using JsonSerializer = System.Text.Json.JsonSerializer;
+	using ServiceInformationDto = Zeiss.PiWeb.Api.Rest.Dtos.Data.ServiceInformationDto;
 
 	#endregion
 
@@ -202,7 +209,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 			new OrderDto { Entity = EntityDto.Characteristic, Attribute = Characteristic.LowerTolerance, Direction = OrderDirectionDto.Asc },
 			new OrderDto { Entity = EntityDto.Measurement, Attribute = Measurement.MeasurementStatus, Direction = OrderDirectionDto.Desc },
 
-			new Dtos.Data.ServiceInformationDto
+			new ServiceInformationDto
 			{
 				EditionSpecified = true,
 				ServerName = "TestServer",
@@ -364,7 +371,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 
 			EquatableFrom<OrderDto>( value => Tuple.Create( value.Entity, value.Attribute, value.Direction ) ),
 
-			EquatableFrom<Dtos.Data.ServiceInformationDto>( value => Tuple.Create( value.EditionSpecified, value.Edition, value.ServerName, value.SecurityEnabled, value.FeatureList.ToArray(), value.RequestHeaderSize,
+			EquatableFrom<ServiceInformationDto>( value => Tuple.Create( value.EditionSpecified, value.Edition, value.ServerName, value.SecurityEnabled, value.FeatureList.ToArray(), value.RequestHeaderSize,
 															Tuple.Create( value.PartCount, value.CharacteristicCount, value.MeasurementCount, value.ValueCount ),
 															Tuple.Create( value.InspectionPlanTimestamp, value.MeasurementTimestamp, value.ConfigurationTimestamp, value.CatalogTimestamp, value.StructureTimestamp )) ),
 
@@ -382,20 +389,20 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 		}
 		.ToDictionary( pair => pair.Key, pair => pair.Value );
 
-		private static readonly Newtonsoft.Json.JsonSerializerSettings Settings = new()
+		private static readonly JsonSerializerSettings Settings = new()
 		{
-			NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
+			NullValueHandling = NullValueHandling.Ignore,
 			Converters =
 			{
-				new Newtonsoft.Json.Converters.VersionConverter(),
+				new VersionConverter(),
 				new InspectionPlanDtoBaseConverter(),
 				new AttributeConverter()
 			}
 		};
 
-		private static readonly System.Text.Json.JsonSerializerOptions Options = new()
+		private static readonly JsonSerializerOptions Options = new()
 		{
-			DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
+			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
 			Converters =
 			{
 				new JsonInspectionPlanDtoBaseConverter(),
@@ -410,31 +417,31 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 		[TestCaseSource( nameof( TestCases ) )]
 		public void Backward_Compatible<T>( T value )
 		{
-			var json = Newtonsoft.Json.JsonConvert.SerializeObject( value, Settings );
+			var json = JsonConvert.SerializeObject( value, Settings );
 
-			var deserializedValue = System.Text.Json.JsonSerializer.Deserialize<T>( json, Options );
+			var deserializedValue = JsonSerializer.Deserialize<T>( json, Options );
 
 			var equatable = EquatableFromType[typeof( T )];
 
 			var expected = equatable( value );
 			var actual = equatable( deserializedValue );
 
-			Assert.AreEqual( expected, actual, $"{typeof( T ).Name}" );
+			Assert.That( expected, Is.EqualTo( actual ) );
 		}
 
 		[TestCaseSource( nameof( TestCases ) )]
 		public void Forward_Compatible<T>( T value )
 		{
-			var json = System.Text.Json.JsonSerializer.Serialize( value, Options );
+			var json = JsonSerializer.Serialize( value, Options );
 
-			var deserializedValue = Newtonsoft.Json.JsonConvert.DeserializeObject<T>( json, Settings );
+			var deserializedValue = JsonConvert.DeserializeObject<T>( json, Settings );
 
 			var equatable = EquatableFromType[typeof( T )];
 
 			var expected = equatable( value );
 			var actual = equatable( deserializedValue );
 
-			Assert.AreEqual( expected, actual, $"{typeof( T ).Name}" );
+			Assert.That( expected, Is.EqualTo( actual ) );
 		}
 
 		private static KeyValuePair<Type, Func<object, IStructuralEquatable>> EquatableFrom<T>( Func<T, IStructuralEquatable> func )

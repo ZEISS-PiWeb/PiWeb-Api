@@ -5,14 +5,14 @@
     <RootNamespace>Zeiss.PiWeb.Api.Rest.Dtos</RootNamespace>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageVersion>9.1.0</PackageVersion>
+    <PackageVersion>9.1.1</PackageVersion>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Assembly information">
     <AssemblyTitle>Contains the JSON-serializable DataTransferObjects (DTO) that will be exchanged between ZEISS PiWeb Server and client(s).</AssemblyTitle>
     <AssemblyName>Zeiss.PiWeb.Api.Rest.Dtos</AssemblyName>
-    <AssemblyVersion>9.1.0</AssemblyVersion>
+    <AssemblyVersion>9.1.1</AssemblyVersion>
     <Company>Carl Zeiss Industrielle Messtechnik GmbH</Company>
     <Copyright>Copyright © 2020 $(Company)</Copyright>
     <Description>Contains the JSON-serializable DataTransferObjects (DTO) that will be exchanged between ZEISS PiWeb Server and client(s).
@@ -43,17 +43,11 @@
     <SupportedPlatform Include="browser" />
   </ItemGroup>
 
-    <ItemGroup Label=".NET references" Condition="'$(TargetFrameworkIdentifier)' != '.NETCoreApp'">
-      <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
-      <PackageReference Include="System.Buffers" Version="4.5.1" />
-      <PackageReference Include="System.Memory" Version="4.5.5" />
-    </ItemGroup>
-
     <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="System.Text.Json" Version="8.0.5" />
-    <PackageReference Include="SauceControl.InheritDoc" Version="1.4.0">
+    <PackageReference Include="System.Text.Json" Version="9.0.4" />
+    <PackageReference Include="SauceControl.InheritDoc" Version="2.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -71,6 +65,12 @@
       <PackagePath>/</PackagePath>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.Bcl.HashCode" Version="6.0.0" />
+    <PackageReference Include="System.Buffers" Version="4.6.1" />
+    <PackageReference Include="System.Memory" Version="4.6.3" />
   </ItemGroup>
 
 </Project>
