@@ -22,6 +22,7 @@ using JetBrains.Annotations;
 using Zeiss.PiWeb.Api.Rest.Common.Authentication;
 using Zeiss.PiWeb.Api.Rest.Common.Client;
 using Zeiss.PiWeb.Api.Rest.HttpClient.Data;
+using Zeiss.PiWeb.Api.Rest.HttpClient.Health;
 using Zeiss.PiWeb.Api.Rest.HttpClient.OAuth;
 using Zeiss.PiWeb.Api.Rest.HttpClient.RawData;
 
@@ -378,6 +379,12 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 	public OAuthServiceRestClient CreateOAuthServiceRestClient()
 	{
 		return new OAuthServiceRestClient( GetSettings() );
+	}
+
+	/// <inheritdoc />
+	public HealthServiceRestClient CreateHealthServiceRestClient()
+	{
+		return new HealthServiceRestClient( GetSettings() );
 	}
 
 	#endregion

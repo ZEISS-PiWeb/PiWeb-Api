@@ -25,9 +25,10 @@ namespace Zeiss.PiWeb.Api.Rest.Tests
 		#region members
 
 		private readonly HttpListener _Listener = new();
-		private readonly IDictionary<string, Func<string>> _Responses = new Dictionary<string, Func<string>>();
+		private readonly IDictionary<string, Tuple<Func<string>, HttpStatusCode>> _Responses = new Dictionary<string, Tuple<Func<string>, HttpStatusCode>>();
 		private readonly List<string> _ReceivedRequests;
 		private string _DefaultResponse;
+		private HttpStatusCode _DefaultResponseStatusCode;
 
 		#endregion
 
@@ -38,6 +39,8 @@ namespace Zeiss.PiWeb.Api.Rest.Tests
 			var prefix = $"http://+:{port}/";
 			_Listener.Prefixes.Add( prefix );
 			_ReceivedRequests = new List<string>();
+			_DefaultResponse = "";
+			_DefaultResponseStatusCode = HttpStatusCode.OK;
 		}
 
 		#endregion
@@ -75,8 +78,9 @@ namespace Zeiss.PiWeb.Api.Rest.Tests
 					try
 					{
 						var response = CreateResponse( context.Request );
-						var buf = Encoding.UTF8.GetBytes( response );
+						var buf = Encoding.UTF8.GetBytes( response.Item1 );
 						context.Response.ContentLength64 = buf.Length;
+						context.Response.StatusCode = (int)response.Item2;
 						await context.Response.OutputStream.WriteAsync( buf, 0, buf.Length );
 					}
 					finally
@@ -87,27 +91,28 @@ namespace Zeiss.PiWeb.Api.Rest.Tests
 			} );
 		}
 
-		public void RegisterResponse( string uri, Func<string> response )
+		public void RegisterResponse( string uri, Func<string> response, HttpStatusCode responseStatusCode = HttpStatusCode.OK )
 		{
-			_Responses[ uri ] = response;
+			_Responses[ uri ] = new Tuple<Func<string>, HttpStatusCode>( response, responseStatusCode );
 		}
 
-		public void RegisterResponse( string uri, string response )
+		public void RegisterResponse( string uri, string response, HttpStatusCode responseStatusCode = HttpStatusCode.OK )
 		{
 			RegisterResponse( uri, () => response );
 		}
 
-		public void RegisterDefaultResponse( string response )
+		public void RegisterDefaultResponse( string response, HttpStatusCode responseStatusCode = HttpStatusCode.OK )
 		{
 			_DefaultResponse = response;
+			_DefaultResponseStatusCode = responseStatusCode;
 		}
 
-		private string CreateResponse( HttpListenerRequest request )
+		private (string, HttpStatusCode) CreateResponse( HttpListenerRequest request )
 		{
 			if( request.RawUrl != null && _Responses.TryGetValue( request.RawUrl, out var response ) )
-				return response();
+				return ( response.Item1(), response.Item2 );
 
-			return _DefaultResponse ?? string.Empty;
+			return ( _DefaultResponse, _DefaultResponseStatusCode );
 		}
 
 		#endregion
