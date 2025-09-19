@@ -36,14 +36,14 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Health
 		#region methods
 
 		/// <summary>
-		/// Readiness indicates if the application is running normally but isn't ready to receive requests.
+		/// Readiness indicates if the PiWeb Server is running normally but isn't ready to receive requests.
 		/// </summary>
 		/// <param name="cancellationToken">A cancellation token to cancel the web service call.</param>
 		/// <returns>A health check result.</returns>
 		Task<HealthCheckResultType> GetReadiness( CancellationToken cancellationToken = default );
 
 		/// <summary>
-		/// Liveness indicates if an app has crashed and must be restarted.
+		/// Liveness indicates if the PiWeb Server has crashed and must be restarted.
 		/// </summary>
 		/// <param name="cancellationToken">A cancellation token to cancel the web service call.</param>
 		/// <returns>A health check result.</returns>

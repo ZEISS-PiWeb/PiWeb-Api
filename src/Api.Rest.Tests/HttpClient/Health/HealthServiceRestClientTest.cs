@@ -3,7 +3,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss Industrielle Messtechnik GmbH        */
 /* Softwaresystem PiWeb                            */
-/* (c) Carl Zeiss 2021                             */
+/* (c) Carl Zeiss 2025                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #endregion

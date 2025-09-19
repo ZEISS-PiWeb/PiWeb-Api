@@ -3,7 +3,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 /* Carl Zeiss Industrielle Messtechnik GmbH        */
 /* Softwaresystem PiWeb                            */
-/* (c) Carl Zeiss 2015                             */
+/* (c) Carl Zeiss 2025                             */
 /* * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #endregion
@@ -41,7 +41,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Health
 		#region constructors
 
 		/// <summary>
-		/// Constructor. Instantiates a new <see cref="HealthServiceRestClient"/> th communicate with the PiWeb-Server OAuthService.
+		/// Initializes a new instance of the <see cref="HealthServiceRestClient"/> class.
 		/// </summary>
 		/// <param name="serverUri">
 		/// The base url of the PiWeb-Server. Please note that the required "OAuthServiceRest/" will automatically be appended to this url.
@@ -61,17 +61,13 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Health
 
 		#endregion
 
-		#region interface IHealthServiceRestClient
+		#region methods
 
-		/// <inheritdoc />
-		public ICustomRestClient CustomRestClient => _RestClient;
-
-		/// <inheritdoc />
-		public async Task<HealthCheckResultType> GetReadiness( CancellationToken cancellationToken = default )
+		private async Task<HealthCheckResultType> ExecuteHealthCheck( string relativeUri, CancellationToken cancellationToken = default )
 		{
 			try
 			{
-				using var resultStream = await _RestClient.RequestStream( RequestBuilder.CreateGet( "ready" ), cancellationToken ).ConfigureAwait( false );
+				using var resultStream = await _RestClient.RequestStream( RequestBuilder.CreateGet( relativeUri ), cancellationToken ).ConfigureAwait( false );
 				using var reader = new StreamReader( resultStream );
 				var result = await reader.ReadLineAsync() ?? "";
 
@@ -81,7 +77,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Health
 				if( result.Equals( "degraded", StringComparison.OrdinalIgnoreCase ) )
 					return HealthCheckResultType.Degraded;
 
-				throw new InvalidOperationException( $"Unexpected response from readiness check: {result}" );
+				throw new InvalidOperationException( $"Unexpected response from {relativeUri} check: {result}" );
 			}
 			catch( WrappedServerErrorException exception )
 			{
@@ -92,30 +88,23 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Health
 			}
 		}
 
+		#endregion
+
+		#region interface IHealthServiceRestClient
+
+		/// <inheritdoc />
+		public ICustomRestClient CustomRestClient => _RestClient;
+
+		/// <inheritdoc />
+		public async Task<HealthCheckResultType> GetReadiness( CancellationToken cancellationToken = default )
+		{
+			return await ExecuteHealthCheck( "ready", cancellationToken );
+		}
+
 		/// <inheritdoc />
 		public async Task<HealthCheckResultType> GetLiveness( CancellationToken cancellationToken = default )
 		{
-			try
-			{
-				using var resultStream = await _RestClient.RequestStream( RequestBuilder.CreateGet( "live" ), cancellationToken ).ConfigureAwait( false );
-				using var reader = new StreamReader( resultStream );
-				var result = await reader.ReadLineAsync() ?? "";
-
-				if( result.Equals( "healthy", StringComparison.OrdinalIgnoreCase ) )
-					return HealthCheckResultType.Healthy;
-
-				if( result.Equals( "degraded", StringComparison.OrdinalIgnoreCase ) )
-					return HealthCheckResultType.Degraded;
-
-				throw new InvalidOperationException( $"Unexpected response from liveness check: {result}" );
-			}
-			catch( WrappedServerErrorException exception )
-			{
-				if( exception.StatusCode == HttpStatusCode.ServiceUnavailable )
-					return HealthCheckResultType.Unhealthy;
-
-				throw;
-			}
+			return await ExecuteHealthCheck( "live", cancellationToken );
 		}
 
 		#endregion
