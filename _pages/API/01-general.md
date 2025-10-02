@@ -261,44 +261,97 @@ If PiWeb Server is secured by Windows authentication you have to follow the [Ker
 If PiWeb Server is secured by certificate authentication you have to provide a valid X.509 certificate of an authorized user along with the REST request.
 
 <br/>
-**OpenID connect authentication**
+**OpenID Connect authentication**
 
-If PiWeb Server is secured by OpenID connect authentication you have to obtain an access token and pass it in the HTTP authorization header. The access token can be obtained from an OpenID Issuer.
-The OpenID issuer URL is provided by a helper endpoint. Invoke a GET request on this endpoint without any authorization header.
+If PiWeb Server is secured by OpenID Connect authentication you have to obtain an access token and pass it in the HTTP authorization header. The access token can be obtained from an OpenID identity provider, also called token issuer or trusted authority.
+The OpenID identity provider URL is provided by a helper endpoint. To get information about the trusted authority for authentication, use the following endpoint:
+
+{% assign linkId="oAuthConfigurationEndpointGet" %}
+{% assign method="GET" %}
+{% assign endpoint="/OAuthServiceRest/OAuthConfiguration" %}
+{% assign summary="Returns information necessary for OIDC login" %}
+
+{% assign exampleCaption="Fetching the information necessary for OIDC login" %}
+{% capture jsonrequest %}
+{% highlight http %}
+GET /oAuthServiceRest/oAuthConfiguration HTTP/1.1
+{% endhighlight %}
+{% endcapture %}
+
+{% capture jsonresponse %}
+{% highlight json %}
+
+{
+  "accessTokenType": 0,
+  "supportedOidcAuthenticationFlows": 2,
+  "upstreamTokenInformation":
+  {
+    "openIdAuthority": "http://identity-provider/realms/PiWeb",
+    "clientId": "PiWeb_Desktop",
+    "browserClientId": "PiWeb_Browser",
+    "browserCompatibilityClientId": "PiWeb_Compat",
+    "redirectUri": "https://login.microsoftonline.com/common/oauth2/nativeclient",
+    "requestedScopes": "openid profile email offline_access",
+    "additionalEndpointBaseAddresses": []
+  },
+  "localTokenInformation": 
+  {
+    ...
+  }
+}
+
+{% endhighlight %}
+{% endcapture %}
+
+{% capture footer %}
+
+{% capture table %}
+#### Object structure
+
+Property                             | Description
+-------------------------------------|--------------------------------------------------------------
+<nobr><code>AccessTokenType</code> accessTokenType</nobr> | The type of token accepted by PiWeb Server as bearer token in the HTTP Authorization header. <br> <b>Values:</b> <br> 0 - `Auto` - A valid JSON Web Token (JWT) must be used, either access or identity token. <br> 1 - `OidcIdentityToken` - OIDC identity token must be used (JWT per standard). <br> 2 - `OAuthAccessToken` - OAuth access token must be used, which may not be a JWT.
+<code>OidcAuthenticationFlows</code> supportedOidcAuthenticationFlows | The OIDC authentication flows which can be used together with the identity provider. <i>Please note that this is a flags enum.</i> <br> <b>Values:</b> 0 - `None` - No authentication flow is supported. <br> 1 - `HybridFlow` - OIDC Hybrid Flow is supported. <br> 2 - `AuthorizationCodeFlow` - OIDC Authorization Code Flow is supported.
+<nobr><code>string</code> openIdAuthority</nobr> | The root URL of the trusted authority, also called identity provider or token issuer.
+<nobr><code>string</code> redirectUri</nobr> | The redirect URI which must be used during the login process.
+<nobr><code>string</code> requestedScopes</nobr> | The scopes which should be requested during the login process.
+<nobr><code>string</code> clientId</nobr> | The client ID used for the login process of the PiWeb desktop clients.
+<nobr><code>string</code> browserClientId</nobr> | The client ID used for the login process of the PiWeb browser clients.
+<nobr><code>string</code> browserCompatibilityClientId</nobr> | The client ID used for the login process of the PiWeb browser clients in compatibility mode.
+<nobr><code>string</code> additionalEndpointBaseAddresses</nobr> | Additional base addresses of trusted hosts which are part of the login process, but not the same as the trusted authority (e.g. through redirects or proxies).
+
+{% endcapture %}
+{{ table | markdownify | replace: '<table>', '<table class="table table-hover">' }}
+
+>{{ site.images['info'] }} Please use the information from `upstreamTokenInformation`. Values from `localTokenInformation` are only included for legacy reasons.
+
+{% endcapture %}
+
+{% include endpointTab.html %}
+
+The values received from previous endpoint can be used together with the [OpenID Connect](https://openid.net/connect/) specifications to obtain an access token. You can use
+an OpenID Connect client library to help dealing with all the details. Since OIDC is a standard, the following is just a short summary of necessary steps, without technical details.
+Please refer to the official [OpenID Connect specification](https://openid.net/specs/openid-connect-core-1_0.html) for further information.
+
+First use [OpenID Connect discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfig) to get the URL of the authorization and
+token endpoints. You can use either the Authorization Code Flow + PKCE, or the Hybrid Flow, based on the supported flows from the OAuthConfiguration endpoint.
+The [OpenID Connect](https://openid.net/specs/openid-connect-core-1_0.html) specification has a section for each flow, describing how to get an access token.
+
+You need to specify the client id, the scopes and the redirect URI from the returned configuration when sending the request to the authoization endpoint.
+Sending the PKCE code challenge is highly advised when using the Authorization Code Flow.
+The identity provider will redirect to some kind of login procedure, e.g. a login page, which is often displayed in a browser window handled by your application.
+
+After successful authentication, the obtained authorization code and the PKCE code verifier are sent to the token endpoint, which returns an access token, an ID token, and if the scope `offline_access` was used, also a refresh token.
+Based on the `accessTokenType` setting of the configuration received from PiWeb Server, you can decide which token to use for requests.
+PiWeb server uses the authentication scheme "Bearer" for OpenID connect authentication. The HTTP authorization header must contain the scheme "Bearer" as well as the obtained token, for any sent request.
 
 ```http
-http(s)://serverHost:port/instanceName/OAuthServiceRest/oauthTokenInformation
-```
-
-A JSON response with the following format will be returned.
-
-```json
-{"openIdAuthority":"https://issuerHost:port/basePath"}
-```
-
-The OpenID issuer URL can be used together with the [OpenID connect](https://openid.net/connect/) specifications to obtain an access token. You can use
-a OpenID connect client library to help dealing with all the details. Following a short description together with the PiWeb specifics.
-
-First use [OpenID connect discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfig) to get the URL of the authorization and
-token endpoints. Then you can use the [OpenID connect](https://openid.net/specs/openid-connect-core-1_0.html) specification to get an access token.
-
-The authorization flow used by PiWeb is the Authorization Code Flow + PKCE. You need to specify the client id "f1ddf74a-7ed1-4963-ab60-a1138a089791" and the
-scope "piweb". Additionally the scopes "profile", "email" and "offline_access" are supported as well. The redirect_uri is "urn:ietf:wg:oauth:2.0:oob".
-
-The obtained authorization code, the PKCE code verifier and the client secret "d2940022-7469-4790-9498-776e3adac79f" are sent to the token endpoint
-which returns an access token.
-
-The access token can be used to authenticate requests to PiWeb services. PiWeb server uses the authentication scheme "Bearer" for OpenID connect
-authentication. The HTTP authorization header must contain the scheme "Bearer" as well as the obtained access token.
-
-```http
-GET /DataServiceRest/serviceInformation HTTP/1.1
+GET /DataServiceRest/Configuration HTTP/1.1
 Authorization: Bearer access_token
 ```
 
-The access token is valid for 1 hour. When the access token has expired you need to obtain a new access token. The expiration date can be obtained
-by client from the access token itself. The access token is a JSON Web Token as defined in [RFC7519](https://www.rfc-editor.org/rfc/rfc7519)
-and contains the claim "exp" defining its expiration date.
+The access or ID token is valid for a certain time. The expiration date can be obtained by the client from the token itself, if it is a JSON Web Token, as defined in [RFC7519](https://www.rfc-editor.org/rfc/rfc7519).
+These contain the claim `exp`, defining its expiration date. The ID token is a JWT by default. For token not in the JWT format, e.g. when using opaque token and OIDC token introspection, the expiration time may be part of the response of the token endpoint, see property `expires_in` (given in seconds). If the token is expired, the refresh token may be used to acquire a new access token. This is essential, since PiWeb Server will reject expired token.
 
 <h2 id="{{page.sections['general']['secs']['parameter'].anchor}}">{{page.sections['general']['secs']['parameter'].title}}</h2>
 
