@@ -4,7 +4,7 @@ level: 0
 version: 112
 displayVersion: "1.12"
 title: Data Service
-isCurrentVersion: false
+isCurrentVersion: true
 permalink: /dataservice/v1.12/
 sections:
   dataservice:
