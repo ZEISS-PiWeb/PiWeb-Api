@@ -139,10 +139,9 @@ h4 code{
   box-shadow: 0 2px 10px -1px rgba(0,0,0,0.4);
 }
 
-@media (min-width: 767px) {
-	.container-header {
-		padding-left:32px;
-	}
+.main_logo {
+	float:left;
+	margin: 11px
 }
 
 .nav>li.fixedWidth{
@@ -215,13 +214,14 @@ nav>.affix{
 @media (min-width: 768px){
 	.navbar-collapse .navbar-nav{
 		margin-top: 12px;
-		margin-left: 54px;
+		margin-left: 40px;
 	}
 }
 
 .navbar-brand {
   font-size: 2.8em;
-  margin-top: 10px;
+  margin-top: 25px;
+  padding: 0;
 }
 
 @media (min-width: 768px) {
