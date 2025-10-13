@@ -11,6 +11,7 @@
 namespace Zeiss.PiWeb.Api.Rest.HttpClient.Builder;
 
 using Zeiss.PiWeb.Api.Rest.HttpClient.Data;
+using Zeiss.PiWeb.Api.Rest.HttpClient.Health;
 using Zeiss.PiWeb.Api.Rest.HttpClient.OAuth;
 using Zeiss.PiWeb.Api.Rest.HttpClient.RawData;
 
@@ -32,8 +33,14 @@ public interface IRestClientBuilder
 	public RawDataServiceRestClient CreateRawDataServiceRestClient();
 
 	/// <summary>
-	/// Creates an oauth data service rest client using the current setup.
+	/// Creates an oauth service rest client using the current setup.
 	/// </summary>
 	/// <returns>The created oauth service rest client.</returns>
 	public OAuthServiceRestClient CreateOAuthServiceRestClient();
+
+	/// <summary>
+	/// Creates a health service rest client using the current setup.
+	/// </summary>
+	/// <returns>The created health service rest client.</returns>
+	public HealthServiceRestClient CreateHealthServiceRestClient();
 }
