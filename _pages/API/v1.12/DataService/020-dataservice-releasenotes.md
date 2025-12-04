@@ -2,12 +2,11 @@
 
 <p></p>
 
-{% assign version="1.11.0" %}
+{% assign version="1.12.0" %}
 {% capture features %}
     <ul>
-        <li>Added endpoint to fetch the number of parts at a certain path or depth</li>
-        <li>Added endpoint to fetch the number of characteristics at a certain path or depth</li>
-        <li>Added endpoint to subscribe to <a href="/PiWeb-Api/dataservice/v1.11/#ds-events">events</a> of DataService activity</li>
+        <li>Added endpoint <code>/InspectionPlanItems</code> to fetch parts and characteristics in one request, e.g. to fetch complete sub-trees of the inspection plan</li>
+        <li>Added parameter <code>searchCondition</code> to part and characteristic endpoints, which allows filtering the result based on part or characteristic attributes</li>
     </ul>
 {% endcapture %}
 
