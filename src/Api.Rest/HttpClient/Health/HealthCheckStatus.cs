@@ -13,7 +13,9 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Health
 	#region usings
 
 	using System.Text.Json.Serialization;
+	using Microsoft.Extensions.Diagnostics.HealthChecks;
 	using Newtonsoft.Json;
+	using Newtonsoft.Json.Converters;
 
 	#endregion
 
@@ -29,7 +31,9 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Health
 		/// </summary>
 		[JsonProperty( "status" )]
 		[JsonPropertyName( "status" )]
-		public HealthCheckResultType Status { get; set; }
+		[Newtonsoft.Json.JsonConverter( typeof( StringEnumConverter ) )]
+		[System.Text.Json.Serialization.JsonConverter( typeof( JsonStringEnumConverter ) )]
+		public HealthStatus Status { get; set; }
 
 		#endregion
 	}

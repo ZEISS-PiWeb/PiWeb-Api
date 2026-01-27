@@ -21,6 +21,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Health
 	using Zeiss.PiWeb.Api.Rest.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 	using Zeiss.PiWeb.Api.Rest.HttpClient.Builder;
+	using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 	#endregion
 
@@ -79,7 +80,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Health
 			catch( WrappedServerErrorException exception )
 			{
 				if( exception.StatusCode == HttpStatusCode.ServiceUnavailable )
-					return new HealthCheckStatus { Status = HealthCheckResultType.Unhealthy };
+					return new HealthCheckStatus { Status = HealthStatus.Unhealthy };
 
 				throw;
 			}
