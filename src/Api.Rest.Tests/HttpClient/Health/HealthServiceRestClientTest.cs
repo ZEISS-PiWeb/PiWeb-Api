@@ -17,6 +17,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 	using System.Net;
 	using System.Threading.Tasks;
 	using FluentAssertions;
+	using Microsoft.Extensions.Diagnostics.HealthChecks;
 	using Newtonsoft.Json;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Rest.Contracts;
@@ -65,7 +66,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 		{
 			using var server = WebServer.StartNew( Port );
 			using var client = new HealthServiceRestClient( Uri );
-			var healthCheckResponse = new HealthCheckStatus { Status = HealthCheckResultType.Healthy };
+			var healthCheckResponse = new HealthCheckStatus { Status = HealthStatus.Healthy };
 			var responseJson = JsonConvert.SerializeObject( healthCheckResponse );
 			server.RegisterResponse( "/HealthServiceRest/ready", responseJson );
 			var interfaceInformationResponse = new InterfaceVersionRange { SupportedVersions = [new Version( 1, 0, 0 )] };
@@ -74,7 +75,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 
 			var result = await client.GetReadiness();
 
-			result.Status.Should().Be( HealthCheckResultType.Healthy );
+			result.Status.Should().Be( HealthStatus.Healthy );
 		}
 
 		[Test]
@@ -82,7 +83,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 		{
 			using var server = WebServer.StartNew( Port );
 			using var client = new HealthServiceRestClient( Uri );
-			var healthCheckResponse = new HealthCheckStatus { Status = HealthCheckResultType.Degraded };
+			var healthCheckResponse = new HealthCheckStatus { Status = HealthStatus.Degraded };
 			var responseJson = JsonConvert.SerializeObject( healthCheckResponse );
 			server.RegisterResponse( "/HealthServiceRest/ready", responseJson );
 			var interfaceInformationResponse = new InterfaceVersionRange { SupportedVersions = [new Version( 1, 0, 0 )] };
@@ -91,7 +92,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 
 			var result = await client.GetReadiness();
 
-			result.Status.Should().Be( HealthCheckResultType.Degraded );
+			result.Status.Should().Be( HealthStatus.Degraded );
 		}
 
 		[Test]
@@ -99,7 +100,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 		{
 			using var server = WebServer.StartNew( Port );
 			using var client = new HealthServiceRestClient( Uri );
-			var healthCheckResponse = new HealthCheckStatus { Status = HealthCheckResultType.Unhealthy };
+			var healthCheckResponse = new HealthCheckStatus { Status = HealthStatus.Unhealthy };
 			var responseJson = JsonConvert.SerializeObject( healthCheckResponse );
 			server.RegisterResponse( "/HealthServiceRest/ready", responseJson, HttpStatusCode.ServiceUnavailable );
 			var interfaceInformationResponse = new InterfaceVersionRange { SupportedVersions = [new Version( 1, 0, 0 )] };
@@ -108,7 +109,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 
 			var result = await client.GetReadiness();
 
-			result.Status.Should().Be( HealthCheckResultType.Unhealthy );
+			result.Status.Should().Be( HealthStatus.Unhealthy );
 		}
 
 		[Test]
@@ -143,7 +144,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 		{
 			using var server = WebServer.StartNew( Port );
 			using var client = new HealthServiceRestClient( Uri );
-			var healthCheckResponse = new HealthCheckStatus { Status = HealthCheckResultType.Healthy };
+			var healthCheckResponse = new HealthCheckStatus { Status = HealthStatus.Healthy };
 			var responseJson = JsonConvert.SerializeObject( healthCheckResponse );
 			server.RegisterResponse( "/HealthServiceRest/live", responseJson );
 			var interfaceInformationResponse = new InterfaceVersionRange { SupportedVersions = [new Version( 1, 0, 0 )] };
@@ -152,7 +153,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 
 			var result = await client.GetLiveness();
 
-			result.Status.Should().Be( HealthCheckResultType.Healthy );
+			result.Status.Should().Be( HealthStatus.Healthy );
 		}
 
 		[Test]
@@ -160,7 +161,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 		{
 			using var server = WebServer.StartNew( Port );
 			using var client = new HealthServiceRestClient( Uri );
-			var healthCheckResponse = new HealthCheckStatus { Status = HealthCheckResultType.Degraded };
+			var healthCheckResponse = new HealthCheckStatus { Status = HealthStatus.Degraded };
 			var responseJson = JsonConvert.SerializeObject( healthCheckResponse );
 			server.RegisterResponse( "/HealthServiceRest/live", responseJson );
 			var interfaceInformationResponse = new InterfaceVersionRange { SupportedVersions = [new Version( 1, 0, 0 )] };
@@ -169,7 +170,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 
 			var result = await client.GetLiveness();
 
-			result.Status.Should().Be( HealthCheckResultType.Degraded );
+			result.Status.Should().Be( HealthStatus.Degraded );
 		}
 
 		[Test]
@@ -177,7 +178,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 		{
 			using var server = WebServer.StartNew( Port );
 			using var client = new HealthServiceRestClient( Uri );
-			var healthCheckResponse = new HealthCheckStatus { Status = HealthCheckResultType.Unhealthy };
+			var healthCheckResponse = new HealthCheckStatus { Status = HealthStatus.Unhealthy };
 			var responseJson = JsonConvert.SerializeObject( healthCheckResponse );
 			server.RegisterResponse( "/HealthServiceRest/live", responseJson, HttpStatusCode.ServiceUnavailable );
 			var interfaceInformationResponse = new InterfaceVersionRange { SupportedVersions = [new Version( 1, 0, 0 )] };
@@ -186,7 +187,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 
 			var result = await client.GetLiveness();
 
-			result.Status.Should().Be( HealthCheckResultType.Unhealthy );
+			result.Status.Should().Be( HealthStatus.Unhealthy );
 		}
 
 		[Test]
