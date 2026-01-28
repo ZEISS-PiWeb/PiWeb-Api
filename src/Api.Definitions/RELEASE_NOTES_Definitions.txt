@@ -8,6 +8,8 @@
 ==========================================
 New Features
 ==========================================
+- Add new keys to WellKnownKeys (#295)
+
 - Update target frameworks (#292)
     ○ add .NET 10
 
