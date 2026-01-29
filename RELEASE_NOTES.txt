@@ -1,5 +1,35 @@
 ======================================================
 -------------------------------------------------------------------------------------------
+ Version 9.2.0                                                                   
+-------------------------------------------------------------------------------------------
+======================================================
+
+
+==========================================
+New Features
+==========================================
+- Add new keys to WellKnownKeys (#295)
+
+- Update target frameworks (#292)
+    ○ add .NET 10
+
+- Update dependencies (#292)
+    ○ JetBrains.Annotations from 2024.3.0 to 2025.2.4
+    ○ Newtonsoft.Json from 13.0.3 to 13.0.4
+    ○ System.Text.Json from 9.0.4 to 10.0.1
+    ○ Microsoft.IdentityModel.Logging from 8.12.1 to 8.15.0
+    ○ Microsoft.IdentityModel.Tokens from 8.12.1 to 8.15.0
+    ○ System.IdentityModel.Tokens.Jwt from 8.12.1 to 8.15.0
+    ○ System.Security.Cryptography.ProtectedData from 9.0.4 to 10.0.1
+
+- Add HealthServiceRestClient for health checks (#288)
+    ○ add new REST client HealthServiceRestClient, which can be used for health checks of the PiWeb Server
+    ○ check for readiness (indicates if the PiWeb Server is running normally but isn't ready to receive requests)
+    ○ check for liveness (indicates if the PiWeb Server has crashed and must be restarted)
+
+
+======================================================
+-------------------------------------------------------------------------------------------
  Version 9.1.1                                                                   
 -------------------------------------------------------------------------------------------
 ======================================================

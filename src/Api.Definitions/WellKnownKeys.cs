@@ -209,7 +209,7 @@ namespace Zeiss.PiWeb.Api.Definitions
 			public const ushort CallbackUriText = 2097;
 
 			/// <summary>
-			/// The uri that can be used to create an interactive hyperlink that calls another application. This is used by PiWeb Monitor 
+			/// The uri that can be used to create an interactive hyperlink that calls another application. This is used by PiWeb Monitor
 			/// for example to switch back to the measuring application (Calypso, Caligo etc.) when clicking on a characteristic or part.
 			/// </summary>
 			/// <remarks>AlphaNumeric</remarks>
@@ -373,53 +373,69 @@ namespace Zeiss.PiWeb.Api.Definitions
 			/// <remarks>Catalog</remarks>
 			public const ushort DistributionAnalysisMode = 13282;
 
-			/// <summary>Regelkartenkonfiguration der Lagekarte</summary>
+			/// <summary>Control chart configuration of the location control chart</summary>
 			/// <remarks>AlphaNumeric</remarks>>
 			public const ushort LocationChartConfiguration = 9010;
 
-			/// <summary>Mittellinie der Lagekarte</summary>
+			/// <summary>Average value of the location control chart</summary>
 			/// <remarks>Float</remarks>
 			public const ushort LocationChartAverageValue = 9011;
 
-			/// <summary>Untere Eingriffgrenze der Lagekarte</summary>
+			/// <summary>Lower control limit of the location control chart</summary>
 			/// <remarks>Float</remarks>
 			public const ushort LocationChartLowerControlLimit = 9012;
 
-			/// <summary>Obere Eingriffgrenze der Lagekarte</summary>
+			/// <summary>Upper control limit of the location control chart</summary>
 			/// <remarks>Float</remarks>
 			public const ushort LocationChartUpperControlLimit = 9013;
 
-			/// <summary>Untere Warngrenze der Lagekarte</summary>
+			/// <summary>Lower warning limit of the location control chart</summary>
 			/// <remarks>Float</remarks>
 			public const ushort LocationChartLowerWarningLimit = 9014;
 
-			/// <summary>Obere Warngrenze der Lagekarte</summary>
+			/// <summary>Upper warning limit of the location control chart</summary>
 			/// <remarks>Float</remarks>
 			public const ushort LocationChartUpperWarningLimit = 9015;
 
-			/// <summary>Regelkartenkonfiguration der Streuungskarte</summary>
+			/// <summary>Lower alarm limit of the location control chart</summary>
+			/// <remarks>Float</remarks>
+			public const ushort LocationChartLowerAlarmLimit = 9016;
+
+			/// <summary>Upper alarm limit of the location control chart</summary>
+			/// <remarks>Float</remarks>
+			public const ushort LocationChartUpperAlarmLimit = 9017;
+
+			/// <summary>Control chart configuration of the variation control chart</summary>
 			/// <remarks>AlphaNumeric</remarks>
 			public const ushort VariationChartConfiguration = 9110;
 
-			/// <summary>Mittellinie der Streuungskarte</summary>
+			/// <summary>Average value of the variation control chart</summary>
 			/// <remarks>Float</remarks>
 			public const ushort VariationChartAverageValue = 9111;
 
-			/// <summary>Untere Eingriffgrenze der Streuungskarte</summary>
+			/// <summary>Lower control limit of the variation control chart</summary>
 			/// <remarks>Float</remarks>
 			public const ushort VariationChartLowerControlLimit = 9112;
 
-			/// <summary>Obere Eingriffgrenze der Streuungskarte</summary>
+			/// <summary>Upper control limit of the variation control chart</summary>
 			/// <remarks>Float</remarks>
 			public const ushort VariationChartUpperControlLimit = 9113;
 
-			/// <summary>Untere Warngrenze der Streuungskarte</summary>
+			/// <summary>Lower warning limit of the variation control chart</summary>
 			/// <remarks>Float</remarks>
 			public const ushort VariationChartLowerWarningLimit = 9114;
 
-			/// <summary>Obere Warngrenze der Streuungskarte</summary>
+			/// <summary>Upper warning limit of the variation control chart</summary>
 			/// <remarks>Float</remarks>
 			public const ushort VariationChartUpperWarningLimit = 9115;
+
+			/// <summary>Lower alarm limit of the variation control chart</summary>
+			/// <remarks>Float</remarks>
+			public const ushort VariationChartLowerAlarmLimit = 9116;
+
+			/// <summary>Upper alarm limit of the variation control chart</summary>
+			/// <remarks>Float</remarks>
+			public const ushort VariationChartUpperAlarmLimit = 9117;
 
 			/// <summary>Stamp text</summary>
 			/// <remarks>Integer</remarks>
@@ -684,7 +700,7 @@ namespace Zeiss.PiWeb.Api.Definitions
 			public const ushort Comment = 1900;
 
 			/// <summary>
-			/// The uri that can be used to create an interactive hyperlink that calls another application. This is used by PiWeb Monitor 
+			/// The uri that can be used to create an interactive hyperlink that calls another application. This is used by PiWeb Monitor
 			/// for example to switch back to the measuring application (Calypso, Caligo etc.) when clicking on a characteristic or part.
 			/// </summary>
 			/// <remarks>AlphaNumeric</remarks>

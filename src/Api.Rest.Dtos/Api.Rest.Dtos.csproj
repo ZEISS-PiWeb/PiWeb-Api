@@ -1,18 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net8.0;net9.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net8.0;net9.0;net10.0</TargetFrameworks>
     <RootNamespace>Zeiss.PiWeb.Api.Rest.Dtos</RootNamespace>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageVersion>9.1.1</PackageVersion>
+    <PackageVersion>9.2.0</PackageVersion>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Assembly information">
     <AssemblyTitle>Contains the JSON-serializable DataTransferObjects (DTO) that will be exchanged between ZEISS PiWeb Server and client(s).</AssemblyTitle>
     <AssemblyName>Zeiss.PiWeb.Api.Rest.Dtos</AssemblyName>
-    <AssemblyVersion>9.1.1</AssemblyVersion>
+    <AssemblyVersion>9.2.0</AssemblyVersion>
     <Company>Carl Zeiss Industrielle Messtechnik GmbH</Company>
     <Copyright>Copyright © 2020 $(Company)</Copyright>
     <Description>Contains the JSON-serializable DataTransferObjects (DTO) that will be exchanged between ZEISS PiWeb Server and client(s).
@@ -44,9 +44,9 @@
   </ItemGroup>
 
     <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="System.Text.Json" Version="9.0.4" />
+    <PackageReference Include="JetBrains.Annotations" Version="2025.2.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="System.Text.Json" Version="10.0.1" />
     <PackageReference Include="SauceControl.InheritDoc" Version="2.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
