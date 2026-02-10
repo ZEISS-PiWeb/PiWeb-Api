@@ -698,7 +698,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			if( !_IsBrowser )
 			{
 #pragma warning disable CA1416
-				_HttpClientHandler.PreAuthenticate = true;
+				// Since the Windows update from january 2026 the pre-authentication will fail after 100 sec.
+				// This applies to .Net Framework only, .Net Core seems to ignore the setting anyway.
+				_HttpClientHandler.PreAuthenticate = false;
+
 				_HttpClientHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 				_HttpClientHandler.UseProxy = _UseProxy;
 				_HttpClientHandler.CheckCertificateRevocationList = _CheckCertificateRevocationList;
