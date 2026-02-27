@@ -10,6 +10,12 @@
 
 namespace Zeiss.PiWeb.Api.Definitions
 {
+	#region usings
+
+	using System;
+
+	#endregion
+
 	/// <summary>
 	/// Static class with well known attribute keys.
 	/// </summary>
@@ -377,8 +383,13 @@ namespace Zeiss.PiWeb.Api.Definitions
 			/// <remarks>AlphaNumeric</remarks>>
 			public const ushort LocationChartConfiguration = 9010;
 
+			/// <summary>Center line of the location control chart</summary>
+			/// <remarks>Float</remarks>
+			public const ushort LocationChartCenterLine = 9011;
+
 			/// <summary>Average value of the location control chart</summary>
 			/// <remarks>Float</remarks>
+			[Obsolete( "Use LocationChartCenterLine instead" )]
 			public const ushort LocationChartAverageValue = 9011;
 
 			/// <summary>Lower control limit of the location control chart</summary>
@@ -409,8 +420,13 @@ namespace Zeiss.PiWeb.Api.Definitions
 			/// <remarks>AlphaNumeric</remarks>
 			public const ushort VariationChartConfiguration = 9110;
 
+			/// <summary>Center line of the variation control chart</summary>
+			/// <remarks>Float</remarks>
+			public const ushort VariationChartCenterLine = 9111;
+
 			/// <summary>Average value of the variation control chart</summary>
 			/// <remarks>Float</remarks>
+			[Obsolete( "Use VariationChartCenterLine instead" )]
 			public const ushort VariationChartAverageValue = 9111;
 
 			/// <summary>Lower control limit of the variation control chart</summary>
