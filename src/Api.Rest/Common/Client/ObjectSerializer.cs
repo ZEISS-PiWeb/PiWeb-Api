@@ -150,6 +150,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			private static readonly System.Text.Json.JsonSerializerOptions Options = new()
 			{
 				DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
+				PropertyNameCaseInsensitive = true,
 
 				WriteIndented = false,
 
