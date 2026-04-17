@@ -728,6 +728,10 @@ namespace Zeiss.PiWeb.Api.Definitions
 			/// <remarks>AlphaNumeric</remarks>
 			public const ushort CallbackUriText = 11097;
 
+			/// <summary>Identifying the different modes for distribution analysis.</summary>
+			/// <remarks>Catalog</remarks>
+			public const ushort DistributionAnalysisMode = 13283;
+
 			#endregion
 		}
 
