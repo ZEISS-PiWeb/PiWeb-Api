@@ -9,7 +9,7 @@ ZEISS PiWeb-Api
   <img src="https://github.com/ZEISS-PiWeb/PiWeb-Api/blob/main/Logo.png" />
 </p>
 
-The PiWeb-API is a communication interface for the quality data management system [ZEISS PiWeb](http://www.zeiss.com/industrial-metrology/en_de/products/software/piweb.html). The interface is based on an HTTP/S web service architecture.
+The PiWeb-API is a communication interface for the quality data management system [ZEISS PiWeb](https://www.zeiss.com/metrology/en/software/zeiss-piweb.html). The interface is based on an HTTP/S web service architecture.
 
 #### What's the PiWeb-API?
 
