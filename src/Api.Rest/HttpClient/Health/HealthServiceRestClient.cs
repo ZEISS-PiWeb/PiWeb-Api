@@ -35,7 +35,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Health
 		/// <summary>
 		/// The name of the endpoint of this service.
 		/// </summary>
-		public const string EndpointName = "HealthServiceRest";
+		public const string EndpointName = "HealthServiceRest/";
 
 		#endregion
 
@@ -136,19 +136,19 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Health
 		/// <inheritdoc />
 		public async Task<InterfaceVersionRange> GetInterfaceInformation( CancellationToken cancellationToken = default )
 		{
-			return await _RestClient.Request<InterfaceVersionRange>( RequestBuilder.CreateGet( EndpointName ), cancellationToken ).ConfigureAwait( false );
+			return await _RestClient.Request<InterfaceVersionRange>( RequestBuilder.CreateGet( "" ), cancellationToken ).ConfigureAwait( false );
 		}
 
 		/// <inheritdoc />
 		public async Task<HealthCheckStatus> GetReadiness( CancellationToken cancellationToken = default )
 		{
-			return await ExecuteHealthCheck( $"{EndpointName}/ready", cancellationToken );
+			return await ExecuteHealthCheck( $"ready", cancellationToken );
 		}
 
 		/// <inheritdoc />
 		public async Task<HealthCheckStatus> GetLiveness( CancellationToken cancellationToken = default )
 		{
-			return await ExecuteHealthCheck( $"{EndpointName}/live", cancellationToken );
+			return await ExecuteHealthCheck( $"live", cancellationToken );
 		}
 
 		#endregion

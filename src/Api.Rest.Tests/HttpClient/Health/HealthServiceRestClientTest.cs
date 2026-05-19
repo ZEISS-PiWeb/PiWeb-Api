@@ -71,7 +71,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 			server.RegisterResponse( "/HealthServiceRest/ready", responseJson );
 			var interfaceInformationResponse = new InterfaceVersionRange { SupportedVersions = [new Version( 1, 0, 0 )] };
 			var interfaceResponseJson = JsonConvert.SerializeObject( interfaceInformationResponse );
-			server.RegisterResponse( "/HealthServiceRest", interfaceResponseJson );
+			server.RegisterResponse( "/HealthServiceRest/", interfaceResponseJson );
 
 			var result = await client.GetReadiness();
 
@@ -88,7 +88,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 			server.RegisterResponse( "/HealthServiceRest/ready", responseJson );
 			var interfaceInformationResponse = new InterfaceVersionRange { SupportedVersions = [new Version( 1, 0, 0 )] };
 			var interfaceResponseJson = JsonConvert.SerializeObject( interfaceInformationResponse );
-			server.RegisterResponse( "/HealthServiceRest", interfaceResponseJson );
+			server.RegisterResponse( "/HealthServiceRest/", interfaceResponseJson );
 
 			var result = await client.GetReadiness();
 
@@ -105,7 +105,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 			server.RegisterResponse( "/HealthServiceRest/ready", responseJson, HttpStatusCode.ServiceUnavailable );
 			var interfaceInformationResponse = new InterfaceVersionRange { SupportedVersions = [new Version( 1, 0, 0 )] };
 			var interfaceResponseJson = JsonConvert.SerializeObject( interfaceInformationResponse );
-			server.RegisterResponse( "/HealthServiceRest", interfaceResponseJson );
+			server.RegisterResponse( "/HealthServiceRest/", interfaceResponseJson );
 
 			var result = await client.GetReadiness();
 
@@ -120,7 +120,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 			server.RegisterResponse( "/HealthServiceRest/ready", "", HttpStatusCode.InternalServerError );
 			var interfaceInformationResponse = new InterfaceVersionRange { SupportedVersions = [new Version( 1, 0, 0 )] };
 			var interfaceResponseJson = JsonConvert.SerializeObject( interfaceInformationResponse );
-			server.RegisterResponse( "/HealthServiceRest", interfaceResponseJson );
+			server.RegisterResponse( "/HealthServiceRest/", interfaceResponseJson );
 
 			await client.Awaiting( svc => svc.GetReadiness() )
 				.Should()
@@ -132,7 +132,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 		{
 			using var server = WebServer.StartNew( Port );
 			using var client = new HealthServiceRestClient( Uri );
-			server.RegisterResponse( "/HealthServiceRest", "{}", HttpStatusCode.NotFound );
+			server.RegisterResponse( "/HealthServiceRest/", "{}", HttpStatusCode.NotFound );
 
 			await client.Awaiting( svc => svc.GetReadiness() )
 				.Should()
@@ -149,7 +149,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 			server.RegisterResponse( "/HealthServiceRest/live", responseJson );
 			var interfaceInformationResponse = new InterfaceVersionRange { SupportedVersions = [new Version( 1, 0, 0 )] };
 			var interfaceResponseJson = JsonConvert.SerializeObject( interfaceInformationResponse );
-			server.RegisterResponse( "/HealthServiceRest", interfaceResponseJson );
+			server.RegisterResponse( "/HealthServiceRest/", interfaceResponseJson );
 
 			var result = await client.GetLiveness();
 
@@ -166,7 +166,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 			server.RegisterResponse( "/HealthServiceRest/live", responseJson );
 			var interfaceInformationResponse = new InterfaceVersionRange { SupportedVersions = [new Version( 1, 0, 0 )] };
 			var interfaceResponseJson = JsonConvert.SerializeObject( interfaceInformationResponse );
-			server.RegisterResponse( "/HealthServiceRest", interfaceResponseJson );
+			server.RegisterResponse( "/HealthServiceRest/", interfaceResponseJson );
 
 			var result = await client.GetLiveness();
 
@@ -183,7 +183,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 			server.RegisterResponse( "/HealthServiceRest/live", responseJson, HttpStatusCode.ServiceUnavailable );
 			var interfaceInformationResponse = new InterfaceVersionRange { SupportedVersions = [new Version( 1, 0, 0 )] };
 			var interfaceResponseJson = JsonConvert.SerializeObject( interfaceInformationResponse );
-			server.RegisterResponse( "/HealthServiceRest", interfaceResponseJson );
+			server.RegisterResponse( "/HealthServiceRest/", interfaceResponseJson );
 
 			var result = await client.GetLiveness();
 
@@ -198,7 +198,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 			server.RegisterResponse( "/HealthServiceRest/live", "", HttpStatusCode.InternalServerError );
 			var interfaceInformationResponse = new InterfaceVersionRange { SupportedVersions = [new Version( 1, 0, 0 )] };
 			var interfaceResponseJson = JsonConvert.SerializeObject( interfaceInformationResponse );
-			server.RegisterResponse( "/HealthServiceRest", interfaceResponseJson );
+			server.RegisterResponse( "/HealthServiceRest/", interfaceResponseJson );
 
 			await client.Awaiting( svc => svc.GetLiveness() )
 				.Should()
@@ -210,7 +210,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 		{
 			using var server = WebServer.StartNew( Port );
 			using var client = new HealthServiceRestClient( Uri );
-			server.RegisterResponse( "/HealthServiceRest", "{}", HttpStatusCode.NotFound );
+			server.RegisterResponse( "/HealthServiceRest/", "{}", HttpStatusCode.NotFound );
 
 			await client.Awaiting( svc => svc.GetLiveness() )
 				.Should()
@@ -224,7 +224,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 			using var client = new HealthServiceRestClient( Uri );
 			var interfaceInformationResponse = new InterfaceVersionRange { SupportedVersions = [new Version( 1, 2, 3 )] };
 			var interfaceResponseJson = JsonConvert.SerializeObject( interfaceInformationResponse );
-			server.RegisterResponse( "/HealthServiceRest", interfaceResponseJson );
+			server.RegisterResponse( "/HealthServiceRest/", interfaceResponseJson );
 
 			var result = await client.GetInterfaceInformation();
 
@@ -237,7 +237,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 		{
 			using var server = WebServer.StartNew( Port );
 			using var client = new HealthServiceRestClient( Uri );
-			server.RegisterResponse( "/HealthServiceRest", "", HttpStatusCode.NotFound );
+			server.RegisterResponse( "/HealthServiceRest/", "", HttpStatusCode.NotFound );
 
 			await client.Awaiting( svc => svc.GetInterfaceInformation() )
 				.Should()
