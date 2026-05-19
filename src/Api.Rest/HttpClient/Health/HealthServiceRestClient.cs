@@ -14,6 +14,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Health
 
 	using System;
 	using System.Net;
+	using System.Net.Http;
 	using System.Threading;
 	using System.Threading.Tasks;
 	using JetBrains.Annotations;
@@ -56,6 +57,14 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Health
 		/// <exception cref="ArgumentNullException"><paramref name="serverUri"/> is <see langword="null" />.</exception>
 		public HealthServiceRestClient( [NotNull] Uri serverUri )
 			: base( new RestClient( serverUri, EndpointName, serializer: ObjectSerializer.SystemTextJson ) )
+		{ }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HealthServiceRestClient"/> class.
+		/// </summary>
+		/// <param name="httpClient">The <see cref="HttpClient"/> instance used to send HTTP requests.</param>
+		public HealthServiceRestClient( [NotNull] HttpClient httpClient )
+			: base( new HttpClientBackedRestClient( httpClient, EndpointName, serializer: ObjectSerializer.SystemTextJson ) )
 		{ }
 
 		/// <summary>

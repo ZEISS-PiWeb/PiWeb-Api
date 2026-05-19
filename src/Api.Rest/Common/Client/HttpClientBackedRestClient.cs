@@ -1,0 +1,186 @@
+﻿#region copyright
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
+/* Carl Zeiss Industrielle Messtechnik GmbH        */
+/* Softwaresystem PiWeb                            */
+/* (c) Carl Zeiss 2026                             */
+/* * * * * * * * * * * * * * * * * * * * * * * * * */
+
+#endregion
+
+namespace Zeiss.PiWeb.Api.Rest.Common.Client
+{
+	using System;
+	using System.Net.Http;
+	using System.Threading;
+	using System.Threading.Tasks;
+	using CacheCow.Client;
+	using CacheCow.Common;
+	using JetBrains.Annotations;
+	using Zeiss.PiWeb.Api.Rest.Contracts;
+
+	/// <summary>
+	/// Provides a REST client implementation that uses a supplied HttpClient for sending HTTP requests, supporting
+	/// configurable URI length limits, chunked transfer encoding, and custom object serialization.
+	/// </summary>
+	/// <remarks><see cref="HttpClientBackedRestClient"/> is designed for scenarios where you need to integrate with an existing HttpClient
+	/// instance, allowing for advanced configuration such as custom handlers, authentication, or proxy settings. Many
+	/// standard RestClient features, such as authentication management, timeout, and caching, must be configured directly
+	/// on the HttpClient or its handler chain. Properties related to these features will throw NotSupportedException if
+	/// accessed or set. This class is sealed and cannot be inherited.</remarks>
+	public sealed class HttpClientBackedRestClient : RestClientBase, ICustomRestClient
+	{
+		#region members
+
+		private readonly HttpClient _HttpClient;
+		private readonly string _EndpointName;
+
+		#endregion
+
+		#region constructor
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HttpClientBackedRestClient"/> class with the specified HTTP client, maximum URI length,
+		/// chunked transfer setting, and object serializer.
+		/// </summary>
+		/// <param name="httpClient">The HttpClient instance used to send HTTP requests.</param>
+		/// <param name="maxUriLength">The maximum allowed length of the request URI. Requests exceeding this length may be split or handled differently.</param>
+		/// <param name="chunked">A value indicating whether chunked transfer encoding is enabled for requests. If set to true, requests may be sent in chunks.</param>
+		/// <param name="serializer">The object serializer used to serialize and deserialize request and response bodies.</param>
+		public HttpClientBackedRestClient( HttpClient httpClient,
+			string endpointName,
+			int maxUriLength = DefaultMaxUriLength,
+			bool chunked = true,
+			[CanBeNull] IObjectSerializer serializer = null )
+		{
+			if( httpClient == null ) throw new ArgumentNullException( nameof( httpClient ) );
+
+			_HttpClient = httpClient;
+			_EndpointName = endpointName;
+
+			Chunked = chunked;
+			Serializer = serializer ?? ObjectSerializer.Default;
+			MaxUriLength = maxUriLength;
+		}
+
+		#endregion
+
+		#region properties
+
+		/// <inheritdoc />
+		protected override bool Chunked { get; }
+
+		/// <inheritdoc />
+		protected override IObjectSerializer Serializer { get; }
+
+		#endregion
+
+		#region methods
+
+		/// <inheritdoc />
+		protected override async Task<TResult> PerformRequestAsync<TResult>(
+			Func<HttpRequestMessage> requestCreationHandler,
+			bool streamed, Func<HttpResponseMessage, Task<TResult>> handler = null,
+			bool autoDisposeResponse = true,
+			CancellationToken cancellationToken = default )
+		{
+			HttpRequestMessage request = null;
+			HttpResponseMessage response = null;
+
+			try
+			{
+				var completionOptions = streamed ? HttpCompletionOption.ResponseHeadersRead : HttpCompletionOption.ResponseContentRead;
+
+				request = requestCreationHandler();
+				SetDefaultHttpHeaders( request );
+
+				if( !string.IsNullOrWhiteSpace( _EndpointName ) )
+					request.RequestUri = new Uri( _EndpointName + request.RequestUri, UriKind.RelativeOrAbsolute );
+
+				response = await _HttpClient.SendAsync( request, completionOptions, cancellationToken ).ConfigureAwait( false );
+
+				if( response.IsSuccessStatusCode )
+				{
+					if( handler != null )
+					{
+						return await handler( response ).ConfigureAwait( false );
+					}
+
+					return default;
+				}
+
+				await HandleFaultedResponse( response, Serializer, cancellationToken ).ConfigureAwait( false );
+
+				return default;
+			}
+			catch( HttpRequestException ex )
+			{
+				throw new RestClientException( $"Error fetching web service response for request [{request?.RequestUri}]: {ex.Message}", ex );
+			}
+			finally
+			{
+				if( autoDisposeResponse )
+				{
+					response?.Dispose();
+				}
+			}
+		}
+
+		#endregion
+
+		#region interface ICustomRestClient
+
+		/// <inheritdoc />
+		public int MaxUriLength { get; }
+
+		/// <inheritdoc />
+		public AuthenticationContainer AuthenticationContainer
+		{
+			get;
+			set => throw new NotSupportedException( "AuthenticationContainer is not supported for HttpClient backed RestClient. Please configure the authentication on the HttpClient instance." );
+		} = new AuthenticationContainer( AuthenticationMode.NoneOrBasic );
+
+		/// <inheritdoc />
+		public Uri ServiceLocation => _HttpClient.BaseAddress ?? throw new InvalidOperationException( "HttpClient BaseAddress is not set." );
+
+		/// <inheritdoc />
+		public TimeSpan Timeout
+		{
+			get => throw new NotSupportedException( "Timeout is not supported for HttpClient backed RestClient. Please set the timeout on the HttpClient instance." );
+			set => throw new NotSupportedException( "Timeout is not supported for HttpClient backed RestClient. Please set the timeout on the HttpClient instance." );
+		}
+
+		/// <inheritdoc />
+		public bool UseDefaultWebProxy
+		{
+			get => throw new NotSupportedException( "UseDefaultWebProxy is not supported for HttpClient backed RestClient. Please configure the proxy settings on the HttpClientHandler instance used to create the HttpClient." );
+			set => throw new NotSupportedException( "UseDefaultWebProxy is not supported for HttpClient backed RestClient. Please configure the proxy settings on the HttpClientHandler instance used to create the HttpClient." );
+		}
+
+		/// <inheritdoc />
+		public bool CheckCertificateRevocationList
+		{
+			get => throw new NotSupportedException( "CheckCertificateRevocationList is not supported for HttpClient backed RestClient. Please configure the certificate revocation settings on the HttpClientHandler instance used to create the HttpClient." );
+			set => throw new NotSupportedException( "CheckCertificateRevocationList is not supported for HttpClient backed RestClient. Please configure the certificate revocation settings on the HttpClientHandler instance used to create the HttpClient." );
+		}
+
+		/// <inheritdoc />
+		public ICacheStore CacheStore
+		{
+			get => throw new NotSupportedException( "CacheStore is not supported for HttpClient backed RestClient. Please implement caching on the HttpClient instance using a delegating handler." );
+			set => throw new NotSupportedException( "CacheStore is not supported for HttpClient backed RestClient. Please implement caching on the HttpClient instance using a delegating handler." );
+		}
+
+		/// <inheritdoc />
+		public IVaryHeaderStore VaryHeaderStore
+		{
+			get => throw new NotSupportedException( "VaryHeaderStore is not supported for HttpClient backed RestClient. Please implement vary header handling on the HttpClient instance using a delegating handler." );
+			set => throw new NotSupportedException( "VaryHeaderStore is not supported for HttpClient backed RestClient. Please implement vary header handling on the HttpClient instance using a delegating handler." );
+		}
+
+		/// <inheritdoc />
+		public event EventHandler AuthenticationChanged;
+
+		#endregion
+	}
+}

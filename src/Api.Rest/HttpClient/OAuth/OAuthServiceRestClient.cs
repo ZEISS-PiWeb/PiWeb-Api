@@ -13,6 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 	#region usings
 
 	using System;
+	using System.Net.Http;
 	using System.Threading;
 	using System.Threading.Tasks;
 	using JetBrains.Annotations;
@@ -41,7 +42,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 		#region constructors
 
 		/// <summary>
-		/// Constructor. Instantiates a new <see cref="OAuthServiceRestClient"/> th communicate with the PiWeb-Server OAuthService.
+		/// Initializes a new instance of the <see cref="OAuthServiceRestClient"/> class.
 		/// </summary>
 		/// <param name="serverUri">
 		/// The base url of the PiWeb-Server. Please note that the required "OAuthServiceRest/" will automatically be appended to this url.
@@ -49,6 +50,14 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 		/// <exception cref="ArgumentNullException"><paramref name="serverUri"/> is <see langword="null" />.</exception>
 		public OAuthServiceRestClient( [NotNull] Uri serverUri )
 			: base( new RestClient( serverUri, EndpointName, serializer: ObjectSerializer.SystemTextJson ) )
+		{ }
+
+		/// <summary>
+		///Initializes a new instance of the <see cref="OAuthServiceRestClient"/> class.
+		/// </summary>
+		/// <param name="httpClient">The <see cref="HttpClient"/> instance used to send HTTP requests.</param>
+		public OAuthServiceRestClient( [NotNull] HttpClient httpClient )
+			: base( new HttpClientBackedRestClient( httpClient, EndpointName, serializer: ObjectSerializer.SystemTextJson ) )
 		{ }
 
 		/// <summary>

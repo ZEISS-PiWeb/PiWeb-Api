@@ -16,6 +16,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Net;
+	using System.Net.Http;
 	using System.Threading;
 	using System.Threading.Tasks;
 	using JetBrains.Annotations;
@@ -59,10 +60,32 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		/// </summary>
 		/// <param name="serverUri">The PiWeb Server uri, including port and instance</param>
 		/// <param name="maxUriLength">The uri length limit</param>
-		/// <param name="restClient">Custom implementation of RestClient</param>
 		/// <param name="maxRequestsInParallel"> The maximum number of concurrent tasks enabled by a <see cref="T:System.Threading.Tasks.ParallelOptions" /> instance.</param>
-		public DataServiceRestClient( [NotNull] Uri serverUri, int maxUriLength = RestClientBase.DefaultMaxUriLength, RestClientBase restClient = null, int maxRequestsInParallel = 8 )
-			: base( restClient ?? new RestClient( serverUri, EndpointName, maxUriLength: maxUriLength, serializer: ObjectSerializer.SystemTextJson ) )
+		public DataServiceRestClient( [NotNull] Uri serverUri, int maxUriLength = RestClientBase.DefaultMaxUriLength, int maxRequestsInParallel = 8 )
+			: base( new RestClient( serverUri, EndpointName, maxUriLength: maxUriLength, serializer: ObjectSerializer.SystemTextJson ) )
+		{
+			_MaxRequestsInParallel = maxRequestsInParallel;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DataServiceRestClient"/> class.
+		/// </summary>
+		/// <param name="httpClient">The <see cref="HttpClient"/> instance used to send HTTP requests.</param>
+		/// <param name="maxUriLength">The uri length limit</param>
+		/// <param name="maxRequestsInParallel">The maximum number of concurrent tasks enabled by a <see cref="T:System.Threading.Tasks.ParallelOptions" /> instance.</param>
+		public DataServiceRestClient( [NotNull] HttpClient httpClient, int maxUriLength = RestClientBase.DefaultMaxUriLength, int maxRequestsInParallel = 8 )
+			: base( new HttpClientBackedRestClient( httpClient, EndpointName, maxUriLength: maxUriLength, serializer: ObjectSerializer.SystemTextJson ) )
+		{
+			_MaxRequestsInParallel = maxRequestsInParallel;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DataServiceRestClient"/> class.
+		/// </summary>
+		/// <param name="restClient">Custom implementation of RestClient</param>
+		/// <param name="maxRequestsInParallel">The maximum number of concurrent tasks enabled by a <see cref="T:System.Threading.Tasks.ParallelOptions" /> instance.</param>
+		public DataServiceRestClient( ICustomRestClient restClient, int maxRequestsInParallel = 8 )
+			: base( restClient )
 		{
 			_MaxRequestsInParallel = maxRequestsInParallel;
 		}

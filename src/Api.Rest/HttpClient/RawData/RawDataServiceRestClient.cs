@@ -60,9 +60,25 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// </summary>
 		/// <param name="serverUri">The PiWeb Server uri, including port and instance</param>
 		/// <param name="maxUriLength">The uri length limit</param>
+		public RawDataServiceRestClient( [NotNull] Uri serverUri, int maxUriLength = RestClientBase.DefaultMaxUriLength )
+			: base(  new RestClient( serverUri, EndpointName, maxUriLength: maxUriLength, serializer: ObjectSerializer.SystemTextJson ) )
+		{ }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RawDataServiceRestClient"/> class.
+		/// </summary>
+		/// <param name="httpClient">The <see cref="HttpClient"/> instance used to send HTTP requests.</param>
+		/// <param name="maxUriLength">The uri length limit</param>
+		public RawDataServiceRestClient( [NotNull] HttpClient httpClient, int maxUriLength = RestClientBase.DefaultMaxUriLength )
+			: base( new HttpClientBackedRestClient( httpClient, EndpointName, maxUriLength: maxUriLength, serializer: ObjectSerializer.SystemTextJson ) )
+		{ }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RawDataServiceRestClient"/> class.
+		/// </summary>
 		/// <param name="restClient">Custom implementation of RestClient</param>
-		public RawDataServiceRestClient( [NotNull] Uri serverUri, int maxUriLength = RestClientBase.DefaultMaxUriLength, RestClientBase restClient = null )
-			: base( restClient ?? new RestClient( serverUri, EndpointName, maxUriLength: maxUriLength, serializer: ObjectSerializer.SystemTextJson ) )
+		public RawDataServiceRestClient( [NotNull] ICustomRestClient restClient )
+			: base( restClient )
 		{ }
 
 		/// <summary>

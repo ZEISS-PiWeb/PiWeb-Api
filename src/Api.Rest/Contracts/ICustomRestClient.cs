@@ -15,6 +15,8 @@ using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using CacheCow.Client;
+using CacheCow.Common;
 using JetBrains.Annotations;
 using Zeiss.PiWeb.Api.Rest.Common.Client;
 
@@ -25,19 +27,52 @@ using Zeiss.PiWeb.Api.Rest.Common.Client;
 /// </summary>
 public interface ICustomRestClient
 {
+	#region properties
+
+	int MaxUriLength { get; }
+
+	AuthenticationContainer AuthenticationContainer { get; set; }
+
+	Uri ServiceLocation { get; }
+
+	TimeSpan Timeout { get; set; }
+
+	bool UseDefaultWebProxy { get; set; }
+
+	bool CheckCertificateRevocationList { get; set; }
+
+	ICacheStore CacheStore { get; set; }
+
+	IVaryHeaderStore VaryHeaderStore { get; set; }
+
+	event EventHandler AuthenticationChanged;
+
+	#endregion
+
 	#region methods
 
 	Task Request( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken );
+
 	Task Request( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken );
+
 	Task<T> Request<T>( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken );
+
 	Task<T> Request<T>( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken );
+
 	Task<Stream> RequestStream( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken );
+
 	Task<Stream> RequestStream( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken );
+
 	IAsyncEnumerable<T> RequestEnumerated<T>( [NotNull] Func<HttpRequestMessage> requestCreationHandler, [EnumeratorCancellation] CancellationToken cancellationToken );
+
 	IAsyncEnumerable<T> RequestEnumerated<T>( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, [EnumeratorCancellation] CancellationToken cancellationToken );
+
 	Task<byte[]> RequestBytes( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken );
+
 	Task<byte[]> RequestBytes( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken );
+
 	Task<T> RequestBinary<T>( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken );
+
 	Task<T> RequestBinary<T>( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken );
 
 	/// <summary>

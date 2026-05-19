@@ -14,6 +14,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 	using System;
 	using JetBrains.Annotations;
+	using Zeiss.PiWeb.Api.Rest.Contracts;
 
 	#endregion
 
@@ -21,7 +22,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	{
 		#region members
 
-		protected readonly RestClientBase _RestClient;
+		protected readonly ICustomRestClient _RestClient;
 		private bool _IsDisposed;
 
 		#endregion
@@ -32,7 +33,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// Initializes a new instance of the <see cref="CommonRestClientBase" /> class.
 		/// </summary>
 		/// <exception cref="ArgumentNullException"><paramref name="restClient"/> is <see langword="null" />.</exception>
-		protected CommonRestClientBase( [NotNull] RestClientBase restClient )
+		protected CommonRestClientBase( [NotNull] ICustomRestClient restClient )
 		{
 			_RestClient = restClient ?? throw new ArgumentNullException( nameof( restClient ) );
 			_RestClient.AuthenticationChanged += RestClientOnAuthenticationChanged;
@@ -63,7 +64,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			{
 				if( disposing )
 				{
-					_RestClient.Dispose();
+					( _RestClient as IDisposable )?.Dispose();
 				}
 
 				_IsDisposed = true;
