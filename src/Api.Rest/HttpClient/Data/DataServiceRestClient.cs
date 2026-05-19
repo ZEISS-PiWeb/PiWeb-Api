@@ -34,7 +34,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 	/// <summary>
 	/// Client class for communicating with the REST based data service.
 	/// </summary>
-	public class DataServiceRestClient : CommonRestClientBase, IDataServiceRestClient
+	public class DataServiceRestClient : ServiceRestClientBase, IDataServiceRestClient
 	{
 		#region constants
 
@@ -84,7 +84,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		/// </summary>
 		/// <param name="restClient">Custom implementation of RestClient</param>
 		/// <param name="maxRequestsInParallel">The maximum number of concurrent tasks enabled by a <see cref="T:System.Threading.Tasks.ParallelOptions" /> instance.</param>
-		public DataServiceRestClient( ICustomRestClient restClient, int maxRequestsInParallel = 8 )
+		public DataServiceRestClient( IRestClient restClient, int maxRequestsInParallel = 8 )
 			: base( restClient )
 		{
 			_MaxRequestsInParallel = maxRequestsInParallel;
@@ -479,7 +479,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		#region interface IDataServiceRestClient
 
 		/// <inheritdoc />
-		public ICustomRestClient CustomRestClient => _RestClient;
+		public IRestClient RestClient => _RestClient;
 
 		/// <inheritdoc />
 		public async Task<ServiceInformationDto> GetServiceInformation( CancellationToken cancellationToken = default )

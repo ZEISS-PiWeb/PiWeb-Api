@@ -27,7 +27,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 	/// <summary>
 	/// Web service class to communicate with the REST based PiWeb OAuth service.
 	/// </summary>
-	public class OAuthServiceRestClient : CommonRestClientBase, IOAuthServiceRestClient
+	public class OAuthServiceRestClient : ServiceRestClientBase, IOAuthServiceRestClient
 	{
 		#region constants
 
@@ -73,7 +73,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 		#region interface IOAuthServiceRestClient
 
 		/// <inheritdoc />
-		public ICustomRestClient CustomRestClient => _RestClient;
+		public IRestClient RestClient => _RestClient;
 
 		/// <inheritdoc />
 		public async Task<InterfaceVersionRange> GetInterfaceInformation( CancellationToken cancellationToken = default )

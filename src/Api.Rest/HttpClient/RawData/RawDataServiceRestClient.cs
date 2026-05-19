@@ -35,7 +35,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 	/// <summary>
 	/// Client class for communicating with the REST based raw data service.
 	/// </summary>
-	public class RawDataServiceRestClient : CommonRestClientBase, IRawDataServiceRestClient
+	public class RawDataServiceRestClient : ServiceRestClientBase, IRawDataServiceRestClient
 	{
 		#region constants
 
@@ -77,7 +77,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// Initializes a new instance of the <see cref="RawDataServiceRestClient"/> class.
 		/// </summary>
 		/// <param name="restClient">Custom implementation of RestClient</param>
-		public RawDataServiceRestClient( [NotNull] ICustomRestClient restClient )
+		public RawDataServiceRestClient( [NotNull] IRestClient restClient )
 			: base( restClient )
 		{ }
 
@@ -207,7 +207,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		#region interface IRawDataServiceRestClient
 
 		/// <inheritdoc />
-		public ICustomRestClient CustomRestClient => _RestClient;
+		public IRestClient RestClient => _RestClient;
 
 		/// <summary>
 		/// Method for fetching the <see cref="ServiceInformationDto"/>. This method can be used for connection checking. The call returns quickly

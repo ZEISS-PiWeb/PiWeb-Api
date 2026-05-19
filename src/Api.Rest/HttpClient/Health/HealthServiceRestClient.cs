@@ -29,7 +29,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Health
 	/// <summary>
 	/// Web service class to communicate with the REST based PiWeb health service.
 	/// </summary>
-	public class HealthServiceRestClient : CommonRestClientBase, IHealthServiceRestClient
+	public class HealthServiceRestClient : ServiceRestClientBase, IHealthServiceRestClient
 	{
 		#region constants
 
@@ -140,7 +140,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Health
 		#region interface IHealthServiceRestClient
 
 		/// <inheritdoc />
-		public ICustomRestClient CustomRestClient => _RestClient;
+		public IRestClient RestClient => _RestClient;
 
 		/// <inheritdoc />
 		public async Task<InterfaceVersionRange> GetInterfaceInformation( CancellationToken cancellationToken = default )

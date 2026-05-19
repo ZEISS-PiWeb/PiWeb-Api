@@ -28,7 +28,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	/// standard RestClient features, such as authentication management, timeout, and caching, must be configured directly
 	/// on the HttpClient or its handler chain. Properties related to these features will throw NotSupportedException if
 	/// accessed or set. This class is sealed and cannot be inherited.</remarks>
-	public sealed class HttpClientBackedRestClient : RestClientBase, ICustomRestClient
+	public sealed class HttpClientBackedRestClient : RestClientBase
 	{
 		#region members
 
@@ -128,58 +128,55 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		#endregion
 
-		#region interface ICustomRestClient
+		#region interface IRestClient
 
 		/// <inheritdoc />
-		public int MaxUriLength { get; }
+		public override int MaxUriLength { get; }
 
 		/// <inheritdoc />
-		public AuthenticationContainer AuthenticationContainer
+		public override AuthenticationContainer AuthenticationContainer
 		{
 			get;
 			set => throw new NotSupportedException( "AuthenticationContainer is not supported for HttpClient backed RestClient. Please configure the authentication on the HttpClient instance." );
 		} = new AuthenticationContainer( AuthenticationMode.NoneOrBasic );
 
 		/// <inheritdoc />
-		public Uri ServiceLocation => _HttpClient.BaseAddress ?? throw new InvalidOperationException( "HttpClient BaseAddress is not set." );
+		public override Uri ServiceLocation => _HttpClient.BaseAddress ?? throw new InvalidOperationException( "HttpClient BaseAddress is not set." );
 
 		/// <inheritdoc />
-		public TimeSpan Timeout
+		public override TimeSpan Timeout
 		{
 			get => throw new NotSupportedException( "Timeout is not supported for HttpClient backed RestClient. Please set the timeout on the HttpClient instance." );
 			set => throw new NotSupportedException( "Timeout is not supported for HttpClient backed RestClient. Please set the timeout on the HttpClient instance." );
 		}
 
 		/// <inheritdoc />
-		public bool UseDefaultWebProxy
+		public override bool UseDefaultWebProxy
 		{
 			get => throw new NotSupportedException( "UseDefaultWebProxy is not supported for HttpClient backed RestClient. Please configure the proxy settings on the HttpClientHandler instance used to create the HttpClient." );
 			set => throw new NotSupportedException( "UseDefaultWebProxy is not supported for HttpClient backed RestClient. Please configure the proxy settings on the HttpClientHandler instance used to create the HttpClient." );
 		}
 
 		/// <inheritdoc />
-		public bool CheckCertificateRevocationList
+		public override bool CheckCertificateRevocationList
 		{
 			get => throw new NotSupportedException( "CheckCertificateRevocationList is not supported for HttpClient backed RestClient. Please configure the certificate revocation settings on the HttpClientHandler instance used to create the HttpClient." );
 			set => throw new NotSupportedException( "CheckCertificateRevocationList is not supported for HttpClient backed RestClient. Please configure the certificate revocation settings on the HttpClientHandler instance used to create the HttpClient." );
 		}
 
 		/// <inheritdoc />
-		public ICacheStore CacheStore
+		public override ICacheStore CacheStore
 		{
 			get => throw new NotSupportedException( "CacheStore is not supported for HttpClient backed RestClient. Please implement caching on the HttpClient instance using a delegating handler." );
 			set => throw new NotSupportedException( "CacheStore is not supported for HttpClient backed RestClient. Please implement caching on the HttpClient instance using a delegating handler." );
 		}
 
 		/// <inheritdoc />
-		public IVaryHeaderStore VaryHeaderStore
+		public override IVaryHeaderStore VaryHeaderStore
 		{
 			get => throw new NotSupportedException( "VaryHeaderStore is not supported for HttpClient backed RestClient. Please implement vary header handling on the HttpClient instance using a delegating handler." );
 			set => throw new NotSupportedException( "VaryHeaderStore is not supported for HttpClient backed RestClient. Please implement vary header handling on the HttpClient instance using a delegating handler." );
 		}
-
-		/// <inheritdoc />
-		public event EventHandler AuthenticationChanged;
 
 		#endregion
 	}

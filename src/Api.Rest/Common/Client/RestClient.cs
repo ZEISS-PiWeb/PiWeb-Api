@@ -35,7 +35,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 	#endregion
 
-	public class RestClient : RestClientBase, IDisposable, ICustomRestClient
+	public class RestClient : RestClientBase, IDisposable
 	{
 		#region constants
 
@@ -177,12 +177,12 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		#region properties
 
-		public int MaxUriLength { get; }
+		public override int MaxUriLength { get; }
 
 		/// <summary>
 		/// Gets or sets the request timeout.
 		/// </summary>
-		public TimeSpan Timeout
+		public override TimeSpan Timeout
 		{
 			get => _Timeout;
 			set
@@ -200,7 +200,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// For executing within a browser this property is ignored and the browser's default is used.
 		/// </remarks>
 #pragma warning disable CA1416
-		public bool UseDefaultWebProxy
+		public override bool UseDefaultWebProxy
 		{
 			get => _IsBrowser || _UseProxy;
 			set
@@ -220,7 +220,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// <remarks>
 		/// For executing within a browser this property is ignored.
 		/// </remarks>
-		public bool CheckCertificateRevocationList
+		public override bool CheckCertificateRevocationList
 		{
 			get => !_IsBrowser && _CheckCertificateRevocationList;
 
@@ -238,7 +238,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// <summary>
 		/// Returns the endpoint address of the webservice.
 		/// </summary>
-		public Uri ServiceLocation { get; }
+		public override Uri ServiceLocation { get; }
 
 		/// <summary>
 		/// Gets or sets the information for authenticating requests.
@@ -247,7 +247,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// For executing within a browser this property is ignored.
 		/// Instead inject a custom <see cref="DelegatingHandler"/> to appropriately modify the request.
 		/// </remarks>
-		public AuthenticationContainer AuthenticationContainer
+		public override AuthenticationContainer AuthenticationContainer
 		{
 			get => _AuthenticationContainer;
 			set
@@ -275,7 +275,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// <remarks>
 		/// For example use <see cref="InMemoryCacheStore"/> or <see cref="FilesystemCacheStore"/>.
 		/// </remarks>
-		public ICacheStore CacheStore
+		public override ICacheStore CacheStore
 		{
 			get => _CacheStore;
 
@@ -297,7 +297,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// <remarks>
 		/// For example use <see cref="InMemoryVaryHeaderStore"/> or <see cref="FilesystemVaryHeaderStore"/>.
 		/// </remarks>
-		public IVaryHeaderStore VaryHeaderStore
+		public override IVaryHeaderStore VaryHeaderStore
 		{
 			get => _VaryHeaderStore;
 
