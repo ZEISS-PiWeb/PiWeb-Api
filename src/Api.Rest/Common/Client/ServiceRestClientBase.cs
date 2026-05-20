@@ -13,6 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	#region usings
 
 	using System;
+	using System.Runtime.CompilerServices;
 	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Contracts;
 
@@ -23,6 +24,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		#region members
 
 		protected readonly IRestClient _RestClient;
+		private readonly IRestClientConfiguration _Configuration;
+
 		private bool _IsDisposed;
 
 		#endregion
@@ -34,9 +37,20 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// </summary>
 		/// <exception cref="ArgumentNullException"><paramref name="restClient"/> is <see langword="null" />.</exception>
 		protected ServiceRestClientBase( [NotNull] IRestClient restClient )
+			: this( restClient, restClient as IRestClientConfiguration )
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ServiceRestClientBase" /> class.
+		/// </summary>
+		/// <exception cref="ArgumentNullException"><paramref name="restClient"/> is <see langword="null" />.</exception>
+		protected ServiceRestClientBase( [NotNull] IRestClient restClient, IRestClientConfiguration configuration )
 		{
 			_RestClient = restClient ?? throw new ArgumentNullException( nameof( restClient ) );
-			_RestClient.AuthenticationChanged += RestClientOnAuthenticationChanged;
+
+			_Configuration = configuration;
+			_Configuration?.AuthenticationChanged += RestClientOnAuthenticationChanged;
 		}
 
 		#endregion
@@ -48,6 +62,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		#endregion
 
 		#region methods
+
+		private IRestClientConfiguration GetConfigurationOrThrow( [CallerMemberName] string propertyName = "" )
+		{
+			return _Configuration ?? throw new NotSupportedException( $"{propertyName} is not supported for not configured RestClients. Please set the {propertyName} on the RestClient (HttpClient) instance." );
+		}
 
 		private void RestClientOnAuthenticationChanged( object sender, EventArgs e )
 		{
@@ -73,7 +92,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		#endregion
 
-		#region interface IRestClient
+		#region interface IDisposable
 
 		/// <inheritdoc />
 		public void Dispose()
@@ -82,11 +101,15 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			GC.SuppressFinalize( this );
 		}
 
+		#endregion
+
+		#region interface IServiceRestClient
+
 		/// <inheritdoc />
 		public virtual AuthenticationContainer AuthenticationContainer
 		{
-			get => _RestClient.AuthenticationContainer;
-			set => _RestClient.AuthenticationContainer = value;
+			get => _Configuration?.AuthenticationContainer ?? new AuthenticationContainer( AuthenticationMode.NoneOrBasic );
+			set => GetConfigurationOrThrow().AuthenticationContainer = value;
 		}
 
 		/// <inheritdoc />
@@ -95,22 +118,22 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// <inheritdoc />
 		public TimeSpan Timeout
 		{
-			get => _RestClient.Timeout;
-			set => _RestClient.Timeout = value;
+			get => GetConfigurationOrThrow().Timeout;
+			set => GetConfigurationOrThrow().Timeout = value;
 		}
 
 		/// <inheritdoc />
 		public bool UseDefaultWebProxy
 		{
-			get => _RestClient.UseDefaultWebProxy;
-			set => _RestClient.UseDefaultWebProxy = value;
+			get => GetConfigurationOrThrow().UseDefaultWebProxy;
+			set => GetConfigurationOrThrow().UseDefaultWebProxy = value;
 		}
 
 		/// <inheritdoc />
 		public bool CheckCertificateRevocationList
 		{
-			get => _RestClient.CheckCertificateRevocationList;
-			set => _RestClient.CheckCertificateRevocationList = value;
+			get => GetConfigurationOrThrow().CheckCertificateRevocationList;
+			set => GetConfigurationOrThrow().CheckCertificateRevocationList = value;
 		}
 
 		public event EventHandler AuthenticationChanged;

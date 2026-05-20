@@ -15,8 +15,6 @@ using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using CacheCow.Client;
-using CacheCow.Common;
 using JetBrains.Annotations;
 using Zeiss.PiWeb.Api.Rest.Common.Client;
 
@@ -30,22 +28,8 @@ public interface IRestClient
 	#region properties
 
 	int MaxUriLength { get; }
-
-	AuthenticationContainer AuthenticationContainer { get; set; }
-
+		
 	Uri ServiceLocation { get; }
-
-	TimeSpan Timeout { get; set; }
-
-	bool UseDefaultWebProxy { get; set; }
-
-	bool CheckCertificateRevocationList { get; set; }
-
-	ICacheStore CacheStore { get; set; }
-
-	IVaryHeaderStore VaryHeaderStore { get; set; }
-
-	event EventHandler AuthenticationChanged;
 
 	#endregion
 

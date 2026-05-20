@@ -21,8 +21,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using System.Text;
 	using System.Threading;
 	using System.Threading.Tasks;
-	using CacheCow.Client;
-	using CacheCow.Common;
 	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Common.Data;
 	using Zeiss.PiWeb.Api.Rest.Contracts;
@@ -216,56 +214,12 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// <inheritdoc />
 		public abstract int MaxUriLength { get; }
 
-		/// <inheritdoc />
-		public abstract AuthenticationContainer AuthenticationContainer
-		{
-			get;
-			set;
-		}
 
 		/// <inheritdoc />
 		public abstract Uri ServiceLocation
 		{
 			get;
 		}
-
-		/// <inheritdoc />
-		public abstract TimeSpan Timeout
-		{
-			get;
-			set;
-		}
-
-		/// <inheritdoc />
-		public abstract bool UseDefaultWebProxy
-		{
-			get;
-			set;
-		}
-
-		/// <inheritdoc />
-		public abstract bool CheckCertificateRevocationList
-		{
-			get;
-			set;
-		}
-
-		/// <inheritdoc />
-		public abstract ICacheStore CacheStore
-		{
-			get;
-			set;
-		}
-
-		/// <inheritdoc />
-		public abstract IVaryHeaderStore VaryHeaderStore
-		{
-			get;
-			set;
-		}
-
-		/// <inheritdoc />
-		public event EventHandler AuthenticationChanged;
 
 		public Task Request( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{

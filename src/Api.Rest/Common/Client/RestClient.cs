@@ -35,7 +35,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 	#endregion
 
-	public class RestClient : RestClientBase, IDisposable
+	public class RestClient : RestClientBase, IRestClientConfiguration, IDisposable
 	{
 		#region constants
 
@@ -182,7 +182,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// <summary>
 		/// Gets or sets the request timeout.
 		/// </summary>
-		public override TimeSpan Timeout
+		public TimeSpan Timeout
 		{
 			get => _Timeout;
 			set
@@ -200,7 +200,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// For executing within a browser this property is ignored and the browser's default is used.
 		/// </remarks>
 #pragma warning disable CA1416
-		public override bool UseDefaultWebProxy
+		public bool UseDefaultWebProxy
 		{
 			get => _IsBrowser || _UseProxy;
 			set
@@ -220,7 +220,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// <remarks>
 		/// For executing within a browser this property is ignored.
 		/// </remarks>
-		public override bool CheckCertificateRevocationList
+		public bool CheckCertificateRevocationList
 		{
 			get => !_IsBrowser && _CheckCertificateRevocationList;
 
@@ -247,7 +247,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// For executing within a browser this property is ignored.
 		/// Instead inject a custom <see cref="DelegatingHandler"/> to appropriately modify the request.
 		/// </remarks>
-		public override AuthenticationContainer AuthenticationContainer
+		public AuthenticationContainer AuthenticationContainer
 		{
 			get => _AuthenticationContainer;
 			set
@@ -275,7 +275,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// <remarks>
 		/// For example use <see cref="InMemoryCacheStore"/> or <see cref="FilesystemCacheStore"/>.
 		/// </remarks>
-		public override ICacheStore CacheStore
+		public ICacheStore CacheStore
 		{
 			get => _CacheStore;
 
@@ -297,7 +297,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// <remarks>
 		/// For example use <see cref="InMemoryVaryHeaderStore"/> or <see cref="FilesystemVaryHeaderStore"/>.
 		/// </remarks>
-		public override IVaryHeaderStore VaryHeaderStore
+		public IVaryHeaderStore VaryHeaderStore
 		{
 			get => _VaryHeaderStore;
 

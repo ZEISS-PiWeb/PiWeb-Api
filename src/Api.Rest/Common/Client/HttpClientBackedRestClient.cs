@@ -14,8 +14,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using System.Net.Http;
 	using System.Threading;
 	using System.Threading.Tasks;
-	using CacheCow.Client;
-	using CacheCow.Common;
 	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Contracts;
 
@@ -44,11 +42,13 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// chunked transfer setting, and object serializer.
 		/// </summary>
 		/// <param name="httpClient">The HttpClient instance used to send HTTP requests.</param>
+		/// <param name="endpointName">An optional endpoint name to prepend to request URIs. If provided, this will be combined with the request URI for each request.</param>
 		/// <param name="maxUriLength">The maximum allowed length of the request URI. Requests exceeding this length may be split or handled differently.</param>
 		/// <param name="chunked">A value indicating whether chunked transfer encoding is enabled for requests. If set to true, requests may be sent in chunks.</param>
 		/// <param name="serializer">The object serializer used to serialize and deserialize request and response bodies.</param>
-		public HttpClientBackedRestClient( HttpClient httpClient,
-			string endpointName,
+		public HttpClientBackedRestClient(
+			HttpClient httpClient,
+			string endpointName = null,
 			int maxUriLength = DefaultMaxUriLength,
 			bool chunked = true,
 			[CanBeNull] IObjectSerializer serializer = null )
@@ -134,49 +134,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		public override int MaxUriLength { get; }
 
 		/// <inheritdoc />
-		public override AuthenticationContainer AuthenticationContainer
-		{
-			get;
-			set => throw new NotSupportedException( "AuthenticationContainer is not supported for HttpClient backed RestClient. Please configure the authentication on the HttpClient instance." );
-		} = new AuthenticationContainer( AuthenticationMode.NoneOrBasic );
-
-		/// <inheritdoc />
 		public override Uri ServiceLocation => _HttpClient.BaseAddress ?? throw new InvalidOperationException( "HttpClient BaseAddress is not set." );
-
-		/// <inheritdoc />
-		public override TimeSpan Timeout
-		{
-			get => throw new NotSupportedException( "Timeout is not supported for HttpClient backed RestClient. Please set the timeout on the HttpClient instance." );
-			set => throw new NotSupportedException( "Timeout is not supported for HttpClient backed RestClient. Please set the timeout on the HttpClient instance." );
-		}
-
-		/// <inheritdoc />
-		public override bool UseDefaultWebProxy
-		{
-			get => throw new NotSupportedException( "UseDefaultWebProxy is not supported for HttpClient backed RestClient. Please configure the proxy settings on the HttpClientHandler instance used to create the HttpClient." );
-			set => throw new NotSupportedException( "UseDefaultWebProxy is not supported for HttpClient backed RestClient. Please configure the proxy settings on the HttpClientHandler instance used to create the HttpClient." );
-		}
-
-		/// <inheritdoc />
-		public override bool CheckCertificateRevocationList
-		{
-			get => throw new NotSupportedException( "CheckCertificateRevocationList is not supported for HttpClient backed RestClient. Please configure the certificate revocation settings on the HttpClientHandler instance used to create the HttpClient." );
-			set => throw new NotSupportedException( "CheckCertificateRevocationList is not supported for HttpClient backed RestClient. Please configure the certificate revocation settings on the HttpClientHandler instance used to create the HttpClient." );
-		}
-
-		/// <inheritdoc />
-		public override ICacheStore CacheStore
-		{
-			get => throw new NotSupportedException( "CacheStore is not supported for HttpClient backed RestClient. Please implement caching on the HttpClient instance using a delegating handler." );
-			set => throw new NotSupportedException( "CacheStore is not supported for HttpClient backed RestClient. Please implement caching on the HttpClient instance using a delegating handler." );
-		}
-
-		/// <inheritdoc />
-		public override IVaryHeaderStore VaryHeaderStore
-		{
-			get => throw new NotSupportedException( "VaryHeaderStore is not supported for HttpClient backed RestClient. Please implement vary header handling on the HttpClient instance using a delegating handler." );
-			set => throw new NotSupportedException( "VaryHeaderStore is not supported for HttpClient backed RestClient. Please implement vary header handling on the HttpClient instance using a delegating handler." );
-		}
 
 		#endregion
 	}
