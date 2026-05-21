@@ -74,7 +74,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Data
 		/// <param name="maxUriLength">The uri length limit</param>
 		/// <param name="maxRequestsInParallel">The maximum number of concurrent tasks enabled by a <see cref="T:System.Threading.Tasks.ParallelOptions" /> instance.</param>
 		public DataServiceRestClient( [NotNull] HttpClient httpClient, int maxUriLength = RestClientBase.DefaultMaxUriLength, int maxRequestsInParallel = 8 )
-			: base( new HttpClientBackedRestClient( httpClient, EndpointName, maxUriLength: maxUriLength, serializer: ObjectSerializer.SystemTextJson ) )
+			: base( new HttpClientRestClient( httpClient, EndpointName, maxUriLength: maxUriLength, serializer: ObjectSerializer.SystemTextJson ) )
 		{
 			_MaxRequestsInParallel = maxRequestsInParallel;
 		}

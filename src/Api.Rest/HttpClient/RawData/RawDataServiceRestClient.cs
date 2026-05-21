@@ -70,7 +70,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.RawData
 		/// <param name="httpClient">The <see cref="HttpClient"/> instance used to send HTTP requests.</param>
 		/// <param name="maxUriLength">The uri length limit</param>
 		public RawDataServiceRestClient( [NotNull] HttpClient httpClient, int maxUriLength = RestClientBase.DefaultMaxUriLength )
-			: base( new HttpClientBackedRestClient( httpClient, EndpointName, maxUriLength: maxUriLength, serializer: ObjectSerializer.SystemTextJson ) )
+			: base( new HttpClientRestClient( httpClient, EndpointName, maxUriLength: maxUriLength, serializer: ObjectSerializer.SystemTextJson ) )
 		{ }
 
 		/// <summary>

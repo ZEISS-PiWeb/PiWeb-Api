@@ -64,7 +64,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Health
 		/// </summary>
 		/// <param name="httpClient">The <see cref="HttpClient"/> instance used to send HTTP requests.</param>
 		public HealthServiceRestClient( [NotNull] HttpClient httpClient )
-			: base( new HttpClientBackedRestClient( httpClient, EndpointName, serializer: ObjectSerializer.SystemTextJson ) )
+			: base( new HttpClientRestClient( httpClient, EndpointName, serializer: ObjectSerializer.SystemTextJson ) )
 		{ }
 
 		/// <summary>
