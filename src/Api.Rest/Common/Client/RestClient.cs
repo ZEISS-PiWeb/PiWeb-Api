@@ -35,6 +35,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 	#endregion
 
+	/// <summary>
+	/// Provides a REST client implementation with configurable authentication, caching, and timeout settings.
+	/// </summary>
 	public class RestClient : RestClientBase, IRestClientConfiguration, IDisposable
 	{
 		#region constants
@@ -65,10 +68,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// </summary>
 		public static readonly TimeSpan DefaultShortTimeout = TimeSpan.FromSeconds( 15 );
 
-		private readonly bool _Chunked;
 		private ICacheStore _CacheStore;
 		private IVaryHeaderStore _VaryHeaderStore;
-		private readonly IObjectSerializer _Serializer;
 
 		/// <summary>
 		/// This value will be increased atomically to uniquely identify a request session which consists of an original rest request
@@ -114,6 +115,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			bool chunked = true,
 			[CanBeNull] DelegatingHandler customHttpMessageHandler = null,
 			[CanBeNull] IObjectSerializer serializer = null )
+			: base( maxUriLength, chunked, serializer ?? ObjectSerializer.Default )
 		{
 			if( serverUri == null )
 				throw new ArgumentNullException( nameof( serverUri ) );
@@ -123,11 +125,8 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				Path = ( serverUri.AbsolutePath.Replace( "/DataServiceSoap", "" ) + "/" + endpointName ).Replace( "//", "/" )
 			}.Uri;
 
-			_Chunked = chunked;
 			_LegacyDelegatingHandler = customHttpMessageHandler;
-			_Serializer = serializer ?? ObjectSerializer.Default;
 
-			MaxUriLength = maxUriLength;
 			_Timeout = timeout ?? DefaultTimeout;
 
 			BuildHttpClient();
@@ -138,6 +137,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// rest client creation via <see cref="RestClientBuilder"/>.
 		/// </summary>
 		public RestClient( [NotNull] string endpointName, [NotNull] RestClientSettings settings )
+			: base( settings.MaxUriLength, settings.AllowChunkedDataTransfer, settings.Serializer )
 		{
 			if( endpointName == null )
 				throw new ArgumentNullException( nameof( endpointName ) );
@@ -152,15 +152,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			_Timeout = settings.Timeout;
 			_UseProxy = settings.UseSystemProxy;
 			_CheckCertificateRevocationList = settings.CheckCertificateRevocationList;
-			_Chunked = settings.AllowChunkedDataTransfer;
 
 			_LegacyDelegatingHandler = null;
 			_AuthenticationHandler = settings.AuthenticationHandler;
 
 			_DelegatingHandlerFactories = new List<Func<DelegatingHandler>>( settings.DelegatingHandlerFactories );
-
-			_Serializer = settings.Serializer;
-			MaxUriLength = settings.MaxUriLength;
 
 			BuildHttpClient();
 
@@ -171,13 +167,14 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		#region events
 
+		/// <summary>
+		/// Occurs when the authentication state changes.
+		/// </summary>
 		public event EventHandler AuthenticationChanged;
 
 		#endregion
 
 		#region properties
-
-		public override int MaxUriLength { get; }
 
 		/// <summary>
 		/// Gets or sets the request timeout.
@@ -312,14 +309,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			}
 		}
 
-		protected override bool Chunked => _Chunked;
-
-		protected override IObjectSerializer Serializer => _Serializer;
-
 		#endregion
 
 		#region methods
 
+		/// <inheritdoc />
 		protected override async Task<TResult> PerformRequestAsync<TResult>(
 			Func<HttpRequestMessage> requestCreationHandler,
 			bool streamed, Func<HttpResponseMessage, Task<TResult>> handler = null,
@@ -383,7 +377,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 						continue;
 					}
 
-					await HandleFaultedResponse( response, _Serializer, cancellationToken ).ConfigureAwait( false );
+					await HandleFaultedResponse( response, cancellationToken ).ConfigureAwait( false );
 				}
 			}
 			catch( HttpRequestException ex )

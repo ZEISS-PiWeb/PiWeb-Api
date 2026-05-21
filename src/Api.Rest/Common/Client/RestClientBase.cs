@@ -26,6 +26,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using Zeiss.PiWeb.Api.Rest.Contracts;
 	using Zeiss.PiWeb.Api.Rest.Dtos;
 
+	/// <summary>
+	/// Provides a base implementation for REST client functionality, including methods for sending HTTP requests, handling
+	/// responses, and managing serialization. Intended to be extended by concrete REST client implementations.
+	/// </summary>
 	public abstract class RestClientBase : IRestClient
 	{
 		#region constants
@@ -45,16 +49,45 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		#endregion
 
-		#region properties
+		#region members
 
-		protected abstract IObjectSerializer Serializer { get; }
+		private bool _Chunked;
+		private IObjectSerializer _Serializer;
 
-		protected abstract bool Chunked { get; }
+		#endregion
+
+		#region constructors
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RestClientBase"/> class.
+		/// </summary>
+		/// <param name="maxUriLength">The maximum allowed length of the request URI. Requests exceeding this length may be split or handled differently.</param>
+		/// <param name="chunked">A value indicating whether HTTP requests should use chunked transfer encoding.</param>
+		/// <param name="serializer">The serializer used to convert objects to and from the request and response payloads.</param>
+		protected RestClientBase( int maxUriLength, bool chunked, [NotNull] IObjectSerializer serializer )
+		{
+			MaxUriLength = maxUriLength;
+
+			_Chunked = chunked;
+			_Serializer = serializer ?? throw new ArgumentNullException( nameof( serializer ) );
+		}
 
 		#endregion
 
 		#region methods
 
+		/// <summary>
+		/// Performs the actual request by invoking the given request creation handler and processing the response with the given response handler.
+		/// The implementation of this method is responsible for handling all aspects of the request execution,
+		/// including but not limited to: sending the request, handling retries, processing the response, and disposing of resources as necessary.
+		/// </summary>
+		/// <typeparam name="TResult">The type of the result returned by the response handler.</typeparam>
+		/// <param name="requestCreationHandler">A delegate that creates and returns the <see cref="HttpRequestMessage"/> to be sent.</param>
+		/// <param name="streamed">Indicates whether the response should be streamed.</param>
+		/// <param name="handler">A delegate that processes the <see cref="HttpResponseMessage"/> and returns a result.</param>
+		/// <param name="autoDisposeResponse">Indicates whether the response should be automatically disposed after processing.</param>
+		/// <param name="cancellationToken">A cancellation token that can be used to cancel the request operation.</param>
+		/// <returns>A task that represents the asynchronous operation of sending the HTTP request and processing the response.</returns>
 		protected abstract Task<TResult> PerformRequestAsync<TResult>(
 			Func<HttpRequestMessage> requestCreationHandler,
 			bool streamed, Func<HttpResponseMessage, Task<TResult>> handler = null,
@@ -74,9 +107,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			return default;
 		}
 
-		/// <summary>
-		/// Reads and returns the response stream.
-		/// </summary>
 		private static Task<Stream> ResponseToStreamAsync( HttpResponseMessage response )
 		{
 			return response.Content.ReadAsStreamAsync();
@@ -134,6 +164,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			return Task.FromResult( result );
 		}
 
+		/// <summary>
+		/// Configures the specified HTTP request message with standard default headers.
+		/// </summary>
+		/// <param name="request">The HTTP request message to which default headers will be applied. Cannot be null.</param>
 		protected void SetDefaultHttpHeaders( HttpRequestMessage request )
 		{
 			request.Headers.Accept.Add( new MediaTypeWithQualityHeaderValue( MimeTypeJson ) );
@@ -141,7 +175,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			request.Headers.AcceptEncoding.Add( new StringWithQualityHeaderValue( "deflate" ) );
 			request.Headers.UserAgent.Add( new ProductInfoHeaderValue( ClientIdHelper.ClientProduct, ClientIdHelper.ClientVersion ) );
 			if( request.Content != null )
-				request.Headers.TransferEncodingChunked = Chunked;
+				request.Headers.TransferEncodingChunked = _Chunked;
 			request.Headers.Add( "Keep-Alive", "true" );
 
 			if( !Equals( CultureInfo.CurrentUICulture, CultureInfo.InvariantCulture ) )
@@ -151,16 +185,22 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			}
 		}
 
-		protected static async Task HandleFaultedResponse( HttpResponseMessage response, IObjectSerializer serializer, CancellationToken cancellationToken )
+		/// <summary>
+		/// Processes an HTTP response to detect and handle fault conditions based on client or server errors.
+		/// </summary>
+		/// <param name="response">The HTTP response message to inspect for faulted states.</param>
+		/// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
+		/// <returns>A task that represents the asynchronous operation.</returns>
+		protected async Task HandleFaultedResponse( HttpResponseMessage response, CancellationToken cancellationToken )
 		{
-			await HandleClientBasedFaults( response, serializer, cancellationToken ).ConfigureAwait( false );
+			await HandleClientBasedFaults( response, cancellationToken ).ConfigureAwait( false );
 			HandleServerBasedFaults( response );
 		}
 
 		/// <summary>
 		/// Handles all responses with status codes between 400 and 499
 		/// </summary>
-		protected static async Task HandleClientBasedFaults( HttpResponseMessage response, IObjectSerializer serializer, CancellationToken cancellationToken )
+		private async Task HandleClientBasedFaults( HttpResponseMessage response, CancellationToken cancellationToken )
 		{
 			if( response.StatusCode < HttpStatusCode.BadRequest || response.StatusCode >= HttpStatusCode.InternalServerError )
 				return;
@@ -170,7 +210,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 				Error error;
 				try
 				{
-					error = await serializer.DeserializeAsync<Error>( responseStream, cancellationToken ).ConfigureAwait( false )
+					error = await _Serializer.DeserializeAsync<Error>( responseStream, cancellationToken ).ConfigureAwait( false )
 							?? new Error( $"Request {response.RequestMessage.Method} {response.RequestMessage.RequestUri} was not successful: {(int)response.StatusCode} ({response.ReasonPhrase})" );
 				}
 				catch( ObjectSerializerException )
@@ -194,7 +234,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// <summary>
 		/// Handles all responses with status codes between 500 and 505
 		/// </summary>
-		protected static void HandleServerBasedFaults( HttpResponseMessage response )
+		private static void HandleServerBasedFaults( HttpResponseMessage response )
 		{
 			if( response.StatusCode < HttpStatusCode.InternalServerError || response.StatusCode >= HttpStatusCode.HttpVersionNotSupported )
 				return;
@@ -212,7 +252,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		#region interface IRestClient
 
 		/// <inheritdoc />
-		public abstract int MaxUriLength { get; }
+		public int MaxUriLength { get; }
 
 
 		/// <inheritdoc />
@@ -221,39 +261,46 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			get;
 		}
 
+		/// <inheritdoc />
 		public Task Request( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
 			return PerformRequestAsync<object>( requestCreationHandler, false, null, true, cancellationToken );
 		}
 
+		/// <inheritdoc />
 		public Task Request( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync<object>( () => requestCreationHandler( Serializer, cancellationToken ), false, null, true, cancellationToken );
+			return PerformRequestAsync<object>( () => requestCreationHandler( _Serializer, cancellationToken ), false, null, true, cancellationToken );
 		}
 
+		/// <inheritdoc />
 		public Task<T> Request<T>( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync( requestCreationHandler, false, response => ResponseToObjectAsync<T>( response, Serializer, cancellationToken ), true, cancellationToken );
+			return PerformRequestAsync( requestCreationHandler, false, response => ResponseToObjectAsync<T>( response, _Serializer, cancellationToken ), true, cancellationToken );
 		}
 
+		/// <inheritdoc />
 		public Task<T> Request<T>( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync( () => requestCreationHandler( Serializer, cancellationToken ), false, response => ResponseToObjectAsync<T>( response, Serializer, cancellationToken ), true, cancellationToken );
+			return PerformRequestAsync( () => requestCreationHandler( _Serializer, cancellationToken ), false, response => ResponseToObjectAsync<T>( response, _Serializer, cancellationToken ), true, cancellationToken );
 		}
 
+		/// <inheritdoc />
 		public Task<Stream> RequestStream( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
 			return PerformRequestAsync( requestCreationHandler, true, ResponseToStreamAsync, false, cancellationToken );
 		}
 
+		/// <inheritdoc />
 		public Task<Stream> RequestStream( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync( () => requestCreationHandler( Serializer, cancellationToken ), true, ResponseToStreamAsync, false, cancellationToken );
+			return PerformRequestAsync( () => requestCreationHandler( _Serializer, cancellationToken ), true, ResponseToStreamAsync, false, cancellationToken );
 		}
 
+		/// <inheritdoc />
 		public async IAsyncEnumerable<T> RequestEnumerated<T>( [NotNull] Func<HttpRequestMessage> requestCreationHandler, [EnumeratorCancellation] CancellationToken cancellationToken )
 		{
-			var items = await PerformRequestAsync( requestCreationHandler, true, response => Task.FromResult( ResponseToAsyncEnumerable<T>( response, Serializer, cancellationToken ) ), false, cancellationToken );
+			var items = await PerformRequestAsync( requestCreationHandler, true, response => Task.FromResult( ResponseToAsyncEnumerable<T>( response, _Serializer, cancellationToken ) ), false, cancellationToken );
 
 			await foreach( var item in items.ConfigureAwait( false ) )
 			{
@@ -261,9 +308,10 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			}
 		}
 
+		/// <inheritdoc />
 		public async IAsyncEnumerable<T> RequestEnumerated<T>( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, [EnumeratorCancellation] CancellationToken cancellationToken )
 		{
-			var items = await PerformRequestAsync( () => requestCreationHandler( Serializer, cancellationToken ), true, response => Task.FromResult( ResponseToAsyncEnumerable<T>( response, Serializer, cancellationToken ) ), false, cancellationToken );
+			var items = await PerformRequestAsync( () => requestCreationHandler( _Serializer, cancellationToken ), true, response => Task.FromResult( ResponseToAsyncEnumerable<T>( response, _Serializer, cancellationToken ) ), false, cancellationToken );
 
 			await foreach( var item in items.ConfigureAwait( false ) )
 			{
@@ -271,46 +319,40 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			}
 		}
 
+		/// <inheritdoc />
 		public Task<byte[]> RequestBytes( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
 			return PerformRequestAsync( requestCreationHandler, false, ResponseToBytesAsync, true, cancellationToken );
 		}
 
+		/// <inheritdoc />
 		public Task<byte[]> RequestBytes( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync( () => requestCreationHandler( Serializer, cancellationToken ), false, ResponseToBytesAsync, true, cancellationToken );
+			return PerformRequestAsync( () => requestCreationHandler( _Serializer, cancellationToken ), false, ResponseToBytesAsync, true, cancellationToken );
 		}
 
+		/// <inheritdoc />
 		public Task<T> RequestBinary<T>( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
 			return PerformRequestAsync( requestCreationHandler, false, BinaryResponseToObjectAsync<T>, true, cancellationToken );
 		}
 
+		/// <inheritdoc />
 		public Task<T> RequestBinary<T>( [NotNull] Func<IObjectSerializer, CancellationToken, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync( () => requestCreationHandler( Serializer, cancellationToken ), false, BinaryResponseToObjectAsync<T>, true, cancellationToken );
+			return PerformRequestAsync( () => requestCreationHandler( _Serializer, cancellationToken ), false, BinaryResponseToObjectAsync<T>, true, cancellationToken );
 		}
 
-		/// <summary>
-		/// Start an async operation. Returns an URL to poll for status updates if the operation is accepted, otherwise the operation is done synchronously.
-		/// </summary>
-		/// <returns>Returns a Task that represents the duration of the initial REST request. The result of the task contains
-		/// the URI for polling the operation result or null in case the server already finished the request synchronously.</returns>
-		/// <exception cref="RestClientException">The response indicated status Accepted, but did not contain polling information.</exception>
+		/// <inheritdoc />
 		public Task<Uri> RequestAsyncOperation( [NotNull] Func<HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
 			return PerformRequestAsync( requestCreationHandler, false, LocationHeaderToUrl, true, cancellationToken );
 		}
 
-		/// <summary>
-		/// Start an async operation. Returns an URL to poll for status updates if the operation is accepted, otherwise the operation is done synchronously.
-		/// </summary>
-		/// <returns>Returns a Task that represents the duration of the initial REST request. The result of the task contains
-		/// the URI for polling the operation result or null in case the server already finished the request synchronously.</returns>
-		/// <exception cref="RestClientException">The response indicated status Accepted, but did not contain polling information.</exception>
+		/// <inheritdoc />
 		public Task<Uri> RequestAsyncOperation( [NotNull] Func<IObjectSerializer, HttpRequestMessage> requestCreationHandler, CancellationToken cancellationToken )
 		{
-			return PerformRequestAsync( () => requestCreationHandler( Serializer ), false, LocationHeaderToUrl, true, cancellationToken );
+			return PerformRequestAsync( () => requestCreationHandler( _Serializer ), false, LocationHeaderToUrl, true, cancellationToken );
 		}
 
 		#endregion

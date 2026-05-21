@@ -19,11 +19,19 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 	#endregion
 
+	/// <summary>
+	/// Provides a base implementation of the <see cref="IServiceRestClient"/> interface,
+	/// encapsulating common functionality for REST clients that interact with a service endpoint.
+	/// </summary>
 	public abstract class ServiceRestClientBase : IServiceRestClient
 	{
 		#region members
 
+		/// <summary>
+		/// Provides access to the underlying REST client used for making HTTP requests.
+		/// </summary>
 		protected readonly IRestClient _RestClient;
+
 		private readonly IRestClientConfiguration _Configuration;
 
 		private bool _IsDisposed;
@@ -57,6 +65,9 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 		#region properties
 
+		/// <summary>
+		/// Gets the maximum allowed length of the request URI. Requests exceeding this length may be split or handled differently.
+		/// </summary>
 		public int MaxUriLength => _RestClient.MaxUriLength;
 
 		#endregion
@@ -136,6 +147,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			set => GetConfigurationOrThrow().CheckCertificateRevocationList = value;
 		}
 
+		/// <inheritdoc />
 		public event EventHandler AuthenticationChanged;
 
 		#endregion
