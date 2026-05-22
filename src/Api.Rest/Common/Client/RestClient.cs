@@ -38,19 +38,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	/// <summary>
 	/// Provides a REST client implementation with configurable authentication, caching, and timeout settings.
 	/// </summary>
+#if NET5_0_OR_GREATER
+	[UnsupportedOSPlatform( "browser" )]
+#endif
 	public class RestClient : RestClientBase, IRestClientConfiguration, IDisposable
 	{
-		#region constants
-
-		private readonly bool _IsBrowser
-#if NET5_0_OR_GREATER
-			= OperatingSystem.IsBrowser();
-#else
-			= false;
-#endif
-
-		#endregion
-
 		#region members
 
 		/// <summary>
@@ -196,15 +188,11 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// <remarks>
 		/// For executing within a browser this property is ignored and the browser's default is used.
 		/// </remarks>
-#pragma warning disable CA1416
 		public bool UseDefaultWebProxy
 		{
-			get => _IsBrowser || _UseProxy;
+			get => _UseProxy;
 			set
 			{
-				if( _IsBrowser )
-					return;
-
 				_UseProxy = value;
 				if( _HttpClientHandler.UseProxy != value )
 					_HttpClientHandler.UseProxy = value;
@@ -219,18 +207,14 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// </remarks>
 		public bool CheckCertificateRevocationList
 		{
-			get => !_IsBrowser && _CheckCertificateRevocationList;
+			get => _CheckCertificateRevocationList;
 
 			set
 			{
-				if( _IsBrowser )
-					return;
-
 				_CheckCertificateRevocationList = value;
 				_HttpClientHandler.CheckCertificateRevocationList = value;
 			}
 		}
-#pragma warning restore CA1416
 
 		/// <summary>
 		/// Returns the endpoint address of the webservice.
@@ -255,13 +239,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 				_AuthenticationContainer = value;
 
-				// Use the custom HTTP message handler for passing authentication relevant information in browser instead.
-				if( _IsBrowser )
-					return;
-
-#pragma warning disable CA1416
 				UpdateAuthenticationInformation();
-#pragma warning restore CA1416
 			}
 		}
 
@@ -435,20 +413,13 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		{
 			_HttpClientHandler = new HttpClientHandler();
 
-			// Almost all options are not available when running in browser
-			// and need to be done either manually or are not possible at all.
-			if( !_IsBrowser )
-			{
-#pragma warning disable CA1416
-				// Since the Windows update from january 2026 the pre-authentication will fail after 100 sec.
-				// This applies to .Net Framework only, .Net Core seems to ignore the setting anyway.
-				_HttpClientHandler.PreAuthenticate = false;
+			// Since the Windows update from january 2026 the pre-authentication will fail after 100 sec.
+			// This applies to .Net Framework only, .Net Core seems to ignore the setting anyway.
+			_HttpClientHandler.PreAuthenticate = false;
 
-				_HttpClientHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-				_HttpClientHandler.UseProxy = _UseProxy;
-				_HttpClientHandler.CheckCertificateRevocationList = _CheckCertificateRevocationList;
-#pragma warning restore CA1416
-			}
+			_HttpClientHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+			_HttpClientHandler.UseProxy = _UseProxy;
+			_HttpClientHandler.CheckCertificateRevocationList = _CheckCertificateRevocationList;
 
 			HttpMessageHandler outerDelegatingHandler = _HttpClientHandler;
 
