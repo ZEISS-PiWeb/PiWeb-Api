@@ -15,8 +15,6 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Builder;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using CacheCow.Client;
-using CacheCow.Common;
 using JetBrains.Annotations;
 using Zeiss.PiWeb.Api.Rest.Common.Authentication;
 using Zeiss.PiWeb.Api.Rest.Common.Client;
@@ -63,16 +61,10 @@ public record RestClientSettings
 	public IObjectSerializer Serializer { get; set; } = ObjectSerializer.Default;
 
 	/// <summary>
-	/// The external cache store to use for http caching or <c>null</c> if an internal cache store should be used.
+	/// The factory to create caching handlers for HTTP requests.
 	/// </summary>
 	[CanBeNull]
-	public ICacheStore CacheStore { get; set; }
-
-	/// <summary>
-	/// The external vary header store to use for http caching or <c>null</c> if an internal vary header store should be used.
-	/// </summary>
-	[CanBeNull]
-	public IVaryHeaderStore VaryHeaderStore { get; set; }
+	public ICachingHandlerFactory CachingHandlerFactory { get; set; }
 
 	/// <summary>
 	/// Specifies whether a system-wide http proxy setting will be respected.

@@ -1,0 +1,63 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <RootNamespace>Zeiss.PiWeb.Api.Rest.Caching</RootNamespace>
+    <TargetFrameworks>netstandard2.0;net8.0;net9.0;net10.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <PackageVersion>9.2.3</PackageVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Assembly information">
+    <AssemblyTitle>Provides caching extensions for the HTTP(S)/REST based communication of the ZEISS PiWeb-API .NET Client.</AssemblyTitle>
+    <AssemblyName>Zeiss.PiWeb.Api.Rest.Caching</AssemblyName>
+    <AssemblyVersion>9.2.3</AssemblyVersion>
+    <Company>Carl Zeiss Industrielle Messtechnik GmbH</Company>
+    <Copyright>Copyright © 2026 $(Company)</Copyright>
+    <Description>Provides caching extensions for the HTTP(S)/REST based communication of the ZEISS PiWeb-API .NET Client.</Description>
+    <FileVersion>$(AssemblyVersion)</FileVersion>
+    <InformationalVersion>$(AssemblyVersion)</InformationalVersion>
+    <NeutralLanguage>en</NeutralLanguage>
+    <Product>ZEISS PiWeb API</Product>
+  </PropertyGroup>
+
+  <PropertyGroup Label="NuGet package specifications">
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder); .xml;</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <Authors>$(Company)</Authors>
+    <EmbedAllSources>true</EmbedAllSources>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageIconUrl>https://raw.githubusercontent.com/ZEISS-PiWeb/PiWeb-Api/develop/logo128px.png</PackageIconUrl>
+    <PackageId>Zeiss.PiWeb.Api.Rest.Caching</PackageId>
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/ZEISS-PiWeb/PiWeb-Api</PackageProjectUrl>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageTags>ZEISS PiWeb API</PackageTags>
+    <Version>$(InformationalVersion)</Version>
+    <RepositoryUrl>https://github.com/ZEISS-PiWeb/PiWeb-Api</RepositoryUrl>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/RELEASE_NOTES_Caching.txt"))</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DebugType>Full</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup Label="NuGet references">
+    <PackageReference Include="CacheCow.Client" Version="2.13.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\LICENSE.txt">
+      <Link>LICENSE.txt</Link>
+      <Pack>true</Pack>
+      <PackagePath>/</PackagePath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Api.Rest\Api.Rest.csproj" />
+  </ItemGroup>
+
+</Project>

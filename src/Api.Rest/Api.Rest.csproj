@@ -54,9 +54,9 @@
   </ItemGroup>
 
   <ItemGroup Label="NuGet references">
-    <PackageReference Include="CacheCow.Client" Version="2.13.1" />
     <PackageReference Include="IdentityModel" Version="7.0.0" />
     <PackageReference Include="JetBrains.Annotations" Version="2025.2.4" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
     <PackageReference Include="Microsoft.IdentityModel.Logging" Version="8.15.0" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.15.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
