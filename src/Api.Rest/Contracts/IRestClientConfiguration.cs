@@ -13,8 +13,6 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts;
 #region usings
 
 using System;
-using CacheCow.Client;
-using CacheCow.Common;
 using Zeiss.PiWeb.Api.Rest.Common.Client;
 
 #endregion
@@ -48,14 +46,9 @@ public interface IRestClientConfiguration
 	bool CheckCertificateRevocationList { get; set; }
 
 	/// <summary>
-	/// Gets or sets the cache store used for storing and retrieving cached data.
+	/// Gets or sets the The <see cref="ICachingHandlerFactory"/> to be used for HTTP caching.
 	/// </summary>
-	ICacheStore CacheStore { get; set; }
-
-	/// <summary>
-	/// Gets or sets the store used to manage HTTP Vary header values for caching purposes.
-	/// </summary>
-	IVaryHeaderStore VaryHeaderStore { get; set; }
+	ICachingHandlerFactory CachingHandlerFactory { get; set; }
 
 	#endregion
 
