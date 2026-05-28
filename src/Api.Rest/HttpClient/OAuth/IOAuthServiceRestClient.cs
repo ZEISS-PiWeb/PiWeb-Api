@@ -23,14 +23,14 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 	/// <summary>
 	/// Web service interface to communicate with the REST based PiWeb OAuth service.
 	/// </summary>
-	public interface IOAuthServiceRestClient : IRestClient
+	public interface IOAuthServiceRestClient : IServiceRestClient
 	{
 		#region properties
 
 		/// <summary>
 		/// A custom rest client that can be used to execute rest request created by a rest request builder.
 		/// </summary>
-		public ICustomRestClient CustomRestClient { get; }
+		public IRestClient RestClient { get; }
 
 		#endregion
 

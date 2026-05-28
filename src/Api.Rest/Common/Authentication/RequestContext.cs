@@ -25,7 +25,7 @@ internal class RequestContext : IRequestContext
 {
 	#region members
 
-	[NotNull] private readonly RestClientBase _RestClient;
+	[NotNull] private readonly RestClient _RestClient;
 
 	#endregion
 
@@ -41,7 +41,7 @@ internal class RequestContext : IRequestContext
 	/// <param name="retryPayload">The payload carried over from the previous attempt.</param>
 	/// <param name="cancellationToken">The cancellation token of the operation.</param>
 	public RequestContext(
-		[NotNull] RestClientBase restClient,
+		[NotNull] RestClient restClient,
 		[NotNull] HttpRequestMessage request,
 		long session,
 		long attempt,

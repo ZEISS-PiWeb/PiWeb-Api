@@ -39,7 +39,7 @@ public record RestClientSettings
 	/// <summary>
 	/// The timespan to wait before rest requests time out.
 	/// </summary>
-	public TimeSpan Timeout { get; set; } = RestClientBase.DefaultTimeout;
+	public TimeSpan Timeout { get; set; } = RestClient.DefaultTimeout;
 
 	/// <summary>
 	/// The maximum length of URIs generated for rest requests.

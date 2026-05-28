@@ -60,7 +60,7 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 	/// <summary>
 	/// The timespan to wait before rest requests time out. Default value is 5 minutes.
 	/// </summary>
-	private TimeSpan _Timeout = RestClientBase.DefaultTimeout;
+	private TimeSpan _Timeout = RestClient.DefaultTimeout;
 
 	/// <summary>
 	/// The maximum length of URIs generated for rest requests. Default value is 8192.
@@ -179,9 +179,9 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 	{
 		_Timeout = timeoutType switch
 		{
-			StandardTimeoutType.Default         => RestClientBase.DefaultTimeout,
-			StandardTimeoutType.ConnectionCheck => RestClientBase.DefaultTestTimeout,
-			StandardTimeoutType.ShortOperation  => RestClientBase.DefaultShortTimeout,
+			StandardTimeoutType.Default         => RestClient.DefaultTimeout,
+			StandardTimeoutType.ConnectionCheck => RestClient.DefaultTestTimeout,
+			StandardTimeoutType.ShortOperation  => RestClient.DefaultShortTimeout,
 			StandardTimeoutType.Infinite        => Timeout.InfiniteTimeSpan,
 			_                                   => throw new ArgumentOutOfRangeException( nameof( timeoutType ), timeoutType, null )
 		};
