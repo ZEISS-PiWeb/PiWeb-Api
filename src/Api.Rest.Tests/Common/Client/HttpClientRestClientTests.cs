@@ -51,6 +51,15 @@ public sealed class HttpClientRestClientTests
 	}
 
 	[Test]
+	public void ServiceLocation_BaseAddressAndEndpointNameIsSet_ReturnsBaseAddress()
+	{
+		using var httpClient = new HttpClient { BaseAddress = Uri };
+		var client = new HttpClientRestClient( httpClient, endpointName: $"api/" );
+
+		client.ServiceLocation.Should().Be( $"{Uri}api/" );
+	}
+
+	[Test]
 	public void ServiceLocation_BaseAddressIsNotSet_ThrowsInvalidOperationException()
 	{
 		using var httpClient = new HttpClient();
@@ -103,7 +112,7 @@ public sealed class HttpClientRestClientTests
 	{
 		using var server = WebServer.StartNew( Port );
 		using var httpClient = new HttpClient { BaseAddress = Uri };
-		var client = new HttpClientRestClient( httpClient, endpointName: $"api/" );
+		var client = new HttpClientRestClient( httpClient, endpointName: "api/" );
 		var expected = new Error( "from api endpoint" );
 		server.RegisterResponse( "/api/items/42", JsonConvert.SerializeObject( expected ) );
 

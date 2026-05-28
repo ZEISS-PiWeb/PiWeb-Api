@@ -116,7 +116,7 @@ public sealed class HttpClientRestClient : RestClientBase
 	#region interface IRestClient
 
 	/// <inheritdoc />
-	public override Uri ServiceLocation => _HttpClient.BaseAddress ?? throw new InvalidOperationException( "HttpClient BaseAddress is not set." );
+	public override Uri ServiceLocation => new Uri( _HttpClient.BaseAddress ?? throw new InvalidOperationException( "HttpClient BaseAddress is not set." ), _EndpointName );
 
 	#endregion
 }
