@@ -80,7 +80,7 @@ public sealed class HttpClientRestClient : RestClientBase
 			SetDefaultHttpHeaders( request );
 
 			if( !string.IsNullOrWhiteSpace( _EndpointName ) )
-				request.RequestUri = new Uri( _EndpointName + request.RequestUri, UriKind.RelativeOrAbsolute );
+				request.RequestUri = new Uri( _EndpointName.TrimEnd( '/' ) + "/" + request.RequestUri.OriginalString.TrimStart( '/' ), UriKind.Relative );
 
 			response = await _HttpClient.SendAsync( request, completionOptions, cancellationToken ).ConfigureAwait( false );
 
