@@ -26,8 +26,6 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 	using System.Text;
 	using System.Threading;
 	using System.Threading.Tasks;
-	using CacheCow.Client;
-	using CacheCow.Common;
 	using JetBrains.Annotations;
 	using Zeiss.PiWeb.Api.Rest.Common.Authentication;
 	using Zeiss.PiWeb.Api.Rest.Contracts;
@@ -68,8 +66,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		/// </summary>
 		public static readonly TimeSpan DefaultShortTimeout = TimeSpan.FromSeconds( 15 );
 
-		private ICacheStore _CacheStore;
-		private IVaryHeaderStore _VaryHeaderStore;
+		private ICachingHandlerFactory _CachingHandlerFactory;
 
 		/// <summary>
 		/// This value will be increased atomically to uniquely identify a request session which consists of an original rest request
@@ -91,7 +88,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		private HttpClient _HttpClient;
 		private HttpClientHandler _HttpClientHandler;
 		private TimeoutHandler _TimeoutHandler;
-		private CachingHandler _CachingHandler;
+		private DelegatingHandler _CachingHandler;
 
 		private bool _UseProxy = true;
 		private bool _CheckCertificateRevocationList = false;
@@ -266,44 +263,24 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 		}
 
 		/// <summary>
-		/// Gets or sets the client-side cache store to cache requests (triggered by HTTP headers, like Cache-Control and Etag).
+		/// Gets or sets the client-side caching handler factory to cache requests (triggered by HTTP headers, like Cache-Control and Etag).
 		/// If the value is <see langword="null" />, built-in caching is used (.Net Framework) or caching is disabled (.Net Standard, .Net Core).
 		/// </summary>
 		/// <remarks>
-		/// For example use <see cref="InMemoryCacheStore"/> or <see cref="FilesystemCacheStore"/>.
+		/// For example use <see cref="Zeiss.PiWeb.Api.Rest.Caching.CachingHandlerFactory"/>
+		/// with <see cref="CacheCow.Client.InMemoryCacheStore"/> / <see cref="CacheCow.Client.InMemoryVaryHeaderStore "/>
+		/// or <see cref="Zeiss.PiWeb.Api.Rest.Caching.FilesystemCacheStore"/> / <see cref="Zeiss.PiWeb.Api.Rest.Caching.FilesystemVaryHeaderStore"/>.
 		/// </remarks>
-		public ICacheStore CacheStore
+		public ICachingHandlerFactory CachingHandlerFactory
 		{
-			get => _CacheStore;
+			get => _CachingHandlerFactory;
 
 			set
 			{
-				if( value == _CacheStore )
+				if( value == _CachingHandlerFactory )
 					return;
 
-				_CacheStore = value;
-
-				RebuildHttpClient();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the header store to build header-dependent keys for the cache (see "Vary" HTTP header).
-		/// If the value is <see langword="null" />, the default VaryHeaderStore is used.
-		/// </summary>
-		/// <remarks>
-		/// For example use <see cref="InMemoryVaryHeaderStore"/> or <see cref="FilesystemVaryHeaderStore"/>.
-		/// </remarks>
-		public IVaryHeaderStore VaryHeaderStore
-		{
-			get => _VaryHeaderStore;
-
-			set
-			{
-				if( value == _VaryHeaderStore )
-					return;
-
-				_VaryHeaderStore = value;
+				_CachingHandlerFactory = value;
 
 				RebuildHttpClient();
 			}
@@ -452,16 +429,13 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 
 			HttpMessageHandler outerDelegatingHandler = _HttpClientHandler;
 
-			if( _CacheStore == null )
+			if( _CachingHandlerFactory == null )
 			{
 				_CachingHandler = null;
 			}
 			else
 			{
-				_CachingHandler = _VaryHeaderStore == null
-					? new CachingHandler( _CacheStore )
-					: new CachingHandler( _CacheStore, _VaryHeaderStore );
-				_CachingHandler.DoNotEmitCacheCowHeader = true;
+				_CachingHandler = _CachingHandlerFactory.CreateCachingHandler();
 
 				_CachingHandler.InnerHandler = outerDelegatingHandler;
 				outerDelegatingHandler = _CachingHandler;

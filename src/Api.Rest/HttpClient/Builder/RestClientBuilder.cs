@@ -16,8 +16,6 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
-using CacheCow.Client;
-using CacheCow.Common;
 using JetBrains.Annotations;
 using Zeiss.PiWeb.Api.Rest.Common.Authentication;
 using Zeiss.PiWeb.Api.Rest.Common.Client;
@@ -35,19 +33,9 @@ using Zeiss.PiWeb.Api.Rest.HttpClient.RawData;
 /// disposed. This means the builder needs to life longer then any rest client it builds. It is possible to use an external cache instead
 /// by calling <see cref="EnableExternalHttpCaching"/>.
 /// </summary>
-public class RestClientBuilder : IRestClientBuilder, IDisposable
+public class RestClientBuilder : IRestClientBuilder
 {
 	#region members
-
-	// The internal cache store used when http caching is enabled and no external cache store is set.
-	private readonly Lazy<ICacheStore> _InternalSharedCacheStore = new(
-		() => new InMemoryCacheStore(),
-		LazyThreadSafetyMode.ExecutionAndPublication);
-
-	// The internal vary header store used when http caching is enabled and no external vary header store is set.
-	private readonly Lazy<IVaryHeaderStore> _InternalSharedVaryHeaderStore = new(
-		() => new InMemoryVaryHeaderStore(),
-		LazyThreadSafetyMode.ExecutionAndPublication);
 
 	// Factories used for creating a delegating handler chains
 	[NotNull] private readonly List<Func<DelegatingHandler>> _DelegatingHandlerFactories = new List<Func<DelegatingHandler>>();
@@ -85,21 +73,9 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 	[NotNull] private IObjectSerializer _Serializer = ObjectSerializer.Default;
 
 	/// <summary>
-	/// Indicates whether http caching is enabled. Default value is <c>null</c>.
+	/// The <see cref="ICachingHandlerFactory"/> to be used for HTTP caching.
 	/// </summary>
-	private bool _HttpCachingEnabled = true;
-
-	/// <summary>
-	/// The external cache store to use for http caching or <c>null</c> if an internal cache store should be used.
-	/// Default value is <c>null</c>.
-	/// </summary>
-	[CanBeNull] private ICacheStore _CacheStore;
-
-	/// <summary>
-	/// The external vary header store to use for http caching or <c>null</c> if an internal vary header store should be used.
-	/// Default value is <c>null</c>.
-	/// </summary>
-	[CanBeNull] private IVaryHeaderStore _VaryHeaderStore;
+	[CanBeNull] private ICachingHandlerFactory _CachingHandlerFactory;
 
 	/// <summary>
 	/// Specifies whether a system-wide http proxy setting will be respected.
@@ -150,8 +126,7 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 			MaxRequestsInParallel = _MaxRequestsInParallel,
 			AllowChunkedDataTransfer = _AllowChunkedDataTransfer,
 			Serializer = _Serializer,
-			CacheStore = _CacheStore ?? ( _HttpCachingEnabled ? _InternalSharedCacheStore.Value : null ),
-			VaryHeaderStore = _VaryHeaderStore ?? ( _HttpCachingEnabled ? _InternalSharedVaryHeaderStore.Value : null ),
+			CachingHandlerFactory = _CachingHandlerFactory,
 			UseSystemProxy = _UseSystemProxy,
 			CheckCertificateRevocationList = _CheckCertificateRevocationList,
 			DelegatingHandlerFactories = new List<Func<DelegatingHandler>>( _DelegatingHandlerFactories ),
@@ -231,33 +206,11 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 	}
 
 	/// <summary>
-	/// Enables http caching using internal cache implementations shared for all rest clients created with this builder.
-	/// This corresponds to the default state.
+	/// Sets an provided <see cref="ICachingHandlerFactory"/> to be used for HTTP caching.
 	/// </summary>
-	/// <remarks>
-	/// The shared internal cache is disposed when this builder is disposed. You need to make sure this builder lives longer than any
-	/// rest client created by this builder. Use <see cref="EnableExternalHttpCaching"/> instead to have explicit control over the lifetime
-	/// of the cache.
-	/// </remarks>
-	public virtual RestClientBuilder EnableStandardHttpCaching()
-	{
-		_HttpCachingEnabled = true;
-		_CacheStore = null; // forces use of the internal cache store
-		_VaryHeaderStore = null; // forces use of the internal vary header store
-
-		return this;
-	}
-
-	/// <summary>
-	/// Sets an externally provided cache store and very header store to be used as http cache.
-	/// </summary>
-	public virtual RestClientBuilder EnableExternalHttpCaching(
-		[NotNull] ICacheStore cacheStore,
-		[NotNull] IVaryHeaderStore varyHeaderStore )
-	{
-		_HttpCachingEnabled = true;
-		_CacheStore = cacheStore ?? throw new ArgumentNullException( nameof( cacheStore ) );
-		_VaryHeaderStore = varyHeaderStore ?? throw new ArgumentNullException( nameof( varyHeaderStore ) );
+	public virtual RestClientBuilder EnableHttpCaching( [NotNull] ICachingHandlerFactory cachingHandlerFactory )
+	{		
+		_CachingHandlerFactory = cachingHandlerFactory ?? throw new ArgumentNullException( nameof( cachingHandlerFactory ) );
 
 		return this;
 	}
@@ -267,9 +220,7 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 	/// </summary>
 	public virtual RestClientBuilder DisableHttpCaching()
 	{
-		_HttpCachingEnabled = false;
-		_CacheStore = null;
-		_VaryHeaderStore = null;
+		_CachingHandlerFactory = null;
 
 		return this;
 	}
@@ -331,32 +282,6 @@ public class RestClientBuilder : IRestClientBuilder, IDisposable
 	{
 		_AuthenticationHandler = authenticationHandler;
 		return this;
-	}
-
-	/// <summary>
-	/// Performs cleanup.
-	/// </summary>
-	/// <param name="disposing">
-	/// Indicates whether the method call comes from a Dispose method (<c>true</c>) or from a finalizer (<c>false</c>).
-	/// </param>
-	protected virtual void Dispose( bool disposing )
-	{
-		if( _InternalSharedCacheStore.IsValueCreated )
-			_InternalSharedCacheStore.Value.Dispose();
-
-		if( _InternalSharedVaryHeaderStore.IsValueCreated )
-			_InternalSharedVaryHeaderStore.Value.Dispose();
-	}
-
-	#endregion
-
-	#region interface IDisposable
-
-	/// <inheritdoc />
-	public void Dispose()
-	{
-		Dispose( true );
-		GC.SuppressFinalize( this );
 	}
 
 	#endregion
