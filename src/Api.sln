@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29001.49
+# Visual Studio Version 18
+VisualStudioVersion = 18.5.11723.231 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.Rest", "Api.Rest\Api.Rest.csproj", "{A4762752-5B94-47BC-9B2D-B72E61E3399B}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Rest.Dtos.Tests", "Api.Rest.Dtos.Tests\Api.Rest.Dtos.Tests.csproj", "{3A6AFFB6-94AE-432D-968B-CC469587496F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Core", "Api.Core\Api.Core.csproj", "{558E76E0-9FA8-4349-A4EB-8B69C7BF03EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Rest.Caching", "Api.Rest.Caching\Api.Rest.Caching.csproj", "{47AAC9FE-3A69-40D7-0CBF-F7D045EC13B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{558E76E0-9FA8-4349-A4EB-8B69C7BF03EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{558E76E0-9FA8-4349-A4EB-8B69C7BF03EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{558E76E0-9FA8-4349-A4EB-8B69C7BF03EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47AAC9FE-3A69-40D7-0CBF-F7D045EC13B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47AAC9FE-3A69-40D7-0CBF-F7D045EC13B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47AAC9FE-3A69-40D7-0CBF-F7D045EC13B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47AAC9FE-3A69-40D7-0CBF-F7D045EC13B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
