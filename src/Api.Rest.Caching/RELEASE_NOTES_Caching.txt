@@ -1,0 +1,15 @@
+======================================================
+-------------------------------------------------------------------------------------------
+ Version 10.0.0
+-------------------------------------------------------------------------------------------
+======================================================
+
+
+==========================================
+New Features
+==========================================
+- Add a standalone caching extension with ICachingHandlerFactory and CacheCow-based filesystem stores (#308)
+    ○ Introduce ICachingHandlerFactory to abstract caching handler creation and move CacheCow-based caching to new Api.Rest.Caching project
+    ○ Update RestClient and builder to use the new factory, removing direct CacheCow dependencies
+    ○ Reduces overhead in browser scenarios, since caching is handled by the browser itself
+    ○ Move CacheCow-based filesystem cache stores from Api.Rest to new project

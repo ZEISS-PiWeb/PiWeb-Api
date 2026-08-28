@@ -1,190 +1,32 @@
 ======================================================
 -------------------------------------------------------------------------------------------
- Version 9.2.3                                                                  
+ Version 10.0.0
 -------------------------------------------------------------------------------------------
 ======================================================
 
 
 ==========================================
-Bugfixes
+ Bugfixes
 ==========================================
-- Allow case insensitive JSON properties for SystemTextJson (#301)
-    ○ compare the names of properties case insensitive when using SystemTextJson, to allow for any matching between clients and server
-
-
-======================================================
--------------------------------------------------------------------------------------------
- Version 9.2.2                                                                  
--------------------------------------------------------------------------------------------
-======================================================
-
-
-==========================================
-Bugfixes
-==========================================
-- adapt unsuitable key names in WellKnownKeys (#299)
-    ○ add new correct versions and mark the old ones as obsolete
-    ○ affects "Average value" of control charts, now called "Center line" (K9011 and K9111)
-
-
-======================================================
--------------------------------------------------------------------------------------------
- Version 9.2.1                                                                   
--------------------------------------------------------------------------------------------
-======================================================
-
-
-==========================================
-Bugfixes
-==========================================
-- Fix an issue when using Windows authentication in combination with .NET Framework (#297)
-    ○ login could fail with status code 401 after a certain amount of time with no requests, due to more strict security rules by Windows
-
-
-======================================================
--------------------------------------------------------------------------------------------
- Version 9.2.0                                                                   
--------------------------------------------------------------------------------------------
-======================================================
+- Correct request URI and endpoint path handling, including slashes and trailing endpoint name in HealthServiceRestClient (#305)
 
 
 ==========================================
 New Features
 ==========================================
-- Add new keys to WellKnownKeys (#295)
-
-- Update target frameworks (#292)
-    ○ add .NET 10
-
-- Update dependencies (#292)
-    ○ JetBrains.Annotations from 2024.3.0 to 2025.2.4
-    ○ Newtonsoft.Json from 13.0.3 to 13.0.4
-    ○ System.Text.Json from 9.0.4 to 10.0.1
-    ○ Microsoft.IdentityModel.Logging from 8.12.1 to 8.15.0
-    ○ Microsoft.IdentityModel.Tokens from 8.12.1 to 8.15.0
-    ○ System.IdentityModel.Tokens.Jwt from 8.12.1 to 8.15.0
-    ○ System.Security.Cryptography.ProtectedData from 9.0.4 to 10.0.1
-
-- Add HealthServiceRestClient for health checks (#288)
-    ○ add new REST client HealthServiceRestClient, which can be used for health checks of the PiWeb Server
-    ○ check for readiness (indicates if the PiWeb Server is running normally but isn't ready to receive requests)
-    ○ check for liveness (indicates if the PiWeb Server has crashed and must be restarted)
-
-
-======================================================
--------------------------------------------------------------------------------------------
- Version 9.1.1                                                                   
--------------------------------------------------------------------------------------------
-======================================================
-
-==========================================
- Bugfixes
-==========================================
-- Update dependencies (#285)
-    ○ JetBrains.Annotations from 2024.2.0 to 2024.3.0
-    ○ Microsoft.Extensions.ObjectPool from 8.0.8 to 9.0.4
-    ○ CommunityToolkit.HighPerformance from 8.3.0 to 8.4.0
-    ○ Microsoft.Bcl.HashCode from 1.1.1 to 6.0.0
-    ○ System.Buffers from 4.5.1 to 4.6.1
-    ○ System.Memory from 4.5.5 to 4.6.3
-    ○ System.Text.Json from 8.0.5 to 9.0.4
-    ○ Microsoft.IdentityModel.Logging from 8.0.2 to 8.12.1
-    ○ Microsoft.IdentityModel.Tokens from 8.0.2 to 8.12.1
-    ○ System.IdentityModel.Tokens.Jwt from 8.0.2 to 8.12.1
-    ○ Newtonsoft.Json.Bson from 1.0.2 to 1.0.3
-    ○ System.Security.Cryptography.ProtectedData from 8.0.0 to 9.0.4
-
-
-======================================================
--------------------------------------------------------------------------------------------
- Version 9.1.0                                                                   
--------------------------------------------------------------------------------------------
-======================================================
-
-
-==========================================
- Bugfixes
-==========================================
-- Update dependencies (#265)
-    ○ System.Text.Json from 8.0.4 to 8.0.5
-- fix OIDC token expiration time extraction (#268)
-
-==========================================
-New Features
-==========================================
-- Make RestClient constructor public (#270)
-	○ constructor taking a settings object is now public
-	○ custom rest clients based on RestClient can now be implemented by NuGet users
-- Add new properties to OAuthTokenInformation (#272 and #273)
-	○ add BrowserClientID and BrowserCompatibilityClientID
-	○ allows different client implementations to use the correct ID based on their technology 
-	○ existing property ClientID should be used for native applications
-- Update target framework (#275)
-    ○ remove .NET 6
-    ○ add .NET 9
-
-
-
-======================================================
--------------------------------------------------------------------------------------------
- Version 9.0.1                                                                   
--------------------------------------------------------------------------------------------
-======================================================
-
-
-==========================================
- Bugfixes
-==========================================
-
-- Automatically choose correct access token type for OIDC (#263)
-    ○ automatically choose JWT token to use as access token, if no other type is enforced by PiWeb Server
-    ○ do not silently return null on error states of the OIDC authentication procedure, but throw an exception instead to make debugging easier
-
-
-======================================================
--------------------------------------------------------------------------------------------
- Version 9.0.0                                                                   
--------------------------------------------------------------------------------------------
-======================================================
-
-
-==========================================
- Bugfixes
-==========================================
-
-- Correctly recognize backslash at the end of path as part of name (#248)
-- Discard OIDC token file on decryption exception to allow for normal login retry (#250)
-- Fix measurement search with AllAttributeSelectionDto.False still returning attributes (#253)
-
-
-==========================================
-New Features
-==========================================
-
-- Improve creation of REST clients (#234)
-    ○ Add RestClientBuilder to build REST clients using a fluent syntax to configure available options
-    ○ Add new REST client constructor using settings from provided RestClientSettings instead of having to deal with parameter overloads
-    ○ Add possibility of using DelegatingHandlers to implement and inject custom behaviour into the request pipeline of the REST clients
-    ○ Add IAuthenticationHandler interface to enable custom authentication handling which can be injected by using the RestClientBuilder
-    ○ Add ICustomRestClient access via public property, which enables implementing custom REST requests as extension methods on REST clients
-- Extend OIDC configuration to make it more flexible, public configuration will now be fetched automatically from the PiWeb Server if available (#231)
-- Add extended version property (#238)
-    ○ Add property 'ExtendedVersion' to ServiceInformationDto which consists of Version-BuildDate-BuildHash
-- Enable OIDC authorization code flow (#244)
-    ○ Adds support for the OIDC authorization code flow as described in the OpenID specification
-    ○ Add feature matrix to allow checking supported features of the OAuth REST service
-    ○ Add interface abstraction for OIDC flows and implementations for the hybrid and authorization code flow
-    ○ Add new OAuthConfigruation class which combines different token information and a flags enum to get information about supported flows on server side
-- Support optional certificate revocation list check (#251)
-    ○ Add REST client setting 'CheckCertificateRevocationList' to enable checking the TLS certificate revocation list (default: false)
-- Update target framework and dependencies (#246)
-    ○ remove .NET 7
-    ○ add .NET 8
-    ○ JetBrains.Annotations from 2020.3.0 to 2024.2.0
-    ○ CacheCow.Client from 2.12.1 to 2.13.1
-    ○ IdentityModel from 6.2.0 to 7.0.0
-    ○ Microsoft.IdentityModel.Logging from 6.34.0 to 8.0.2
-    ○ Microsoft.IdentityModel.Tokens from 6.34.0 to 8.0.2
-    ○ System.Text.Json from 7.0.3 to 8.0.4
-    ○ System.IdentityModel.Tokens.Jwt from 6.34.0 to 8.0.2
-    ○ System.Security.Cryptography.ProtectedData 7.0.1 to 8.0.0
+- Support externally managed HttpClient instances and custom request handler chains (#305)
+    ○ Refactor REST-client abstractions, service interfaces, and configuration handling
+    ○ RestClient class represents the default implementation for desktop scenarios, using an internal HttpClient as before
+    ○ HttpClientRestClient class allows providing an externally managed and configured HttpClient, e.g. for browser scenarios
+    ○ For the simple usage of the Data/RawDataServiceRestClients, no breaking changes should surface for desktop clients
+    ○ For scenarios with custom rest clients implementing our interfaces, changes may be necessary
+- Remove browser/WASM platform support from RestClient class (#307)
+    ○ Direct consequence of #305
+    ○ In browser scenarios, use HttpClientRestClient and inject an HttpClient instance directly to the service REST clients
+- Add a standalone caching extension with ICachingHandlerFactory and CacheCow-based filesystem stores (#308)
+    ○ Introduce ICachingHandlerFactory to abstract caching handler creation and move CacheCow-based caching to new Api.Rest.Caching project
+    ○ Update RestClient and builder to use the new factory, removing direct CacheCow dependencies
+    ○ Reduces overhead in browser scenarios, since caching is handled by the browser itself
+- Add several new keys to WellKnownKeys (#303 and #309)
+    ○ Add well-known keys for part distribution analysis mode
+    ○ Add well-known keys for measurement callback URI and callback description
