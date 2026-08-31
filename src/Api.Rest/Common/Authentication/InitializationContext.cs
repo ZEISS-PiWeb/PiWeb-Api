@@ -23,7 +23,7 @@ internal class InitializationContext : IInitializationContext
 {
 	#region members
 
-	[NotNull] private readonly RestClientBase _RestClient;
+	[NotNull] private readonly RestClient _RestClient;
 
 	#endregion
 
@@ -33,7 +33,7 @@ internal class InitializationContext : IInitializationContext
 	/// Initializes a new instance of the <see cref="InitializationContext"/> class.
 	/// </summary>
 	/// <param name="restClient">The rest client.</param>
-	public InitializationContext( [NotNull] RestClientBase restClient )
+	public InitializationContext( [NotNull] RestClient restClient )
 	{
 		_RestClient = restClient ?? throw new ArgumentNullException( nameof( restClient ) );
 	}

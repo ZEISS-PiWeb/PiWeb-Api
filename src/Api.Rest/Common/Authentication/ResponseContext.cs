@@ -25,7 +25,7 @@ internal class ResponseContext : IResponseContext
 {
 	#region members
 
-	[NotNull] private readonly RestClientBase _RestClient;
+	[NotNull] private readonly RestClient _RestClient;
 
 	#endregion
 
@@ -41,7 +41,7 @@ internal class ResponseContext : IResponseContext
 	/// <param name="attempt">The current request attempt.</param>
 	/// <param name="cancellationToken">The cancellation token of the operation.</param>
 	public ResponseContext(
-		[NotNull] RestClientBase restClient,
+		[NotNull] RestClient restClient,
 		[NotNull] HttpRequestMessage request,
 		[NotNull] HttpResponseMessage response,
 		long session,

@@ -216,7 +216,7 @@ namespace Zeiss.PiWeb.Api.Definitions
 
 			/// <summary>
 			/// The uri that can be used to create an interactive hyperlink that calls another application. This is used by PiWeb Monitor
-			/// for example to switch back to the measuring application (Calypso, Caligo etc.) when clicking on a characteristic or part.
+			/// for example to switch back to the measuring application (Calypso, Caligo etc.).
 			/// </summary>
 			/// <remarks>AlphaNumeric</remarks>
 			public const ushort CallbackUri = 2098;
@@ -569,6 +569,19 @@ namespace Zeiss.PiWeb.Api.Definitions
 			/// <remarks>Integer</remarks>
 			public const ushort AggregatedMeasurementCount = 101;
 
+			/// <summary>
+			/// This is a descriptive text for the <see cref="CallbackUri"/>.
+			/// </summary>
+			/// <remarks>AlphaNumeric</remarks>
+			public const ushort CallbackUriText = 197;
+
+			/// <summary>
+			/// The uri that can be used to create an interactive hyperlink that calls another application. This is used by PiWeb Monitor
+			/// for example to switch back to the measuring application (Calypso, Caligo etc.).
+			/// </summary>
+			/// <remarks>AlphaNumeric</remarks>
+			public const ushort CallbackUri = 198;
+
 			/// <summary>Supplier</summary>
 			/// <remarks>AlphaNumeric</remarks>
 			public const ushort Supplier = 801;
@@ -716,17 +729,21 @@ namespace Zeiss.PiWeb.Api.Definitions
 			public const ushort Comment = 1900;
 
 			/// <summary>
-			/// The uri that can be used to create an interactive hyperlink that calls another application. This is used by PiWeb Monitor
-			/// for example to switch back to the measuring application (Calypso, Caligo etc.) when clicking on a characteristic or part.
-			/// </summary>
-			/// <remarks>AlphaNumeric</remarks>
-			public const ushort CallbackUri = 11098;
-
-			/// <summary>
 			/// This is a descriptive text for the <see cref="CallbackUri"/>.
 			/// </summary>
 			/// <remarks>AlphaNumeric</remarks>
 			public const ushort CallbackUriText = 11097;
+
+			/// <summary>
+			/// The uri that can be used to create an interactive hyperlink that calls another application. This is used by PiWeb Monitor
+			/// for example to switch back to the measuring application (Calypso, Caligo etc.).
+			/// </summary>
+			/// <remarks>AlphaNumeric</remarks>
+			public const ushort CallbackUri = 11098;
+
+			/// <summary>Identifying the different modes for distribution analysis.</summary>
+			/// <remarks>Catalog</remarks>
+			public const ushort DistributionAnalysisMode = 13283;
 
 			#endregion
 		}

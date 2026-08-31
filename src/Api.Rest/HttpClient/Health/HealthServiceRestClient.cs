@@ -14,6 +14,7 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Health
 
 	using System;
 	using System.Net;
+	using System.Net.Http;
 	using System.Threading;
 	using System.Threading.Tasks;
 	using JetBrains.Annotations;
@@ -28,14 +29,14 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Health
 	/// <summary>
 	/// Web service class to communicate with the REST based PiWeb health service.
 	/// </summary>
-	public class HealthServiceRestClient : CommonRestClientBase, IHealthServiceRestClient
+	public class HealthServiceRestClient : ServiceRestClientBase, IHealthServiceRestClient
 	{
 		#region constants
 
 		/// <summary>
 		/// The name of the endpoint of this service.
 		/// </summary>
-		public const string EndpointName = "HealthServiceRest";
+		public const string EndpointName = "HealthServiceRest/";
 
 		#endregion
 
@@ -56,6 +57,14 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Health
 		/// <exception cref="ArgumentNullException"><paramref name="serverUri"/> is <see langword="null" />.</exception>
 		public HealthServiceRestClient( [NotNull] Uri serverUri )
 			: base( new RestClient( serverUri, EndpointName, serializer: ObjectSerializer.SystemTextJson ) )
+		{ }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HealthServiceRestClient"/> class.
+		/// </summary>
+		/// <param name="httpClient">The <see cref="HttpClient"/> instance used to send HTTP requests.</param>
+		public HealthServiceRestClient( [NotNull] HttpClient httpClient )
+			: base( new HttpClientRestClient( httpClient, EndpointName, serializer: ObjectSerializer.SystemTextJson ) )
 		{ }
 
 		/// <summary>
@@ -131,24 +140,24 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.Health
 		#region interface IHealthServiceRestClient
 
 		/// <inheritdoc />
-		public ICustomRestClient CustomRestClient => _RestClient;
+		public IRestClient RestClient => _RestClient;
 
 		/// <inheritdoc />
 		public async Task<InterfaceVersionRange> GetInterfaceInformation( CancellationToken cancellationToken = default )
 		{
-			return await _RestClient.Request<InterfaceVersionRange>( RequestBuilder.CreateGet( EndpointName ), cancellationToken ).ConfigureAwait( false );
+			return await _RestClient.Request<InterfaceVersionRange>( RequestBuilder.CreateGet( "" ), cancellationToken ).ConfigureAwait( false );
 		}
 
 		/// <inheritdoc />
 		public async Task<HealthCheckStatus> GetReadiness( CancellationToken cancellationToken = default )
 		{
-			return await ExecuteHealthCheck( $"{EndpointName}/ready", cancellationToken );
+			return await ExecuteHealthCheck( $"ready", cancellationToken );
 		}
 
 		/// <inheritdoc />
 		public async Task<HealthCheckStatus> GetLiveness( CancellationToken cancellationToken = default )
 		{
-			return await ExecuteHealthCheck( $"{EndpointName}/live", cancellationToken );
+			return await ExecuteHealthCheck( $"live", cancellationToken );
 		}
 
 		#endregion

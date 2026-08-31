@@ -33,7 +33,7 @@ namespace Zeiss.PiWeb.Api.Rest.Contracts
 		/// <summary>
 		/// A custom rest client that can be used to execute rest request created by a rest request builder.
 		/// </summary>
-		public ICustomRestClient CustomRestClient { get; }
+		public IRestClient RestClient { get; }
 
 		#endregion
 
