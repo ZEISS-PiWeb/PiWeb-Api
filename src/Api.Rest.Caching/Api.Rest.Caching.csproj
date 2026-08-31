@@ -7,13 +7,13 @@
     <RootNamespace>Zeiss.PiWeb.Api.Rest.Caching</RootNamespace>
     <TargetFrameworks>netstandard2.0;net8.0;net9.0;net10.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
-    <PackageVersion>9.2.3</PackageVersion>
+    <PackageVersion>10.0.0</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Assembly information">
     <AssemblyTitle>Provides caching extensions for the HTTP(S)/REST based communication of the ZEISS PiWeb-API .NET Client.</AssemblyTitle>
     <AssemblyName>Zeiss.PiWeb.Api.Rest.Caching</AssemblyName>
-    <AssemblyVersion>9.2.3</AssemblyVersion>
+    <AssemblyVersion>10.0.0</AssemblyVersion>
     <Company>Carl Zeiss Industrielle Messtechnik GmbH</Company>
     <Copyright>Copyright © 2026 $(Company)</Copyright>
     <Description>Provides caching extensions for the HTTP(S)/REST based communication of the ZEISS PiWeb-API .NET Client.</Description>
