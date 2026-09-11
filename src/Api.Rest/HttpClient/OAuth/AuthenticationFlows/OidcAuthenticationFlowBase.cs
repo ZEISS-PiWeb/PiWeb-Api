@@ -177,7 +177,7 @@ public abstract class OidcAuthenticationFlowBase
 			throw new InvalidOperationException( "Error during request of discovery document: discovery response was empty." );
 
 		if( response.IsError )
-			throw new InvalidOperationException( $"Error during request of discovery document: {response.Error}." );
+			throw new InvalidOperationException( $"Error during request of discovery document: {response.Error}.", response.Exception );
 	}
 
 	private static async Task<OAuthTokenCredential> CreateCredentialsWithClaimsFromUserInfo( string userInfoEndpoint, TokenResponse tokenResponse, OAuthConfiguration configuration )
