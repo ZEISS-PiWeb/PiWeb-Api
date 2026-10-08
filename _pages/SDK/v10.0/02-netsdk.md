@@ -2,10 +2,10 @@
 area: sdk
 title: .NET SDK
 level: 0
-version: 91
-displayVersion: "9.1"
+version: 100
+displayVersion: "10.0"
 isCurrentVersion: true
-permalink: "/sdk/v9.1/"
+permalink: "/sdk/v10.0/"
 sections:
   general:
     title: General Information
