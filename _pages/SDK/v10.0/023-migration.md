@@ -1,44 +1,38 @@
 <h1 id="{{page.sections['migration'].anchor}}">{{page.sections['migration'].title}}</h1>
 <hr>
 
->{{ site.images['info'] }} Version `8.0.0` of our .NET SDK NuGet introduced breaking changes. This migration guide will help you migrate from version `7.X.X` to a NuGet version `>=8.0.0`.
+>{{ site.images['info'] }} Version `10.0` of our .NET SDK NuGet introduced a separate caching-related NuGet package. This migration guide will help you migrate from version `9.X` to NuGet version `10.0`.
 
-<h2 id="{{page.sections['migration']['secs']['nuget'].anchor}}">.NET SDK NuGet Version 8.0.0</h2>
+<h2 id="{{page.sections['migration']['secs']['nuget'].anchor}}">.NET SDK NuGet Version 10.0</h2>
 
-With Version `8.0.0` of our .NET SDK NuGet we introduced more architectural changes. We added an additional NuGet: [Zeiss.Piweb.Api.Core](https://www.nuget.org/packages/Zeiss.PiWeb.Api.Core/). This Nuget contains core classes of the API which were former DTOs, but contain a certain amount of logic. This classes were moved and renamed to not contain the *Dto*-suffix. 
+In version `10.0` of our .NET SDK NuGet package we introduced architectural changes. We added an additional NuGet: [Zeiss.Piweb.Api.Rest.Caching](https://www.nuget.org/packages/Zeiss.PiWeb.Api.Rest.Caching). This Nuget contains classes related to caching of HTTP and HTTPS requests.
 
 <h2 id="{{page.sections['migration']['secs']['structure'].anchor}}">{{page.sections['migration']['secs']['structure'].title}}</h2>
 
-The new NuGet structure aims for clearer architecture and different levels of dependencies. The following image gives you a short impression of the new structure:
+The new NuGet structure aims to provide a clearer architecture and distinguish dependency levels. The following image provides an overview of the new structure:
 
-<img src="/PiWeb-Api/images/v8/nuget_structure.png" class="img-responsive center-block">
+<img src="/PiWeb-Api/images/v10/nuget_structure.png" class="img-responsive center-block">
 
 <h2 id="{{page.sections['migration']['secs']['migrate'].anchor}}">{{page.sections['migration']['secs']['migrate'].title}}</h2>
 
-The following steps have to be done to migrate from version 7.2 to version 8.0.
+The following steps describe how to migrate from version 9.X to version 10.0.
 
-<h4>Referencing the new package</h4>
+<h4>Using the new package</h4>
 
-The new package will automatically be referenced when updating either the package `Zeiss.PiWeb.Api.Rest` or `Zeiss.PiWeb.Api.Rest.Dtos`, since it is a transitive dependency. You do not need to do anything when your are just using `Zeiss.PiWeb.Api.Definitions`.
+The new package is needed only if you enable caching for the DataServiceRestClient by providing implementations of `ICacheStore` and `IVaryHeaderStore` for the relevant properties of the wrapped `RestClient` (named CacheStore and VaryHeaderStore). These two properties have been removed and replaced with the property `CachingHandlerFactory`. This moves the dependencies for these implementations into the new package. You can either provide your own implementation for the interface `ICachingHandlerFactory` or use the provided implementation from our package, which simply requires implementations of `ICacheStore` and `IVaryHeaderStore` in the constructor, as before.
 
-<h4>Renaming of Data Transfer Object classes</h4>
+The available implementations are unchanged.
 
-You need to remove the *Dto*-suffix from the following classes or interfaces if your are referencing them in your application:
-- Attribute
-- AttributeItemExtensions
-- IAttributeItem
-- PathInformation
-- PathInformationExtension
-- PathElement
-- InspectionPlanEntity
-- PathHelper
+ICacheStore:
+- `InMemoryCacheStore` (provided by the external CacheCow library)
+- `FilesystemCacheStore` (from Zeiss.Piweb.Api.Rest.Caching)
 
-It can be neccessary to add an explicit using, e.g. `using Attribute = Zeiss.PiWeb.Api.Core.Attribute;` when encountering ambiguous references.
+IVaryHeaderStore:
+- `InMemoryVaryHeaderStore` (provided by the external CacheCow library)
+- `FilesystemVaryHeaderStore` (from Zeiss.Piweb.Api.Rest.Caching)
+
+Please note that the filesystem-based implementations are basic and may not be suitable for production use; for example, they do not impose a maximum cache size or provide a cleanup mechanism. Assess whether they meet your needs, or provide more sophisticated implementations of `ICacheStore` and `IVaryHeaderStore`.
 
 <h4>Other changes</h4>
 
-Many return types and method parameters which were former Arrays are now ReadOnlyList or ReadOnlyCollections. This removes many `.ToArrays` when using methods but also prevents certain operations on the fetched result lists.
-You can still edit entries, e.g. fetched parts, but you cannot append new entries. It can be needed to maintain your own list instead of working directly with the result set or property of a DTO.
-
-The class `DataCharacteristicDto` was removed, since it had no real benefit (only a simple container for the characteristic uuid and the value). It was replaced by a dictionary of uuid and `DataValueDto`, see `DataMeasurement`: the property
-*Characteristics* was formerly an array of `DataCharacteristicDto` and is now an `IReadOnlyDictionary<Guid, DataValueDto>`.
+Due to the extraction of caching into the separate NuGet package, the `RestClientBuilder` no longer keeps an internal cache. This means that the builder no longer implements `IDisposable`, existing `usings` need to be removed.
