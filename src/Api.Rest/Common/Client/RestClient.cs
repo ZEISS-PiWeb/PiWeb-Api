@@ -141,6 +141,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			_Timeout = settings.Timeout;
 			_UseProxy = settings.UseSystemProxy;
 			_CheckCertificateRevocationList = settings.CheckCertificateRevocationList;
+			_CachingHandlerFactory = settings.CachingHandlerFactory;
 
 			_LegacyDelegatingHandler = null;
 			_AuthenticationHandler = settings.AuthenticationHandler;
