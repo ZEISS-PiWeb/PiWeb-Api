@@ -4,7 +4,7 @@ title: .NET SDK
 level: 0
 version: 91
 displayVersion: "9.1"
-isCurrentVersion: true
+isCurrentVersion: false
 permalink: "/sdk/v9.1/"
 sections:
   general:
