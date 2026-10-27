@@ -65,6 +65,9 @@ namespace Zeiss.PiWeb.Api.Definitions
 		/// <summary>The server supports internal generation of event based alarms.</summary>
 		public const string AlarmFeatureSupported = "AlarmFeatureSupported";
 
+		/// <summary>The server supports the calculation of dynamized inspection plans based on a ruleset.</summary>
+		public const string DynamizationSupported = "DynamizationSupported";
+
 		#endregion
 	}
 }
