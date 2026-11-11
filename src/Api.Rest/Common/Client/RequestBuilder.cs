@@ -172,10 +172,7 @@ namespace Zeiss.PiWeb.Api.Rest.Common.Client
 			var request = SetParametersAndHeaders( method, relativeUri, additionalHttpRequestHeader, parameterDefinitions );
 			if( payload != Payload.Empty )
 			{
-				request.Content = new PushStreamContent( ( outputStream, _, _ ) =>
-				{
-					return serializer.SerializeAsync( outputStream, payload.Value, cancellationToken );
-				}, new MediaTypeWithQualityHeaderValue( RestClientBase.MimeTypeJson ) );
+				request.Content = new StreamingJsonContent( outputStream => serializer.SerializeAsync( outputStream, payload.Value, cancellationToken ), RestClientBase.MimeTypeJson );
 			}
 
 			return request;
