@@ -62,11 +62,25 @@ namespace Zeiss.PiWeb.Api.Rest.HttpClient.OAuth
 		public string RedirectUri { get; set; } = "urn:ietf:wg:oauth:2.0:oob";
 
 		/// <summary>
-		/// Scopes which the client can request.
+		/// Scopes which a native PiWeb standalone desktop client can request.
 		/// </summary>
 		[JsonProperty( "requestedScopes" )]
 		[JsonPropertyName( "requestedScopes" )]
 		public string RequestedScopes { get; set; } = "openid profile email offline_access piweb";
+
+		/// <summary>
+		/// Scopes which the PiWeb browser applications client can request.
+		/// </summary>
+		[JsonProperty( "browserClientRequestedScopes" )]
+		[JsonPropertyName( "browserClientRequestedScopes" )]
+		public string BrowserClientRequestedScopes { get; set; } = "openid profile email offline_access piweb";
+
+		/// <summary>
+		/// Scopes which the PiWeb browser applications (compatibility mode) client can request.
+		/// </summary>
+		[JsonProperty( "browserCompatibilityClientRequestedScopes" )]
+		[JsonPropertyName( "browserCompatibilityClientRequestedScopes" )]
+		public string BrowserCompatibilityClientRequestedScopes { get; set; } = "openid profile email offline_access piweb";
 
 		/// <summary>
 		/// Additional trusted base addresses for OpenID endpoints.
