@@ -1,0 +1,15 @@
+version: 2
+updates:
+  - package-ecosystem: "nuget"
+    directory: "/src/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 5
+    # Combine minor and patch updates into one PR
+    groups:
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
