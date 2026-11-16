@@ -13,7 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data
 	#region usings
 
 	using System;
-	using FluentAssertions;
+	using AwesomeAssertions;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 

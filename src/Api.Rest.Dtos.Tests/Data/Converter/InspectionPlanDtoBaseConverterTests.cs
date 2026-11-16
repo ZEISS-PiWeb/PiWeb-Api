@@ -13,7 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Data.Converter
 {
 	#region usings
 
-	using FluentAssertions;
+	using AwesomeAssertions;
 	using Newtonsoft.Json;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Converter;
