@@ -16,7 +16,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using FluentAssertions;
+using AwesomeAssertions;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Zeiss.PiWeb.Api.Rest.Common.Client;

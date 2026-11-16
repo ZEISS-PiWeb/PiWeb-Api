@@ -21,7 +21,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Tests.Compatibility
 	using System.Text;
 	using System.Text.Json;
 	using System.Text.Json.Serialization;
-	using FluentAssertions;
+	using AwesomeAssertions;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Converters;
 	using NUnit.Framework;

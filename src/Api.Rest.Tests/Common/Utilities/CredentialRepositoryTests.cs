@@ -15,7 +15,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.Common.Utilities
 	using System;
 	using System.Diagnostics.CodeAnalysis;
 	using System.IO;
-	using FluentAssertions;
+	using AwesomeAssertions;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Rest.Common.Utilities;
 

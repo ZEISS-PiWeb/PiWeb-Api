@@ -14,7 +14,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.Common.Client;
 
 using System;
 using System.Net.Http;
-using FluentAssertions;
+using AwesomeAssertions;
 using NUnit.Framework;
 using Zeiss.PiWeb.Api.Rest.Common.Client;
 using Zeiss.PiWeb.Api.Rest.HttpClient.Builder;

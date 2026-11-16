@@ -14,7 +14,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.Dtos.Data
 
 	using System;
 	using System.Linq;
-	using FluentAssertions;
+	using AwesomeAssertions;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Rest.Dtos.Data;
 
