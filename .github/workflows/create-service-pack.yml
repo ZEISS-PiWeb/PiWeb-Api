@@ -13,9 +13,46 @@ on:
 
 jobs:
   release:
+    permissions:
+      contents: write
     # With @main we want the latest version. Consider using a version tag to avoid breaking changes.
     uses: ZEISS-PiWeb/github-actions/.github/workflows/create-support-release.yml@main
     with:
       generate_release_notes: false
       dotnet_version: '10.0.x'
-    secrets: inherit
+    secrets:
+      PUSH_TO_GITHUB_REPO_PAT: ${{ secrets.PUSH_TO_GITHUB_REPO_PAT }}
+
+  publish:
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Download NuGet packages
+        uses: actions/download-artifact@v4
+        with:
+          name: packages
+          path: package_output
+
+      - name: NuGet login
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Push packages to nuget.org
+        env:
+          NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
+        run: >
+          dotnet nuget push "package_output/*.nupkg"
+          --skip-duplicate
+          --no-symbols
+          --api-key "$NUGET_API_KEY"
+          --source https://api.nuget.org/v3/index.json
