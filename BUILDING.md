@@ -31,6 +31,20 @@ This creates a release branch (if not already present), and a tag called "v<vers
 The tag and branch is then merged to the master branch.
 Therefore the master branch only contains stable release code.
 
+NuGet publication is performed by the workflows in this repository. They use
+NuGet trusted publishing with GitHub Actions OIDC; the publishing jobs require
+the `NUGET_USER` repository or organization secret and `id-token: write`
+permission. The shared build workflow is used to build and upload packages,
+but the final login and push remain in this repository because NuGet trusted
+publishing currently does not resolve reusable-workflow policy matching
+reliably. See [NuGet/login issue #6](https://github.com/NuGet/login/issues/6).
+Configure NuGet trusted-publishing policies for `ZEISS-PiWeb/PiWeb-Api` for
+each workflow: `develop.yml`, `create-release.yml`, and
+`create-service-pack.yml`. Use the workflow filename and leave the optional
+environment unset. The `NUGET_USER` secret must contain the NuGet account name.
+The release workflows also require `PUSH_TO_GITHUB_REPO_PAT` to push branches
+and tags.
+
 This branching model was first described by Vincent Driessen in
 his blog entry
 [A successful Git branching model](http://nvie.com/posts/a-successful-git-branching-model/).
