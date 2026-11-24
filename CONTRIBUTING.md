@@ -24,7 +24,7 @@ If you find yourself wishing for a feature or improvement that doesn't exist in 
 We are always happy to receive code contributions from your side.  
 
 For all contributions, please respect the following guidelines:
-- Make sure to either sign the [Individual](./CONTRIBUTOR-LICENSE-AGREEMENT-INDIVIDUAL.txt) or the [Corporate](./CONTRIBUTOR-LICENSE-AGREEMENT-CORPORATE.txt) Contributor License Agreement (CLA) and send it to piweb.github@zeiss.com.
+- Make sure to either sign the [Individual](./docs/CONTRIBUTOR-AGREEMENT-INDIVIDUAL.txt) or the [Corporate](./docs/CONTRIBUTOR-AGREEMENT-CORPORATE.txt) Contributor License Agreement (CLA) and send it to piweb.github@zeiss.com.
 - Always associate a PR with either an [issue](#other-issues) or a [feature](#suggesting-a-feature).  
 - Each PR should implement ONE feature or bugfix. If you want to add or fix more than one thing, submit more than one PR.
 - Do not commit changes to files that are irrelevant to your feature or bugfix.
