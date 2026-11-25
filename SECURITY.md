@@ -2,7 +2,7 @@
 
 ## Secure Software Development
 
-ZEISS.PiWeb.Api is maintained as a ZEISS open source project. To support its security
+This library is maintained as a ZEISS open source project. To support its security
 and safety, everyone contributing to or maintaining this repository must follow
 established secure-development practices, including the OpenSSF Best Practices
 where applicable.
