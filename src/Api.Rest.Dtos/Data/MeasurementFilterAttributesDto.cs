@@ -248,7 +248,8 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				ToModificationDate = ToModificationDate,
 				MergeAttributes = MergeAttributes,
 				MergeCondition = MergeCondition,
-				MergeMasterPart = MergeMasterPart
+				MergeMasterPart = MergeMasterPart,
+				Statistics = Statistics
 			};
 		}
 
