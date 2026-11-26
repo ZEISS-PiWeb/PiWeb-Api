@@ -169,6 +169,7 @@ namespace Zeiss.PiWeb.Api.Rest.Dtos.Data
 				LimitResultPerPart = LimitResultPerPart,
 				OrderBy = OrderBy,
 				SearchCondition = SearchCondition,
+				CaseSensitive = CaseSensitive,
 				MeasurementUuids = MeasurementUuids,
 				AggregationMeasurements = AggregationMeasurements,
 				FromModificationDate = FromModificationDate,
