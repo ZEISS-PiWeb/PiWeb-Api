@@ -16,7 +16,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Health
 	using System.Linq;
 	using System.Net;
 	using System.Threading.Tasks;
-	using FluentAssertions;
+	using AwesomeAssertions;
 	using Microsoft.Extensions.Diagnostics.HealthChecks;
 	using Newtonsoft.Json;
 	using NUnit.Framework;

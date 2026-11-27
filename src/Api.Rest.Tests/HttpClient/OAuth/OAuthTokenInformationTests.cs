@@ -13,7 +13,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.OAuth
 	#region usings
 
 	using System.Text.Json;
-	using FluentAssertions;
+	using AwesomeAssertions;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Rest.HttpClient.OAuth;
 

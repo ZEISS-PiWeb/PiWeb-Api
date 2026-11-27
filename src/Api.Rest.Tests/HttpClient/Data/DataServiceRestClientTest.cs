@@ -16,7 +16,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Data
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
-	using FluentAssertions;
+	using AwesomeAssertions;
 	using Newtonsoft.Json;
 	using NUnit.Framework;
 	using Zeiss.PiWeb.Api.Core;
@@ -148,7 +148,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Data
 			await client.GetMeasurementValues( filter: new MeasurementValueFilterAttributesDto { MeasurementUuids = uuids, CharacteristicsUuidList = uuids } );
 
 			foreach( var request in server.ReceivedRequests )
-				request.Length.Should().BeLessOrEqualTo( 200 );
+				request.Length.Should().BeLessThanOrEqualTo( 200 );
 		}
 
 		[Test]
@@ -187,7 +187,7 @@ namespace Zeiss.PiWeb.Api.Rest.Tests.HttpClient.Data
 			await client.GetMeasurements( filter: new MeasurementFilterAttributesDto { MeasurementUuids = uuids } );
 
 			foreach( var request in server.ReceivedRequests )
-				request.Length.Should().BeLessOrEqualTo( 200 );
+				request.Length.Should().BeLessThanOrEqualTo( 200 );
 		}
 
 		#endregion
